@@ -1,4 +1,49 @@
-type ExampleEntity @entity {
+
+# TokenStorage type
+type TokenStorage @entity {
   id: String!
-  name: String!
+  press: String
+  pointer: String
+  sender: String
+  tokenId: BigInt
+  transactionHash: String
+  updatedAt: BigInt
+  updatedBy: String
+  rawTransaction: RawTransaction
+}
+
+# RawTransaction type
+type RawTransaction @entity {
+  id: String!
+  transactionHash: String
+  eventType: String
+  createdAt: BigInt
+  Press: [Router] @derivedFrom(field: "RawTransaction")
+  tokenStorage: [TokenStorage] @derivedFrom(field: "RawTransactin")
+}
+
+# Arweave type
+type Arweave @entity {
+  id: String!
+  link: String
+  tableName: String
+}
+
+# Router type
+type Router @entity {
+  id: String!
+  press: Bytes
+  sender: String
+  factory: String
+  pointer: String
+  owner: String
+  logic: String
+  renderer: String
+  fundsRecipient: String
+  royaltyBPS: BigInt
+  transferable: Boolean
+  fungible: Boolean
+  createdAt: BigInt
+  transactionHash: String
+  RawTransaction: RawTransaction
 }
