@@ -1,0 +1,1 @@
+export { RiverIcon, type SvgProps } from './RiverIcon'

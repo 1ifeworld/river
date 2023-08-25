@@ -1,3 +1,5 @@
+'use client'
+
 import { RiverIcon } from '@river/design-system';
 
 export function Header() {
