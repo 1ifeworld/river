@@ -4,13 +4,14 @@ import {
   useWaitForTransaction,
 } from 'wagmi';
 import { PrepareWriteContractResult } from 'wagmi/actions';
-import { type Hex, type Hash } from 'viem';
+import { type Hex, type Hash, parseEther } from 'viem';
 import { routerAbi } from '../abi';
 import { router } from '../constants';
 
 interface RemoveDataProps {
   press: Hex;
   data: Hash;
+  value?: string;
   prepareTxn: boolean;
 }
 
@@ -24,6 +25,7 @@ interface RemoveDataReturn {
 export function useRemoveData({
   press,
   data,
+  value,
   prepareTxn,
 }: RemoveDataProps): RemoveDataReturn {
   const { config: removeDataConfig } = usePrepareContractWrite({
@@ -31,6 +33,7 @@ export function useRemoveData({
     abi: routerAbi,
     functionName: 'removeData',
     args: [press, data],
+    value: value ? parseEther(value) : BigInt(0),
     enabled: prepareTxn,
   });
 
