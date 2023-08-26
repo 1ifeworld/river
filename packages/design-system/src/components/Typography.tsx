@@ -4,13 +4,13 @@ import { cn } from '../utils';
 export interface TypographyProps {
   children: React.ReactNode;
   className?: string;
-};
+}
 
 export function Headline({ children, className }: TypographyProps) {
   return (
     <h1
       className={cn(
-        'text-[2.188rem] font-bold leading-snug tracking-tight font-sans',
+        'text-2xl font-bold tracking-[0.013em] font-sans',
         className
       )}
     >
@@ -21,7 +21,12 @@ export function Headline({ children, className }: TypographyProps) {
 
 export function BodyExtraLarge({ children, className }: TypographyProps) {
   return (
-    <p className={cn('text-lg/7 font-medium font-sans', className)}>
+    <p
+      className={cn(
+        'text-xl font-medium tracking-[0.013em] font-sans',
+        className
+      )}
+    >
       {children}
     </p>
   );
@@ -29,7 +34,12 @@ export function BodyExtraLarge({ children, className }: TypographyProps) {
 
 export function BodyLarge({ children, className }: TypographyProps) {
   return (
-    <p className={cn('text-lg/7 font-medium font-sans', className)}>
+    <p
+      className={cn(
+        'text-lg font-normal tracking-[0.013em] font-sans',
+        className
+      )}
+    >
       {children}
     </p>
   );
@@ -37,7 +47,12 @@ export function BodyLarge({ children, className }: TypographyProps) {
 
 export function Body({ children, className }: TypographyProps) {
   return (
-    <p className={cn('text-base font-normal font-sans', className)}>
+    <p
+      className={cn(
+        'text-base font-normal tracking-[0.013em] font-sans',
+        className
+      )}
+    >
       {children}
     </p>
   );
@@ -45,28 +60,13 @@ export function Body({ children, className }: TypographyProps) {
 
 export function BodySmall({ children, className }: TypographyProps) {
   return (
-    <p className={cn('text-sm font-normal font-sans', className)}>{children}</p>
-  );
-}
-
-export function BodyExtraSmall({ children, className }: TypographyProps) {
-  return (
-    <span className={cn('text-xs font-normal font-sans', className)}>
-      {children}
-    </span>
-  );
-}
-
-export function Caption({ children, className }: TypographyProps) {
-  return (
-    <p className={cn('text-xs/[15px] font-normal font-mono', className)}>
+    <p
+      className={cn(
+        'text-sm font-normal tracking-[0.013em] font-sans',
+        className
+      )}
+    >
       {children}
     </p>
-  );
-}
-
-export function CaptionLarge({ children, className }: TypographyProps) {
-  return (
-    <p className={cn('text-sm font-normal font-mono', className)}>{children}</p>
   );
 }
