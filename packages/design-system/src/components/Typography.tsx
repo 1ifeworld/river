@@ -8,12 +8,20 @@ export interface TypographyProps {
 
 export function Headline({ children, className }: TypographyProps) {
   return (
-    <p
+    <h1
       className={cn(
-        'text-2xl/10 font-medium tracking-[-0.5px] font-sans',
+        'text-[2.188rem] font-bold leading-snug tracking-tight font-sans',
         className
       )}
     >
+      {children}
+    </h1>
+  );
+}
+
+export function BodyExtraLarge({ children, className }: TypographyProps) {
+  return (
+    <p className={cn('text-lg/7 font-medium font-sans', className)}>
       {children}
     </p>
   );
