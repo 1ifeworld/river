@@ -1,0 +1,10 @@
+query listings($channel: String!) {
+  channels(where: { id: $channel }) {
+    listings {
+      chainId
+      tokenId
+      listingAddress
+      hasTokenId
+    }
+  }
+}
