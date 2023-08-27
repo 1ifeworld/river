@@ -5,7 +5,7 @@ export const config: Config = {
     {
       name: "optimism-goerli",
       chainId: 420,
-      rpcUrl: process.env.PONDER_RPC_URL_420,
+      rpcUrl: process.env.ANVIL_FORK_URL,
     },
   ],
   contracts: [
@@ -13,8 +13,15 @@ export const config: Config = {
       name: "Router",
       network: "optimism-goerli",
       abi: "./abis/Router.json",
-      address: "0x7539973c756c45bf0ecc4167d6ce9750c60f903d",
-      startBlock: 13518679,
+      address: "0x880253BF121374121fE21948DE3A426a695924ee",
+      startBlock: 13777523,
+    },
+    {
+      name: "LogicTransmitterMerkleAdmin",
+      network: "optimism-goerli",
+      abi: "./abis/LogicTransmitterMerkleAdmin.json",
+      address: "0x4a38667adcd14d47ab927140e83aafa64b281e4c",
+      startBlock: 13777523,
     },
   ],
 };
