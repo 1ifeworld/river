@@ -1,10 +1,10 @@
 import { getDefaultConfig } from 'connectkit';
-import { createConfig } from 'wagmi';
+import { type Config, createConfig } from 'wagmi';
 import { optimism, optimismGoerli, zora, zoraTestnet } from 'wagmi/chains';
 
 const chains = [optimism, optimismGoerli, zora, zoraTestnet];
 
-export const config = createConfig(
+export const config: Config = createConfig(
   getDefaultConfig({
     appName: 'River',
     alchemyId: process.env.NEXT_PUBLIC_ALCHEMY_KEY as string,
