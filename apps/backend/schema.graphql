@@ -1,15 +1,50 @@
 type Listing @entity {
   id: String!
+  ## sender
+  ## blockNumber
   chainId: String!
   tokenId: String!
   listingAddress: String!
   hasTokenId: Boolean!
   channel: Channel!
+  ## target metadata json -- the query to initially fetch and/or refresh
+  ## metadata should just return a processed json here
 }
 
 type Channel @entity {
   id: String!
   listings: [Listing!]! @derivedFrom(field: "channel")
+}
+
+
+# Router type
+type Router @entity {
+  id: String!
+  press: String
+  sender: String
+  factory: String
+  pointer: String
+  newPress: String
+  newPressData: String
+  owner: String
+  logic: String
+  renderer: String
+  fundsRecipient: String
+  royaltyBPS: BigInt
+  transferable: Boolean
+  fungible: Boolean
+  createdAt: BigInt
+  transactionHash: String
+  # RawTransaction: RawTransaction
+}
+
+
+type LogicTransmitterMerkleAdmin @entity{
+  id: String! 
+  press: String
+  merkleRoot: String
+  accounts: [String]
+  roles: [Boolean]
 }
 
 # # RawTransaction type
@@ -48,12 +83,4 @@ type Channel @entity {
 #   createdAt: BigInt
 #   transactionHash: String
 #   RawTransaction: RawTransaction
-# }
-
-# type LogicTransmitterMerkleAdmin @entity{
-#   id: String! 
-#   press: String
-#   merkleRoot: String
-#   accounts: [String]
-#   roles: [Boolean]
 # }
