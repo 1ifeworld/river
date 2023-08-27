@@ -3,12 +3,15 @@
   "scripts": {
     "dev": "ponder dev",
     "start": "ponder start",
+    "lint": "eslint .",
     "codegen": "ponder codegen"
   },
   "dependencies": {
     "@ponder/core": "0.0.87"
   },
   "devDependencies": {
+    "eslint-config-ponder": "0.0.87",
+    "eslint": "^8.43.0",
     "@types/node": "^18.11.18",
     "abitype": "^0.8.11",
     "typescript": "^5.1.3",
