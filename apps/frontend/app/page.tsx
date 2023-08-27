@@ -1,4 +1,4 @@
-import { Header } from '@/components/client';
+import { Header } from '../components/client';
 
 export default function Home() {
   return (
