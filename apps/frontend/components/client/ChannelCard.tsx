@@ -10,7 +10,7 @@ import {
   ContextMenuSubContent,
   ContextMenuSubTrigger,
   ContextMenuTrigger,
-} from "@river/design-system/src/components/EntityCard";
+} from "@river/design-system/src/components/ContextMenu";
 import { cn } from "@river/design-system/src/utils";
 
 export interface Channel {
