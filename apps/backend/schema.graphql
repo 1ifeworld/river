@@ -17,7 +17,6 @@ type Channel @entity {
 }
 
 
-# Router type
 type Router @entity {
   id: String!
   press: String
@@ -26,13 +25,6 @@ type Router @entity {
   pointer: String
   newPress: String
   newPressData: String
-  owner: String
-  logic: String
-  renderer: String
-  fundsRecipient: String
-  royaltyBPS: BigInt
-  transferable: Boolean
-  fungible: Boolean
   createdAt: BigInt
   transactionHash: String
   # RawTransaction: RawTransaction
@@ -47,7 +39,6 @@ type LogicTransmitterMerkleAdmin @entity{
   roles: [Boolean]
 }
 
-# # RawTransaction type
 # type RawTransaction @entity {
 #   id: String!
 #   transactionHash: String
@@ -57,30 +48,8 @@ type LogicTransmitterMerkleAdmin @entity{
 #   tokenStorage: [TokenStorage] @derivedFrom(field: "RawTransaction")
 # }
 
-# # Arweave type
 # type Arweave @entity {
 #   id: String!
 #   link: String
 #   tableName: String
-# }
-
-# # Router type
-# type Router @entity {
-#   id: String!
-#   press: String
-#   sender: String
-#   factory: String
-#   pointer: String
-#   newPress: String
-#   newPressData: String
-#   owner: String
-#   logic: String
-#   renderer: String
-#   fundsRecipient: String
-#   royaltyBPS: BigInt
-#   transferable: Boolean
-#   fungible: Boolean
-#   createdAt: BigInt
-#   transactionHash: String
-#   RawTransaction: RawTransaction
 # }
