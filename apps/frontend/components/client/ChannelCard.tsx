@@ -27,7 +27,7 @@ export function ChannelCard({
   ...props
 }: ChannelCardProps) {
   return (
-    <div className={cn('space-y-[8px]', className)} {...props}>
+    <Flex className={cn('flex-col gap-y-2', className)} {...props}>
       <div className='overflow-hidden rounded'>
         <Image
           src={channel.cover}
@@ -37,11 +37,16 @@ export function ChannelCard({
           className={cn('h-auto w-auto object-cover aspect-square')}
         />
       </div>
-
       <Flex className='flex-col'>
-        <Body className='text-'>{channel.name}</Body>
-        <BodySmall className='text-sonic-silver'>{channel.creator}</BodySmall>
+        <Body className='text-raisin-black leading-none'>{channel.name}</Body>
+        {channel.members ? (
+          <BodySmall className='text-sonic-silver'>
+            {channel.creator} + `{channel.members.length} others`
+          </BodySmall>
+        ) : (
+          <BodySmall className='text-sonic-silver'>{channel.creator}</BodySmall>
+        )}
       </Flex>
-    </div>
+    </Flex>
   );
 }
