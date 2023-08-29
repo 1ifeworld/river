@@ -7,13 +7,14 @@
     "codegen": "ponder codegen"
   },
   "dependencies": {
-    "@ponder/core": "0.0.87"
+    "@ponder/core": "0.0.87",
+    "alchemy-sdk": "^2.10.0"
   },
   "devDependencies": {
-    "eslint-config-ponder": "0.0.87",
-    "eslint": "^8.43.0",
     "@types/node": "^18.11.18",
     "abitype": "^0.8.11",
+    "eslint": "^8.43.0",
+    "eslint-config-ponder": "0.0.87",
     "typescript": "^5.1.3",
     "viem": "^1.2.6"
   }

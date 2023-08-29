@@ -5,8 +5,8 @@ export const config: Config = {
     {
       name: "optimism-goerli",
       chainId: 420,
-      rpcUrl: process.env.ANVIL_FORK_URL,
-    },
+      rpcUrl: process.env.PONDER_RPC_URL_420,
+    }
   ],
   contracts: [
     {
