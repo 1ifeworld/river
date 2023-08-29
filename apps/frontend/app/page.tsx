@@ -31,7 +31,7 @@ export default function Home() {
             <ChannelCard
               key={`${channel}-${index}`}
               channel={channel}
-              width={222}
+              width={224}
             />
           ))}
         </div>        
