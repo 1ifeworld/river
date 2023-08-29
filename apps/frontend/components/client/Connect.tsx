@@ -9,19 +9,21 @@ import {
   DropdownMenuTrigger,
   Flex,
 } from '@river/design-system';
+import { useDisconnect } from 'wagmi';
 
 function AuthDropdown({
   ensName,
   truncatedAddress,
-  show,
+  disconnect,
 }: {
   ensName?: string;
   truncatedAddress?: string;
-  show?: () => void;
+  disconnect: () => void;
 }) {
+  console.log(truncatedAddress)
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger className='focus:outline-none'>
         <BodySmall className='text-onyx'>
           {ensName ? ensName : truncatedAddress}
         </BodySmall>
@@ -29,8 +31,14 @@ function AuthDropdown({
       <DropdownMenuContent className='bg-white border border-philippine-gray rounded px-8 py-5 mr-3 mt-3'>
         <Flex className='flex-col gap-y-5 items-center'>
           <DropdownMenuItem className='focus:outline-none'>
-            <BodySmall className='text-onyx hover:underline cursor-pointer'>
-              Disconnect
+            <BodySmall className='text-onyx'>
+              <button
+                className='hover:underline cursor-pointer'
+                type='button'
+                onClick={() => disconnect()}
+              >
+                Disconnect
+              </button>
             </BodySmall>
           </DropdownMenuItem>
           <DropdownMenuItem className='focus:outline-none'>
@@ -45,24 +53,25 @@ function AuthDropdown({
 }
 
 export function Connect() {
+  const { disconnect } = useDisconnect();
   return (
     <ConnectKitButton.Custom>
       {({ isConnected, show, truncatedAddress, ensName }) => {
-        return (
+        return isConnected ? (
+          <button type='button' className='p-2 font-medium rounded justify-center items-center flex hover:bg-bright-gray'>
+            <AuthDropdown
+              ensName={ensName}
+              truncatedAddress={truncatedAddress}
+              disconnect={disconnect}
+            />
+          </button>
+        ) : (
           <button
             type='button'
             className='p-2 font-medium rounded justify-center items-center flex hover:bg-bright-gray'
             onClick={show}
           >
-            {isConnected ? (
-              <AuthDropdown
-                ensName={ensName}
-                truncatedAddress={truncatedAddress}
-                show={show}
-              />
-            ) : (
-              <BodySmall className='text-onyx'>Connect</BodySmall>
-            )}
+            <BodySmall className='text-onyx'>Connect</BodySmall>
           </button>
         );
       }}
