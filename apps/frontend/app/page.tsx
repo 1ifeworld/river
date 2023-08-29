@@ -1,10 +1,10 @@
 import { Header, ChannelCard } from '../components/client';
 import { type Channel } from '../components/client';
-import { getListings } from '../gql/requests/getListings';
 
 const sampleChannelData: Channel = {
   name: 'Channel',
   creator: 'tranqui.eth',
+  members: ['junghwan.eth', 'jawn.eth', 'salief.eth'],
   cover:
     'https://ipfs.io/ipfs/bafybeihax3e3suai6qrnjrgletfaqfzriziokl7zozrq3nh42df7u74jyu',
 };
@@ -20,10 +20,7 @@ const arrayOfChannelData: Channel[] = [
   sampleChannelData,
 ];
 
-export default async function Home() {
-  const channels = await getListings({
-    channel: '0x5A2AfcD3aA9B1445A49f0bc8f9c11bFe3DA391de',
-  });
+export default function Home() {
   return (
     <>
       <Header />
