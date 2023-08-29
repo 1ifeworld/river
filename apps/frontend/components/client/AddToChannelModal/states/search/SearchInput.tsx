@@ -12,6 +12,7 @@ import {
 import { networks } from "../../../../../constants";
 import useGetTokenMetadata from "../../../../../hooks/useGetTokenMetadata";
 import { Nft } from "alchemy-sdk";
+import { Hex } from "viem";
 
 interface NetworkSelectProps {
   selectedNetwork: number;
@@ -59,11 +60,17 @@ function NetworkSelect({
 }
 
 type SearchInputProps = {
-  searchResults: Nft | undefined;
-  setSearchResults: React.Dispatch<React.SetStateAction<Nft | undefined>>;
+    searchResults: Nft | undefined;
+    setSearchResults: React.Dispatch<React.SetStateAction<Nft | undefined>>;
+    setSearchParams: (params: {
+        network?: number;
+        contractAddress?: string;
+        tokenId?: string;
+    }) => void;
 };
 
-const SearchInput = ({ searchResults, setSearchResults }: SearchInputProps) => {
+
+const SearchInput = ({ searchResults, setSearchResults, setSearchParams }: SearchInputProps) => {
   // Change the initial state and state type to number instead of string | null
   const [network, setNetwork] = useState<number>(1); // defaulting to Ethereum's ID
   const [contractAddress, setContractAddress] = useState<string>("");
@@ -86,13 +93,19 @@ const SearchInput = ({ searchResults, setSearchResults }: SearchInputProps) => {
     fetchMetadata();
   };
 
-    // if tokenMetadata exists, set results to tokenMetadata
-
   useEffect(() => {
     if (tokenMetadata) {
       setSearchResults(tokenMetadata);
     }
   }, [tokenMetadata]);
+
+  useEffect(() => {
+    setSearchParams({
+        network,
+        contractAddress,
+        tokenId
+    });
+}, [network, contractAddress, tokenId]);  
 
   return (
     <div className="flex items-center w-full my-2">

@@ -14,7 +14,7 @@ const SearchAction = ({addReady, addTrigger}: SearchActionProps) => {
     console.log("addReady in search action: ", addReady)
 
   return (
-    <button disabled={!addReady} className="w-full p-2 mt-2 bg-gray-300">Add</button>
+    <button disabled={!addReady} onClick={addTrigger} className="w-full p-2 mt-2 bg-gray-300">Add</button>
   );
 };
 
