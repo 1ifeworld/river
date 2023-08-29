@@ -10,22 +10,23 @@ import {
   Flex,
 } from '@river/design-system';
 import { useDisconnect } from 'wagmi';
+import { shortenAddress } from '../../utils/shortenAddress';
+import { Hex } from 'viem';
 
 function AuthDropdown({
   ensName,
-  truncatedAddress,
+  address,
   disconnect,
 }: {
   ensName?: string;
-  truncatedAddress?: string;
+  address?: Hex;
   disconnect: () => void;
 }) {
-  console.log(truncatedAddress)
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className='focus:outline-none'>
         <BodySmall className='text-onyx'>
-          {ensName ? ensName : truncatedAddress}
+          {ensName ? ensName : shortenAddress(address)}
         </BodySmall>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='bg-white border border-philippine-gray rounded px-8 py-5 mr-3 mt-3'>
@@ -56,15 +57,16 @@ export function Connect() {
   const { disconnect } = useDisconnect();
   return (
     <ConnectKitButton.Custom>
-      {({ isConnected, show, truncatedAddress, ensName }) => {
+      {({ isConnected, show, address, ensName }) => {
         return isConnected ? (
-          <button type='button' className='p-2 font-medium rounded justify-center items-center flex hover:bg-bright-gray'>
+          <div className='p-2 font-medium rounded justify-center items-center flex hover:bg-bright-gray'>
             <AuthDropdown
               ensName={ensName}
-              truncatedAddress={truncatedAddress}
+              address={address}
               disconnect={disconnect}
+              // className=
             />
-          </button>
+          </div>
         ) : (
           <button
             type='button'
