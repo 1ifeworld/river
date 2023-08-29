@@ -1,14 +1,14 @@
 import { ConnectKitButton } from 'connectkit';
 import { BodySmall } from '@river/design-system';
 
-export const Connect = () => {
+export function Connect() {
   return (
     <ConnectKitButton.Custom>
       {({ isConnected, show, truncatedAddress, ensName }) => {
         return (
           <button
             type='button'
-            className='px-4 py-3 bg-dark-gunmetal rounded-xl border border-arsenic justify-center items-center flex  hover:border-dark-gray'
+            className='px-2 py-4 rounded justify-center items-center flex hover:bg-bright-gray'
             onClick={show}
           >
             <BodySmall className='text-onyx'>
@@ -19,4 +19,4 @@ export const Connect = () => {
       }}
     </ConnectKitButton.Custom>
   );
-};
+}

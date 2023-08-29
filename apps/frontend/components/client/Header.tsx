@@ -1,6 +1,7 @@
 'use client';
 
 import { RiverIcon } from '@river/design-system';
+import { Connect } from './Connect';
 import { AuthPlaceholder } from '../AuthPlaceholder';
 
 export function Header() {
@@ -10,9 +11,7 @@ export function Header() {
       <div></div>
 
       <RiverIcon />
-
-      {/* auth component placeholder */}
-      <AuthPlaceholder />
+      <Connect />
     </div>
   );
 }
