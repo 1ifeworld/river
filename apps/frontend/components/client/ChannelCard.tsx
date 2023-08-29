@@ -1,6 +1,6 @@
-import Image from "next/image";
-
-import { cn } from "@river/design-system/src/utils";
+import Image from 'next/image';
+import { Body, BodySmall, Flex } from '@river/design-system';
+import { cn } from '@river/design-system/src/utils';
 
 export interface Channel {
   name: string;
@@ -27,24 +27,21 @@ export function ChannelCard({
   ...props
 }: ChannelCardProps) {
   return (
-    <div className={cn("space-y-[8px]", className)} {...props}>
-  
-          <div className="overflow-hidden rounded-[4px]">
-            <Image
-              src={channel.cover}
-              alt={channel.name}
-              width={width}
-              height={width}
-              className={cn(
-                "h-auto w-auto object-cover transition-all hover:scale-105 aspect-square"
-              )}
-            />
-          </div>
-       
-      <div className="space-y-1 text-sm">
-        <h3 className="font-medium leading-none">{channel.name}</h3>
-        <p className="text-xs text-muted-foreground">{channel.creator}</p>
+    <div className={cn('space-y-[8px]', className)} {...props}>
+      <div className='overflow-hidden rounded'>
+        <Image
+          src={channel.cover}
+          alt={channel.name}
+          width={width}
+          height={width}
+          className={cn('h-auto w-auto object-cover aspect-square')}
+        />
       </div>
+
+      <Flex className='flex-col'>
+        <Body>{channel.name}</Body>
+        <BodySmall>{channel.creator}</BodySmall>
+      </Flex>
     </div>
   );
 }
