@@ -2,7 +2,7 @@
 module.exports = {
   reactStrictMode: true,
   images: {
-    domains: ['ipfs.io'],
+    domains: ['ipfs.io', 'res.cloudinary.com'],
   },
   webpack: (config) => {
     config.resolve.fallback = { fs: false, net: false, tls: false };
