@@ -13,7 +13,8 @@ const config: Config = {
       },
       colors: {
         onyx: '#373737',
-        'bright-gray': '#EEEEEE'
+        'bright-gray': '#EEEEEE',
+        'silver-sand': '#C2C2C2',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
