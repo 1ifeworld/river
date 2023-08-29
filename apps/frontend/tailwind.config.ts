@@ -15,6 +15,7 @@ const config: Config = {
         onyx: '#373737',
         'bright-gray': '#EEEEEE',
         'silver-sand': '#C2C2C2',
+        'philippine-gray': '#8B8B8B'
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
