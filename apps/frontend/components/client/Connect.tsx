@@ -7,6 +7,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  Flex,
 } from '@river/design-system';
 
 function AuthDropdown({
@@ -20,14 +21,22 @@ function AuthDropdown({
 }) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>{ensName || truncatedAddress}</DropdownMenuTrigger>
-      <DropdownMenuContent className='border border-philippine-gray rounded px-8 py-5 gap-y-4'>
-        <Flex>
-          <DropdownMenuItem>
-            <BodySmall className='text-onyx'>Disconnect</BodySmall>
+      <DropdownMenuTrigger>
+        <BodySmall className='text-onyx'>
+          {ensName ? ensName : truncatedAddress}
+        </BodySmall>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className='bg-white border border-philippine-gray rounded px-8 py-5 mr-3 mt-3'>
+        <Flex className='flex-col gap-y-5 items-center'>
+          <DropdownMenuItem className='focus:outline-none'>
+            <BodySmall className='text-onyx hover:underline cursor-pointer'>
+              Disconnect
+            </BodySmall>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <BodySmall className='text-silver-sand'>About River</BodySmall>
+          <DropdownMenuItem className='focus:outline-none'>
+            <BodySmall className='text-silver-sand cursor-not-allowed'>
+              About River
+            </BodySmall>
           </DropdownMenuItem>
         </Flex>
       </DropdownMenuContent>
@@ -45,17 +54,15 @@ export function Connect() {
             className='p-2 font-medium rounded justify-center items-center flex hover:bg-bright-gray'
             onClick={show}
           >
-            <BodySmall className='text-onyx'>
-              {isConnected ? (
-                <AuthDropdown
-                  ensName={ensName}
-                  truncatedAddress={truncatedAddress}
-                  show={show}
-                />
-              ) : (
-                'Connect'
-              )}
-            </BodySmall>
+            {isConnected ? (
+              <AuthDropdown
+                ensName={ensName}
+                truncatedAddress={truncatedAddress}
+                show={show}
+              />
+            ) : (
+              <BodySmall className='text-onyx'>Connect</BodySmall>
+            )}
           </button>
         );
       }}
