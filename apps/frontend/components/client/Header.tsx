@@ -1,18 +1,13 @@
-'use client';
-
 import { RiverIcon } from '@river/design-system';
-import { AuthPlaceholder } from '../AuthPlaceholder';
+import { Connect } from './Connect';
 
 export function Header() {
   return (
-    <div className='flex justify-between items-center p-3'>
+    <div className='flex justify-end items-center p-3'>
       {/* sidebar icon placeholder */}
       <div></div>
 
-      <RiverIcon />
-
-      {/* auth component placeholder */}
-      <AuthPlaceholder />
+      <Connect />
     </div>
   );
 }
