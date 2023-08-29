@@ -1,6 +1,5 @@
 import Image from 'next/image';
-import { Body, BodySmall, Flex } from '@river/design-system';
-import { cn } from '@river/design-system/src/utils';
+import { Body, BodySmall, Flex, cn } from '@river/design-system';
 
 export interface Channel {
   name: string;
