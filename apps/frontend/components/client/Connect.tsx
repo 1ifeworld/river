@@ -21,13 +21,15 @@ function AuthDropdown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>{ensName || truncatedAddress}</DropdownMenuTrigger>
-      <DropdownMenuContent className='border'>
-        <DropdownMenuItem>
-          <BodySmall className='text-onyx'>Disconnect</BodySmall>
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <BodySmall className='text-silver-sand'>About River</BodySmall>
-        </DropdownMenuItem>
+      <DropdownMenuContent className='border border-philippine-gray rounded px-8 py-5 gap-y-4'>
+        <Flex>
+          <DropdownMenuItem>
+            <BodySmall className='text-onyx'>Disconnect</BodySmall>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <BodySmall className='text-silver-sand'>About River</BodySmall>
+          </DropdownMenuItem>
+        </Flex>
       </DropdownMenuContent>
     </DropdownMenu>
   );
