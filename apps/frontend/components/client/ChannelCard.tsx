@@ -39,8 +39,8 @@ export function ChannelCard({
       </div>
 
       <Flex className='flex-col'>
-        <Body>{channel.name}</Body>
-        <BodySmall>{channel.creator}</BodySmall>
+        <Body className='text-'>{channel.name}</Body>
+        <BodySmall className='text-sonic-silver'>{channel.creator}</BodySmall>
       </Flex>
     </div>
   );

@@ -16,7 +16,8 @@ const config: Config = {
         'bright-gray': '#EEEEEE',
         'silver-sand': '#C2C2C2',
         'philippine-gray': '#8B8B8B',
-        'sonic-silver': '#777777'
+        'sonic-silver': '#777777',
+        'raisin-black': '#262626'
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
