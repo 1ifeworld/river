@@ -8,11 +8,11 @@ export function Connect() {
         return (
           <button
             type='button'
-            className='px-2 py-4 rounded justify-center items-center flex hover:bg-bright-gray'
+            className='p-2 font-medium rounded justify-center items-center flex hover:bg-bright-gray'
             onClick={show}
           >
             <BodySmall className='text-onyx'>
-              {isConnected ? ensName ?? truncatedAddress : 'Connect Wallet'}
+              {isConnected ? ensName ?? truncatedAddress : 'Connect'}
             </BodySmall>
           </button>
         );
