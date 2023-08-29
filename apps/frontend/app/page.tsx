@@ -1,14 +1,13 @@
-import { 
-  Header, 
-  ChannelCard 
-} from '../components/client';
+import { Header, ChannelCard } from '../components/client';
 import { type Channel } from '../components/client';
 
 const sampleChannelData: Channel = {
-  name: "Channel",
-  creator: "tranqui.eth",
-  cover: "https://ipfs.io/ipfs/bafybeihax3e3suai6qrnjrgletfaqfzriziokl7zozrq3nh42df7u74jyu"
-}
+  name: 'Channel',
+  creator: 'tranqui.eth',
+  members: ['junghwan.eth', 'jawn.eth', 'salief.eth'],
+  cover:
+    'https://ipfs.io/ipfs/bafybeihax3e3suai6qrnjrgletfaqfzriziokl7zozrq3nh42df7u74jyu',
+};
 
 const arrayOfChannelData: Channel[] = [
   sampleChannelData,
@@ -18,14 +17,14 @@ const arrayOfChannelData: Channel[] = [
   sampleChannelData,
   sampleChannelData,
   sampleChannelData,
-  sampleChannelData  
-]
+  sampleChannelData,
+];
 
 export default function Home() {
   return (
     <>
       <Header />
-      <main className="mx-[144px] my-5">
+      <main className='mx-[144px] my-5'>
         <div className={`grid grid-cols-6 gap-x-5 gap-y-4`}>
           {arrayOfChannelData.map((channel, index) => (
             <ChannelCard
@@ -34,7 +33,7 @@ export default function Home() {
               width={224}
             />
           ))}
-        </div>        
+        </div>
       </main>
     </>
   );

@@ -1,7 +1,6 @@
 import sdk from '../client';
-import { type Hex } from 'viem';
 
-export async function getListings({ channel }: { channel: Hex }) {
+export async function getListings({ channel }: { channel: string }) {
   const { channels } = await sdk.listings({ channel });
 
   return {
