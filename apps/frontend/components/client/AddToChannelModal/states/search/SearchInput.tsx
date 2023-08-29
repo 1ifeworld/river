@@ -50,7 +50,7 @@ function NetworkSelect({
       <SelectContent>
         {Object.entries(networks).map(([networkId, networkName]) => (
           <SelectItem key={networkId} value={networkId}>
-            <div className="flex items-center border-[1.5px] border-[#DADADA] px-2">
+            <div className="flex items-center border-[1.5px] border-t-0 border-[#DADADA] px-2">
               <img
                 src={getIconPath(Number(networkId))}
                 alt={`${networkName} icon`}

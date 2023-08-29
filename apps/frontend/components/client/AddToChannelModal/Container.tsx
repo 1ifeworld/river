@@ -20,10 +20,10 @@ export function Container() {
 
   return (
     <Dialog>
-      <DialogTrigger className="border-red-500 border-2 w-fit justify-start">
+      <DialogTrigger className="border-red-500 border-2 w-fit justify-center">
         Open
       </DialogTrigger>
-      <DialogContent className="flex flex-wrap border-2 border-red-500 w-fit h-[490px] p-4">
+      <DialogContent className="flex flex-wrap border-2 border-red-500 w-[490px] h-[490px] ">
         <Nav activeTab={activeTab} setActiveTab={setActiveTab}></Nav>
         <>
           {activeTab === "Search" ? <SearchContainer /> : null}
