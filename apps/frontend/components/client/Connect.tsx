@@ -11,7 +11,7 @@ export const Connect = () => {
             className='px-4 py-3 bg-dark-gunmetal rounded-xl border border-arsenic justify-center items-center flex  hover:border-dark-gray'
             onClick={show}
           >
-            <BodySmall className='text-platinum'>
+            <BodySmall className='text-onyx'>
               {isConnected ? ensName ?? truncatedAddress : 'Connect Wallet'}
             </BodySmall>
           </button>
