@@ -21,7 +21,7 @@ const arrayOfChannelData: Channel[] = [
   sampleChannelData  
 ]
 
-export default function Home() {
+export default async function Home() {
   return (
     <>
       <Header />
