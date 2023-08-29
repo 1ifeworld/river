@@ -64,7 +64,6 @@ export function Connect() {
               ensName={ensName}
               address={address}
               disconnect={disconnect}
-              // className=
             />
           </div>
         ) : (
