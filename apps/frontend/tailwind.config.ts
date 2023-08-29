@@ -11,6 +11,13 @@ const config: Config = {
       fontFamily: {
         sans: ['var(--font-helvetica-neue)'],
       },
+      fontSize: {
+        sm: '0.923rem',
+        base: '1rem',
+        lg: '1.308rem',
+        xl: '1.923rem',
+        '2xl': '2.692rem',
+      },
       colors: {
         onyx: '#373737',
         'bright-gray': '#EEEEEE',
