@@ -38,10 +38,10 @@ export function ChannelCard({
         />
       </div>
       <Flex className='flex-col'>
-        <Body className='text-raisin-black leading-none'>{channel.name}</Body>
+        <Body className='text-raisin-black font-medium leading-none'>{channel.name}</Body>
         {channel.members ? (
           <BodySmall className='text-sonic-silver'>
-            {channel.creator} + `{channel.members.length} others`
+            {channel.creator} + {channel.members.length} others
           </BodySmall>
         ) : (
           <BodySmall className='text-sonic-silver'>{channel.creator}</BodySmall>

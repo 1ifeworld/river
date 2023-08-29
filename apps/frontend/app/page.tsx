@@ -7,7 +7,6 @@ import { type Channel } from '../components/client';
 const sampleChannelData: Channel = {
   name: "Channel",
   creator: "tranqui.eth",
-  members: [],
   cover: "https://ipfs.io/ipfs/bafybeihax3e3suai6qrnjrgletfaqfzriziokl7zozrq3nh42df7u74jyu"
 }
 
@@ -26,8 +25,8 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main className="mx-[145px] my-[20px]">
-        <div className={`grid grid-cols-6 gap-x-[21px] gap-y-[18px] pb-4`}>
+      <main className="mx-[144px] my-5">
+        <div className={`grid grid-cols-6 gap-x-5 gap-y-4`}>
           {arrayOfChannelData.map((channel, index) => (
             <ChannelCard
               key={`${channel}-${index}`}
