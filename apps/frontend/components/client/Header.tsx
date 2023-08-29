@@ -1,8 +1,5 @@
-'use client';
-
 import { RiverIcon } from '@river/design-system';
 import { Connect } from './Connect';
-import { AuthPlaceholder } from '../AuthPlaceholder';
 
 export function Header() {
   return (
