@@ -28,6 +28,7 @@ type Channel @entity {
   id: String!
   contractUri: String
   listings: [Listing!]! @derivedFrom(field: "channel")
+  logicTransmitterMerkleAdmin: [LogicTransmitterMerkleAdmin!]! @derivedFrom(field: "id")
 }
 
 
