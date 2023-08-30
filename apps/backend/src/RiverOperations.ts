@@ -4,34 +4,31 @@
 // import getNftMetadata from "./hooks/useGetNFTMetadata";
 // import { pressDataDecoder } from "./decodingSchema/decoders/pressDataDecoder";
 
-
 // type OurNftStructure = {
-
 
 //     pieceName?: string,
 //     pieceCreator?: string,
 //     pieceDescription?: string,
 //     pieceImageURL?: string,
-//     pieceAnimationURL?: string, 
-//     pieceCreatedDate?: string, 
+//     pieceAnimationURL?: string,
+//     pieceCreatedDate?: string,
 //     pieceContentType?: string
 
 // }
 
 // function processMetadata(metadata: Nft | NftMetadata ): OurNftStructure {
 //   return {
-      
+
 //     pieceName: metadata.title,
 //     pieceCreator: metadata.contract.contractDeployer,
 //     pieceDescription: metadata.description,
 //     pieceImageURL: metadata.media[0]?.thumbnail,
-//     pieceAnimationURL: metadata.contract.raw?.metadata?.animation_url, 
-//     pieceCreatedDate: metadata.contract.deployedBlockNumber, 
+//     pieceAnimationURL: metadata.contract.raw?.metadata?.animation_url,
+//     pieceCreatedDate: metadata.contract.deployedBlockNumber,
 //     pieceContentType: metadata.contract.image?.contentType
-    
+
 //   };
 // }
-
 
 // ponder.on("Router:DataSent", async ({ event, context }) => {
 //   const { Channel, Listing, PieceMetadata } = context.entities;
@@ -111,8 +108,8 @@
 //   });
 // } else {
 //   console.log("Listing already exists:", listingId);
-// } } 
-  
+// } }
+
 //   ponder.on("Router:DataRemoved", async ({ event, context }) => {
 //     const { Listing } = context.entities;
 //     const { press, ids } = event.params;
@@ -129,13 +126,12 @@
 
 //   ponder.on("Router:PressRegistered", async ({ event, context }) => {
 //     const { Router, Channel } = context.entities;
-  
+
 //     const { sender, factory, newPress, newPressData } = event.params;
-  
+
 //     // Decode the newPressData
 //     const contractUri = await pressDataDecoder(newPressData);
 
-  
 //     // Create or update the Router entity
 //     await Router.upsert({
 //       id: newPress,
@@ -153,7 +149,6 @@
 //       }
 //     });
 
-  
 //     // Create or update the Channel entity
 //     await Channel.upsert({
 //       id: newPress,
@@ -164,5 +159,5 @@
 //         contractUri: contractUri,
 //       }
 //   });
-//   }); 
+//   });
 // });
