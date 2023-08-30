@@ -39,6 +39,7 @@ export default {
       colors: {
         // river custom start
         onyx: '#373737',
+        'light-gray' : '#D2D2D2',
         'bright-gray': '#EEEEEE',
         'silver-sand': '#C2C2C2',
         'philippine-gray': '#8B8B8B',
