@@ -2,7 +2,7 @@ import { getDefaultConfig } from 'connectkit';
 import { type Config, createConfig } from 'wagmi';
 import { optimism, optimismGoerli, zora, zoraTestnet } from 'wagmi/chains';
 
-const chains = [optimism, optimismGoerli, zora, zoraTestnet];
+const chains = [optimismGoerli];
 
 export const config: Config = createConfig(
   getDefaultConfig({
