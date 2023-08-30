@@ -84,6 +84,9 @@ importers:
       '@graphql-codegen/typescript-operations':
         specifier: ^4.0.1
         version: 4.0.1(graphql@16.8.0)
+      '@river/tailwind':
+        specifier: workspace:^
+        version: link:../../packages/tailwind
       '@river/tsconfig':
         specifier: workspace:*
         version: link:../../packages/tsconfig
