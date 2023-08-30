@@ -1,3 +1,14 @@
+type PieceMetadata @entity {
+id: String!
+pieceName: String
+pieceCreator: String
+pieceDescription: String
+pieceImageURL: String 
+pieceAnimationURL: String
+pieceCreatedDate: String
+pieceContentType: String 
+}
+
 type Listing @entity {
   id: String!
   ## sender
@@ -7,13 +18,17 @@ type Listing @entity {
   listingAddress: String!
   hasTokenId: Boolean!
   channel: Channel!
+  listingTargetMetadata: PieceMetadata! 
+
   ## target metadata json -- the query to initially fetch and/or refresh
   ## metadata should just return a processed json here
 }
 
 type Channel @entity {
   id: String!
+  contractUri: String
   listings: [Listing!]! @derivedFrom(field: "channel")
+  logicTransmitterMerkleAdmin: [LogicTransmitterMerkleAdmin!]! @derivedFrom(field: "id")
 }
 
 
