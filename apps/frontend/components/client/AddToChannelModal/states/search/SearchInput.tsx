@@ -1,21 +1,22 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@river/design-system/src/components/Select";
-import { SearchIcon } from "@river/design-system";
-import { Input } from "@river/design-system/src/components/Input";
-import { Label } from "@river/design-system/src/components/Label";
+  Flex,
+  SearchIcon,
+  Body,
+  Label,
+} from '@river/design-system';
 
-import { networks } from "../../../../../constants";
-import useGetTokenMetadata from "../../../../../hooks/useGetTokenMetadata";
-import { Nft } from "alchemy-sdk";
-import { Hex } from "viem";
+import { Input } from '@river/design-system/src/components/Input';
+
+import { networks } from '../../../../../constants';
+import useGetTokenMetadata from '../../../../../hooks/useGetTokenMetadata';
+import { Nft } from 'alchemy-sdk';
+import Image from 'next/image';
 
 interface NetworkSelectProps {
   selectedNetwork: number;
@@ -24,7 +25,7 @@ interface NetworkSelectProps {
 
 const getIconPath = (networkId: number) => {
   const networkName = networks[networkId];
-  return networkName ? `/icons/${networkName}.svg` : ""; // default to empty string if no match.
+  return networkName ? `/icons/${networkName}.svg` : ''; // default to empty string if no match.
 };
 
 function NetworkSelect({
@@ -34,25 +35,24 @@ function NetworkSelect({
   return (
     <Select onValueChange={(value) => setSelectedNetwork(Number(value))}>
       <SelectTrigger
-        id="networkSelect"
-        className="rounded-l-[4px] w-[70px] h-[40px] px-2 border-[1.5px] border-[#DADADA] focus:outline-none"
+        id='networkSelect'
+        className='w-fit h-[40px] border-[1.5px] border-[#DADADA] focus:ring-0'
       >
         <SelectValue>
-          <img
+          <Image
             src={getIconPath(selectedNetwork)}
             width={14}
             height={24}
-            alt={networks[selectedNetwork] + " icon"}
-            className=""
+            alt={networks[selectedNetwork] + 'icon'}
           />
         </SelectValue>
       </SelectTrigger>
       <SelectContent>
         {Object.entries(networks).map(([networkId, networkName]) => (
           <SelectItem key={networkId} value={networkId}>
-            <div className="text-[13px] rounded-[4px] flex items-center border-[1.5px] border-[#DADADA] p-2 my-2 w-[162px]">
-              {networkName}
-            </div>
+            <Flex className='rounded items-center px-2 my-2 w-[162px]'>
+              <Body>{networkName}</Body>
+            </Flex>
           </SelectItem>
         ))}
       </SelectContent>
@@ -77,8 +77,8 @@ const SearchInput = ({
 }: SearchInputProps) => {
   // Change the initial state and state type to number instead of string | null
   const [network, setNetwork] = useState<number>(1); // defaulting to Ethereum's ID
-  const [contractAddress, setContractAddress] = useState<string>("");
-  const [tokenId, setTokenId] = useState<string>("");
+  const [contractAddress, setContractAddress] = useState<string>('');
+  const [tokenId, setTokenId] = useState<string>('');
 
   const { tokenMetadata, fetchMetadata } = useGetTokenMetadata({
     network: network,
@@ -106,60 +106,69 @@ const SearchInput = ({
   }, [network, contractAddress, tokenId]);
 
   return (
-    <div className="flex w-fit h-fit justify-start items-center mt-[22px]">
-      <div className="flex flex-col gap-y-[5px]">
-        <Label htmlFor="networkSelect" className="text-[#7B7B7B] w-fit ml-2 text-[10px]" id="networkSelect">
+    <Flex className='item-center justify-between'>
+      {/* Network select */}
+      <Flex className='flex-col gap-y-1'>
+        <Label
+          htmlFor='networkSelect'
+          className='text-[#7B7B7B] w-fit text-[10px]'
+          id='networkSelect'
+        >
           Network
         </Label>
         <NetworkSelect
           selectedNetwork={network}
           setSelectedNetwork={setNetwork}
         />
-      </div>
-      <div className="flex flex-col gap-y-[5px]">
-        <Label htmlFor="addressInput" className="text-[#7B7B7B] ml-2 w-fit text-[10px]">
+      </Flex>
+      {/* Address input */}
+      <Flex className='flex-col gap-y-1'>
+        <Label
+          htmlFor='addressInput'
+          className='text-[#7B7B7B] w-fit text-[10px]'
+        >
           Address
         </Label>
         <Input
-          id="addressInput"
-          type="text"
-          placeholder="0xA7b..."
+          id='addressInput'
+          type='text'
+          placeholder='0xA837b...'
           value={contractAddress}
           onChange={(e) => setContractAddress(e.target.value)}
-          className="px-2 w-[274px] h-[40px] border-[1.5px] border-l-0 border-[#DADADA] focus:outline-none"
+          className='px-2 w-[256px] h-[40px] border-[1.5px] rounded border-[#DADADA] focus-visible:ring-0'
         />
-      </div>
-      <div className="flex flex-col gap-y-[5px]">
-        <Label htmlFor="tokenIdInput" className="ml-2 text-[#7B7B7B] w-fit text-[10px]">
+      </Flex>
+      {/* Token id input */}
+      <Flex className='flex-col gap-y-1'>
+        <Label
+          htmlFor='tokenIdInput'
+          className='text-[#7B7B7B] w-fit text-[10px]'
+        >
           ID
         </Label>
         <Input
-          id="tokenIdInput"
-          type="text"
-          placeholder="17"
+          id='tokenIdInput'
+          type='text'
+          placeholder='17'
           value={tokenId}
           onChange={(e) => setTokenId(e.target.value)}
-          className="rounded-r-[4px] px-2 w-[40px] h-[40px] border-[1.5px]  border-l-0 border-[#DADADA] focus:outline-none"
+          className='px-2 w-14 h-[40px] border-[1.5px] border-[#DADADA] focus-visible:outline-none focus-visible:ring-0'
         />
-      </div>
-      <div className="flex flex-col gap-y-[5px] justify-center">
-        <Label htmlFor="" className="text-white w-fit text-[10px]">
-          Search
-        </Label>
-        <button
-          className="ml-[12px] flex h-full self-center rounded-full bg-[#F2F2F2] hover:bg-[#A8A8A8] disabled:bg-[#F2F2F2] focus:outline-none"
-          onClick={() => {
-            // Handle the search here using network, contractAddress, and tokenId
-            handleFetchMetadata();
-          }}
-        >
-          <SearchIcon
-            width="35"
-            className="fill-[#393939] hover:fill-[#FEFEFE] disabled:fill-[#CACACA]"
-          />
-        </button>
-      </div>
-    </div>
+      </Flex>
+      {/* Search button */}
+      <button
+        className='mt-5 self-center rounded-full bg-[#F2F2F2] hover:bg-[#A8A8A8] disabled:bg-[#F2F2F2] focus:outline-none'
+        onClick={() => {
+          // Handle the search here using network, contractAddress, and tokenId
+          handleFetchMetadata();
+        }}
+      >
+        <SearchIcon
+          width='35'
+          className='fill-[#393939] hover:fill-[#FEFEFE] disabled:fill-[#CACACA]'
+        />
+      </button>
+    </Flex>
   );
 };
 

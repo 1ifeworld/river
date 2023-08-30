@@ -2,9 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
+/* html {
   font-size: 13px;
-}
+} */
 
 @layer base {
   :root {

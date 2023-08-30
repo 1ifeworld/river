@@ -1,8 +1,6 @@
 import * as React from "react";
 import { cn } from "../utils";
-
-export interface SvgProps
-  extends Pick<React.SVGProps<SVGSVGElement>, "fill" | "width" | "className"> {}
+import { type SvgProps } from "./types";
 
 export function SearchIcon({
   width,
@@ -14,7 +12,7 @@ export function SearchIcon({
       width={width}
       height={width}
       viewBox="0 0 35 35"
-      // fill={fill}
+      fill='none'
       xmlns="http://www.w3.org/2000/svg"
       className={cn(className)}
     >

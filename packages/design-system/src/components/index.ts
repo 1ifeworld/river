@@ -6,8 +6,11 @@ export {
   BodySmall,
   type TypographyProps,
 } from './Typography';
-export * from './Button'
-export * from './Dialog'
-export * from './ContextMenu'
-export * from './DropdownMenu'
-export * from "./SvgLoader"
+export * from './Button';
+export * from './Dialog';
+export * from './ContextMenu';
+export * from './DropdownMenu';
+export * from './Input';
+export * from './Label';
+export * from './Select';
+export * from './SvgLoader';

@@ -13,9 +13,8 @@ export function StateNav({
   closeModal,
 }: StateNavProps) {
   return (
-    <Debug>
     <div className='flex justify-center text-silver-sand w-full gap-x-7'>
-      <button disabled onClick={() => setActiveTab('Upload')}>
+      <button disabled onClick={() => setActiveTab('Upload')} className='focus:outline-none'>
         <Body
           className={cn(
             activeTab === 'Upload'
@@ -27,19 +26,19 @@ export function StateNav({
           Upload
         </Body>
       </button>
-      <button onClick={() => setActiveTab('Search')}>
+      <button onClick={() => setActiveTab('Search')} className='focus:outline-none'>
         <Body
           className={cn(
             activeTab === 'Search'
               ? 'text-raisin-black border-b-[2px] border-[#287EFF]'
               : '',
-            'text-[14px] focus:outline-none leading-[3rem]'
+            'text-[14px] focus:outline-none leading-[3rem] min-w-[64px]'
           )}
         >
           Search
         </Body>
       </button>
-      <button disabled onClick={() => setActiveTab('Text')}>
+      <button disabled onClick={() => setActiveTab('Text')} className='focus:outline-none'>
         <Body
           className={cn(
             activeTab === 'Text'
@@ -52,6 +51,5 @@ export function StateNav({
         </Body>
       </button>
     </div>
-    </Debug>
   );
 }

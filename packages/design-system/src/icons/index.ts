@@ -1,2 +1,5 @@
-export { RiverIcon, type SvgProps } from './RiverIcon'
+export { Add } from './Add'
+export { Exit } from './Exit'
+export { RiverIcon} from './RiverIcon'
 export { SearchIcon } from './SearchIcon'
+export { type SvgProps } from './types'

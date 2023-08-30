@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { cn } from '../utils';
-
-export interface SvgProps
-  extends Pick<React.SVGProps<SVGSVGElement>, 'fill' | 'width' | 'className'> {}
+import { type SvgProps } from "./types";
 
 export function RiverIcon({
   width = 59,
