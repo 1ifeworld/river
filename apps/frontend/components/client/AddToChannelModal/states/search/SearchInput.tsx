@@ -35,7 +35,7 @@ function NetworkSelect({
     <Select onValueChange={(value) => setSelectedNetwork(Number(value))}>
       <SelectTrigger
         id="networkSelect"
-        className="w-[70px] h-[40px] px-2 border-[1.5px] border-[#DADADA] focus:outline-none"
+        className="rounded-l-[4px] w-[70px] h-[40px] px-2 border-[1.5px] border-[#DADADA] focus:outline-none"
       >
         <SelectValue>
           <img
@@ -50,12 +50,7 @@ function NetworkSelect({
       <SelectContent>
         {Object.entries(networks).map(([networkId, networkName]) => (
           <SelectItem key={networkId} value={networkId}>
-            <div className="flex items-center border-[1.5px] border-t-0 border-[#DADADA] px-2">
-              <img
-                src={getIconPath(Number(networkId))}
-                alt={`${networkName} icon`}
-                className="w-[14px] h-[24px] mr-2"
-              />
+            <div className="text-[13px] rounded-[4px] flex items-center border-[1.5px] border-[#DADADA] p-2 my-2 w-[162px]">
               {networkName}
             </div>
           </SelectItem>
@@ -111,7 +106,7 @@ const SearchInput = ({
   }, [network, contractAddress, tokenId]);
 
   return (
-    <div className="flex w-fit h-fit justify-start items-center border-[1px] border-red-500 ">
+    <div className="flex w-fit h-fit justify-start items-center mt-[22px]">
       <div className="flex flex-col gap-y-[5px]">
         <Label htmlFor="networkSelect" className="text-[#7B7B7B] w-fit ml-2 text-[10px]" id="networkSelect">
           Network
@@ -130,7 +125,7 @@ const SearchInput = ({
           type="text"
           placeholder="0xA7b..."
           value={contractAddress}
-          onChange={(e) => setTokenId(e.target.value)}
+          onChange={(e) => setContractAddress(e.target.value)}
           className="px-2 w-[274px] h-[40px] border-[1.5px] border-l-0 border-[#DADADA] focus:outline-none"
         />
       </div>
@@ -144,7 +139,7 @@ const SearchInput = ({
           placeholder="17"
           value={tokenId}
           onChange={(e) => setTokenId(e.target.value)}
-          className="px-2 w-[40px] h-[40px] border-[1.5px] border-l-0 border-[#DADADA] focus:outline-none"
+          className="rounded-r-[4px] px-2 w-[40px] h-[40px] border-[1.5px]  border-l-0 border-[#DADADA] focus:outline-none"
         />
       </div>
       <div className="flex flex-col gap-y-[5px] justify-center">
@@ -152,7 +147,7 @@ const SearchInput = ({
           Search
         </Label>
         <button
-          className="ml-[12px] flex h-full self-center rounded-full bg-[#F2F2F2] hover:bg-[#A8A8A8] disabled:bg-[#F2F2F2]"
+          className="ml-[12px] flex h-full self-center rounded-full bg-[#F2F2F2] hover:bg-[#A8A8A8] disabled:bg-[#F2F2F2] focus:outline-none"
           onClick={() => {
             // Handle the search here using network, contractAddress, and tokenId
             handleFetchMetadata();

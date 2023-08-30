@@ -5,48 +5,46 @@ import React from "react";
 import { Nft } from "alchemy-sdk";
 import Image from "next/image";
 import { cn } from "@river/design-system/src/utils";
+import { Body, BodySmall } from "@river/design-system";
 
 interface NetworkSelectProps {
   nftMetadata: Nft | undefined;
 }
 
 const SearchGallery = ({ nftMetadata }: NetworkSelectProps) => {
-  console.log("nft metadata in search gallery: ", nftMetadata);
   return (
-    <div className="w-full h-[220px] bg-[#E0E0E0] flex items-center">
+    <div className="w-full h-[218px] bg-[#F8F8F8] border-y-[0.7px] border-[#E0E0E0] flex items-center">
       {/* Grid container */}
-      <div className="flex-grow grid grid-cols-2  px-4">
+      <div className="mx-[33px] flex justify-start items-center w-full space-x-[21px]">
         {/* First Column: Image or Blank Square */}
-        <div className="flex w-fit h-full items-center bg-[#D0D0D0]">
+        <div className="flex justify-center w-fit">
           {nftMetadata?.media?.[0]?.thumbnail ? (
             <Image
               src={nftMetadata?.media?.[0]?.thumbnail}
               alt={nftMetadata?.title}
-              width={165}
-              height={165}
+              width={200}
+              height={200}
               className={cn(
-                "border-2 border-black object-cover aspect-square"
+                "rounded-[4px] w-[165px] h-[165px] object-cover aspect-square"
               )}
             />
           ) : (
             // Your custom div component for the null state goes here
-            <div className="w-[165px] h-[165px]"></div>
+            <div className="w-[165px] h-[165px] bg-[#D0D0D0]"></div>
           )}
         </div>
         {/* Second Column: Text details */}
-        <div className="flex flex-col justify-between">
-            <div>
-                <span className="text-[17px] text-[#272727]">
-                    {nftMetadata?.title || "Title Placeholder"}
-                </span>
-                <br/>
-                <span className="text-[13px] text-[#777777]">
-                    {nftMetadata?.contract.contractDeployer || "Created By Placeholder"}
-                </span>
-            </div>
-            <span className="text-[13px] text-[#777777]">
-                {nftMetadata?.description || "Description Placeholder"}
-            </span>
+        <div className="h-full flex flex-col w-[200px]">
+          <Body className="text-[#272727] break-words">
+            {nftMetadata?.title || "Title"}
+          </Body>
+          {/* truncating for now but need to add ens resolution */}
+          <BodySmall className="text-[13px] text-[#777777] break-words truncate">
+            {nftMetadata?.contract.contractDeployer  || "Created By"}
+          </BodySmall>      
+          <BodySmall className="text-[13px] text-[#777777] break-words mt-[25.9px] ">
+            {nftMetadata?.description || "Description" || "Description"}
+          </BodySmall>                  
         </div>
       </div>
     </div>

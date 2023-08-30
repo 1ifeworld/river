@@ -1,20 +1,29 @@
 "use client";
 
 // SearchAction.tsx
-import React from 'react';
+import React from "react";
 
 interface SearchActionProps {
-    addReady: boolean;
-    addTrigger: (() => void) | undefined;
-  }
-  
+  addReady: boolean;
+  addTrigger: (() => void) | undefined;
+  nameOfAdd?: string;
+}
 
-const SearchAction = ({addReady, addTrigger}: SearchActionProps) => {
-
-    console.log("addReady in search action: ", addReady)
+const SearchAction = ({
+  addReady,
+  addTrigger,
+  nameOfAdd,
+}: SearchActionProps) => {
+  console.log("addReady in search action: ", addReady);
 
   return (
-    <button disabled={!addReady} onClick={addTrigger} className="w-full p-2 mt-2 bg-gray-300">Add</button>
+    <button
+      disabled={!addReady}
+      onClick={addTrigger}
+      className="rounded-[4px] mx-[18px] bg-[#3F8AE2] hover:bg-[#1456A4] text-white w-full p-2 mt-[22px]"
+    >
+      {nameOfAdd ? "Add " + `"${nameOfAdd}"` : "Add"}
+    </button>
   );
 };
 

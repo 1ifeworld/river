@@ -80,14 +80,14 @@ const SearchContainer = () => {
     console.log("config: ", sendDataConfig)
 
   return (
-    <div className='flex flex-wrap justify-center'>
+    <div className='flex flex-wrap h-fit justify-center'>
       <SearchGallery nftMetadata={searchResults} />
       <SearchInput 
         searchResults={searchResults} 
         setSearchResults={setSearchResults} 
         setSearchParams={handleSetSearchParams}
     />
-      <SearchAction addReady={!!sendDataConfig ? true : false} addTrigger={sendData} />
+      <SearchAction nameOfAdd={searchResults?.title} addReady={!!sendDataConfig ? true : false} addTrigger={sendData} />
     </div>
   );
 };

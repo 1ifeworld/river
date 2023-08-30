@@ -6,3 +6,4 @@ export {
   BodySmall,
   type TypographyProps,
 } from './Typography';
+export * from "./SvgLoader"
