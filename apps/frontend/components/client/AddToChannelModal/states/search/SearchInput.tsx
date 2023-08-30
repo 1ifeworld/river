@@ -64,9 +64,9 @@ type SearchInputProps = {
   searchResults: Nft | undefined;
   setSearchResults: React.Dispatch<React.SetStateAction<Nft | undefined>>;
   setSearchParams: (params: {
-    network?: number;
-    contractAddress?: string;
-    tokenId?: string;
+    network?: number | undefined;
+    contractAddress?: string | undefined;
+    tokenId?: string | undefined;
   }) => void;
 };
 
