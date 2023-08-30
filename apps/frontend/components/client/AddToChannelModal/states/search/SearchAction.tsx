@@ -2,6 +2,7 @@
 
 // SearchAction.tsx
 import React from "react";
+import {SvgLoader} from "@river/design-system"
 
 interface SearchActionProps {
   addReady: boolean;
@@ -14,7 +15,6 @@ const SearchAction = ({
   addTrigger,
   nameOfAdd,
 }: SearchActionProps) => {
-  console.log("addReady in search action: ", addReady);
 
   return (
     <button

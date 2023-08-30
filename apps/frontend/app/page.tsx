@@ -25,11 +25,11 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main className="flex flex-wrap justify-center h-full mx-[145px] my-[20px]">
+      <main className="flex flex-col  justify-center h-full mx-[145px] my-[20px] space-y-4">
         {/* Add to channel modal */}
         <Container />        
         {/* Channel card grid */}
-        {/* <div className={`grid grid-cols-6 gap-x-[21px] gap-y-[18px] pb-4`}>
+        <div className={`grid grid-cols-6 gap-x-[21px] gap-y-[18px] pb-4`}>
           {arrayOfChannelData.map((channel, index) => (
             <ChannelCard
               key={`${channel}-${index}`}
@@ -37,7 +37,7 @@ export default function Home() {
               width={222}
             />
           ))}
-        </div>         */}
+        </div>        
       </main>
     </>
   );
