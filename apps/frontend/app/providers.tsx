@@ -1,7 +1,7 @@
 'use client';
 
-import { ConnectKitProvider } from 'connectkit';
 import * as React from 'react';
+import { ConnectKitProvider } from 'connectkit';
 import { WagmiConfig } from 'wagmi';
 import { config } from '../wagmiConfig';
 
@@ -10,9 +10,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   React.useEffect(() => setMounted(true), []);
   return (
     <WagmiConfig config={config}>
-      <ConnectKitProvider theme='minimal'>
-        {mounted && children}
-      </ConnectKitProvider>
+      <ConnectKitProvider>{mounted && children}</ConnectKitProvider>
     </WagmiConfig>
   );
 }

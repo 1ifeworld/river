@@ -1,18 +1,59 @@
+type PieceMetadata @entity {
+id: String!
+pieceName: String
+pieceCreator: String
+pieceDescription: String
+pieceImageURL: String 
+pieceAnimationURL: String
+pieceCreatedDate: String
+pieceContentType: String 
+}
+
 type Listing @entity {
   id: String!
+  ## sender
+  ## blockNumber
   chainId: String!
   tokenId: String!
   listingAddress: String!
   hasTokenId: Boolean!
   channel: Channel!
+  listingTargetMetadata: PieceMetadata! 
+
+  ## target metadata json -- the query to initially fetch and/or refresh
+  ## metadata should just return a processed json here
 }
 
 type Channel @entity {
   id: String!
+  contractUri: String
   listings: [Listing!]! @derivedFrom(field: "channel")
+  logicTransmitterMerkleAdmin: [LogicTransmitterMerkleAdmin!]! @derivedFrom(field: "id")
 }
 
-# # RawTransaction type
+
+type Router @entity {
+  id: String!
+  press: String
+  sender: String
+  factory: String
+  pointer: String
+  newPress: String
+  newPressData: String
+  createdAt: BigInt
+  transactionHash: String
+  # RawTransaction: RawTransaction
+}
+
+
+type LogicTransmitterMerkleAdmin @entity{
+  id: String! 
+  press: String
+  merkleRoot: String
+  accounts: [String]
+  roles: [Boolean]
+}
+
 # type RawTransaction @entity {
 #   id: String!
 #   transactionHash: String
@@ -22,38 +63,8 @@ type Channel @entity {
 #   tokenStorage: [TokenStorage] @derivedFrom(field: "RawTransaction")
 # }
 
-# # Arweave type
 # type Arweave @entity {
 #   id: String!
 #   link: String
 #   tableName: String
-# }
-
-# # Router type
-# type Router @entity {
-#   id: String!
-#   press: String
-#   sender: String
-#   factory: String
-#   pointer: String
-#   newPress: String
-#   newPressData: String
-#   owner: String
-#   logic: String
-#   renderer: String
-#   fundsRecipient: String
-#   royaltyBPS: BigInt
-#   transferable: Boolean
-#   fungible: Boolean
-#   createdAt: BigInt
-#   transactionHash: String
-#   RawTransaction: RawTransaction
-# }
-
-# type LogicTransmitterMerkleAdmin @entity{
-#   id: String! 
-#   press: String
-#   merkleRoot: String
-#   accounts: [String]
-#   roles: [Boolean]
 # }

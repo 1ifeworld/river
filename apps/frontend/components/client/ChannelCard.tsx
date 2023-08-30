@@ -1,17 +1,5 @@
-"use client";
-
-import Image from "next/image";
-import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuSeparator,
-  ContextMenuSub,
-  ContextMenuSubContent,
-  ContextMenuSubTrigger,
-  ContextMenuTrigger,
-} from "@river/design-system/src/components/EntityCard";
-import { cn } from "@river/design-system/src/utils";
+import Image from 'next/image';
+import { Body, BodySmall, Flex, cn } from '@river/design-system';
 
 export interface Channel {
   name: string;
@@ -38,26 +26,26 @@ export function ChannelCard({
   ...props
 }: ChannelCardProps) {
   return (
-    <div className={cn("space-y-[8px]", className)} {...props}>
-      <ContextMenu>
-        <ContextMenuTrigger>
-          <div className="overflow-hidden rounded-[4px]">
-            <Image
-              src={channel.cover}
-              alt={channel.name}
-              width={width}
-              height={width}
-              className={cn(
-                "h-auto w-auto object-cover transition-all aspect-square"
-              )}
-            />
-          </div>
-        </ContextMenuTrigger>
-      </ContextMenu>
-      <div className="space-y-[1px] text-sm">
-        <h3 className="text-[13px] text-[#262626] leading-none">{channel.name}</h3>
-        <p className="text-xs text-[#777777] text-muted-foreground">{channel.creator}</p>
+    <Flex className={cn('flex-col gap-y-2', className)} {...props}>
+      <div className='overflow-hidden rounded'>
+        <Image
+          src={channel.cover}
+          alt={channel.name}
+          width={width}
+          height={width}
+          className={cn('h-auto w-auto object-cover aspect-square')}
+        />
       </div>
-    </div>
+      <Flex className='flex-col'>
+        <Body className='text-raisin-black font-medium leading-none'>{channel.name}</Body>
+        {channel.members ? (
+          <BodySmall className='text-sonic-silver'>
+            {channel.creator} + {channel.members.length} others
+          </BodySmall>
+        ) : (
+          <BodySmall className='text-sonic-silver'>{channel.creator}</BodySmall>
+        )}
+      </Flex>
+    </Flex>
   );
 }
