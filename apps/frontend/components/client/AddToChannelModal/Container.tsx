@@ -22,7 +22,7 @@ export function Container() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className="bg-[#3F8AE2] hover:bg-[#1456A4] text-white py-[2px] px-4 text-[13px] w-fit rounded-[4px] ">
+      <DialogTrigger className="bg-[#3F8AE2] hover:bg-[#1456A4] text-white py-[4px] px-4 text-[13px] w-fit rounded-[4px] ">
         + Add
       </DialogTrigger>
       <DialogContent className="flex flex-col border-[0.7px] rounded-[13.92px] border-[#D2D2D2] w-[490px] h-[438px] ">
