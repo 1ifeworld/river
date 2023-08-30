@@ -38,24 +38,6 @@ ponder.on(
   }
 );
 
-ponder.on(
-  "LogicTransmitterMerkleAdmin:MerkleRootSet",
-  async ({ event, context }) => {
-    const { LogicTransmitterMerkleAdmin } = context.entities;
-
-    const { press, merkleRoot } = event.params;
-
-    await LogicTransmitterMerkleAdmin.upsert({
-      id: press,
-      create: {
-        merkleRoot,
-      },
-      update: {
-        merkleRoot,
-      },
-    });
-  }
-);
 
 // Logic Merkle Root Set // alternative functionality we may find use for
 

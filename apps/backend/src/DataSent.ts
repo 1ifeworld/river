@@ -1,10 +1,10 @@
 import { ponder } from "@/generated";
 import { schemaMap } from "./decodingSchema";
 import { BigNumberish, Network, Nft, NftMetadata } from "alchemy-sdk";
-import getNftMetadata from "./hooks/useGetNFTMetadata";
+import getNftMetadata from "./hooks/useGetTokenMetadata";
 import { pressDataDecoder } from "./decodingSchema/decoders/pressDataDecoder";
 
-type OurNftStructure = {
+type NFTProcessedLog = {
   pieceName?: string;
   pieceCreator?: string;
   pieceDescription?: string;
@@ -14,7 +14,7 @@ type OurNftStructure = {
   pieceContentType?: string;
 };
 
-function processMetadata(metadata: Nft | NftMetadata): OurNftStructure {
+function processMetadata(metadata: Nft | NftMetadata): NFTProcessedLog {
   return {
     pieceName: metadata.title,
     pieceCreator: metadata.contract.contractDeployer,

@@ -20,7 +20,7 @@ export async function pressDataDecoder(press: `0x${string}`) {
     return undefined;
   }
 
-  const bytecode: any = await publicClient.getBytecode({
+  const bytecode = await publicClient.getBytecode({
     address: press,
   });
 
