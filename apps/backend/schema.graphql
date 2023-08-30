@@ -7,8 +7,6 @@ pieceImageURL: String
 pieceAnimationURL: String
 pieceCreatedDate: String
 pieceContentType: String 
-listing: Listing! 
-
 }
 
 type Listing @entity {
@@ -28,6 +26,7 @@ type Listing @entity {
 
 type Channel @entity {
   id: String!
+  contractUri: String
   listings: [Listing!]! @derivedFrom(field: "channel")
 }
 
