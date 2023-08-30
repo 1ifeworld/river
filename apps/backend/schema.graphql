@@ -8,6 +8,7 @@ pieceAnimationURL: String
 pieceCreatedDate: String
 pieceContentType: String 
 listing: Listing! 
+
 }
 
 type Listing @entity {
@@ -19,7 +20,7 @@ type Listing @entity {
   listingAddress: String!
   hasTokenId: Boolean!
   channel: Channel!
-  listingTargetMetadata: [PieceMetadata!] @derivedFrom (field: "listing")
+  listingTargetMetadata: PieceMetadata! 
 
   ## target metadata json -- the query to initially fetch and/or refresh
   ## metadata should just return a processed json here

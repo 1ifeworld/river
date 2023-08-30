@@ -2,9 +2,11 @@ import { ponder } from "@/generated";
 import { schemaMap } from "./decodingSchema";
 import { BigNumberish, Network, Nft, NftMetadata } from "alchemy-sdk";
 import getNftMetadata from "./hooks/useGetNFTMetadata";
+import { pressDataDecoder } from "./decodingSchema/decoders/pressDataDecoder";
 
 
 type OurNftStructure = {
+
 
     pieceName?: string,
     pieceCreator?: string,
@@ -16,8 +18,9 @@ type OurNftStructure = {
 
 }
 
-function processMetadata(metadata: Nft | NftMetadata  ): OurNftStructure {
+function processMetadata(metadata: Nft | NftMetadata ): OurNftStructure {
   return {
+      
     pieceName: metadata.title,
     pieceCreator: metadata.contract.contractDeployer,
     pieceDescription: metadata.description,
@@ -25,6 +28,7 @@ function processMetadata(metadata: Nft | NftMetadata  ): OurNftStructure {
     pieceAnimationURL: metadata.contract.raw?.metadata?.animation_url, 
     pieceCreatedDate: metadata.contract.deployedBlockNumber, 
     pieceContentType: metadata.contract.image?.contentType
+    
   };
 }
 
@@ -67,48 +71,47 @@ ponder.on("Router:DataSent", async ({ event, context }) => {
       continue;
     }
 
-    // Process the metadata into your own shape
-    const processedMetadata = processMetadata(metadata);
+ // Process the metadata into your own shape
+const processedMetadata = processMetadata(metadata);
 
-    // Create a Listing entity
-    const existingListing = await Listing.findUnique({
-      id: listingId,
-    });
+// Check if a PieceMetadata entity with the listingId already exists
+const existingMetadata = await PieceMetadata.findUnique({
+  id: listingId,
+});
 
-    if (!existingListing) {
-      const listing = await Listing.create({
-        id: listingId,
-        data: {
-          chainId: chainId.toString(),
-          tokenId: tokenId.toString(),
-          listingAddress: listingAddress,
-          hasTokenId: hasTokenId,
-          channel: press,
-        },
-      });
-    } else {
-      console.log("Listing already exists:", listingId);
-    }
+// Create a PieceMetadata entity
+if (!existingMetadata) {
+  const metadataEntity = await PieceMetadata.create({
+    id: listingId,
+    data: {
+      ...processedMetadata,
+      listing: listingId,
+    },
+  });
+} else {
+  console.log("PieceMetadata already exists:", listingId);
+}
 
-    // Check if a PieceMetadata entity with the listingId already exists
-    const existingMetadata = await PieceMetadata.findUnique({
-      id: listingId,
-    });
+// Create a Listing entity
+const existingListing = await Listing.findUnique({
+  id: listingId,
+});
 
-    // Create a PieceMetadata entity and associate it with the created Listing entity
-    if (!existingMetadata) {
-      const metadataEntity = await PieceMetadata.create({
-        id: listingId,
-        data: {
-          ...processedMetadata,
-          listing: listingId,
-        },
-      });
-    } else {
-      console.log("PieceMetadata already exists:", listingId);
-    }
-  }
-
+if (!existingListing) {
+  const listing = await Listing.create({
+    id: listingId,
+    data: {
+      chainId: chainId.toString(),
+      tokenId: tokenId.toString(),
+      listingAddress: listingAddress,
+      hasTokenId: hasTokenId,
+      channel: press,
+      listingTargetMetadata: listingId,  // associate the PieceMetadata entity with the Listing entity
+    },
+  });
+} else {
+  console.log("Listing already exists:", listingId);
+} } 
   
   ponder.on("Router:DataRemoved", async ({ event, context }) => {
     const { Listing } = context.entities;
@@ -125,18 +128,19 @@ ponder.on("Router:DataSent", async ({ event, context }) => {
   // setupPress ;; pressRegistered
 
   ponder.on("Router:PressRegistered", async ({ event, context }) => {
-    const { Router } = context.entities;
+    // const { Router } = context.entities;
 
     const { sender, factory, newPress, newPressData } = event.params;
+    console.log('Press Data', pressDataDecoder(newPressData))
+    console.log('New Press Data', newPressData)
 
-    await Router.create({
-      id: newPress,
-      data: {
-        sender,
-        factory,
-        newPress,
-        newPressData,
-      },
-    });
-  });
-});
+    // await Router.create({
+    //   id: newPress,
+    //   data: {
+    //     sender,
+    //     factory,
+    //     newPress,
+    //     newPressData,
+    //   },
+    }); 
+  }); 
