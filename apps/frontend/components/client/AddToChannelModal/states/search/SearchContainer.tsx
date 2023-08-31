@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SearchGallery from './SearchGallery';
 import SearchInput from './SearchInput';
 import SearchAction from './SearchAction';
@@ -13,6 +13,7 @@ import {
   isAddress,
 } from 'viem';
 import { Debug, Flex } from '@river/design-system';
+import { useRouter } from 'next/navigation';
 
 interface Listing {
   chainId: bigint;
@@ -29,6 +30,7 @@ export function SearchContainer() {
     hasTokenId: true,
   });
   const [searchResults, setSearchResults] = useState<Nft | undefined>();
+  const router = useRouter();
 
   const handleSetSearchParams = (updatedParams: {
     network?: number | undefined;
@@ -76,6 +78,12 @@ export function SearchContainer() {
       value: '0.0005',
       prepareTxn: searchResults ? true : false,
     });
+
+  useEffect(() => {
+    router.refresh();
+  }, [sendDataSuccess]);
+
+  console.log('sendDataSuccess', sendDataSuccess);
 
   return (
     <Flex className='flex-col justify-center gap-4'>
