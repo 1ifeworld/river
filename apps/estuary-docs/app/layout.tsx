@@ -1,6 +1,9 @@
 import '../styles/globals.css';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
+import { SideNav } from '../components/client';
+import { Header } from '../components/server';
+import { Flex } from '@river/design-system';
 
 const helveticaNeue = localFont({
   src: '../public/fonts/HelveticaNeue.woff2',
@@ -21,7 +24,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <body className={helveticaNeue.className}>{children}</body>
+      <body className={helveticaNeue.className}>
+        <Header />
+        <Flex>
+          <SideNav />
+          <span className='p-8'>{children}</span>
+        </Flex>
+      </body>
     </html>
   );
 }
