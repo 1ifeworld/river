@@ -24,7 +24,7 @@ const arrayOfChannelData: Channel[] = [
 export default function Home() {
   return (
     <>
-      <Header />
+    <Header/>
       <main className="flex flex-col  justify-center h-full mx-[145px] my-[20px] space-y-4">
         {/* Add to channel modal */}
         <Container />        
