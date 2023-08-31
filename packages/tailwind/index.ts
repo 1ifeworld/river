@@ -17,20 +17,8 @@ export default {
     },
     extend: {
       // river custom start
-      fontSize: {
-        sm: '0.923rem',
-        base: '1rem',
-        lg: '1.308rem',
-        xl: '1.923rem',
-        '2xl': '2.692rem',
-      },
       fontFamily: {
         sans: ['var(--font-helvetica-neue)'],
-      },
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       // river custom end
       borderColor: {
