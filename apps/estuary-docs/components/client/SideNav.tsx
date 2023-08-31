@@ -14,6 +14,9 @@ export function SideNav() {
             <Link href='/estuary/tokens/colors'>
               <BodySmall>Colors</BodySmall>
             </Link>
+            <Link href='/estuary/tokens/typography'>
+              <BodySmall>Typography</BodySmall>
+            </Link>
           </Stack>
           <Stack>
             {/* Elements */}
