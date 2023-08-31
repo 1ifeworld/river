@@ -15,11 +15,10 @@ import {
   Exit,
 } from '@river/design-system';
 import { StateNav } from './StateNav';
-import { Cross1Icon } from '@radix-ui/react-icons';
 import { SearchContainer } from './states/search/SearchContainer';
 import { Flex } from '@river/design-system';
 
-export function Container() {
+export function ChannelModal() {
   const [activeTab, setActiveTab] = useState<string>('Search');
   const [open, setOpen] = useState<boolean>(false);
 
