@@ -6,13 +6,17 @@ export default async function Channel({
 }: {
   params: { contract: string };
 }) {
-  // const { channels: listings } = await getListings({
-  //   channel: params.contract,
-  // });
+
+
+  const { channels: listings } = await getListings({
+    channel: params.contract,
+  });
+  console.log("listings: ", listings)
+
 
   return (
-    <Flex>
-
+    <Flex className='border-2 border-red-500'>
+      
     </Flex>
   );
 }
