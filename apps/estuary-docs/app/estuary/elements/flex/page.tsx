@@ -1,5 +1,9 @@
-import Flex from './flex.mdx'
+import { Headline } from '@river/design-system';
 
 export default function Page() {
-    return <Flex />
+  return (
+    <>
+      <Headline className='mb-8'>Flex</Headline>
+    </>
+  );
 }
