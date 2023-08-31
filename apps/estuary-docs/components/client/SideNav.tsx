@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 export function SideNav() {
   return (
-    <ScrollArea.Root className='w-[248px] h-screen overflow-hidden bg-white border-r border-gray-300'>
+    <ScrollArea.Root className='w-[196px] h-screen overflow-hidden bg-white border-r border-gray-300'>
       <ScrollArea.Viewport className='w-full h-full'>
         <Flex className='flex-col justify-center px-6 py-8'>
           {/* Overview */}
@@ -22,6 +22,9 @@ export function SideNav() {
           </Link>
           {/* Components */}
           <BodySmall className='text-gray-700'>Components</BodySmall>
+          <Link href='/estuary/components/button'>
+            <BodySmall>Button</BodySmall>
+          </Link>
         </Flex>
       </ScrollArea.Viewport>
     </ScrollArea.Root>
