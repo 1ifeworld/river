@@ -1,4 +1,3 @@
-
 import { Header } from "../../../components/client";
 
 export default function ChannelLayout({
@@ -7,8 +6,8 @@ export default function ChannelLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section>
-      <Header />
+    <section className="mx-[145px]">
+      <Header/>
       {children}
     </section>
   );
