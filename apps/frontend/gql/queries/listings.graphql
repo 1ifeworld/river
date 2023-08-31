@@ -1,10 +1,25 @@
-query listings($channel: String!) {
-  channels(where: { id: $channel }) {
-    listings {
-      chainId
-      tokenId
-      listingAddress
-      hasTokenId
+ # ANY TIME YOU MAKE CHANGES TO THE QUERY. MAKE SURE YOU RUN 'pnpm codegen' 
+ # FROM FRONTEND TO UPDATE YOUR SDK.GENERATED FILE
+
+query listings{
+  listings {
+    id
+    chainId
+    tokenId
+    listingAddress
+    hasTokenId
+    channel {
+      id
+    }
+    listingTargetMetadata {
+      id
+      pieceName
+      pieceCreator
+      pieceDescription
+      pieceImageURL
+      pieceAnimationURL
+      pieceCreatedDate
+      pieceContentType
     }
   }
 }

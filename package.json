@@ -10,5 +10,8 @@
   },
   "keywords": [],
   "author": "Lifeworld",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "turbo": "^1.10.13"
+  }
 }
