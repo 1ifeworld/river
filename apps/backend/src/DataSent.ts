@@ -2,7 +2,7 @@ import { ponder } from "@/generated";
 import { schemaMap } from "./decodingSchema";
 import { BigNumberish, Network, Nft, NftMetadata } from "alchemy-sdk";
 import getNftMetadata from "./hooks/useGetTokenMetadata";
-import { pressDataDecoder } from "./decodingSchema/decoders/pressDataDecoder";
+import fetchIPFSData  from "./utils/fetchIPFSdata";
 
 type NFTProcessedLog = {
   pieceName?: string;
@@ -27,19 +27,55 @@ function processMetadata(metadata: Nft | NftMetadata): NFTProcessedLog {
 }
 
 ponder.on("Router:DataSent", async ({ event, context }) => {
-  const { Channel, Listing, PieceMetadata } = context.entities;
+  const { Channel, Listing, PieceMetadata, ContractUri } = context.entities;
   const { press, schema, response, ids } = event.params;
 
   // Decode event response into dynamic array of new listings
   const [newListings] = schemaMap[String(schema)](response);
 
-  // Lookup press in channel table, if it doesnt exist, create it
+  // Fetch the contractUri data
   let channel = await Channel.findUnique({ id: press });
   if (!channel) {
-    channel = await Channel.create({
-      id: press,
-    });
+    return;
   }
+
+  // Check if a ContractUri entity with the channel id already exists
+  let existingContractUri = await ContractUri.findUnique({
+    id: channel.id,
+  });
+
+  // Create or update a ContractUri entity
+  if (!existingContractUri) {
+    existingContractUri = await ContractUri.create({
+      id: channel.id,
+      data: {
+        uri: channel.contractUri,
+      },
+    });
+    console.log('ContractUri created:', existingContractUri);
+  } else {
+    existingContractUri = await ContractUri.update({
+      id: channel.id,
+      data: {
+        uri: channel.contractUri,
+      },
+    });
+    console.log('ContractUri updated:', existingContractUri);
+  }
+
+  // Check if existingContractUri.id is not null
+  if (!existingContractUri.id) {
+    console.error('existingContractUri.id is null');
+    return;
+  }
+
+  // Update the channel to associate it with the ContractUri entity
+  channel = await Channel.update({
+    id: channel.id,
+    data: {
+      contractUri: existingContractUri.id,
+    },
+  });
 
   // Create a Listing associated with the channel
   for (const [index, newListing] of newListings.entries()) {
@@ -60,7 +96,6 @@ ponder.on("Router:DataSent", async ({ event, context }) => {
     });
 
     if (!metadata) {
-      console.error("Metadata is undefined for listing:", listingId);
       continue;
     }
 

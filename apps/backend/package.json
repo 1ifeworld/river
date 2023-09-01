@@ -8,7 +8,8 @@
   },
   "dependencies": {
     "@ponder/core": "0.0.87",
-    "alchemy-sdk": "^2.10.0"
+    "alchemy-sdk": "^2.10.0",
+    "cross-fetch": "^4.0.0"
   },
   "devDependencies": {
     "@types/node": "^18.11.18",
