@@ -30,12 +30,14 @@ type ContractUri @entity {
   name: String
   description: String
   image: String
+  updatedAt: BigInt
 }
 
 type Channel @entity {
   id: String!
   listings: [Listing!]! @derivedFrom(field: "channel")
   contractUri: ContractUri
+  createdAt: BigInt
   logicTransmitterMerkleAdmin: [LogicTransmitterMerkleAdmin!]! @derivedFrom(field: "id")
 }
 

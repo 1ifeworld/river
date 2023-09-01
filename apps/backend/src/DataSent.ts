@@ -1,6 +1,6 @@
 import { ponder } from "@/generated";
 import { schemaMap } from "./decodingSchema";
-import { BigNumberish, Network, Nft, NftMetadata } from "alchemy-sdk";
+import { BigNumberish} from "alchemy-sdk";
 import getNftMetadata from "./hooks/useGetTokenMetadata";
 import fetchIPFSData  from "./utils/fetchIPFSdata";
 
@@ -14,15 +14,33 @@ type NFTProcessedLog = {
   pieceContentType?: string;
 };
 
-function processMetadata(metadata: Nft | NftMetadata): NFTProcessedLog {
+type AlchemyV3GetNFTMetadata = {
+  name: string;
+  description: string;
+  image: {
+    thumbnailUrl: string;
+    contentType: string;
+  };
+  raw: {
+    metadata: {
+      animation_url: string;
+    };
+  };
+  contract: {
+    contractDeployer: string;
+    deployedBlockNumber: string;
+  };
+};
+
+function processMetadata(metadata: AlchemyV3GetNFTMetadata): NFTProcessedLog {
   return {
-    pieceName: metadata.title,
+    pieceName: metadata.name,
     pieceCreator: metadata.contract.contractDeployer,
     pieceDescription: metadata.description,
-    pieceImageURL: metadata.media[0]?.thumbnail,
-    pieceAnimationURL: metadata.contract.raw?.metadata?.animation_url,
+    pieceImageURL: metadata.image?.thumbnailUrl,
+    pieceAnimationURL: metadata.raw?.metadata?.animation_url,
     pieceCreatedDate: metadata.contract.deployedBlockNumber,
-    pieceContentType: metadata.contract.image?.contentType,
+    pieceContentType: metadata.image?.contentType,
   };
 }
 
@@ -32,50 +50,6 @@ ponder.on("Router:DataSent", async ({ event, context }) => {
 
   // Decode event response into dynamic array of new listings
   const [newListings] = schemaMap[String(schema)](response);
-
-  // Fetch the contractUri data
-  let channel = await Channel.findUnique({ id: press });
-  if (!channel) {
-    return;
-  }
-
-  // Check if a ContractUri entity with the channel id already exists
-  let existingContractUri = await ContractUri.findUnique({
-    id: channel.id,
-  });
-
-  // Create or update a ContractUri entity
-  if (!existingContractUri) {
-    existingContractUri = await ContractUri.create({
-      id: channel.id,
-      data: {
-        uri: channel.contractUri,
-      },
-    });
-    console.log('ContractUri created:', existingContractUri);
-  } else {
-    existingContractUri = await ContractUri.update({
-      id: channel.id,
-      data: {
-        uri: channel.contractUri,
-      },
-    });
-    console.log('ContractUri updated:', existingContractUri);
-  }
-
-  // Check if existingContractUri.id is not null
-  if (!existingContractUri.id) {
-    console.error('existingContractUri.id is null');
-    return;
-  }
-
-  // Update the channel to associate it with the ContractUri entity
-  channel = await Channel.update({
-    id: channel.id,
-    data: {
-      contractUri: existingContractUri.id,
-    },
-  });
 
   // Create a Listing associated with the channel
   for (const [index, newListing] of newListings.entries()) {

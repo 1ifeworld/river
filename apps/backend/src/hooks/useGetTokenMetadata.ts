@@ -1,5 +1,5 @@
-import { Network, Alchemy } from "alchemy-sdk";
 import { BigNumberish } from "alchemy-sdk";
+import {fetch} from 'cross-fetch'
 
 type Props = {
   network: number;
@@ -7,24 +7,31 @@ type Props = {
   tokenId: BigNumberish;
   apiKey: string;
 };
-
-const getNftMetadata = async ({ network, address, tokenId, apiKey }: Props) => {
-  const alchemy_settings_mainnet = {
-    apiKey: apiKey,
-    network: Network.ETH_MAINNET,
-  };
-
-  const alchemyMainnet = new Alchemy(alchemy_settings_mainnet);
-
-  if (network && address && tokenId) {
-    try {
-      const data = await alchemyMainnet.nft.getNftMetadata(address, tokenId);
-      return data;
-    } catch (error) {
-      console.error("Error fetching NFT metadata:", error);
-      throw error;
-    }
-  }
+var requestOptions = {
+  method: 'GET',
+  redirect: 'follow'
 };
 
-export default getNftMetadata;
+const getNftMetadata = async ({ network, address, tokenId, apiKey }: Props) => {
+    // for multichain we will need to have agnostic baseURL 
+    if (network !== 1 ) {
+      console.error("Only mainnet is support at the moment.")
+    }
+    const baseURL = `https://eth-mainnet.g.alchemy.com/nft/v3/${process.env.NEXT_PUBLIC_ALCHEMY_KEY}/getNFTMetadata?`;
+    const fullURL = baseURL + `contractAddress=${address}&tokenId=${tokenId}`;
+
+    if (network && address && tokenId) {
+      try {
+        const response = await fetch(fullURL);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        console.error("Error fetching NFT metadata:", error);
+        throw error;
+      }
+    };
+  }
+    export default getNftMetadata; 
