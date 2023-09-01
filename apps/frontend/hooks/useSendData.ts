@@ -13,6 +13,7 @@ interface SendDataProps {
   data: Hash;
   value?: string;
   prepareTxn: boolean;
+  successCallback?: () => void;
 }
 
 interface SendDataReturn {
@@ -27,6 +28,7 @@ export function useSendData({
   data,
   value,
   prepareTxn,
+  successCallback,
 }: SendDataProps): SendDataReturn {
   const { config: sendDataConfig } = usePrepareContractWrite({
     address: router,
@@ -43,6 +45,9 @@ export function useSendData({
   const { isLoading: sendDataLoading, isSuccess: sendDataSuccess } =
     useWaitForTransaction({
       hash: dataToSend?.hash,
+      onSuccess() {
+        successCallback?.();
+      },
     });
 
   return {
