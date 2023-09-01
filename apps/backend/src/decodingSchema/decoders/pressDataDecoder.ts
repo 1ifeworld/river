@@ -9,11 +9,14 @@ import {
 
 import { publicClient } from "../../viem/client";
 
+
 export type PressData = {};
 
 export function stringDecoder(data: Hash): readonly [String] {
   return decodeAbiParameters(parseAbiParameters("string"), data);
+
 }
+// revert back to using viem and slice 0x00 
 
 export async function pressDataDecoder(press: `0x${string}`) {
   if (!press) {
@@ -27,11 +30,11 @@ export async function pressDataDecoder(press: `0x${string}`) {
   if (!bytecode) {
     return undefined;
   }
-
-  const stringData = bytecode.slice(64);
+  const stringData = bytecode.slice(2);  // removes 0x 
   const decodedString = Buffer.from(stringData, "hex")
     .toString("utf8")
-    .replace(/\0/g, "");
+    .replace(/\0/g, "")
+    .slice(2); // removes sstore length padding
 
   if (!decodedString) {
     return undefined;
