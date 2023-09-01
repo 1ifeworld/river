@@ -1,6 +1,5 @@
 import { Header, ChannelCard } from '../components/client';
 import { type Channel } from '../components/client';
-import {Container} from '../components/client/AddToChannelModal'
 
 const sampleChannelData: Channel = {
   name: 'Channel',
@@ -24,10 +23,8 @@ const arrayOfChannelData: Channel[] = [
 export default function Home() {
   return (
     <>
-      <Header />
+    <Header/>
       <main className="flex flex-col  justify-center h-full mx-[145px] my-[20px] space-y-4">
-        {/* Add to channel modal */}
-        <Container />        
         {/* Channel card grid */}
         <div className={`grid grid-cols-6 gap-x-[21px] gap-y-[18px] pb-4`}>
           {arrayOfChannelData.map((channel, index) => (

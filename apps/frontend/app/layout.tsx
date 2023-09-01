@@ -1,11 +1,11 @@
-import '../styles/globals.css';
-import type { Metadata } from 'next';
-import { Providers } from './providers';
-import { helveticaNeue } from './fonts/fonts';
+import "../styles/globals.css";
+import type { Metadata } from "next";
+import { Providers } from "./providers";
+import { helveticaNeue } from "./fonts/fonts";
 
 export const metadata: Metadata = {
-  title: 'River',
-  description: 'Set information free',
+  title: "River",
+  description: "Set information free",
 };
 
 export default function RootLayout({
@@ -14,9 +14,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='en' className={`${helveticaNeue.variable}`}>
+    <html lang="en" className={`${helveticaNeue.variable}`}>
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );

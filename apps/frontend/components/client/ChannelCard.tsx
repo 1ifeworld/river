@@ -3,6 +3,7 @@ import { Body, BodySmall, Flex, cn } from '@river/design-system';
 
 export interface Channel {
   name: string;
+  description?: string;
   creator: string;
   members?: string[];
   cover: string;

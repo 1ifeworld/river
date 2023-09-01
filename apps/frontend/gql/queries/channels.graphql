@@ -1,8 +1,7 @@
-# ANY TIME YOU MAKE CHANGES TO THE QUERY. MAKE SURE YOU RUN 'pnpm codegen'
-# FROM FRONTEND TO UPDATE YOUR SDK.GENERATED FILE
-
-query listings($channel: String!) {
+query channel($channel: String!) {
   channels(where: { id: $channel }) {
+    id
+    contractUri
     listings {
       id
       chainId
@@ -19,6 +18,13 @@ query listings($channel: String!) {
         pieceCreatedDate
         pieceContentType
       }
+    }
+    logicTransmitterMerkleAdmin {
+      id
+      press
+      merkleRoot
+      accounts
+      roles
     }
   }
 }

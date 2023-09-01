@@ -1,0 +1,33 @@
+{
+  "name": "estuary-docs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@mdx-js/loader": "^2.3.0",
+    "@mdx-js/react": "^2.3.0",
+    "@next/mdx": "^13.4.19",
+    "@radix-ui/react-scroll-area": "^1.0.4",
+    "@river/design-system": "workspace:^",
+    "@types/mdx": "^2.0.7",
+    "@types/node": "^20.5.6",
+    "@types/react": "18.2.21",
+    "@types/react-dom": "18.2.7",
+    "autoprefixer": "10.4.15",
+    "next": "13.4.19",
+    "postcss": "8.4.28",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "tailwindcss": "3.3.3",
+    "typescript": "5.1.6"
+  },
+  "devDependencies": {
+    "@river/tailwind": "workspace:*",
+    "@river/tsconfig": "workspace:*"
+  }
+}
