@@ -77,13 +77,8 @@ export function SearchContainer() {
       data: sendInputs,
       value: '0.0005',
       prepareTxn: searchResults ? true : false,
+      successCallback: router.refresh,
     });
-
-  useEffect(() => {
-    router.refresh();
-  }, [sendDataSuccess]);
-
-  console.log('sendDataSuccess', sendDataSuccess);
 
   return (
     <Flex className='flex-col justify-center gap-4'>

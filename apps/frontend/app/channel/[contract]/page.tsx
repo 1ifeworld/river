@@ -3,6 +3,8 @@ import { Flex } from '@river/design-system';
 import { ChannelBanner, ChannelBody } from '../../../components/channel';
 import { type Channel } from '../../../components/client';
 
+export const dynamic = 'force-dynamic'
+
 export default async function Channel({
   params,
 }: {
