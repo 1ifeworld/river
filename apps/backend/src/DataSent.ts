@@ -57,7 +57,7 @@ ponder.on("Router:DataSent", async ({ event, context }) => {
     // listing ID is unique to listings adding to channels 
     const listingId = `${chainId}/${press}/${ids[index]}`;
     // unique to token metadata that we're looking up 
-    const metatdataId = `${chainId}/${listingAddress}/${tokenId}`;
+    const metatdataId = `${chainId}/${listingAddress}/${tokenId}/${hasTokenId}`;
 
     // Check if a PieceMetadata entity with the metadataId already exists
     const existingMetadata = await PieceMetadata.findUnique({
