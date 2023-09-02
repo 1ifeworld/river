@@ -1,8 +1,8 @@
 import { ponder } from "@/generated";
 import { schemaMap } from "./decodingSchema";
-import { BigNumberish} from "alchemy-sdk";
+import { BigNumberish } from "alchemy-sdk";
 import getNftMetadata from "./hooks/useGetTokenMetadata";
-import fetchIPFSData  from "./utils/fetchIPFSdata";
+import fetchIPFSData from "./utils/fetchIPFSdata";
 
 type NFTProcessedLog = {
   pieceName?: string;
@@ -45,7 +45,7 @@ function processMetadata(metadata: AlchemyV3GetNFTMetadata): NFTProcessedLog {
 }
 
 ponder.on("Router:DataSent", async ({ event, context }) => {
-  const { Channel, Listing, PieceMetadata, ContractUri } = context.entities;
+  const { Channel, Listing, PieceMetadata } = context.entities;
   const { press, schema, response, ids } = event.params;
 
   // Decode event response into dynamic array of new listings
@@ -56,26 +56,6 @@ ponder.on("Router:DataSent", async ({ event, context }) => {
     const { chainId, tokenId, listingAddress, hasTokenId } = newListing;
     const listingId = `${chainId}/${press}/${ids[index]}`;
 
-    const apiKey = process.env.NEXT_PUBLIC_ALCHEMY_KEY;
-    if (!apiKey) {
-      throw new Error("ALCHEMY_KEY is not defined");
-    }
-
-    // Fetch the target metadata
-    const metadata = await getNftMetadata({
-      network: 1,
-      address: listingAddress,
-      tokenId: tokenId as BigNumberish,
-      apiKey: apiKey,
-    });
-
-    if (!metadata) {
-      continue;
-    }
-
-    // Process the metadata into your own shape
-    const processedMetadata = processMetadata(metadata);
-
     // Check if a PieceMetadata entity with the listingId already exists
     const existingMetadata = await PieceMetadata.findUnique({
       id: listingId,
@@ -83,35 +63,47 @@ ponder.on("Router:DataSent", async ({ event, context }) => {
 
     // Create a PieceMetadata entity
     if (!existingMetadata) {
-      const metadataEntity = await PieceMetadata.create({
-        id: listingId,
-        data: {
-          ...processedMetadata,
-        },
-      });
-    } else {
-      console.log("PieceMetadata already exists:", listingId);
-    }
+      try {
+        const metadata: AlchemyV3GetNFTMetadata = await getNftMetadata({
+          network: chainId,
+          address: listingAddress,
+          tokenId: tokenId as BigNumberish,
+        });
 
-    // Create a Listing entity
-    const existingListing = await Listing.findUnique({
-      id: listingId,
-    });
+        if (metadata) {
+        // convert alchemy v3 return into our opinionated processed nft metadata scheme
+        const processedMetadata = processMetadata(metadata);
+        // create metadata object into our pieceMetadata table
+        await PieceMetadata.create({
+          id: listingId,
+          data: {
+            ...processedMetadata,
+          },
+        });
+      } else {
+        console.error("Metadata is undefined.");
+      } } catch (error) {
+  console.error("Error in getNFTMetadata call. The River flows.", error);
+}
 
-    if (!existingListing) {
-      const listing = await Listing.create({
+      // Check if listing table entry for ListingID exists.
+      // we know it doesnt exist because its being created. but this is a dev environment fix to prevent unique ID errors
+      const existingListing = await Listing.findUnique({
         id: listingId,
-        data: {
-          chainId: chainId.toString(),
-          tokenId: tokenId.toString(),
-          listingAddress: listingAddress,
-          hasTokenId: hasTokenId,
-          channel: press,
-          listingTargetMetadata: listingId, // associate the PieceMetadata entity with the Listing entity
-        },
       });
-    } else {
-      console.log("Listing already exists:", listingId);
+      // if listing doesnt exist. create listing entity and associate it with metadata
+      if (!existingListing) {
+        const listing = await Listing.create({
+          id: listingId,
+          data: {
+            chainId: chainId.toString(),
+            tokenId: tokenId.toString(),
+            listingAddress: listingAddress,
+            hasTokenId: hasTokenId,
+            channel: press,
+            listingTargetMetadata: listingId, // associate the PieceMetadata entity with the Listing entity
+          },
+        });
+      }
     }
-  }
-});
+  } });
