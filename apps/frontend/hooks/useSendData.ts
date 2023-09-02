@@ -47,6 +47,7 @@ export function useSendData({
       hash: dataToSend?.hash,
       onSuccess() {
         successCallback?.();
+        console.log("success callback ran")
       },
     });
 

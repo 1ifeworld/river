@@ -11,9 +11,10 @@ import {
   parseAbiParameters,
   zeroAddress,
   isAddress,
+  getAddress
 } from 'viem';
 import { Debug, Flex } from '@river/design-system';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface Listing {
   chainId: bigint;
@@ -30,7 +31,10 @@ export function SearchContainer() {
     hasTokenId: true,
   });
   const [searchResults, setSearchResults] = useState<Nft | undefined>();
+  const pathname = usePathname()
+  const cleanedPathname = getAddress(pathname.slice(9))
   const router = useRouter();
+
 
   const handleSetSearchParams = (updatedParams: {
     network?: number | undefined;
@@ -72,8 +76,7 @@ export function SearchContainer() {
 
   const { sendDataConfig, sendData, sendDataLoading, sendDataSuccess } =
     useSendData({
-      // TODO: update press input to come from custom routing
-      press: '0x5A2AfcD3aA9B1445A49f0bc8f9c11bFe3DA391de',
+      press: cleanedPathname,
       data: sendInputs,
       value: '0.0005',
       prepareTxn: searchResults ? true : false,

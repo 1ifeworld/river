@@ -38,6 +38,7 @@ type Channel @entity {
   listings: [Listing!]! @derivedFrom(field: "channel")
   contractUri: ContractUri
   createdAt: BigInt
+  createdBy: String!
   logicTransmitterMerkleAdmin: [LogicTransmitterMerkleAdmin!]! @derivedFrom(field: "id")
 }
 
@@ -51,6 +52,7 @@ type Router @entity {
   newPress: String
   newPressData: String
   createdAt: BigInt
+  createdBy: String
   transactionHash: String
   # RawTransaction: RawTransaction
 }

@@ -1,7 +1,15 @@
 query channel($channel: String!) {
   channels(where: { id: $channel }) {
     id
-    contractUri
+    createdAt
+    contractUri {
+      id
+      uri
+      name
+      description
+      image
+      updatedAt
+    }
     listings {
       id
       chainId

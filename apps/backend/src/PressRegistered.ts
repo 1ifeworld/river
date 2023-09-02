@@ -68,10 +68,12 @@ ponder.on("Router:PressRegistered", async ({ event, context }) => {
       create: {
         contractUri: newContractUri.id,
         createdAt: timestamp,
+        createdBy: sender
       },
       update: {
         contractUri: newContractUri.id,
         createdAt: timestamp,
+        createdBy: sender
       },
     });
   
@@ -85,6 +87,7 @@ ponder.on("Router:PressRegistered", async ({ event, context }) => {
       newPress,
       newPressData,
       createdAt: timestamp,
+      createdBy: sender
     },
     update: {
       sender,
@@ -92,6 +95,7 @@ ponder.on("Router:PressRegistered", async ({ event, context }) => {
       newPress,
       newPressData,
       createdAt: timestamp,
+      createdBy: sender
     },
   });
 
