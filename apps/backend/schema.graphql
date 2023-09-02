@@ -24,10 +24,20 @@ type Listing @entity {
   ## metadata should just return a processed json here
 }
 
+type ContractUri @entity {
+  id: String!
+  uri: String
+  name: String
+  description: String
+  image: String
+  updatedAt: BigInt
+}
+
 type Channel @entity {
   id: String!
-  contractUri: String
   listings: [Listing!]! @derivedFrom(field: "channel")
+  contractUri: ContractUri
+  createdAt: BigInt
   logicTransmitterMerkleAdmin: [LogicTransmitterMerkleAdmin!]! @derivedFrom(field: "id")
 }
 

@@ -1,8 +1,4 @@
 import { ponder } from "@/generated";
-import { schemaMap } from "./decodingSchema";
-import { BigNumberish, Network, Nft, NftMetadata } from "alchemy-sdk";
-import getNftMetadata from "./hooks/useGetTokenMetadata";
-import { pressDataDecoder } from "./decodingSchema/decoders/pressDataDecoder";
 
 ponder.on("Router:DataRemoved", async ({ event, context }) => {
   const { Listing } = context.entities;
