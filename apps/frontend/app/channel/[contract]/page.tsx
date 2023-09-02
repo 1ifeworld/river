@@ -19,6 +19,12 @@ export default async function Channel({
     return ipfsString.replace('ipfs://', 'https://ipfs.io/ipfs/');
   }
 
+  // const makeListingsChronological = (listings: any) => {
+  //   take in listings array and re order the array based on 
+  //   createdAt timestamp value for each listing
+  //   use this function the channelBodyInput
+  // }
+
   const channelBannerInput: Channel = {
     name: channels[0]?.contractUri?.name as string,
     description: channels[0]?.contractUri?.description as string,

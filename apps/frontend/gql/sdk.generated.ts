@@ -163,6 +163,7 @@ export type Listing = {
   __typename?: 'Listing';
   chainId: Scalars['String']['output'];
   channel?: Maybe<Channel>;
+  createdAt?: Maybe<Scalars['BigInt']['output']>;
   hasTokenId: Scalars['Boolean']['output'];
   id: Scalars['String']['output'];
   listingAddress: Scalars['String']['output'];
@@ -191,6 +192,14 @@ export type ListingFilter = {
   channel_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   channel_not_starts_with?: InputMaybe<Scalars['String']['input']>;
   channel_starts_with?: InputMaybe<Scalars['String']['input']>;
+  createdAt?: InputMaybe<Scalars['BigInt']['input']>;
+  createdAt_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  createdAt_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  createdAt_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  createdAt_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  createdAt_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  createdAt_not?: InputMaybe<Scalars['BigInt']['input']>;
+  createdAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
   hasTokenId?: InputMaybe<Scalars['Boolean']['input']>;
   hasTokenId_in?: InputMaybe<Array<InputMaybe<Scalars['Boolean']['input']>>>;
   hasTokenId_not?: InputMaybe<Scalars['Boolean']['input']>;
