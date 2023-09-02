@@ -7,6 +7,12 @@ import {
 import Image from "next/image";
 import { shortenAddress } from "../../utils/shortenAddress";
 
+function truncateText(text: string, maxLength: number) {
+  if (!text) return '';  // Return an empty string if text is undefined
+  if (text.length <= maxLength) return text;
+  return text.slice(0, maxLength) + '...';
+}
+
 export function ChannelBody({ listings }: { listings: any }) {
   if (!listings || listings.length === 0) {
     return <div>No Listings available.</div>
@@ -27,7 +33,7 @@ export function ChannelBody({ listings }: { listings: any }) {
             </div>
             <Flex className="flex-col">
               <Body className="text-raisin-black font-medium leading-none">
-                {listing?.listingTargetMetadata?.pieceName}
+                {truncateText(listing?.listingTargetMetadata?.pieceName, 30)}
               </Body>
               <BodySmall className="text-sonic-silver">
                 {shortenAddress(listing?.listingTargetMetadata?.pieceCreator)}

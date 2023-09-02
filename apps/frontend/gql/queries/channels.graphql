@@ -1,5 +1,5 @@
 query channel($channel: String!) {
-  channels(where: { id: $channel }) {
+  channels(where: { id: $channel }, orderBy: createdAt, orderDirection: desc) {
     id
     createdAt
     contractUri {
