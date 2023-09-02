@@ -21,7 +21,9 @@ export type Scalars = {
 
 export type Channel = {
   __typename?: 'Channel';
-  contractUri?: Maybe<Scalars['String']['output']>;
+  contractUri?: Maybe<ContractUri>;
+  createdAt?: Maybe<Scalars['BigInt']['output']>;
+  createdBy: Scalars['String']['output'];
   id: Scalars['String']['output'];
   listings: Array<Listing>;
   logicTransmitterMerkleAdmin: Array<LogicTransmitterMerkleAdmin>;
@@ -56,6 +58,24 @@ export type ChannelFilter = {
   contractUri_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   contractUri_not_starts_with?: InputMaybe<Scalars['String']['input']>;
   contractUri_starts_with?: InputMaybe<Scalars['String']['input']>;
+  createdAt?: InputMaybe<Scalars['BigInt']['input']>;
+  createdAt_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  createdAt_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  createdAt_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  createdAt_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  createdAt_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  createdAt_not?: InputMaybe<Scalars['BigInt']['input']>;
+  createdAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  createdBy?: InputMaybe<Scalars['String']['input']>;
+  createdBy_contains?: InputMaybe<Scalars['String']['input']>;
+  createdBy_ends_with?: InputMaybe<Scalars['String']['input']>;
+  createdBy_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  createdBy_not?: InputMaybe<Scalars['String']['input']>;
+  createdBy_not_contains?: InputMaybe<Scalars['String']['input']>;
+  createdBy_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  createdBy_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  createdBy_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  createdBy_starts_with?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   id_contains?: InputMaybe<Scalars['String']['input']>;
   id_ends_with?: InputMaybe<Scalars['String']['input']>;
@@ -68,10 +88,82 @@ export type ChannelFilter = {
   id_starts_with?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type ContractUri = {
+  __typename?: 'ContractUri';
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['String']['output'];
+  image?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['BigInt']['output']>;
+  uri?: Maybe<Scalars['String']['output']>;
+};
+
+export type ContractUriFilter = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  description_contains?: InputMaybe<Scalars['String']['input']>;
+  description_ends_with?: InputMaybe<Scalars['String']['input']>;
+  description_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  description_not?: InputMaybe<Scalars['String']['input']>;
+  description_not_contains?: InputMaybe<Scalars['String']['input']>;
+  description_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  description_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  description_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  description_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  id_contains?: InputMaybe<Scalars['String']['input']>;
+  id_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains?: InputMaybe<Scalars['String']['input']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id_starts_with?: InputMaybe<Scalars['String']['input']>;
+  image?: InputMaybe<Scalars['String']['input']>;
+  image_contains?: InputMaybe<Scalars['String']['input']>;
+  image_ends_with?: InputMaybe<Scalars['String']['input']>;
+  image_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  image_not?: InputMaybe<Scalars['String']['input']>;
+  image_not_contains?: InputMaybe<Scalars['String']['input']>;
+  image_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  image_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  image_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  image_starts_with?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_contains?: InputMaybe<Scalars['String']['input']>;
+  name_ends_with?: InputMaybe<Scalars['String']['input']>;
+  name_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  name_not?: InputMaybe<Scalars['String']['input']>;
+  name_not_contains?: InputMaybe<Scalars['String']['input']>;
+  name_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  name_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  name_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  name_starts_with?: InputMaybe<Scalars['String']['input']>;
+  updatedAt?: InputMaybe<Scalars['BigInt']['input']>;
+  updatedAt_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  updatedAt_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  updatedAt_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  updatedAt_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  updatedAt_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  updatedAt_not?: InputMaybe<Scalars['BigInt']['input']>;
+  updatedAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  uri?: InputMaybe<Scalars['String']['input']>;
+  uri_contains?: InputMaybe<Scalars['String']['input']>;
+  uri_ends_with?: InputMaybe<Scalars['String']['input']>;
+  uri_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  uri_not?: InputMaybe<Scalars['String']['input']>;
+  uri_not_contains?: InputMaybe<Scalars['String']['input']>;
+  uri_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  uri_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  uri_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  uri_starts_with?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type Listing = {
   __typename?: 'Listing';
   chainId: Scalars['String']['output'];
   channel?: Maybe<Channel>;
+  createdAt?: Maybe<Scalars['BigInt']['output']>;
   hasTokenId: Scalars['Boolean']['output'];
   id: Scalars['String']['output'];
   listingAddress: Scalars['String']['output'];
@@ -100,6 +192,14 @@ export type ListingFilter = {
   channel_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   channel_not_starts_with?: InputMaybe<Scalars['String']['input']>;
   channel_starts_with?: InputMaybe<Scalars['String']['input']>;
+  createdAt?: InputMaybe<Scalars['BigInt']['input']>;
+  createdAt_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  createdAt_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  createdAt_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  createdAt_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  createdAt_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  createdAt_not?: InputMaybe<Scalars['BigInt']['input']>;
+  createdAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
   hasTokenId?: InputMaybe<Scalars['Boolean']['input']>;
   hasTokenId_in?: InputMaybe<Array<InputMaybe<Scalars['Boolean']['input']>>>;
   hasTokenId_not?: InputMaybe<Scalars['Boolean']['input']>;
@@ -296,6 +396,8 @@ export type Query = {
   __typename?: 'Query';
   channel?: Maybe<Channel>;
   channels: Array<Channel>;
+  contractUri?: Maybe<ContractUri>;
+  contractUris: Array<ContractUri>;
   listing?: Maybe<Listing>;
   listings: Array<Listing>;
   logicTransmitterMerkleAdmin?: Maybe<LogicTransmitterMerkleAdmin>;
@@ -322,6 +424,24 @@ export type QueryChannelsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   timestamp?: InputMaybe<Scalars['Int']['input']>;
   where?: InputMaybe<ChannelFilter>;
+};
+
+
+/** Autogenerated file. Do not edit manually. */
+export type QueryContractUriArgs = {
+  id: Scalars['String']['input'];
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+/** Autogenerated file. Do not edit manually. */
+export type QueryContractUrisArgs = {
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ContractUriFilter>;
 };
 
 
@@ -399,6 +519,7 @@ export type QueryRoutersArgs = {
 export type Router = {
   __typename?: 'Router';
   createdAt?: Maybe<Scalars['BigInt']['output']>;
+  createdBy?: Maybe<Scalars['String']['output']>;
   factory?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
   newPress?: Maybe<Scalars['String']['output']>;
@@ -418,6 +539,16 @@ export type RouterFilter = {
   createdAt_lte?: InputMaybe<Scalars['BigInt']['input']>;
   createdAt_not?: InputMaybe<Scalars['BigInt']['input']>;
   createdAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  createdBy?: InputMaybe<Scalars['String']['input']>;
+  createdBy_contains?: InputMaybe<Scalars['String']['input']>;
+  createdBy_ends_with?: InputMaybe<Scalars['String']['input']>;
+  createdBy_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  createdBy_not?: InputMaybe<Scalars['String']['input']>;
+  createdBy_not_contains?: InputMaybe<Scalars['String']['input']>;
+  createdBy_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  createdBy_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  createdBy_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  createdBy_starts_with?: InputMaybe<Scalars['String']['input']>;
   factory?: InputMaybe<Scalars['String']['input']>;
   factory_contains?: InputMaybe<Scalars['String']['input']>;
   factory_ends_with?: InputMaybe<Scalars['String']['input']>;
@@ -505,7 +636,7 @@ export type ChannelQueryVariables = Exact<{
 }>;
 
 
-export type ChannelQuery = { __typename?: 'Query', channels: Array<{ __typename?: 'Channel', id: string, contractUri?: string | null, listings: Array<{ __typename?: 'Listing', id: string, chainId: string, tokenId: string, listingAddress: string, hasTokenId: boolean, listingTargetMetadata?: { __typename?: 'PieceMetadata', id: string, pieceName?: string | null, pieceCreator?: string | null, pieceDescription?: string | null, pieceImageURL?: string | null, pieceAnimationURL?: string | null, pieceCreatedDate?: string | null, pieceContentType?: string | null } | null }>, logicTransmitterMerkleAdmin: Array<{ __typename?: 'LogicTransmitterMerkleAdmin', id: string, press?: string | null, merkleRoot?: string | null, accounts?: Array<string | null> | null, roles?: Array<boolean | null> | null }> }> };
+export type ChannelQuery = { __typename?: 'Query', channels: Array<{ __typename?: 'Channel', id: string, createdAt?: any | null, contractUri?: { __typename?: 'ContractUri', id: string, uri?: string | null, name?: string | null, description?: string | null, image?: string | null, updatedAt?: any | null } | null, listings: Array<{ __typename?: 'Listing', id: string, chainId: string, tokenId: string, listingAddress: string, hasTokenId: boolean, listingTargetMetadata?: { __typename?: 'PieceMetadata', id: string, pieceName?: string | null, pieceCreator?: string | null, pieceDescription?: string | null, pieceImageURL?: string | null, pieceAnimationURL?: string | null, pieceCreatedDate?: string | null, pieceContentType?: string | null } | null }>, logicTransmitterMerkleAdmin: Array<{ __typename?: 'LogicTransmitterMerkleAdmin', id: string, press?: string | null, merkleRoot?: string | null, accounts?: Array<string | null> | null, roles?: Array<boolean | null> | null }> }> };
 
 export type ListingsQueryVariables = Exact<{
   channel: Scalars['String']['input'];
@@ -519,7 +650,15 @@ export const ChannelDocument: DocumentNode = gql`
     query channel($channel: String!) {
   channels(where: {id: $channel}) {
     id
-    contractUri
+    createdAt
+    contractUri {
+      id
+      uri
+      name
+      description
+      image
+      updatedAt
+    }
     listings {
       id
       chainId

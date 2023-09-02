@@ -45,6 +45,7 @@ function processMetadata(metadata: AlchemyV3GetNFTMetadata): NFTProcessedLog {
 
 ponder.on("Router:DataSent", async ({ event, context }) => {
   const { Channel, Listing, PieceMetadata } = context.entities;
+  const { timestamp } = event.block;
   const { press, schema, response, ids } = event.params;
 
   // Decode event response into dynamic array of new listings
@@ -103,6 +104,7 @@ ponder.on("Router:DataSent", async ({ event, context }) => {
             tokenId: tokenId.toString(),
             listingAddress: listingAddress,
             hasTokenId: hasTokenId,
+            createdAt: timestamp,
             channel: press,
             listingTargetMetadata: metatdataId, // associate the PieceMetadata entity with the Listing entity
           },

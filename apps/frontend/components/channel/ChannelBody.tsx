@@ -2,17 +2,21 @@ import {
   Flex,
   cn,
   Body,
-  BodySmall,
-  Headline,
-  BodyLarge,
+  BodySmall
 } from "@river/design-system";
-import { type Channel, ChannelCard } from "../client";
 import Image from "next/image";
-import { ChannelModal } from "../client/AddToChannelModal";
 import { shortenAddress } from "../../utils/shortenAddress";
-import { Hex } from "viem";
+
+function truncateText(text: string, maxLength: number) {
+  if (!text) return '';  // Return an empty string if text is undefined
+  if (text.length <= maxLength) return text;
+  return text.slice(0, maxLength) + '...';
+}
 
 export function ChannelBody({ listings }: { listings: any }) {
+  if (!listings || listings.length === 0) {
+    return <div>No Listings available.</div>
+  }
   return (
     <Flex className="gap-x-10">
       <div className={`grid grid-cols-6 gap-x-[21px] gap-y-[18px] pb-4`}>
@@ -29,7 +33,7 @@ export function ChannelBody({ listings }: { listings: any }) {
             </div>
             <Flex className="flex-col">
               <Body className="text-raisin-black font-medium leading-none">
-                {listing?.listingTargetMetadata?.pieceName}
+                {truncateText(listing?.listingTargetMetadata?.pieceName, 30)}
               </Body>
               <BodySmall className="text-sonic-silver">
                 {shortenAddress(listing?.listingTargetMetadata?.pieceCreator)}
