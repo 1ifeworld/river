@@ -54,11 +54,14 @@ ponder.on("Router:DataSent", async ({ event, context }) => {
   // Create a Listing associated with the channel
   for (const [index, newListing] of newListings.entries()) {
     const { chainId, tokenId, listingAddress, hasTokenId } = newListing;
+    // listing ID is unique to listings adding to channels 
     const listingId = `${chainId}/${press}/${ids[index]}`;
+    // unique to token metadata that we're looking up 
+    const metatdataId = `${chainId}/${listingAddress}/${tokenId}`;
 
-    // Check if a PieceMetadata entity with the listingId already exists
+    // Check if a PieceMetadata entity with the metadataId already exists
     const existingMetadata = await PieceMetadata.findUnique({
-      id: listingId,
+      id: metatdataId,
     });
 
     // Create a PieceMetadata entity
@@ -75,7 +78,7 @@ ponder.on("Router:DataSent", async ({ event, context }) => {
         const processedMetadata = processMetadata(metadata);
         // create metadata object into our pieceMetadata table
         await PieceMetadata.create({
-          id: listingId,
+          id: metatdataId,
           data: {
             ...processedMetadata,
           },
@@ -101,7 +104,7 @@ ponder.on("Router:DataSent", async ({ event, context }) => {
             listingAddress: listingAddress,
             hasTokenId: hasTokenId,
             channel: press,
-            listingTargetMetadata: listingId, // associate the PieceMetadata entity with the Listing entity
+            listingTargetMetadata: metatdataId, // associate the PieceMetadata entity with the Listing entity
           },
         });
       }
