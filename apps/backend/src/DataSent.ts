@@ -1,8 +1,7 @@
 import { ponder } from "@/generated";
 import { schemaMap } from "./decodingSchema";
 import { BigNumberish } from "alchemy-sdk";
-import getNftMetadata from "./hooks/useGetTokenMetadata";
-import fetchIPFSData from "./utils/fetchIPFSdata";
+import getMetadata from "./fetch/getMetadata";
 
 type NFTProcessedLog = {
   pieceName?: string;
@@ -54,9 +53,9 @@ ponder.on("Router:DataSent", async ({ event, context }) => {
   // Create a Listing associated with the channel
   for (const [index, newListing] of newListings.entries()) {
     const { chainId, tokenId, listingAddress, hasTokenId } = newListing;
-    // listing ID is unique to listings adding to channels 
+    // listing ID is unique to listings adding to channels
     const listingId = `${chainId}/${press}/${ids[index]}`;
-    // unique to token metadata that we're looking up 
+    // unique to token metadata that we're looking up
     const metatdataId = `${chainId}/${listingAddress}/${tokenId}/${hasTokenId}`;
 
     // Check if a PieceMetadata entity with the metadataId already exists
@@ -67,27 +66,28 @@ ponder.on("Router:DataSent", async ({ event, context }) => {
     // Create a PieceMetadata entity
     if (!existingMetadata) {
       try {
-        const metadata: AlchemyV3GetNFTMetadata = await getNftMetadata({
+        const metadata: AlchemyV3GetNFTMetadata = await getMetadata({
           network: chainId,
           address: listingAddress,
           tokenId: tokenId as BigNumberish,
         });
 
         if (metadata) {
-        // convert alchemy v3 return into our opinionated processed nft metadata scheme
-        const processedMetadata = processMetadata(metadata);
-        // create metadata object into our pieceMetadata table
-        await PieceMetadata.create({
-          id: metatdataId,
-          data: {
-            ...processedMetadata,
-          },
-        });
-      } else {
-        console.error("Metadata is undefined.");
-      } } catch (error) {
-  console.error("Error in getNFTMetadata call. The River flows.", error);
-}
+          // convert alchemy v3 return into our opinionated processed nft metadata scheme
+          const processedMetadata = processMetadata(metadata);
+          // create metadata object into our pieceMetadata table
+          await PieceMetadata.create({
+            id: metatdataId,
+            data: {
+              ...processedMetadata,
+            },
+          });
+        } else {
+          console.error("Metadata is undefined.");
+        }
+      } catch (error) {
+        console.error("Error in getMetadata call. The River flows.", error);
+      }
 
       // Check if listing table entry for ListingID exists.
       // we know it doesnt exist because its being created. but this is a dev environment fix to prevent unique ID errors
@@ -109,4 +109,5 @@ ponder.on("Router:DataSent", async ({ event, context }) => {
         });
       }
     }
-  } });
+  }
+});
