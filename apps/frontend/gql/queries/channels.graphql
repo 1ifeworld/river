@@ -2,7 +2,6 @@ query channel($channel: String!) {
   channels(where: { id: $channel }) {
     id
     createdAt
-    # createdBy
     contractUri {
       id
       uri
@@ -11,13 +10,13 @@ query channel($channel: String!) {
       image
       updatedAt
     }
-    listings {
+    listings(orderBy: "createdAt", orderDirection: "desc") {
       id
+      createdAt
       chainId
       tokenId
       listingAddress
       hasTokenId
-      # createdAt
       listingTargetMetadata {
         id
         pieceName
