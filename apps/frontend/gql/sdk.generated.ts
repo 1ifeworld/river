@@ -1,4 +1,4 @@
-import { DocumentNode } from 'graphql';
+import type { DocumentNode } from "graphql/language/ast";
 import { GraphQLClient } from 'graphql-request';
 import { GraphQLClientRequestHeaders } from 'graphql-request/build/cjs/types';
 import gql from 'graphql-tag';
@@ -636,7 +636,7 @@ export type ChannelQueryVariables = Exact<{
 }>;
 
 
-export type ChannelQuery = { __typename?: 'Query', channels: Array<{ __typename?: 'Channel', id: string, createdAt?: any | null, contractUri?: { __typename?: 'ContractUri', id: string, uri?: string | null, name?: string | null, description?: string | null, image?: string | null, updatedAt?: any | null } | null, listings: Array<{ __typename?: 'Listing', id: string, chainId: string, tokenId: string, listingAddress: string, hasTokenId: boolean, listingTargetMetadata?: { __typename?: 'PieceMetadata', id: string, pieceName?: string | null, pieceCreator?: string | null, pieceDescription?: string | null, pieceImageURL?: string | null, pieceAnimationURL?: string | null, pieceCreatedDate?: string | null, pieceContentType?: string | null } | null }>, logicTransmitterMerkleAdmin: Array<{ __typename?: 'LogicTransmitterMerkleAdmin', id: string, press?: string | null, merkleRoot?: string | null, accounts?: Array<string | null> | null, roles?: Array<boolean | null> | null }> }> };
+export type ChannelQuery = { __typename?: 'Query', channels: Array<{ __typename?: 'Channel', id: string, createdAt?: any | null, contractUri?: { __typename?: 'ContractUri', id: string, uri?: string | null, name?: string | null, description?: string | null, image?: string | null, updatedAt?: any | null } | null, listings: Array<{ __typename?: 'Listing', id: string, createdAt?: any | null, chainId: string, tokenId: string, listingAddress: string, hasTokenId: boolean, listingTargetMetadata?: { __typename?: 'PieceMetadata', id: string, pieceName?: string | null, pieceCreator?: string | null, pieceDescription?: string | null, pieceImageURL?: string | null, pieceAnimationURL?: string | null, pieceCreatedDate?: string | null, pieceContentType?: string | null } | null }>, logicTransmitterMerkleAdmin: Array<{ __typename?: 'LogicTransmitterMerkleAdmin', id: string, press?: string | null, merkleRoot?: string | null, accounts?: Array<string | null> | null, roles?: Array<boolean | null> | null }> }> };
 
 export type ListingsQueryVariables = Exact<{
   channel: Scalars['String']['input'];
@@ -646,7 +646,7 @@ export type ListingsQueryVariables = Exact<{
 export type ListingsQuery = { __typename?: 'Query', channels: Array<{ __typename?: 'Channel', listings: Array<{ __typename?: 'Listing', id: string, chainId: string, tokenId: string, listingAddress: string, hasTokenId: boolean, listingTargetMetadata?: { __typename?: 'PieceMetadata', id: string, pieceName?: string | null, pieceCreator?: string | null, pieceDescription?: string | null, pieceImageURL?: string | null, pieceAnimationURL?: string | null, pieceCreatedDate?: string | null, pieceContentType?: string | null } | null }> }> };
 
 
-export const ChannelDocument: DocumentNode = gql`
+export const ChannelDocument = gql`
     query channel($channel: String!) {
   channels(where: {id: $channel}) {
     id
@@ -659,8 +659,9 @@ export const ChannelDocument: DocumentNode = gql`
       image
       updatedAt
     }
-    listings {
+    listings(orderBy: "createdAt", orderDirection: "desc") {
       id
+      createdAt
       chainId
       tokenId
       listingAddress
