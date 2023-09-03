@@ -1,3 +1,4 @@
+import type { DocumentNode } from "graphql/language/ast";
 import { GraphQLClient } from 'graphql-request';
 import { GraphQLClientRequestHeaders } from 'graphql-request/build/cjs/types';
 import gql from 'graphql-tag';
