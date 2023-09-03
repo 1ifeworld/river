@@ -7,6 +7,12 @@ const config: CodegenConfig = {
   generates: {
     'gql/sdk.generated.ts': {
       plugins: [
+        {
+          add: {
+            content:
+              'import type { DocumentNode } from "graphql/language/ast";',
+          },
+        },
         'typescript',
         'typescript-operations',
         'typescript-graphql-request',
