@@ -2,6 +2,7 @@ query channel($channel: String!) {
   channels(where: { id: $channel }) {
     id
     createdAt
+    createdBy
     contractUri {
       id
       uri

@@ -14,6 +14,8 @@ export default async function Channel({
     channel: getAddress(params.contract) as string,
   });  
 
+  console.log(channels)
+
   const ipfsToHttps = (ipfsString: string) => {
     if (!ipfsString) return "";
     return ipfsString.replace('ipfs://', 'https://ipfs.io/ipfs/');
@@ -29,9 +31,7 @@ export default async function Channel({
     name: channels[0]?.contractUri?.name as string,
     description: channels[0]?.contractUri?.description as string,
     cover: ipfsToHttps(channels[0]?.contractUri?.image as string),
-    /* Commented out because of issue with accessing createdBy in graphql */
-    // creator: channels[0]?.createdBy as string,
-    creator: "0x153D2A196dc8f1F6b9Aa87241864B3e4d4FEc170",
+    creator: channels[0]?.createdBy as string,
     members: channels[0]?.logicTransmitterMerkleAdmin[0]?.accounts as string[]
   }
 
