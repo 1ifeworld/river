@@ -14,6 +14,7 @@ query channel($channel: String!) {
     listings(orderBy: "createdAt", orderDirection: "desc") {
       id
       createdAt
+      createdBy
       chainId
       tokenId
       listingAddress

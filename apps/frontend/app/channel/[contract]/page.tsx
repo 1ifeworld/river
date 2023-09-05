@@ -9,20 +9,17 @@ export default async function Channel({
 }: {
   params: { contract: string };
 }) {
-
   const { channels } = await getChannel({
     channel: getAddress(params.contract) as string,
-  });  
-
-  console.log(channels)
+  });
 
   const ipfsToHttps = (ipfsString: string) => {
-    if (!ipfsString) return "";
+    if (!ipfsString) return '';
     return ipfsString.replace('ipfs://', 'https://ipfs.io/ipfs/');
-  }
+  };
 
   // const makeListingsChronological = (listings: any) => {
-  //   take in listings array and re order the array based on 
+  //   take in listings array and re order the array based on
   //   createdAt timestamp value for each listing
   //   use this function the channelBodyInput
   // }
@@ -32,12 +29,12 @@ export default async function Channel({
     description: channels[0]?.contractUri?.description as string,
     cover: ipfsToHttps(channels[0]?.contractUri?.image as string),
     creator: channels[0]?.createdBy as string,
-    members: channels[0]?.logicTransmitterMerkleAdmin[0]?.accounts as string[]
-  }
+    members: channels[0]?.logicTransmitterMerkleAdmin[0]?.accounts as string[],
+  };
 
   return (
     <Flex className='flex-col gap-y-[87px]'>
-      <ChannelBanner channel={channelBannerInput}/>
+      <ChannelBanner channel={channelBannerInput} />
       <ChannelBody listings={channels[0]?.listings} />
     </Flex>
   );
