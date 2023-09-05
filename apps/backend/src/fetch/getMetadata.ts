@@ -12,7 +12,7 @@ const getMetadata = async ({ network, address, tokenId }: Props) => {
   if (network !== BigInt(1)) {
     throw new Error("Only mainnet is supported at the moment.");
   }
-  const baseURL = `https://eth-mainnet.g.alchemy.com/nft/v3/${process.env.NEXT_PUBLIC_ALCHEMY_KEY}/getNFTMetadata?`;
+  const baseURL = `https://eth-mainnet.g.alchemy.com/nft/v3/${process.env.ALCHEMY_KEY}/getNFTMetadata?`;
   const fullURL = baseURL + `contractAddress=${address}&tokenId=${tokenId}`;
 
   if (network && address && tokenId) {
