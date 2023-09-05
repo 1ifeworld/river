@@ -10,7 +10,7 @@ export function Headline({ children, className }: TypographyProps) {
   return (
     <h1
       className={cn(
-        'text-2xl font-sans',
+        'text-2xl font-sans antialiased',
         className
       )}
     >
@@ -23,7 +23,7 @@ export function BodyExtraLarge({ children, className }: TypographyProps) {
   return (
     <p
       className={cn(
-        'text-xl font-sans',
+        'text-xl font-sans antialiased',
         className
       )}
     >
@@ -36,7 +36,7 @@ export function BodyLarge({ children, className }: TypographyProps) {
   return (
     <p
       className={cn(
-        'text-lg font-sans',
+        'text-lg font-sans antialiased',
         className
       )}
     >
@@ -49,7 +49,7 @@ export function Body({ children, className }: TypographyProps) {
   return (
     <p
       className={cn(
-        'text-base font-sans',
+        'text-base font-sans antialiased',
         className
       )}
     >
@@ -62,7 +62,7 @@ export function BodySmall({ children, className }: TypographyProps) {
   return (
     <p
       className={cn(
-        'text-sm font-sans',
+        'text-sm font-sans antialiased',
         className
       )}
     >
