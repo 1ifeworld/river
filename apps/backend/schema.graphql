@@ -18,6 +18,7 @@ type Listing @entity {
   listingAddress: String!
   hasTokenId: Boolean!
   createdAt: BigInt
+  createdBy: String!
   channel: Channel!
   listingTargetMetadata: PieceMetadata! 
 
