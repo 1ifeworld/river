@@ -164,6 +164,7 @@ export type Listing = {
   chainId: Scalars['String']['output'];
   channel?: Maybe<Channel>;
   createdAt?: Maybe<Scalars['BigInt']['output']>;
+  createdBy: Scalars['String']['output'];
   hasTokenId: Scalars['Boolean']['output'];
   id: Scalars['String']['output'];
   listingAddress: Scalars['String']['output'];
@@ -200,6 +201,16 @@ export type ListingFilter = {
   createdAt_lte?: InputMaybe<Scalars['BigInt']['input']>;
   createdAt_not?: InputMaybe<Scalars['BigInt']['input']>;
   createdAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  createdBy?: InputMaybe<Scalars['String']['input']>;
+  createdBy_contains?: InputMaybe<Scalars['String']['input']>;
+  createdBy_ends_with?: InputMaybe<Scalars['String']['input']>;
+  createdBy_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  createdBy_not?: InputMaybe<Scalars['String']['input']>;
+  createdBy_not_contains?: InputMaybe<Scalars['String']['input']>;
+  createdBy_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  createdBy_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  createdBy_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  createdBy_starts_with?: InputMaybe<Scalars['String']['input']>;
   hasTokenId?: InputMaybe<Scalars['Boolean']['input']>;
   hasTokenId_in?: InputMaybe<Array<InputMaybe<Scalars['Boolean']['input']>>>;
   hasTokenId_not?: InputMaybe<Scalars['Boolean']['input']>;
@@ -636,7 +647,7 @@ export type ChannelQueryVariables = Exact<{
 }>;
 
 
-export type ChannelQuery = { __typename?: 'Query', channels: Array<{ __typename?: 'Channel', id: string, createdAt?: any | null, createdBy: string, contractUri?: { __typename?: 'ContractUri', id: string, uri?: string | null, name?: string | null, description?: string | null, image?: string | null, updatedAt?: any | null } | null, listings: Array<{ __typename?: 'Listing', id: string, createdAt?: any | null, chainId: string, tokenId: string, listingAddress: string, hasTokenId: boolean, listingTargetMetadata?: { __typename?: 'PieceMetadata', id: string, pieceName?: string | null, pieceCreator?: string | null, pieceDescription?: string | null, pieceImageURL?: string | null, pieceAnimationURL?: string | null, pieceCreatedDate?: string | null, pieceContentType?: string | null } | null }>, logicTransmitterMerkleAdmin: Array<{ __typename?: 'LogicTransmitterMerkleAdmin', id: string, press?: string | null, merkleRoot?: string | null, accounts?: Array<string | null> | null, roles?: Array<boolean | null> | null }> }> };
+export type ChannelQuery = { __typename?: 'Query', channels: Array<{ __typename?: 'Channel', id: string, createdAt?: any | null, createdBy: string, contractUri?: { __typename?: 'ContractUri', id: string, uri?: string | null, name?: string | null, description?: string | null, image?: string | null, updatedAt?: any | null } | null, listings: Array<{ __typename?: 'Listing', id: string, createdAt?: any | null, createdBy: string, chainId: string, tokenId: string, listingAddress: string, hasTokenId: boolean, listingTargetMetadata?: { __typename?: 'PieceMetadata', id: string, pieceName?: string | null, pieceCreator?: string | null, pieceDescription?: string | null, pieceImageURL?: string | null, pieceAnimationURL?: string | null, pieceCreatedDate?: string | null, pieceContentType?: string | null } | null }>, logicTransmitterMerkleAdmin: Array<{ __typename?: 'LogicTransmitterMerkleAdmin', id: string, press?: string | null, merkleRoot?: string | null, accounts?: Array<string | null> | null, roles?: Array<boolean | null> | null }> }> };
 
 export type ListingsQueryVariables = Exact<{
   channel: Scalars['String']['input'];
@@ -663,6 +674,7 @@ export const ChannelDocument = gql`
     listings(orderBy: "createdAt", orderDirection: "desc") {
       id
       createdAt
+      createdBy
       chainId
       tokenId
       listingAddress
