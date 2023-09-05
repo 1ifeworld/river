@@ -8,12 +8,48 @@ export default {
     'components/**/*.{ts,tsx}',
   ],
   theme: {
-    container: {
-      center: true,
-      padding: '2rem',
-      screens: {
-        '2xl': '1400px',
-      },
+    // Replaces all of the default `fontSize` values
+    fontSize: {
+      sm: [
+        '0.75rem',
+        {
+          lineHeight: '1.125rem',
+          letterSpacing: '0.013em',
+          fontWeight: '500',
+        },
+      ],
+      base: [
+        '0.813rem',
+        {
+          lineHeight: '1.25rem',
+          letterSpacing: '0.013em',
+          fontWeight: '500',
+        },
+      ],
+      lg: [
+        '1.063rem',
+        {
+          lineHeight: '1.625rem',
+          letterSpacing: '0.013em',
+          fontWeight: '500',
+        },
+      ],
+      xl: [
+        '1.563rem',
+        {
+          lineHeight: '2.125rem',
+          letterSpacing: '0.013em',
+          fontWeight: '600',
+        },
+      ],
+      '2xl': [
+        '2.188rem',
+        {
+          lineHeight: '2.75rem',
+          letterSpacing: '0.013em',
+          fontWeight: '700',
+        },
+      ],
     },
     extend: {
       // river custom start

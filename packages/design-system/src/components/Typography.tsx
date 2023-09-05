@@ -10,7 +10,7 @@ export function Headline({ children, className }: TypographyProps) {
   return (
     <h1
       className={cn(
-        'text-2xl font-bold tracking-[0.013em] font-sans',
+        'text-2xl font-sans',
         className
       )}
     >
@@ -23,7 +23,7 @@ export function BodyExtraLarge({ children, className }: TypographyProps) {
   return (
     <p
       className={cn(
-        'text-xl font-medium tracking-[0.013em] font-sans',
+        'text-xl font-sans',
         className
       )}
     >
@@ -36,7 +36,7 @@ export function BodyLarge({ children, className }: TypographyProps) {
   return (
     <p
       className={cn(
-        'text-lg font-normal tracking-[0.013em] font-sans',
+        'text-lg font-sans',
         className
       )}
     >
@@ -49,7 +49,7 @@ export function Body({ children, className }: TypographyProps) {
   return (
     <p
       className={cn(
-        'text-base font-normal tracking-[0.013em] font-sans',
+        'text-base font-sans',
         className
       )}
     >
@@ -62,7 +62,7 @@ export function BodySmall({ children, className }: TypographyProps) {
   return (
     <p
       className={cn(
-        'text-sm font-normal tracking-[0.013em] font-sans',
+        'text-sm font-sans',
         className
       )}
     >
