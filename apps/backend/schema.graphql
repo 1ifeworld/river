@@ -1,12 +1,12 @@
 type PieceMetadata @entity {
-id: String!
-pieceName: String
-pieceCreator: String
-pieceDescription: String
-pieceImageURL: String 
-pieceAnimationURL: String
-pieceCreatedDate: String
-pieceContentType: String 
+  id: String!
+  pieceName: String
+  pieceCreator: String
+  pieceDescription: String
+  pieceImageURL: String
+  pieceAnimationURL: String
+  pieceCreatedDate: String
+  pieceContentType: String
 }
 
 type Listing @entity {
@@ -20,7 +20,7 @@ type Listing @entity {
   createdAt: BigInt
   createdBy: String!
   channel: Channel!
-  listingTargetMetadata: PieceMetadata! 
+  listingTargetMetadata: PieceMetadata!
 
   ## target metadata json -- the query to initially fetch and/or refresh
   ## metadata should just return a processed json here
@@ -41,9 +41,9 @@ type Channel @entity {
   contractUri: ContractUri
   createdAt: BigInt
   createdBy: String!
-  logicTransmitterMerkleAdmin: [LogicTransmitterMerkleAdmin!]! @derivedFrom(field: "id")
+  logicTransmitterMerkleAdmin: [LogicTransmitterMerkleAdmin!]!
+    @derivedFrom(field: "id")
 }
-
 
 type Router @entity {
   id: String!
@@ -59,9 +59,8 @@ type Router @entity {
   # RawTransaction: RawTransaction
 }
 
-
-type LogicTransmitterMerkleAdmin @entity{
-  id: String! 
+type LogicTransmitterMerkleAdmin @entity {
+  id: String!
   press: String
   merkleRoot: String
   accounts: [String]
