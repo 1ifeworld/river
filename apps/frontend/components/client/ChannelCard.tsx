@@ -1,13 +1,15 @@
 import Image from 'next/image';
 import { Body, BodySmall, Flex, cn } from '@river/design-system';
+import { Hex } from 'viem';
 
 export interface Channel {
   name: string;
   description?: string;
-  creator: string;
+  creator: Hex;
   members?: string[];
   cover: string;
 }
+
 
 interface ChannelCardProps extends React.HTMLAttributes<HTMLDivElement> {
   channel: Channel;
