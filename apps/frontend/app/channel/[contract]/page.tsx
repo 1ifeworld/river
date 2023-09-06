@@ -30,7 +30,6 @@ export default async function Channel({
     members: channels[0]?.logicTransmitterMerkleAdmin[0]?.accounts as string[],
   };
 
-
   const listingInput: ListingExtended[] = channels[0]?.listings.map(listing => ({
     id: listing.id,
     chainId: BigInt(listing.chainId),
@@ -39,7 +38,16 @@ export default async function Channel({
     createdAt: listing.createdAt as bigint,
     createdBy: listing.createdBy as Hex,
     listingAddress: listing.listingAddress as Hex,
-    listingTargetMetadata: listing?.listingTargetMetadata, 
+    listingTargetMetadata: listing?.listingTargetMetadata ? {
+      id: listing.listingTargetMetadata.id,
+      pieceName: listing.listingTargetMetadata.pieceName || '',
+      pieceCreator: listing.listingTargetMetadata.pieceCreator as Hex,
+      pieceDescription: listing.listingTargetMetadata.pieceDescription || '',
+      pieceImageURL: listing.listingTargetMetadata.pieceImageURL || '',
+      pieceAnimationURL: listing.listingTargetMetadata.pieceAnimationURL || '',
+      pieceCreatedDate: listing.listingTargetMetadata.pieceCreatedDate || '',
+      pieceContentType: listing.listingTargetMetadata.pieceContentType || '',
+  } : null,
 }));
 
   return (
