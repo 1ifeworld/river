@@ -54,14 +54,14 @@ export default {
     // Replaces all of the default color values
     colors: {
       base: 'hsl(var(--base) / <alpha-value>)',
-      baseHover: 'hsl(var(--base-hover) / <alpha-value>)',
-      baseBorder: 'hsl(var(--base-border) / <alpha-value>)',
-      baseShade: 'hsl(var(--base-shade) / <alpha-value>)',
+      'base-hover': 'hsl(var(--base-hover) / <alpha-value>)',
+      'base-border': 'hsl(var(--base-border) / <alpha-value>)',
+      'base-shade': 'hsl(var(--base-shade) / <alpha-value>)',
       label: 'hsl(var(--label) / <alpha-value>)',
-      labelMuted: 'hsl(var(--label-muted) / <alpha-value>)',
-      labelFaint: 'hsl(var(--label-faint) / <alpha-value>)',
+      'label-muted': 'hsl(var(--label-muted) / <alpha-value>)',
+      'label-faint': 'hsl(var(--label-faint) / <alpha-value>)',
       accent: 'hsl(var(--accent) / <alpha-value>)',
-      accentHover: 'hsl(var(--accent-hover) / <alpha-value>)',
+      'accent-hover': 'hsl(var(--accent-hover) / <alpha-value>)',
     },
     extend: {
       fontFamily: {

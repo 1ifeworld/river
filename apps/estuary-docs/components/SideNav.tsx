@@ -7,12 +7,12 @@ import Link from 'next/link';
 
 export function SideNav() {
   return (
-    <ScrollArea.Root className='w-[196px] h-screen overflow-hidden bg-base border-r border-baseBorder'>
+    <ScrollArea.Root className='w-[196px] h-screen overflow-hidden bg-base border-r border-base-border'>
       <ScrollArea.Viewport className='w-full h-full'>
         <Stack className=' justify-center px-6 py-8 gap-4'>
           <Stack>
             {/* Tokens */}
-            <BodySmall className='text-labelMuted'>Tokens</BodySmall>
+            <BodySmall className='text-label-muted'>Tokens</BodySmall>
             <Link href='/estuary/tokens/colors'>
               <BodySmall>Colors</BodySmall>
             </Link>
@@ -22,7 +22,7 @@ export function SideNav() {
           </Stack>
           <Stack>
             {/* Elements */}
-            <BodySmall className='text-labelMuted'>Elements</BodySmall>
+            <BodySmall className='text-label-muted'>Elements</BodySmall>
             <Link href='/estuary/elements/debug'>
               <BodySmall>Debug</BodySmall>
             </Link>
@@ -35,7 +35,7 @@ export function SideNav() {
           </Stack>
           <Stack>
             {/* Components */}
-            <BodySmall className='text-labelMuted'>Components</BodySmall>
+            <BodySmall className='text-label-muted'>Components</BodySmall>
             <Link href='/estuary/components/button'>
               <BodySmall>Button</BodySmall>
             </Link>

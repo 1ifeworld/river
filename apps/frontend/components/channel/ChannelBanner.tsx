@@ -30,13 +30,13 @@ export function ChannelBanner({ channel }: { channel: Channel }) {
         <div></div>
         <div className="">
           <Headline className="font-medium text-label">{channel.name ? channel.name : "Channel name missing"}</Headline>
-          <BodyLarge className="text-labelMuted">
+          <BodyLarge className="text-label-muted">
             {channel.creator ? shortenAddress(channel.creator as Hex): ""}
             {channel.members?.length
               ? ` + ${channel.members.length - 1} others`
               : ""}
           </BodyLarge>
-          <Body className="text-labelMuted">{channel.description ? channel.description : ""}</Body>
+          <Body className="text-label-muted">{channel.description ? channel.description : ""}</Body>
         </div>
         <ChannelModal />
       </Flex>

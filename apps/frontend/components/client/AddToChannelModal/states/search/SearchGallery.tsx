@@ -10,7 +10,7 @@ interface NetworkSelectProps {
 
 const SearchGallery = ({ nftMetadata }: NetworkSelectProps) => {
   return (
-    <div className='w-full h-[218px] bg-baseShade border-y-[0.5px] border-baseBorder flex items-center'>
+    <div className='w-full h-[218px] bg-base-shade border-y-[0.5px] border-base-border flex items-center'>
       {/* Grid container */}
       <div className='mx-[33px] flex justify-start items-center w-full space-x-5'>
         {/* First Column: Image or Blank Square */}
@@ -26,7 +26,7 @@ const SearchGallery = ({ nftMetadata }: NetworkSelectProps) => {
               )}
             />
           ) : (
-            <div className='w-[165px] h-[165px] bg-baseBorder'></div>
+            <div className='w-[165px] h-[165px] bg-base-border'></div>
           )}
         </div>
         {/* Second Column: Text details */}
@@ -35,10 +35,10 @@ const SearchGallery = ({ nftMetadata }: NetworkSelectProps) => {
             {nftMetadata?.title || 'Title'}
           </Body>
           {/* truncating for now but need to add ens resolution */}
-          <BodySmall className='text-[13px] text-labelMuted break-words truncate'>
+          <BodySmall className='text-[13px] text-label-muted break-words truncate'>
             {nftMetadata?.contract.contractDeployer || 'Created By'}
           </BodySmall>
-          <BodySmall className='text-[13px] text-labelMuted break-words mt-[25.9px] '>
+          <BodySmall className='text-[13px] text-label-muted break-words mt-[25.9px] '>
             {nftMetadata?.description || 'Description' || 'Description'}
           </BodySmall>
         </div>

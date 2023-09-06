@@ -29,7 +29,7 @@ function AuthDropdown({
           {ensName ? ensName : shortenAddress(address)}
         </BodySmall>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className='bg-base border border-baseBorder rounded px-8 py-5 mr-3 mt-3'>
+      <DropdownMenuContent className='bg-base border border-base-border rounded px-8 py-5 mr-3 mt-3'>
         <Flex className='flex-col gap-y-5 items-center'>
           <DropdownMenuItem className='focus:outline-none'>
             <BodySmall className='text-label'>
@@ -43,7 +43,7 @@ function AuthDropdown({
             </BodySmall>
           </DropdownMenuItem>
           <DropdownMenuItem className='focus:outline-none'>
-            <BodySmall className='text-labelMuted cursor-not-allowed'>
+            <BodySmall className='text-label-muted cursor-not-allowed'>
               About River
             </BodySmall>
           </DropdownMenuItem>
@@ -59,7 +59,7 @@ export function Connect() {
     <ConnectKitButton.Custom>
       {({ isConnected, show, address, ensName }) => {
         return isConnected ? (
-          <div className='p-2 font-medium rounded justify-center items-center flex hover:bg-baseHover'>
+          <div className='p-2 font-medium rounded justify-center items-center flex hover:bg-base-hover'>
             <AuthDropdown
               ensName={ensName}
               address={address}
@@ -69,7 +69,7 @@ export function Connect() {
         ) : (
           <button
             type='button'
-            className='p-2 font-medium rounded justify-center items-center flex hover:bg-baseHover'
+            className='p-2 font-medium rounded justify-center items-center flex hover:bg-base-hover'
             onClick={show}
           >
             <BodySmall className='text-label'>Connect</BodySmall>
