@@ -25,7 +25,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <Stack className=' justify-center h-full mx-[145px] my-5 space-y-4'>
+      <Stack className='items-center my-10'>
         {/* Channel Grid */}
         <Flex className='flex-wrap gap-5 pb-4'>
           {arrayOfChannelData.map((channel, index) => (

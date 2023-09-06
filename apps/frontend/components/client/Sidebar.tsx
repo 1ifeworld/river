@@ -1,49 +1,39 @@
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetFooter,
-  SheetClose,
-  SheetOverlay,
-  SheetTrigger,
+  Stack,
   Menu,
   Flex,
-  BodySmall,
+  Body,
   Globe,
+  RiverIcon,
+  cn,
 } from '@river/design-system';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import Link from 'next/link';
 
 export function Sidebar() {
   return (
-    <Sheet open={true}>
-      <SheetTrigger className='p-5'>
-        <Menu />
-      </SheetTrigger>
-      <SheetContent
-        className='px-5 w-[208px] shadow-none bg-base'
-        side={'left'}
-      >
-        <Flex className='flex-col gap-[40px] mt-12'>
-          <Flex className='flex-col gap-4'>
-            <Flex className='items-center gap-x-2'>
-              {/* TODO: replace with custom `SearchIcon` */}
-              <MagnifyingGlassIcon fill={'bg-label'} />
-              <BodySmall>Search</BodySmall>
-            </Flex>
-            <Flex className='items-center gap-x-2'>
-              <Globe />
-              <BodySmall>Home</BodySmall>
-            </Flex>
-          </Flex>
-          <BodySmall className='text-sonic-silver font-medium'>
-            My Channels
-          </BodySmall>
+    <Stack className='hidden md:flex bg-base border-r border-baseBorder h-screen sticky top-0 w-[210px] p-5'>
+      <Stack>
+        <Flex>
+          <RiverIcon />
         </Flex>
-        <SheetClose className='focus:outline-none' />
-        <SheetFooter>{/* Auth Placeholder */}</SheetFooter>
-      </SheetContent>
-    </Sheet>
+        <Stack className='gap-3 my-8'>
+          <Flex className='items-center gap-x-2'>
+            {/* TODO: replace with custom `SearchIcon` */}
+            {/* TODO: pass the `label` var value here instead of hardcoding */}
+            <MagnifyingGlassIcon stroke='#C2C2C2' />
+            <Body className='text-labelFaint'>Search</Body>
+          </Flex>
+          <Flex className='items-center gap-x-2'>
+            {/* TODO: pass the `label` var value here instead of hardcoding */}
+            <Globe fill='#393939' />
+            <Body className='text-label'>
+              <Link href='/'>Home</Link>
+            </Body>
+          </Flex>
+        </Stack>
+        <Body className='text-labelFaint font-medium'>Favorites</Body>
+      </Stack>
+    </Stack>
   );
 }

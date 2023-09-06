@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { type SvgProps } from './types';
 
+//  = '#393939'
 export function Menu({ width = '15', fill, className }: SvgProps) {
   return (
     <svg
