@@ -9,6 +9,7 @@ export interface Channel {
   cover: string;
 }
 
+
 interface ChannelCardProps extends React.HTMLAttributes<HTMLDivElement> {
   channel: Channel;
   width?: number;

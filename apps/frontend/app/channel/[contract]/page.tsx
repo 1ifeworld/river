@@ -1,7 +1,9 @@
-import { getChannel } from '../../../gql/requests/getChannel';
+import { getChannel } from '../../../gql/requests/getChannel'
+import { getListings } from '../../../gql/requests/getListings';
 import { Flex } from '@river/design-system';
 import { ChannelBanner, ChannelBody } from '../../../components/channel';
 import { type Channel } from '../../../components/client';
+import { type Listing } from '../../../components/channel';
 import { getAddress } from 'viem';
 
 export default async function Channel({
@@ -12,7 +14,7 @@ export default async function Channel({
   const { channels } = await getChannel({
     channel: getAddress(params.contract) as string,
   });
-
+  
   const ipfsToHttps = (ipfsString: string) => {
     if (!ipfsString) return '';
     return ipfsString.replace('ipfs://', 'https://ipfs.io/ipfs/');
@@ -32,10 +34,20 @@ export default async function Channel({
     members: channels[0]?.logicTransmitterMerkleAdmin[0]?.accounts as string[],
   };
 
+  const listingInput: Listing[] = channels[0]?.listings.map(listing => ({
+    id: listing?.id,
+    chainId: listing?.chainId,
+    tokenId: listing?.tokenId,
+    hasTokenId: listing?.hasTokenId,
+    createdBy: listing?.createdBy,
+    listingAddress: listing?.listingAddress,
+}));
+
   return (
     <Flex className='flex-col gap-y-[87px]'>
       <ChannelBanner channel={channelBannerInput} />
-      <ChannelBody listings={channels[0]?.listings} />
+      <ChannelBody listings={listingInput} />
+
     </Flex>
   );
 }
