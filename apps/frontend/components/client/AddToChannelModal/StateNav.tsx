@@ -13,7 +13,7 @@ export function StateNav({
   closeModal,
 }: StateNavProps) {
   return (
-    <div className='flex justify-center text-labelMuted w-full gap-x-7'>
+    <div className='flex justify-center text-label-muted w-full gap-x-7'>
       <button
         disabled
         onClick={() => setActiveTab('Upload')}

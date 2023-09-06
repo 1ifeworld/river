@@ -25,11 +25,11 @@ export function ChannelCard({
       <Stack className='max-w-[224px]'>
         <Body className='text-label font-medium leading-none'>{channel.name}</Body>
         {channel.members ? (
-          <BodySmall className='text-labelMuted'>
+          <BodySmall className='text-label-muted'>
             {truncateText(channel.creator, 30)} + {channel.members.length} others
           </BodySmall>
         ) : (
-          <BodySmall className='text-labelMuted'>{truncateText(channel.creator, 30)}</BodySmall>
+          <BodySmall className='text-label-muted'>{truncateText(channel.creator, 30)}</BodySmall>
         )}
       </Stack>
     </Stack>

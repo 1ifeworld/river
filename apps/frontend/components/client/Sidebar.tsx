@@ -12,7 +12,7 @@ import Link from 'next/link';
 
 export function Sidebar() {
   return (
-    <Stack className='hidden md:flex bg-base border-r border-baseBorder h-screen sticky top-0 w-[210px] p-5'>
+    <Stack className='hidden md:flex bg-base border-r border-base-border h-screen sticky top-0 w-[210px] p-5'>
       <Stack>
         <Flex>
           <RiverIcon />
@@ -22,7 +22,7 @@ export function Sidebar() {
             {/* TODO: replace with custom `SearchIcon` */}
             {/* TODO: pass the `label` var value here instead of hardcoding */}
             <MagnifyingGlassIcon stroke='#C2C2C2' />
-            <Body className='text-labelFaint'>Search</Body>
+            <Body className='text-label-faint'>Search</Body>
           </Flex>
           <Flex className='items-center gap-x-2'>
             {/* TODO: pass the `label` var value here instead of hardcoding */}
@@ -32,7 +32,7 @@ export function Sidebar() {
             </Body>
           </Flex>
         </Stack>
-        <Body className='text-labelFaint font-medium'>Favorites</Body>
+        <Body className='text-label-faint font-medium'>Favorites</Body>
       </Stack>
     </Stack>
   );
