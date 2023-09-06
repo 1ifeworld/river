@@ -2,6 +2,7 @@ import { Header } from "../components/client";
 import { AllChannels } from "../components/channel/AllChannels";
 import { type Channel } from "../types/types";
 import { getAllChannels } from "../gql/requests/getAllChannels";
+import { Stack, Flex } from "@river/design-system";
 import { Hex } from "viem";
 
 
@@ -29,11 +30,11 @@ export default async function Home() {
   return (
     <>
       <Header />
-      <main className="flex flex-col justify-center h-full mx-[145px] my-[20px] space-y-4">
+      <Stack className='items-center my-10'>
         {/* Channel card grid */}
-        <div className={`grid grid-cols-6 gap-x-[21px] gap-y-[18px] pb-4`}>
-        </div>
-        <div>    <AllChannels channel={channelsInput} /></div>
-      </main>
+        <Flex className='flex-wrap gap-5 pb-4'>
+    <AllChannels channel={channelsInput} />
+    </Flex>
+    </Stack>
     </>
   ) }
