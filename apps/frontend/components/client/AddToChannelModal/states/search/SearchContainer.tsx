@@ -14,16 +14,10 @@ import {
   getAddress
 } from 'viem';
 import { Debug, Flex } from '@river/design-system';
-import { type ListingExtended } from '../../../../channel';
+import { type Listing} from '../../../../../types/types';
 import { usePathname, useRouter } from 'next/navigation';
 
 
-export interface Listing {
-  chainId: bigint;
-  tokenId: bigint;
-  listingAddress: Hex;
-  hasTokenId: boolean;
-}
 
 export function SearchContainer() {
   const [searchParams, setSearchParams] = useState<Listing>({
