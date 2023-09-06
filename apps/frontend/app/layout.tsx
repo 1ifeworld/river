@@ -1,11 +1,13 @@
-import "../styles/globals.css";
-import type { Metadata } from "next";
-import { Providers } from "./providers";
-import { helveticaNeue } from "./fonts/fonts";
+import '../styles/globals.css';
+import type { Metadata } from 'next';
+import { Providers } from './providers';
+import { helveticaNeue } from './fonts/fonts';
+import { Sidebar } from '../components/client';
+import { Flex } from '@river/design-system';
 
 export const metadata: Metadata = {
-  title: "River",
-  description: "Set information free",
+  title: 'River',
+  description: 'Set information free',
 };
 
 export default function RootLayout({
@@ -14,10 +16,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${helveticaNeue.variable}`}>
+    <html lang='en' className={`${helveticaNeue.variable}`}>
       <body>
         <Providers>
-          {children}
+          <Flex>
+            <Sidebar />
+            {children}
+          </Flex>
         </Providers>
       </body>
     </html>

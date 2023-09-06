@@ -6,7 +6,7 @@ export function Header() {
       {/* sidebar icon placeholder */}
       <div></div>
 
-      <Connect />
+      {/* <Connect /> */}
     </div>
   );
 }
