@@ -59,7 +59,7 @@ export function Connect() {
     <ConnectKitButton.Custom>
       {({ isConnected, show, address, ensName }) => {
         return isConnected ? (
-          <div className='p-2 font-medium rounded justify-center items-center flex hover:bg-bright-gray'>
+          <div className='p-2 font-medium rounded justify-center items-center flex hover:bg-baseHover'>
             <AuthDropdown
               ensName={ensName}
               address={address}
@@ -69,10 +69,10 @@ export function Connect() {
         ) : (
           <button
             type='button'
-            className='p-2 font-medium rounded justify-center items-center flex hover:bg-bright-gray'
+            className='p-2 font-medium rounded justify-center items-center flex hover:bg-baseHover'
             onClick={show}
           >
-            <BodySmall className='text-onyx'>Connect</BodySmall>
+            <BodySmall className='text-label'>Connect</BodySmall>
           </button>
         );
       }}
