@@ -9,7 +9,7 @@ function truncateText(text: string, maxLength: number) {
   return text.slice(0, maxLength) + '...';
 }
 
-export function AllChannelFill({ channel }: { channel: Channel[]}) {
+export function AllChannels({ channel }: { channel: Channel[]}) {
   if (!channel || channel.length === 0) {
     return <div>No Channels available.</div>;
   }

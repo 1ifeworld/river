@@ -18,7 +18,6 @@ export default async function Channel({
   
   const ipfsToHttps = (ipfsString: string) => {
     if (!ipfsString) return '';
-    console.log("IPFS", ipfsString)
     return ipfsString.replace('ipfs://', 'https://ipfs.io/ipfs/');
   };
 

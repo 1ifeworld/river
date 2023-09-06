@@ -1,5 +1,5 @@
 import { Header } from "../components/client";
-import { AllChannelFill } from "../components/channel/ChannelFill";
+import { AllChannels } from "../components/channel/AllChannels";
 import { type Channel } from "../types/types";
 import { getAllChannels } from "../gql/requests/getAllChannels";
 import { Hex } from "viem";
@@ -33,7 +33,7 @@ export default async function Home() {
         {/* Channel card grid */}
         <div className={`grid grid-cols-6 gap-x-[21px] gap-y-[18px] pb-4`}>
         </div>
-        <div>    <AllChannelFill channel={channelsInput} /></div>
+        <div>    <AllChannels channel={channelsInput} /></div>
       </main>
     </>
   ) }
