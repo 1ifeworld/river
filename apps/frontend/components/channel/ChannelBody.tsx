@@ -9,11 +9,11 @@ import { Hex } from 'viem';
 export interface PieceMetadata {
   id: string;
   pieceName?: string;
-  pieceCreator?: Hex;
+  pieceCreator: Hex;
   pieceDescription?: string;
   pieceImageURL?: string;
   pieceAnimationURL?: string;
-  pieceCreatedDate?: string;
+  pieceCreatedDate: string;
   pieceContentType?: string;
 }
 

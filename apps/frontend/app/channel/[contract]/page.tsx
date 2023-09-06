@@ -40,10 +40,10 @@ export default async function Channel({
     id: listing.id,
     chainId: BigInt(listing.chainId),
     tokenId: BigInt(listing.tokenId),
-    hasTokenId: listing?.hasTokenId as boolean,
+    hasTokenId: listing.hasTokenId as boolean,
     createdAt: listing.createdAt as bigint,
     createdBy: listing.createdBy as Hex,
-    listingAddress: listing?.listingAddress as Hex,
+    listingAddress: listing.listingAddress as Hex,
 }));
 
   return (
