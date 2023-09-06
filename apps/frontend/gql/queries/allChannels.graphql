@@ -1,0 +1,41 @@
+query allChannels{
+   channels(orderBy: "createdAt", orderDirection: "desc") {
+    id
+    createdAt
+    createdBy
+    contractUri {
+      id
+      uri
+      name
+      description
+      image
+      updatedAt
+    }
+    listings(orderBy: "createdAt", orderDirection: "desc") {
+      id
+      createdAt
+      createdBy
+      chainId
+      tokenId
+      listingAddress
+      hasTokenId
+      listingTargetMetadata {
+        id
+        pieceName
+        pieceCreator
+        pieceDescription
+        pieceImageURL
+        pieceAnimationURL
+        pieceCreatedDate
+        pieceContentType
+      }
+    }
+    logicTransmitterMerkleAdmin {
+      id
+      press
+      merkleRoot
+      accounts
+      roles
+    }
+  }
+}

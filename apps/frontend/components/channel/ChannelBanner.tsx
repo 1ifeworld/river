@@ -5,7 +5,7 @@ import {
   Headline,
   BodyLarge,
 } from "@river/design-system";
-import { type Channel } from "../client";
+import { type Channel } from "../../types/types";
 import Image from "next/image";
 import { ChannelModal } from "../client/AddToChannelModal";
 import { shortenAddress } from "../../utils/shortenAddress";

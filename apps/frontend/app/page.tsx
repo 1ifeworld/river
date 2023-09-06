@@ -1,9 +1,9 @@
 import { Header, ChannelCard } from '../components/client';
-import { type Channel } from '../components/client';
+import { type Channel } from '../types/types';
 
 const sampleChannelData: Channel = {
   name: 'Channel',
-  creator: 'tranqui.eth',
+  creator: '0xbC68dee71fd19C6eb4028F98F3C3aB62aAD6FeF3',
   members: ['junghwan.eth', 'jawn.eth', 'salief.eth'],
   cover:
     'https://ipfs.io/ipfs/bafybeihax3e3suai6qrnjrgletfaqfzriziokl7zozrq3nh42df7u74jyu',

@@ -1,13 +1,6 @@
 import Image from 'next/image';
 import { Body, BodySmall, Flex, cn } from '@river/design-system';
-
-export interface Channel {
-  name: string;
-  description?: string;
-  creator: string;
-  members?: string[];
-  cover: string;
-}
+import { type Channel } from '../../types/types';
 
 interface ChannelCardProps extends React.HTMLAttributes<HTMLDivElement> {
   channel: Channel;
