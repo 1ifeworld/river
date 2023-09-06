@@ -1,6 +1,6 @@
 import { Flex, cn, Body, BodySmall } from '@river/design-system';
 import Image from 'next/image';
-import { shortenAddress } from '../../utils/shortenAddress';
+import { shortenAddress, truncateText } from '../../utils';
 import { type ListingExtended } from '../../types/types';
 
 export function ChannelBody({ listings }: { listings: ListingExtended[]}) {
