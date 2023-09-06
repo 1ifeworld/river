@@ -4,15 +4,25 @@
 
 @layer base {
   :root {
-    --primary: 0 0 15;
-    --secondary: 0 0 47;
-    --accent: 216 100 58;
-    --accentHover: 213 78 36;
-    --neutral: 0 0 98;
-    --neutralHover: 0 0 95;
-    /* Colors to include */
-    /* --primaryHover:  */
-    /* --secondaryHover */
+    /* hsl(deg % % / <alpha-value>) */
+
+    /* Background */
+    --base: 0deg 0% 100%;
+    --base-hover: 0deg 0% 98%;
+    --base-border: 0deg 0% 82%;
+
+    /* Label */
+    --label: 0deg 0% 15%;
+    --label-muted: 0deg 0% 47%;
+    --label-faint: 0deg 0% 76%;
+
+    /* Accent */
+    --accent: 216deg 100% 58%;
+    --accent-hover: 213deg 78% 36%;
+
+    /* TODO: decide upon these colors */
+    /* --base-selected: */
+    /* --label-link:  */
   }
 
   /* TODO: add values for dark mode */

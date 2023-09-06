@@ -31,10 +31,10 @@ export function ChannelBody({ listings }: { listings: any }) {
               />
             </div>
             <Flex className='flex-col'>
-              <Body className='text-raisin-black font-medium leading-none'>
+              <Body className='text-labelBase font-medium leading-none'>
                 {truncateText(listing?.listingTargetMetadata?.pieceName, 30)}
               </Body>
-              <BodySmall className='text-sonic-silver'>
+              <BodySmall className='text-labelMuted'>
                 {shortenAddress(listing?.listingTargetMetadata?.pieceCreator)}
               </BodySmall>
             </Flex>

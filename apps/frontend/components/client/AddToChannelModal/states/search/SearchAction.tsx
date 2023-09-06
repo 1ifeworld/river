@@ -15,7 +15,7 @@ const SearchAction = ({
     <Button
       disabled={!addReady}
       onClick={addTrigger}
-      className='rounded w-full bg-[#3F8AE2] hover:bg-[#1456A4] mb-4'
+      className='rounded w-full bg-accent hover:bg-accentHover mb-4'
     >
       <Body>{nameOfAdd ? 'Add ' + `"${nameOfAdd}"` : 'Add'}</Body>
     </Button>

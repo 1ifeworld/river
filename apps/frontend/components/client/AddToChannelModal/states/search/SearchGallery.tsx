@@ -10,7 +10,7 @@ interface NetworkSelectProps {
 
 const SearchGallery = ({ nftMetadata }: NetworkSelectProps) => {
   return (
-    <div className='w-full h-[218px] bg-[#F8F8F8] border-y-[0.5px] border-[#E0E0E0] flex items-center'>
+    <div className='w-full h-[218px] bg-[#F8F8F8] border-y-[0.5px] border-baseBorder flex items-center'>
       {/* Grid container */}
       <div className='mx-[33px] flex justify-start items-center w-full space-x-5'>
         {/* First Column: Image or Blank Square */}
