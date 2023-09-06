@@ -31,7 +31,7 @@ export interface ListingExtended extends Listing{
     createdAt: bigint; 
     createdBy: Hex;
     channel?: Channel; 
-    listingTargetMetadata?: PieceMetadata;
+    listingTargetMetadata?: PieceMetadata | null;
   }
   
 
