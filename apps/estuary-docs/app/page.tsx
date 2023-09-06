@@ -1,4 +1,4 @@
-import { Header } from '../components/server';
+import { Header } from '../components/Header';
 
 export default function Home() {
   return;

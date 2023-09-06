@@ -1,4 +1,3 @@
-import { RiverIcon } from '@river/design-system';
 import { Connect } from './Connect';
 
 export function Header() {
@@ -7,7 +6,7 @@ export function Header() {
       {/* sidebar icon placeholder */}
       <div></div>
 
-      <Connect />
+      {/* <Connect /> */}
     </div>
   );
 }

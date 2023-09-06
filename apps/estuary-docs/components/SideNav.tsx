@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import * as ScrollArea from '@radix-ui/react-scroll-area';
 import { Flex, Stack, BodySmall } from '@river/design-system';
@@ -5,12 +7,12 @@ import Link from 'next/link';
 
 export function SideNav() {
   return (
-    <ScrollArea.Root className='w-[196px] h-screen overflow-hidden bg-white border-r border-gray-300'>
+    <ScrollArea.Root className='w-[196px] h-screen overflow-hidden bg-base border-r border-base-border'>
       <ScrollArea.Viewport className='w-full h-full'>
         <Stack className=' justify-center px-6 py-8 gap-4'>
           <Stack>
             {/* Tokens */}
-            <BodySmall className='text-gray-400'>Tokens</BodySmall>
+            <BodySmall className='text-label-muted'>Tokens</BodySmall>
             <Link href='/estuary/tokens/colors'>
               <BodySmall>Colors</BodySmall>
             </Link>
@@ -20,7 +22,7 @@ export function SideNav() {
           </Stack>
           <Stack>
             {/* Elements */}
-            <BodySmall className='text-gray-400'>Elements</BodySmall>
+            <BodySmall className='text-label-muted'>Elements</BodySmall>
             <Link href='/estuary/elements/debug'>
               <BodySmall>Debug</BodySmall>
             </Link>
@@ -33,7 +35,7 @@ export function SideNav() {
           </Stack>
           <Stack>
             {/* Components */}
-            <BodySmall className='text-gray-400'>Components</BodySmall>
+            <BodySmall className='text-label-muted'>Components</BodySmall>
             <Link href='/estuary/components/button'>
               <BodySmall>Button</BodySmall>
             </Link>

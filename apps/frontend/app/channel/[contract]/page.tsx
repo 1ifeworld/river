@@ -1,8 +1,10 @@
-import { getChannel } from '../../../gql/requests/getChannel'
+import { getChannel } from '../../../gql/requests/getChannel';
 import { Hex } from 'viem';
 import { Flex } from '@river/design-system';
+
 import { ChannelBanner, ChannelBody} from '../../../components/channel';
 import { type Channel, type ListingExtended  } from '../../../types/types';
+
 import { getAddress } from 'viem';
 
 
@@ -15,7 +17,7 @@ export default async function Channel({
   const { channels } = await getChannel({
     channel: getAddress(params.contract) as string,
   });
-  
+
   const ipfsToHttps = (ipfsString: string) => {
     if (!ipfsString) return '';
     return ipfsString.replace('ipfs://', 'https://ipfs.io/ipfs/');
@@ -48,6 +50,7 @@ export default async function Channel({
       pieceContentType: listing.listingTargetMetadata.pieceContentType || '',
   } : null,
 }));
+
 
   return (
 
