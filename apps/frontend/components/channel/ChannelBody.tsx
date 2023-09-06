@@ -1,15 +1,7 @@
 import { Flex, cn, Body, BodySmall } from '@river/design-system';
 import Image from 'next/image';
-import { shortenAddress } from '../../utils/shortenAddress';
+import { shortenAddress, truncateText } from '../../utils';
 import { type ListingExtended } from '../../types/types';
-
-
-
-function truncateText(text: string, maxLength: number) {
-  if (!text) return ''; // Return an empty string if text is undefined
-  if (text.length <= maxLength) return text;
-  return text.slice(0, maxLength) + '...';
-}
 
 export function ChannelBody({ listings }: { listings: ListingExtended[]}) {
   if (!listings || listings.length === 0) {

@@ -1,4 +1,5 @@
 import { Header, ChannelCard } from '../components/client';
+import { Flex, Stack } from '@river/design-system';
 import { type Channel } from '../types/types';
 
 const sampleChannelData: Channel = {
@@ -23,19 +24,15 @@ const arrayOfChannelData: Channel[] = [
 export default function Home() {
   return (
     <>
-    <Header/>
-      <main className="flex flex-col  justify-center h-full mx-[145px] my-[20px] space-y-4">
-        {/* Channel card grid */}
-        <div className={`grid grid-cols-6 gap-x-[21px] gap-y-[18px] pb-4`}>
+      <Header />
+      <Stack className=' justify-center h-full mx-[145px] my-5 space-y-4'>
+        {/* Channel Grid */}
+        <Flex className='flex-wrap gap-5 pb-4'>
           {arrayOfChannelData.map((channel, index) => (
-            <ChannelCard
-              key={`${channel}-${index}`}
-              channel={channel}
-              width={222}
-            />
+            <ChannelCard key={`${channel}-${index}`} channel={channel} />
           ))}
-        </div>        
-      </main>
+        </Flex>
+      </Stack>
     </>
   );
 }

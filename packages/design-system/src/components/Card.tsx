@@ -3,7 +3,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '../utils';
 
-const cardVariants = cva('aspect-square', {
+const cardVariants = cva('aspect-square overflow-hidden object-cover', {
   variants: {
     size: {
       default: 'h-[224px] w-[224px] rounded',

@@ -1,45 +1,37 @@
 import Image from 'next/image';
-import { Body, BodySmall, Flex, cn } from '@river/design-system';
+import { Body, Card, BodySmall, Stack, cn } from '@river/design-system';
 import { type Channel } from '../../types/types';
-
-interface ChannelCardProps extends React.HTMLAttributes<HTMLDivElement> {
-  channel: Channel;
-  width?: number;
-}
-
-/*
-  NOTE: 
-  I believe should become a server component
-  Once we have the data streaming into app correctly
-*/
+import { truncateText } from '../../utils';
 
 export function ChannelCard({
-  channel, // channel data object
-  width, // aspect ratio is defaulted to square, so just provide width measurement
+  channel,
   className,
-  ...props
-}: ChannelCardProps) {
+}: {
+  channel: Channel;
+  className?: string;
+}) {
   return (
-    <Flex className={cn('flex-col gap-y-2', className)} {...props}>
-      <div className='overflow-hidden rounded'>
+    <Stack className={cn('gap-y-2', className)}>
+      {/* Image */}
+      <Card>
         <Image
           src={channel.cover}
           alt={channel.name}
-          width={width}
-          height={width}
-          className={cn('h-auto w-auto object-cover aspect-square')}
+          width={224}
+          height={224}
         />
-      </div>
-      <Flex className='flex-col'>
+      </Card>
+      {/* Caption */}
+      <Stack className='max-w-[224px]'>
         <Body className='text-label font-medium leading-none'>{channel.name}</Body>
         {channel.members ? (
           <BodySmall className='text-labelMuted'>
-            {channel.creator} + {channel.members.length} others
+            {truncateText(channel.creator, 30)} + {channel.members.length} others
           </BodySmall>
         ) : (
-          <BodySmall className='text-labelMuted'>{channel.creator}</BodySmall>
+          <BodySmall className='text-labelMuted'>{truncateText(channel.creator, 30)}</BodySmall>
         )}
-      </Flex>
-    </Flex>
+      </Stack>
+    </Stack>
   );
 }
