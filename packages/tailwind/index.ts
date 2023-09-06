@@ -51,6 +51,16 @@ export default {
         },
       ],
     },
+    colors: {
+      primary: 'hsl(var(--primary) / <alpha-value>)',
+      primaryHover: 'hsl(var(--primaryHover) / <alpha-value>)',
+      secondary: 'hsl(var(--secondary) / <alpha-value>)',
+      secondaryHover: 'hsl(var(--secondaryHover) / <alpha-value>)',
+      accent: 'hsl(var(--accent) / <alpha-value>)',
+      accentHover: 'hsl(var(--accentHover) / <alpha-value>)',
+      neutral: 'hsl(var(--neutral) / <alpha-value>)',
+      neutralHover: 'hsl(var(--neutralHover) / <alpha-value>)',
+    },
     extend: {
       // river custom start
       fontFamily: {
