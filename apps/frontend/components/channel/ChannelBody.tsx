@@ -35,7 +35,7 @@ export function ChannelBody({ listings }: { listings: ListingExtended[]}) {
             </div>
             <Flex className='flex-col'>
               <Body className='text-labelBase font-medium leading-none'>
-                {truncateText(listing?.listingTargetMetadata?.pieceName, 30)}
+                {truncateText(listing?.listingTargetMetadata?.pieceName as string, 30)}
               </Body>
               <BodySmall className='text-labelMuted'>
                 {shortenAddress(listing?.listingTargetMetadata?.pieceCreator)}
