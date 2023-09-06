@@ -1,7 +1,8 @@
 import { Flex, cn, Body, BodySmall } from '@river/design-system';
 import Image from 'next/image';
 import { shortenAddress } from '../../utils/shortenAddress';
-import { Channel } from '../client';
+import { type Channel } from '../client';
+import { type BaseListing } from '../client/AddToChannelModal/states/search';
 import { Hex } from 'viem';
 
 
@@ -16,14 +17,10 @@ export interface PieceMetadata {
   pieceContentType?: string;
 }
 
-export interface Listing {
-  id?: string;
-  chainId?: string;
-  tokenId?: string;
-  listingAddress?: string;
-  hasTokenId?: boolean;
-  createdAt?: bigint; 
-  createdBy?: string;
+export interface Listing extends BaseListing{
+  id: string;
+  createdAt: bigint; 
+  createdBy: Hex;
   channel?: Channel; 
   listingTargetMetadata?: PieceMetadata;
 }
@@ -51,7 +48,7 @@ export function ChannelBody({ listings }: { listings: Listing[]}) {
                     ? listing?.listingTargetMetadata?.pieceImageURL
                     : ''
                 }
-                alt={listing.listingTargetMetadata?.pieceName || 'Default Alt Text'}
+                alt={listing?.listingTargetMetadata?.pieceName || ''}
                 width={224}
                 height={224}
                 className={cn('object-cover aspect-square')}

@@ -1,9 +1,11 @@
 import { getChannel } from '../../../gql/requests/getChannel'
 import { getListings } from '../../../gql/requests/getListings';
+import { Hex } from 'viem';
 import { Flex } from '@river/design-system';
 import { ChannelBanner, ChannelBody } from '../../../components/channel';
 import { type Channel } from '../../../components/client';
 import { type Listing } from '../../../components/channel';
+import { type BaseListing } from '../../../components/client/AddToChannelModal/states/search';
 import { getAddress } from 'viem';
 
 export default async function Channel({
@@ -30,17 +32,18 @@ export default async function Channel({
     name: channels[0]?.contractUri?.name as string,
     description: channels[0]?.contractUri?.description as string,
     cover: ipfsToHttps(channels[0]?.contractUri?.image as string),
-    creator: channels[0]?.createdBy as string,
+    creator: channels[0]?.createdBy as Hex,
     members: channels[0]?.logicTransmitterMerkleAdmin[0]?.accounts as string[],
   };
 
   const listingInput: Listing[] = channels[0]?.listings.map(listing => ({
-    id: listing?.id,
-    chainId: listing?.chainId,
-    tokenId: listing?.tokenId,
-    hasTokenId: listing?.hasTokenId,
-    createdBy: listing?.createdBy,
-    listingAddress: listing?.listingAddress,
+    id: listing.id,
+    chainId: BigInt(listing.chainId),
+    tokenId: BigInt(listing.tokenId),
+    hasTokenId: listing?.hasTokenId as boolean,
+    createdAt: listing.createdAt as bigint,
+    createdBy: listing.createdBy as Hex,
+    listingAddress: listing?.listingAddress as Hex,
 }));
 
   return (

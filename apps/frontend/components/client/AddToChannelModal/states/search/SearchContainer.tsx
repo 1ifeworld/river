@@ -14,17 +14,19 @@ import {
   getAddress
 } from 'viem';
 import { Debug, Flex } from '@river/design-system';
+import { type Listing } from '../../../../channel';
 import { usePathname, useRouter } from 'next/navigation';
 
-interface Listing {
+
+export interface BaseListing {
   chainId: bigint;
   tokenId: bigint;
-  listingAddress: string;
+  listingAddress: Hex;
   hasTokenId: boolean;
 }
 
 export function SearchContainer() {
-  const [searchParams, setSearchParams] = useState<Listing>({
+  const [searchParams, setSearchParams] = useState<BaseListing>({
     chainId: BigInt(0),
     tokenId: BigInt(0),
     listingAddress: zeroAddress,
@@ -36,22 +38,22 @@ export function SearchContainer() {
   const router = useRouter();
 
 
-  const handleSetSearchParams = (updatedParams: {
+const handleSetSearchParams = (updatedParams: {
     network?: number | undefined;
     contractAddress?: string | undefined;
     tokenId?: string | undefined;
-  }) => {
+}) => {
     setSearchParams((prev) => ({
       ...prev,
       chainId: updatedParams.network
         ? BigInt(updatedParams.network)
         : prev.chainId,
-      listingAddress: updatedParams.contractAddress || prev.listingAddress,
+      listingAddress: (updatedParams.contractAddress || prev.listingAddress) as Hex,
       tokenId: updatedParams.tokenId
         ? BigInt(updatedParams.tokenId)
         : prev.tokenId,
     }));
-  };
+};
 
   /* sendData Hook */
   const sendInputs: Hash = encodeAbiParameters(
@@ -65,10 +67,10 @@ export function SearchContainer() {
           // additional outer brackets to define as struct
           searchParams.chainId,
           searchParams.tokenId,
-          isAddress(searchParams.listingAddress)
-            ? searchParams.listingAddress
+          isAddress(searchParams.listingAddress as Hex)
+            ? searchParams.listingAddress as Hex
             : zeroAddress,
-          searchParams.hasTokenId,
+          searchParams.hasTokenId as boolean,
         ],
       ],
     ]

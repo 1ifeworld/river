@@ -642,6 +642,11 @@ export type RouterFilter = {
   transactionHash_starts_with?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type AllChannelsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllChannelsQuery = { __typename?: 'Query', channels: Array<{ __typename?: 'Channel', id: string, createdAt?: any | null, createdBy: string, contractUri?: { __typename?: 'ContractUri', id: string, uri?: string | null, name?: string | null, description?: string | null, image?: string | null, updatedAt?: any | null } | null, listings: Array<{ __typename?: 'Listing', id: string, createdAt?: any | null, createdBy: string, chainId: string, tokenId: string, listingAddress: string, hasTokenId: boolean, listingTargetMetadata?: { __typename?: 'PieceMetadata', id: string, pieceName?: string | null, pieceCreator?: string | null, pieceDescription?: string | null, pieceImageURL?: string | null, pieceAnimationURL?: string | null, pieceCreatedDate?: string | null, pieceContentType?: string | null } | null }>, logicTransmitterMerkleAdmin: Array<{ __typename?: 'LogicTransmitterMerkleAdmin', id: string, press?: string | null, merkleRoot?: string | null, accounts?: Array<string | null> | null, roles?: Array<boolean | null> | null }> }> };
+
 export type ChannelQueryVariables = Exact<{
   channel: Scalars['String']['input'];
 }>;
@@ -657,6 +662,49 @@ export type ListingsQueryVariables = Exact<{
 export type ListingsQuery = { __typename?: 'Query', channels: Array<{ __typename?: 'Channel', listings: Array<{ __typename?: 'Listing', id: string, chainId: string, tokenId: string, listingAddress: string, hasTokenId: boolean, listingTargetMetadata?: { __typename?: 'PieceMetadata', id: string, pieceName?: string | null, pieceCreator?: string | null, pieceDescription?: string | null, pieceImageURL?: string | null, pieceAnimationURL?: string | null, pieceCreatedDate?: string | null, pieceContentType?: string | null } | null }> }> };
 
 
+export const AllChannelsDocument = gql`
+    query allChannels {
+  channels(orderBy: "createdAt", orderDirection: "desc") {
+    id
+    createdAt
+    createdBy
+    contractUri {
+      id
+      uri
+      name
+      description
+      image
+      updatedAt
+    }
+    listings(orderBy: "createdAt", orderDirection: "desc") {
+      id
+      createdAt
+      createdBy
+      chainId
+      tokenId
+      listingAddress
+      hasTokenId
+      listingTargetMetadata {
+        id
+        pieceName
+        pieceCreator
+        pieceDescription
+        pieceImageURL
+        pieceAnimationURL
+        pieceCreatedDate
+        pieceContentType
+      }
+    }
+    logicTransmitterMerkleAdmin {
+      id
+      press
+      merkleRoot
+      accounts
+      roles
+    }
+  }
+}
+    `;
 export const ChannelDocument = gql`
     query channel($channel: String!) {
   channels(where: {id: $channel}) {
@@ -731,6 +779,9 @@ const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationTy
 
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
+    allChannels(variables?: AllChannelsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<AllChannelsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<AllChannelsQuery>(AllChannelsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'allChannels', 'query');
+    },
     channel(variables: ChannelQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<ChannelQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<ChannelQuery>(ChannelDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'channel', 'query');
     },
