@@ -1,17 +1,11 @@
 import Image from 'next/image';
-import { Body, BodySmall, Flex, cn } from '@river/design-system';
+import { Body, Card, BodySmall, Flex, cn } from '@river/design-system';
 import { type Channel } from '../../types/types';
 
 interface ChannelCardProps extends React.HTMLAttributes<HTMLDivElement> {
   channel: Channel;
   width?: number;
 }
-
-/*
-  NOTE: 
-  I believe should become a server component
-  Once we have the data streaming into app correctly
-*/
 
 export function ChannelCard({
   channel, // channel data object
@@ -21,17 +15,20 @@ export function ChannelCard({
 }: ChannelCardProps) {
   return (
     <Flex className={cn('flex-col gap-y-2', className)} {...props}>
-      <div className='overflow-hidden rounded'>
+      <Card>
         <Image
           src={channel.cover}
           alt={channel.name}
-          width={width}
-          height={width}
+          // width={width}
+          // height={width}
           className={cn('h-auto w-auto object-cover aspect-square')}
         />
-      </div>
+      </Card>
+
       <Flex className='flex-col'>
-        <Body className='text-label font-medium leading-none'>{channel.name}</Body>
+        <Body className='text-label font-medium leading-none'>
+          {channel.name}
+        </Body>
         {channel.members ? (
           <BodySmall className='text-labelMuted'>
             {channel.creator} + {channel.members.length} others
