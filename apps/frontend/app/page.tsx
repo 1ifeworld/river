@@ -1,5 +1,5 @@
 import { Header, ChannelCard } from '../components/client';
-import { type Channel } from '../components/client';
+import { type Channel } from '../types/types';
 
 const sampleChannelData: Channel = {
   name: 'Channel',

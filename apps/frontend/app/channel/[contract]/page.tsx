@@ -1,11 +1,8 @@
 import { getChannel } from '../../../gql/requests/getChannel'
-import { getListings } from '../../../gql/requests/getListings';
 import { Hex } from 'viem';
 import { Flex } from '@river/design-system';
 import { ChannelBanner, ChannelBody } from '../../../components/channel';
-import { type Channel } from '../../../components/client';
-import { type ListingExtended } from '../../../components/channel';
-import { type Listing } from '../../../components/client/AddToChannelModal/states/search';
+import { type Channel, type ListingExtended  } from '../../../types/types';
 import { getAddress } from 'viem';
 
 export default async function Channel({

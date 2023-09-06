@@ -1,29 +1,8 @@
 import { Flex, cn, Body, BodySmall } from '@river/design-system';
 import Image from 'next/image';
 import { shortenAddress } from '../../utils/shortenAddress';
-import { type Channel } from '../client';
-import { type Listing } from '../client/AddToChannelModal/states/search';
-import { Hex } from 'viem';
+import { type ListingExtended } from '../../types/types';
 
-
-export interface PieceMetadata {
-  id: string;
-  pieceName?: string;
-  pieceCreator: Hex;
-  pieceDescription?: string;
-  pieceImageURL?: string;
-  pieceAnimationURL?: string;
-  pieceCreatedDate: string;
-  pieceContentType?: string;
-}
-
-export interface ListingExtended extends Listing{
-  id: string;
-  createdAt: bigint; 
-  createdBy: Hex;
-  channel?: Channel; 
-  listingTargetMetadata?: PieceMetadata;
-}
 
 
 function truncateText(text: string, maxLength: number) {
