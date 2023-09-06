@@ -38,7 +38,7 @@ export function ChannelCard({
         />
       </div>
       <Flex className='flex-col'>
-        <Body className='text-labelBase font-medium leading-none'>{channel.name}</Body>
+        <Body className='text-label font-medium leading-none'>{channel.name}</Body>
         {channel.members ? (
           <BodySmall className='text-labelMuted'>
             {channel.creator} + {channel.members.length} others

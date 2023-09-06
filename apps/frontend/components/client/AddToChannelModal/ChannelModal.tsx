@@ -25,7 +25,7 @@ export function ChannelModal() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       {/* Replace with `Button` component */}
-      <DialogTrigger className='bg-[#3F8AE2] hover:bg-[#1456A4] text-white py-[4px] px-4 text-[13px] w-fit rounded-[4px] '>
+      <DialogTrigger className='bg-accent hover:bg-accentHover text-white py-1 px-4 text-[13px] w-fit rounded '>
         + Add
       </DialogTrigger>
 

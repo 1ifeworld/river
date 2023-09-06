@@ -29,7 +29,7 @@ export function ChannelBanner({ channel }: { channel: Channel }) {
       <Flex className="h-full flex-col justify-between">
         <div></div>
         <div className="">
-          <Headline className="font-medium text-labelMuted">{channel.name ? channel.name : "Channel name missing"}</Headline>
+          <Headline className="font-medium text-label">{channel.name ? channel.name : "Channel name missing"}</Headline>
           <BodyLarge className="text-labelMuted">
             {channel.creator ? shortenAddress(channel.creator as Hex): ""}
             {channel.members?.length

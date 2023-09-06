@@ -56,6 +56,7 @@ export default {
       base: 'hsl(var(--base) / <alpha-value>)',
       baseHover: 'hsl(var(--base-hover) / <alpha-value>)',
       baseBorder: 'hsl(var(--base-border) / <alpha-value>)',
+      baseShade: 'hsl(var(--base-shade) / <alpha-value>)',
       label: 'hsl(var(--label) / <alpha-value>)',
       labelMuted: 'hsl(var(--label-muted) / <alpha-value>)',
       labelFaint: 'hsl(var(--label-faint) / <alpha-value>)',
