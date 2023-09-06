@@ -1,41 +1,39 @@
-import { Header, ChannelCard } from '../components/client';
-import { type Channel } from '../types/types';
+import { Header } from "../components/client";
+import { AllChannelFill } from "../components/channel/ChannelFill";
+import { type Channel } from "../types/types";
+import { getAllChannels } from "../gql/requests/getAllChannels";
+import { Hex } from "viem";
 
-const sampleChannelData: Channel = {
-  name: 'Channel',
-  creator: '0xbC68dee71fd19C6eb4028F98F3C3aB62aAD6FeF3',
-  members: ['junghwan.eth', 'jawn.eth', 'salief.eth'],
-  cover:
-    'https://ipfs.io/ipfs/bafybeihax3e3suai6qrnjrgletfaqfzriziokl7zozrq3nh42df7u74jyu',
-};
 
-const arrayOfChannelData: Channel[] = [
-  sampleChannelData,
-  sampleChannelData,
-  sampleChannelData,
-  sampleChannelData,
-  sampleChannelData,
-  sampleChannelData,
-  sampleChannelData,
-  sampleChannelData,
-];
 
-export default function Home() {
+export default async function Home() {
+  const { channels } = await getAllChannels();
+
+  const ipfsToHttps = (ipfsString: string) => {
+    if (!ipfsString) return '';
+    console.log("IPFS", ipfsString)
+    return ipfsString.replace('ipfs://', 'https://ipfs.io/ipfs/');
+  };
+
+  // TODO JDR: make it work with uri
+  const channelsWithNoName = channels.filter(channel => channel?.contractUri?.image && channel.contractUri.image.trim() !== "");
+
+  const channelsInput: Channel[] = channelsWithNoName.map(channel => ({
+    name: channel?.contractUri?.name as string,
+    description: channel?.contractUri?.description as string,
+    cover: ipfsToHttps(channel?.contractUri?.image as string),
+    creator: channel?.createdBy as Hex,
+    members: channel?.logicTransmitterMerkleAdmin[0]?.accounts as string[],
+  }));
+  
   return (
     <>
-    <Header/>
-      <main className="flex flex-col  justify-center h-full mx-[145px] my-[20px] space-y-4">
+      <Header />
+      <main className="flex flex-col justify-center h-full mx-[145px] my-[20px] space-y-4">
         {/* Channel card grid */}
         <div className={`grid grid-cols-6 gap-x-[21px] gap-y-[18px] pb-4`}>
-          {arrayOfChannelData.map((channel, index) => (
-            <ChannelCard
-              key={`${channel}-${index}`}
-              channel={channel}
-              width={222}
-            />
-          ))}
-        </div>        
+        </div>
+        <div>    <AllChannelFill channel={channelsInput} /></div>
       </main>
     </>
-  );
-}
+  ) }
