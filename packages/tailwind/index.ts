@@ -51,59 +51,21 @@ export default {
         },
       ],
     },
+    // Replaces all of the default color values
+    colors: {
+      base: 'hsl(var(--base) / <alpha-value>)',
+      baseHover: 'hsl(var(--base-hover) / <alpha-value>)',
+      baseBorder: 'hsl(var(--base-border) / <alpha-value>)',
+      baseShade: 'hsl(var(--base-shade) / <alpha-value>)',
+      label: 'hsl(var(--label) / <alpha-value>)',
+      labelMuted: 'hsl(var(--label-muted) / <alpha-value>)',
+      labelFaint: 'hsl(var(--label-faint) / <alpha-value>)',
+      accent: 'hsl(var(--accent) / <alpha-value>)',
+      accentHover: 'hsl(var(--accent-hover) / <alpha-value>)',
+    },
     extend: {
-      // river custom start
       fontFamily: {
         sans: ['var(--font-helvetica-neue)'],
-      },
-      // river custom end
-      borderColor: {
-        DEFAULT: 'hsl(var(--border) / <alpha-value>)',
-      },
-      colors: {
-        // river custom start
-        onyx: '#373737',
-        'light-gray': '#D2D2D2',
-        'crayola-blue': '#287EFF',
-        'bright-gray': '#EEEEEE',
-        'silver-sand': '#C2C2C2',
-        'philippine-gray': '#8B8B8B',
-        'sonic-silver': '#777777',
-        'raisin-black': '#262626',
-        // river custom end
-        border: 'hsl(var(--border) / <alpha-value>)',
-        input: 'hsl(var(--input) / <alpha-value>)',
-        ring: 'hsl(var(--ring) / <alpha-value>)',
-        background: 'hsl(var(--background) / <alpha-value>)',
-        foreground: 'hsl(var(--foreground) / <alpha-value>)',
-        primary: {
-          DEFAULT: 'hsl(var(--primary) / <alpha-value>)',
-          foreground: 'hsl(var(--primary-foreground) / <alpha-value>)',
-        },
-        secondary: {
-          DEFAULT: 'hsl(var(--secondary) / <alpha-value>)',
-          foreground: 'hsl(var(--secondary-foreground) / <alpha-value>)',
-        },
-        destructive: {
-          DEFAULT: 'hsl(var(--destructive) / <alpha-value>)',
-          foreground: 'hsl(var(--destructive-foreground) / <alpha-value>)',
-        },
-        muted: {
-          DEFAULT: 'hsl(var(--muted) / <alpha-value>)',
-          foreground: 'hsl(var(--muted-foreground) / <alpha-value>)',
-        },
-        accent: {
-          DEFAULT: 'hsl(var(--accent) / <alpha-value>)',
-          foreground: 'hsl(var(--accent-foreground) / <alpha-value>)',
-        },
-        popover: {
-          DEFAULT: 'hsl(var(--popover) / <alpha-value>)',
-          foreground: 'hsl(var(--popover-foreground) / <alpha-value>)',
-        },
-        card: {
-          DEFAULT: 'hsl(var(--card) / <alpha-value>)',
-          foreground: 'hsl(var(--card-foreground) / <alpha-value>)',
-        },
       },
       borderRadius: {
         lg: `var(--radius)`,

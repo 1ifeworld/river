@@ -29,10 +29,10 @@ function AuthDropdown({
           {ensName ? ensName : shortenAddress(address)}
         </BodySmall>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className='bg-white border border-philippine-gray rounded px-8 py-5 mr-3 mt-3'>
+      <DropdownMenuContent className='bg-base border border-baseBorder rounded px-8 py-5 mr-3 mt-3'>
         <Flex className='flex-col gap-y-5 items-center'>
           <DropdownMenuItem className='focus:outline-none'>
-            <BodySmall className='text-onyx'>
+            <BodySmall className='text-label'>
               <button
                 className='hover:underline cursor-pointer'
                 type='button'
@@ -43,7 +43,7 @@ function AuthDropdown({
             </BodySmall>
           </DropdownMenuItem>
           <DropdownMenuItem className='focus:outline-none'>
-            <BodySmall className='text-silver-sand cursor-not-allowed'>
+            <BodySmall className='text-labelMuted cursor-not-allowed'>
               About River
             </BodySmall>
           </DropdownMenuItem>
@@ -59,7 +59,7 @@ export function Connect() {
     <ConnectKitButton.Custom>
       {({ isConnected, show, address, ensName }) => {
         return isConnected ? (
-          <div className='p-2 font-medium rounded justify-center items-center flex hover:bg-bright-gray'>
+          <div className='p-2 font-medium rounded justify-center items-center flex hover:bg-baseHover'>
             <AuthDropdown
               ensName={ensName}
               address={address}
@@ -69,10 +69,10 @@ export function Connect() {
         ) : (
           <button
             type='button'
-            className='p-2 font-medium rounded justify-center items-center flex hover:bg-bright-gray'
+            className='p-2 font-medium rounded justify-center items-center flex hover:bg-baseHover'
             onClick={show}
           >
-            <BodySmall className='text-onyx'>Connect</BodySmall>
+            <BodySmall className='text-label'>Connect</BodySmall>
           </button>
         );
       }}

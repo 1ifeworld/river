@@ -10,7 +10,7 @@ interface NetworkSelectProps {
 
 const SearchGallery = ({ nftMetadata }: NetworkSelectProps) => {
   return (
-    <div className='w-full h-[218px] bg-[#F8F8F8] border-y-[0.5px] border-[#E0E0E0] flex items-center'>
+    <div className='w-full h-[218px] bg-baseShade border-y-[0.5px] border-baseBorder flex items-center'>
       {/* Grid container */}
       <div className='mx-[33px] flex justify-start items-center w-full space-x-5'>
         {/* First Column: Image or Blank Square */}
@@ -26,20 +26,19 @@ const SearchGallery = ({ nftMetadata }: NetworkSelectProps) => {
               )}
             />
           ) : (
-            // Your custom div component for the null state goes here
-            <div className='w-[165px] h-[165px] bg-[#D0D0D0]'></div>
+            <div className='w-[165px] h-[165px] bg-baseBorder'></div>
           )}
         </div>
         {/* Second Column: Text details */}
         <div className='h-full flex flex-col w-[200px]'>
-          <Body className='text-[#272727] break-words'>
+          <Body className='text-label break-words'>
             {nftMetadata?.title || 'Title'}
           </Body>
           {/* truncating for now but need to add ens resolution */}
-          <BodySmall className='text-[13px] text-[#777777] break-words truncate'>
+          <BodySmall className='text-[13px] text-labelMuted break-words truncate'>
             {nftMetadata?.contract.contractDeployer || 'Created By'}
           </BodySmall>
-          <BodySmall className='text-[13px] text-[#777777] break-words mt-[25.9px] '>
+          <BodySmall className='text-[13px] text-labelMuted break-words mt-[25.9px] '>
             {nftMetadata?.description || 'Description' || 'Description'}
           </BodySmall>
         </div>

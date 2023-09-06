@@ -34,12 +34,11 @@ export function ChannelBody({ listings }: { listings: ListingExtended[]}) {
               />
             </div>
             <Flex className='flex-col'>
-              <Body className='text-raisin-black font-medium leading-none'>
-              {truncateText(listing?.listingTargetMetadata?.pieceName || '', 30)}
-
+              <Body className='text-labelBase font-medium leading-none'>
+                {truncateText(listing?.listingTargetMetadata?.pieceName as string, 30)}
               </Body>
-              <BodySmall className='text-sonic-silver'>
-              {shortenAddress(listing?.listingTargetMetadata?.pieceCreator)}
+              <BodySmall className='text-labelMuted'>
+                {shortenAddress(listing?.listingTargetMetadata?.pieceCreator)}
               </BodySmall>
             </Flex>
           </Flex>

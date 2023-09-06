@@ -1,8 +1,8 @@
 import '../styles/globals.css';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
-import { SideNav } from '../components/client';
-import { Header } from '../components/server';
+import { SideNav } from '../components/SideNav';
+import { Header } from '../components/Header';
 import { Flex } from '@river/design-system';
 
 const helveticaNeue = localFont({

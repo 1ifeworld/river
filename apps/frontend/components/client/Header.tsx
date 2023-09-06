@@ -1,4 +1,3 @@
-import { RiverIcon } from '@river/design-system';
 import { Connect } from './Connect';
 
 export function Header() {

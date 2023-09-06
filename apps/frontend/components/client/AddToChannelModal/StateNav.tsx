@@ -1,5 +1,5 @@
 import React from 'react';
-import { Body, Debug, cn } from '@river/design-system';
+import { Body, cn } from '@river/design-system';
 
 interface StateNavProps {
   activeTab: string;
@@ -13,12 +13,16 @@ export function StateNav({
   closeModal,
 }: StateNavProps) {
   return (
-    <div className='flex justify-center text-silver-sand w-full gap-x-7'>
-      <button disabled onClick={() => setActiveTab('Upload')} className='focus:outline-none'>
+    <div className='flex justify-center text-labelMuted w-full gap-x-7'>
+      <button
+        disabled
+        onClick={() => setActiveTab('Upload')}
+        className='focus:outline-none'
+      >
         <Body
           className={cn(
             activeTab === 'Upload'
-              ? 'text-raisin-black border-b-[2px] border-[#287EFF]'
+              ? 'text-label border-b-[2px] border-accent'
               : '',
             'text-[14px]'
           )}
@@ -26,11 +30,14 @@ export function StateNav({
           Upload
         </Body>
       </button>
-      <button onClick={() => setActiveTab('Search')} className='focus:outline-none'>
+      <button
+        onClick={() => setActiveTab('Search')}
+        className='focus:outline-none'
+      >
         <Body
           className={cn(
             activeTab === 'Search'
-              ? 'text-raisin-black border-b-[2px] border-[#287EFF]'
+              ? 'text-label border-b-[2px] border-accent'
               : '',
             'text-[14px] focus:outline-none leading-[3rem] min-w-[64px]'
           )}
@@ -38,11 +45,15 @@ export function StateNav({
           Search
         </Body>
       </button>
-      <button disabled onClick={() => setActiveTab('Text')} className='focus:outline-none'>
+      <button
+        disabled
+        onClick={() => setActiveTab('Text')}
+        className='focus:outline-none'
+      >
         <Body
           className={cn(
             activeTab === 'Text'
-              ? 'text-raisin-black border-b-[2px] border-[#287EFF]'
+              ? 'text-label border-b-[2px] border-accent'
               : '',
             'text-[14px]'
           )}
