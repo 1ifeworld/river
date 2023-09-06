@@ -2,7 +2,7 @@ import { Flex, cn, Body, BodySmall } from '@river/design-system';
 import Image from 'next/image';
 import { shortenAddress } from '../../utils/shortenAddress';
 import { type Channel } from '../client';
-import { type BaseListing } from '../client/AddToChannelModal/states/search';
+import { type Listing } from '../client/AddToChannelModal/states/search';
 import { Hex } from 'viem';
 
 
@@ -17,7 +17,7 @@ export interface PieceMetadata {
   pieceContentType?: string;
 }
 
-export interface Listing extends BaseListing{
+export interface ListingExtended extends Listing{
   id: string;
   createdAt: bigint; 
   createdBy: Hex;
@@ -32,14 +32,14 @@ function truncateText(text: string, maxLength: number) {
   return text.slice(0, maxLength) + '...';
 }
 
-export function ChannelBody({ listings }: { listings: Listing[]}) {
+export function ChannelBody({ listings }: { listings: ListingExtended[]}) {
   if (!listings || listings.length === 0) {
     return <div>No Listings available.</div>;
   }
   return (
     <Flex className='gap-x-10'>
       <div className={`grid grid-cols-6 gap-x-[21px] gap-y-[18px] pb-4`}>
-        {listings.map((listing: Listing, index: number) => (
+        {listings.map((listing: ListingExtended, index: number) => (
           <Flex className={cn('flex-col gap-y-2')}>
             <div id={listing.id} className='overflow-hidden rounded'>
               <Image

@@ -4,8 +4,8 @@ import { Hex } from 'viem';
 import { Flex } from '@river/design-system';
 import { ChannelBanner, ChannelBody } from '../../../components/channel';
 import { type Channel } from '../../../components/client';
-import { type Listing } from '../../../components/channel';
-import { type BaseListing } from '../../../components/client/AddToChannelModal/states/search';
+import { type ListingExtended } from '../../../components/channel';
+import { type Listing } from '../../../components/client/AddToChannelModal/states/search';
 import { getAddress } from 'viem';
 
 export default async function Channel({
@@ -36,7 +36,7 @@ export default async function Channel({
     members: channels[0]?.logicTransmitterMerkleAdmin[0]?.accounts as string[],
   };
 
-  const listingInput: Listing[] = channels[0]?.listings.map(listing => ({
+  const listingInput: ListingExtended[] = channels[0]?.listings.map(listing => ({
     id: listing.id,
     chainId: BigInt(listing.chainId),
     tokenId: BigInt(listing.tokenId),
