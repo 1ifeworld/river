@@ -24,6 +24,7 @@ export default async function Channel({
   };
 
   const channelBannerInput: Channel = {
+    id: channels[0]?.id,
     name: channels[0]?.contractUri?.name as string,
     description: channels[0]?.contractUri?.description as string,
     cover: ipfsToHttps(channels[0]?.contractUri?.image as string),

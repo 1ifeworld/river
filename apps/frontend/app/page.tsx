@@ -20,6 +20,7 @@ export default async function Home() {
   );
 
   const channelsInput: Channel[] = channelsWithNoName.map((channel) => ({
+    id: channel?.id,
     name: channel?.contractUri?.name as string,
     description: channel?.contractUri?.description as string,
     cover: ipfsToHttps(channel?.contractUri?.image as string),
