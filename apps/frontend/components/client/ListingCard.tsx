@@ -31,16 +31,9 @@ export function ListingCard({
         <Body className='text-label font-medium leading-none'>
           {extendedListing?.listingTargetMetadata?.pieceName}
         </Body>
-        {extendedListing?.channel?.members ? (
-          <BodySmall className='text-label-muted'>
-            {truncateText(extendedListing?.createdBy, 30)} +{' '}
-            {extendedListing?.channel?.members.length} others
-          </BodySmall>
-        ) : (
-          <BodySmall className='text-label-muted'>
-            {truncateText(extendedListing?.createdBy, 30)}
-          </BodySmall>
-        )}
+        <BodySmall className='text-label-muted'>
+          {truncateText(extendedListing?.createdBy, 30)}
+        </BodySmall>
       </Stack>
     </Stack>
   );
