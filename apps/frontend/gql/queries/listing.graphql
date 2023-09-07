@@ -6,6 +6,7 @@ query listing($id: String!) {
     listingAddress
     hasTokenId
     createdAt
+    createdBy
     listingTargetMetadata {
       id
       pieceName

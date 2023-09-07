@@ -659,7 +659,7 @@ export type ListingQueryVariables = Exact<{
 }>;
 
 
-export type ListingQuery = { __typename?: 'Query', listings: Array<{ __typename?: 'Listing', id: string, chainId: string, tokenId: string, listingAddress: string, hasTokenId: boolean, createdAt?: any | null, listingTargetMetadata?: { __typename?: 'PieceMetadata', id: string, pieceName?: string | null, pieceCreator?: string | null, pieceDescription?: string | null, pieceImageURL?: string | null, pieceAnimationURL?: string | null, pieceCreatedDate?: string | null, pieceContentType?: string | null } | null }> };
+export type ListingQuery = { __typename?: 'Query', listings: Array<{ __typename?: 'Listing', id: string, chainId: string, tokenId: string, listingAddress: string, hasTokenId: boolean, createdAt?: any | null, createdBy: string, listingTargetMetadata?: { __typename?: 'PieceMetadata', id: string, pieceName?: string | null, pieceCreator?: string | null, pieceDescription?: string | null, pieceImageURL?: string | null, pieceAnimationURL?: string | null, pieceCreatedDate?: string | null, pieceContentType?: string | null } | null }> };
 
 export type ListingsQueryVariables = Exact<{
   channel: Scalars['String']['input'];
@@ -764,6 +764,7 @@ export const ListingDocument = gql`
     listingAddress
     hasTokenId
     createdAt
+    createdBy
     listingTargetMetadata {
       id
       pieceName
