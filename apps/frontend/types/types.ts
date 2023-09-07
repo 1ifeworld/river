@@ -1,6 +1,7 @@
 import { Hex } from "viem";
 
 export interface Channel {
+    id: string;
     name: string;
     description?: string;
     creator: Hex;
