@@ -3,7 +3,8 @@ type PieceMetadata @entity {
   pieceName: String
   pieceCreator: String
   pieceDescription: String
-  pieceImageURL: String
+  pieceThumbnail: String
+  pieceFullRes: String
   pieceAnimationURL: String
   pieceCreatedDate: String
   pieceContentType: String
