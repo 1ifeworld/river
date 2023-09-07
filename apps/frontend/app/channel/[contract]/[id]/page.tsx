@@ -1,84 +1,42 @@
-import { getListing } from "../../../../gql/requests/getListing";
-import { Hex, isAddress } from "viem";
-import { Flex } from "@river/design-system";
-import { getAddress } from "viem";
+import { ListingView } from "../../../../components/listing"; // Adjust the path as needed
+import { validateRoute } from "../../../../utils"; // Adjust the path as needed
+import { getListing } from "../../../../gql/requests/getListing"; // Adjust the path as needed
+import { Hex } from "viem";
 
-// Define a type for a numeric string (e.g., "123")
-type NumericString = `${number}`;
-
-// Define a type for a listing ID which follows a specific pattern
-type ListingId = `${NumericString}/${Hex}/${string}`;
-
-// Utility function to check if a given string is a valid hexadecimal value
-function isValidHex(value: string): value is Hex {
-  return /^0x[a-fA-F0-9]+$/.test(value);
-}
-
-// Utility function to check if a given string is a valid numeric string
-function isValidNumericString(value: string): value is NumericString {
-  return /^\d+$/.test(value);
-}
-
-// Main server component function
+/**
+ * The main server component function responsible for validating the route parameters,
+ * fetching the relevant listing data based on the parameters, and rendering the ListingView component.
+ *
+ * @param params - An object containing the contract and id parameters.
+ * @param params.contract - The contract parameter, expected to be of type Hex.
+ * @param params.id - The id parameter, expected to be a string representing a number.
+ * 
+ * @returns A JSX element, which is the ListingView component with the fetched listings and potential error as props.
+ */
 export default async function View({
   params,
 }: {
   params: { contract: Hex; id: string };
 }) {
-  // Initialize state variables
-  let success = true; // Flag to track if the input validation and query are successful
-  let error: string | null = null; // To store error messages, if any
-  let queryResult: any; // To store the result of the query
+  // Validate the provided route parameters using the validateRoute utility function.
+  // This function checks the validity of the contract and id parameters and returns:
+  // - success: a boolean indicating if the parameters are valid.
+  // - error: a string containing an error message if the parameters are invalid.
+  // - constructListingId: a constructed listing ID if the parameters are valid.
+  const { success, error, constructListingId } = validateRoute(params);
 
-  // Validate if the contract parameter is a valid Ethereum address
-  if (!isAddress(params.contract)) {
-    success = false;
-    error = "Contract input was not an address";
-  }
+  // Initialize an array to store the fetched listings.
+  let queryResult: any[] = [];
 
-  // Validate if the ID parameter is a valid numeric string
-  if (success && !isValidNumericString(params.id)) {
-    success = false;
-    error = "Invalid ID provided.";
-  }
-
-  // If all validations pass, construct the listing ID and fetch the listing data
-  if (success) {
-    const constructListingId: ListingId = `${1}/${
-      getAddress(params.contract) as Hex
-    }/${params.id}`;
-
-    // Fetch the listing data using the constructed ID
+  // If the route parameters are valid and we have a constructed listing ID,
+  // proceed to fetch the listing data using the getListing function.
+  if (success && constructListingId) {
     const { listings } = await getListing({
       id: constructListingId as string,
     });
-
-    queryResult = listings; // Store the fetched data in the queryResult variable
+    queryResult = listings;
   }
 
-  // Render different components or elements based on the state variables
-
-  // If there's an error, render the error message
-  if (!success && error) {
-    return <Flex className="flex-col">{error}</Flex>;
-  }
-
-  // If the query result is an empty array, render a message indicating no listings found
-  if (queryResult && queryResult.length === 0) {
-    return (
-      <Flex className="flex-col">
-        No listings found for the provided listingId
-      </Flex>
-    );
-  }
-
-  // If the query result has data, render the data
-  if (queryResult && queryResult.length !== 0) {
-    return (
-      <Flex className="flex-col">Data: {JSON.stringify(queryResult)}</Flex>
-    );
-  }
-
-  // Default render (e.g., while waiting for data or initial state)
-  return <Flex className="flex-col">Loading...</Flex>;
+  // Render the ListingView component, passing the fetched listings and potential error message as props.
+  return <ListingView listings={queryResult} error={error} />;
 }
