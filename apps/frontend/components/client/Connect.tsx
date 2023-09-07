@@ -3,20 +3,14 @@ import { ConnectKitButton } from 'connectkit';
 import { type Hex } from 'viem';
 import { Flex, Body, Stack, Card } from '@river/design-system';
 import { firstSeven } from '../../utils';
+import { useDisconnect } from 'wagmi';
 
-function Auth({
-  address,
-  ensName,
-  show,
-}: {
-  address?: Hex;
-  ensName?: string;
-  show?: () => void;
-}) {
+function Auth({ address, ensName }: { address?: Hex; ensName?: string }) {
+  const { disconnect } = useDisconnect();
   return (
     <button
       type='button'
-      onClick={() => show?.()}
+      onClick={() => disconnect()}
       className='-m-2 hover:bg-base-hover hover:rounded-full transition-all p-2'
     >
       <Flex className='items-center gap-[10px]'>
@@ -41,7 +35,7 @@ export function Connect() {
     <ConnectKitButton.Custom>
       {({ isConnected, show, address, ensName }) => {
         return isConnected ? (
-          <Auth address={address} ensName={ensName} show={show} />
+          <Auth address={address} ensName={ensName} />
         ) : (
           <button
             type='button'
