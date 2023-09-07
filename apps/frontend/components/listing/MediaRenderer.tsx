@@ -1,0 +1,17 @@
+import React from "react";
+import { AspectRatio } from "@river/design-system";
+import Image from "next/image";
+
+export function MediaRenderer({ mediaURL }: { mediaURL: string }) {
+  return (
+    <div className="relative h-[90%] w-full border-2 border-accent ">
+      <Image
+        fill={true}
+        src={mediaURL}
+        alt="Image"
+        className=""
+        style={{objectFit: "contain"}}
+      />
+    </div>
+  );
+}
