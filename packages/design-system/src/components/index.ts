@@ -16,3 +16,4 @@ export * from './Label';
 export * from './Select';
 export * from './Sheet';
 export * from './SvgLoader';
+export * from './AspectRatio';
