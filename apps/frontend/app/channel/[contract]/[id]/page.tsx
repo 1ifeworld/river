@@ -26,7 +26,7 @@ export default async function View({
   const { success, error, constructListingId } = validateRoute(params);
 
   // Initialize an array to store the fetched listings.
-  let queryResult: ListingExtended[] = [];
+  let queryResult: any[] = [];
 
   // If the route parameters are valid and we have a constructed listing ID,
   // proceed to fetch the listing data using the getListing function.
