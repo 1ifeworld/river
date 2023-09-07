@@ -654,6 +654,13 @@ export type ChannelQueryVariables = Exact<{
 
 export type ChannelQuery = { __typename?: 'Query', channels: Array<{ __typename?: 'Channel', id: string, createdAt?: any | null, createdBy: string, contractUri?: { __typename?: 'ContractUri', id: string, uri?: string | null, name?: string | null, description?: string | null, image?: string | null, updatedAt?: any | null } | null, listings: Array<{ __typename?: 'Listing', id: string, createdAt?: any | null, createdBy: string, chainId: string, tokenId: string, listingAddress: string, hasTokenId: boolean, listingTargetMetadata?: { __typename?: 'PieceMetadata', id: string, pieceName?: string | null, pieceCreator?: string | null, pieceDescription?: string | null, pieceImageURL?: string | null, pieceAnimationURL?: string | null, pieceCreatedDate?: string | null, pieceContentType?: string | null } | null }>, logicTransmitterMerkleAdmin: Array<{ __typename?: 'LogicTransmitterMerkleAdmin', id: string, press?: string | null, merkleRoot?: string | null, accounts?: Array<string | null> | null, roles?: Array<boolean | null> | null }> }> };
 
+export type ListingQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type ListingQuery = { __typename?: 'Query', listings: Array<{ __typename?: 'Listing', id: string, chainId: string, tokenId: string, listingAddress: string, hasTokenId: boolean, createdAt?: any | null, listingTargetMetadata?: { __typename?: 'PieceMetadata', id: string, pieceName?: string | null, pieceCreator?: string | null, pieceDescription?: string | null, pieceImageURL?: string | null, pieceAnimationURL?: string | null, pieceCreatedDate?: string | null, pieceContentType?: string | null } | null }> };
+
 export type ListingsQueryVariables = Exact<{
   channel: Scalars['String']['input'];
 }>;
@@ -748,6 +755,28 @@ export const ChannelDocument = gql`
   }
 }
     `;
+export const ListingDocument = gql`
+    query listing($id: String!) {
+  listings(where: {id: $id}) {
+    id
+    chainId
+    tokenId
+    listingAddress
+    hasTokenId
+    createdAt
+    listingTargetMetadata {
+      id
+      pieceName
+      pieceCreator
+      pieceDescription
+      pieceImageURL
+      pieceAnimationURL
+      pieceCreatedDate
+      pieceContentType
+    }
+  }
+}
+    `;
 export const ListingsDocument = gql`
     query listings($channel: String!) {
   channels(where: {id: $channel}) {
@@ -784,6 +813,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     channel(variables: ChannelQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<ChannelQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<ChannelQuery>(ChannelDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'channel', 'query');
+    },
+    listing(variables: ListingQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<ListingQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<ListingQuery>(ListingDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'listing', 'query');
     },
     listings(variables: ListingsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<ListingsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<ListingsQuery>(ListingsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'listings', 'query');

@@ -1,0 +1,20 @@
+query listing($id: String!) {
+  listings(where: {id: $id}) {
+    id
+    chainId
+    tokenId
+    listingAddress
+    hasTokenId
+    createdAt
+    listingTargetMetadata {
+      id
+      pieceName
+      pieceCreator
+      pieceDescription
+      pieceImageURL
+      pieceAnimationURL
+      pieceCreatedDate
+      pieceContentType
+    }
+  }
+}
