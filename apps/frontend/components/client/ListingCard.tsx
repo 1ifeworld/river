@@ -5,22 +5,22 @@ import { type ListingExtended } from '../../types/types';
 import { truncateText } from '../../utils';
 
 export function ListingCard({
-  extendedListing,
+  listing,
   className,
 }: {
-  extendedListing: ListingExtended;
+  listing: ListingExtended;
   className?: string;
 }) {
   return (
     <Stack className={cn('gap-y-2', className)}>
       {/* Image */}
       <Card>
-        <Link href={extendedListing.listingAddress}>
+        <Link href={listing.listingAddress}>
           <Image
             src={
-              extendedListing?.listingTargetMetadata?.pieceImageURL as string
+              listing?.listingTargetMetadata?.pieceImageURL as string
             }
-            alt={extendedListing?.listingTargetMetadata?.pieceName as string}
+            alt={listing?.listingTargetMetadata?.pieceName as string}
             width={224}
             height={224}
           />
@@ -29,10 +29,10 @@ export function ListingCard({
       {/* Caption */}
       <Stack className='max-w-[224px]'>
         <Body className='text-label font-medium leading-none'>
-          {extendedListing?.listingTargetMetadata?.pieceName}
+          {listing?.listingTargetMetadata?.pieceName}
         </Body>
         <BodySmall className='text-label-muted'>
-          {truncateText(extendedListing?.createdBy, 30)}
+          {truncateText(listing?.createdBy, 30)}
         </BodySmall>
       </Stack>
     </Stack>
