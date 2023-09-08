@@ -33,8 +33,8 @@ export function ChannelBanner({ channels }: { channels: Channel}) {
           <Headline className="font-medium text-label">{channels?.contractUri?.name ? channels?.contractUri?.name  : "Channel name missing"}</Headline>
           <BodyLarge className="text-label-muted">
             {channels?.createdBy ? shortenAddress(channels?.createdBy as Hex): ""}
-            {channels?.logicTransmitterMerkleAdmin?.length
-              ? ` + ${channels?.logicTransmitterMerkleAdmin?.length - 1} others`
+            {channels?.logicTransmitterMerkleAdmin[0].accounts?.length
+              ? ` + ${channels.logicTransmitterMerkleAdmin[0].accounts.length - 1} others`
               : ""}
           </BodyLarge>
           <Body className="text-label-muted">{channels?.contractUri?.description ? channels?.contractUri?.description : ""}</Body>
