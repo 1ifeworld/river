@@ -1,14 +1,16 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Body, Card, BodySmall, Stack, cn } from '@river/design-system';
-import { type Channel } from '../../types/types';
+import { type Channel, type ContractUri } from '../../types/types';
 import { truncateText, removeFirstTwo } from '../../utils';
 
 export function ChannelCard({
   channel,
+  contractUri,
   className,
 }: {
   channel: Channel;
+  contractUri: ContractUri;
   className?: string;
 }) {
   return (
@@ -17,8 +19,8 @@ export function ChannelCard({
       <Card>
         <Link href={removeFirstTwo(channel.id)}>
           <Image
-            src={channel.cover}
-            alt={channel.name}
+            src={contractUri?.image}
+            alt={contractUri.name}
             width={224}
             height={224}
           />
@@ -27,16 +29,16 @@ export function ChannelCard({
       {/* Caption */}
       <Stack className='max-w-[224px]'>
         <Body className='text-label font-medium leading-none'>
-          {channel.name}
+          {contractUri.name}
         </Body>
-        {channel.members ? (
+        {channel.logicTransmitterMerkleAdmin.accounts ? (
           <BodySmall className='text-label-muted'>
-            {truncateText(channel.creator, 30)} + {channel.members.length}{' '}
+            {truncateText(channel?.createdBy, 30)} + {channel.logicTransmitterMerkleAdmin.accounts}{' '}
             others
           </BodySmall>
         ) : (
           <BodySmall className='text-label-muted'>
-            {truncateText(channel.creator, 30)}
+            {truncateText(channel.createdBy, 30)}
           </BodySmall>
         )}
       </Stack>
