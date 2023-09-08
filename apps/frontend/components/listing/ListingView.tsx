@@ -1,8 +1,9 @@
 import React from "react";
-import { Flex, Body, BodySmall } from "@river/design-system";
+import { Flex, Stack, Body, BodySmall } from "@river/design-system";
 import Image from "next/image";
 import { truncateText, shortenAddress } from "../../utils";
-import { ListingRenderer } from ".";
+import { MediaRenderer, MediaContainer, ListingNav } from ".";
+import { ipfsToHttps } from "../../utils";
 
 type ListingViewProps = {
   listings: any[]; // You can replace 'any' with the actual type of your listings
@@ -29,14 +30,18 @@ export function ListingView({ listings, error }: ListingViewProps) {
     return <Flex className="flex-col">Loading...</Flex>;
   }
 
-  const mediaURL: string = listings?.[0]?.listingTargetMetadata?.pieceImageURL
-    ? listings?.[0]?.listingTargetMetadata?.pieceImageURL
+  const mediaURL: string = listings?.[0]?.listingTargetMetadata?.pieceFullRes
+    ? listings?.[0]?.listingTargetMetadata?.pieceFullRes
     : "";
 
-  // Render the listing
   return (
-    <Flex className="w-full h-full justify-center">
-      <ListingRenderer mediaURL={mediaURL} />
-    </Flex>
+    // outer flex is the skeleton of the media container. we let w expand fully, and set height to 765px
+    // its a flex box, and will always center the media renderer inside
+    <Stack className="w-full h-full items-center">
+        <ListingNav listing={listings?.[0]} />
+        <MediaContainer>
+            <MediaRenderer mediaURL={mediaURL} />
+        </MediaContainer>
+    </Stack>
   );
 }

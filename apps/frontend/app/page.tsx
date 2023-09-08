@@ -2,6 +2,7 @@ import { Header } from '../components/client';
 import { getAllChannels } from '../gql/requests/getAllChannels';
 import { Stack, Flex } from '@river/design-system';
 import { Hex } from 'viem';
+import { Sidebar } from '../components/client';
 
 export default async function Home() {
   const { channels } = await getAllChannels();
@@ -27,13 +28,13 @@ export default async function Home() {
   // }));
 
   return (
-    <>
+    <Flex>
       <Stack className='items-center my-10'>
         {/* Channel card grid */}
         <Flex className='flex-wrap gap-5 pb-4'>
           {/* <AllChannels channel={channelsContractUriInput} /> */}
         </Flex>
       </Stack>
-    </>
+    </Flex>
   );
 }

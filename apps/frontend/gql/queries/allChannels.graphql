@@ -24,7 +24,8 @@ query allChannels{
         pieceName
         pieceCreator
         pieceDescription
-        pieceImageURL
+        pieceThumbnail
+        pieceFullRes
         pieceAnimationURL
         pieceCreatedDate
         pieceContentType

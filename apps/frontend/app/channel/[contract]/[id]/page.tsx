@@ -38,5 +38,7 @@ export default async function View({
   }
 
   // Render the ListingView component, passing the fetched listings and potential error message as props.
-  return <ListingView listings={queryResult} error={error} />;
+  return (
+      <ListingView listings={queryResult} error={error} />
+  );
 }

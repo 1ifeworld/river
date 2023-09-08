@@ -1,13 +1,14 @@
 import { Header } from "../../../../components/client";
 
-export default function ChannelLayout({
+export default function ViewLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <section className="mx-[145px]">
-      <Header/>
+    // w-full h-full
+    <section className="flex w-full h-full">
+      {/* <Header /> */}
       {children}
     </section>
   );
