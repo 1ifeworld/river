@@ -33,7 +33,7 @@ export function ChannelCard({
         {channel.logicTransmitterMerkleAdmin[0].accounts ? (
           <BodySmall className="text-label-muted">
             {truncateText(channel?.createdBy, 20)} +{" "}
-            {channel.logicTransmitterMerkleAdmin[0].accounts.length} others
+            {channel.logicTransmitterMerkleAdmin[0].accounts.length - 1} others
           </BodySmall>
         ) : (
           <BodySmall className="text-label-muted">
