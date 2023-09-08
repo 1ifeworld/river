@@ -1,5 +1,4 @@
 import { getChannel } from "../../../../gql/requests/getChannel";
-import { Hex } from "viem";
 import { Flex } from "@river/design-system";
 import { ChannelBanner, ChannelBody } from "../../../../components/channel";
 import { Channel } from '../../../../gql/sdk.generated';
@@ -15,7 +14,7 @@ export default async function Channel({
   });
 
   return (
-    <Flex className="flex-col gap-y-[87px]">
+    <Flex className="flex-col my-[80px] gap-y-[87px]">
       <ChannelBanner channels={channels?.[0]} />
       <ChannelBody listings={channels[0]?.listings} />
     </Flex>      

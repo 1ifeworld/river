@@ -1,5 +1,3 @@
-import { Header } from "../../../../components/client";
-
 export default function ViewLayout({
   children,
 }: {
@@ -7,7 +5,7 @@ export default function ViewLayout({
 }) {
   return (
     // w-full h-full
-    <section className="flex w-full h-full">
+    <section className="flex w-full h-screen">
       {/* <Header /> */}
       {children}
     </section>
