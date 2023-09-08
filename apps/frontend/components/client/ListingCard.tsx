@@ -31,7 +31,7 @@ export function ListingCard({
           {truncateText(listing?.listingTargetMetadata?.pieceName as string, 30)}
         </Body>
         <BodySmall className="text-label-muted">
-          {truncateText(listing?.createdBy, 20)}
+          {truncateText(listing?.listingTargetMetadata?.pieceCreator as string, 20)}
         </BodySmall>
       </Stack>
     </Stack>
