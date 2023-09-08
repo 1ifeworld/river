@@ -1,9 +1,10 @@
 import React from "react";
 import { Flex, Stack } from "@river/design-system";
 import { MediaRenderer, MediaContainer, ListingNav } from ".";
+import { Listing } from "../../gql/sdk.generated";
 
 type ListingViewProps = {
-  listings: any[]; // You can replace 'any' with the actual type of your listings
+  listings: Listing[];
   error?: string;
 };
 
