@@ -5,12 +5,12 @@ import {
   Headline,
   BodyLarge,
 } from "@river/design-system";
-// import { ListingExtended, type Channel, type ContractUri, type LogicTransmitterMerkleAdmin } from "../../types/types";
 import Image from "next/image";
 import { ChannelModal } from "../client/AddToChannelModal";
 import { shortenAddress } from "../../utils/shortenAddress";
 import { Hex } from "viem";
 import { Listing, Channel, ChannelQuery, ContractUri, LogicTransmitterMerkleAdmin, PieceMetadata } from "../../gql/sdk.generated";
+import { ipfsToHttps } from "../../utils";
 
 export function ChannelBanner({ channels }: { channels: Channel}) {
 
@@ -18,7 +18,7 @@ export function ChannelBanner({ channels }: { channels: Channel}) {
     <Flex className="gap-x-10 h-[248px]">
       <div className="overflow-hidden rounded">
         <Image
-          src={channels?.contractUri?.uri as string}
+          src={ipfsToHttps(channels?.contractUri?.image as string)}
           alt={channels?.contractUri?.name ? channels?.contractUri?.name : "Channel name missing"}
           width={248}
           height={248}

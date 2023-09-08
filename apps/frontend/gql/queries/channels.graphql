@@ -24,7 +24,8 @@ query channel($channel: String!) {
         pieceName
         pieceCreator
         pieceDescription
-        pieceImageURL
+        pieceThumbnail
+        pieceFullRes
         pieceAnimationURL
         pieceCreatedDate
         pieceContentType

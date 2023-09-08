@@ -3,6 +3,7 @@ import { Flex, Stack, Body, BodySmall } from "@river/design-system";
 import Image from "next/image";
 import { truncateText, shortenAddress } from "../../utils";
 import { MediaRenderer, MediaContainer, ListingNav } from ".";
+import { ipfsToHttps } from "../../utils";
 
 type ListingViewProps = {
   listings: any[]; // You can replace 'any' with the actual type of your listings
@@ -29,8 +30,8 @@ export function ListingView({ listings, error }: ListingViewProps) {
     return <Flex className="flex-col">Loading...</Flex>;
   }
 
-  const mediaURL: string = listings?.[0]?.listingTargetMetadata?.pieceImageURL
-    ? listings?.[0]?.listingTargetMetadata?.pieceImageURL
+  const mediaURL: string = listings?.[0]?.listingTargetMetadata?.pieceFullRes
+    ? listings?.[0]?.listingTargetMetadata?.pieceFullRes
     : "";
 
   return (

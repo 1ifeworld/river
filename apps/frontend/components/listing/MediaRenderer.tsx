@@ -1,5 +1,4 @@
 import React from "react";
-import { AspectRatio } from "@river/design-system";
 import Image from "next/image";
 
 export function MediaRenderer({ mediaURL }: { mediaURL: string }) {
