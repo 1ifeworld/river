@@ -2,7 +2,7 @@ import React from "react";
 import { Flex, Stack, Body, BodySmall } from "@river/design-system";
 import Image from "next/image";
 import { truncateText, shortenAddress } from "../../utils";
-import { MediaRenderer, MediaContainer } from ".";
+import { MediaRenderer, MediaContainer, ListingNav } from ".";
 
 type ListingViewProps = {
   listings: any[]; // You can replace 'any' with the actual type of your listings
@@ -36,7 +36,8 @@ export function ListingView({ listings, error }: ListingViewProps) {
   return (
     // outer flex is the skeleton of the media container. we let w expand fully, and set height to 765px
     // its a flex box, and will always center the media renderer inside
-    <Stack className="w-full h-full items-center border-2 border-label">
+    <Stack className="w-full h-full items-center">
+        <ListingNav listing={listings?.[0]} />
         <MediaContainer>
             <MediaRenderer mediaURL={mediaURL} />
         </MediaContainer>

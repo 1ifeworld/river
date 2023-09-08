@@ -31,7 +31,6 @@ export default async function Home() {
 
   return (
     <Flex>
-     <Sidebar />
       <Stack className='items-center my-10'>
         {/* Channel card grid */}
         <Flex className='flex-wrap gap-5 pb-4'>

@@ -2,7 +2,6 @@ import { ListingView } from "../../../../components/listing"; // Adjust the path
 import { validateRoute } from "../../../../utils"; // Adjust the path as needed
 import { getListing } from "../../../../gql/requests/getListing"; // Adjust the path as needed
 import { Hex } from "viem";
-import { Stack } from "@river/design-system";
 
 /**
  * The main server component function responsible for validating the route parameters,
