@@ -1,5 +1,4 @@
 import { Header } from '../components/client';
-import { AllChannels } from '../components/channel/AllChannels';
 import { getAllChannels } from '../gql/requests/getAllChannels';
 import { Stack, Flex } from '@river/design-system';
 import { Hex } from 'viem';
