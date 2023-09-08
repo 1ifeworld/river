@@ -15,7 +15,7 @@ export default {
         {
           lineHeight: '1.125rem',
           letterSpacing: '0.013em',
-          fontWeight: '500',
+          fontWeight: '400',
         },
       ],
       base: [
@@ -23,7 +23,7 @@ export default {
         {
           lineHeight: '1.25rem',
           letterSpacing: '0.013em',
-          fontWeight: '500',
+          fontWeight: '400',
         },
       ],
       lg: [
@@ -31,7 +31,7 @@ export default {
         {
           lineHeight: '1.625rem',
           letterSpacing: '0.013em',
-          fontWeight: '500',
+          fontWeight: '400',
         },
       ],
       xl: [
