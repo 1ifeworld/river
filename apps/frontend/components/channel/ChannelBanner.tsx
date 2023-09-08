@@ -9,7 +9,7 @@ import Image from "next/image";
 import { ChannelModal } from "../client/AddToChannelModal";
 import { shortenAddress } from "../../utils/shortenAddress";
 import { Hex } from "viem";
-import { Listing, Channel, ChannelQuery, ContractUri, LogicTransmitterMerkleAdmin, PieceMetadata } from "../../gql/sdk.generated";
+import { Channel } from "../../gql/sdk.generated";
 import { ipfsToHttps } from "../../utils";
 
 export function ChannelBanner({ channels }: { channels: Channel}) {
@@ -32,7 +32,7 @@ export function ChannelBanner({ channels }: { channels: Channel}) {
         <div className="">
           <Headline className="font-medium text-label">{channels?.contractUri?.name ? channels?.contractUri?.name  : "Channel name missing"}</Headline>
           <BodyLarge className="text-label-muted">
-            {channels.createdBy ? shortenAddress(channels.createdBy as Hex): ""}
+            {channels?.createdBy ? shortenAddress(channels?.createdBy as Hex): ""}
             {channels?.logicTransmitterMerkleAdmin?.length
               ? ` + ${channels?.logicTransmitterMerkleAdmin?.length - 1} others`
               : ""}

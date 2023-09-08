@@ -1,12 +1,10 @@
 import React from "react";
-import { Flex, Stack, Body, BodySmall } from "@river/design-system";
-import Image from "next/image";
-import { truncateText, shortenAddress } from "../../utils";
+import { Flex, Stack } from "@river/design-system";
 import { MediaRenderer, MediaContainer, ListingNav } from ".";
-import { ipfsToHttps } from "../../utils";
+import { Listing } from "../../gql/sdk.generated";
 
 type ListingViewProps = {
-  listings: any[]; // You can replace 'any' with the actual type of your listings
+  listings: Listing[];
   error?: string;
 };
 

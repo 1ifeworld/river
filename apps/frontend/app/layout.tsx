@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en" className={`${helveticaNeue.variable}`}>
       <body>
         <Providers>
-         <Flex className="min-h-screen h-screen min-w-screen w-screen border-2 border-accent">
+         <Flex className="min-h-screen min-w-screen">
           <Sidebar/>
           {children}
           </Flex>

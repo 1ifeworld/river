@@ -3,7 +3,7 @@ import { cn } from '../utils';
 import { type SvgProps } from "./types";
 
 export function RiverIcon({
-  width = 59,
+  width = 41,
   fill = '#000000',
   className,
 }: SvgProps) {
