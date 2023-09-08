@@ -17,6 +17,8 @@ import { networks } from '../../../../../constants';
 import useGetTokenMetadata from '../../../../../hooks/useGetTokenMetadata';
 import { Nft } from 'alchemy-sdk';
 import Image from 'next/image';
+import { Ethereum } from '@river/design-system';
+
 
 interface NetworkSelectProps {
   selectedNetwork: number;
@@ -25,7 +27,7 @@ interface NetworkSelectProps {
 
 const getIconPath = (networkId: number) => {
   const networkName = networks[networkId];
-  return networkName ? `/icons/${networkName}.svg` : ''; // default to empty string if no match.
+  return networkName ? `/icons/ethereum.svg` : ''; // default to empty string if no match.
 };
 
 function NetworkSelect({
@@ -39,12 +41,7 @@ function NetworkSelect({
         className='w-fit h-[40px] border-[1.5px] border-[#DADADA] focus:ring-0'
       >
         <SelectValue>
-          <Image
-            src={getIconPath(selectedNetwork)}
-            width={14}
-            height={24}
-            alt={networks[selectedNetwork] + 'icon'}
-          />
+        <Ethereum/>
         </SelectValue>
       </SelectTrigger>
       <SelectContent>

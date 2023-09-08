@@ -5,4 +5,5 @@ export { Menu } from './Menu';
 export { RiverIcon } from './RiverIcon';
 export { SearchIcon } from './SearchIcon';
 export { RightPointer } from './RightPointer';
+export { Ethereum } from './Ethereum';
 export { type SvgProps } from './types';
