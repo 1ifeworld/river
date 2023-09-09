@@ -43,7 +43,7 @@ export function ListingCard({
             )}
           </Body>
         </Link>
-        <BodySmall className='text-label-muted'>
+        <BodySmall className='text-label-muted cursor-default'>
           {truncateText(
             listing?.listingTargetMetadata?.pieceCreator as string,
             20

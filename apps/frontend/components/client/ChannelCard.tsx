@@ -34,12 +34,12 @@ export function ChannelCard({
           </Body>
         </Link>
         {channel.logicTransmitterMerkleAdmin[0].accounts ? (
-          <BodySmall className='text-label-muted'>
+          <BodySmall className='text-label-muted cursor-default'>
             {truncateText(channel?.createdBy, 20)} +{' '}
             {channel.logicTransmitterMerkleAdmin[0].accounts.length - 1} others
           </BodySmall>
         ) : (
-          <BodySmall className='text-label-muted'>
+          <BodySmall className='text-label-muted cursor-default'>
             {truncateText(channel.createdBy, 30)}
           </BodySmall>
         )}
