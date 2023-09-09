@@ -14,7 +14,7 @@ export default async function Channel({
   });
 
   return (
-    <Flex className="flex-col my-[80px] gap-y-[87px]">
+    <Flex className="flex-col my-[80px] gap-y-[88px]">
       <ChannelBanner channels={channels?.[0]} />
       <ChannelBody listings={channels[0]?.listings} />
     </Flex>      
