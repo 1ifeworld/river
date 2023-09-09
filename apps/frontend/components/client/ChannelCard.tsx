@@ -15,21 +15,24 @@ export function ChannelCard({
   return (
     <Stack className={cn('gap-y-2', className)}>
       {/* Image */}
-      <Card className='relative'>
-        <Link href={`channel/${channel.id}`}>
+      <Link href={`channel/${channel.id}`}>
+        <Card className='relative'>
           <Image
             className='object-cover aspect-square'
             src={ipfsToHttps(channel.contractUri?.image as string)}
             alt={channel.contractUri?.name as string}
             fill
           />
-        </Link>
-      </Card>
+        </Card>
+      </Link>
+
       {/* Caption */}
       <Stack className='max-w-[224px]'>
-        <Body className='text-label font-medium leading-[14px]'>
-          {channel.contractUri?.name}
-        </Body>
+        <Link href={`channel/${channel.id}`}>
+          <Body className='text-label font-medium leading-[14px] hover:underline'>
+            {channel.contractUri?.name}
+          </Body>
+        </Link>
         {channel.logicTransmitterMerkleAdmin[0].accounts ? (
           <BodySmall className='text-label-muted'>
             {truncateText(channel?.createdBy, 20)} +{' '}
