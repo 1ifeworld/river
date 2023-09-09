@@ -31,12 +31,18 @@ export function ListingCard({
       </Card>
       {/* Caption */}
       <Stack className='max-w-[224px]'>
-        <Body className='text-label font-medium leading-[14px]'>
-          {truncateText(
-            listing?.listingTargetMetadata?.pieceName as string,
-            30
-          )}
-        </Body>
+        <Link
+          href={`${extractAddressFromListingId(listing.id)}/${listing.id.slice(
+            44
+          )}`}
+        >
+          <Body className='text-label font-medium leading-[14px] hover:underline'>
+            {truncateText(
+              listing?.listingTargetMetadata?.pieceName as string,
+              30
+            )}
+          </Body>
+        </Link>
         <BodySmall className='text-label-muted'>
           {truncateText(
             listing?.listingTargetMetadata?.pieceCreator as string,
