@@ -1,6 +1,14 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Body, Card, BodySmall, Stack, cn } from '@river/design-system';
+import {
+  Body,
+  Card,
+  BodySmall,
+  Stack,
+  cn,
+  Flex,
+  C,
+} from '@river/design-system';
 import { Channel } from '../../gql/sdk.generated';
 import { truncateText } from '../../utils';
 import { ipfsToHttps } from '../../utils';
@@ -25,14 +33,16 @@ export function ChannelCard({
           />
         </Card>
       </Link>
-
       {/* Caption */}
       <Stack className='max-w-[224px]'>
-        <Link href={`channel/${channel.id}`}>
-          <Body className='text-label font-medium leading-[14px] hover:underline'>
-            {channel.contractUri?.name}
-          </Body>
-        </Link>
+        <Flex className='justify-between items-center'>
+          <Link href={`channel/${channel.id}`}>
+            <Body className='text-label font-medium leading-[14px] hover:underline'>
+              {channel.contractUri?.name}
+            </Body>
+          </Link>
+          <C />
+        </Flex>
         {channel.logicTransmitterMerkleAdmin[0].accounts ? (
           <BodySmall className='text-label-muted cursor-default'>
             {truncateText(channel?.createdBy, 20)} +{' '}

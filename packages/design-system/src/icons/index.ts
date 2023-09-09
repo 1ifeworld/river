@@ -1,4 +1,5 @@
 export { Add } from './Add';
+export { C } from './C';
 export { Exit } from './Exit';
 export { Globe } from './Globe';
 export { Menu } from './Menu';
