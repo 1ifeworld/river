@@ -7,9 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "codegen": "graphql-codegen --config codegen.ts"
+    "codegen": "graphql-codegen --config codegen.ts --watch"
   },
   "dependencies": {
+    "@parcel/watcher": "^2.3.0",
     "@radix-ui/react-icons": "^1.3.0",
     "@river/design-system": "workspace:*",
     "alchemy-sdk": "^2.10.0",
