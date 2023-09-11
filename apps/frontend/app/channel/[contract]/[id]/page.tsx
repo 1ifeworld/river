@@ -1,6 +1,7 @@
 import { ListingView } from "../../../../components/listing"; // Adjust the path as needed
 import { validateRoute } from "../../../../utils"; // Adjust the path as needed
 import { getListing } from "../../../../gql/requests/getListing"; // Adjust the path as needed
+import { Listing } from "../../../../gql/sdk.generated";
 import { Hex } from "viem";
 
 /**
@@ -26,7 +27,7 @@ export default async function View({
   const { success, error, constructListingId } = validateRoute(params);
 
   // Initialize an array to store the fetched listings.
-  let queryResult: any[] = [];
+  let queryResult: Listing[] = [];
 
   // If the route parameters are valid and we have a constructed listing ID,
   // proceed to fetch the listing data using the getListing function.
