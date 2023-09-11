@@ -42,6 +42,9 @@ export function SideNav() {
             <Link href='/estuary/components/card'>
               <BodySmall>Card</BodySmall>
             </Link>
+            <Link href='/estuary/components/tooltip'>
+              <BodySmall>Tooltip</BodySmall>
+            </Link>
           </Stack>
         </Stack>
       </ScrollArea.Viewport>
