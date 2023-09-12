@@ -8,12 +8,16 @@ import {
 } from '@river/design-system';
 import Image from 'next/image';
 import { ChannelModal } from '../../client/AddToChannelModal';
-import { shortenAddress } from '../../../utils/shortenAddress';
 import { Hex } from 'viem';
 import { Channel } from '../../../gql/sdk.generated';
-import { ipfsToHttps } from '../../../utils';
+import { ipfsToHttps, shortenAddress, getAddressDisplay } from '../../../utils';
 
-export function ChannelBanner({ channels }: { channels: Channel }) {
+export async function ChannelBanner({ channels }: { channels: Channel }) {
+
+    // Attempt to resolve relevant address/ens before component renders
+    const creatorEnsOrAddress = await getAddressDisplay(channels?.createdBy as Hex)
+
+
   return (
     <Flex className='gap-x-10 h-[248px]'>
       <Card size='lg' className='relative'>
@@ -39,9 +43,7 @@ export function ChannelBanner({ channels }: { channels: Channel }) {
               : 'Channel name missing'}
           </Headline>
           <BodyLarge className='text-label-muted'>
-            {channels?.createdBy
-              ? shortenAddress(channels?.createdBy as Hex)
-              : ''}
+            {creatorEnsOrAddress}
             {channels?.logicTransmitterMerkleAdmin[0].accounts?.length
               ? ` + ${
                   channels.logicTransmitterMerkleAdmin[0].accounts.length - 1
