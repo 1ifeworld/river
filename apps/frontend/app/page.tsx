@@ -1,5 +1,5 @@
 import { getAllChannels } from "../gql/requests/getAllChannels";
-import { Flex } from "@river/design-system";
+import { Flex, Stack } from "@river/design-system";
 import { Channel } from "../gql/sdk.generated";
 import { ChannelCard } from "../components/client";
 
@@ -12,10 +12,13 @@ export default async function Home() {
   );
 
   return (
+    <Stack>
     <Flex className="m-[40px] flex-wrap gap-5 pb-4">
       {channelsWithNoName.map((validChannel: Channel, index: number) => (
         <ChannelCard channel={validChannel} />
       ))}
     </Flex>
+    </Stack>
+    
   );
 }
