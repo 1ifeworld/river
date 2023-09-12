@@ -60,12 +60,17 @@ export function ChannelUri({
         type="text"
         placeholder="Name"
         value={name}
-        onChange={(e) => setName(e.target.value)}
+        onChange={(e) =>  {setName(e.target.value)
+        console.log("Updated Name:", e.target.value);
+        }}
+        
       />
       <Input
         placeholder="Description"
         value={description}
-        onChange={(e) => setDescription(e.target.value)}
+        onChange={(e) =>  {setDescription(e.target.value)
+        console.log("Updated Description:", e.target.value);
+        } }
       />
       <Input type="file" onChange={handleImageChange} />
       <Button onClick={handleUpload}>Upload Image</Button>

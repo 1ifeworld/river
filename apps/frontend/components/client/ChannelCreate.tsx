@@ -54,26 +54,12 @@ export function ChannelCreate({
       <Flex className="h-full flex-col justify-between cursor-default">
         <div></div>
         <div className="">
-          <Headline className="font-medium text-label">
-            {channels?.contractUri?.name
-              ? channels?.contractUri?.name
-              : "Channel name missing"}
-          </Headline>
-          <BodyLarge className="text-label-muted">
-            {channels?.createdBy
-              ? shortenAddress(channels?.createdBy as Hex)
-              : ""}
-            {channels?.logicTransmitterMerkleAdmin[0].accounts?.length
-              ? ` + ${
-                  channels.logicTransmitterMerkleAdmin[0].accounts.length - 1
-                } others`
-              : ""}
-          </BodyLarge>
-          <Body className="text-label-muted">
-            {channels?.contractUri?.description
-              ? channels?.contractUri?.description
-              : ""}
-          </Body>
+        <Headline className="font-medium text-label">
+  {name || "Channel name missing"}
+</Headline>
+<Body className="text-label-muted">
+  {description || ""}
+</Body>
         </div>
         <ChannelUri
           cid={cid}
