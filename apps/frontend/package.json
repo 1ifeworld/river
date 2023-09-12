@@ -23,7 +23,8 @@
     "react-dom": "18.2.0",
     "tailwindcss-animate": "^1.0.7",
     "viem": "^1.7.0",
-    "wagmi": "^1.3.10"
+    "wagmi": "^1.3.10",
+    "web3.storage": "^4.5.5"
   },
   "devDependencies": {
     "@graphql-codegen/add": "^5.0.0",
