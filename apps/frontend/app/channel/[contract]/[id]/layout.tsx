@@ -3,11 +3,5 @@ export default function ViewLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    // w-full h-full
-    <section className="flex w-full h-screen">
-      {/* <Header /> */}
-      {children}
-    </section>
-  );
+  return <section className='flex w-full h-screen'>{children}</section>;
 }
