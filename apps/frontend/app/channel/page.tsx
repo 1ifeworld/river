@@ -11,13 +11,6 @@ export default function Page() {
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
 
-  
-
-  useEffect(() => {
-    console.log("Name in Page:", name);
-    console.log("Description in Page:", description);
-  }, [name, description]);
-
   return (
     <Stack>
 <ChannelCreate 
