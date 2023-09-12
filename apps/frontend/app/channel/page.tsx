@@ -1,9 +1,7 @@
 "use client";
-import React, { useState } from "react";
 
 import { LanyardMerkle } from "../../components/client/ChannelUri/LanyardMerkle";
 import { Stack } from "@river/design-system";
-
 import { ChannelUri } from "../../components/client/ChannelUri/ChannelUri";
 
 export default function Page() {

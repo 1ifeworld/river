@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useWeb3Storage } from "../../../hooks/useWeb3Storage";
 import { Input, Button, Stack } from "@river/design-system";
 import { createLanyardTree } from "../../../hooks";
 
