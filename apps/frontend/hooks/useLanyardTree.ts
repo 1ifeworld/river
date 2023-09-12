@@ -1,7 +1,7 @@
 import * as lanyard from "lanyard";
 import { Hash, Hex } from "viem";
 
-type OwnerAddress = `0x${string}`;
+
 
 interface LanyardTreeError {
   message: string;
@@ -14,7 +14,7 @@ interface UseLanyardTreeResult {
 
 // need to adjust this to get data from form 
 export const createLanyardTree = async (
-  owners: OwnerAddress[]
+  owners: Hex[]
 ): Promise<UseLanyardTreeResult> => {
   try {
     if (!owners || owners.length === 0) {
