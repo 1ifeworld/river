@@ -21,8 +21,8 @@ export default function Page() {
   return (
     <Stack>
 <ChannelCreate 
-  cid={cid}
   setCid={setCid}
+  cid={cid}
   name={name}
   setName={setName} 
   setDescription={setDescription} 
