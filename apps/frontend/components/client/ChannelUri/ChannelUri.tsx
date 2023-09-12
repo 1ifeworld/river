@@ -59,22 +59,48 @@ export function ChannelUri({
       <Input
         type="text"
         placeholder="Name"
+        className='px-2 w-[256px] h-[40px] border-[1.5px] rounded border-[#DADADA] focus-visible:ring-0'
         value={name}
-        onChange={(e) =>  {setName(e.target.value)
-        console.log("Updated Name:", e.target.value);
+        onChange={(e) => {
+          setName(e.target.value);
+          console.log("Updated Name:", e.target.value);
         }}
-        
       />
       <Input
         placeholder="Description"
         value={description}
-        onChange={(e) =>  {setDescription(e.target.value)
-        console.log("Updated Description:", e.target.value);
-        } }
+        className='px-2 w-[256px] h-[40px] border-[1.5px] rounded border-[#DADADA] focus-visible:ring-0'
+        onChange={(e) => {
+          setDescription(e.target.value);
+          console.log("Updated Description:", e.target.value);
+        }}
       />
-      <Input type="file" onChange={handleImageChange} />
-      <Button onClick={handleUpload}>Upload Image</Button>
-      <Button onClick={handleContractInsertion}>Insert into Contract</Button>
+      <Input           
+      className='px-2 w-[256px] h-[40px] border-[1.5px] rounded border-[#DADADA] focus-visible:ring-0'
+      type="file" onChange={handleImageChange} />
+      <Button
+        variant="outline"
+        size="icon"
+        className="rounded w-full bg-accent hover:bg-accent-hover mb-4"
+        onClick={handleUpload}
+      >
+        Upload Image
+      </Button>
+      <Button
+        variant="outline"
+        size="icon"
+        className="rounded w-full bg-accent hover:bg-accent-hover mb-4"
+        onClick={handleContractInsertion}
+      >
+        Insert into Contract
+      </Button>
+      <Button
+        variant="outline"
+        size="icon"
+        className="rounded w-full bg-accent hover:bg-accent-hover mb-4"
+      >
+        Create
+      </Button>
     </Stack>
   );
 }

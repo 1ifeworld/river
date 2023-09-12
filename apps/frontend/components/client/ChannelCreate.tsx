@@ -32,22 +32,23 @@ export function ChannelCreate({
 
   return (
     <Flex className="gap-x-10 h-[248px]">
-      <Card size="lg" className="relative">
-        <Image
-          className="object-cover aspect-square"
-          src={
-            cid
-              ? `https://ipfs.io/ipfs/${cid}`
-              : ipfsToHttps(channels?.contractUri?.image as string)
-          }
-          alt={
-            channels?.contractUri?.name
-              ? channels?.contractUri?.name
-              : "Channel name missing"
-          }
-          fill
-        />
-      </Card>
+<Card size="lg" className="relative bg-gray-400 w-[300px] h-[300px]">
+  <Image
+    className="object-cover aspect-square bg-gray-400"
+    
+    src={
+      cid
+        ? `https://ipfs.io/ipfs/${cid}`
+        : ipfsToHttps(channels?.contractUri?.image as string)
+    }
+    alt={
+      channels?.contractUri?.name
+        ? channels?.contractUri?.name
+        : "Channel name missing"
+    }
+    fill
+  />
+</Card>
 
       {/* Channel settings */}
       {/* Second Column: Text details */}
