@@ -1,15 +1,14 @@
-'use client';
-import React, { useState } from "react";
-import { useWeb3Storage } from "../../hooks/useWeb3Storage";
+"use client";
+
+import { LanyardMerkle } from "../../components/client/ChannelUri/LanyardMerkle";
+import { Stack } from "@river/design-system";
 import { ChannelUri } from "../../components/client/ChannelUri/ChannelUri";
-import { Input, Button, Stack } from "@river/design-system";
 
 export default function Page() {
-  
-      
-    return (
-      <Stack>
-       <ChannelUri />
-      </Stack>
-    );
+  return (
+    <Stack>
+      <ChannelUri />
+      <LanyardMerkle />
+    </Stack>
+  );
 }

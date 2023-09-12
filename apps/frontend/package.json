@@ -20,6 +20,7 @@
     "graphql": "^16.8.0",
     "graphql-request": "^6.1.0",
     "graphql-tag": "^2.12.6",
+    "lanyard": "^1.1.2",
     "next": "13.4.19",
     "react": "18.2.0",
     "react-dom": "18.2.0",
