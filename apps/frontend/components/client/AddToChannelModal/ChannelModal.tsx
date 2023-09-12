@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState } from 'react';
 
 import {
@@ -24,12 +23,11 @@ export function ChannelModal() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      {/* Replace with `Button` component */}
       <DialogTrigger className='bg-accent hover:bg-accent-hover text-[#FFFFFF] py-1 px-4 text-[13px] w-fit rounded '>
         + Add
       </DialogTrigger>
 
-      <DialogContent className='flex flex-col border-[0.5px] rounded-[14px] border-base-border w-[488px] h-fit'>
+      <DialogContent className='flex flex-col border-[0.5px] rounded-[14px] border-base-border w-full sm:w-[488px] h-fit'>
         <Flex className='items-center px-4'>
           <StateNav
             closeModal={setOpen}
@@ -46,9 +44,6 @@ export function ChannelModal() {
           </Button>
         </Flex>
         {activeTab === 'Search' ? <SearchContainer /> : null}
-
-        {/* {activeTab === "Update" ? <UpdateContainer/> : null}
-          {activeTab === "Text" ? <TextContainer/> : null} */}
       </DialogContent>
     </Dialog>
   );

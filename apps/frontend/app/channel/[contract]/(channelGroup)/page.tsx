@@ -1,6 +1,6 @@
 import { getChannel } from "../../../../gql/requests/getChannel";
 import { Flex } from "@river/design-system";
-import { ChannelBanner, ChannelBody } from "../../../../components/channel";
+import { ChannelBanner, ChannelBody } from "../../../../components/server/channel";
 import { Channel } from '../../../../gql/sdk.generated';
 import { getAddress } from "viem";
 

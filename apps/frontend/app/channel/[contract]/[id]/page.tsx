@@ -1,4 +1,4 @@
-import { ListingView } from "../../../../components/listing"; // Adjust the path as needed
+import { ListingView } from "../../../../components/server/listing"; // Adjust the path as needed
 import { validateRoute } from "../../../../utils"; // Adjust the path as needed
 import { getListing } from "../../../../gql/requests/getListing"; // Adjust the path as needed
 import { Listing } from "../../../../gql/sdk.generated";
