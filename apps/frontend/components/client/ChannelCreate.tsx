@@ -19,7 +19,7 @@ import {
     setName: React.Dispatch<React.SetStateAction<string>>;
     description: string;
     setDescription: React.Dispatch<React.SetStateAction<string>>;
-    setCid?: React.Dispatch<React.SetStateAction<string>>; 
+    setCid: React.Dispatch<React.SetStateAction<string>>; 
   }
   
   export function ChannelCreate({
