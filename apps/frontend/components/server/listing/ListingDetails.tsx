@@ -1,5 +1,4 @@
 import { Body, Headline, Stack } from '@river/design-system';
-import { Hex } from 'viem';
 import { getAddressDisplay } from '../../../utils';
 
 export async function ListingDetails({ listing }: { listing: any }) {
