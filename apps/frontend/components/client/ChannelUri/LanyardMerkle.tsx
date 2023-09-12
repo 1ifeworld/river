@@ -18,7 +18,7 @@ export function LanyardMerkle() {
     }
     if (addresses.every(isValidAddress)) {
       const response = await createLanyardTree(addresses as `0x${string}`[]);
-      console.log(response); 
+      console.log(response);
       setAddresses([]);
     } else {
       console.error("One or more addresses are not valid.");
@@ -48,8 +48,18 @@ export function LanyardMerkle() {
         value={inputAddress}
         onChange={(e) => setInputAddress(e.target.value)}
       />
-      <Button onClick={handleAddAddress}>Add Addresses</Button>
-      <Button onClick={handleSubmit}>Create Lanyard Tree</Button>
+      <Button
+        className="rounded w-full bg-accent hover:bg-accent-hover mb-4"
+        onClick={handleAddAddress}
+      >
+        Add Addresses
+      </Button>
+      <Button
+        className="rounded w-full bg-accent hover:bg-accent-hover mb-4"
+        onClick={handleSubmit}
+      >
+        Create Lanyard Tree
+      </Button>
     </Stack>
   );
 }

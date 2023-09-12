@@ -87,7 +87,7 @@ const handleSetSearchParams = (updatedParams: {
           searchResults={searchResults}
           setSearchResults={setSearchResults}
           setSearchParams={handleSetSearchParams}
-        />
+        />  
         <SearchAction
           nameOfAdd={searchResults?.title}
           addReady={!!sendDataConfig ? true : false}
