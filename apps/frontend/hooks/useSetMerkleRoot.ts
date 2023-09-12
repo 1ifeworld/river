@@ -1,84 +1,84 @@
-import { Hash, Hex } from 'viem';
-import {
-  useContractWrite,
-  usePrepareContractWrite,
-  useWaitForTransaction,
-} from 'wagmi';
-import { logicAbi } from '../abi';
-import { createLanyardTree } from '.';
-import { useState, useEffect } from 'react';
+// import { Hash, Hex } from 'viem';
+// import {
+//   useContractWrite,
+//   usePrepareContractWrite,
+//   useWaitForTransaction,
+// } from 'wagmi';
+// import { logicAbi } from '../abi';
+// import { createLanyardTree } from '.';
+// import { useState, useEffect } from 'react';
 
-type Props = {
-  merkleRoot: Hash;
-  press: Hex; // we should get their own press contract 
-};
+// type Props = {
+//   merkleRoot: Hash;
+//   press: Hex; // we should get their own press contract 
+// };
 
-interface UseSetMerkleRootResult {
-  config: any;
-  error: any;
-  writeMerkleRoot: any;
-  writeError: any;
-  data: any;
-  isError: boolean;
-  isLoading: boolean;
-  isSuccess: boolean;
-  status: any;
-  mintExistingData: any;
-  mintExistingLoading: boolean;
-}
+// interface UseSetMerkleRootResult {
+//   config: any;
+//   error: any;
+//   writeMerkleRoot: any;
+//   writeError: any;
+//   data: any;
+//   isError: boolean;
+//   isLoading: boolean;
+//   isSuccess: boolean;
+//   status: any;
+//   mintExistingData: any;
+//   mintExistingLoading: boolean;
+// }
 
-export function useSetMerkleRoot({ addresses, press }: Props): UseSetMerkleRootResult {
-  const [merkleRoot, setMerkleRoot] = useState<Hash | null>(null);
+// export function useSetMerkleRoot({ addresses, press }: Props): UseSetMerkleRootResult {
+//   const [merkleRoot, setMerkleRoot] = useState<Hash | null>(null);
 
-  useEffect(() => {
-    const fetchMerkleRoot = async () => {
-      const result = await createLanyardTree(addresses);
-      if (result.merkle) {
-        setMerkleRoot(result.merkle);
-      } else {
-        console.error(result.error?.message);
-      }
-    };
+//   useEffect(() => {
+//     const fetchMerkleRoot = async () => {
+//       const result = await createLanyardTree(addresses);
+//       if (result.merkle) {
+//         setMerkleRoot(result.merkle);
+//       } else {
+//         console.error(result.error?.message);
+//       }
+//     };
 
-    fetchMerkleRoot();
-  }, [addresses]);
+//     fetchMerkleRoot();
+//   }, [addresses]);
 
-  const { config, error } = merkleRoot ? usePrepareContractWrite({
-    address: passPaymaster,
-    abi: logicAbi,
-    functionName: 'setMerkleRoot',
-    args: [press, merkleRoot], // Update this line
-    enabled: true
-  }) : { config: null, error: null };
+//   const { config, error } = merkleRoot ? usePrepareContractWrite({
+//     address: passPaymaster,
+//     abi: logicAbi,
+//     functionName: 'setMerkleRoot',
+//     args: [press, merkleRoot], // Update this line
+//     enabled: true
+//   }) : { config: null, error: null };
 
-  const {
-    write: writeMerkleRoot,
-    data,
-    error: writeError,
-    isError,
-    isLoading,
-    isSuccess,
-    status,
-  } = useContractWrite(config);
+//   const {
+//     write: writeMerkleRoot,
+//     data,
+//     error: writeError,
+//     isError,
+//     isLoading,
+//     isSuccess,
+//     status,
+//   } = useContractWrite(config);
 
-  const { data: mintExistingData, isLoading: mintExistingLoading } =
-    useWaitForTransaction({
-      hash: data?.hash,
-    });
+//   const { data: mintExistingData, isLoading: mintExistingLoading } =
+//     useWaitForTransaction({
+//       hash: data?.hash,
+//     });
 
-  return {
-    config,
-    error,
-    writeMerkleRoot,
-    writeError,
-    data,
-    isError,
-    isLoading,
-    isSuccess,
-    status,
-    mintExistingData,
-    mintExistingLoading,
-  };
-}
+//   return {
+//     config,
+//     error,
+//     writeMerkleRoot,
+//     writeError,
+//     data,
+//     isError,
+//     isLoading,
+//     isSuccess,
+//     status,
+//     mintExistingData,
+//     mintExistingLoading,
+//   };
+// }
 
-export default useSetMerkleRoot;
+// export default useSetMerkleRoot;
