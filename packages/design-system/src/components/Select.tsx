@@ -4,7 +4,7 @@ import * as React from 'react';
 import { CaretDownIcon, CheckIcon } from '@radix-ui/react-icons';
 import * as SelectPrimitive from '@radix-ui/react-select';
 
-import { cn } from '../utils';
+import { cn } from '@/utils';
 
 const Select = SelectPrimitive.Root;
 

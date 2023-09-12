@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 
-import { cn } from '../utils';
+import { cn } from '@/utils';
 
 const cardVariants = cva(
   'aspect-square overflow-hidden object-cover outline outline-[0.5px] outline-base-border',
