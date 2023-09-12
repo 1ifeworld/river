@@ -1,4 +1,4 @@
-import { SvgLoader, Button, Body } from '@river/design-system';
+import { Button, Body } from '@river/design-system';
 
 interface SearchActionProps {
   addReady: boolean;
@@ -15,7 +15,7 @@ const SearchAction = ({
     <Button
       disabled={!addReady}
       onClick={addTrigger}
-      className='rounded w-full bg-river-accent hover:bg-river-accent-hover mb-4'
+      className='rounded w-full mb-4'
     >
       <Body>{nameOfAdd ? 'Add ' + `"${nameOfAdd}"` : 'Add'}</Body>
     </Button>

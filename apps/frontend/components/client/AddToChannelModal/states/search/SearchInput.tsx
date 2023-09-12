@@ -27,7 +27,7 @@ interface NetworkSelectProps {
 
 const getIconPath = (networkId: number) => {
   const networkName = networks[networkId];
-  return networkName ? `/icons/ethereum.svg` : ''; // default to empty string if no match.
+  return networkName ? `/icons/ethereum.svg` : '';
 };
 
 function NetworkSelect({

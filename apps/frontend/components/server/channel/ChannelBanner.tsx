@@ -1,6 +1,7 @@
 import {
   Flex,
   cn,
+  Stack,
   Body,
   Card,
   Headline,
@@ -13,13 +14,13 @@ import { Channel } from '../../../gql/sdk.generated';
 import { ipfsToHttps, shortenAddress, getAddressDisplay } from '../../../utils';
 
 export async function ChannelBanner({ channels }: { channels: Channel }) {
-
-    // Attempt to resolve relevant address/ens before component renders
-    const creatorEnsOrAddress = await getAddressDisplay(channels?.createdBy as Hex)
-
+  // Attempt to resolve relevant address/ens before component renders
+  const creatorEnsOrAddress = await getAddressDisplay(
+    channels?.createdBy as Hex
+  );
 
   return (
-    <Flex className='gap-x-10 h-[248px]'>
+    <Flex className='gap-x-8 h-[248px]'>
       <Card size='lg' className='relative'>
         <Image
           className='object-cover aspect-square'
@@ -34,9 +35,8 @@ export async function ChannelBanner({ channels }: { channels: Channel }) {
       </Card>
       {/* Channel settings */}
       {/* Second Column: Text details */}
-      <Flex className='h-full flex-col justify-between cursor-default'>
-        <div></div>
-        <div className=''>
+      <Stack className='h-full justify-end cursor-default'>
+        <span className='inline-block mb-5'>
           <Headline className='font-medium text-label'>
             {channels?.contractUri?.name
               ? channels?.contractUri?.name
@@ -50,14 +50,16 @@ export async function ChannelBanner({ channels }: { channels: Channel }) {
                 } others`
               : ''}
           </BodyLarge>
-          <Body className='text-label-muted'>
-            {channels?.contractUri?.description
-              ? channels?.contractUri?.description
-              : ''}
-          </Body>
-        </div>
-        <ChannelModal />
-      </Flex>
+        </span>
+        <Body className='text-label-muted mb-[44px]'>
+          {channels?.contractUri?.description
+            ? channels?.contractUri?.description
+            : ''}
+        </Body>
+        <span>
+          <ChannelModal />
+        </span>
+      </Stack>
     </Flex>
   );
 }
