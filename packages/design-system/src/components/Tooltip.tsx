@@ -1,13 +1,13 @@
-'use client'
+'use client';
 
 import * as React from 'react';
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 
-import { cn } from '../utils';
-
 interface TooltipProps {
-  side?: 'top' | 'bottom' | 'left' | 'right';
-  children: React.ReactNode
+  side?: 'top' | 'right' | 'bottom' | 'left';
+  align?: 'start' | 'center' | 'end';
+  children: React.ReactNode;
+  content: React.ReactNode;
 }
 
 const TooltipProvider = TooltipPrimitive.Provider;
@@ -16,23 +16,30 @@ const TooltipRoot = TooltipPrimitive.Root;
 
 const TooltipTrigger = TooltipPrimitive.Trigger;
 
-const TooltipPortal = TooltipPrimitive.Portal;
-
 const TooltipContent = TooltipPrimitive.Content;
 
-const TooltipArrow = TooltipPrimitive.Arrow;
-
-export function Tooltip({ side, children }: TooltipProps) {
+export function Tooltip({ side, align, children, content }: TooltipProps) {
   return (
     <TooltipProvider>
       <TooltipRoot>
-        <TooltipTrigger asChild>
-            <p>Open me</p>
+        <TooltipTrigger asChild className='cursor-pointer'>
+          {children}
         </TooltipTrigger>
-        <TooltipContent side={side}>
-            {children}
+        <TooltipContent
+          className='bg-base border-[0.5px] border-base-border px-5 py-4 rounded-[10px] shadow-sm'
+          sideOffset={4}
+          side={side}
+          align={align}
+        >
+          {content}
         </TooltipContent>
       </TooltipRoot>
     </TooltipProvider>
   );
 }
+
+// Unused Primitive Parts
+
+// TooltipPrimitive.Portal
+
+// TooltipPrimitive.Arrow;

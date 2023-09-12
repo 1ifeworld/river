@@ -1,13 +1,8 @@
 import {
-  Flex,
-  Button,
   Body,
   Stack,
-  BodySmall,
   BodyLarge,
-  Add,
   Headline,
-  Card,
   Tooltip,
 } from '@river/design-system';
 
@@ -16,17 +11,47 @@ export default function Page() {
     <>
       <Stack className='mb-8 gap-2'>
         <Headline>Tooltip</Headline>
-        <BodyLarge className='text-label'>
+        <BodyLarge className='text-label-muted'>
           Extra information displayed upon hovering
         </BodyLarge>
       </Stack>
-      <Flex className='flex-col md:flex-row gap-10'>
-        {/* Default */}
-        <Flex className='flex-col gap-2'>
-          <BodySmall className='text-gray-400'>Default</BodySmall>
-          <Tooltip>Tooltip</Tooltip>
-        </Flex>
-      </Flex>
+      <Stack className='gap-10'>
+        {/* Top */}
+        <Tooltip
+          content={
+            <Body className='text-label-muted'>Set information free</Body>
+          }
+        >
+          <Body className='text-label'>Appear above (default)</Body>
+        </Tooltip>
+        {/* Right */}
+        <Tooltip
+          side={'right'}
+          content={
+            <Body className='text-label-muted'>Set information free</Body>
+          }
+        >
+          <Body className='text-label'>Appear right</Body>
+        </Tooltip>
+        {/* Bottom */}
+        <Tooltip
+          side={'bottom'}
+          content={
+            <Body className='text-label-muted'>Set information free</Body>
+          }
+        >
+          <Body className='text-label'>Appear below</Body>
+        </Tooltip>
+        {/* Left */}
+        <Tooltip
+          side={'left'}
+          content={
+            <Body className='text-label-muted'>Set information free</Body>
+          }
+        >
+          <Body className='text-label'>Appear left</Body>
+        </Tooltip>
+      </Stack>
     </>
   );
 }
