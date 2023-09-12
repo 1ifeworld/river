@@ -3,9 +3,9 @@
   "include": ["."],
   "exclude": ["dist", "build", "node_modules"],
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "src/",
     "paths": {
-      "@/utils": ["./src/utils"]
+      "@/utils": ["utils/index.ts"]
     }
   }
 }
