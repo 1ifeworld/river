@@ -23,7 +23,7 @@ export function ChannelModal() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className='bg-accent hover:bg-accent-hover text-[#FFFFFF] py-1 px-4 text-[13px] w-fit rounded '>
+      <DialogTrigger className='bg-river-accent hover:bg-river-accent-hover text-[#FFFFFF] py-1 px-4 text-[13px] w-fit rounded '>
         + Add
       </DialogTrigger>
 

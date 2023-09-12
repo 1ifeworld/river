@@ -55,12 +55,12 @@ export default function Page() {
           {/* Accent */}
           <Flex className='flex-col gap-2'>
             <BodySmall className='text-label'>Accent</BodySmall>
-            <Card size='sm' className='bg-accent' />
+            <Card size='sm' className='bg-river-accent' />
           </Flex>
           {/* Accent Hover */}
           <Flex className='flex-col gap-2'>
             <BodySmall className='text-label'>Accent Hover</BodySmall>
-            <Card size='sm' className='bg-accent-hover' />
+            <Card size='sm' className='bg-river-accent-hover' />
           </Flex>
         </Flex>
       </Flex>
