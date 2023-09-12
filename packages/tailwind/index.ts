@@ -60,8 +60,8 @@ export default {
       label: 'hsl(var(--label) / <alpha-value>)',
       'label-muted': 'hsl(var(--label-muted) / <alpha-value>)',
       'label-faint': 'hsl(var(--label-faint) / <alpha-value>)',
-      accent: 'hsl(var(--accent) / <alpha-value>)',
-      'accent-hover': 'hsl(var(--accent-hover) / <alpha-value>)',
+      'river-accent': 'hsl(var(--accent) / <alpha-value>)',
+      'river-accent-hover': 'hsl(var(--accent-hover) / <alpha-value>)',
     },
     extend: {
       fontFamily: {
