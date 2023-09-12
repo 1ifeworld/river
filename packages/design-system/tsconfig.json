@@ -1,11 +1,5 @@
 {
   "extends": "@river/tsconfig/react.json",
   "include": ["."],
-  "exclude": ["dist", "build", "node_modules"],
-  "compilerOptions": {
-    "baseUrl": "src/",
-    "paths": {
-      "@/utils": ["utils/index.ts"]
-    }
-  }
+  "exclude": ["dist", "build", "node_modules"]
 }
