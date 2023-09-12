@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useWeb3Storage } from "../../hooks/useWeb3Storage";
 import { Input, Button, Stack } from "@river/design-system";
 
-export default function ProfilePictureSetter() {
+export default function ChannelPictureSetter() {
     const [image, setImage] = useState<File | null>(null);
     const [cid, setCid] = useState<string>("");
     const [name, setName] = useState<string>("");
@@ -30,7 +30,7 @@ export default function ProfilePictureSetter() {
           description: description,
           image: `ipfs://${cid}`
         };
-        console.log("Contract Data:", contractUriData);
+        console.log("Data for Channel:", contractUriData);
       
         const blob = new Blob([JSON.stringify(contractUriData)], { type: 'application/json' });
         
