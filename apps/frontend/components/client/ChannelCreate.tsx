@@ -6,10 +6,7 @@ import {
   Headline,
   BodyLarge,
 } from "@river/design-system";
-import Image from "next/image";
-import { ChannelModal } from "./AddToChannelModal";
-import { shortenAddress } from "../../utils";
-import { Hex } from "viem";
+import Image from "next/image"; 
 import { Channel } from "../../gql/sdk.generated";
 import { ipfsToHttps } from "../../utils";
 import { useState } from "react";

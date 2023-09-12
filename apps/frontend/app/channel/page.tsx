@@ -1,7 +1,7 @@
 "use client";
 
 import { LanyardMerkle } from "../../components/client/ChannelUri/LanyardMerkle";
-import { Stack } from "@river/design-system";
+import { Flex, Stack } from "@river/design-system";
 import { ChannelCreate } from "../../components/client/ChannelCreate";
 import { useState, useEffect } from "react";
 
@@ -27,7 +27,14 @@ export default function Page() {
   setDescription={setDescription} 
   description={description}
 />
-      {/* <LanyardMerkle /> */}
+{/* <div>
+
+
+      <LanyardMerkle />
+
+
+      </div> */}
+
     </Stack>
   );
 }

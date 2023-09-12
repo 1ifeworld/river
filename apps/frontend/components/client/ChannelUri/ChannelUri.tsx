@@ -59,7 +59,7 @@ export function ChannelUri({
       <Input
         type="text"
         placeholder="Name"
-        className='px-2 w-[256px] h-[40px] border-[1.5px] rounded border-[#DADADA] focus-visible:ring-0'
+
         value={name}
         onChange={(e) => {
           setName(e.target.value);
@@ -68,15 +68,13 @@ export function ChannelUri({
       />
       <Input
         placeholder="Description"
-        value={description}
-        className='px-2 w-[256px] h-[40px] border-[1.5px] rounded border-[#DADADA] focus-visible:ring-0'
+
         onChange={(e) => {
           setDescription(e.target.value);
           console.log("Updated Description:", e.target.value);
         }}
       />
       <Input           
-      className='px-2 w-[256px] h-[40px] border-[1.5px] rounded border-[#DADADA] focus-visible:ring-0'
       type="file" onChange={handleImageChange} />
       <Button
         variant="outline"
