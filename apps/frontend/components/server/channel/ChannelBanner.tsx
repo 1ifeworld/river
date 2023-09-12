@@ -7,11 +7,11 @@ import {
   BodyLarge,
 } from '@river/design-system';
 import Image from 'next/image';
-import { ChannelModal } from '../client/AddToChannelModal';
-import { shortenAddress } from '../../utils/shortenAddress';
+import { ChannelModal } from '../../client/AddToChannelModal';
+import { shortenAddress } from '../../../utils/shortenAddress';
 import { Hex } from 'viem';
-import { Channel } from '../../gql/sdk.generated';
-import { ipfsToHttps } from '../../utils';
+import { Channel } from '../../../gql/sdk.generated';
+import { ipfsToHttps } from '../../../utils';
 
 export function ChannelBanner({ channels }: { channels: Channel }) {
   return (
