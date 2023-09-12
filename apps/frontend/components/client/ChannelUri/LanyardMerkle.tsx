@@ -12,9 +12,13 @@ export function LanyardMerkle() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (addresses.length === 0) {
+      console.error("No addresses provided.");
+      return;
+    }
     if (addresses.every(isValidAddress)) {
       const response = await createLanyardTree(addresses as `0x${string}`[]);
-      console.log(response); // Display the result in the console
+      console.log(response); 
       setAddresses([]);
     } else {
       console.error("One or more addresses are not valid.");
@@ -23,7 +27,14 @@ export function LanyardMerkle() {
 
   const handleAddAddress = () => {
     if (inputAddress) {
-      const newAddresses = inputAddress.split(",").map((addr) => addr.trim());
+      const newAddresses = inputAddress
+        .split(",")
+        .map((addr) => addr.trim())
+        .filter(isValidAddress); // Only add valid addresses
+      if (newAddresses.length === 0) {
+        console.error("No valid addresses provided.");
+        return;
+      }
       setAddresses((prev) => [...prev, ...newAddresses]);
       setInputAddress("");
     }
