@@ -10,8 +10,9 @@ import {
   C,
 } from '@river/design-system';
 import { Channel } from '../../gql/sdk.generated';
-import { truncateText } from '../../utils';
-import { ipfsToHttps } from '../../utils';
+import { truncateText, ipfsToHttps } from '../../utils';
+import { useGetAddressDisplay } from '../../hooks/useGetAddressDisplay';
+import { Hex } from 'viem';
 
 export function ChannelCard({
   channel,
@@ -20,6 +21,11 @@ export function ChannelCard({
   channel: Channel;
   className?: string;
 }) {
+  // Run useGetAddress hook on page load. Add in the display lag so that the cards dont jump 
+  // in place initially before display has fetched a value. always show at least the address,
+  // and correct it to the ens. This should be replaced by a server side solution
+  const { display } = useGetAddressDisplay(channel.createdBy as Hex)
+  const frontEndDisplayLagFix = display ? display : channel.createdBy as Hex  
   return (
     <Stack className={cn('gap-y-2', className)}>
       {/* Image */}
@@ -45,12 +51,12 @@ export function ChannelCard({
         </Flex>
         {channel.logicTransmitterMerkleAdmin[0].accounts ? (
           <BodySmall className='text-label-muted cursor-default'>
-            {truncateText(channel?.createdBy, 20)} +{' '}
+            {truncateText(frontEndDisplayLagFix, 20)} +{' '}
             {channel.logicTransmitterMerkleAdmin[0].accounts.length - 1} others
           </BodySmall>
         ) : (
           <BodySmall className='text-label-muted cursor-default'>
-            {truncateText(channel.createdBy, 30)}
+            {truncateText(frontEndDisplayLagFix, 30)}
           </BodySmall>
         )}
       </Stack>

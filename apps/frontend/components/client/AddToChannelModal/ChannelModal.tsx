@@ -11,6 +11,7 @@ import {
   DialogTrigger,
   Button,
   Debug,
+  Body,
   Exit,
 } from '@river/design-system';
 import { StateNav } from './StateNav';
@@ -23,10 +24,11 @@ export function ChannelModal() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className='bg-accent hover:bg-accent-hover text-[#FFFFFF] py-1 px-4 text-[13px] w-fit rounded '>
-        + Add
+      <DialogTrigger>
+        <Button className='w-[112px]'>
+          <Body className='font-medium'>+ Add</Body>
+        </Button>
       </DialogTrigger>
-
       <DialogContent className='flex flex-col border-[0.5px] rounded-[14px] border-base-border w-full sm:w-[488px] h-fit'>
         <Flex className='items-center px-4'>
           <StateNav

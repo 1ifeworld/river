@@ -11,7 +11,7 @@ export async function ListingNav({ listing }: { listing: any }) {
   });
 
   return (
-    <Flex className='pl-4 items-center h-[50px] border-b gap-x-[8px] border-base-border'>
+    <Flex className='pl-4 items-center h-[50px] border-b gap-x-[8px] border-base-shade'>
       <Link
         href={`/channel/${
           getAddress(extractAddressFromListingId(listing.id)) as string

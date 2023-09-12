@@ -4,6 +4,8 @@ import { Body, Card, BodySmall, Stack, cn } from '@river/design-system';
 import { truncateText } from '../../utils';
 import { Listing } from '../../gql/sdk.generated';
 import { extractAddressFromListingId } from '../../utils';
+import { useGetAddressDisplay } from '../../hooks/useGetAddressDisplay';
+import { Hex } from 'viem';
 
 export function ListingCard({
   listing,
@@ -12,6 +14,12 @@ export function ListingCard({
   listing: Listing;
   className?: string;
 }) {
+  // Run useGetAddress hook on page load. Add in the display lag so that the cards dont jump 
+  // in place initially before display has fetched a value. always show at least the address,
+  // and correct it to the ens. This should be replaced by a server side solution
+  const { display } = useGetAddressDisplay(listing?.listingTargetMetadata?.pieceCreator as Hex)
+  const frontEndDisplayLagFix = display ? display : listing?.listingTargetMetadata?.pieceCreator as Hex
+
   return (
     <Stack className={cn('gap-y-2', className)}>
       {/* Image */}
@@ -44,10 +52,7 @@ export function ListingCard({
           </Body>
         </Link>
         <BodySmall className='text-label-muted cursor-default'>
-          {truncateText(
-            listing?.listingTargetMetadata?.pieceCreator as string,
-            20
-          )}
+          {truncateText(frontEndDisplayLagFix, 30)}
         </BodySmall>
       </Stack>
     </Stack>

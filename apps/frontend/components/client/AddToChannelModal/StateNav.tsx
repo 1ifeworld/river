@@ -22,7 +22,7 @@ export function StateNav({
         <Body
           className={cn(
             activeTab === 'Upload'
-              ? 'text-label border-b-[2px] border-accent'
+              ? 'text-label border-b-[2px] border-primary'
               : '',
             'text-[14px]'
           )}
@@ -37,7 +37,7 @@ export function StateNav({
         <Body
           className={cn(
             activeTab === 'Search'
-              ? 'text-label border-b-[2px] border-accent'
+              ? 'text-label border-b-[2px] border-primary'
               : '',
             'text-[14px] focus:outline-none leading-[3rem] min-w-[64px]'
           )}
@@ -53,7 +53,7 @@ export function StateNav({
         <Body
           className={cn(
             activeTab === 'Text'
-              ? 'text-label border-b-[2px] border-accent'
+              ? 'text-label border-b-[2px] border-primary'
               : '',
             'text-[14px]'
           )}

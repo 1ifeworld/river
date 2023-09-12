@@ -103,6 +103,9 @@ importers:
 
   apps/frontend:
     dependencies:
+      '@basementdev/sdk':
+        specifier: ^1.0.9
+        version: 1.0.9
       '@parcel/watcher':
         specifier: ^2.3.0
         version: 2.3.0
@@ -1048,6 +1051,16 @@ packages:
       '@babel/helper-string-parser': 7.22.5
       '@babel/helper-validator-identifier': 7.22.15
       to-fast-properties: 2.0.0
+    dev: false
+
+  /@basementdev/sdk@1.0.9:
+    resolution: {integrity: sha512-l4hzWerSjno/Q6VzPqF26dl77cwDUMNVQYzTGBzXJ6Vhas/ZWX/V5jwo5D67h7F7OZztK+8zvUosF4nKiAx7rg==}
+    dependencies:
+      graphql: 16.8.0
+      graphql-request: 5.2.0(graphql@16.8.0)
+      graphql-tag: 2.12.6(graphql@16.8.0)
+    transitivePeerDependencies:
+      - encoding
     dev: false
 
   /@coinbase/wallet-sdk@3.7.1:
@@ -4969,6 +4982,10 @@ packages:
       tslib: 2.6.2
     dev: false
 
+  /asynckit@0.4.0:
+    resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
+    dev: false
+
   /atomic-sleep@1.0.0:
     resolution: {integrity: sha512-kNOjDqAh7px0XWNI+4QbzoiR/nTkHAWNud2uvnJquD1/x5a7EQZMJT0AczqK0Qn67oY/TTQ1LbUKajZpp3I9tQ==}
     engines: {node: '>=8.0.0'}
@@ -5569,6 +5586,13 @@ packages:
     resolution: {integrity: sha512-IfEDxwoWIjkeXL1eXcDiow4UbKjhLdq6/EuSVR9GMN7KVH3r9gQ83e73hsz1Nd1T3ijd5xv1wcWRYO+D6kCI2w==}
     dev: true
 
+  /combined-stream@1.0.8:
+    resolution: {integrity: sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==}
+    engines: {node: '>= 0.8'}
+    dependencies:
+      delayed-stream: 1.0.0
+    dev: false
+
   /comma-separated-tokens@2.0.3:
     resolution: {integrity: sha512-Fu4hJdvzeylCfQPp9SGWidpzrMs7tTrlu6Vb8XGaRGck8QSNZJJp538Wrb60Lax4fPwR64ViY468OIUTbRlGZg==}
     dev: false
@@ -5874,6 +5898,11 @@ packages:
   /delay@5.0.0:
     resolution: {integrity: sha512-ReEBKkIfe4ya47wlPYf/gu5ib6yUG0/Aez0JQZQz94kiWtRQvZIQbTiehsnwHvLSWJnQdhVeqYue7Id1dKr0qw==}
     engines: {node: '>=10'}
+    dev: false
+
+  /delayed-stream@1.0.0:
+    resolution: {integrity: sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==}
+    engines: {node: '>=0.4.0'}
     dev: false
 
   /depd@1.1.2:
@@ -6664,6 +6693,11 @@ packages:
     engines: {node: ^12.20 || >= 14.13}
     dev: true
 
+  /extract-files@9.0.0:
+    resolution: {integrity: sha512-CvdFfHkC95B4bBBk36hcEmvdR2awOdhhVUYH6S/zrVj3477zven/fJMYg7121h4T1xHZC+tetUpubpAhxwI7hQ==}
+    engines: {node: ^10.17.0 || ^12.0.0 || >= 13.7.0}
+    dev: false
+
   /eyes@0.1.8:
     resolution: {integrity: sha512-GipyPsXO1anza0AOZdy69Im7hGFCNB7Y/NGjDlZGJ3GJJLtwNSb2vrzYrTYJRrRloVx7pl+bhUaTB8yiccPvFQ==}
     engines: {node: '> 0.1.90'}
@@ -6885,6 +6919,15 @@ packages:
       is-callable: 1.2.7
     dev: false
 
+  /form-data@3.0.1:
+    resolution: {integrity: sha512-RHkBKtLWUVwd7SqRIvCZMEvAMoGUp0XU+seQiZejj0COz3RI3hWP4sCv3gZWWLjJTd7rGwcsF5eKZGii0r/hbg==}
+    engines: {node: '>= 6'}
+    dependencies:
+      asynckit: 0.4.0
+      combined-stream: 1.0.8
+      mime-types: 2.1.35
+    dev: false
+
   /formdata-polyfill@4.0.10:
     resolution: {integrity: sha512-buewHzMvYL29jdeQTVILecSaZKnt/RJWjoZCF5OW60Z67/GmSLBkOFM7qh1PI3zFNtJbaZL5eQu1vLfazOwj4g==}
     engines: {node: '>=12.20.0'}
@@ -7089,6 +7132,20 @@ packages:
       - encoding
       - utf-8-validate
     dev: true
+
+  /graphql-request@5.2.0(graphql@16.8.0):
+    resolution: {integrity: sha512-pLhKIvnMyBERL0dtFI3medKqWOz/RhHdcgbZ+hMMIb32mEPa5MJSzS4AuXxfI4sRAu6JVVk5tvXuGfCWl9JYWQ==}
+    peerDependencies:
+      graphql: 14 - 16
+    dependencies:
+      '@graphql-typed-document-node/core': 3.2.0(graphql@16.8.0)
+      cross-fetch: 3.1.8
+      extract-files: 9.0.0
+      form-data: 3.0.1
+      graphql: 16.8.0
+    transitivePeerDependencies:
+      - encoding
+    dev: false
 
   /graphql-request@6.1.0(graphql@16.8.0):
     resolution: {integrity: sha512-p+XPfS4q7aIpKVcgmnZKhMNqhltk20hfXtkaIkTfjjmiKMJ5xrt5c743cL03y/K7y1rg3WrIC49xGiEQ4mxdNw==}
