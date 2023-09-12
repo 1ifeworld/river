@@ -15,7 +15,7 @@ export default function Page() {
           Extra information displayed upon hovering
         </BodyLarge>
       </Stack>
-      <Stack className='gap-10'>
+      <Stack className='absolute space-y-10'>
         {/* Top */}
         <Tooltip
           content={

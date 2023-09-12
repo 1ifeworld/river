@@ -18,6 +18,8 @@ const TooltipTrigger = TooltipPrimitive.Trigger;
 
 const TooltipContent = TooltipPrimitive.Content;
 
+const TooltipPortal = TooltipPrimitive.Portal;
+
 export function Tooltip({ side, align, children, content }: TooltipProps) {
   return (
     <TooltipProvider>
@@ -25,14 +27,16 @@ export function Tooltip({ side, align, children, content }: TooltipProps) {
         <TooltipTrigger asChild className='cursor-pointer'>
           {children}
         </TooltipTrigger>
-        <TooltipContent
-          className='bg-base border-[0.5px] border-base-border px-5 py-4 rounded-[10px] shadow-sm'
-          sideOffset={4}
-          side={side}
-          align={align}
-        >
-          {content}
-        </TooltipContent>
+        <TooltipPortal>
+          <TooltipContent
+            className='bg-base border-[0.5px] border-base-border px-5 py-4 rounded-[10px] shadow-sm'
+            sideOffset={4}
+            side={side}
+            align={align}
+          >
+            {content}
+          </TooltipContent>
+        </TooltipPortal>
       </TooltipRoot>
     </TooltipProvider>
   );
@@ -41,5 +45,4 @@ export function Tooltip({ side, align, children, content }: TooltipProps) {
 // Unused Primitive Parts
 
 // TooltipPrimitive.Portal
-
 // TooltipPrimitive.Arrow;
