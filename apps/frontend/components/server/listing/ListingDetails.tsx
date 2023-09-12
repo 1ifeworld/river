@@ -1,12 +1,17 @@
 import { Body, Headline, Stack } from '@river/design-system';
+import { Hex } from 'viem';
+import { getAddressDisplay } from '../../../utils';
 
-export function ListingDetails({ listing }: { listing: any }) {
+export async function ListingDetails({ listing }: { listing: any }) {
+  // Attempt to resolve relevant address/ens before component renders
+  const creatorEnsOrAddress = await getAddressDisplay(listing?.listingTargetMetadata?.pieceCreator)
+
   return (
     <Stack className='p-6 gap-4'>
       <span className='inline-block pb-2'>
         <Headline>{listing?.listingTargetMetadata?.pieceName}</Headline>
         <Body className='text-label-muted'>
-          {listing?.listingTargetMetadata?.pieceCreator}
+          {creatorEnsOrAddress}
         </Body>
       </span>
       <span className='inline-block'>
