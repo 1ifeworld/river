@@ -1,51 +1,16 @@
-'use client';
+"use client";
 import React, { useState } from "react";
-import { useWeb3Storage } from "../../hooks/useWeb3Storage";
 
-import { Input, Button, Stack } from "@river/design-system";
-import { createLanyardTree } from "../../hooks";
+import { LanyardMerkle } from "../../components/client/ChannelUri/LanyardMerkle";
+import { Stack } from "@river/design-system";
+
 import { ChannelUri } from "../../components/client/ChannelUri/ChannelUri";
 
-function isValidAddress(address: string): address is `0x${string}` {
-  return address.startsWith('0x');
-}
-
-export default function  Page() {
-    const [addresses, setAddresses] = useState<string[]>([]);
-    const [inputAddress, setInputAddress] = useState<string>('');
-
-    
-    const handleSubmit = async (e: React.FormEvent) => {
-      e.preventDefault();
-      if (addresses.every(isValidAddress)) {
-        const response = await createLanyardTree(addresses as `0x${string}`[]);
-        console.log(response); // Display the result in the console
-        setAddresses([]);
-      } else {
-        console.error("One or more addresses are not valid.");
-      }
-    };
-    
-    const handleAddAddress = () => {
-      if (inputAddress) {
-        const newAddresses = inputAddress.split(',').map(addr => addr.trim());
-        setAddresses(prev => [...prev, ...newAddresses]);
-        setInputAddress('');
-      }
-    };
-
-    return (
-      <Stack>
+export default function Page() {
+  return (
+    <Stack>
       <ChannelUri />
-        <Input 
-          type="text" 
-          placeholder="Enter addresses separated by commas"
-          value={inputAddress}
-          onChange={(e) => setInputAddress(e.target.value)}
-        />
-        <Button onClick={handleAddAddress}>Add Addresses</Button>
-        <Button onClick={handleSubmit}>Create Lanyard Tree</Button>
-
-  </Stack>
-
-    )};
+      <LanyardMerkle />
+    </Stack>
+  );
+}
