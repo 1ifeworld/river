@@ -23,13 +23,13 @@ export function NewChannelContainer() {
   const { address } = useAccount();
   const initialAdmin = address ? address : zeroAddress;
 
-  // const pathname = usePathname();
-  // const router = useRouter();
+  const router = useRouter();
 
   const [imageCid, setImageCid] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [uriCid, setUriCid] = useState<string>("");
+  const [channelCreated, setChannelCreated] = useState(false)
   const [merkleRoot, setMerkleRoot] = useState<string>("");
 
   const { client } = useWeb3Storage(uriCid);
@@ -45,7 +45,6 @@ export function NewChannelContainer() {
     const file = new File([blob], "schema.json", { type: "application/json" });
     const schemaCid = await client.put([file], { wrapWithDirectory: false });
     setUriCid(`ipfs://${schemaCid}`)
-    console.log(`Schema CID: ${schemaCid}`);
   };
 
   /* setupPress Hook */
@@ -70,17 +69,30 @@ export function NewChannelContainer() {
     ),
     [[name, encodedUri, initialAdmin, logic, logicInit, renderer, rendererInit]]
   );
-
-  const { setupPressConfig, setupPress, setupPressLoading, setupPressSuccess } =
+  const { setupPress, setupPressTxnReceipt } =
     useSetupPress({
       factory: factory,
       data: setupInputs,
       prepareTxn: uriCid ? true : false
-      // successCallback: router.refresh,x
     });
 
-    console.log("uri cid ", uriCid)
-    console.log("setup pres config, ", setupPressConfig)
+  const newChannelRoute = setupPressTxnReceipt ? setupPressTxnReceipt.logs[0].address : undefined
+
+  // trigger channel creation once channel uri pinned and state has updated
+  useEffect(() => {
+    if (!!uriCid && !channelCreated && !!setupPress) {
+      setChannelCreated(true)
+      setupPress?.();        
+    }
+  }, [uriCid, setupPress]);  
+    
+
+  // trigger route change once channel creation is complete
+  useEffect(() => {
+    if (!!newChannelRoute) {
+      router.push(`/channel/${newChannelRoute}`);
+    }    
+  }, [newChannelRoute]);
 
 
 
@@ -98,9 +110,8 @@ export function NewChannelContainer() {
         />
         <LanyardMerkle onMerkleRootChange={setMerkleRoot} />
         <CreateChannelButton
-          createReady={!!imageCid && !!name && !!setupPressConfig}
-          handleUriUpload={handleUriUpload}
-          createTrigger={setupPress}
+          createReady={!!imageCid && !!name}
+          createTrigger={handleUriUpload}
         />
       </Flex>
     </Flex>
