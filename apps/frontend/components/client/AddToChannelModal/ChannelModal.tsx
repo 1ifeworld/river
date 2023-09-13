@@ -23,7 +23,8 @@ export function ChannelModal() {
   const [open, setOpen] = useState<boolean>(false);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    // open
+    <Dialog open={true} onOpenChange={setOpen}>
       <DialogTrigger>
         <Button className='w-[112px]'>
           <Body className='font-medium'>+ Add</Body>
