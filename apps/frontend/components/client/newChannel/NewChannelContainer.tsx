@@ -88,6 +88,8 @@ export function NewChannelContainer() {
 // trigger route change once channel creation is complete
 useEffect(() => {
   if (!!newChannelRoute) {
+    router.push(`/channel/${newChannelRoute}`);
+
     // Trigger revalidation for the home page
     fetch('/api/revalidate', {
       method: 'POST',
@@ -100,8 +102,6 @@ useEffect(() => {
     .then(data => {
       if (data.revalidated) {
         console.log('Home page revalidated successfully:', data);
-        // Navigate to the new channel route after revalidation
-        router.push(`/channel/${newChannelRoute}`);
       } else {
         console.error('Error triggering revalidation:', data.message);
       }
