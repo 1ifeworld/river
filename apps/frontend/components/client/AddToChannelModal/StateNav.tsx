@@ -1,19 +1,14 @@
 import React from 'react';
-import { Body, cn } from '@river/design-system';
+import { Body, Flex, cn } from '@river/design-system';
 
 interface StateNavProps {
   activeTab: string;
   setActiveTab: React.Dispatch<React.SetStateAction<string>>;
-  closeModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export function StateNav({
-  activeTab,
-  setActiveTab,
-  closeModal,
-}: StateNavProps) {
+export function StateNav({ activeTab, setActiveTab }: StateNavProps) {
   return (
-    <div className='flex justify-center text-label-muted w-full gap-x-7'>
+    <Flex className='justify-center w-full gap-x-7'>
       <button
         disabled
         onClick={() => setActiveTab('Upload')}
@@ -58,9 +53,9 @@ export function StateNav({
             'text-[14px] font-medium text-label-faint cursor-not-allowed'
           )}
         >
-          Text
+          Write
         </Body>
       </button>
-    </div>
+    </Flex>
   );
 }

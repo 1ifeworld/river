@@ -24,7 +24,7 @@ export function ChannelModal() {
 
   return (
     // open
-    <Dialog open={true} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
         <Button className='w-[112px]'>
           <Body className='font-medium'>+ Add</Body>
@@ -33,7 +33,7 @@ export function ChannelModal() {
       <DialogContent className='flex flex-col border-[0.5px] rounded-[14px] border-base-border w-full sm:w-[488px] h-fit'>
         <Flex className='items-center px-4'>
           <StateNav
-            closeModal={setOpen}
+            
             activeTab={activeTab}
             setActiveTab={setActiveTab}
           />
