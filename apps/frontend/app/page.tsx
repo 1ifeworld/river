@@ -6,14 +6,14 @@ import { ChannelCard } from '../components/client';
 export default async function Home() {
   const { channels } = await getAllChannels();
 
-  // const channelsWithNoName = channels.filter(
-  //   (channel) =>
-  //     channel?.contractUri?.image && channel.contractUri.image.trim() !== ''
-  // );
+  const channelsWithNoName = channels.filter(
+    (channel) =>
+      channel?.contractUri?.image && channel.contractUri.image.trim() !== ''
+  );
 
   return (
     <Flex className='m-[40px] flex-wrap gap-5 pb-4'>
-      {channels.map((validChannel: Channel) => (
+      {channelsWithNoName.map((validChannel: Channel) => (
         <ChannelCard key={validChannel.id} channel={validChannel} />
       ))}
     </Flex>
