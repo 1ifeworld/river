@@ -3,6 +3,7 @@ import { Hex } from "viem";
 import { getAdminChannels } from "../../../gql/requests/getAdmin";
 import { Channel } from '../../../gql/sdk.generated';
 import { Stack, Body } from '@river/design-system';
+import Link from 'next/link';
 
 interface AdminChannelsProps {
   address: Hex;
@@ -25,12 +26,15 @@ const AdminChannels: React.FC<AdminChannelsProps> = ({ address }) => {
     <Stack>
        <Body className='text-label-faint font-medium'>My Channels</Body>
 
-      <ul>
+       <ul>
         {adminChannels.map(channel => (
-                <Body className='text-label'key={channel?.contractUri?.name}>{channel?.contractUri?.name}</Body>
+          <li key={channel.id}>
+            <Link href={`/channel/${channel.id}`} passHref>
+              <Body className='text-label'>{channel?.contractUri?.name}</Body>
+            </Link>
+          </li>
         ))}
       </ul>
-
     </Stack>
   );
 }
