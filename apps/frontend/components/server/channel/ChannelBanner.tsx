@@ -12,6 +12,7 @@ import { ChannelModal } from '../../client/AddToChannelModal';
 import { Hex } from 'viem';
 import { Channel } from '../../../gql/sdk.generated';
 import { ipfsToHttps, shortenAddress, getAddressDisplay } from '../../../utils';
+import { truncateText } from '../../../utils';
 
 export async function ChannelBanner({ channels }: { channels: Channel }) {
   // Attempt to resolve relevant address/ens before component renders
@@ -38,7 +39,7 @@ export async function ChannelBanner({ channels }: { channels: Channel }) {
       <Stack className='h-full justify-end cursor-default'>
         <span className='inline-block mb-5'>
           <Headline className='font-medium text-label'>
-            {channels?.contractUri?.name
+            {truncateText(channels?.contractUri?.name ?? '', 20)
               ? channels?.contractUri?.name
               : 'Channel name missing'}
           </Headline>
