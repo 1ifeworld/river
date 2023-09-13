@@ -1,28 +1,13 @@
-import {
-  Stack,
-  Menu,
-  Flex,
-  Body,
-  Globe,
-  RiverIcon,
-  cn,
-} from '@river/design-system';
+import { Stack, Flex, Body, Globe, RiverIcon } from '@river/design-system';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
 import { Connect } from './Connect';
-import AdminChannels from './SidebarContent/isAdmin';
-import { useState } from 'react';
+import { AdminChannels } from './AdminChannels';
 import { Hex } from 'viem';
+import { useAccount } from 'wagmi';
 
 export function Sidebar() {
-  const [isConnected, setIsConnected] = useState(false);
-  const [authAddress, setAuthAddress] = useState<Hex | null>(null);
-
-
-  const handleConnect = (address: Hex) => {
-    setIsConnected(true);
-    setAuthAddress(address);
-  };
+  const { isConnected, address } = useAccount();
 
   return (
     <Stack className='hidden md:flex bg-base border-r border-base-shade h-screen sticky top-0 w-[210px] p-5'>
@@ -39,18 +24,11 @@ export function Sidebar() {
               <Body className='text-label'>
                 <Link href='/'>Home</Link>
               </Body>
-            
             </Flex>
           </Stack>
-          {/* <Body className='text-label-faint font-medium'>Favorites</Body> */}
-                  {/* Conditionally render the AdminChannels component */}
- 
-        {isConnected && authAddress && <AdminChannels address={authAddress} />}
+          {isConnected && <AdminChannels address={address as Hex} />}
         </span>
-     
-
-
-        <Connect onConnect={handleConnect} />
+        <Connect />
       </Stack>
     </Stack>
   );

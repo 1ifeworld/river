@@ -30,29 +30,26 @@ function Auth({ address, ensName }: { address?: Hex; ensName?: string }) {
   );
 }
 
-export function Connect({ onConnect }: { onConnect: (address: Hex) => void }) {
+export function Connect() {
   return (
     <ConnectKitButton.Custom>
       {({ isConnected, show, address, ensName }) => {
-        if (isConnected) {
-          onConnect(address as Hex); 
-          return <Auth address={address} ensName={ensName} />;
-        } else {
-          return (
-            <button
-              type='button'
-              onClick={show}
-              className='-m-2 hover:bg-base-hover hover:rounded-full transition-all p-2 min-w-[119px]'
-            >
-              <Flex className='items-center gap-[10px]'>
-                <Card className='h-[40px] w-[40px] bg-gradient-to-r from-[#5856D6] to-[#AF52DE] rounded-full' />
-                <Flex className='justify-center pr-2'>
-                  <Body className='text-label-muted'>Connect</Body>
-                </Flex>
+        return isConnected ? (
+          <Auth address={address} ensName={ensName} />
+        ) : (
+          <button
+            type='button'
+            onClick={show}
+            className='-m-2 hover:bg-base-hover hover:rounded-full transition-all p-2 min-w-[119px]'
+          >
+            <Flex className='items-center gap-[10px]'>
+              <Card className='h-[40px] w-[40px] bg-gradient-to-r from-[#5856D6] to-[#AF52DE] rounded-full' />
+              <Flex className='justify-center pr-2'>
+                <Body className='text-label-muted'>Connect</Body>
               </Flex>
-            </button>
-          );
-        }
+            </Flex>
+          </button>
+        );
       }}
     </ConnectKitButton.Custom>
   );
