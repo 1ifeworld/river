@@ -44,7 +44,7 @@ export function ChannelCard({
         <Flex className='justify-between items-center'>
           <Link href={`channel/${channel.id}`}>
             <Body className='text-label font-medium leading-[14px] hover:underline'>
-              {channel.contractUri?.name}
+            {truncateText(channel.contractUri?.name ?? '', 20)}
             </Body>
           </Link>
           <C />
