@@ -3,7 +3,7 @@ import {
     useContractWrite,
     useWaitForTransaction,
   } from 'wagmi';
-  import { PrepareWriteContractResult } from 'wagmi/actions';
+  import { PrepareWriteContractResult, WriteContractResult } from 'wagmi/actions';
   import { type Hex, type Hash, parseEther } from 'viem';
   import { routerAbi } from '../abi';
   import { router } from '../constants';
@@ -18,6 +18,7 @@ import {
   interface SetupPressReturn {
     setupPressConfig: PrepareWriteContractResult;
     setupPress: (() => void) | undefined;
+    setupPressResult: WriteContractResult | undefined;
     setupPressLoading: boolean;
     setupPressSuccess: boolean;
   }
@@ -37,12 +38,12 @@ import {
       enabled: prepareTxn,
     });
   
-    const { data: pressToSetup, write: setupPress } =
+    const { data: setupPressResult, write: setupPress } =
       useContractWrite(setupPressConfig);
   
     const { isLoading: setupPressLoading, isSuccess: setupPressSuccess } =
       useWaitForTransaction({
-        hash: pressToSetup?.hash,
+        hash: setupPressResult?.hash,
         onSuccess() {
           successCallback?.();
           console.log("success callback ran")
@@ -52,6 +53,7 @@ import {
     return {
       setupPressConfig,
       setupPress,
+      setupPressResult,
       setupPressLoading,
       setupPressSuccess,
     };

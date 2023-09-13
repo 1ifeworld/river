@@ -2,7 +2,7 @@ import {
   Flex,
 } from "@river/design-system";
 import { useWeb3Storage } from "../../../hooks/useWeb3Storage";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChannelUri } from "../ChannelUri/ChannelUri";
 import { CardWithUpload } from ".";
 import { CreateChannelButton } from ".";
@@ -29,6 +29,7 @@ export function NewChannelContainer() {
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [uriCid, setUriCid] = useState<string>("");
+  const [channelCreated, setChannelCreated] = useState(false)
 
   const { client } = useWeb3Storage(uriCid);
   const handleUriUpload = async () => {
@@ -43,7 +44,6 @@ export function NewChannelContainer() {
     const file = new File([blob], "schema.json", { type: "application/json" });
     const schemaCid = await client.put([file], { wrapWithDirectory: false });
     setUriCid(`ipfs://${schemaCid}`)
-    console.log(`Schema CID: ${schemaCid}`);
   };
 
   /* setupPress Hook */
@@ -77,8 +77,14 @@ export function NewChannelContainer() {
       // successCallback: router.refresh,x
     });
 
-    console.log("uri cid ", uriCid)
-    console.log("setup pres config, ", setupPressConfig)
+  // trigger channel creation once channel uri pinned and state has updated
+  useEffect(() => {
+    if (!!uriCid && !channelCreated && !!setupPress) {
+      setChannelCreated(true)
+      setupPress?.();        
+    }
+  }, [uriCid, setupPress]);  
+    
 
   return (
     <Flex className="gap-x-10 h-[248px]">
@@ -93,9 +99,8 @@ export function NewChannelContainer() {
           description={description}
         />
         <CreateChannelButton
-          createReady={!!imageCid && !!name && !!setupPressConfig}
-          handleUriUpload={handleUriUpload}
-          createTrigger={setupPress}
+          createReady={!!imageCid && !!name}
+          createTrigger={handleUriUpload}
         />
       </Flex>
     </Flex>
