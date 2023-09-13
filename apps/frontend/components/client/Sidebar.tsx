@@ -24,9 +24,12 @@ export function Sidebar() {
               <Body className='text-label'>
                 <Link href='/'>Home</Link>
               </Body>
-            </Flex>
+            </Flex>              
           </Stack>
           {isConnected && <AdminChannels address={address as Hex} />}
+          <Body className='text-label'>
+                <Link href='/channel'>+ Create Channel</Link>
+              </Body>
         </span>
         <Connect />
       </Stack>
