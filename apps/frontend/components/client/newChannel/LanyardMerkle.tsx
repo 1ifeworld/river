@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Input, Button, Stack } from "@river/design-system";
+import { Input, Stack } from "@river/design-system";
 import { createLanyardTree } from "../../../hooks";
 
 interface Props {
-  onMerkleRootChange?: (merkle: string) => void; 
+  onMerkleRootChange: (merkle: string) => void; 
 }
-export function LanyardMerkle({ onMerkleRootChange }: { onMerkleRootChange: (merkle: string) => void }) {
+
+export function LanyardMerkle({ onMerkleRootChange }: Props) {
   const [addresses, setAddresses] = useState<string[]>([]);
   const [inputAddress, setInputAddress] = useState<string>("");
   const [merkleRoot, setMerkleRoot] = useState<string>("")
-
 
   useEffect(() => {
     const generateTree = async () => {
@@ -17,50 +17,26 @@ export function LanyardMerkle({ onMerkleRootChange }: { onMerkleRootChange: (mer
         const response = await createLanyardTree(addresses);
         if (response && response.merkle) {
           setMerkleRoot(response.merkle);
-          if(onMerkleRootChange) {
-            onMerkleRootChange(response.merkle);
-          }
+          onMerkleRootChange(response.merkle);
         }
       }
     };
     generateTree();
   }, [addresses]);
 
-  
   function isValidAddress(address: string): address is `0x${string}` {
     return address.startsWith("0x");
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (addresses.length === 0) {
-      console.error("No addresses provided.");
-      return;
-    }
-    if (addresses.every(isValidAddress)) {
-      const response = await createLanyardTree(addresses as `0x${string}`[]);
-      console.log(response);
-      setAddresses([]);
-    } else {
-      console.error("One or more addresses are not valid.");
-    }
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newAddress = e.target.value;
+    setInputAddress(newAddress);
+    const newAddresses = newAddress
+      .split(",")
+      .map((addr) => addr.trim())
+      .filter(isValidAddress);
+    setAddresses(newAddresses);
   };
-
-  const handleAddAddress = () => {
-    if (inputAddress) {
-      const newAddresses = inputAddress
-        .split(",")
-        .map((addr) => addr.trim())
-        .filter(isValidAddress); // Only add valid addresses
-      if (newAddresses.length === 0) {
-        console.error("No valid addresses provided.");
-        return;
-      }
-      setAddresses((prev) => [...prev, ...newAddresses]);
-      setInputAddress("");
-    }
-  };
-
 
   return (
     <Stack>
@@ -68,24 +44,8 @@ export function LanyardMerkle({ onMerkleRootChange }: { onMerkleRootChange: (mer
         type="text"
         placeholder="Enter addresses separated by commas"
         value={inputAddress}
-        onChange={(e) => setInputAddress(e.target.value)}
+        onChange={handleInputChange}
       />
-      <Button
-        className="rounded w-full bg-accent hover:bg-accent-hover mb-4"
-        onClick={handleAddAddress}
-      >
-        Add Addresses
-      </Button>
-      <Button
-        className="rounded w-full bg-accent hover:bg-accent-hover mb-4"
-        onClick={() => {
-          if(merkleRoot) {
-            console.log(`Merkle root is: ${merkleRoot}`);
-          }
-        }}
-      >
-        Create Lanyard Tree
-      </Button>
     </Stack>
   );
 }

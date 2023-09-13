@@ -32,8 +32,6 @@ export function NewChannelContainer() {
   const [uriCid, setUriCid] = useState<string>("");
   const [merkleRoot, setMerkleRoot] = useState<string>("");
 
-
-
   const { client } = useWeb3Storage(uriCid);
   const handleUriUpload = async () => {
     const contractUriData = {
@@ -98,7 +96,7 @@ export function NewChannelContainer() {
           setDescription={setDescription}
           description={description}
         />
-          <LanyardMerkle onMerkleRootChange={setMerkleRoot} />
+        <LanyardMerkle onMerkleRootChange={setMerkleRoot} />
         <CreateChannelButton
           createReady={!!imageCid && !!name && !!setupPressConfig}
           handleUriUpload={handleUriUpload}
