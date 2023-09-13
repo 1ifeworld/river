@@ -4,6 +4,7 @@ import { getAdminChannels } from '../../gql/requests/getAdminChannels';
 import { type Channel } from '../../gql/sdk.generated';
 import { Stack, Body } from '@river/design-system';
 import Link from 'next/link';
+import { truncateText } from '../../utils';
 
 export function AdminChannels({ address }: { address: Hex }) {
   const [adminChannels, setAdminChannels] = useState<Channel[]>([]);
@@ -29,7 +30,7 @@ export function AdminChannels({ address }: { address: Hex }) {
         {adminChannels.map((channel) => (
           <li key={channel.id}>
             <Link href={`/channel/${channel.id}`} passHref>
-              <Body className='text-label'>{channel?.contractUri?.name}</Body>
+            <Body className='text-label'>{truncateText(channel?.contractUri?.name ?? '', 10)}</Body>
             </Link>
           </li>
         ))}
