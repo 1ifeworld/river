@@ -24,7 +24,7 @@ export function StateNav({
             activeTab === 'Upload'
               ? 'text-label border-b-[2px] border-primary'
               : '',
-            'text-[14px] font-medium'
+            'text-[14px] font-medium text-label-faint cursor-not-allowed'
           )}
         >
           Upload
@@ -39,7 +39,7 @@ export function StateNav({
             activeTab === 'Search'
               ? 'text-label border-b-[2px] border-primary'
               : '',
-            'text-[14px] focus:outline-none leading-[3rem] min-w-[64px] font-medium'
+            'text-[14px] leading-[3rem] min-w-[64px] font-medium'
           )}
         >
           Search
@@ -47,15 +47,15 @@ export function StateNav({
       </button>
       <button
         disabled
-        onClick={() => setActiveTab('Text')}
+        onClick={() => setActiveTab('Write')}
         className='focus:outline-none'
       >
         <Body
           className={cn(
-            activeTab === 'Text'
+            activeTab === 'Write'
               ? 'text-label border-b-[2px] border-primary'
               : '',
-            'text-[14px] font-medium'
+            'text-[14px] font-medium text-label-faint cursor-not-allowed'
           )}
         >
           Text
