@@ -8,7 +8,7 @@ export default async function Home() {
 
   const channelsWithNoName = channels.filter(
     (channel) =>
-      channel?.contractUri?.image && channel.contractUri.image.trim() !== ''
+      channel?.contractUri?.image !== ""
   );
 
   return (
