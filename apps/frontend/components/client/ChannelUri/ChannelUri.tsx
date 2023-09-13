@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { Input, Button, Stack, BodyLarge } from "@river/design-system";
-import { Channel } from "../../../gql/sdk.generated";
-import { useAccount } from "wagmi";
-import { useGetAddressDisplay } from "../../../hooks";
-import { zeroAddress } from "viem";
+import React, { useState } from 'react';
+import { Input, Button, Stack, BodyLarge } from '@river/design-system';
+import { Channel } from '../../../gql/sdk.generated';
+import { useAccount } from 'wagmi';
+import { useGetAddressDisplay } from '../../../hooks';
+import { zeroAddress } from 'viem';
 
 export function ChannelUri({
   name,
@@ -16,29 +16,30 @@ export function ChannelUri({
   setName: React.Dispatch<React.SetStateAction<string>>;
   setDescription: React.Dispatch<React.SetStateAction<string>>;
 }) {
-
-  const { address } = useAccount()
-  const { display } = useGetAddressDisplay(address? address : zeroAddress)
+  const { address } = useAccount();
+  const { display } = useGetAddressDisplay(address ? address : zeroAddress);
 
   return (
     <Stack>
       <Input
-        type="text"
-        placeholder="Name"
-        className=""
+        type='text'
+        variant='ghost'
+        size='lg'
+        placeholder='Channel Name'
         value={name}
         onChange={(e) => {
           setName(e.target.value);
-          console.log("Updated Name:", e.target.value);
+          console.log('Updated Name:', e.target.value);
         }}
       />
-      <BodyLarge className="text-label-muted">{display}</BodyLarge>
+      <BodyLarge className='text-label-muted'>{display}</BodyLarge>
       <Input
-        placeholder="Description"
-
+        type='text'
+        variant='ghost'
+        placeholder='Description'
         onChange={(e) => {
           setDescription(e.target.value);
-          console.log("Updated Description:", e.target.value);
+          console.log('Updated Description:', e.target.value);
         }}
       />
     </Stack>
