@@ -2,20 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  overflow: hidden;
-}
-
-code {
-  font-family: monospace;
-  background: rgba(0, 0, 0, 0.05);
-  white-space: pre-wrap;
-  overflow-wrap: break-word;
-  max-width: 728px;
-  font-size: 0.8rem;
-  width: 100%;
-}
-
 @layer base {
   :root {
     /* hsl(deg % % / <alpha-value>) */
@@ -32,13 +18,56 @@ code {
     --label-faint: 0deg 0% 76%;
 
     /* Accent */
-    --accent: 216deg 100% 58%;
-    --accent-hover: 216deg 73% 49%;
+    --river-accent: 216deg 100% 58%;
+    --river-accent-hover: 216deg 73% 49%;
 
     /* TODO: decide upon these colors */
     /* --base-selected: */
     /* --label-link:  */
-  }
+    /* --label-hover */
 
-  /* TODO: add values for dark mode */
+    /* shadcn styles */
+    --background: 0deg 0% 100%;
+    --foreground: 0deg 0% 15%;
+
+    --muted: 210deg 40% 96.1%; /* unchanged */
+    --muted-foreground: 215.4deg 16.3% 46.9%; /* unchanged */
+
+    --popover: 0deg 0% 100%;
+    --popover-foreground: 0deg 0% 15%;
+
+    --border: 0deg 0% 82%;
+    --input: 214.3deg 31.8% 91.4%; /* unchanged */
+
+    --card: 0deg 0% 100%;
+    --card-foreground: 0deg 0% 15%;
+
+    --primary: 216deg 100% 58%;
+    --primary-foreground: 0deg 0% 100%;
+
+    --secondary: 210deg 40% 96.1%; /* unchanged */
+    --secondary-foreground: 222.2deg 47.4% 11.2%; /* unchanged */
+
+    --accent: 210 40% 96.1%; /* unchanged */
+    --accent-foreground: 222.2 47.4% 11.2%; /* unchanged */
+
+    --destructive: 0 100% 50%; /* unchanged */
+    --destructive-foreground: 210 40% 98%; /* unchanged */
+
+    --ring: 215 20.2% 65.1%; /* unchanged */
+
+    --radius: 0.5rem; /* unchanged */
+
+    /* TODO: add values for dark mode */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+  }
 }

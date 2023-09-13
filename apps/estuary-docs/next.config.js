@@ -6,9 +6,6 @@ const nextConfig = {
     config.externals.push('pino-pretty', 'lokijs', 'encoding');
     return config;
   },
-  experimental: {
-    mdxRs: true,
-  },
   transpilePackages: ['@river/design-system'],
 };
 
