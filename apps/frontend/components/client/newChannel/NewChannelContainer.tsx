@@ -73,8 +73,6 @@ export function NewChannelContainer() {
     prepareTxn: uriCid ? true : false,
   });
 
-  console.log('Txn receipt', setupPressTxnReceipt)
-
   const newChannelRoute = setupPressTxnReceipt
     ? setupPressTxnReceipt.logs[0].address
     : undefined;
@@ -90,8 +88,9 @@ export function NewChannelContainer() {
   // trigger route change once channel creation is complete
   useEffect(() => {
     if (!!newChannelRoute) {
-      console.log("New channel route:", newChannelRoute);
-      // router.push(`/channel/${newChannelRoute}`);
+      setTimeout(() => {
+        router.push(`/channel/${newChannelRoute}`);
+      }, 1000);
     }
   }, [newChannelRoute]);
 

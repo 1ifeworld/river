@@ -2,7 +2,8 @@ import { type Hex } from 'viem';
 import { BasementSDK } from "@basementdev/sdk";
 import { shortenAddress } from '.';
 
-export async function getAddressDisplay(address: Hex) {
+// hex
+export async function getAddressDisplay(address: string) {
 
     const sdk = new BasementSDK({
         apiKey: process.env.NEXT_PUBLIC_BASEMENT_API,
@@ -17,5 +18,5 @@ export async function getAddressDisplay(address: Hex) {
     if (data?.reverseProfile?.name) {
         return data?.reverseProfile?.name
     }
-    return shortenAddress(address)    
+    return shortenAddress(address as Hex)    
 }
