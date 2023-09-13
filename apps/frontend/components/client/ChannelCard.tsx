@@ -48,11 +48,11 @@ export function ChannelCard({
             </Body>
           </Link>
           <C />
-        </Flex>
-        {channel.logicTransmitterMerkleAdmin[0].accounts ? (
+        </Flex>        
+        {channel?.logicTransmitterMerkleAdmin[0].accounts?.length as number > 1? (
           <BodySmall className='text-label-muted cursor-default'>
             {truncateText(frontEndDisplayLagFix, 20)} +{' '}
-            {channel.logicTransmitterMerkleAdmin[0].accounts.length - 1} others
+            {channel?.logicTransmitterMerkleAdmin[0].accounts?.length as number - 1} others
           </BodySmall>
         ) : (
           <BodySmall className='text-label-muted cursor-default'>

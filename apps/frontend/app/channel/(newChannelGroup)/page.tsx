@@ -1,9 +1,9 @@
 "use client";
 
-import { LanyardMerkle } from "../../components/client/ChannelUri/LanyardMerkle";
+import { LanyardMerkle } from "../../../components/client/ChannelUri/LanyardMerkle";
 import { Flex, Stack } from "@river/design-system";
-import { ChannelCreate } from "../../components/client/newChannel/ChannelCreate";
-import { NewChannelContainer } from "../../components/client/newChannel/NewChannelContainer";
+import { ChannelCreate } from "../../../components/client/newChannel/ChannelCreate";
+import { NewChannelContainer } from "../../../components/client/newChannel/NewChannelContainer";
 import { useState, useEffect } from "react";
 
 export default function Page() {
@@ -14,6 +14,7 @@ export default function Page() {
   return (
     <Stack>
       <NewChannelContainer />
+
       {/* <div>
 
 
