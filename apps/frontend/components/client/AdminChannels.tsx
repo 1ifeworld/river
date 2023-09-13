@@ -20,6 +20,8 @@ export function AdminChannels({ address }: { address: Hex }) {
     })();
   }, [address]);
 
+  if (adminChannels.length === 0) return null;
+
   return (
     <Stack>
       <Body className='text-label-faint font-medium mb-2'>My Channels</Body>
