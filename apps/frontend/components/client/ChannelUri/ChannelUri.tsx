@@ -36,7 +36,7 @@ export function ChannelUri({
       <Input
         type='text'
         variant='ghost'
-        placeholder='Description'
+        placeholder='Add description'
         onChange={(e) => {
           setDescription(e.target.value);
           console.log('Updated Description:', e.target.value);
