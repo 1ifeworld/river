@@ -16,14 +16,13 @@ import {
 } from "viem";
 import { factory, logic, renderer } from "../../../constants";
 import { useAccount } from "wagmi";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export function NewChannelContainer() {
   const { address } = useAccount();
   const initialAdmin = address ? address : zeroAddress;
 
-  // const pathname = usePathname();
-  // const router = useRouter();
+  const router = useRouter();
 
   const [imageCid, setImageCid] = useState<string>("");
   const [name, setName] = useState<string>("");
@@ -68,14 +67,14 @@ export function NewChannelContainer() {
     ),
     [[name, encodedUri, initialAdmin, logic, logicInit, renderer, rendererInit]]
   );
-
-  const { setupPressConfig, setupPress, setupPressLoading, setupPressSuccess } =
+  const { setupPress, setupPressTxnReceipt } =
     useSetupPress({
       factory: factory,
       data: setupInputs,
       prepareTxn: uriCid ? true : false
-      // successCallback: router.refresh,x
     });
+
+  const newChannelRoute = setupPressTxnReceipt ? setupPressTxnReceipt.logs[0].address : undefined
 
   // trigger channel creation once channel uri pinned and state has updated
   useEffect(() => {
@@ -85,6 +84,13 @@ export function NewChannelContainer() {
     }
   }, [uriCid, setupPress]);  
     
+
+  // trigger route change once channel creation is complete
+  useEffect(() => {
+    if (!!newChannelRoute) {
+      router.push(`/channel/${newChannelRoute}`);
+    }    
+  }, [newChannelRoute]);
 
   return (
     <Flex className="gap-x-10 h-[248px]">

@@ -4,7 +4,7 @@ import {
     useWaitForTransaction,
   } from 'wagmi';
   import { PrepareWriteContractResult, WriteContractResult } from 'wagmi/actions';
-  import { type Hex, type Hash, parseEther } from 'viem';
+  import { type Hex, type Hash, type TransactionReceipt } from 'viem';
   import { routerAbi } from '../abi';
   import { router } from '../constants';
   
@@ -19,6 +19,7 @@ import {
     setupPressConfig: PrepareWriteContractResult;
     setupPress: (() => void) | undefined;
     setupPressResult: WriteContractResult | undefined;
+    setupPressTxnReceipt: TransactionReceipt | undefined
     setupPressLoading: boolean;
     setupPressSuccess: boolean;
   }
@@ -41,19 +42,23 @@ import {
     const { data: setupPressResult, write: setupPress } =
       useContractWrite(setupPressConfig);
   
-    const { isLoading: setupPressLoading, isSuccess: setupPressSuccess } =
+    const { data: setupPressTxnReceipt, isLoading: setupPressLoading, isSuccess: setupPressSuccess } =
       useWaitForTransaction({
         hash: setupPressResult?.hash,
         onSuccess() {
+          console.log("txn complete data: ", setupPressTxnReceipt )
           successCallback?.();
           console.log("success callback ran")
         },
       });
   
+      console.log("seuptPress txn receipt", setupPressTxnReceipt)
+
     return {
       setupPressConfig,
-      setupPress,
+      setupPress,      
       setupPressResult,
+      setupPressTxnReceipt,
       setupPressLoading,
       setupPressSuccess,
     };
