@@ -9,6 +9,7 @@ import {
   SearchIcon,
   Body,
   Label,
+  Stack,
 } from '@river/design-system';
 
 import { Input } from '@river/design-system/src/components/Input';
@@ -18,7 +19,6 @@ import useGetTokenMetadata from '../../../../../hooks/useGetTokenMetadata';
 import { Nft } from 'alchemy-sdk';
 import Image from 'next/image';
 import { Ethereum } from '@river/design-system';
-
 
 interface NetworkSelectProps {
   selectedNetwork: number;
@@ -41,15 +41,13 @@ function NetworkSelect({
         className='w-fit h-[40px] border-[1.5px] border-[#DADADA] focus:ring-0'
       >
         <SelectValue>
-        <Ethereum/>
+          <Ethereum />
         </SelectValue>
       </SelectTrigger>
       <SelectContent>
         {Object.entries(networks).map(([networkId, networkName]) => (
           <SelectItem key={networkId} value={networkId}>
-            <Flex className='rounded items-center px-2 my-2 w-[162px]'>
-              <Body>{networkName}</Body>
-            </Flex>
+            <Body className='text-label'>{networkName}</Body>
           </SelectItem>
         ))}
       </SelectContent>
@@ -103,9 +101,9 @@ const SearchInput = ({
   }, [network, contractAddress, tokenId]);
 
   return (
-    <Flex className='item-center justify-between'>
+    <Flex className='items-center justify-between'>
       {/* Network select */}
-      <Flex className='flex-col gap-y-1'>
+      <Stack className='gap-y-1'>
         <Label
           htmlFor='networkSelect'
           className='text-[#7B7B7B] w-fit text-[10px]'
@@ -117,7 +115,7 @@ const SearchInput = ({
           selectedNetwork={network}
           setSelectedNetwork={setNetwork}
         />
-      </Flex>
+      </Stack>
       {/* Address input */}
       <Flex className='flex-col gap-y-1'>
         <Label

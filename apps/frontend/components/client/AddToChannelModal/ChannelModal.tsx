@@ -1,18 +1,15 @@
 'use client';
+
 import React, { useState } from 'react';
 
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
   Button,
-  Debug,
   Body,
   Exit,
+  Stack,
 } from '@river/design-system';
 import { StateNav } from './StateNav';
 import { SearchContainer } from './states/search/SearchContainer';
@@ -24,18 +21,14 @@ export function ChannelModal() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>
+      <DialogTrigger className='focus-outline:none'>
         <Button className='w-[112px]'>
           <Body className='font-medium'>+ Add</Body>
         </Button>
       </DialogTrigger>
-      <DialogContent className='flex flex-col border-[0.5px] rounded-[14px] border-base-border w-full sm:w-[488px] h-fit'>
+      <DialogContent className='flex flex-col border-[0.5px] border-base-border rounded-[14px] h-fit'>
         <Flex className='items-center px-4'>
-          <StateNav
-            closeModal={setOpen}
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-          />
+          <StateNav activeTab={activeTab} setActiveTab={setActiveTab} />
           <Button
             onClick={() => setOpen(false)}
             variant='outline'
