@@ -85,12 +85,32 @@ export function NewChannelContainer() {
     }
   }, [uriCid, setupPress]);
 
-  // trigger route change once channel creation is complete
-  useEffect(() => {
-    if (!!newChannelRoute) {
-      router.push(`/channel/${newChannelRoute}`);
-    }
-  }, [newChannelRoute]);
+// trigger route change once channel creation is complete
+useEffect(() => {
+  if (!!newChannelRoute) {
+    // Trigger revalidation for the home page
+    fetch('/api/revalidate', {
+      method: 'POST',
+      body: JSON.stringify({ path: '/' }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.revalidated) {
+        console.log('Home page revalidated successfully:', data);
+        // Navigate to the new channel route after revalidation
+        router.push(`/channel/${newChannelRoute}`);
+      } else {
+        console.error('Error triggering revalidation:', data.message);
+      }
+    })
+    .catch(error => {
+      console.error('Failed to trigger revalidation:', error);
+    });
+  }
+}, [newChannelRoute]);
 
   return (
     <Flex className='gap-x-10 h-[248px]'>
