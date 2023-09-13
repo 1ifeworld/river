@@ -44,9 +44,10 @@ export async function ChannelBanner({ channels }: { channels: Channel }) {
           </Headline>
           <BodyLarge className='text-label-muted'>
             {creatorEnsOrAddress}
-            {channels?.logicTransmitterMerkleAdmin[0].accounts?.length
+            
+            {channels?.logicTransmitterMerkleAdmin[0].accounts?.length as number > 1
               ? ` + ${
-                  channels.logicTransmitterMerkleAdmin[0].accounts.length - 1
+                  channels?.logicTransmitterMerkleAdmin[0].accounts?.length as number - 1
                 } others`
               : ''}
           </BodyLarge>

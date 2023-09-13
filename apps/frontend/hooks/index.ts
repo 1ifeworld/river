@@ -1,5 +1,6 @@
 export * from './useRemoveData'
 export * from './useSendData'
+export * from './useSetupPress'
 export * from './useUpdatePressData'
 export * from './useGetTokenMetadata'
 export * from './useMediaQuery'
