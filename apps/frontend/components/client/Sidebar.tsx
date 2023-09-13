@@ -42,12 +42,13 @@ export function Sidebar() {
             
             </Flex>
           </Stack>
-          <Body className='text-label-faint font-medium'>Favorites</Body>
-        </span>
-     
-        {/* Conditionally render the AdminChannels component */}
+          {/* <Body className='text-label-faint font-medium'>Favorites</Body> */}
+                  {/* Conditionally render the AdminChannels component */}
  
         {isConnected && authAddress && <AdminChannels address={authAddress} />}
+        </span>
+     
+
 
         <Connect onConnect={handleConnect} />
       </Stack>
