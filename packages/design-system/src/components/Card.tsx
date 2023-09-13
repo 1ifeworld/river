@@ -12,6 +12,7 @@ const cardVariants = cva(
         sm: 'min-h-[160px] min-w-[160px] rounded',
         lg: 'min-h-[248px] min-w-[248px] rounded-[7px]',
         icon: 'min-h-[48px] min-w-[48px] rounded-[1.5px]',
+        auth: 'min-h-[40px] min-w-[40px] rounded-full',
       },
     },
     defaultVariants: {
