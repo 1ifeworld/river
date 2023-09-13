@@ -8,10 +8,10 @@ const cardVariants = cva(
   {
     variants: {
       size: {
-        default: 'h-[224px] w-[224px] rounded',
-        sm: 'h-[160px] w-[160px] rounded',
-        lg: 'h-[248px] w-[248px] rounded-[6.5px]',
-        icon: 'h-[48px] w-[48px] rounded-[1.5px]',
+        default: 'min-h-[224px] min-w-[224px] rounded',
+        sm: 'min-h-[160px] min-w-[160px] rounded',
+        lg: 'min-h-[248px] min-w-[248px] rounded-[7px]',
+        icon: 'min-h-[48px] min-w-[48px] rounded-[1.5px]',
       },
     },
     defaultVariants: {

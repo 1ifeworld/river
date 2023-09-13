@@ -43,9 +43,9 @@ export default {
         },
       ],
       '2xl': [
-        '2.188rem',
+        '1.625rem',
         {
-          lineHeight: '2.75rem',
+          lineHeight: '2.5rem',
           letterSpacing: '0.013em',
           fontWeight: '700',
         },
