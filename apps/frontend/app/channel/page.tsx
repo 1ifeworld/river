@@ -2,9 +2,9 @@
 
 import { LanyardMerkle } from "../../components/client/ChannelUri/LanyardMerkle";
 import { Flex, Stack } from "@river/design-system";
-import { ChannelCreate } from "../../components/client/ChannelCreate";
+import { ChannelCreate } from "../../components/client/newChannel/ChannelCreate";
+import { NewChannelContainer } from "../../components/client/newChannel/NewChannelContainer";
 import { useState, useEffect } from "react";
-
 
 export default function Page() {
   const [cid, setCid] = useState<string>("");
@@ -13,22 +13,14 @@ export default function Page() {
 
   return (
     <Stack>
-<ChannelCreate 
-  setCid={setCid}
-  cid={cid}
-  name={name}
-  setName={setName} 
-  setDescription={setDescription} 
-  description={description}
-/>
-{/* <div>
+      <NewChannelContainer />
+      {/* <div>
 
 
       <LanyardMerkle />
 
 
       </div> */}
-
     </Stack>
   );
 }
