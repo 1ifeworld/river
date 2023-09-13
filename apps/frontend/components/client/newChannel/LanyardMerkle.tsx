@@ -1,11 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Input, Button, Stack } from "@river/design-system";
 import { createLanyardTree } from "../../../hooks";
 
-export function LanyardMerkle() {
+interface Props {
+  onMerkleRootChange?: (merkle: string) => void; 
+}
+export function LanyardMerkle({ onMerkleRootChange }: { onMerkleRootChange: (merkle: string) => void }) {
   const [addresses, setAddresses] = useState<string[]>([]);
   const [inputAddress, setInputAddress] = useState<string>("");
+  const [merkleRoot, setMerkleRoot] = useState<string>("")
 
+
+  useEffect(() => {
+    const generateTree = async () => {
+      if (addresses.every(isValidAddress)) {
+        const response = await createLanyardTree(addresses);
+        if (response && response.merkle) {
+          setMerkleRoot(response.merkle);
+          if(onMerkleRootChange) {
+            onMerkleRootChange(response.merkle);
+          }
+        }
+      }
+    };
+    generateTree();
+  }, [addresses]);
+
+  
   function isValidAddress(address: string): address is `0x${string}` {
     return address.startsWith("0x");
   }
@@ -40,6 +61,7 @@ export function LanyardMerkle() {
     }
   };
 
+
   return (
     <Stack>
       <Input
@@ -56,7 +78,11 @@ export function LanyardMerkle() {
       </Button>
       <Button
         className="rounded w-full bg-accent hover:bg-accent-hover mb-4"
-        onClick={handleSubmit}
+        onClick={() => {
+          if(merkleRoot) {
+            console.log(`Merkle root is: ${merkleRoot}`);
+          }
+        }}
       >
         Create Lanyard Tree
       </Button>

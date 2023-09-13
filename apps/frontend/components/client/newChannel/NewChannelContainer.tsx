@@ -2,7 +2,7 @@ import {
   Flex,
 } from "@river/design-system";
 import { useWeb3Storage } from "../../../hooks/useWeb3Storage";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChannelUri } from "../ChannelUri/ChannelUri";
 import { CardWithUpload } from ".";
 import { CreateChannelButton } from ".";
@@ -17,6 +17,7 @@ import {
 import { factory, logic, renderer } from "../../../constants";
 import { useAccount } from "wagmi";
 import { usePathname, useRouter } from "next/navigation";
+import { LanyardMerkle } from "./LanyardMerkle";
 
 export function NewChannelContainer() {
   const { address } = useAccount();
@@ -29,6 +30,9 @@ export function NewChannelContainer() {
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [uriCid, setUriCid] = useState<string>("");
+  const [merkleRoot, setMerkleRoot] = useState<string>("");
+
+
 
   const { client } = useWeb3Storage(uriCid);
   const handleUriUpload = async () => {
@@ -80,6 +84,8 @@ export function NewChannelContainer() {
     console.log("uri cid ", uriCid)
     console.log("setup pres config, ", setupPressConfig)
 
+
+
   return (
     <Flex className="gap-x-10 h-[248px]">
       {/* First Column: Channel image upload */}
@@ -92,6 +98,7 @@ export function NewChannelContainer() {
           setDescription={setDescription}
           description={description}
         />
+          <LanyardMerkle onMerkleRootChange={setMerkleRoot} />
         <CreateChannelButton
           createReady={!!imageCid && !!name && !!setupPressConfig}
           handleUriUpload={handleUriUpload}
