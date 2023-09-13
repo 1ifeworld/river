@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import SearchGallery from './SearchGallery';
 import SearchInput from './SearchInput';
 import SearchAction from './SearchAction';
@@ -11,13 +11,11 @@ import {
   parseAbiParameters,
   zeroAddress,
   isAddress,
-  getAddress
+  getAddress,
 } from 'viem';
-import { Debug, Flex } from '@river/design-system';
-import { type Listing} from '../../../../../types/types';
+import { Stack } from '@river/design-system';
+import { type Listing } from '../../../../../types/types';
 import { usePathname, useRouter } from 'next/navigation';
-
-
 
 export function SearchContainer() {
   const [searchParams, setSearchParams] = useState<Listing>({
@@ -27,27 +25,27 @@ export function SearchContainer() {
     hasTokenId: true,
   });
   const [searchResults, setSearchResults] = useState<Nft | undefined>();
-  const pathname = usePathname()
-  const cleanedPathname = getAddress(pathname.slice(9))
+  const pathname = usePathname();
+  const cleanedPathname = getAddress(pathname.slice(9));
   const router = useRouter();
 
-
-const handleSetSearchParams = (updatedParams: {
+  const handleSetSearchParams = (updatedParams: {
     network?: number | undefined;
     contractAddress?: string | undefined;
     tokenId?: string | undefined;
-}) => {
+  }) => {
     setSearchParams((prev) => ({
       ...prev,
       chainId: updatedParams.network
         ? BigInt(updatedParams.network)
         : prev.chainId,
-      listingAddress: (updatedParams.contractAddress || prev.listingAddress) as Hex,
+      listingAddress: (updatedParams.contractAddress ||
+        prev.listingAddress) as Hex,
       tokenId: updatedParams.tokenId
         ? BigInt(updatedParams.tokenId)
         : prev.tokenId,
     }));
-};
+  };
 
   /* sendData Hook */
   const sendInputs: Hash = encodeAbiParameters(
@@ -62,7 +60,7 @@ const handleSetSearchParams = (updatedParams: {
           searchParams.chainId,
           searchParams.tokenId,
           isAddress(searchParams.listingAddress as Hex)
-            ? searchParams.listingAddress as Hex
+            ? (searchParams.listingAddress as Hex)
             : zeroAddress,
           searchParams.hasTokenId as boolean,
         ],
@@ -80,20 +78,20 @@ const handleSetSearchParams = (updatedParams: {
     });
 
   return (
-    <Flex className='flex-col justify-center gap-4'>
+    <Stack className='justify-center gap-4'>
       <SearchGallery nftMetadata={searchResults} />
-      <Flex className='flex-col gap-y-4 mx-[18px]'>
+      <Stack className='gap-y-4 mx-[18px]'>
         <SearchInput
           searchResults={searchResults}
           setSearchResults={setSearchResults}
           setSearchParams={handleSetSearchParams}
-        />  
+        />
         <SearchAction
           nameOfAdd={searchResults?.title}
           addReady={!!sendDataConfig ? true : false}
           addTrigger={sendData}
         />
-      </Flex>
-    </Flex>
+      </Stack>
+    </Stack>
   );
 }
