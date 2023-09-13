@@ -37,14 +37,14 @@ export function ChannelModal() {
             activeTab={activeTab}
             setActiveTab={setActiveTab}
           />
-          <Button
+          {/* <Button
             onClick={() => setOpen(false)}
             variant='outline'
             size='icon'
             className='rounded-full w-[18px] h-[18px] bg-[#BEBEBE] border-none bg-[#F2F2F2] hover:bg-[#A8A8A8]'
           >
             <Exit className='stroke-[#393939] hover:stroke-[#FEFEFE]' />
-          </Button>
+          </Button> */}
         </Flex>
         {activeTab === 'Search' ? <SearchContainer /> : null}
       </DialogContent>

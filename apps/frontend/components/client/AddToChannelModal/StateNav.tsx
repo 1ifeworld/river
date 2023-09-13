@@ -24,7 +24,7 @@ export function StateNav({
             activeTab === 'Upload'
               ? 'text-label border-b-[2px] border-primary'
               : '',
-            'text-[14px]'
+            'text-[14px] font-medium'
           )}
         >
           Upload
@@ -39,7 +39,7 @@ export function StateNav({
             activeTab === 'Search'
               ? 'text-label border-b-[2px] border-primary'
               : '',
-            'text-[14px] focus:outline-none leading-[3rem] min-w-[64px]'
+            'text-[14px] focus:outline-none leading-[3rem] min-w-[64px] font-medium'
           )}
         >
           Search
@@ -55,7 +55,7 @@ export function StateNav({
             activeTab === 'Text'
               ? 'text-label border-b-[2px] border-primary'
               : '',
-            'text-[14px]'
+            'text-[14px] font-medium'
           )}
         >
           Text
