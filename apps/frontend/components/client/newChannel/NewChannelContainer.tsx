@@ -88,10 +88,9 @@ export function NewChannelContainer() {
   // trigger route change once channel creation is complete
   useEffect(() => {
     if (!!newChannelRoute) {
-      router.push(`/channel/${newChannelRoute}`)
       setTimeout(() => {
         router.push(`/channel/${newChannelRoute}`);
-      }, 2000);
+      }, 5000);
     }
   }, [newChannelRoute]);
 
