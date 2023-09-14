@@ -13,7 +13,7 @@ export default async function Home() {
   )
 
   return (
-    <Flex className="m-[40px] flex-wrap gap-5 pb-4">
+    <Flex className="m-10 flex-wrap gap-5 pb-4">
       {channelsWithNoName.map((validChannel: Channel) => (
         <ChannelCard key={validChannel.id} channel={validChannel} />
       ))}

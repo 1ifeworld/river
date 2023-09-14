@@ -40,7 +40,7 @@ export function Connect() {
           <button
             type="button"
             onClick={show}
-            className="-m-2 hover:bg-base-hover hover:rounded-full transition-all p-2 min-w-[119px]"
+            className="-m-2 hover:bg-base-hover hover:rounded-full transition-all p-2 max-w-[120px]"
           >
             <Flex className="items-center gap-[10px]">
               <div className="min-h-[40px] min-w-[40px] bg-gradient-to-r from-[#5856D6] to-[#AF52DE] rounded-full" />

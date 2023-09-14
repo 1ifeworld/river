@@ -1,10 +1,10 @@
-import { getChannel } from '../../../../gql/requests/getChannel'
-import { Flex } from '@river/design-system'
+import { getChannel } from '../../../gql/requests/getChannel'
+import { Stack } from '@river/design-system'
 import {
   ChannelBanner,
   ChannelBody,
-} from '../../../../components/server/channel'
-import { type Channel } from '../../../../gql/sdk.generated'
+} from '../../../components/server/channel'
+import { type Channel } from '../../../gql/sdk.generated'
 import { getAddress } from 'viem'
 
 export default async function Channel({
@@ -17,9 +17,9 @@ export default async function Channel({
   })
 
   return (
-    <Flex className="flex-col my-[80px] gap-y-[88px]">
+    <Stack className="m-10 gap-y-[88px]">
       <ChannelBanner channels={channels?.[0]} />
       <ChannelBody listings={channels[0]?.listings} />
-    </Flex>
+    </Stack>
   )
 }
