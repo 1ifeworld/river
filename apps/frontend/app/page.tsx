@@ -9,12 +9,11 @@ export default async function Home() {
   const { channels } = await getAllChannels()
 
   const channelsWithNoName = channels.filter(
-    (channel) =>
-      channel?.contractUri?.image !== ""
-  );
+    (channel) => channel?.contractUri?.image !== '',
+  )
 
   return (
-    <Flex className="m-[40px] flex-wrap gap-5 pb-4">
+    <Flex className="m-10 flex-wrap gap-5 pb-4">
       {channelsWithNoName.map((validChannel: Channel) => (
         <ChannelCard key={validChannel.id} channel={validChannel} />
       ))}

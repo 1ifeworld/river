@@ -10,7 +10,7 @@ export function Sidebar() {
   const { isConnected, address } = useAccount()
 
   return (
-    <Stack className="hidden md:flex bg-base border-r border-base-shade h-screen sticky top-0 w-[210px] p-5">
+    <Stack className="hidden md:flex bg-base border-r border-base-shade h-screen sticky top-0 p-5">
       <Stack className="justify-between h-full">
         <span>
           <RiverIcon />

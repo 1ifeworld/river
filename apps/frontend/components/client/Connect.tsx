@@ -11,7 +11,7 @@ function Auth({ address, ensName }: { address?: Hex; ensName?: string }) {
     <button
       type="button"
       onClick={() => disconnect()}
-      className="-m-2 hover:bg-base-hover hover:rounded-full transition-all p-2"
+      className="-m-2 hover:bg-base-hover hover:rounded-full transition-all p-2 min-w-[128px]"
     >
       <Flex className="items-center gap-[10px]">
         <Avatar address={address} size={40} />
@@ -40,7 +40,7 @@ export function Connect() {
           <button
             type="button"
             onClick={show}
-            className="-m-2 hover:bg-base-hover hover:rounded-full transition-all p-2 min-w-[119px]"
+            className="-m-2 hover:bg-base-hover hover:rounded-full transition-all p-2 min-w-[128px]"
           >
             <Flex className="items-center gap-[10px]">
               <div className="min-h-[40px] min-w-[40px] bg-gradient-to-r from-[#5856D6] to-[#AF52DE] rounded-full" />

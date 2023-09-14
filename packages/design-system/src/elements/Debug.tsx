@@ -6,7 +6,7 @@ type DebugProps = PropsWithChildren<{
 }>
 
 export function Debug(props: DebugProps) {
-  return <div className={cn('border border-red-500', props.className)}>{props.children}</div>
+  return <div className={cn('border border-[#39FF14]', props.className)}>{props.children}</div>
 }
 
 Debug.displayName = 'Debug'

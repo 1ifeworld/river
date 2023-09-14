@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
-import { type Hex } from "viem";
-import { getAddressDisplay } from "../utils";
+import { useState, useEffect } from 'react'
+import { type Hex } from 'viem'
+import { getAddressDisplay } from '../utils'
 
 export function useGetAddressDisplay(address: Hex) {
-  const [display, setDisplay] = useState("");
+  const [display, setDisplay] = useState('')
 
   // run getAddress fetch on any change to address
   useEffect(() => {
