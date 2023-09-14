@@ -1,1 +1,1 @@
-export * from "./SearchContainer"
+export * from './SearchContainer'

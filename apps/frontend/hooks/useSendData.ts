@@ -2,25 +2,25 @@ import {
   usePrepareContractWrite,
   useContractWrite,
   useWaitForTransaction,
-} from 'wagmi';
-import { PrepareWriteContractResult } from 'wagmi/actions';
-import { type Hex, type Hash, parseEther } from 'viem';
-import { routerAbi } from '../abi';
-import { router } from '../constants';
+} from 'wagmi'
+import { PrepareWriteContractResult } from 'wagmi/actions'
+import { type Hex, type Hash, parseEther } from 'viem'
+import { routerAbi } from '../abi'
+import { router } from '../constants'
 
 interface SendDataProps {
-  press: Hex;
-  data: Hash;
-  value?: string;
-  prepareTxn: boolean;
-  successCallback?: () => void;
+  press: Hex
+  data: Hash
+  value?: string
+  prepareTxn: boolean
+  successCallback?: () => void
 }
 
 interface SendDataReturn {
-  sendDataConfig: PrepareWriteContractResult;
-  sendData: (() => void) | undefined;
-  sendDataLoading: boolean;
-  sendDataSuccess: boolean;
+  sendDataConfig: PrepareWriteContractResult
+  sendData: (() => void) | undefined
+  sendDataLoading: boolean
+  sendDataSuccess: boolean
 }
 
 export function useSendData({
@@ -37,24 +37,23 @@ export function useSendData({
     args: [press, data],
     value: value ? parseEther(value) : BigInt(0),
     enabled: prepareTxn,
-  });
+  })
 
-  const { data: dataToSend, write: sendData } =
-    useContractWrite(sendDataConfig);
+  const { data: dataToSend, write: sendData } = useContractWrite(sendDataConfig)
 
   const { isLoading: sendDataLoading, isSuccess: sendDataSuccess } =
     useWaitForTransaction({
       hash: dataToSend?.hash,
       onSuccess() {
-        successCallback?.();
-        console.log("success callback ran")
+        successCallback?.()
+        console.log('success callback ran')
       },
-    });
+    })
 
   return {
     sendDataConfig,
     sendData,
     sendDataLoading,
     sendDataSuccess,
-  };
+  }
 }

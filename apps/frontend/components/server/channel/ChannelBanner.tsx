@@ -18,14 +18,14 @@ export async function ChannelBanner({ channels }: { channels: Channel }) {
 
   // Attempt to resolve relevant address/ens before component renders
   const creatorEnsOrAddress = channels?.createdBy ? 
-    await getAddressDisplay(channels.createdBy) 
+    await getAddressDisplay(channels.createdBy as Hex) 
     : ""   
 
   return (
-    <Flex className='gap-x-8 h-[248px]'>
-      <Card size='lg' className='relative'>
+    <Flex className="gap-x-8 h-[248px]">
+      <Card size="lg" className="relative">
         <Image
-          className='object-cover aspect-square'
+          className="object-cover aspect-square"
           src={ipfsToHttps(channels?.contractUri?.image as string)}
           alt={
             channels?.contractUri?.name
@@ -48,12 +48,13 @@ export async function ChannelBanner({ channels }: { channels: Channel }) {
             {creatorEnsOrAddress}        
             {channels?.logicTransmitterMerkleAdmin[0].accounts?.length as number > 1
               ? ` + ${
-                  channels?.logicTransmitterMerkleAdmin[0].accounts?.length as number - 1
+                  (channels?.logicTransmitterMerkleAdmin[0].accounts
+                    ?.length as number) - 1
                 } others`
               : ''}
           </BodyLarge>
         </span>
-        <Body className='text-label-muted mb-[44px]'>
+        <Body className="text-label-muted mb-[44px]">
           {channels?.contractUri?.description
             ? channels?.contractUri?.description
             : ''}
@@ -63,5 +64,5 @@ export async function ChannelBanner({ channels }: { channels: Channel }) {
         </span>
       </Stack>
     </Flex>
-  );
+  )
 }

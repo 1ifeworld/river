@@ -1,5 +1,5 @@
-import { type Hex } from "viem";
+import { type Hex } from 'viem'
 
 export function firstSeven(str?: string | Hex) {
-  return str?.substring(0, 7);
+  return str?.substring(0, 7)
 }

@@ -18,72 +18,82 @@ import { useRouter } from "next/navigation";
 import { LanyardMerkle } from "./LanyardMerkle";
 
 export function NewChannelContainer() {
-  const { address } = useAccount();
-  const initialAdmin = address ? address : zeroAddress;
+  const { address } = useAccount()
+  const initialAdmin = address ? address : zeroAddress
 
-  const router = useRouter();
+  const router = useRouter()
 
-  const [imageCid, setImageCid] = useState<string>("");
-  const [name, setName] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [uriCid, setUriCid] = useState<string>("");
-  const [channelCreated, setChannelCreated] = useState(false);
-  const [merkleRoot, setMerkleRoot] = useState<string>("");
+  const [imageCid, setImageCid] = useState<string>('')
+  const [name, setName] = useState<string>('')
+  const [description, setDescription] = useState<string>('')
+  const [uriCid, setUriCid] = useState<string>('')
+  const [channelCreated, setChannelCreated] = useState(false)
+  const [merkleRoot, setMerkleRoot] = useState<string>('')
 
-  const { client } = useWeb3Storage(uriCid);
+  const { client } = useWeb3Storage(uriCid)
   const handleUriUpload = async () => {
     const contractUriData = {
       name,
       description,
       image: `ipfs://${imageCid}`,
-    };
+    }
     const blob = new Blob([JSON.stringify(contractUriData)], {
-      type: "application/json",
-    });
-    const file = new File([blob], "schema.json", { type: "application/json" });
-    const schemaCid = await client.put([file], { wrapWithDirectory: false });
-    setUriCid(`ipfs://${schemaCid}`);
-  };
+      type: 'application/json',
+    })
+    const file = new File([blob], 'schema.json', { type: 'application/json' })
+    const schemaCid = await client.put([file], { wrapWithDirectory: false })
+    setUriCid(`ipfs://${schemaCid}`)
+  }
 
   /* setupPress Hook */
   // setup logic inits
-  const initialAdminArray: Hex[] = [initialAdmin];
+  const initialAdminArray: Hex[] = [initialAdmin]
   const initialMerkleRoot: Hash =
-    "0x0000000000000000000000000000000000000000000000000000000000000000";
+    '0x0000000000000000000000000000000000000000000000000000000000000000'
   const logicInit: Hash = encodeAbiParameters(
-    parseAbiParameters("address[], bytes32"),
-    [initialAdminArray, initialMerkleRoot]
-  );
+    parseAbiParameters('address[], bytes32'),
+    [initialAdminArray, initialMerkleRoot],
+  )
   // setup rendererInits
   const rendererInit: Hash =
-    "0x0000000000000000000000000000000000000000000000000000000000000000";
+    '0x0000000000000000000000000000000000000000000000000000000000000000'
   // encode sub inputs
   const encodedUri: Hash = encodeAbiParameters(parseAbiParameters("string"), [
     uriCid,
-  ]);
+  ])
   const setupInputs: Hash = encodeAbiParameters(
     parseAbiParameters(
-      "(string, bytes, address, address, bytes, address, bytes)"
+      '(string, bytes, address, address, bytes, address, bytes)',
     ),
-    [[name, encodedUri, initialAdmin, logic, logicInit, renderer, rendererInit]]
-  );
+    [
+      [
+        name,
+        encodedUri,
+        initialAdmin,
+        logic,
+        logicInit,
+        renderer,
+        rendererInit,
+      ],
+    ],
+  )
   const { setupPress, setupPressTxnReceipt } = useSetupPress({
     factory: factory,
     data: setupInputs,
     prepareTxn: uriCid ? true : false,
-  });
+  })
 
   const newChannelRoute = setupPressTxnReceipt
     ? setupPressTxnReceipt.logs[0].address
-    : undefined;
+    : undefined
 
   // trigger channel creation once channel uri pinned and state has updated
   useEffect(() => {
     if (!!uriCid && !channelCreated && !!setupPress) {
-      setChannelCreated(true);
-      setupPress?.();
+      setChannelCreated(true)
+      setupPress?.()
     }
-  }, [uriCid, setupPress]);
+  }, [uriCid, setupPress])
 
   // trigger route change once channel creation is complete
   useEffect(() => {
@@ -92,7 +102,7 @@ export function NewChannelContainer() {
         router.push(`/channel/${newChannelRoute}`);
       }, 5000);
     }
-  }, [newChannelRoute]);
+  }, [newChannelRoute])
 
   return (
     <Flex className="gap-x-10 h-[248px]">
@@ -115,5 +125,5 @@ export function NewChannelContainer() {
         />
       </Stack>
     </Flex>
-  );
+  )
 }

@@ -1,16 +1,16 @@
-import sdk from '../client';
-import { Hex } from 'viem';
+import sdk from '../client'
+import { Hex } from 'viem'
 
 export async function getAdminChannels(address: Hex) {
-  const { channels } = await sdk.allChannels();
+  const { channels } = await sdk.allChannels()
 
   const adminChannels = channels.filter((channel) =>
     channel.logicTransmitterMerkleAdmin.some(
-      (admin) => admin.accounts && admin.accounts.includes(address)
-    )
-  );
+      (admin) => admin.accounts && admin.accounts.includes(address),
+    ),
+  )
 
   return {
     adminChannels,
-  };
+  }
 }

@@ -12,11 +12,11 @@ export function useGetAddressDisplay(address: Hex) {
       getAddressDisplay(address).then((fetchedData) => {
         // Only call setResolvedAddress if fetchedData is not null
         if (fetchedData) {
-          setDisplay(fetchedData);
+          setDisplay(fetchedData)
         }
-      });
+      })
     }
-  }, [address]);
+  }, [address])
 
-  return { display };
+  return { display }
 }

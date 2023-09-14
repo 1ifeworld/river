@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Input, Button, Stack, BodyLarge } from '@river/design-system';
-import { Channel } from '../../../gql/sdk.generated';
-import { useAccount } from 'wagmi';
-import { useGetAddressDisplay } from '../../../hooks';
-import { zeroAddress } from 'viem';
+import React from 'react'
+import { Input, Button, Stack, BodyLarge } from '@river/design-system'
+import { type Channel } from '../../../gql/sdk.generated'
+import { useAccount } from 'wagmi'
+import { useGetAddressDisplay } from '../../../hooks'
+import { zeroAddress } from 'viem'
 
 export function ChannelUri({
   name,
@@ -11,37 +11,37 @@ export function ChannelUri({
   description,
   setDescription,
 }: {
-  name: string;
-  description: string;
-  setName: React.Dispatch<React.SetStateAction<string>>;
-  setDescription: React.Dispatch<React.SetStateAction<string>>;
+  name: string
+  description: string
+  setName: React.Dispatch<React.SetStateAction<string>>
+  setDescription: React.Dispatch<React.SetStateAction<string>>
 }) {
-  const { address } = useAccount();
-  const { display } = useGetAddressDisplay(address ? address : zeroAddress);
+  const { address } = useAccount()
+  const { display } = useGetAddressDisplay(address ? address : zeroAddress)
 
   return (
     <Stack>
       <Input
-        type='text'
-        variant='ghost'
-        size='lg'
-        placeholder='Channel Name'
+        type="text"
+        variant="ghost"
+        size="lg"
+        placeholder="Channel Name"
         value={name}
         onChange={(e) => {
-          setName(e.target.value);
-          console.log('Updated Name:', e.target.value);
+          setName(e.target.value)
+          console.log('Updated Name:', e.target.value)
         }}
       />
-      <BodyLarge className='text-label-muted'>{display}</BodyLarge>
+      <BodyLarge className="text-label-muted">{display}</BodyLarge>
       <Input
-        type='text'
-        variant='ghost'
-        placeholder='Add description'
+        type="text"
+        variant="ghost"
+        placeholder="Add description"
         onChange={(e) => {
-          setDescription(e.target.value);
-          console.log('Updated Description:', e.target.value);
+          setDescription(e.target.value)
+          console.log('Updated Description:', e.target.value)
         }}
       />
     </Stack>
-  );
+  )
 }

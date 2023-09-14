@@ -10,7 +10,7 @@
 
 // type Props = {
 //   merkleRoot: Hash;
-//   press: Hex; // we should get their own press contract 
+//   press: Hex; // we should get their own press contract
 // };
 
 // interface UseSetMerkleRootResult {

@@ -1,9 +1,9 @@
-import { Button, Body } from '@river/design-system';
+import { Button, Body } from '@river/design-system'
 
 interface SearchActionProps {
-  addReady: boolean;
-  addTrigger?: () => void;
-  nameOfAdd?: string;
+  addReady: boolean
+  addTrigger?: () => void
+  nameOfAdd?: string
 }
 
 const SearchAction = ({
@@ -15,11 +15,11 @@ const SearchAction = ({
     <Button
       disabled={!addReady}
       onClick={addTrigger}
-      className='rounded w-full mb-4'
+      className="rounded w-full mb-4"
     >
-      <Body>{nameOfAdd ? 'Add ' + `"${nameOfAdd}"` : 'Add'}</Body>
+      <Body>{nameOfAdd ? `Add "${nameOfAdd}"` : 'Add'}</Body>
     </Button>
-  );
-};
+  )
+}
 
-export default SearchAction;
+export default SearchAction
