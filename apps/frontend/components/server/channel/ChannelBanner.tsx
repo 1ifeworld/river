@@ -19,7 +19,7 @@ export async function ChannelBanner({ channels }: { channels: Channel }) {
   // Attempt to resolve relevant address/ens before component renders
   const creatorEnsOrAddress = channels?.createdBy ? 
     await getAddressDisplay(channels.createdBy) 
-    : "" 
+    : ""   
 
   return (
     <Flex className='gap-x-8 h-[248px]'>
