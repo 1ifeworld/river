@@ -18,7 +18,7 @@ export async function ChannelBanner({ channels }: { channels: Channel }) {
 
   // Attempt to resolve relevant address/ens before component renders
   const creatorEnsOrAddress = channels?.createdBy ? 
-    await getAddressDisplay(channels.createdBy) 
+    await getAddressDisplay(channels.createdBy as Hex) 
     : ""   
 
   return (
