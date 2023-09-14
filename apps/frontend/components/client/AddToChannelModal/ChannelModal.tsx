@@ -22,7 +22,7 @@ export function ChannelModal() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className='focus-outline:none'>
-        <Button className='w-[112px]'>
+        <Button>
           <Body className='font-medium'>+ Add</Body>
         </Button>
       </DialogTrigger>

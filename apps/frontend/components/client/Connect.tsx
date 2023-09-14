@@ -43,7 +43,7 @@ export function Connect() {
             className='-m-2 hover:bg-base-hover hover:rounded-full transition-all p-2 min-w-[119px]'
           >
             <Flex className='items-center gap-[10px]'>
-              <Card className='h-[40px] w-[40px] bg-gradient-to-r from-[#5856D6] to-[#AF52DE] rounded-full' />
+              <Card size='auth' className='bg-gradient-to-r from-[#5856D6] to-[#AF52DE]' />
               <Flex className='justify-center pr-2'>
                 <Body className='text-label-muted'>Connect</Body>
               </Flex>
