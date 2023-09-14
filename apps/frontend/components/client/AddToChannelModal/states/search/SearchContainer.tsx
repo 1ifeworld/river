@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import SearchGallery from './SearchGallery';
-import SearchInput from './SearchInput';
-import SearchAction from './SearchAction';
-import { Nft } from 'alchemy-sdk';
-import { useSendData } from '../../../../../hooks';
+import React, { useState } from 'react'
+import SearchGallery from './SearchGallery'
+import SearchInput from './SearchInput'
+import SearchAction from './SearchAction'
+import { Nft } from 'alchemy-sdk'
+import { useSendData } from '../../../../../hooks'
 import {
   Hex,
   Hash,
@@ -12,10 +12,10 @@ import {
   zeroAddress,
   isAddress,
   getAddress,
-} from 'viem';
-import { Stack } from '@river/design-system';
-import { type Listing } from '../../../../../types/types';
-import { usePathname, useRouter } from 'next/navigation';
+} from 'viem'
+import { Stack } from '@river/design-system'
+import { type Listing } from '../../../../../types/types'
+import { usePathname, useRouter } from 'next/navigation'
 
 export function SearchContainer() {
   const [searchParams, setSearchParams] = useState<Listing>({
@@ -23,16 +23,16 @@ export function SearchContainer() {
     tokenId: BigInt(0),
     listingAddress: zeroAddress,
     hasTokenId: true,
-  });
-  const [searchResults, setSearchResults] = useState<Nft | undefined>();
-  const pathname = usePathname();
-  const cleanedPathname = getAddress(pathname.slice(9));
-  const router = useRouter();
+  })
+  const [searchResults, setSearchResults] = useState<Nft | undefined>()
+  const pathname = usePathname()
+  const cleanedPathname = getAddress(pathname.slice(9))
+  const router = useRouter()
 
   const handleSetSearchParams = (updatedParams: {
-    network?: number | undefined;
-    contractAddress?: string | undefined;
-    tokenId?: string | undefined;
+    network?: number | undefined
+    contractAddress?: string | undefined
+    tokenId?: string | undefined
   }) => {
     setSearchParams((prev) => ({
       ...prev,
@@ -44,8 +44,8 @@ export function SearchContainer() {
       tokenId: updatedParams.tokenId
         ? BigInt(updatedParams.tokenId)
         : prev.tokenId,
-    }));
-  };
+    }))
+  }
 
   /* sendData Hook */
   const sendInputs: Hash = encodeAbiParameters(
@@ -65,8 +65,8 @@ export function SearchContainer() {
           searchParams.hasTokenId as boolean,
         ],
       ],
-    ]
-  );
+    ],
+  )
 
   const { sendDataConfig, sendData, sendDataLoading, sendDataSuccess } =
     useSendData({
@@ -75,12 +75,12 @@ export function SearchContainer() {
       value: '0.0005',
       prepareTxn: searchResults ? true : false,
       successCallback: router.refresh,
-    });
+    })
 
   return (
-    <Stack className='justify-center gap-4'>
+    <Stack className="justify-center gap-4">
       <SearchGallery nftMetadata={searchResults} />
-      <Stack className='gap-y-4 mx-[18px]'>
+      <Stack className="gap-y-4 mx-[18px]">
         <SearchInput
           searchResults={searchResults}
           setSearchResults={setSearchResults}
@@ -93,5 +93,5 @@ export function SearchContainer() {
         />
       </Stack>
     </Stack>
-  );
+  )
 }

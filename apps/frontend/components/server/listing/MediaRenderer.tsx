@@ -1,5 +1,5 @@
-import React from "react";
-import Image from "next/image";
+import React from 'react'
+import Image from 'next/image'
 
 export function MediaRenderer({ mediaURL }: { mediaURL: string }) {
   return (
@@ -9,8 +9,8 @@ export function MediaRenderer({ mediaURL }: { mediaURL: string }) {
         src={mediaURL}
         alt="Image"
         className=""
-        style={{ objectFit: "contain" }}
+        style={{ objectFit: 'contain' }}
       />
     </div>
-  );
+  )
 }

@@ -6,24 +6,24 @@ import {
   Card,
   Headline,
   BodyLarge,
-} from '@river/design-system';
-import Image from 'next/image';
-import { ChannelModal } from '../../client/AddToChannelModal';
-import { Hex } from 'viem';
-import { Channel } from '../../../gql/sdk.generated';
-import { ipfsToHttps, shortenAddress, getAddressDisplay } from '../../../utils';
+} from '@river/design-system'
+import Image from 'next/image'
+import { ChannelModal } from '../../client/AddToChannelModal'
+import { Hex } from 'viem'
+import { type Channel } from '../../../gql/sdk.generated'
+import { ipfsToHttps, shortenAddress, getAddressDisplay } from '../../../utils'
 
 export async function ChannelBanner({ channels }: { channels: Channel }) {
   // Attempt to resolve relevant address/ens before component renders
   const creatorEnsOrAddress = await getAddressDisplay(
-    channels?.createdBy as Hex
-  );
+    channels?.createdBy as Hex,
+  )
 
   return (
-    <Flex className='gap-x-8 h-[248px]'>
-      <Card size='lg' className='relative'>
+    <Flex className="gap-x-8 h-[248px]">
+      <Card size="lg" className="relative">
         <Image
-          className='object-cover aspect-square'
+          className="object-cover aspect-square"
           src={ipfsToHttps(channels?.contractUri?.image as string)}
           alt={
             channels?.contractUri?.name
@@ -35,24 +35,26 @@ export async function ChannelBanner({ channels }: { channels: Channel }) {
       </Card>
       {/* Channel settings */}
       {/* Second Column: Text details */}
-      <Stack className='h-full justify-end cursor-default'>
-        <span className='inline-block mb-5'>
-          <Headline className='font-medium text-label'>
+      <Stack className="h-full justify-end cursor-default">
+        <span className="inline-block mb-5">
+          <Headline className="font-medium text-label">
             {channels?.contractUri?.name
               ? channels?.contractUri?.name
               : 'Channel name missing'}
           </Headline>
-          <BodyLarge className='text-label-muted'>
+          <BodyLarge className="text-label-muted">
             {creatorEnsOrAddress}
-            
-            {channels?.logicTransmitterMerkleAdmin[0].accounts?.length as number > 1
+
+            {(channels?.logicTransmitterMerkleAdmin[0].accounts
+              ?.length as number) > 1
               ? ` + ${
-                  channels?.logicTransmitterMerkleAdmin[0].accounts?.length as number - 1
+                  (channels?.logicTransmitterMerkleAdmin[0].accounts
+                    ?.length as number) - 1
                 } others`
               : ''}
           </BodyLarge>
         </span>
-        <Body className='text-label-muted mb-[44px]'>
+        <Body className="text-label-muted mb-[44px]">
           {channels?.contractUri?.description
             ? channels?.contractUri?.description
             : ''}
@@ -62,5 +64,5 @@ export async function ChannelBanner({ channels }: { channels: Channel }) {
         </span>
       </Stack>
     </Flex>
-  );
+  )
 }

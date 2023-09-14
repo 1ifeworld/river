@@ -6,7 +6,8 @@
     "dev": "concurrently \"next dev\" \"graphql-codegen --config codegen.ts --watch\"",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "biome check . --apply",
+    "format": "biome format . --write",
     "predev": "pnpm codegen",
     "codegen": "graphql-codegen --config codegen.ts"
   },
@@ -32,6 +33,7 @@
     "web3.storage": "^4.5.5"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.1.2",
     "@graphql-codegen/add": "^5.0.0",
     "@graphql-codegen/cli": "5.0.0",
     "@graphql-codegen/typescript": "^4.0.1",

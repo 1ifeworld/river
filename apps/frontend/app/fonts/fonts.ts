@@ -1,4 +1,4 @@
-import localFont from 'next/font/local';
+import localFont from 'next/font/local'
 
 export const helveticaNeue = localFont({
   src: [
@@ -25,4 +25,4 @@ export const helveticaNeue = localFont({
   ],
   display: 'swap',
   variable: '--font-helvetica-neue',
-});
+})

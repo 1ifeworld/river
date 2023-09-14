@@ -312,4 +312,4 @@ export const routerAbi = [
     stateMutability: 'payable',
     type: 'function',
   },
-] as const;
+] as const

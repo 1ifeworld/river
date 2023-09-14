@@ -1,17 +1,17 @@
-import { Button, Body } from '@river/design-system';
+import { Button, Body } from '@river/design-system'
 
 export function CreateChannelButton({
   createReady,
 
   createTrigger,
 }: {
-  createReady: boolean;
+  createReady: boolean
 
-  createTrigger?: () => void;
+  createTrigger?: () => void
 }) {
   return (
     <Button disabled={!createReady} onClick={createTrigger}>
-      <Body className='font-medium'>Create</Body>
+      <Body className="font-medium">Create</Body>
     </Button>
-  );
+  )
 }

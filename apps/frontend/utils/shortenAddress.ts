@@ -1,15 +1,15 @@
-import { getAddress, Hex } from 'viem';
+import { Hex, getAddress } from 'viem'
 
 export function shortenAddress(address?: Hex, chars = 4): string {
   if (!address) {
-    return '';
+    return ''
   }
 
-  const parsed = getAddress(address);
+  const parsed = getAddress(address)
 
   if (!parsed) {
-    console.error(`Invalid 'address' parameter '${address}'.`);
-    return '';
+    console.error(`Invalid 'address' parameter '${address}'.`)
+    return ''
   }
-  return `${parsed.substring(0, chars + 2)}...${parsed.substring(42 - chars)}`;
+  return `${parsed.substring(0, chars + 2)}...${parsed.substring(42 - chars)}`
 }
