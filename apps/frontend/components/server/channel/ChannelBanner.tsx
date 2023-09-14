@@ -6,18 +6,20 @@ import {
   Card,
   Headline,
   BodyLarge,
-} from '@river/design-system'
-import Image from 'next/image'
-import { ChannelModal } from '../../client/AddToChannelModal'
-import { Hex } from 'viem'
-import { type Channel } from '../../../gql/sdk.generated'
-import { ipfsToHttps, shortenAddress, getAddressDisplay } from '../../../utils'
+} from '@river/design-system';
+import Image from 'next/image';
+import { ChannelModal } from '../../client/AddToChannelModal';
+import { Hex } from 'viem';
+import { Channel } from '../../../gql/sdk.generated';
+import { ipfsToHttps, shortenAddress, getAddressDisplay } from '../../../utils';
+import { truncateText } from '../../../utils';
 
 export async function ChannelBanner({ channels }: { channels: Channel }) {
+
   // Attempt to resolve relevant address/ens before component renders
-  const creatorEnsOrAddress = await getAddressDisplay(
-    channels?.createdBy as Hex,
-  )
+  const creatorEnsOrAddress = channels?.createdBy ? 
+    await getAddressDisplay(channels.createdBy) 
+    : ""   
 
   return (
     <Flex className="gap-x-8 h-[248px]">
@@ -35,18 +37,16 @@ export async function ChannelBanner({ channels }: { channels: Channel }) {
       </Card>
       {/* Channel settings */}
       {/* Second Column: Text details */}
-      <Stack className="h-full justify-end cursor-default">
-        <span className="inline-block mb-5">
-          <Headline className="font-medium text-label">
-            {channels?.contractUri?.name
+      <Stack className='h-full justify-end cursor-default'>
+        <span className='inline-block mb-5'>
+          <Headline className='font-medium text-label'>
+            {truncateText(channels?.contractUri?.name ?? '', 20)
               ? channels?.contractUri?.name
               : 'Channel name missing'}
           </Headline>
-          <BodyLarge className="text-label-muted">
-            {creatorEnsOrAddress}
-
-            {(channels?.logicTransmitterMerkleAdmin[0].accounts
-              ?.length as number) > 1
+          <BodyLarge className='text-label-muted'>
+            {creatorEnsOrAddress}        
+            {channels?.logicTransmitterMerkleAdmin[0].accounts?.length as number > 1
               ? ` + ${
                   (channels?.logicTransmitterMerkleAdmin[0].accounts
                     ?.length as number) - 1

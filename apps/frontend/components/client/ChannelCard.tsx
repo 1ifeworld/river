@@ -22,7 +22,7 @@ export function ChannelCard({
     <Stack className={cn('gap-y-2', className)}>
       {/* Image */}
       <Link href={`channel/${channel.id}`}>
-        <Card className="relative">
+        <Card className='relative shadow-md'>
           <Image
             className="object-cover aspect-square"
             src={ipfsToHttps(channel.contractUri?.image as string)}
