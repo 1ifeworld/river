@@ -1,9 +1,6 @@
 import { getChannel } from '../../../gql/requests/getChannel'
 import { Stack } from '@river/design-system'
-import {
-  ChannelBanner,
-  ChannelBody,
-} from '../../../components/server/channel'
+import { ChannelBanner, ChannelBody } from '../../../components/server/channel'
 import { type Channel } from '../../../gql/sdk.generated'
 import { getAddress } from 'viem'
 

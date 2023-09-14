@@ -3,5 +3,5 @@ export default function NewChannelLayout({
 }: {
   children: React.ReactNode
 }) {
-  return <section className="mx-[40px] my-[80px]">{children}</section>
+  return <section className="m-10">{children}</section>
 }
