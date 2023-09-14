@@ -6,7 +6,7 @@ import {
   Card,
   Headline,
   BodyLarge,
-} from "@river/design-system";
+} from '@river/design-system'
 
 export default function Loading() {
   // You can add any UI inside Loading, including a Skeleton.
@@ -24,5 +24,5 @@ export default function Loading() {
         </Stack>
       </Flex>
     </div>
-  );
+  )
 }

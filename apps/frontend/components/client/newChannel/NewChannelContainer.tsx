@@ -1,21 +1,21 @@
-import { Flex, Stack } from "@river/design-system";
-import { useWeb3Storage } from "../../../hooks/useWeb3Storage";
-import { useState, useEffect } from "react";
-import { ChannelUri } from "../ChannelUri/ChannelUri";
-import { UploadCard } from "./UploadCard";
-import { CreateChannelButton } from ".";
-import { useSetupPress } from "../../../hooks";
+import { Flex, Stack } from '@river/design-system'
+import { useWeb3Storage } from '../../../hooks/useWeb3Storage'
+import { useState, useEffect } from 'react'
+import { ChannelUri } from '../ChannelUri/ChannelUri'
+import { UploadCard } from './UploadCard'
+import { CreateChannelButton } from '.'
+import { useSetupPress } from '../../../hooks'
 import {
   Hex,
   Hash,
   encodeAbiParameters,
   parseAbiParameters,
   zeroAddress,
-} from "viem";
-import { factory, logic, renderer } from "../../../constants";
-import { useAccount } from "wagmi";
-import { useRouter } from "next/navigation";
-import { LanyardMerkle } from "./LanyardMerkle";
+} from 'viem'
+import { factory, logic, renderer } from '../../../constants'
+import { useAccount } from 'wagmi'
+import { useRouter } from 'next/navigation'
+import { LanyardMerkle } from './LanyardMerkle'
 
 export function NewChannelContainer() {
   const { address } = useAccount()
@@ -58,7 +58,7 @@ export function NewChannelContainer() {
   const rendererInit: Hash =
     '0x0000000000000000000000000000000000000000000000000000000000000000'
   // encode sub inputs
-  const encodedUri: Hash = encodeAbiParameters(parseAbiParameters("string"), [
+  const encodedUri: Hash = encodeAbiParameters(parseAbiParameters('string'), [
     uriCid,
   ])
   const setupInputs: Hash = encodeAbiParameters(
@@ -99,8 +99,8 @@ export function NewChannelContainer() {
   useEffect(() => {
     if (!!newChannelRoute) {
       setTimeout(() => {
-        router.push(`/channel/${newChannelRoute}`);
-      }, 5000);
+        router.push(`/channel/${newChannelRoute}`)
+      }, 5000)
     }
   }, [newChannelRoute])
 
