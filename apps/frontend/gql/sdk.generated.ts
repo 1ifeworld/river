@@ -683,6 +683,8 @@ export type ListingsQuery = { __typename?: 'Query', channels: Array<{ __typename
 export const AllChannelsDocument = gql`
     query allChannels {
   channels(
+    orderBy: "createdAt"
+    orderDirection: "desc"
     where: {createdBy_not_in: ["0x004991c3bbcF3dd0596292C80351798965070D75", "0x806164c929Ad3A6f4bd70c2370b3Ef36c64dEaa8"]}
   ) {
     id
