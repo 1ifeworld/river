@@ -1,14 +1,15 @@
 import { getDefaultConfig } from 'connectkit'
 import { type Config, createConfig } from 'wagmi'
 import { optimism, optimismGoerli, zora, zoraTestnet } from 'wagmi/chains'
+import { env } from './services/env'
 
 const chains = [optimismGoerli]
 
 export const config: Config = createConfig(
   getDefaultConfig({
     appName: 'River',
-    alchemyId: process.env.NEXT_PUBLIC_ALCHEMY_KEY as string,
-    walletConnectProjectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_ID as string,
+    alchemyId: env.NEXT_PUBLIC_ALCHEMY_KEY,
+    walletConnectProjectId: env.NEXT_PUBLIC_WALLET_CONNECT_ID,
     autoConnect: true,
     chains,
   }),

@@ -4,7 +4,7 @@ import { shortenAddress } from '.'
 
 export async function getAddressDisplay(address: Hex) {
   const sdk = new BasementSDK({
-    apiKey: process.env.NEXT_PUBLIC_BASEMENT_API,
+    apiKey: env.NEXT_PUBLIC_BASEMENT_API,
     endpoint: 'https://beta.basement.dev/v2/graphql',
   })
 

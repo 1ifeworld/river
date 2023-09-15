@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Network, Alchemy, Nft } from 'alchemy-sdk'
+import { env } from '../services/env'
 
 type Props = {
   network: number
@@ -9,7 +10,7 @@ type Props = {
 
 const useGetTokenMetadata = ({ network, address, tokenId }: Props) => {
   const alchemy_settings_mainnet = {
-    apiKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY,
+    apiKey: env.NEXT_PUBLIC_ALCHEMY_KEY,
     network: Network.ETH_MAINNET,
   }
   const alchemyMainnet = new Alchemy(alchemy_settings_mainnet)
