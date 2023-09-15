@@ -1,6 +1,7 @@
 import { type Hex } from 'viem'
 import { BasementSDK } from '@basementdev/sdk'
-import { shortenAddress } from '.'
+import { shortenAddress } from './shortenAddress'
+import { env } from '../services/env'
 
 export async function getAddressDisplay(address: Hex) {
   const sdk = new BasementSDK({
