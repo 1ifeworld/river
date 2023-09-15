@@ -1,12 +1,13 @@
 {
   "name": "river",
   "version": "0.0.0",
-  "description": "",
+  "description": "Set information free",
   "main": "index.js",
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
-    "lint": "turbo lint"
+    "lint": "turbo lint",
+    "format": "turbo format"
   },
   "keywords": [],
   "author": "Lifeworld",
