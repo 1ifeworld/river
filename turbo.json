@@ -8,7 +8,11 @@
     "test": {
       "dependsOn": ["lint", "build"]
     },
-    "dev": {},
-    "lint": {}
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {},
+    "format": {}
   }
 }
