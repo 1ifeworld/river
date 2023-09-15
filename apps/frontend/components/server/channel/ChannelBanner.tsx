@@ -22,7 +22,7 @@ export async function ChannelBanner({ channels }: { channels: Channel }) {
 
   return (
     <Flex className="gap-x-8 h-[248px]">
-      <Card size="lg" className="relative">
+      <Card size="lg" className="relative shadow-reg">
         <Image
           className="object-cover aspect-square"
           src={ipfsToHttps(channels?.contractUri?.image as string)}
