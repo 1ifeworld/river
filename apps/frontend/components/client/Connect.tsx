@@ -1,7 +1,7 @@
 import { Avatar } from 'connectkit'
 import { ConnectKitButton } from 'connectkit'
 import { type Hex } from 'viem'
-import { Flex, Body, Stack, Card } from '@river/design-system'
+import { Flex, Body, Stack, Button } from '@river/design-system'
 import { firstSeven } from '../../utils'
 import { useDisconnect } from 'wagmi'
 
@@ -37,18 +37,13 @@ export function Connect() {
         return isConnected ? (
           <Auth address={address} ensName={ensName} />
         ) : (
-          <button
-            type="button"
+          <Button
             onClick={show}
-            className="-m-2 hover:bg-base-hover hover:rounded-full transition-all p-2 min-w-[128px]"
+            // TODO: add `shadow-reg`
+            className="-m-2 bg-base hover:bg-base-hover border border-base-border min-w-[128px]"
           >
-            <Flex className="items-center gap-[10px]">
-              <div className="min-h-[40px] min-w-[40px] bg-gradient-to-r from-[#5856D6] to-[#AF52DE] rounded-full" />
-              <Flex className="justify-center pr-2">
-                <Body className="text-label-muted">Connect</Body>
-              </Flex>
-            </Flex>
-          </button>
+            <Body className="text-label">Connect</Body>
+          </Button>
         )
       }}
     </ConnectKitButton.Custom>
