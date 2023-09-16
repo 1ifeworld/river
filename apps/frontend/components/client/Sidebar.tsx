@@ -2,9 +2,13 @@ import {
   Stack,
   Flex,
   Body,
+  BodyLarge,
+  SearchIcon,
+  Add,
   Globe,
   RiverIcon,
   Debug,
+  Button,
 } from '@river/design-system'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import Link from 'next/link'
@@ -24,25 +28,25 @@ export function Sidebar() {
     <Stack className="hidden md:flex bg-base border-r border-base-shade h-screen sticky top-0 px-5 pt-10 pb-5">
       <Stack className="justify-between h-full">
         <span>
-          <Stack className="gap-1">
-            <Body className="text-label-faint font-medium">River</Body>
-            {/* Search */}
-            {/* <Flex className="items-center gap-x-2">
-              <MagnifyingGlassIcon stroke="#C2C2C2" />
-              <Body className="text-label-faint">Search</Body>
-            </Flex> */}
-            <Flex className="items-center gap-x-2">
-              <Globe fill="#393939" />
-              <Body className="text-label">
-                <Link href="/">Home</Link>
+          <Stack className="gap-2">
+            <span>
+              <Body className="text-label-faint font-medium cursor-default">
+                River
               </Body>
-            </Flex>
+              <Link href="/">
+                <Body className="text-label hover:underline">Home </Body>
+              </Link>
+            </span>
+            <Link href="/channel">
+              <Body className="text-label-faint hover:text-label-faint/80 font-medium my-2">
+                Create Channel
+              </Body>
+            </Link>
+
+            {isConnected && <AdminChannels address={address as Hex} />}
           </Stack>
-          {isConnected && <AdminChannels address={address as Hex} />}
-          <Body className="text-label">
-            <Link href="/channel">+ Create Channel</Link>
-          </Body>
         </span>
+
         <span>
           <Connect />
         </span>
