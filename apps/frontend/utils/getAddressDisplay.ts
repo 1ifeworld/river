@@ -1,10 +1,11 @@
 import { type Hex } from 'viem'
 import { BasementSDK } from '@basementdev/sdk'
-import { shortenAddress } from '.'
+import { shortenAddress } from './shortenAddress'
+import { env } from '../services/env'
 
 export async function getAddressDisplay(address: Hex) {
   const sdk = new BasementSDK({
-    apiKey: process.env.NEXT_PUBLIC_BASEMENT_API,
+    apiKey: env.NEXT_PUBLIC_BASEMENT_API,
     endpoint: 'https://beta.basement.dev/v2/graphql',
   })
 

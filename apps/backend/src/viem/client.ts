@@ -1,6 +1,5 @@
-import { create } from "domain";
-import { createPublicClient, http } from "viem";
-import { optimismGoerli } from "viem/chains";
+import { createPublicClient, http } from 'viem';
+import { optimismGoerli } from 'viem/chains';
 
 const transport = http(process.env.PONDER_RPC_URL_420);
 

@@ -1,12 +1,13 @@
 import * as React from 'react'
 import { Web3Storage } from 'web3.storage'
+import { env } from '../services/env'
 
 export function useWeb3Storage(cid: string) {
   const [unpackedMetadata, setUnpackedMetadata] = React.useState<string>('')
   const [imageCid, setImageCid] = React.useState<string>('')
 
   const client = new Web3Storage({
-    token: process.env.NEXT_PUBLIC_WEB3STORAGE_TOKEN as string,
+    token: env.NEXT_PUBLIC_WEB3STORAGE_TOKEN,
   })
 
   React.useEffect(() => {
