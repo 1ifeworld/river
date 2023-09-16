@@ -147,6 +147,18 @@ export default {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
+      boxShadow: {
+        reg: '0px 0px 2px rgba(0, 0, 0, 0.15), 0px 2px 5px rgba(0, 0, 0, 0.05), 0px 8px 40px rgba(0, 0, 0, 0.04)',
+        'reg-1':
+          '0px 0px 2px rgba(0, 0, 0, 0.15), 0px 4px 7px rgba(0, 0, 0, 0.05), 0px 12px 40px rgba(0, 0, 0, 0.1)',
+        'reg-2':
+          '0px 0px 2px rgba(0, 0, 0, 0.15), 0px 4px 7px rgba(0, 0, 0, 0.07), 0px 12px 40px rgba(0, 0, 0, 0.15)',
+        soft: '0px 0px 4px rgba(0, 0, 0, 0.02), 0px 8px 16px rgba(0, 0, 0, 0.02), 0px 16px 32px rgba(0, 0, 0, 0.04)',
+        'soft-1':
+          '0px 0px 4px rgba(0, 0, 0, 0.02), 0px 10px 16px rgba(0, 0, 0, 0.03), 0px 18px 32px rgba(0, 0, 0, 0.05)',
+        'soft-2':
+          '0px 0px 4px rgba(0, 0, 0, 0.02), 0px 12px 16px rgba(0, 0, 0, 0.04), 0px 20px 32px rgba(0, 0, 0, 0.08)',
+      },
     },
   },
   plugins: [require('tailwindcss-animate')],
