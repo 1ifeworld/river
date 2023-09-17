@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -57,9 +57,9 @@ importers:
       '@radix-ui/react-scroll-area':
         specifier: ^1.0.4
         version: 1.0.4(@types/react-dom@18.2.7)(@types/react@18.2.21)(react-dom@18.2.0)(react@18.2.0)
-      '@river/design-system':
-        specifier: workspace:^
-        version: link:../../packages/design-system
+      '@river/estuary':
+        specifier: workspace:*
+        version: link:../../packages/estuary
       '@types/mdx':
         specifier: ^2.0.7
         version: 2.0.7
@@ -115,9 +115,9 @@ importers:
       '@radix-ui/react-icons':
         specifier: ^1.3.0
         version: 1.3.0(react@18.2.0)
-      '@river/design-system':
+      '@river/estuary':
         specifier: workspace:*
-        version: link:../../packages/design-system
+        version: link:../../packages/estuary
       '@vercel/analytics':
         specifier: ^1.0.2
         version: 1.0.2
@@ -213,7 +213,7 @@ importers:
         specifier: 5.1.6
         version: 5.1.6
 
-  packages/design-system:
+  packages/estuary:
     dependencies:
       '@radix-ui/react-aspect-ratio':
         specifier: ^1.0.3
@@ -1187,6 +1187,7 @@ packages:
 
   /@emotion/memoize@0.7.4:
     resolution: {integrity: sha512-Ja/Vfqe3HpuzRsG1oBtWTHk2PGZ7GR+2Vz5iYGelAw8dx32K0y7PjVuxK6z1nMpZOqAFsRUPCkK1YjJ56qJlgw==}
+    requiresBuild: true
     dev: false
     optional: true
 

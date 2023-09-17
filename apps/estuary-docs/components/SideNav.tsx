@@ -2,7 +2,7 @@
 
 import React from 'react';
 import * as ScrollArea from '@radix-ui/react-scroll-area';
-import { Flex, Stack, BodySmall } from '@river/design-system';
+import { Flex, Stack, BodySmall } from '@river/estuary';
 import Link from 'next/link';
 
 export function SideNav() {

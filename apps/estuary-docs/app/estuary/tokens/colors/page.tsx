@@ -4,7 +4,7 @@ import {
   Flex,
   BodySmall,
   BodyExtraLarge,
-} from '@river/design-system';
+} from '@river/estuary';
 
 export default function Page() {
   return (

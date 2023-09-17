@@ -5,7 +5,7 @@ import {
   Add,
   Headline,
   Card,
-} from '@river/design-system';
+} from '@river/estuary';
 
 export default function Page() {
   return (

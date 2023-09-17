@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { SideNav } from '../components/SideNav';
 import { Header } from '../components/Header';
-import { Flex } from '@river/design-system';
+import { Flex } from '@river/estuary';
 
 const helveticaNeue = localFont({
   src: '../public/fonts/HelveticaNeue.woff2',

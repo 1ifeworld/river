@@ -7,7 +7,7 @@ import {
   Flex,
   Input,
   IconContainer,
-} from '@river/design-system';
+} from '@river/estuary';
 import { PlusIcon } from 'lucide-react';
 
 export default function Page() {

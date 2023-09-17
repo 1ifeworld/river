@@ -1,4 +1,4 @@
-import { Headline } from '@river/design-system';
+import { Headline } from '@river/estuary';
 
 export default function Page() {
   return (

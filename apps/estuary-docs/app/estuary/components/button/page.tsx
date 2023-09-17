@@ -1,4 +1,4 @@
-import { Flex, Button, BodySmall, Add, Headline } from '@river/design-system';
+import { Flex, Button, BodySmall, Add, Headline } from '@river/estuary';
 
 export default function Page() {
   return (
