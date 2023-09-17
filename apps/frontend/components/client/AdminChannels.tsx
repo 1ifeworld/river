@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Hex } from 'viem'
-import { getAdminChannels } from '../../gql/requests/getAdminChannels'
-import { type Channel } from '../../gql/sdk.generated'
-import { Stack, Body } from '../../../../packages/estuary/src'
+import { getAdminChannels, type Channel } from '@/gql'
+import { Stack, Body } from '@river/estuary'
 import Link from 'next/link'
-import { truncateText } from '../../utils'
+import { truncateText } from '@/utils'
 
 export function AdminChannels({ address }: { address: Hex }) {
   const [adminChannels, setAdminChannels] = useState<Channel[]>([])

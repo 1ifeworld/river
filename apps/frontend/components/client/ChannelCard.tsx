@@ -1,9 +1,9 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { Body, Card, BodySmall, Stack, cn, Flex, C } from '../../../../packages/estuary/src'
-import { type Channel } from '../../gql/sdk.generated'
-import { truncateText, ipfsToHttps } from '../../utils'
-import { useGetAddressDisplay } from '../../hooks/useGetAddressDisplay'
+import { Body, Card, BodySmall, Stack, cn, Flex, C } from '@river/estuary'
+import { type Channel } from '@/gql'
+import { truncateText, ipfsToHttps } from '@/utils'
+import { useGetAddressDisplay } from '@/hooks'
 import { Hex } from 'viem'
 
 export function ChannelCard({

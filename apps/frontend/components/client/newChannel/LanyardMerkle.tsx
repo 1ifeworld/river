@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Input, Stack } from '../../../../../packages/estuary/src'
-import { createLanyardTree } from '../../../hooks'
+import { Input, Stack } from '@river/estuary'
+import { createLanyardTree } from '@/hooks'
 
 interface Props {
   onMerkleRootChange: (merkle: string) => void

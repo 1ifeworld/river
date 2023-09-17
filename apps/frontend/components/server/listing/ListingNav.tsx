@@ -1,8 +1,8 @@
 import React from 'react'
-import { RightPointer, Flex, Body } from '../../../../../packages/estuary/src'
-import { getChannel } from '../../../gql/requests/getChannel'
+import { RightPointer, Flex, Body } from '@river/estuary'
+import { getChannel } from '@/gql'
 import { getAddress } from 'viem'
-import { extractAddressFromListingId } from '../../../utils'
+import { extractAddressFromListingId } from '@/utils'
 import Link from 'next/link'
 
 export async function ListingNav({ listing }: { listing: any }) {

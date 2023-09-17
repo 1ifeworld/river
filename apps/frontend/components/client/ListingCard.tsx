@@ -1,10 +1,9 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { Body, Card, BodySmall, Stack, cn } from '../../../../packages/estuary/src'
-import { truncateText } from '../../utils'
-import { Listing } from '../../gql/sdk.generated'
-import { extractAddressFromListingId } from '../../utils'
-import { useGetAddressDisplay } from '../../hooks/useGetAddressDisplay'
+import { Body, Card, BodySmall, Stack, cn } from '@river/estuary'
+import { truncateText, extractAddressFromListingId } from '@/utils'
+import { Listing } from '@/gql'
+import { useGetAddressDisplay } from '@/hooks'
 import { Hex } from 'viem'
 
 export function ListingCard({

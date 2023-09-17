@@ -1,7 +1,6 @@
-import { ListingView } from '../../../../../components/server/listing'
-import { validateRoute } from '../../../../../utils'
-import { getListing } from '../../../../../gql/requests/getListing'
-import { Listing } from '../../../../../gql/sdk.generated'
+import { ListingView } from '@/server'
+import { validateRoute } from '@/utils'
+import { getListing, type Listing } from '@/gql'
 import { Hex } from 'viem'
 
 /**

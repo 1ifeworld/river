@@ -6,13 +6,12 @@ import {
   Card,
   Headline,
   BodyLarge,
-} from '../../../../../packages/estuary/src'
+} from '@river/estuary'
 import Image from 'next/image'
-import { ChannelModal } from '../../client/AddToChannelModal'
+import { ChannelModal } from '@/client'
 import { Hex } from 'viem'
-import { Channel } from '../../../gql/sdk.generated'
-import { ipfsToHttps, shortenAddress, getAddressDisplay } from '../../../utils'
-import { truncateText } from '../../../utils'
+import { Channel } from '@/gql'
+import { ipfsToHttps, truncateText, getAddressDisplay } from '@/utils'
 
 export async function ChannelBanner({ channels }: { channels: Channel }) {
   // Attempt to resolve relevant address/ens before component renders

@@ -1,4 +1,4 @@
-import { Button, Body } from '../../../../../packages/estuary/src'
+import { Button, Body } from '@river/estuary'
 
 export function CreateChannelButton({
   createReady,

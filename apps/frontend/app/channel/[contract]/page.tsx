@@ -1,7 +1,7 @@
-import { getChannel } from '../../../gql/requests/getChannel'
-import { Stack } from '../../../../../packages/estuary/src'
-import { ChannelBanner, ChannelBody } from '../../../components/server/channel'
-import { type Channel } from '../../../gql/sdk.generated'
+import { getChannel, type Channel } from '@/gql'
+import { Stack } from '@river/estuary'
+import { ChannelBanner, ChannelBody } from '@/server'
+
 import { getAddress } from 'viem'
 
 export default async function Channel({

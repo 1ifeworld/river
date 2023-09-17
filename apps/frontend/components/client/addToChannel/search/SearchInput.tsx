@@ -10,15 +10,15 @@ import {
   Body,
   Label,
   Stack,
-} from '../../../../../../../packages/estuary/src'
+} from '@river/estuary'
 
-import { Input } from '../../../../../../../packages/estuary/src/components/Input'
+import { Input } from '@river/estuary/src/components/Input'
 
-import { networks } from '../../../../../constants'
-import useGetTokenMetadata from '../../../../../hooks/useGetTokenMetadata'
+import { networks } from '../../../../constants'
+import useGetTokenMetadata from '../../../../hooks/useGetTokenMetadata'
 import { Nft } from 'alchemy-sdk'
 import Image from 'next/image'
-import { Ethereum } from '../../../../../../../packages/estuary/src'
+import { Ethereum } from '@river/estuary'
 
 interface NetworkSelectProps {
   selectedNetwork: number

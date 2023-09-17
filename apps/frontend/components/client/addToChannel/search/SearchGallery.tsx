@@ -1,8 +1,8 @@
 import React from 'react'
 import { Nft } from 'alchemy-sdk'
 import Image from 'next/image'
-import { cn } from '../../../../../../../packages/estuary/src/utils'
-import { Body, BodySmall } from '../../../../../../../packages/estuary/src'
+import { cn } from '@river/estuary/src/utils'
+import { Body, BodySmall } from '@river/estuary'
 
 interface NetworkSelectProps {
   nftMetadata: Nft | undefined

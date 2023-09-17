@@ -1,8 +1,7 @@
 import React from 'react'
-import { Input, Button, Stack, BodyLarge } from '../../../../../packages/estuary/src'
-import { type Channel } from '../../../gql/sdk.generated'
+import { Input, Stack, BodyLarge } from '@river/estuary'
 import { useAccount } from 'wagmi'
-import { useGetAddressDisplay } from '../../../hooks'
+import { useGetAddressDisplay } from '@/hooks'
 import { zeroAddress } from 'viem'
 
 export function ChannelUri({
