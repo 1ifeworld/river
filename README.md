@@ -10,6 +10,26 @@ The codebase consists of frontend, backend, and protocol ([separate repo](https:
 
 Please see the local development instructions in the README.md for each section. Everything you see is under active development – use code at your own risk.
 
+## Getting Started
+
+Clone the repository:
+
+```bash
+$ git clone https://github.com/1ifeworld/river.git
+```
+
+Install dependencies:
+
+```bash
+$ pnpm install
+```
+
+Lastly, run the development server:
+
+```bash
+$ pnpm dev
+```
+
 ### Contributions
 
 If you're prepared to add a feature/squash a bug, kindly create a [pull request](https://github.com/1ifeworld/river/pulls) that includes comprehensive commit messages. 
