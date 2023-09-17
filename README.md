@@ -18,7 +18,7 @@ Clone the repository:
 $ git clone https://github.com/1ifeworld/river.git
 ```
 
-Install dependencies:
+Ensure your pnpm version is up to date, then install dependencies:
 
 ```bash
 $ pnpm install
