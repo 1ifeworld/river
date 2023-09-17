@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { Providers } from './providers'
 import { helveticaNeue } from './fonts/fonts'
 import { Sidebar } from '../components/client'
-import { Grid } from '@river/design-system'
+import { Grid } from '@river/estuary'
 import { Analytics } from '@vercel/analytics/react'
 
 export const metadata: Metadata = {

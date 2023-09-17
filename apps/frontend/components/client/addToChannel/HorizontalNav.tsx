@@ -1,12 +1,12 @@
 import React from 'react'
-import { Body, Flex, cn } from '@river/design-system'
+import { Body, Flex, cn } from '@river/estuary'
 
-interface StateNavProps {
+interface HorizontalNavProps {
   activeTab: string
   setActiveTab: React.Dispatch<React.SetStateAction<string>>
 }
 
-export function StateNav({ activeTab, setActiveTab }: StateNavProps) {
+export function HorizontalNav({ activeTab, setActiveTab }: HorizontalNavProps) {
   return (
     <Flex className="justify-center w-full gap-x-7">
       <button

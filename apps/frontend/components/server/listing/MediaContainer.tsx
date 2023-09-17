@@ -1,5 +1,5 @@
 import React from 'react'
-import { Flex } from '@river/design-system'
+import { Flex } from '@river/estuary'
 
 export function MediaContainer({ children }: { children: React.ReactNode }) {
   return (

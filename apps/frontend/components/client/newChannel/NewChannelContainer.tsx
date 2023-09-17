@@ -1,10 +1,9 @@
-import { Flex, Stack } from '@river/design-system'
-import { useWeb3Storage } from '../../../hooks/useWeb3Storage'
+import { Flex, Stack } from '@river/estuary'
+import { useWeb3Storage, useSetupPress } from '@/hooks'
 import { useState, useEffect } from 'react'
-import { ChannelUri } from '../ChannelUri/ChannelUri'
+import { ChannelUri } from '../ChannelUri'
 import { UploadCard } from './UploadCard'
-import { CreateChannelButton } from '.'
-import { useSetupPress } from '../../../hooks'
+import { CreateChannelButton } from './CreateChannelButton'
 import {
   Hex,
   Hash,
@@ -12,7 +11,7 @@ import {
   parseAbiParameters,
   zeroAddress,
 } from 'viem'
-import { factory, logic, renderer } from '../../../constants'
+import { factory, logic, renderer } from '@/constants'
 import { useAccount } from 'wagmi'
 import { useRouter } from 'next/navigation'
 import { LanyardMerkle } from './LanyardMerkle'

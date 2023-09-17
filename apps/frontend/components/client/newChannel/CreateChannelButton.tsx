@@ -1,4 +1,4 @@
-import { Button, Body } from '@river/design-system'
+import { Button, Body } from '@river/estuary'
 
 export function CreateChannelButton({
   createReady,

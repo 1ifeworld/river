@@ -5,8 +5,8 @@ import {
 } from 'wagmi'
 import { PrepareWriteContractResult, WriteContractResult } from 'wagmi/actions'
 import { type Hex, type Hash, type TransactionReceipt } from 'viem'
-import { routerAbi } from '../abi'
-import { router } from '../constants'
+import { routerAbi } from '@/abi'
+import { router } from '@/constants'
 
 interface SetupPressProps {
   factory: Hex

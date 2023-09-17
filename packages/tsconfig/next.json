@@ -15,8 +15,7 @@
     "target": "esnext",
     "moduleResolution": "bundler",
     "isolatedModules": true,
-    "resolvePackageJsonExports": false,
-    "baseUrl": "."
+    "resolvePackageJsonExports": false
   },
   "include": ["next-env.d.ts"],
   "exclude": ["node_modules"]

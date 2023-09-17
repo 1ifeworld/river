@@ -10,10 +10,10 @@ import {
   Body,
   Exit,
   Stack,
-} from '@river/design-system'
-import { StateNav } from './StateNav'
-import { SearchContainer } from './states/search/SearchContainer'
-import { Flex } from '@river/design-system'
+} from '@river/estuary'
+import { HorizontalNav } from './HorizontalNav'
+import { SearchContainer } from './search/SearchContainer'
+import { Flex } from '@river/estuary'
 
 export function ChannelModal() {
   const [activeTab, setActiveTab] = useState<string>('Search')
@@ -28,7 +28,7 @@ export function ChannelModal() {
       </DialogTrigger>
       <DialogContent className="flex flex-col border-[0.5px] border-base-border rounded-[14px] h-fit">
         <Flex className="items-center px-4">
-          <StateNav activeTab={activeTab} setActiveTab={setActiveTab} />
+          <HorizontalNav activeTab={activeTab} setActiveTab={setActiveTab} />
           <Button
             onClick={() => setOpen(false)}
             variant="outline"

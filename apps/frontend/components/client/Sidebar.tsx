@@ -9,17 +9,12 @@ import {
   RiverIcon,
   Debug,
   Button,
-} from '@river/design-system'
-import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
+} from '@river/estuary'
 import Link from 'next/link'
 import { Connect } from './Connect'
 import { AdminChannels } from './AdminChannels'
 import { Hex } from 'viem'
 import { useAccount } from 'wagmi'
-
-function Divider() {
-  return <div className="w-full h-[0.5px] border border-shade my-4 mx-5" />
-}
 
 export function Sidebar() {
   const { isConnected, address } = useAccount()

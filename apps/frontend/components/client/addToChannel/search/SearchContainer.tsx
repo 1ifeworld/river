@@ -3,7 +3,7 @@ import SearchGallery from './SearchGallery'
 import SearchInput from './SearchInput'
 import SearchAction from './SearchAction'
 import { Nft } from 'alchemy-sdk'
-import { useSendData } from '../../../../../hooks'
+import { useSendData } from '../../../../hooks'
 import {
   Hex,
   Hash,
@@ -13,8 +13,8 @@ import {
   isAddress,
   getAddress,
 } from 'viem'
-import { Stack } from '@river/design-system'
-import { type Listing } from '../../../../../types/types'
+import { Stack } from '@river/estuary'
+import { type Listing } from '../../../../types/types'
 import { usePathname, useRouter } from 'next/navigation'
 
 export function SearchContainer() {

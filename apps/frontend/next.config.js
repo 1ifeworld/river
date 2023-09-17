@@ -9,5 +9,5 @@ module.exports = {
     config.externals.push('pino-pretty', 'lokijs', 'encoding')
     return config
   },
-  transpilePackages: ['@river/design-system'],
+  transpilePackages: ['@river/estuary'],
 }

@@ -1,6 +1,6 @@
-import { Grid } from '@river/design-system'
-import { Listing } from '../../../gql/sdk.generated'
-import { ListingCard } from '../../client'
+import { Grid } from '@river/estuary'
+import { Listing } from '@/gql'
+import { ListingCard } from '@/client'
 
 export function ChannelBody({ listings }: { listings: Listing[] }) {
   if (!listings || listings.length === 0) {

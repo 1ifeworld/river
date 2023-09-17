@@ -1,5 +1,5 @@
-import { Body, Headline, Stack } from '@river/design-system'
-import { getAddressDisplay } from '../../../utils'
+import { Body, Headline, Stack } from '@river/estuary'
+import { getAddressDisplay } from '@/utils'
 
 export async function ListingDetails({ listing }: { listing: any }) {
   // Attempt to resolve relevant address/ens before component renders

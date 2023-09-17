@@ -1,4 +1,4 @@
-import { Flex, BodyLarge, Body } from '@river/design-system';
+import { Flex, BodyLarge, Body } from '@river/estuary';
 import Link from 'next/link';
 
 export function Header() {

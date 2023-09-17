@@ -5,8 +5,8 @@ import {
 } from 'wagmi'
 import { PrepareWriteContractResult } from 'wagmi/actions'
 import { type Hex, type Hash, parseEther } from 'viem'
-import { routerAbi } from '../abi'
-import { router } from '../constants'
+import { routerAbi } from '@/abi'
+import { router } from '@/constants'
 
 interface RemoveDataProps {
   press: Hex
