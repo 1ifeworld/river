@@ -5,7 +5,7 @@ import baseConfig from '@river/tailwind'
 export default {
   content: [
     ...baseConfig.content,
-    '../../packages/design-system/src/**/*.{ts,tsx}',
+    '../../packages/estuary/src/**/*.{ts,tsx}',
   ],
   presets: [baseConfig],
 } satisfies Config

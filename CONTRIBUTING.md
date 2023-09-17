@@ -15,7 +15,7 @@ Then, run the following command from the root folder:
 
 ### Navigating the Monorepo
 
-There are three main components of this repository, the [Next.js](https://nextjs.org/) app that powers the River frontend, located at `apps/frontend`, the [Ponder](https://github.com/0xOlias/ponder) instance powering the backend, located at `apps/backend`, and the River design system, [Estuary](https://estuary-live.vercel.app/estuary/tokens/typography), located at `packages/design-system`.
+There are three main components of this repository, the [Next.js](https://nextjs.org/) app that powers the River frontend, located at `apps/frontend`, the [Ponder](https://github.com/0xOlias/ponder) instance powering the backend, located at `apps/backend`, and the River design system, [Estuary](https://estuary-live.vercel.app/estuary/tokens/typography), located at `packages/estuary`.
 
 If you're looking for our protocol repository, click [here](https://github.com/1ifeworld/river-contracts).
 
