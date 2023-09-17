@@ -42,6 +42,9 @@ export function SideNav() {
             <Link href='/estuary/components/card'>
               <BodySmall>Card</BodySmall>
             </Link>
+            <Link href='/estuary/components/iconContainer'>
+              <BodySmall>Icon Container</BodySmall>
+            </Link>
             <Link href='/estuary/components/input'>
               <BodySmall>Input</BodySmall>
             </Link>

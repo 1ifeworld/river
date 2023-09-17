@@ -11,6 +11,7 @@ export * from './Card';
 export * from './Dialog';
 export * from './ContextMenu';
 export * from './DropdownMenu';
+export * from './IconContainer';
 export * from './Input';
 export * from './Label';
 export * from './Select';
