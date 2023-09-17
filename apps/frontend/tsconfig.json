@@ -1,7 +1,15 @@
 {
   "extends": "@river/tsconfig/next.json",
   "compilerOptions": {
-    "plugins": [{ "name": "next" }]
+    "plugins": [{ "name": "next" }],
+    "baseUrl": ".",
+    "paths": {
+      "@/abi": ["abi/index.ts"],
+      "@/utils": ["utils/index.ts"],
+      "@/services": ["services/index.ts"],
+      "@/hooks": ["hooks/index.ts"],
+      "@/constants": ["constants/index.ts"],
+    }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]

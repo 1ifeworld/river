@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Network, Alchemy, Nft } from 'alchemy-sdk'
-import { env } from '../services/env'
+import { env } from '@/services'
 
 type Props = {
   network: number

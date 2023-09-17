@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { type Hex } from 'viem'
-import { getAddressDisplay } from '../utils'
+import { getAddressDisplay } from '@/utils'
 
 export function useGetAddressDisplay(address: Hex) {
   const [display, setDisplay] = useState('')
