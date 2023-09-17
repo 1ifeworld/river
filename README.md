@@ -46,4 +46,4 @@ pnpm format
 
 Additionally, ensure that you review the project's open [issues](https://github.com/1ifeworld/river/issues) and link your pull request to a relevant one, if applicable.
 
-For more detailed guidelines on the contribution process and setting up a local development environment, click [here](https://github.com/1ifeworld/river/blob/main/CONTRIBUTING.md).
+For more detailed guidelines on the contribution process and setting up a local development environment, click [here](./CONTRIBUTING.md).
