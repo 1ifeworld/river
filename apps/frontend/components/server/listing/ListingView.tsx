@@ -1,5 +1,5 @@
 import React from 'react'
-import { Flex, Stack } from '@river/design-system'
+import { Flex, Stack } from '../../../../../packages/estuary/src'
 import { MediaRenderer, MediaContainer, ListingNav } from '.'
 import { Listing } from '../../../gql/sdk.generated'
 import { ListingDetails } from './ListingDetails'

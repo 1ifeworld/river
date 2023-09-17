@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Input, Stack } from '@river/design-system'
+import { Input, Stack } from '../../../../../packages/estuary/src'
 import { createLanyardTree } from '../../../hooks'
 
 interface Props {

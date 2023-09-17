@@ -1,5 +1,5 @@
 import React from 'react'
-import { Body, Flex, cn } from '@river/design-system'
+import { Body, Flex, cn } from '../../../../../packages/estuary/src'
 
 interface StateNavProps {
   activeTab: string

@@ -1,7 +1,7 @@
 import { Avatar } from 'connectkit'
 import { ConnectKitButton } from 'connectkit'
 import { type Hex } from 'viem'
-import { Flex, Body, Stack, Button } from '@river/design-system'
+import { Flex, Body, Stack, Button } from '../../../../packages/estuary/src'
 import { firstSeven } from '../../utils'
 import { useDisconnect } from 'wagmi'
 

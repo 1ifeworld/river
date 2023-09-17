@@ -13,7 +13,7 @@ import {
   isAddress,
   getAddress,
 } from 'viem'
-import { Stack } from '@river/design-system'
+import { Stack } from '../../../../../../../packages/estuary/src'
 import { type Listing } from '../../../../../types/types'
 import { usePathname, useRouter } from 'next/navigation'
 

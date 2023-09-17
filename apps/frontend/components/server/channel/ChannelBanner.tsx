@@ -6,7 +6,7 @@ import {
   Card,
   Headline,
   BodyLarge,
-} from '@river/design-system'
+} from '../../../../../packages/estuary/src'
 import Image from 'next/image'
 import { ChannelModal } from '../../client/AddToChannelModal'
 import { Hex } from 'viem'

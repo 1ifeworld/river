@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react'
 import { useWeb3Storage } from '../../../hooks/useWeb3Storage'
-import { Button, Body, Card } from '@river/design-system'
+import { Button, Body, Card } from '../../../../../packages/estuary/src'
 import Image from 'next/image'
 
 export function UploadCard({

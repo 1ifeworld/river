@@ -1,4 +1,4 @@
-import { Grid } from '@river/design-system'
+import { Grid } from '../../../../../packages/estuary/src'
 import { Listing } from '../../../gql/sdk.generated'
 import { ListingCard } from '../../client'
 

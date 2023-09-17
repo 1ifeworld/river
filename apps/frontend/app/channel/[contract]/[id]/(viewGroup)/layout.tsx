@@ -1,4 +1,4 @@
-import { Flex } from '@river/design-system'
+import { Flex } from '../../../../../../../packages/estuary/src'
 
 export default function ViewLayout({
   children,

@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { Body, Card, BodySmall, Stack, cn } from '@river/design-system'
+import { Body, Card, BodySmall, Stack, cn } from '../../../../packages/estuary/src'
 import { truncateText } from '../../utils'
 import { Listing } from '../../gql/sdk.generated'
 import { extractAddressFromListingId } from '../../utils'

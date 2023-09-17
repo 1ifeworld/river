@@ -6,7 +6,7 @@ const nextConfig = {
     config.externals.push('pino-pretty', 'lokijs', 'encoding');
     return config;
   },
-  transpilePackages: ['@river/design-system'],
+  transpilePackages: ['@river/estuary'],
 };
 
 const withMDX = require('@next/mdx')();

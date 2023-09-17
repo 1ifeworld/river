@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { Body, Card, BodySmall, Stack, cn, Flex, C } from '@river/design-system'
+import { Body, Card, BodySmall, Stack, cn, Flex, C } from '../../../../packages/estuary/src'
 import { type Channel } from '../../gql/sdk.generated'
 import { truncateText, ipfsToHttps } from '../../utils'
 import { useGetAddressDisplay } from '../../hooks/useGetAddressDisplay'

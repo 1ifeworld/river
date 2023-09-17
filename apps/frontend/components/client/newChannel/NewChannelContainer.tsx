@@ -1,4 +1,4 @@
-import { Flex, Stack } from '@river/design-system'
+import { Flex, Stack } from '../../../../../packages/estuary/src'
 import { useWeb3Storage } from '../../../hooks/useWeb3Storage'
 import { useState, useEffect } from 'react'
 import { ChannelUri } from '../ChannelUri/ChannelUri'

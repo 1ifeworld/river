@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Hex } from 'viem'
 import { getAdminChannels } from '../../gql/requests/getAdminChannels'
 import { type Channel } from '../../gql/sdk.generated'
-import { Stack, Body } from '@river/design-system'
+import { Stack, Body } from '../../../../packages/estuary/src'
 import Link from 'next/link'
 import { truncateText } from '../../utils'
 

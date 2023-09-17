@@ -1,4 +1,4 @@
-import { Grid } from '@river/design-system'
+import { Grid } from '../../../packages/estuary/src'
 import { getAllChannels } from '../gql/requests/getAllChannels'
 import { type Channel } from '../gql/sdk.generated'
 import { ChannelCard } from '../components/client'

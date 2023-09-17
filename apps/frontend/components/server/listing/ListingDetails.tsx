@@ -1,4 +1,4 @@
-import { Body, Headline, Stack } from '@river/design-system'
+import { Body, Headline, Stack } from '../../../../../packages/estuary/src'
 import { getAddressDisplay } from '../../../utils'
 
 export async function ListingDetails({ listing }: { listing: any }) {

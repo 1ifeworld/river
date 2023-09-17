@@ -1,5 +1,5 @@
 import React from 'react'
-import { RightPointer, Flex, Body } from '@river/design-system'
+import { RightPointer, Flex, Body } from '../../../../../packages/estuary/src'
 import { getChannel } from '../../../gql/requests/getChannel'
 import { getAddress } from 'viem'
 import { extractAddressFromListingId } from '../../../utils'

@@ -10,10 +10,10 @@ import {
   Body,
   Exit,
   Stack,
-} from '@river/design-system'
+} from '../../../../../packages/estuary/src'
 import { StateNav } from './StateNav'
 import { SearchContainer } from './states/search/SearchContainer'
-import { Flex } from '@river/design-system'
+import { Flex } from '../../../../../packages/estuary/src'
 
 export function ChannelModal() {
   const [activeTab, setActiveTab] = useState<string>('Search')

@@ -9,7 +9,7 @@ import {
   RiverIcon,
   Debug,
   Button,
-} from '@river/design-system'
+} from '../../../../packages/estuary/src'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import Link from 'next/link'
 import { Connect } from './Connect'

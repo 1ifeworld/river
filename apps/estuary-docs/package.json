@@ -13,7 +13,7 @@
     "@mdx-js/react": "^2.3.0",
     "@next/mdx": "^13.4.19",
     "@radix-ui/react-scroll-area": "^1.0.4",
-    "@river/design-system": "workspace:^",
+    "@river/estuary": "workspace:*",
     "@types/mdx": "^2.0.7",
     "@types/node": "^20.5.6",
     "@types/react": "18.2.21",
