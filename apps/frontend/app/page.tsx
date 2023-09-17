@@ -1,6 +1,6 @@
 import { Grid } from '@river/estuary'
 import { getAllChannels, type Channel } from '@/gql'
-import { ChannelCard } from '../components/client'
+import { ChannelCard } from '@/client'
 
 export const dynamic = 'force-dynamic'
 

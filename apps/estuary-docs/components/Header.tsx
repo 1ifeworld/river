@@ -9,7 +9,7 @@ export function Header() {
         <div className='text-label-faint'>|</div>
         <BodyLarge className='text-label-muted'>Documentation</BodyLarge>
       </Flex>
-      <Link href='https://github.com/1ifeworld/river/tree/main/packages/design-system'>
+      <Link href='https://github.com/1ifeworld/river/tree/main/packages/estuary'>
         <BodyLarge className='text-label-muted'>GitHub</BodyLarge>
       </Link>
     </Flex>
