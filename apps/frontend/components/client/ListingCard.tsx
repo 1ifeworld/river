@@ -42,7 +42,7 @@ export function ListingCard({
         </Link>
       </Card>
       {/* Caption */}
-      <Stack className="max-w-[224px]">
+      <Stack className="min-w-[224px]">
         <Link
           href={`${extractAddressFromListingId(listing.id)}/${listing.id.slice(
             44,
