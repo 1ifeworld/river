@@ -26,7 +26,7 @@ export function ListingCard({
   return (
     <Stack className={cn('gap-y-2', className)}>
       {/* Image */}
-      <Card className="relative shadow-reg">
+      <Card className="relative shadow-reg hover:brightness-50 transition-all">
         <Link
           href={`${extractAddressFromListingId(listing.id)}/${listing.id.slice(
             44,
