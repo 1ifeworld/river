@@ -7,6 +7,7 @@ import {
   Headline,
   Stack,
 } from '@river/estuary';
+import { PlusIcon } from 'lucide-react';
 
 export default function Page() {
   return (
@@ -15,68 +16,63 @@ export default function Page() {
         <Headline>Button</Headline>
         <BodyLarge className='text-label-muted'>Trigger for actions</BodyLarge>
       </Stack>
-      <Flex className='flex-col gap-10'>
-        {/* Default */}
-        <Flex className='flex-col gap-2'>
+      <Stack className='gap-10'>
+        {/* Primary */}
+        <Stack className='gap-2'>
           <BodySmall className='text-gray-400'>Default</BodySmall>
           <Flex className='gap-x-2 items-center'>
-            <Button variant='default' size='default'>
-              Button
+            <Button size='sm'>Button</Button>
+            <Button size='md'>Button</Button>
+            <Button size='lg'>Button</Button>
+            <Button shape='circle'>Button</Button>
+            <Button size='icon'>
+              <PlusIcon />
             </Button>
-            <Button variant='default' size='sm'>
-              Button
-            </Button>
-            <Button variant='default' size='lg'>
-              Button
+            <Button size='icon' shape='circle'>
+              <PlusIcon />
             </Button>
           </Flex>
-        </Flex>
+        </Stack>
         {/* Secondary */}
-        <Flex className='flex-col gap-2'>
+        <Stack className='gap-2'>
           <BodySmall className='text-gray-400'>Secondary</BodySmall>
           <Flex className='gap-x-2 items-center'>
-            <Button variant='secondary' size='default'>
+            <Button variant='secondary' size='sm'>
               Button
             </Button>
-            <Button variant='secondary' size='sm'>
+            <Button variant='secondary' size='md'>
               Button
             </Button>
             <Button variant='secondary' size='lg'>
               Button
             </Button>
-          </Flex>
-        </Flex>
-        {/* Link */}
-        <Flex className='flex-col gap-2'>
-          <BodySmall className='text-gray-400'>Link</BodySmall>
-          <Flex className='gap-x-2 items-center'>
-            <Button variant='link' size='default'>
+            <Button variant='secondary' shape='circle'>
               Button
             </Button>
+            <Button variant='secondary' size='icon'>
+              <PlusIcon />
+            </Button>
+            <Button variant='secondary' size='icon' shape='circle'>
+              <PlusIcon />
+            </Button>
+          </Flex>
+        </Stack>
+        {/* Link */}
+        <Stack className='gap-2'>
+          <BodySmall className='text-gray-400'>Link</BodySmall>
+          <Flex className='gap-x-2 items-center'>
             <Button variant='link' size='sm'>
+              Button
+            </Button>
+            <Button variant='link' size='md'>
               Button
             </Button>
             <Button variant='link' size='lg'>
               Button
             </Button>
           </Flex>
-        </Flex>
-        {/* Pill */}
-        <Flex className='flex-col gap-2'>
-          <BodySmall className='text-gray-400'>Pill</BodySmall>
-          <Flex className='gap-x-2 items-center'>
-            <Button variant='pill' size='default'>
-              Button
-            </Button>
-            <Button variant='pill' size='sm'>
-              Button
-            </Button>
-            <Button variant='pill' size='lg'>
-              Button
-            </Button>
-          </Flex>
-        </Flex>
-      </Flex>
+        </Stack>
+      </Stack>
     </Stack>
   );
 }

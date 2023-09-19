@@ -6,39 +6,37 @@ import { Body } from './Typography';
 import { cn } from '../utils';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center text-label rounded-md ring-offset-background transition-colors transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center text-label ring-offset-background shadow-soft transition-colors transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
-        default:
-          'bg-base border border-base-border shadow-soft hover:bg-base-hover',
-        secondary: 'bg-label text-[#ffffff] shadow-soft hover:bg-label/80',
-        link: 'underline-offset-4 hover:underline',
-        pill: 'bg-base border border-base-border shadow-soft hover:bg-base-hover rounded-full',
+        primary: 'bg-base border border-base-border hover:bg-base-hover',
+        secondary: 'bg-label text-[#ffffff] hover:bg-label/80',
+        link: 'underline-offset-4 hover:underline shadow-none',
+      },
+      shape: {
+        square: 'rounded-md',
+        circle: 'rounded-full',
       },
       size: {
-        default: 'h-10 px-10 py-2',
-        sm: 'h-9 rounded-md px-3',
-        lg: 'h-11 rounded-md px-8',
-        // TODO: determine if we'll continue to need an icon variant
-        // icon: 'h-10 w-10 rounded-full',
+        sm: 'h-9 px-3',
+        md: 'h-10 px-10 py-2',
+        lg: 'h-11 px-8',
+        icon: 'h-8 w-8 p-2 shadow-none',
       },
     },
     compoundVariants: [
       {
-        variant: 'pill',
-        size: 'sm',
-        className: 'rounded-full px-4',
-      },
-      {
-        variant: 'pill',
-        size: 'lg',
-        className: 'rounded-full',
+        variant: ['primary', 'secondary', 'link'],
+        size: ['sm', 'md', 'lg'],
+        shape: 'circle',
+        className: 'px-6',
       },
     ],
     defaultVariants: {
-      variant: 'default',
-      size: 'default',
+      variant: 'primary',
+      shape: 'square',
+      size: 'md',
     },
   }
 );
@@ -51,11 +49,22 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, shape, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button';
+    if (size === 'icon') {
+      return (
+        <Comp
+          className={cn(buttonVariants({ variant, shape, size, className }))}
+          ref={ref}
+          {...props}
+        >
+          {props.children}
+        </Comp>
+      );
+    }
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
+        className={cn(buttonVariants({ variant, shape, size, className }))}
         ref={ref}
         {...props}
       >
