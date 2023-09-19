@@ -151,7 +151,7 @@ const SearchInput = ({
         />
       </Stack>
       {/* Search */}
-      <span className='justify-end'>
+      <span className='items-end'>
         <Button
           size='icon'
           shape='circle'
