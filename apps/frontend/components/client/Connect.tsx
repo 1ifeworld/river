@@ -11,7 +11,7 @@ function Auth({ address, ensName }: { address?: Hex; ensName?: string }) {
     <button
       type="button"
       onClick={() => disconnect()}
-      className="-m-2 hover:bg-base-hover hover:rounded-full transition-all p-2 min-w-[133px]"
+      className="-my-2 hover:bg-base-hover hover:rounded-full transition-all p-2 min-w-[133px]"
     >
       <Flex className="items-center gap-[10px]">
         <Avatar address={address} size={40} />
@@ -37,11 +37,8 @@ export function Connect() {
         return isConnected ? (
           <Auth address={address} ensName={ensName} />
         ) : (
-          <Button
-            onClick={show}
-            className="-m-2 bg-base hover:bg-base-hover border border-base-border shadow-reg"
-          >
-            <Body className="text-label">Connect</Body>
+          <Button onClick={show} className="shadow-soft">
+            Connect
           </Button>
         )
       }}
