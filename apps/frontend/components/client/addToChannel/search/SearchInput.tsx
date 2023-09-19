@@ -151,7 +151,7 @@ const SearchInput = ({
         />
       </Stack>
       {/* Search */}
-      <span className='items-end'>
+      <span className='mt-[22px]'>
         <Button
           size='icon'
           shape='circle'
