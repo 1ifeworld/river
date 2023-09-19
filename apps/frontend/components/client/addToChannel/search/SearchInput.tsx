@@ -101,7 +101,7 @@ const SearchInput = ({
   }, [network, contractAddress, tokenId]);
 
   return (
-    <Flex className='items-center justify-between'>
+    <Flex className='justify-between'>
       {/* Network select */}
       <Stack className='gap-y-1'>
         <Label
@@ -151,7 +151,7 @@ const SearchInput = ({
         />
       </Stack>
       {/* Search */}
-      <span className='content-end'>
+      <span className='justify-end'>
         <Button
           size='icon'
           shape='circle'
