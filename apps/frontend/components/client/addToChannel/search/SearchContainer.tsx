@@ -3,7 +3,7 @@ import SearchGallery from './SearchGallery'
 import SearchInput from './SearchInput'
 import SearchAction from './SearchAction'
 import { Nft } from 'alchemy-sdk'
-import { useSendData } from '../../../../hooks'
+import { useSendData } from '@/hooks'
 import {
   Hex,
   Hash,

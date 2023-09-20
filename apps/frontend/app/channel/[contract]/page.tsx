@@ -14,7 +14,7 @@ export default async function Channel({
   })
 
   return (
-    <Stack className="m-10 gap-y-[88px]">
+    <Stack className="gap-y-[88px]">
       <ChannelBanner channels={channels?.[0]} />
       <ChannelBody listings={channels[0]?.listings} />
     </Stack>
