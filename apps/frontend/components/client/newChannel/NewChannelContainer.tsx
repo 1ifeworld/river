@@ -11,7 +11,7 @@ import {
   parseAbiParameters,
   zeroAddress,
 } from 'viem'
-import { factory, logic, renderer } from '@/constants'
+import { factory, logic, renderer, zeroHash } from '@/constants'
 import { useAccount } from 'wagmi'
 import { useRouter } from 'next/navigation'
 import { LanyardMerkle } from './LanyardMerkle'
@@ -44,19 +44,16 @@ export function NewChannelContainer() {
     setUriCid(`ipfs://${schemaCid}`)
   }
 
-  /* setupPress Hook */
   // setup logic inits
   const initialAdminArray: Hex[] = [initialAdmin]
-  const initialMerkleRoot: Hash =
-    '0x0000000000000000000000000000000000000000000000000000000000000000'
+  const initialMerkleRoot = zeroHash
   const logicInit: Hash = encodeAbiParameters(
     parseAbiParameters('address[], bytes32'),
     [initialAdminArray, initialMerkleRoot],
   )
-  // setup rendererInits
-  const rendererInit: Hash =
-    '0x0000000000000000000000000000000000000000000000000000000000000000'
-  // encode sub inputs
+  // setup renderer inits
+  const rendererInit = zeroHash
+  // encode subinputs
   const encodedUri: Hash = encodeAbiParameters(parseAbiParameters('string'), [
     uriCid,
   ])
@@ -76,15 +73,12 @@ export function NewChannelContainer() {
       ],
     ],
   )
+
   const { setupPress, setupPressTxnReceipt } = useSetupPress({
     factory: factory,
     data: setupInputs,
     prepareTxn: uriCid ? true : false,
   })
-
-  const newChannelRoute = setupPressTxnReceipt
-    ? setupPressTxnReceipt.logs[0].address
-    : undefined
 
   // trigger channel creation once channel uri pinned and state has updated
   useEffect(() => {
@@ -96,12 +90,12 @@ export function NewChannelContainer() {
 
   // trigger route change once channel creation is complete
   useEffect(() => {
-    if (!!newChannelRoute) {
+    if (setupPressTxnReceipt) {
       setTimeout(() => {
-        router.push(`/channel/${newChannelRoute}`)
+        router.push(`/channel/${setupPressTxnReceipt?.logs[0].address}`)
       }, 5000)
     }
-  }, [newChannelRoute])
+  }, [setupPressTxnReceipt])
 
   return (
     <Flex className="gap-x-10 h-[248px]">

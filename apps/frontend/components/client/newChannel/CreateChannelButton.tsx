@@ -11,7 +11,7 @@ export function CreateChannelButton({
 }) {
   return (
     <Button disabled={!createReady} onClick={createTrigger}>
-      <Body className="font-medium">Create</Body>
+      Create
     </Button>
   )
 }
