@@ -1,9 +1,9 @@
-import { Button, Body } from '@river/estuary';
+import { Button, Body } from '@river/estuary'
 
 interface SearchActionProps {
-  addReady: boolean;
-  addTrigger?: () => void;
-  nameOfAdd?: string;
+  addReady: boolean
+  addTrigger?: () => void
+  nameOfAdd?: string
 }
 
 const SearchAction = ({
@@ -15,12 +15,12 @@ const SearchAction = ({
     <Button
       disabled={!addReady}
       onClick={addTrigger}
-      className='w-full mb-4'
-      variant='secondary'
+      className="w-full mb-4"
+      variant="secondary"
     >
       {nameOfAdd ? `Add "${nameOfAdd}"` : 'Add'}
     </Button>
-  );
-};
+  )
+}
 
-export default SearchAction;
+export default SearchAction

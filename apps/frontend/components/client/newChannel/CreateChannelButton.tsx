@@ -1,17 +1,17 @@
-import { Button, Body } from '@river/estuary';
+import { Button, Body } from '@river/estuary'
 
 export function CreateChannelButton({
   createReady,
 
   createTrigger,
 }: {
-  createReady: boolean;
+  createReady: boolean
 
-  createTrigger?: () => void;
+  createTrigger?: () => void
 }) {
   return (
     <Button disabled={!createReady} onClick={createTrigger}>
       Create
     </Button>
-  );
+  )
 }
