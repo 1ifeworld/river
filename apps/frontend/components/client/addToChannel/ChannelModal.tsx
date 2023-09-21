@@ -15,7 +15,7 @@ export function ChannelModal() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className="focus-outline:none">
-        <Button>Add</Button>
+        <Button variant="secondary">Add</Button>
       </DialogTrigger>
       <DialogContent className="flex flex-col border-[0.5px] border-base-border rounded-[14px] h-fit">
         <Flex className="items-center px-4">
