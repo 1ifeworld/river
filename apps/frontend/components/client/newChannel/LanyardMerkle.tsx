@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import { Input, Stack, Button } from '@river/estuary'
-import { createLanyardTree } from '@/hooks'
+import React, { useState, useEffect } from 'react';
+import { Input, Stack, Button } from '@river/estuary';
+import { createLanyardTree } from '@/hooks';
+import { useAccount } from 'wagmi';
 
 interface Props {
-  onMerkleRootChange: (merkle: string) => void
+  onMerkleRootChange: (merkle: string) => void;
 }
 
 export function LanyardMerkle({ onMerkleRootChange }: Props) {
-  const [addresses, setAddresses] = useState<string[]>([]);
+  const { address: connectedAddress } = useAccount();
+  const [addresses, setAddresses] = useState<string[]>(connectedAddress ? [connectedAddress] : []);
   const [inputAddress, setInputAddress] = useState<string>('');
   const [merkleRoot, setMerkleRoot] = useState<string>('');
 
@@ -48,7 +50,7 @@ export function LanyardMerkle({ onMerkleRootChange }: Props) {
 
   const handleAddAddress = () => {
     if (isValidAddress(inputAddress)) {
-      console.log("Address added:", inputAddress); 
+      console.log("Address added:", inputAddress);
       setAddresses(prevAddresses => [...prevAddresses, inputAddress]);
       setInputAddress('');
     } else {
@@ -69,7 +71,9 @@ export function LanyardMerkle({ onMerkleRootChange }: Props) {
       </div>
       <ul>
         {addresses.map((address, index) => (
-          <li key={index}>{address}</li>
+          <li key={index} style={address === connectedAddress ? { color: 'grey' } : {}}>
+            {address}
+          </li>
         ))}
       </ul>
     </Stack>
