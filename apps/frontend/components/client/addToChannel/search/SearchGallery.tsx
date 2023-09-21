@@ -1,10 +1,11 @@
 import React from 'react'
 import { Nft } from 'alchemy-sdk'
 import Image from 'next/image'
-import { cn } from '@river/estuary/src/utils'
+import { cn } from '@river/estuary'
 import { Body, Stack, Flex } from '@river/estuary'
 import { Hex, zeroAddress } from 'viem'
 import { useGetAddressDisplay } from '@/hooks'
+import { truncateText } from '@/utils'
 
 interface NetworkSelectProps {
   nftMetadata: Nft | undefined
@@ -29,7 +30,7 @@ const SearchGallery = ({ nftMetadata }: NetworkSelectProps) => {
               width={200}
               height={200}
               className={cn(
-                'rounded min-w-[164px] min-h-[164px] object-cover aspect-square',
+                'rounded min-w-[164px] min-h-[164px] object-cover aspect-square shadow-soft',
               )}
             />
           ) : (
@@ -37,18 +38,20 @@ const SearchGallery = ({ nftMetadata }: NetworkSelectProps) => {
           )}
         </div>
         {/* Second Column: Text details */}
-        <Stack className="gap-4 max-w-prose">
+        <Stack className="gap-4">
           <span>
             <Body className="text-label break-words">
               {nftMetadata?.title || 'Title'}
             </Body>
             {/* truncating for now but need to add ens resolution */}
-            <Body className="text-label-muted break-words truncate">
+            <Body className="text-label-muted break-words">
               {display || 'Created By'}
             </Body>
           </span>
           <Body className="text-label-muted break-words">
-            {nftMetadata?.description || 'Description' || 'Description'}
+            {truncateText(nftMetadata?.description as string, 120) ||
+              'Description' ||
+              'Description'}
           </Body>
         </Stack>
       </Flex>
