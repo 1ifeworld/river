@@ -19,12 +19,12 @@ export function ChannelUri({
   const { display } = useGetAddressDisplay(address ? address : zeroAddress)
 
   return (
-    <Stack>
+    <Stack className="gap-2">
       <Input
         type="text"
         variant="ghost"
-        size="lg"
         placeholder="Channel Name"
+        className="text-2xl"
         value={name}
         onChange={(e) => {
           setName(e.target.value)
