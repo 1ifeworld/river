@@ -6,6 +6,7 @@ export {
   BodySmall,
   type TypographyProps,
 } from './Typography';
+export * from './AspectRatio';
 export * from './Button';
 export * from './Card';
 export * from './Dialog';
@@ -18,4 +19,5 @@ export * from './Select';
 export * from './Sheet';
 export * from './SvgLoader';
 export * from './Tooltip';
-export * from './AspectRatio';
+export * from './Popover'
+

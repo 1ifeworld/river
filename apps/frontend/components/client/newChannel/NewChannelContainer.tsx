@@ -1,4 +1,4 @@
-import { Flex, Stack } from '@river/estuary'
+import { Flex, Stack, Button } from '@river/estuary'
 import { useWeb3Storage, useSetupPress } from '@/hooks'
 import { useState, useEffect } from 'react'
 import { ChannelUri } from '../ChannelUri'
@@ -106,11 +106,10 @@ export function NewChannelContainer() {
         <span className="inline-block mb-5">
           <ChannelUri
             setName={setName}
-            name={name}
+            name={name} 
             setDescription={setDescription}
             description={description}
-          />
-          {/* <LanyardMerkle onMerkleRootChange={setMerkleRoot} /> */}
+          /> 
         </span>
         <CreateChannelButton
           createReady={!!imageCid && !!name}
