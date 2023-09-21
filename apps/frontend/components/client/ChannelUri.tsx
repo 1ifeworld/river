@@ -3,17 +3,21 @@ import { Input, Stack, BodyLarge, Button, Flex } from "@river/estuary";
 import { useAccount } from "wagmi";
 import { useGetAddressDisplay } from "@/hooks";
 import { zeroAddress } from "viem";
+import { LanyardMerkle } from ".";
 import { Popover, PopoverContent, PopoverTrigger } from "@river/estuary";
 import { PlusCircle } from "lucide-react";
+
 
 export function ChannelUri({
   name,
   setName,
+  setMerkleRoot,
   description,
   setDescription,
 }: {
   name: string;
   description: string;
+  setMerkleRoot:  React.Dispatch<React.SetStateAction<string>>;
   setName: React.Dispatch<React.SetStateAction<string>>;
   setDescription: React.Dispatch<React.SetStateAction<string>>;
 }) {
@@ -37,14 +41,18 @@ export function ChannelUri({
         <BodyLarge className="text-label-muted">{display} </BodyLarge>
 
         <Popover>
-          <PopoverTrigger>
-            <Button className="border-none" size="icon" shape="circle">
-              <PlusCircle />
-            </Button>
-            {/* <LanyardMerkle onMerkleRootChange={setMerkleRoot} /> */}
-          </PopoverTrigger>
-          <PopoverContent><Input placeholder="Add Members"></Input></PopoverContent>
-        </Popover>
+  <PopoverTrigger>
+    <Button className="border-none" size="icon" shape="circle">
+      <PlusCircle />
+    </Button>
+  </PopoverTrigger>
+
+  <Flex>
+    <PopoverContent>
+      <LanyardMerkle onMerkleRootChange={setMerkleRoot} />
+    </PopoverContent>
+  </Flex>
+</Popover>
       </Flex>
       <Input
         type="text"
