@@ -7,5 +7,9 @@ export function SidebarOrDrawer() {
   if (isMobile) {
     return <SidebarAsDrawer />
   }
-  return <Sidebar />
+  return (
+    <aside className="max-w-[210px]">
+      <Sidebar />
+    </aside>
+  )
 }

@@ -1,4 +1,4 @@
-import { Grid } from '@river/estuary'
+import { Debug, Grid } from '@river/estuary'
 import { getAllChannels, type Channel } from '@/gql'
 import { ChannelCard } from '@/client'
 

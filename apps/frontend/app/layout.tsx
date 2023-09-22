@@ -20,14 +20,10 @@ export default function RootLayout({
     <html lang="en" className={`${helveticaNeue.variable}`}>
       <body>
         <Providers>
-          <Grid className="grid-cols-[auto,1fr]">
-            <aside className="max-w-[210px]">
-              <SidebarOrDrawer />
-            </aside>
-            <div className="flex-grow">
-              {children}
-              <Analytics />
-            </div>
+          <Grid className="grid-cols-1 md:grid-cols-[auto,1fr]">
+            <SidebarOrDrawer />
+            {children}
+            <Analytics />
           </Grid>
         </Providers>
       </body>

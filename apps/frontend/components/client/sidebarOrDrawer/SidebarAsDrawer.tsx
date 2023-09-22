@@ -1,5 +1,5 @@
 import { Drawer } from 'vaul'
-import { Button, Flex, Stack } from '@river/estuary'
+import { Button, Flex, Stack, Debug } from '@river/estuary'
 import { MenuIcon, LogOutIcon } from 'lucide-react'
 import { Connect } from '@/client'
 import { useAccount, useDisconnect } from 'wagmi'
@@ -11,7 +11,11 @@ export function SidebarAsDrawer() {
   return (
     <Drawer.Root shouldScaleBackground>
       <Drawer.Trigger className="fixed right-[5%] bottom-[2.5%] z-40" asChild>
-        <Button size="icon" shape="circle" className="shadow-reg focus-visible:outline-none h-12 w-12">
+        <Button
+          size="icon"
+          shape="circle"
+          className="shadow-reg focus-visible:outline-none h-12 w-12"
+        >
           <MenuIcon />
         </Button>
       </Drawer.Trigger>
