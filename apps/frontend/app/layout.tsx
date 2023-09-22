@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { Providers } from './providers'
 import { helveticaNeue } from './fonts/fonts'
 import { SidebarOrDrawer } from '@/client'
-import { Grid } from '@river/estuary'
+import { Grid, Debug } from '@river/estuary'
 import { Analytics } from '@vercel/analytics/react'
 
 export const metadata: Metadata = {
@@ -20,7 +20,7 @@ export default function RootLayout({
     <html lang="en" className={`${helveticaNeue.variable}`}>
       <body>
         <Providers>
-          <Grid className="grid-cols-1 md:grid-cols-[auto,1fr]">
+          <Grid className="w-screen grid-cols-1 md:grid-cols-[auto,1fr]">
             <SidebarOrDrawer />
             {children}
             <Analytics />
