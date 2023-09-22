@@ -2,7 +2,7 @@ import '../styles/globals.css'
 import type { Metadata } from 'next'
 import { Providers } from './providers'
 import { helveticaNeue } from './fonts/fonts'
-import { Sidebar } from '../components/client'
+import { SidebarOrDrawer } from '@/client'
 import { Grid } from '@river/estuary'
 import { Analytics } from '@vercel/analytics/react'
 
@@ -22,7 +22,7 @@ export default function RootLayout({
         <Providers>
           <Grid className="grid-cols-[auto,1fr]">
             <aside className="max-w-[210px]">
-              <Sidebar />
+              <SidebarOrDrawer />
             </aside>
             <div className="flex-grow">
               {children}

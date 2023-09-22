@@ -1,18 +1,7 @@
-import {
-  Stack,
-  Flex,
-  Body,
-  BodyLarge,
-  SearchIcon,
-  Add,
-  Globe,
-  RiverIcon,
-  Debug,
-  Button,
-} from '@river/estuary'
+import { Stack, Body } from '@river/estuary'
 import Link from 'next/link'
-import { Connect } from './Connect'
-import { AdminChannels } from './AdminChannels'
+import { Connect } from '../Connect'
+import { AdminChannels } from '../AdminChannels'
 import { Hex } from 'viem'
 import { useAccount } from 'wagmi'
 
@@ -20,7 +9,7 @@ export function Sidebar() {
   const { isConnected, address } = useAccount()
 
   return (
-    <Stack className="hidden md:flex bg-base border-r border-base-shade h-screen sticky top-0 px-5 pt-10 pb-5">
+    <Stack className="bg-base border-r border-base-shade h-screen sticky top-0 px-5 pt-10 pb-5">
       <Stack className="justify-between h-full">
         <span>
           <Stack className="gap-2">
