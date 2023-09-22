@@ -2,7 +2,13 @@
 
 import React, { useState } from 'react'
 
-import { Dialog, DialogContent, DialogTrigger, Button } from '@river/estuary'
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  Button,
+  Stack,
+} from '@river/estuary'
 import { HorizontalNav } from './HorizontalNav'
 import { SearchContainer } from './search/SearchContainer'
 import { Flex } from '@river/estuary'
@@ -17,7 +23,7 @@ export function ChannelModal() {
       <DialogTrigger className="focus-outline:none">
         <Button variant="secondary">Add</Button>
       </DialogTrigger>
-      <DialogContent className="flex flex-col border-[0.5px] border-base-border rounded-[14px] h-fit">
+      <DialogContent className="border-[0.5px] border-base-border rounded-[14px] h-fit">
         <Flex className="items-center px-4">
           <HorizontalNav activeTab={activeTab} setActiveTab={setActiveTab} />
           <Button onClick={() => setOpen(false)} size="icon" shape="circle">

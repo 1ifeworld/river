@@ -14,8 +14,8 @@ import {
 import { SearchIcon } from 'lucide-react'
 import { Input } from '@river/estuary/src/components/Input'
 
-import { networks } from '../../../../constants'
-import useGetTokenMetadata from '../../../../hooks/useGetTokenMetadata'
+import { networks } from '@/constants'
+import { useGetTokenMetadata } from '@/hooks'
 import { Nft } from 'alchemy-sdk'
 import Image from 'next/image'
 import { Ethereum } from '@river/estuary'
@@ -103,10 +103,10 @@ const SearchInput = ({
   return (
     <Flex className="justify-between">
       {/* Network select */}
-      <Stack className="gap-y-1">
+      <Stack className="gap-1">
         <Label
           htmlFor="networkSelect"
-          className="text-[#7B7B7B] w-fit text-[10px]"
+          className="text-[#7B7B7B] text-[10px]"
           id="networkSelect"
         >
           Network
@@ -117,7 +117,7 @@ const SearchInput = ({
         />
       </Stack>
       {/* Address input */}
-      <Stack className="gap-y-1">
+      <Stack className="gap-1">
         <Label
           htmlFor="addressInput"
           className="text-[#7B7B7B] w-fit text-[10px]"
@@ -130,11 +130,11 @@ const SearchInput = ({
           placeholder="0xA837b..."
           value={contractAddress}
           onChange={(e) => setContractAddress(e.target.value)}
-          className="px-2 w-[256px] h-[40px] border-[1.5px] rounded border-[#DADADA] focus-visible:ring-0"
+          className="w-[156px] md:w-[256px] h-[40px] border-[1.5px] rounded border-[#DADADA] focus-visible:ring-0"
         />
       </Stack>
       {/* Token id input */}
-      <Stack className="gap-y-1">
+      <Stack className="gap-1">
         <Label
           htmlFor="tokenIdInput"
           className="text-[#7B7B7B] w-fit text-[10px]"
@@ -147,7 +147,7 @@ const SearchInput = ({
           placeholder="17"
           value={tokenId}
           onChange={(e) => setTokenId(e.target.value)}
-          className="px-2 w-14 h-[40px] border-[1.5px] border-[#DADADA] focus-visible:outline-none focus-visible:ring-0"
+          className="w-[40px] h-[40px] border-[1.5px] border-[#DADADA] focus-visible:outline-none focus-visible:ring-0"
         />
       </Stack>
       {/* Search */}
