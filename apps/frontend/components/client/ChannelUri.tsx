@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import { Input, Stack, BodyLarge, Button, Flex } from "@river/estuary";
 import { useAccount } from "wagmi";
 import { useGetAddressDisplay } from "@/hooks";
@@ -11,18 +12,20 @@ import { PlusCircle } from "lucide-react";
 export function ChannelUri({
   name,
   setName,
-  setMerkleRoot,
+  setMerkleRoot: setMerkleRootProp,
   description,
   setDescription,
 }: {
   name: string;
   description: string;
-  setMerkleRoot:  React.Dispatch<React.SetStateAction<string>>;
+  setMerkleRoot: React.Dispatch<React.SetStateAction<string>>; 
   setName: React.Dispatch<React.SetStateAction<string>>;
   setDescription: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const { address } = useAccount();
   const { display } = useGetAddressDisplay(address ? address : zeroAddress);
+  const [localMerkleRoot, setLocalMerkleRoot] = useState<string>(''); 
+
 
   return (
     <Stack className="gap-2">
@@ -49,7 +52,7 @@ export function ChannelUri({
 
   <Flex>
     <PopoverContent>
-      <LanyardMerkle onMerkleRootChange={setMerkleRoot} />
+    <LanyardMerkle onMerkleRootChange={setMerkleRootProp} currentMerkleRoot={localMerkleRoot} />
     </PopoverContent>
   </Flex>
 </Popover>

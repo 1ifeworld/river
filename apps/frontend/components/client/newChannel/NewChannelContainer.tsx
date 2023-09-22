@@ -27,7 +27,7 @@ export function NewChannelContainer() {
   const [description, setDescription] = useState<string>('')
   const [uriCid, setUriCid] = useState<string>('')
   const [channelCreated, setChannelCreated] = useState(false)
-  const [merkleRoot, setMerkleRoot] = useState<string>('')
+  const [merkleRoot, setMerkleRoot] = useState<string>(zeroHash);
 
   const { client } = useWeb3Storage(uriCid)
   const handleUriUpload = async () => {
@@ -46,10 +46,9 @@ export function NewChannelContainer() {
 
   // setup logic inits
   const initialAdminArray: Hex[] = [initialAdmin]
-  const initialMerkleRoot = zeroHash
   const logicInit: Hash = encodeAbiParameters(
     parseAbiParameters('address[], bytes32'),
-    [initialAdminArray, initialMerkleRoot],
+    [initialAdminArray, merkleRoot as Hex],
   )
   // setup renderer inits
   const rendererInit = zeroHash
@@ -107,6 +106,7 @@ export function NewChannelContainer() {
           <ChannelUri
             setName={setName}
             name={name} 
+            setMerkleRoot={setMerkleRoot}
             setDescription={setDescription}
             description={description}
           /> 
@@ -117,5 +117,5 @@ export function NewChannelContainer() {
         />
       </Stack>
     </Flex>
-  )
+  );
 }

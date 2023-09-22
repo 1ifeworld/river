@@ -5,13 +5,14 @@ import { useAccount } from 'wagmi';
 
 interface Props {
   onMerkleRootChange: (merkle: string) => void;
+  currentMerkleRoot: string; 
 }
 
-export function LanyardMerkle({ onMerkleRootChange }: Props) {
+export function LanyardMerkle({ onMerkleRootChange, currentMerkleRoot }: Props) {
   const { address: connectedAddress } = useAccount();
   const [addresses, setAddresses] = useState<string[]>(connectedAddress ? [connectedAddress] : []);
   const [inputAddress, setInputAddress] = useState<string>('');
-  const [merkleRoot, setMerkleRoot] = useState<string>('');
+  const [merkleRoot, setMerkleRoot] = useState<string>(currentMerkleRoot);  
 
   useEffect(() => {
     const generateTree = async () => {
