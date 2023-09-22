@@ -11,7 +11,7 @@ export function SidebarAsDrawer() {
   return (
     <Drawer.Root shouldScaleBackground>
       <Drawer.Trigger className="fixed right-[5%] bottom-[2.5%] z-40" asChild>
-        <Button size="icon" shape="circle" className="shadow-reg focus:outline-none">
+        <Button size="icon" shape="circle" className="shadow-reg focus:outline-none h-10 w-10">
           <MenuIcon />
         </Button>
       </Drawer.Trigger>
