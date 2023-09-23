@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import SearchGallery from "./SearchGallery";
 import SearchInput from "./SearchInput";
 import SearchAction from "./SearchAction";
@@ -14,17 +14,14 @@ import {
   getAddress,
 } from "viem";
 import { Stack } from "@river/estuary";
-import { type Listing } from "../../../../types/types";
+import { Listing } from "../../../../types/types";
 import { usePathname, useRouter } from "next/navigation";
 import { MerkleProof } from "hooks/isAdminOrInTree";
-
-
 
 interface SearchContainerProps {
   isAdmin: boolean;
   setAdminStatus: React.Dispatch<React.SetStateAction<boolean>>;
-  merkleProof?: MerkleProof | null; 
-
+  merkleProof?: MerkleProof | null;
 }
 
 export function SearchContainer({
@@ -44,7 +41,7 @@ export function SearchContainer({
   const cleanedPathname = getAddress(pathname.slice(9));
   const router = useRouter();
 
-  const handleSetSearchParams = (updatedParams: {
+  const handleSetSearchParams = useCallback((updatedParams: {
     network?: number | undefined;
     contractAddress?: string | undefined;
     tokenId?: string | undefined;
@@ -60,11 +57,9 @@ export function SearchContainer({
         ? BigInt(updatedParams.tokenId)
         : prev.tokenId,
     }));
-  };
+  }, []);
 
-  const proofArray = merkleProof?.proof as `0x${string}`[] || [];
-  console.log("PROOFOFARRAY",proofArray )
-
+  const proofArray = (merkleProof?.proof as `0x${string}`[]) || [];
 
   const sendInputs: Hash = encodeAbiParameters(
     parseAbiParameters("bytes32[], (uint128, uint128, address, bool)[]"),
@@ -93,24 +88,20 @@ export function SearchContainer({
     });
 
   return (
-    <>
-  
-        <Stack className="justify-center gap-4">
-          <SearchGallery nftMetadata={searchResults} />
-          <Stack className="gap-y-4 mx-[18px]">
-            <SearchInput
-              searchResults={searchResults}
-              setSearchResults={setSearchResults}
-              setSearchParams={handleSetSearchParams}
-            />
-          <SearchAction
-            nameOfAdd={searchResults?.title}
-            addReady={isAdmin || !!sendDataConfig ? true : false}
-            addTrigger={sendData}
-          />
-          </Stack>
-        </Stack>
-
-    </>
+    <Stack className="justify-center gap-4">
+      <SearchGallery nftMetadata={searchResults} />
+      <Stack className="gap-y-4 mx-[18px]">
+        <SearchInput
+          searchResults={searchResults}
+          setSearchResults={setSearchResults}
+          setSearchParams={handleSetSearchParams}
+        />
+        <SearchAction
+          nameOfAdd={searchResults?.title}
+          addReady={isAdmin || !!sendDataConfig}
+          addTrigger={sendData}
+        />
+      </Stack>
+    </Stack>
   );
 }
