@@ -1,14 +1,13 @@
 // ChannelModal.tsx
 "use client";
 
-import React, { useState } from "react";
-import { Dialog, DialogContent, DialogTrigger, Button } from "@river/estuary";
-import { HorizontalNav } from "./HorizontalNav";
-import { SearchContainer } from "./search/SearchContainer";
-import { Flex } from "@river/estuary";
+import React, { useState, useCallback } from "react";
+import { Dialog, DialogContent, DialogTrigger, Button, Flex } from "@river/estuary";
 import { XIcon } from "lucide-react";
 import { Hash } from "viem";
 import { IsAdminOrInTree, MerkleProof } from "hooks/isAdminOrInTree";
+import { HorizontalNav } from "./HorizontalNav";
+import { SearchContainer } from "./search/SearchContainer";
 
 export function ChannelModal() {
   const [activeTab, setActiveTab] = useState<string>("Search");
@@ -17,13 +16,13 @@ export function ChannelModal() {
   const [isInTree, setIsInTree] = useState<boolean>(false);
   const [merkleProof, setMerkleProof] = useState<MerkleProof | null>(null);
 
-  const handleIsInTreeStatus = (status: boolean) => {
+  const handleIsInTreeStatus = useCallback((status: boolean) => {
     setIsInTree(status);
-  };
+  }, []);
 
-  const handleMerkleProofChange = (proof: MerkleProof) => {
+  const handleMerkleProofChange = useCallback((proof: MerkleProof) => {
     setMerkleProof(proof);
-  };
+  }, []);
 
   return (
     <>
@@ -47,13 +46,13 @@ export function ChannelModal() {
                 <XIcon />
               </Button>
             </Flex>
-            {activeTab === "Search" ? (
+            {activeTab === "Search" && (
               <SearchContainer
                 isAdmin={isAdmin}
                 setAdminStatus={setIsAdmin}
                 merkleProof={merkleProof}
               />
-            ) : null}
+            )}
           </DialogContent>
         </Dialog>
       )}

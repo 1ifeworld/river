@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Input, Stack, Button } from '@river/estuary';
 import { createLanyardTree } from '@/hooks';
 import { useAccount } from 'wagmi';
@@ -14,6 +14,10 @@ export function LanyardMerkle({ onMerkleRootChange, currentMerkleRoot }: Props) 
   const [addresses, setAddresses] = useState<string[]>(connectedAddress ? [connectedAddress] : []);
   const [inputAddress, setInputAddress] = useState<string>('');
   const [merkleRoot, setMerkleRoot] = useState<Hex | undefined>(currentMerkleRoot);
+
+  const isValidAddress = useCallback((address: string): address is `0x${string}` => {
+    return address.startsWith('0x') && isAddress(address);
+  }, []);
 
   useEffect(() => {
     const generateTree = async () => {
@@ -40,11 +44,7 @@ export function LanyardMerkle({ onMerkleRootChange, currentMerkleRoot }: Props) 
       }
     };
     generateTree();
-  }, [addresses]);
-
-  function isValidAddress(address: string): address is `0x${string}` {
-    return address.startsWith('0x') && isAddress(address);
-  }
+  }, [addresses, isValidAddress, onMerkleRootChange]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputAddress(e.target.value);
