@@ -1,7 +1,7 @@
 // ChannelModal.tsx
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { Dialog, DialogContent, DialogTrigger, Button, Flex } from "@river/estuary";
 import { XIcon } from "lucide-react";
 import { Hash } from "viem";
@@ -12,9 +12,11 @@ import { SearchContainer } from "./search/SearchContainer";
 export function ChannelModal() {
   const [activeTab, setActiveTab] = useState<string>("Search");
   const [open, setOpen] = useState<boolean>(false);
-  const [isAdmin, setIsAdmin] = useState<boolean>(true);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [isInTree, setIsInTree] = useState<boolean>(false);
   const [merkleProof, setMerkleProof] = useState<MerkleProof | null>(null);
+  const [showButton, setShowButton] = useState<boolean>(false);
+
 
   const handleIsInTreeStatus = useCallback((status: boolean) => {
     setIsInTree(status);
@@ -24,6 +26,12 @@ export function ChannelModal() {
     setMerkleProof(proof);
   }, []);
 
+  useEffect(() => {
+    if (isAdmin || isInTree) {
+      setShowButton(true);
+    }
+  }, [isAdmin, isInTree]);
+
   return (
     <>
       <IsAdminOrInTree
@@ -31,7 +39,8 @@ export function ChannelModal() {
         isInTreeStatus={handleIsInTreeStatus}
         onMerkleProofChange={handleMerkleProofChange}
       />
-      {(isAdmin || isInTree) && (
+
+      {showButton && ( 
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger className="focus-outline:none">
             <Button variant="secondary">Add</Button>
