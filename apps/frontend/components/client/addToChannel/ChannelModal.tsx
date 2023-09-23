@@ -8,14 +8,15 @@ import { SearchContainer } from './search/SearchContainer'
 import { Flex } from '@river/estuary'
 import { XIcon } from 'lucide-react'
 import { Hash } from 'viem'
-import { IsAdminOrInTree } from 'hooks/isAdminOrInTree'
+import { IsAdminOrInTree, MerkleProof } from 'hooks/isAdminOrInTree'
+
 
 export function ChannelModal() {
   const [activeTab, setActiveTab] = useState<string>('Search')
   const [open, setOpen] = useState<boolean>(false)
   const [isAdmin, setIsAdmin] = useState<boolean>(true)
   const [isInTree, setIsInTree] = useState<boolean>(false);
-  const [merkleProof, setMerkleProof] = useState<Hash | null>(null);
+  const [merkleProof, setMerkleProof] = useState<MerkleProof | null>(null);
 
 
 
@@ -24,7 +25,7 @@ export function ChannelModal() {
     setIsInTree(status);
   };
 
-  const handleMerkleProofChange = (proof: Hash) => {
+  const handleMerkleProofChange = (proof: MerkleProof) => {
     setMerkleProof(proof);
   };
 
@@ -50,7 +51,7 @@ return (
                 <XIcon />
               </Button>
             </Flex>
-            {activeTab === 'Search' ?<SearchContainer isAdmin={isAdmin} setAdminStatus={setIsAdmin} merkleProof={merkleProof as Hash} />
+            {activeTab === 'Search' ?<SearchContainer isAdmin={isAdmin} setAdminStatus={setIsAdmin} merkleProof={merkleProof} />
  : null} 
           </DialogContent>
         </Dialog>
