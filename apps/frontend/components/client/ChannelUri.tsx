@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Input, Stack, BodyLarge, Button, Flex } from "@river/estuary";
 import { useAccount } from "wagmi";
 import { useGetAddressDisplay } from "@/hooks";
-import { zeroAddress } from "viem";
+import { zeroAddress,Hex } from "viem";
 import { LanyardMerkle } from ".";
 import { Popover, PopoverContent, PopoverTrigger } from "@river/estuary";
 import { PlusCircle } from "lucide-react";
@@ -12,19 +12,19 @@ import { PlusCircle } from "lucide-react";
 export function ChannelUri({
   name,
   setName,
-  setMerkleRoot: setMerkleRootProp,
+  setMerkleRoot,
   description,
   setDescription,
 }: {
   name: string;
   description: string;
-  setMerkleRoot: React.Dispatch<React.SetStateAction<string>>; 
+  setMerkleRoot: React.Dispatch<React.SetStateAction<Hex>>; 
   setName: React.Dispatch<React.SetStateAction<string>>;
   setDescription: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const { address } = useAccount();
   const { display } = useGetAddressDisplay(address ? address : zeroAddress);
-  const [localMerkleRoot, setLocalMerkleRoot] = useState<string>(''); 
+  const [localMerkleRoot, setLocalMerkleRoot] = useState<Hex | undefined>();
 
 
   return (
@@ -52,7 +52,7 @@ export function ChannelUri({
 
   <Flex>
     <PopoverContent>
-    <LanyardMerkle onMerkleRootChange={setMerkleRootProp} currentMerkleRoot={localMerkleRoot} />
+    <LanyardMerkle onMerkleRootChange={setMerkleRoot} currentMerkleRoot={localMerkleRoot} />
     </PopoverContent>
   </Flex>
 </Popover>

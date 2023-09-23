@@ -2,17 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { Input, Stack, Button } from '@river/estuary';
 import { createLanyardTree } from '@/hooks';
 import { useAccount } from 'wagmi';
+import { isAddress, Hash, Hex } from 'viem';
 
 interface Props {
-  onMerkleRootChange: (merkle: string) => void;
-  currentMerkleRoot: string; 
+  onMerkleRootChange: (merkle: Hash) => void;
+  currentMerkleRoot?: Hex; 
 }
 
 export function LanyardMerkle({ onMerkleRootChange, currentMerkleRoot }: Props) {
   const { address: connectedAddress } = useAccount();
   const [addresses, setAddresses] = useState<string[]>(connectedAddress ? [connectedAddress] : []);
   const [inputAddress, setInputAddress] = useState<string>('');
-  const [merkleRoot, setMerkleRoot] = useState<string>(currentMerkleRoot);  
+  const [merkleRoot, setMerkleRoot] = useState<Hex | undefined>(currentMerkleRoot);
 
   useEffect(() => {
     const generateTree = async () => {
@@ -42,7 +43,7 @@ export function LanyardMerkle({ onMerkleRootChange, currentMerkleRoot }: Props) 
   }, [addresses]);
 
   function isValidAddress(address: string): address is `0x${string}` {
-    return address.startsWith('0x') && address.length === 42;
+    return address.startsWith('0x') && isAddress(address);
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

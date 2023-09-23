@@ -14,7 +14,6 @@ import {
 import { factory, logic, renderer, zeroHash } from '@/constants'
 import { useAccount } from 'wagmi'
 import { useRouter } from 'next/navigation'
-import { LanyardMerkle } from './LanyardMerkle'
 
 export function NewChannelContainer() {
   const { address } = useAccount()
@@ -27,7 +26,7 @@ export function NewChannelContainer() {
   const [description, setDescription] = useState<string>('')
   const [uriCid, setUriCid] = useState<string>('')
   const [channelCreated, setChannelCreated] = useState(false)
-  const [merkleRoot, setMerkleRoot] = useState<string>(zeroHash);
+  const [merkleRoot, setMerkleRoot] = useState<Hash>(zeroHash);
 
   const { client } = useWeb3Storage(uriCid)
   const handleUriUpload = async () => {
@@ -48,7 +47,7 @@ export function NewChannelContainer() {
   const initialAdminArray: Hex[] = [initialAdmin]
   const logicInit: Hash = encodeAbiParameters(
     parseAbiParameters('address[], bytes32'),
-    [initialAdminArray, merkleRoot as Hex],
+    [initialAdminArray, merkleRoot],
   )
   // setup renderer inits
   const rendererInit = zeroHash
