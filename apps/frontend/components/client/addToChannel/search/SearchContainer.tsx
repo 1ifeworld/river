@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import SearchGallery from './SearchGallery';
-import SearchInput from './SearchInput';
-import SearchAction from './SearchAction';
-import { Nft } from 'alchemy-sdk';
-import { useSendData } from '@/hooks';
+import React, { useState } from "react";
+import SearchGallery from "./SearchGallery";
+import SearchInput from "./SearchInput";
+import SearchAction from "./SearchAction";
+import { Nft } from "alchemy-sdk";
+import { useSendData } from "@/hooks";
 import {
   Hex,
   Hash,
@@ -12,18 +12,21 @@ import {
   zeroAddress,
   isAddress,
   getAddress,
-} from 'viem';
-import { useAccount } from 'wagmi';
-import { Stack } from '@river/estuary';
-import { type Listing } from '../../../../types/types';
-import { usePathname, useRouter } from 'next/navigation';
+} from "viem";
+import { useAccount } from "wagmi";
+import { Stack } from "@river/estuary";
+import { type Listing } from "../../../../types/types";
+import { usePathname, useRouter } from "next/navigation";
 
 interface SearchContainerProps {
   isAdmin: boolean;
   setAdminStatus: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export function SearchContainer({ isAdmin, setAdminStatus }: SearchContainerProps) {
+export function SearchContainer({
+  isAdmin,
+  setAdminStatus,
+}: SearchContainerProps) {
   const [searchParams, setSearchParams] = useState<Listing>({
     chainId: BigInt(0),
     tokenId: BigInt(0),
@@ -55,7 +58,7 @@ export function SearchContainer({ isAdmin, setAdminStatus }: SearchContainerProp
   };
 
   const sendInputs: Hash = encodeAbiParameters(
-    parseAbiParameters('bytes32[], (uint128, uint128, address, bool)[]'),
+    parseAbiParameters("bytes32[], (uint128, uint128, address, bool)[]"),
     [
       [],
       [
@@ -75,18 +78,14 @@ export function SearchContainer({ isAdmin, setAdminStatus }: SearchContainerProp
     useSendData({
       press: cleanedPathname,
       data: sendInputs,
-      value: '0.0005',
+      value: "0.0005",
       prepareTxn: searchResults ? true : false,
       successCallback: router.refresh,
     });
 
-
-
-
-
-    return (
-      <>
-          {isAdmin && (
+  return (
+    <>
+  
         <Stack className="justify-center gap-4">
           <SearchGallery nftMetadata={searchResults} />
           <Stack className="gap-y-4 mx-[18px]">
@@ -95,14 +94,14 @@ export function SearchContainer({ isAdmin, setAdminStatus }: SearchContainerProp
               setSearchResults={setSearchResults}
               setSearchParams={handleSetSearchParams}
             />
-            <SearchAction
-              nameOfAdd={searchResults?.title}
-              addReady={isAdmin || !!sendDataConfig ? true : false}
-              addTrigger={sendData}
-            />
+          <SearchAction
+            nameOfAdd={searchResults?.title}
+            addReady={isAdmin || !!sendDataConfig ? true : false}
+            addTrigger={sendData}
+          />
           </Stack>
         </Stack>
-      )}
+
     </>
   );
 }

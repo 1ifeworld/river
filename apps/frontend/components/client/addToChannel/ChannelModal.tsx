@@ -14,27 +14,30 @@ export function ChannelModal() {
   const [activeTab, setActiveTab] = useState<string>('Search')
   const [open, setOpen] = useState<boolean>(false)
   const [isAdmin, setIsAdmin] = useState<boolean>(true)
+  const [isInTree, setIsInTree] = useState<boolean>(false);
 
-  const handleIsInTreeStatus = (isInTree: boolean) => {
-    // Handle the isInTree status here
-};
+
+  const handleIsInTreeStatus = (status: boolean) => {
+    
+    setIsInTree(status);
+  };
 
 const handleMerkleProofChange = (merkleProof: Hash) => {
     // Handle the merkleProof here
 };
 
-  return (
-    <>
-        <IsAdminOrInTree 
-            isAdminStatus={setIsAdmin} 
-            isInTreeStatus={handleIsInTreeStatus} 
-            onMerkleProofChange={handleMerkleProofChange} 
-        />
-        {isAdmin && (
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger className="focus-outline:none">
-            <Button>Add</Button>
-          </DialogTrigger>
+return (
+  <>
+     <IsAdminOrInTree 
+          isAdminStatus={setIsAdmin} 
+          isInTreeStatus={handleIsInTreeStatus} 
+          onMerkleProofChange={handleMerkleProofChange} 
+      />
+      {(isAdmin || isInTree) && (
+          <Dialog open={open} onOpenChange={setOpen}>
+             <DialogTrigger className="focus-outline:none">
+                  <Button>Add</Button>
+              </DialogTrigger>
           <DialogContent className="flex flex-col border-[0.5px] border-base-border rounded-[14px] h-fit">
             <Flex className="items-center px-4">
               <HorizontalNav activeTab={activeTab} setActiveTab={setActiveTab} />
