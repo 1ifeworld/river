@@ -15,6 +15,8 @@ export function ChannelModal() {
   const [open, setOpen] = useState<boolean>(false)
   const [isAdmin, setIsAdmin] = useState<boolean>(true)
   const [isInTree, setIsInTree] = useState<boolean>(false);
+  const [merkleProof, setMerkleProof] = useState<Hash | null>(null);
+
 
 
   const handleIsInTreeStatus = (status: boolean) => {
@@ -22,9 +24,12 @@ export function ChannelModal() {
     setIsInTree(status);
   };
 
-const handleMerkleProofChange = (merkleProof: Hash) => {
-    // Handle the merkleProof here
-};
+  const handleMerkleProofChange = (proof: Hash) => {
+    setMerkleProof(proof);
+  };
+
+
+
 
 return (
   <>
@@ -45,7 +50,7 @@ return (
                 <XIcon />
               </Button>
             </Flex>
-            {activeTab === 'Search' ?<SearchContainer isAdmin={isAdmin} setAdminStatus={setIsAdmin} />
+            {activeTab === 'Search' ?<SearchContainer isAdmin={isAdmin} setAdminStatus={setIsAdmin} merkleProof={merkleProof as Hash} />
  : null} 
           </DialogContent>
         </Dialog>

@@ -6,10 +6,15 @@ import { getChannel } from "gql/requests";
 import { getTreeFromRoot, getMerkleProofs } from ".";
 import { getTree } from "lanyard";
 
+export type MerkleProof = {
+  unhashedLeaf: string;
+  proof: string[];
+};
+
 interface IsAdminProps {
   isAdminStatus: (isAdmin: boolean) => void;
   isInTreeStatus: (isInTree: boolean) => void;
-  onMerkleProofChange?: (merkleProof: Hash) => void; 
+  onMerkleProofChange?: (merkleProof: MerkleProof) => void; 
 }
 
 async function isInTree(merkleRoot: Hash, address: Hex): Promise<boolean> {
@@ -51,12 +56,15 @@ export function IsAdminOrInTree({ isAdminStatus, isInTreeStatus, onMerkleProofCh
                     isInTreeStatus(true);
         
                     // Generate the Merkle proof
-                    const proof = await getMerkleProofs(merkleRoot, address);
+                    const proof  = await getMerkleProofs(merkleRoot, address);
                     if (onMerkleProofChange) {
                         onMerkleProofChange(proof);
+                        console.log("Merkle Proof!!!:", proof);
+
                     }
                 } else {
                     console.log("User is not in the tree.");
+
                     isInTreeStatus(false);
                 }
             } catch (error: any) {

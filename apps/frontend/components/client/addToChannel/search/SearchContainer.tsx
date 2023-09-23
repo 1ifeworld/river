@@ -13,19 +13,24 @@ import {
   isAddress,
   getAddress,
 } from "viem";
-import { useAccount } from "wagmi";
 import { Stack } from "@river/estuary";
 import { type Listing } from "../../../../types/types";
 import { usePathname, useRouter } from "next/navigation";
+import { MerkleProof } from "hooks/isAdminOrInTree";
+
+
 
 interface SearchContainerProps {
   isAdmin: boolean;
   setAdminStatus: React.Dispatch<React.SetStateAction<boolean>>;
+  merkleProof?: MerkleProof | null; 
+
 }
 
 export function SearchContainer({
   isAdmin,
   setAdminStatus,
+  merkleProof,
 }: SearchContainerProps) {
   const [searchParams, setSearchParams] = useState<Listing>({
     chainId: BigInt(0),
@@ -57,10 +62,14 @@ export function SearchContainer({
     }));
   };
 
+  const proofArray = merkleProof?.proof as `0x${string}`[] || [];
+  console.log("PROOFOFARRAY",proofArray )
+
+
   const sendInputs: Hash = encodeAbiParameters(
     parseAbiParameters("bytes32[], (uint128, uint128, address, bool)[]"),
     [
-      [],
+      proofArray,
       [
         [
           searchParams.chainId,
