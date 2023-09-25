@@ -24,7 +24,6 @@ export function SearchContainer() {
     hasTokenId: true,
   })
   const [searchResults, setSearchResults] = useState<Nft | undefined>()
-  console.log('Search results', searchResults)
   const pathname = usePathname()
   const cleanedPathname = getAddress(pathname.slice(9))
   const router = useRouter()
