@@ -30,72 +30,38 @@ export function IsAdminOrInTree({
   const pathname = usePathname();
   const cleanedPathname = getAddress(pathname.slice(9));
   const { address } = useAccount() as { address: Hex };
-  const initialLoad = useRef(true);
+
   useEffect(() => {
     async function checkUserPermissions() {
-      if (!initialLoad.current) {
-        return;
-      }
+      let isAdminResult = false;
+      let isInTreeResult = false;
+
       try {
         const channelData = await getChannel({ channel: cleanedPathname });
         const adminData = channelData.channels[0];
 
-        if (
-          adminData?.logicTransmitterMerkleAdmin[0]?.accounts?.includes(address)
-        ) {
-          console.log("User is an admin.");
-          isAdminStatus(true);
-        } else {
-          console.log("User is not an admin.");
-          isAdminStatus(false);
-        }
+        isAdminResult = adminData?.logicTransmitterMerkleAdmin[0]?.accounts?.includes(address) || false;
 
-        const merkleRoot = adminData?.logicTransmitterMerkleAdmin[0]
-          ?.merkleRoot as `0x${string}`;
-        console.log("Merkle Root:", merkleRoot);
-        console.log("Address:", address);
+        const merkleRoot = adminData?.logicTransmitterMerkleAdmin[0]?.merkleRoot as `0x${string}`;
 
         if (merkleRoot) {
-          try {
-            const tree = await getTreeFromRoot(merkleRoot, address);
-            console.log("Tree Status:", tree);
+          const tree = await getTreeFromRoot(merkleRoot, address);
 
-            if (
-              tree?.unhashedLeaves
-                ?.map((addr: Hex) => addr.toLowerCase())
-                .includes(address.toLowerCase())
-            ) {
-              console.log("User is in the tree.");
-              isInTreeStatus(true);
+          isInTreeResult = tree?.unhashedLeaves
+            ?.map((addr: Hex) => addr.toLowerCase())
+            .includes(address.toLowerCase()) || false;
 
-              // Generate the Merkle proof
-              const proof = await getMerkleProofs(merkleRoot, address);
-              if (onMerkleProofChange) {
-                onMerkleProofChange(proof);
-                console.log("Merkle Proof!!!:", proof);
-              }
-            } else {
-              console.log("User is not in the tree.");
-
-              isInTreeStatus(false);
-            }
-          } catch (error: any) {
-            if (error?.response?.status === 404) {
-              console.log("User is not in the tree (404 response).");
-              isInTreeStatus(false);
-            } else {
-              throw error;
-            }
+          if (isInTreeResult && onMerkleProofChange) {
+            const proof = await getMerkleProofs(merkleRoot, address);
+            onMerkleProofChange(proof);
           }
-        } else {
-          console.log("No Merkle Root available.");
-          isAdminStatus(false);
-          isInTreeStatus(false);
         }
       } catch (error) {
         console.error("Error checking user permissions:", error);
+      } finally {
+        isAdminStatus(isAdminResult);
+        isInTreeStatus(isInTreeResult);
       }
-      initialLoad.current = false;
     }
 
     checkUserPermissions();

@@ -2,9 +2,15 @@
 "use client";
 
 import React, { useState, useCallback, useEffect } from "react";
-import { Dialog, DialogContent, DialogTrigger, Button, Flex } from "@river/estuary";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  Button,
+  Flex,
+} from "@river/estuary";
 import { XIcon } from "lucide-react";
-import { Hash } from "viem";
+import { useAccount } from "wagmi";
 import { IsAdminOrInTree, MerkleProof } from "hooks/isAdminOrInTree";
 import { HorizontalNav } from "./HorizontalNav";
 import { SearchContainer } from "./search/SearchContainer";
@@ -12,11 +18,12 @@ import { SearchContainer } from "./search/SearchContainer";
 export function ChannelModal() {
   const [activeTab, setActiveTab] = useState<string>("Search");
   const [open, setOpen] = useState<boolean>(false);
-  const [isAdmin, setIsAdmin] = useState<boolean>(false);
-  const [isInTree, setIsInTree] = useState<boolean>(false);
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+  const [isInTree, setIsInTree] = useState<boolean | null>(null);
   const [merkleProof, setMerkleProof] = useState<MerkleProof | null>(null);
   const [showButton, setShowButton] = useState<boolean>(false);
 
+  const { address } = useAccount();
 
   const handleIsInTreeStatus = useCallback((status: boolean) => {
     setIsInTree(status);
@@ -27,8 +34,12 @@ export function ChannelModal() {
   }, []);
 
   useEffect(() => {
-    if (isAdmin || isInTree) {
-      setShowButton(true);
+    if (isAdmin !== null && isInTree !== null) {
+      if (isAdmin || isInTree) {
+        setShowButton(true);
+      } else {
+        setShowButton(false);
+      }
     }
   }, [isAdmin, isInTree]);
 
@@ -40,7 +51,7 @@ export function ChannelModal() {
         onMerkleProofChange={handleMerkleProofChange}
       />
 
-      {showButton && ( 
+      {address && showButton && (
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger className="focus-outline:none">
             <Button variant="secondary">Add</Button>
@@ -57,7 +68,7 @@ export function ChannelModal() {
             </Flex>
             {activeTab === "Search" && (
               <SearchContainer
-                isAdmin={isAdmin}
+                isAdmin={isAdmin ?? false}
                 setAdminStatus={setIsAdmin}
                 merkleProof={merkleProof}
               />

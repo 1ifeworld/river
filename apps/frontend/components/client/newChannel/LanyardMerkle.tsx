@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Input, Stack, Label, Button, Flex, Grid } from "@river/estuary";
 import { createLanyardTree } from "@/hooks";
 import { useAccount } from "wagmi";
-import { SearchIcon } from "lucide-react";
+import { Plus } from "lucide-react";
 import { getAddressDisplay } from "utils/getAddressDisplay";
 import { isAddress, Hash, Hex } from "viem";
 import { resolveEnsOrAddress } from "../../../utils/resolveENSorAddress";
@@ -103,12 +103,12 @@ export function LanyardMerkle({
         <Input
           id="memberAddressInput"
           type="text"
-          placeholder="Enter an address"
+          placeholder="Enter an ENS or Ethereum address"
           value={inputAddress}
           onChange={handleInputChange}
         />
         <Button size="icon" shape="circle" onClick={handleAddAddress}>
-          <SearchIcon />
+          <Plus />
         </Button>
       </Flex>
 

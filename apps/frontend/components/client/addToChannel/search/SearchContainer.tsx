@@ -20,7 +20,7 @@ import { MerkleProof } from "hooks/isAdminOrInTree";
 
 interface SearchContainerProps {
   isAdmin: boolean;
-  setAdminStatus: React.Dispatch<React.SetStateAction<boolean>>;
+  setAdminStatus: React.Dispatch<React.SetStateAction<boolean | null>>;
   merkleProof?: MerkleProof | null;
 }
 
@@ -98,7 +98,7 @@ export function SearchContainer({
         />
         <SearchAction
           nameOfAdd={searchResults?.title}
-          addReady={isAdmin || !!sendDataConfig}
+          addReady={isAdmin || !!sendDataConfig ? true: false}
           addTrigger={sendData}
         />
       </Stack>
