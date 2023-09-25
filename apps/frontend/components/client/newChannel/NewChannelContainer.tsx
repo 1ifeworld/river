@@ -29,6 +29,10 @@ export function NewChannelContainer() {
 
   const { client } = useWeb3Storage(uriCid);
 
+  useEffect(() => {
+    console.log("Received Merkle root in NewChannelContainer:", merkleRoot); 
+  }, [merkleRoot]);
+
   const handleUriUpload = useCallback(async () => {
     const contractUriData = {
       name,
