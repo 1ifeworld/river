@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import SearchGallery from './SearchGallery'
 import SearchInput from './SearchInput'
-import SearchAction from './SearchAction'
+import { AddButton } from './AddButton'
 import { Nft } from 'alchemy-sdk'
 import { useSendData } from '@/hooks'
 import {
@@ -86,7 +86,7 @@ export function SearchContainer() {
           setSearchResults={setSearchResults}
           setSearchParams={handleSetSearchParams}
         />
-        <SearchAction
+        <AddButton
           nameOfAdd={searchResults?.title}
           addReady={!!sendDataConfig ? true : false}
           addTrigger={sendData}

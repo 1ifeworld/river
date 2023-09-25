@@ -1,16 +1,12 @@
-import { Button, Body, Debug } from '@river/estuary'
+import { Button } from '@river/estuary'
 
-interface SearchActionProps {
+interface AddButtonProps {
   addReady: boolean
   addTrigger?: () => void
   nameOfAdd?: string
 }
 
-const SearchAction = ({
-  addReady,
-  addTrigger,
-  nameOfAdd,
-}: SearchActionProps) => {
+export function AddButton({ addReady, addTrigger, nameOfAdd }: AddButtonProps) {
   return (
     <Button
       disabled={!addReady}
@@ -22,5 +18,3 @@ const SearchAction = ({
     </Button>
   )
 }
-
-export default SearchAction
