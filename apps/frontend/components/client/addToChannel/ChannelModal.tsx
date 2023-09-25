@@ -7,6 +7,7 @@ import {
   DialogContent,
   DialogTrigger,
   Button,
+  Stack,
   Flex,
 } from "@river/estuary";
 import { XIcon } from "lucide-react";
@@ -56,7 +57,7 @@ export function ChannelModal() {
           <DialogTrigger className="focus-outline:none">
             <Button variant="secondary">Add</Button>
           </DialogTrigger>
-          <DialogContent className="flex flex-col border-[0.5px] border-base-border rounded-[14px] h-fit">
+          <DialogContent className="border-[0.5px] border-base-border rounded-[14px] h-fit">
             <Flex className="items-center px-4">
               <HorizontalNav
                 activeTab={activeTab}
