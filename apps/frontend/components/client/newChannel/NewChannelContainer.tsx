@@ -86,7 +86,7 @@ export function NewChannelContainer() {
         router.push(`/channel/${setupPressTxnReceipt.logs[0].address}`)
       }, 5000)
     }
-  }, [setupPressTxnReceipt, router])
+  }, [setupPressTxnReceipt])
 
   return (
     <Flex className="gap-x-10 h-[248px]">
