@@ -1,8 +1,6 @@
-// ChannelModal.tsx
-"use client";
+'use client'
 
-
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from 'react'
 
 import {
   Dialog,
@@ -11,44 +9,42 @@ import {
   Button,
   Stack,
   Flex,
-} from "@river/estuary";
-import { XIcon } from "lucide-react";
-import { useAccount } from "wagmi";
-import { IsAdminOrInTree, MerkleProof } from "hooks/isAdminOrInTree";
-import { HorizontalNav } from "./HorizontalNav";
-import { SearchContainer } from "./search/SearchContainer";
-
+} from '@river/estuary'
+import { XIcon } from 'lucide-react'
+import { useAccount } from 'wagmi'
+import { IsAdminOrInTree, MerkleProof } from 'hooks/isAdminOrInTree'
+import { HorizontalNav } from './HorizontalNav'
+import { SearchContainer } from './search/SearchContainer'
 
 export function ChannelModal() {
-  const [activeTab, setActiveTab] = useState<string>("Search");
-  const [open, setOpen] = useState<boolean>(false);
-  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
-  const [isInTree, setIsInTree] = useState<boolean | null>(null);
-  const [merkleProof, setMerkleProof] = useState<MerkleProof | null>(null);
-  const [showButton, setShowButton] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<string>('Search')
+  const [open, setOpen] = useState<boolean>(false)
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null)
+  const [isInTree, setIsInTree] = useState<boolean | null>(null)
+  const [merkleProof, setMerkleProof] = useState<MerkleProof | null>(null)
+  const [showButton, setShowButton] = useState<boolean>(false)
 
-  const { address } = useAccount();
+  const { address } = useAccount()
 
   const handleIsInTreeStatus = useCallback((status: boolean) => {
-    setIsInTree(status);
-  }, []);
+    setIsInTree(status)
+  }, [])
 
   const handleMerkleProofChange = useCallback((proof: MerkleProof) => {
-    setMerkleProof(proof);
-  }, []);
+    setMerkleProof(proof)
+  }, [])
 
   useEffect(() => {
     if (isAdmin !== null && isInTree !== null) {
       if (isAdmin || isInTree) {
-        setShowButton(true);
+        setShowButton(true)
       } else {
-        setShowButton(false);
+        setShowButton(false)
       }
     }
-  }, [isAdmin, isInTree]);
+  }, [isAdmin, isInTree])
 
   return (
-
     <>
       <IsAdminOrInTree
         isAdminStatus={setIsAdmin}
@@ -71,7 +67,7 @@ export function ChannelModal() {
                 <XIcon />
               </Button>
             </Flex>
-            {activeTab === "Search" && (
+            {activeTab === 'Search' && (
               <SearchContainer
                 isAdmin={isAdmin ?? false}
                 setAdminStatus={setIsAdmin}
@@ -82,5 +78,5 @@ export function ChannelModal() {
         </Dialog>
       )}
     </>
-  );
+  )
 }

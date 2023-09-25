@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback } from 'react'
 import {
   Input,
   Stack,
@@ -8,19 +8,19 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@river/estuary";
-import { PlusCircle } from "lucide-react";
-import { useAccount } from "wagmi";
-import { useGetAddressDisplay } from "@/hooks";
-import { zeroAddress, Hex } from "viem";
-import { LanyardMerkle } from ".";
+} from '@river/estuary'
+import { PlusCircle } from 'lucide-react'
+import { useAccount } from 'wagmi'
+import { useGetAddressDisplay } from '@/hooks'
+import { zeroAddress, Hex } from 'viem'
+import { LanyardMerkle } from '.'
 
 interface ChannelUriProps {
-  name: string;
-  description: string;
-  setMerkleRoot: React.Dispatch<React.SetStateAction<Hex>>;
-  setName: React.Dispatch<React.SetStateAction<string>>;
-  setDescription: React.Dispatch<React.SetStateAction<string>>;
+  name: string
+  description: string
+  setMerkleRoot: React.Dispatch<React.SetStateAction<Hex>>
+  setName: React.Dispatch<React.SetStateAction<string>>
+  setDescription: React.Dispatch<React.SetStateAction<string>>
 }
 
 export function ChannelUri({
@@ -30,18 +30,23 @@ export function ChannelUri({
   description,
   setDescription,
 }: ChannelUriProps) {
-  const { address } = useAccount();
-  const { display } = useGetAddressDisplay(address || zeroAddress);
-  const [localMerkleRoot, setLocalMerkleRoot] = useState<Hex | undefined>();
+  const { address } = useAccount()
+  const { display } = useGetAddressDisplay(address || zeroAddress)
+  const [localMerkleRoot, setLocalMerkleRoot] = useState<Hex | undefined>()
 
-  const handleNameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-  }, [setName]);
-  
-  const handleDescriptionChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setDescription(e.target.value);
-  }, [setDescription]);
-  
+  const handleNameChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setName(e.target.value)
+    },
+    [setName],
+  )
+
+  const handleDescriptionChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setDescription(e.target.value)
+    },
+    [setDescription],
+  )
 
   return (
     <Stack className="gap-2">
@@ -78,5 +83,5 @@ export function ChannelUri({
         onChange={handleDescriptionChange}
       />
     </Stack>
-  );
+  )
 }

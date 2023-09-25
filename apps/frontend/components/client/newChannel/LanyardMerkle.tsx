@@ -1,94 +1,85 @@
-import React, { useState, useEffect } from "react";
-import { Input, Stack, Label, Button, Flex, Grid } from "@river/estuary";
-import { createLanyardTree } from "@/hooks";
-import { useAccount } from "wagmi";
-import { Plus } from "lucide-react";
-import { getAddressDisplay } from "utils/getAddressDisplay";
-import { isAddress, Hash, Hex } from "viem";
-import { resolveEnsOrAddress } from "../../../utils/resolveENSorAddress";
+import React, { useState, useEffect } from 'react'
+import { Input, Stack, Label, Button, Flex, Grid } from '@river/estuary'
+import { createLanyardTree } from '@/hooks'
+import { useAccount } from 'wagmi'
+import { Plus } from 'lucide-react'
+import { getAddressDisplay } from 'utils/getAddressDisplay'
+import { isAddress, Hash, Hex } from 'viem'
+import { resolveEnsOrAddress } from '../../../utils/resolveENSorAddress'
 
 interface Props {
-  onMerkleRootChange: (merkle: Hash) => void;
-  currentMerkleRoot?: Hex;
+  onMerkleRootChange: (merkle: Hash) => void
+  currentMerkleRoot?: Hex
 }
 
 const isValidAddress = (address: string): boolean => {
-  return isAddress(address);
-};
+  return isAddress(address)
+}
 
 export function LanyardMerkle({
   onMerkleRootChange,
   currentMerkleRoot,
 }: Props) {
-  const { address } = useAccount();
-  const [addresses, setAddresses] = useState<string[]>(
-    address ? [address] : []
-  );
-  const [inputAddress, setInputAddress] = useState<string>("");
+  const { address } = useAccount()
+  const [addresses, setAddresses] = useState<string[]>(address ? [address] : [])
+  const [inputAddress, setInputAddress] = useState<string>('')
   const [merkleRoot, setMerkleRoot] = useState<Hex | undefined>(
-    currentMerkleRoot
-  );
-  const [resolvedAddresses, setResolvedAddresses] = useState<string[]>([]);
+    currentMerkleRoot,
+  )
+  const [resolvedAddresses, setResolvedAddresses] = useState<string[]>([])
 
   useEffect(() => {
     const generateTree = async () => {
-      if (!addresses.length) return;
+      if (!addresses.length) return
 
       const is0xString = (str: string): str is `0x${string}` => {
-        return str.startsWith("0x");
-      };
-      const validAddresses = addresses
-        .filter(isValidAddress)
-        .filter(is0xString);
+        return str.startsWith('0x')
+      }
+      const validAddresses = addresses.filter(isValidAddress).filter(is0xString)
 
       if (validAddresses.length === addresses.length) {
         try {
-          const response = await createLanyardTree(validAddresses);
+          const response = await createLanyardTree(validAddresses)
           if (response?.merkle) {
-            setMerkleRoot(response.merkle);
-            onMerkleRootChange(response.merkle);
-            console.log("Merkle root in LanyardMerkle:", response.merkle);
+            setMerkleRoot(response.merkle)
+            onMerkleRootChange(response.merkle)
+            console.log('Merkle root in LanyardMerkle:', response.merkle)
           } else if (response?.error) {
-            console.error("Error from createLanyardTree:", response.error);
+            console.error('Error from createLanyardTree:', response.error)
           }
         } catch (error) {
-          console.error("Error generating Merkle tree:", error);
+          console.error('Error generating Merkle tree:', error)
         }
       } else {
         const invalidAddresses = addresses.filter(
-          (addr) => !isValidAddress(addr) || !is0xString(addr)
-        );
-        console.log("Invalid addresses:", invalidAddresses);
-        console.warn("Some addresses are not valid.");
+          (addr) => !isValidAddress(addr) || !is0xString(addr),
+        )
+        console.log('Invalid addresses:', invalidAddresses)
+        console.warn('Some addresses are not valid.')
       }
-    };
-    generateTree();
-  }, [addresses, onMerkleRootChange]);
+    }
+    generateTree()
+  }, [addresses, onMerkleRootChange])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputAddress(e.target.value);
-  };
+    setInputAddress(e.target.value)
+  }
 
-  // const handleAddAddress = () => {
-  //   if (isValidAddress(inputAddress)) {
-  //     setAddresses((prevAddresses) => [...prevAddresses, inputAddress]);
-  //     setInputAddress("");
-  //   } else {
-  //     console.warn("Invalid address format:", inputAddress);
-  //   }
-  // };
   const handleAddAddress = async () => {
-    const resolvedInput = await resolveEnsOrAddress(inputAddress);
+    const resolvedInput = await resolveEnsOrAddress(inputAddress)
     if (isAddress(resolvedInput)) {
-      setAddresses((prevAddresses) => [...prevAddresses, resolvedInput]);
+      setAddresses((prevAddresses) => [...prevAddresses, resolvedInput])
       // Get the ENS name for the resolved address
-      const ensNameOrAddress = await getAddressDisplay(resolvedInput);
-      setResolvedAddresses((prevResolved) => [...prevResolved, ensNameOrAddress]);
-      setInputAddress("");
+      const ensNameOrAddress = await getAddressDisplay(resolvedInput)
+      setResolvedAddresses((prevResolved) => [
+        ...prevResolved,
+        ensNameOrAddress,
+      ])
+      setInputAddress('')
     } else {
-      console.warn("Invalid address or ENS format:", inputAddress);
+      console.warn('Invalid address or ENS format:', inputAddress)
     }
-  };
+  }
 
   return (
     <Stack className="gap-y-4">
@@ -116,12 +107,12 @@ export function LanyardMerkle({
         {resolvedAddresses.map((addr, index) => (
           <li
             key={index}
-            style={{ color: addr === address ? "grey" : "inherit" }}
+            style={{ color: addr === address ? 'grey' : 'inherit' }}
           >
             {addr}
           </li>
         ))}
       </ul>
     </Stack>
-  );
+  )
 }

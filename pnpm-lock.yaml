@@ -148,9 +148,6 @@ importers:
       next:
         specifier: 13.4.19
         version: 13.4.19(@babel/core@7.22.17)(react-dom@18.2.0)(react@18.2.0)
-      popover:
-        specifier: ^2.4.1
-        version: 2.4.1
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -161,10 +158,8 @@ importers:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.3.3)
       vaul:
-
         specifier: ^0.6.7
         version: 0.6.7(@types/react-dom@18.2.7)(@types/react@18.2.21)(react-dom@18.2.0)(react@18.2.0)
-
       viem:
         specifier: ^1.12.2
         version: 1.12.2(typescript@5.1.6)
@@ -5913,10 +5908,6 @@ packages:
       mimic-fn: 3.1.0
     dev: false
 
-  /debounce@1.0.2:
-    resolution: {integrity: sha512-AW9SsfJ9CYtgGys1gzmNV21U8OR6xkJX7XZPSWRhzkwwJbfCBiHMLRCJFCpty2ZC1LxXZqRBT8VX7hZY01v2/w==}
-    dev: false
-
   /debounce@1.2.1:
     resolution: {integrity: sha512-XRRe6Glud4rd/ZGQfiV1ruXSfbvfJedlV9Y6zOlP+2K04vBYiJEte6stfFkCP03aMnY5tsipamumUjL14fofug==}
 
@@ -6100,10 +6091,6 @@ packages:
       esutils: 2.0.3
     dev: true
 
-  /domify@1.4.1:
-    resolution: {integrity: sha512-x18nuiDHMCZGXr4KJSRMf/TWYtiaRo6RX8KN9fEbW54mvbQ6pieUuerC2ahBg+kEp1wycFj8MPUI0WkIOw5E9w==}
-    dev: false
-
   /dot-case@3.0.4:
     resolution: {integrity: sha512-Kv5nKlh6yRrdrGvxeJ2e5y2eRUpkUosIW4A2AS38zwSz27zu7ufDwQPi5Jhs3XAlGNetl3bmnGhQsMtkKJnj3w==}
     dependencies:
@@ -6160,10 +6147,6 @@ packages:
       inherits: 2.0.4
       minimalistic-assert: 1.0.1
       minimalistic-crypto-utils: 1.0.1
-    dev: false
-
-  /emitter-component@1.1.1:
-    resolution: {integrity: sha512-G+mpdiAySMuB7kesVRLuyvYRqDmshB7ReKEVuyBPkzQlmiDiLrt7hHHIy4Aff552bgknVN7B2/d3lzhGO5dvpQ==}
     dev: false
 
   /emittery@0.13.1:
@@ -9754,14 +9737,6 @@ packages:
       hey-listen: 1.0.8
       style-value-types: 5.0.0
       tslib: 2.6.2
-    dev: false
-
-  /popover@2.4.1:
-    resolution: {integrity: sha512-YiiOLTvNUJfuhuMm6ug9Uk80nTYUnWjrNRlS8ufWD2W9uzchKG+xpHlid++TTZ30uzEPHUF1qr9vumAFXGdqlw==}
-    dependencies:
-      debounce: 1.0.2
-      domify: 1.4.1
-      emitter-component: 1.1.1
     dev: false
 
   /postcss-import@15.1.0(postcss@8.4.28):
