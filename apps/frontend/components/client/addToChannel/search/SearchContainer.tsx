@@ -16,7 +16,9 @@ import { Stack, Button } from '@river/estuary'
 import { type Listing } from '../../../../types/types'
 import { usePathname, useRouter } from 'next/navigation'
 
-export function SearchContainer() {
+export function SearchContainer({
+  setOpen,
+}: { setOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
   const [searchParams, setSearchParams] = useState<Listing>({
     chainId: BigInt(0),
     tokenId: BigInt(0),
@@ -73,7 +75,10 @@ export function SearchContainer() {
       data: sendInputs,
       value: '0.0005',
       prepareTxn: !!searchResults,
-      successCallback: router.refresh,
+      successCallback: () => {
+        router.refresh
+        setOpen(false)
+      },
     })
 
   return (

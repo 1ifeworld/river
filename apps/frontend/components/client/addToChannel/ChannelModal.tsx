@@ -30,7 +30,7 @@ export function ChannelModal() {
             <XIcon />
           </Button>
         </Flex>
-        {activeTab === 'Search' ? <SearchContainer /> : null}
+        {activeTab === 'Search' ? <SearchContainer setOpen={setOpen} /> : null}
       </DialogContent>
     </Dialog>
   )
