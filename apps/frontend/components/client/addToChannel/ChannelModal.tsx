@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import {
   Dialog,
@@ -13,6 +13,7 @@ import { HorizontalNav } from './HorizontalNav'
 import { SearchContainer } from './search/SearchContainer'
 import { Flex } from '@river/estuary'
 import { XIcon } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 export function ChannelModal() {
   const [activeTab, setActiveTab] = useState<string>('Search')

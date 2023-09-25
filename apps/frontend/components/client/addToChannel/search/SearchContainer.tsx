@@ -76,7 +76,7 @@ export function SearchContainer({
       value: '0.0005',
       prepareTxn: !!searchResults,
       successCallback: () => {
-        router.refresh
+        router.refresh()
         setOpen(false)
       },
     })
@@ -91,6 +91,7 @@ export function SearchContainer({
           setSearchParams={handleSetSearchParams}
         />
         <Button
+          loading={sendDataLoading}
           disabled={!sendData}
           onClick={() => sendData?.()}
           className="w-full"
