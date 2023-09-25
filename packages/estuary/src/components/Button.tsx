@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { Body } from './Typography';
+import { Loader2Icon } from 'lucide-react';
 
 import { cn } from '../utils';
 
@@ -43,13 +44,14 @@ const buttonVariants = cva(
 
 export interface ButtonProps
   extends React.PropsWithChildren,
-    React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  VariantProps<typeof buttonVariants> {
   asChild?: boolean;
+  loading?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, shape, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, shape, size, asChild = false, loading, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button';
     if (size === 'icon') {
       return (
@@ -71,7 +73,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         <Body
           className={variant === 'secondary' ? 'text-[#ffffff]' : 'text-label'}
         >
-          {props.children}
+          {
+            loading ? <Loader2Icon className='animate-spin' size='16' /> :
+              props.children
+          }
         </Body>
       </Comp>
     );

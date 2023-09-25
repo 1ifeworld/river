@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import SearchGallery from './SearchGallery'
 import SearchInput from './SearchInput'
-import SearchAction from './SearchAction'
 import { Nft } from 'alchemy-sdk'
 import { useSendData } from '@/hooks'
 import {
@@ -13,11 +12,13 @@ import {
   isAddress,
   getAddress,
 } from 'viem'
-import { Stack } from '@river/estuary'
+import { Stack, Button } from '@river/estuary'
 import { type Listing } from '../../../../types/types'
 import { usePathname, useRouter } from 'next/navigation'
 
-export function SearchContainer() {
+export function SearchContainer({
+  setOpen,
+}: { setOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
   const [searchParams, setSearchParams] = useState<Listing>({
     chainId: BigInt(0),
     tokenId: BigInt(0),
@@ -73,8 +74,11 @@ export function SearchContainer() {
       press: cleanedPathname,
       data: sendInputs,
       value: '0.0005',
-      prepareTxn: searchResults ? true : false,
-      successCallback: router.refresh,
+      prepareTxn: !!searchResults,
+      successCallback: () => {
+        router.refresh()
+        setOpen(false)
+      },
     })
 
   return (
@@ -86,11 +90,15 @@ export function SearchContainer() {
           setSearchResults={setSearchResults}
           setSearchParams={handleSetSearchParams}
         />
-        <SearchAction
-          nameOfAdd={searchResults?.title}
-          addReady={!!sendDataConfig ? true : false}
-          addTrigger={sendData}
-        />
+        <Button
+          loading={sendDataLoading}
+          disabled={!sendData}
+          onClick={() => sendData?.()}
+          className="w-full"
+          variant="secondary"
+        >
+          {searchResults?.title ? `Add "${searchResults?.title}"` : 'Add'}
+        </Button>
       </Stack>
     </Stack>
   )

@@ -2,13 +2,7 @@
 
 import React, { useState } from 'react'
 
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-  Button,
-  Stack,
-} from '@river/estuary'
+import { Dialog, DialogContent, DialogTrigger, Button } from '@river/estuary'
 import { HorizontalNav } from './HorizontalNav'
 import { SearchContainer } from './search/SearchContainer'
 import { Flex } from '@river/estuary'
@@ -30,7 +24,7 @@ export function ChannelModal() {
             <XIcon />
           </Button>
         </Flex>
-        {activeTab === 'Search' ? <SearchContainer /> : null}
+        {activeTab === 'Search' ? <SearchContainer setOpen={setOpen} /> : null}
       </DialogContent>
     </Dialog>
   )
