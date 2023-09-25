@@ -107,7 +107,6 @@ export function LanyardMerkle({
         {resolvedAddresses.map((addr, index) => (
           <li
             key={index}
-            style={{ color: addr === address ? 'grey' : 'inherit' }}
           >
             {addr}
           </li>
