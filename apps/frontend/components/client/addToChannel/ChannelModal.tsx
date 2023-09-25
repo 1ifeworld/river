@@ -12,7 +12,7 @@ import {
 } from '@river/estuary'
 import { XIcon } from 'lucide-react'
 import { useAccount } from 'wagmi'
-import { IsAdminOrInTree, MerkleProof } from 'hooks/isAdminOrInTree'
+import { IsAdminOrInTree, MerkleProof } from 'hooks/useIsAdminOrInTree'
 import { HorizontalNav } from './HorizontalNav'
 import { SearchContainer } from './search/SearchContainer'
 

@@ -16,7 +16,7 @@ import {
 import { Stack } from '@river/estuary'
 import { Listing } from '../../../../types/types'
 import { usePathname, useRouter } from 'next/navigation'
-import { MerkleProof } from 'hooks/isAdminOrInTree'
+import { MerkleProof } from 'hooks/useIsAdminOrInTree'
 
 interface SearchContainerProps {
   isAdmin: boolean
