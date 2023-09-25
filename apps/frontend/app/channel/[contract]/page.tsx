@@ -1,7 +1,6 @@
 import { getChannel, type Channel } from '@/gql'
 import { Stack } from '@river/estuary'
 import { ChannelBanner, ChannelBody } from '@/server'
-
 import { getAddress } from 'viem'
 
 export default async function Channel({
