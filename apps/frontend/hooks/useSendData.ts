@@ -18,7 +18,7 @@ interface SendDataProps {
 
 interface SendDataReturn {
   sendDataConfig: PrepareWriteContractResult
-  sendData: (() => void) | undefined
+  sendData?: () => void
   sendDataLoading: boolean
   sendDataSuccess: boolean
 }
