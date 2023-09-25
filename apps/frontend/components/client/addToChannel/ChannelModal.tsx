@@ -1,7 +1,9 @@
 // ChannelModal.tsx
 "use client";
 
+
 import React, { useState, useCallback, useEffect } from "react";
+
 import {
   Dialog,
   DialogContent,
@@ -15,6 +17,7 @@ import { useAccount } from "wagmi";
 import { IsAdminOrInTree, MerkleProof } from "hooks/isAdminOrInTree";
 import { HorizontalNav } from "./HorizontalNav";
 import { SearchContainer } from "./search/SearchContainer";
+
 
 export function ChannelModal() {
   const [activeTab, setActiveTab] = useState<string>("Search");
@@ -45,6 +48,7 @@ export function ChannelModal() {
   }, [isAdmin, isInTree]);
 
   return (
+
     <>
       <IsAdminOrInTree
         isAdminStatus={setIsAdmin}

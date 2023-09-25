@@ -2,8 +2,8 @@ import '../styles/globals.css'
 import type { Metadata } from 'next'
 import { Providers } from './providers'
 import { helveticaNeue } from './fonts/fonts'
-import { Sidebar } from '../components/client'
-import { Grid } from '@river/estuary'
+import { SidebarOrDrawer } from '@/client'
+import { Grid, Debug } from '@river/estuary'
 import { Analytics } from '@vercel/analytics/react'
 
 export const metadata: Metadata = {
@@ -20,14 +20,10 @@ export default function RootLayout({
     <html lang="en" className={`${helveticaNeue.variable}`}>
       <body>
         <Providers>
-          <Grid className="grid-cols-[auto,1fr]">
-            <aside className="max-w-[210px]">
-              <Sidebar />
-            </aside>
-            <div className="flex-grow">
-              {children}
-              <Analytics />
-            </div>
+          <Grid className="w-screen grid-cols-1 md:grid-cols-[auto,1fr]">
+            <SidebarOrDrawer />
+            {children}
+            <Analytics />
           </Grid>
         </Providers>
       </body>

@@ -1,18 +1,7 @@
-import {
-  Stack,
-  Flex,
-  Body,
-  BodyLarge,
-  SearchIcon,
-  Add,
-  Globe,
-  RiverIcon,
-  Debug,
-  Button,
-} from '@river/estuary'
+import { Stack, Body } from '@river/estuary'
 import Link from 'next/link'
-import { Connect } from './Connect'
-import { AdminChannels } from './AdminChannels'
+import { Connect } from '../Connect'
+import { AdminChannels } from '../AdminChannels'
 import { Hex } from 'viem'
 import { useAccount } from 'wagmi'
 

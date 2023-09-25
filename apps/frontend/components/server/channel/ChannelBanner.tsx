@@ -20,8 +20,8 @@ export async function ChannelBanner({ channels }: { channels: Channel }) {
     : ''
 
   return (
-    <Flex className="gap-x-8 h-[248px]">
-      <Card size="lg" className="relative shadow-reg">
+    <Flex className="flex-wrap md:flex-nowrap gap-8">
+      <Card size="lg" className="relative shadow-reg w-full md:w-fit">
         <Image
           className="object-cover aspect-square"
           src={ipfsToHttps(channels?.contractUri?.image as string)}
@@ -35,7 +35,7 @@ export async function ChannelBanner({ channels }: { channels: Channel }) {
       </Card>
       {/* Channel settings */}
       {/* Second Column: Text details */}
-      <Stack className="h-full justify-end cursor-default">
+      <Stack className="h-full justify-top md:justify-end  cursor-default h-[248px]">
         <span className="inline-block mb-5">
           <Headline className="font-medium text-label">
             {truncateText(channels?.contractUri?.name ?? '', 20)

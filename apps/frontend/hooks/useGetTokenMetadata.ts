@@ -8,7 +8,7 @@ type Props = {
   tokenId: string
 }
 
-const useGetTokenMetadata = ({ network, address, tokenId }: Props) => {
+export const useGetTokenMetadata = ({ network, address, tokenId }: Props) => {
   const alchemy_settings_mainnet = {
     apiKey: env.NEXT_PUBLIC_ALCHEMY_KEY,
     network: Network.ETH_MAINNET,
@@ -28,5 +28,3 @@ const useGetTokenMetadata = ({ network, address, tokenId }: Props) => {
 
   return { tokenMetadata, fetchMetadata }
 }
-
-export default useGetTokenMetadata

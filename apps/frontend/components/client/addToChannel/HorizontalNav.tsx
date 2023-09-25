@@ -8,24 +8,7 @@ interface HorizontalNavProps {
 
 export function HorizontalNav({ activeTab, setActiveTab }: HorizontalNavProps) {
   return (
-    <Flex className="justify-center w-full gap-x-7">
-      <button
-        type="button"
-        disabled
-        onClick={() => setActiveTab('Upload')}
-        className="focus:outline-none"
-      >
-        <Body
-          className={cn(
-            activeTab === 'Upload'
-              ? 'text-label border-b-[2px] border-label'
-              : '',
-            'text-[14px] font-medium text-label-faint cursor-not-allowed',
-          )}
-        >
-          Upload
-        </Body>
-      </button>
+    <Flex className="justify-start w-full gap-x-7">
       <button
         type="button"
         onClick={() => setActiveTab('Search')}
@@ -33,30 +16,11 @@ export function HorizontalNav({ activeTab, setActiveTab }: HorizontalNavProps) {
       >
         <Body
           className={cn(
-            activeTab === 'Search'
-              ? 'text-label border-b-[2px] border-label'
-              : '',
+            activeTab === 'Search' ? 'text-label' : '',
             'text-[14px] leading-[3rem] min-w-[64px] font-medium',
           )}
         >
           Search
-        </Body>
-      </button>
-      <button
-        type="button"
-        disabled
-        onClick={() => setActiveTab('Write')}
-        className="focus:outline-none"
-      >
-        <Body
-          className={cn(
-            activeTab === 'Write'
-              ? 'text-label border-b-[2px] border-label'
-              : '',
-            'text-[14px] font-medium text-label-faint cursor-not-allowed',
-          )}
-        >
-          Write
         </Body>
       </button>
     </Flex>

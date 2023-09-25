@@ -1,4 +1,4 @@
-import { Grid } from '@river/estuary'
+import { Debug, Grid } from '@river/estuary'
 import { getAllChannels, type Channel } from '@/gql'
 import { ChannelCard } from '@/client'
 
@@ -12,7 +12,7 @@ export default async function Home() {
   )
 
   return (
-    <Grid className="grid-cols-[repeat(auto-fill,_minmax(224px,_1fr))] m-10 gap-5 pb-4">
+    <Grid className="grid-cols-[repeat(auto-fill,_minmax(224px,_1fr))] m-6 md:m-10 gap-5 pb-4">
       {channelsWithNoName.map((validChannel: Channel) => (
         <ChannelCard key={validChannel.id} channel={validChannel} />
       ))}

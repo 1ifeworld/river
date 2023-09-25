@@ -90,7 +90,7 @@ export function SearchContainer({
   return (
     <Stack className="justify-center gap-4">
       <SearchGallery nftMetadata={searchResults} />
-      <Stack className="gap-y-4 mx-[18px]">
+      <Stack className="w-full gap-y-4 p-4 pt-0">
         <SearchInput
           searchResults={searchResults}
           setSearchResults={setSearchResults}
