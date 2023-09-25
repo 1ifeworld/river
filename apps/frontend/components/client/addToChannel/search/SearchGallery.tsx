@@ -1,18 +1,26 @@
 import React from 'react'
 import { Nft } from 'alchemy-sdk'
 import Image from 'next/image'
-import { cn } from '@river/estuary/src/utils'
-import { Body, BodySmall } from '@river/estuary'
+import { cn } from '@river/estuary'
+import { Body, Stack, Flex } from '@river/estuary'
+import { Hex, zeroAddress } from 'viem'
+import { useGetAddressDisplay } from '@/hooks'
+import { truncateText } from '@/utils'
 
 interface NetworkSelectProps {
   nftMetadata: Nft | undefined
 }
 
 const SearchGallery = ({ nftMetadata }: NetworkSelectProps) => {
+  const { display } = useGetAddressDisplay(
+    nftMetadata?.contract.contractDeployer
+      ? (nftMetadata?.contract.contractDeployer as Hex)
+      : zeroAddress,
+  )
   return (
-    <div className="w-full h-[218px] bg-base-shade border-y-[0.5px] border-base-border flex items-center">
+    <div className="w-full h-[218px] bg-base-shade border-y-[0.5px] border-base-border flex items-center p-4">
       {/* Grid container */}
-      <div className="mx-[33px] flex justify-start items-center w-full space-x-5">
+      <Flex className="justify-start items-center w-full space-x-5">
         {/* First Column: Image or Blank Square */}
         <div className="flex justify-center w-fit">
           {nftMetadata?.media?.[0]?.thumbnail ? (
@@ -22,39 +30,33 @@ const SearchGallery = ({ nftMetadata }: NetworkSelectProps) => {
               width={200}
               height={200}
               className={cn(
-                'rounded w-[165px] h-[165px] object-cover aspect-square',
+                'rounded min-w-[164px] min-h-[164px] object-cover aspect-square shadow-soft',
               )}
             />
           ) : (
-            <div className="w-[165px] h-[165px] bg-base-border" />
+            <div className="w-[164px] h-[164px] bg-base-border" />
           )}
         </div>
         {/* Second Column: Text details */}
-        <div className="h-full flex flex-col w-[200px]">
-          <Body className="text-label break-words">
-            {nftMetadata?.title || 'Title'}
+        <Stack className="gap-4">
+          <span>
+            <Body className="text-label break-words">
+              {nftMetadata?.title || 'Title'}
+            </Body>
+            {/* truncating for now but need to add ens resolution */}
+            <Body className="text-label-muted break-words">
+              {display || 'Created By'}
+            </Body>
+          </span>
+          <Body className="text-label-muted break-words">
+            {truncateText(nftMetadata?.description as string, 120) ||
+              'Description' ||
+              'Description'}
           </Body>
-          {/* truncating for now but need to add ens resolution */}
-          <BodySmall className="text-[13px] text-label-muted break-words truncate">
-            {nftMetadata?.contract.contractDeployer || 'Created By'}
-          </BodySmall>
-          <BodySmall className="text-[13px] text-label-muted break-words mt-[25.9px] ">
-            {nftMetadata?.description || 'Description' || 'Description'}
-          </BodySmall>
-        </div>
-      </div>
+        </Stack>
+      </Flex>
     </div>
   )
-}
-
-{
-  /* <div className="w-full h-[220px] bg-[#E0E0E0]">
-{nftMetadata ? (
-  <img src={nftMetadata.media[0].thumbnail} alt={nftMetadata.title || "NFT"} />
-) : (
-  "yo" // Placeholder content or UI components for empty state
-)}
-</div> */
 }
 
 export default SearchGallery

@@ -1,12 +1,15 @@
 // ChannelModal.tsx
 "use client";
 
+
 import React, { useState, useCallback, useEffect } from "react";
+
 import {
   Dialog,
   DialogContent,
   DialogTrigger,
   Button,
+  Stack,
   Flex,
 } from "@river/estuary";
 import { XIcon } from "lucide-react";
@@ -14,6 +17,11 @@ import { useAccount } from "wagmi";
 import { IsAdminOrInTree, MerkleProof } from "hooks/isAdminOrInTree";
 import { HorizontalNav } from "./HorizontalNav";
 import { SearchContainer } from "./search/SearchContainer";
+import { HorizontalNav } from './HorizontalNav'
+import { SearchContainer } from './search/SearchContainer'
+import { Flex } from '@river/estuary'
+import { XIcon } from 'lucide-react'
+
 
 export function ChannelModal() {
   const [activeTab, setActiveTab] = useState<string>("Search");
@@ -44,6 +52,7 @@ export function ChannelModal() {
   }, [isAdmin, isInTree]);
 
   return (
+
     <>
       <IsAdminOrInTree
         isAdminStatus={setIsAdmin}
@@ -56,7 +65,7 @@ export function ChannelModal() {
           <DialogTrigger className="focus-outline:none">
             <Button variant="secondary">Add</Button>
           </DialogTrigger>
-          <DialogContent className="flex flex-col border-[0.5px] border-base-border rounded-[14px] h-fit">
+           <DialogContent className="border-[0.5px] border-base-border rounded-[14px] h-fit">
             <Flex className="items-center px-4">
               <HorizontalNav
                 activeTab={activeTab}
