@@ -20,7 +20,7 @@ export async function ChannelBanner({ channels }: { channels: Channel }) {
     : ''
 
   return (
-    <Flex className="flex-wrap md:flex-nowrap gap-8">
+    <Flex className="flex-wrap md:flex-nowrap md:gap-8">
       <Card size="lg" className="relative shadow-reg w-full md:w-fit">
         <Image
           className="object-cover aspect-square"
@@ -42,7 +42,7 @@ export async function ChannelBanner({ channels }: { channels: Channel }) {
               ? channels?.contractUri?.name
               : 'Channel name missing'}
           </Headline>
-          <BodyLarge className="text-label-muted">
+          <Headline className="text-label-muted font-normal">
             {creatorEnsOrAddress}
             {(channels?.logicTransmitterMerkleAdmin[0].accounts
               ?.length as number) > 1
@@ -51,7 +51,7 @@ export async function ChannelBanner({ channels }: { channels: Channel }) {
                     ?.length as number) - 1
                 } others`
               : ''}
-          </BodyLarge>
+          </Headline>
         </span>
         <Body className="text-label-muted mb-[44px]">
           {channels?.contractUri?.description

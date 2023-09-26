@@ -2,14 +2,14 @@ import { useState, useCallback } from 'react'
 import {
   Input,
   Stack,
-  BodyLarge,
+  Headline,
   Button,
   Flex,
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@river/estuary'
-import { PlusCircle } from 'lucide-react'
+import { PlusIcon } from 'lucide-react'
 import { useAccount } from 'wagmi'
 import { useGetAddressDisplay } from '@/hooks'
 import { zeroAddress, Hex } from 'viem'
@@ -50,32 +50,36 @@ export function ChannelUri({
 
   return (
     <Stack className="gap-2">
-      <Input
-        type="text"
-        variant="ghost"
-        placeholder="Channel Name"
-        className="text-2xl"
-        value={name}
-        onChange={handleNameChange}
-      />
-      <Flex>
-        <BodyLarge className="text-label-muted">{display}</BodyLarge>
-        <Popover>
-          <PopoverTrigger>
-            <Button className="border-none" size="icon" shape="circle">
-              <PlusCircle />
-            </Button>
-          </PopoverTrigger>
-          <Flex>
-            <PopoverContent>
-              <LanyardMerkle
-                onMerkleRootChange={setMerkleRoot}
-                currentMerkleRoot={localMerkleRoot}
-              />
-            </PopoverContent>
-          </Flex>
-        </Popover>
-      </Flex>
+      <span>
+        <Input
+          type="text"
+          variant="ghost"
+          placeholder="Channel Name"
+          className="text-2xl"
+          value={name}
+          onChange={handleNameChange}
+        />
+        <Flex className="items-center gap-2">
+          <Headline className="text-label-muted font-normal">
+            {display}
+          </Headline>
+          <Popover>
+            <PopoverTrigger>
+              <Button size="icon" shape="circle">
+                <PlusIcon />
+              </Button>
+            </PopoverTrigger>
+            <Flex>
+              <PopoverContent>
+                <LanyardMerkle
+                  onMerkleRootChange={setMerkleRoot}
+                  currentMerkleRoot={localMerkleRoot}
+                />
+              </PopoverContent>
+            </Flex>
+          </Popover>
+        </Flex>
+      </span>
       <Input
         type="text"
         variant="ghost"

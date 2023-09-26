@@ -85,30 +85,27 @@ export function NewChannelContainer() {
   }, [setupPressTxnReceipt])
 
   return (
-    <Debug>
-      <Flex className="flex-wrap md:flex-nowrap gap-8">
-        {/* First Column: Channel image upload */}
-        <UploadCard imageCid={imageCid} setImageCid={setImageCid} />
-        {/* Second Column: Channel name + description + create button */}
-        <Stack className="justify-top md:justify-end">
-          <Debug>
-            <ChannelUri
-              setName={setName}
-              name={name}
-              setMerkleRoot={setMerkleRoot}
-              setDescription={setDescription}
-              description={description}
-            />
-          </Debug>
-          <Button
-            variant="secondary"
-            disabled={!!imageCid && !!name}
-            onClick={handleUriUpload}
-          >
-            Create
-          </Button>
-        </Stack>
-      </Flex>
-    </Debug>
+    <Flex className="flex-wrap md:flex-nowrap md:gap-8">
+      {/* First Column: Channel image upload */}
+      <UploadCard imageCid={imageCid} setImageCid={setImageCid} />
+      {/* Second Column: Channel name + description + create button */}
+      <Stack className="h-full justify-top md:justify-end h-[248px]">
+        <ChannelUri
+          setName={setName}
+          name={name}
+          setMerkleRoot={setMerkleRoot}
+          setDescription={setDescription}
+          description={description}
+        />
+
+        <Button
+          variant="secondary"
+          disabled={!(!!imageCid && !!name)}
+          onClick={handleUriUpload}
+        >
+          Create
+        </Button>
+      </Stack>
+    </Flex>
   )
 }
