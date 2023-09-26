@@ -12,6 +12,9 @@ import fetchIPFSData, {IPFSData} from "./utils/fetchIPFSdata";
 ponder.on("Router:PressRegistered", async ({ event, context }) => {
   const { Router, Channel, ContractUri } = context.entities;
   const { timestamp } = event.block;
+  // filter added on tuesday sept 26 @ 6:29pm est
+  if (timestamp < 1695763671) return
+  //  
   const { sender, factory, newPress, newPressData } = event.params;
 
   // Decode the newPressData

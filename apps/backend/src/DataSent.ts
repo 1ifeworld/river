@@ -49,6 +49,9 @@ function processMetadata(metadata: AlchemyV3GetNFTMetadata): NFTProcessedLog {
 ponder.on("Router:DataSent", async ({ event, context }) => {
   const { Channel, Listing, PieceMetadata } = context.entities;
   const { timestamp } = event.block;
+  // filter added on tuesday sept 26 @ 6:29pm est
+  if (timestamp < 1695763671) return
+  //
   const { press, schema, response, ids, sender } = event.params;
 
   // Decode event response into dynamic array of new listings
