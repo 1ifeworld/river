@@ -76,7 +76,7 @@ export function NewChannelContainer() {
   useEffect(() => {
     if (uriCid && !channelCreated && setupPress) {
       setChannelCreated(true)
-      setupPress()
+      setupPress?.()
     }
   }, [uriCid, setupPress])
 

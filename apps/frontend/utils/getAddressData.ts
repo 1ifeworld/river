@@ -4,9 +4,6 @@ import { shortenAddress } from './shortenAddress'
 import { isAddress } from 'viem'
 import { env } from '../services/env'
 
-function isHex(value: string): value is Hex {
-  return /^0x[a-fA-F0-9]+$/.test(value)
-}
 
 export async function getAddressData(
   input: Hex | string,
