@@ -83,7 +83,7 @@ export function NewChannelContainer() {
       const result = await getChannel({
         channel: setupPressTxnReceipt?.logs[0].address as string,
       })
-      if (result) {
+      if (result.channels.length != 0) {
         found = true
         router.push(`/channel/${setupPressTxnReceipt?.logs[0].address}`)
       } else {
