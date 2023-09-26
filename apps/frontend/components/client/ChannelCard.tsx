@@ -35,8 +35,8 @@ export function ChannelCard({
       <Stack className="md:min-w-[224px]">
         <Flex className="justify-between items-center">
           <Link href={`channel/${channel.id}`}>
-            <Body className="text-label font-medium leading-[14px] hover:underline">
-              {truncateText(channel.contractUri?.name ?? '', 20)}
+            <Body className="text-label font-medium leading-[14px] hover:underline truncate">
+              {channel.contractUri?.name}
             </Body>
           </Link>
           <C />

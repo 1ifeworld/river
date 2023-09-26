@@ -13,9 +13,9 @@ import { PlusIcon } from 'lucide-react'
 import { useAccount } from 'wagmi'
 import { useGetAddressDisplay } from '@/hooks'
 import { zeroAddress, Hex } from 'viem'
-import { LanyardMerkle } from '.'
+import { LanyardMerkle } from './index'
 
-interface ChannelUriProps {
+interface ChannelSettingsProps {
   name: string
   description: string
   setMerkleRoot: React.Dispatch<React.SetStateAction<Hex>>
@@ -23,13 +23,13 @@ interface ChannelUriProps {
   setDescription: React.Dispatch<React.SetStateAction<string>>
 }
 
-export function ChannelUri({
+export function ChannelSettings({
   name,
   setName,
   setMerkleRoot,
   description,
   setDescription,
-}: ChannelUriProps) {
+}: ChannelSettingsProps) {
   const { address } = useAccount()
   const { display } = useGetAddressDisplay(address || zeroAddress)
   const [localMerkleRoot, setLocalMerkleRoot] = useState<Hex | undefined>()
@@ -49,18 +49,18 @@ export function ChannelUri({
   )
 
   return (
-    <Stack className="gap-2">
+    <Stack className="gap-4">
       <span>
         <Input
           type="text"
           variant="ghost"
           placeholder="Channel Name"
-          className="text-2xl"
+          className="text-2xl font-medium"
           value={name}
           onChange={handleNameChange}
         />
         <Flex className="items-center gap-2">
-          <Headline className="text-label-muted font-normal">
+          <Headline className="text-label-muted font-normal cursor-default">
             {display}
           </Headline>
           <Popover>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { Flex, Stack, Debug, Button } from '@river/estuary'
 import { useWeb3Storage, useSetupPress } from '@/hooks'
-import { ChannelUri } from '../ChannelUri'
+import { ChannelSettings } from './ChannelSettings'
 import { UploadCard } from './UploadCard'
 import {
   Hash,
@@ -85,27 +85,29 @@ export function NewChannelContainer() {
   }, [setupPressTxnReceipt])
 
   return (
-    <Flex className="flex-wrap md:flex-nowrap md:gap-8">
+    <Flex className="flex-wrap md:flex-nowrap gap-2 md:gap-8">
       {/* First Column: Channel image upload */}
       <UploadCard imageCid={imageCid} setImageCid={setImageCid} />
       {/* Second Column: Channel name + description + create button */}
-      <Stack className="h-full justify-top md:justify-end h-[248px]">
-        <ChannelUri
-          setName={setName}
-          name={name}
-          setMerkleRoot={setMerkleRoot}
-          setDescription={setDescription}
-          description={description}
-        />
-
-        <Button
-          variant="secondary"
-          disabled={!(!!imageCid && !!name)}
-          onClick={handleUriUpload}
-        >
-          Create
-        </Button>
-      </Stack>
+      <span>
+        <Stack className="h-full justify-end gap-12">
+          <ChannelSettings
+            setName={setName}
+            name={name}
+            setMerkleRoot={setMerkleRoot}
+            setDescription={setDescription}
+            description={description}
+          />
+          <Button
+            className="w-fit"
+            variant="secondary"
+            disabled={!(!!imageCid && !!name)}
+            onClick={handleUriUpload}
+          >
+            Create
+          </Button>
+        </Stack>
+      </span>
     </Flex>
   )
 }
