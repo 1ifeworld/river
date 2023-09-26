@@ -16,6 +16,10 @@ import { IsAdminOrInTree, MerkleProof } from 'hooks/useIsAdminOrInTree'
 import { HorizontalNav } from './HorizontalNav'
 import { SearchContainer } from './search/SearchContainer'
 
+function PlaceholderButton() {
+  return <Button variant="secondary" className="opacity-0"></Button>
+}
+
 export function ChannelModal() {
   const [activeTab, setActiveTab] = useState<string>('Search')
   const [open, setOpen] = useState<boolean>(false)
@@ -44,6 +48,8 @@ export function ChannelModal() {
     }
   }, [isAdmin, isInTree])
 
+  const shouldShowPlaceholder = !address || !showButton
+
   return (
     <>
       <IsAdminOrInTree
@@ -52,31 +58,39 @@ export function ChannelModal() {
         onMerkleProofChange={handleMerkleProofChange}
       />
 
-      {address && showButton && (
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger className="focus-outline:none">
-            <Button variant="secondary">Add</Button>
-          </DialogTrigger>
-          <DialogContent className="border-[0.5px] border-base-border rounded-[14px] h-fit">
-            <Flex className="items-center px-4">
-              <HorizontalNav
-                activeTab={activeTab}
-                setActiveTab={setActiveTab}
-              />
-              <Button onClick={() => setOpen(false)} size="icon" shape="circle">
-                <XIcon />
-              </Button>
-            </Flex>
-            {activeTab === 'Search' && (
-              <SearchContainer
-                isAdmin={isAdmin ?? false}
-                setAdminStatus={setIsAdmin}
-                merkleProof={merkleProof}
-              />
-            )}
-          </DialogContent>
-        </Dialog>
-      )}
+      <div className="h-10 w-32">
+        {showButton && address ? (
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger className="focus-outline:none h-full w-full">
+              <Button variant="secondary">Add</Button>
+            </DialogTrigger>
+            <DialogContent className="border-[0.5px] border-base-border rounded-[14px] h-fit">
+              <Flex className="items-center px-4">
+                <HorizontalNav
+                  activeTab={activeTab}
+                  setActiveTab={setActiveTab}
+                />
+                <Button
+                  onClick={() => setOpen(false)}
+                  size="icon"
+                  shape="circle"
+                >
+                  <XIcon />
+                </Button>
+              </Flex>
+              {activeTab === 'Search' && (
+                <SearchContainer
+                  isAdmin={isAdmin ?? false}
+                  setAdminStatus={setIsAdmin}
+                  merkleProof={merkleProof}
+                />
+              )}
+            </DialogContent>
+          </Dialog>
+        ) : (
+          <PlaceholderButton />
+        )}
+      </div>
     </>
   )
 }

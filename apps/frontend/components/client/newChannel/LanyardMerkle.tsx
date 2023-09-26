@@ -4,16 +4,14 @@ import { createLanyardTree } from '@/hooks'
 import { useAccount } from 'wagmi'
 import { Plus } from 'lucide-react'
 import { getAddressDisplay } from 'utils/getAddressDisplay'
+import { getAddressData } from 'utils/getAddressData'
+import { shortenAddress } from 'utils/shortenAddress'
 import { isAddress, Hash, Hex } from 'viem'
-import { resolveEnsOrAddress } from '../../../utils/resolveENSorAddress'
+// import { resolveEnsOrAddress } from '../../../utils/resolveENSorAddress'
 
 interface Props {
   onMerkleRootChange: (merkle: Hash) => void
   currentMerkleRoot?: Hex
-}
-
-const isValidAddress = (address: string): boolean => {
-  return isAddress(address)
 }
 
 export function LanyardMerkle({
@@ -22,40 +20,31 @@ export function LanyardMerkle({
 }: Props) {
   const { address } = useAccount()
   const [addresses, setAddresses] = useState<string[]>(address ? [address] : [])
+  const [displayAddresses, setDisplayAddresses] = useState<string[]>(
+    address ? [address] : [],
+  )
   const [inputAddress, setInputAddress] = useState<string>('')
   const [merkleRoot, setMerkleRoot] = useState<Hex | undefined>(
     currentMerkleRoot,
   )
-  const [resolvedAddresses, setResolvedAddresses] = useState<string[]>([])
 
   useEffect(() => {
     const generateTree = async () => {
       if (!addresses.length) return
 
-      const is0xString = (str: string): str is `0x${string}` => {
-        return str.startsWith('0x')
-      }
-      const validAddresses = addresses.filter(isValidAddress).filter(is0xString)
+      console.log('Addresses to be used for Merkle tree:', addresses)
 
-      if (validAddresses.length === addresses.length) {
-        try {
-          const response = await createLanyardTree(validAddresses)
-          if (response?.merkle) {
-            setMerkleRoot(response.merkle)
-            onMerkleRootChange(response.merkle)
-            console.log('Merkle root in LanyardMerkle:', response.merkle)
-          } else if (response?.error) {
-            console.error('Error from createLanyardTree:', response.error)
-          }
-        } catch (error) {
-          console.error('Error generating Merkle tree:', error)
+      try {
+        const response = await createLanyardTree(addresses as Hex[])
+        if (response?.merkle) {
+          setMerkleRoot(response.merkle)
+          onMerkleRootChange(response.merkle)
+          console.log('Merkle root in LanyardMerkle:', response.merkle)
+        } else if (response?.error) {
+          console.error('Error from createLanyardTree:', response.error)
         }
-      } else {
-        const invalidAddresses = addresses.filter(
-          (addr) => !isValidAddress(addr) || !is0xString(addr),
-        )
-        console.log('Invalid addresses:', invalidAddresses)
-        console.warn('Some addresses are not valid.')
+      } catch (error) {
+        console.error('Error generating Merkle tree:', error)
       }
     }
     generateTree()
@@ -64,23 +53,60 @@ export function LanyardMerkle({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputAddress(e.target.value)
   }
+  const resolveInputToAddress = async (
+    input: string,
+  ): Promise<string | null> => {
+    console.log('Resolving input:', input)
+    try {
+      const resolvedData = await getAddressData(input)
+      console.log('Resolved data from getAddressData:', resolvedData)
 
-  const handleAddAddress = async () => {
-    const resolvedInput = await resolveEnsOrAddress(inputAddress)
-    if (isAddress(resolvedInput)) {
-      setAddresses((prevAddresses) => [...prevAddresses, resolvedInput])
-      // Get the ENS name for the resolved address
-      const ensNameOrAddress = await getAddressDisplay(resolvedInput)
-      setResolvedAddresses((prevResolved) => [
-        ...prevResolved,
-        ensNameOrAddress,
-      ])
-      setInputAddress('')
-    } else {
-      console.warn('Invalid address or ENS format:', inputAddress)
+      // Directly log the 'address' property
+      console.log('Address property from resolvedData:', resolvedData.address)
+
+      // Check if resolvedData has an address property
+      if (resolvedData && resolvedData.address) {
+        return resolvedData.address
+      } else {
+        console.warn('Failed to resolve input:', input)
+        return null
+      }
+    } catch (error) {
+      console.error('Error resolving input:', error)
+      return null
     }
   }
-
+  // Resolve Ethereum address to its associated ENS name (if any)
+  const resolveAddressToENS = async (address: string): Promise<string> => {
+    console.log(`Checking if address ${address} has an associated ENS name.`)
+    const ensName = await getAddressDisplay(address as Hex)
+    if (ensName && ensName !== address) {
+      console.log(`Address ${address} has associated ENS name: ${ensName}`)
+      return ensName
+    } else {
+      console.log(`Address ${address} does not have an associated ENS name.`)
+      return address
+    }
+  }
+  const handleAddAddress = async () => {
+    try {
+      const resolvedAddress = await resolveInputToAddress(inputAddress)
+      if (resolvedAddress) {
+        console.log(`Adding to addresses: ${resolvedAddress}`)
+        setAddresses((prevAddresses) => [...prevAddresses, resolvedAddress])
+        const displayValue = await resolveAddressToENS(resolvedAddress)
+        setDisplayAddresses((prevDisplayAddresses) => [
+          ...prevDisplayAddresses,
+          displayValue,
+        ])
+      } else {
+        console.warn('Invalid address or ENS format:', inputAddress)
+      }
+      setInputAddress('')
+    } catch (error) {
+      console.warn('Error in handleAddAddress:', error)
+    }
+  }
   return (
     <Stack className="gap-y-4">
       <Label
@@ -104,13 +130,13 @@ export function LanyardMerkle({
       </Flex>
 
       <ul>
-        {resolvedAddresses.map((addr, index) => (
-          <li
-            key={index}
-          >
-            {addr}
-          </li>
-        ))}
+        {displayAddresses.map((addr, index) => {
+          if (addr !== address) {
+            // Filter out the connected address
+            return <li key={index}>{addr}</li>
+          }
+          return null // Return null for the connected address
+        })}
       </ul>
     </Stack>
   )
