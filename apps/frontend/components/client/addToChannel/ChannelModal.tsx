@@ -2,6 +2,7 @@
 
 import React, { useState, useCallback, useEffect } from 'react'
 
+
 import {
   Dialog,
   DialogContent,
@@ -51,6 +52,7 @@ export function ChannelModal() {
   const shouldShowPlaceholder = !address || !showButton
 
   return (
+
     <>
       <IsAdminOrInTree
         isAdminStatus={setIsAdmin}
@@ -61,10 +63,10 @@ export function ChannelModal() {
       <div className="h-10 w-32">
         {showButton && address ? (
           <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger className="focus-outline:none h-full w-full">
+      <DialogTrigger className="focus-outline:none">
               <Button variant="secondary">Add</Button>
             </DialogTrigger>
-            <DialogContent className="border-[0.5px] border-base-border rounded-[14px] h-fit">
+      <DialogContent className="border-[0.5px] border-base-border rounded-[14px] h-fit">
               <Flex className="items-center px-4">
                 <HorizontalNav
                   activeTab={activeTab}
@@ -92,5 +94,6 @@ export function ChannelModal() {
         )}
       </div>
     </>
+
   )
 }

@@ -25,6 +25,7 @@ export default function Page() {
             <Button size='md'>Button</Button>
             <Button size='lg'>Button</Button>
             <Button shape='circle'>Button</Button>
+            <Button loading={true} shape='circle'>Button</Button>
             <Button size='icon'>
               <PlusIcon />
             </Button>
@@ -49,6 +50,7 @@ export default function Page() {
             <Button variant='secondary' shape='circle'>
               Button
             </Button>
+            <Button variant='secondary' loading={true} shape='circle'>Button</Button>
             <Button variant='secondary' size='icon'>
               <PlusIcon />
             </Button>

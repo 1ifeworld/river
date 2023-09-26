@@ -18,7 +18,7 @@ interface SendDataProps {
 
 interface SendDataReturn {
   sendDataConfig: PrepareWriteContractResult
-  sendData: (() => void) | undefined
+  sendData?: () => void
   sendDataLoading: boolean
   sendDataSuccess: boolean
 }
@@ -46,7 +46,6 @@ export function useSendData({
       hash: dataToSend?.hash,
       onSuccess() {
         successCallback?.()
-        console.log('success callback ran')
       },
     })
 

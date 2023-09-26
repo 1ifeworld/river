@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import SearchGallery from './SearchGallery'
 import SearchInput from './SearchInput'
-import SearchAction from './SearchAction'
 import { Nft } from 'alchemy-sdk'
 import { useSendData } from '@/hooks'
 import {
@@ -32,6 +31,7 @@ export function SearchContainer({
   merkleProof,
   setOpen,
 }: SearchContainerProps) {
+
   const [searchParams, setSearchParams] = useState<Listing>({
     chainId: BigInt(0),
     tokenId: BigInt(0),
@@ -96,26 +96,24 @@ export function SearchContainer({
       },
     })
 
-
-    return (
-      <Stack className="justify-center gap-4">
-        <SearchGallery nftMetadata={searchResults} />
-        <Stack className="w-full gap-y-4 p-4 pt-0">
-          <SearchInput
-            searchResults={searchResults}
-            setSearchResults={setSearchResults}
-            setSearchParams={handleSetSearchParams}
-          />
-          <Button
-            loading={sendDataLoading}
-            disabled={!sendData}
-            onClick={() => sendData?.()}
-            className="w-full"
-            variant="secondary"
-          >
-            {searchResults?.title ? `Add "${searchResults?.title}"` : 'Add'}
-          </Button>
-        </Stack>
+  return (
+    <Stack className="justify-center gap-4">
+      <SearchGallery nftMetadata={searchResults} />
+      <Stack className="w-full gap-y-4 p-4 pt-0">
+        <SearchInput
+          searchResults={searchResults}
+          setSearchResults={setSearchResults}
+          setSearchParams={handleSetSearchParams}
+        />
+        <Button
+          loading={sendDataLoading}
+          disabled={!sendData}
+          onClick={() => sendData?.()}
+          className="w-full"
+          variant="secondary"
+        >
+          {searchResults?.title ? `Add "${searchResults?.title}"` : 'Add'}
+        </Button>
       </Stack>
     )
   }
