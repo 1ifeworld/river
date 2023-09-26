@@ -45,7 +45,6 @@ export function IsAdminOrInTree({
             address,
           ) || false
 
-        
         if (!isAdminResult) {
           const merkleRoot = adminData?.logicTransmitterMerkleAdmin[0]
             ?.merkleRoot as Hash

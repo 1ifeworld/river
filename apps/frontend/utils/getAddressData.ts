@@ -48,7 +48,7 @@ export async function getAddressData(
     console.log('Input is a valid Ethereum address:', input)
     return {
       address: input,
-      name: shortenAddress(input), 
+      name: shortenAddress(input),
     }
   }
 

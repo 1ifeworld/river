@@ -21,7 +21,7 @@ interface SearchContainerProps {
   isAdmin: boolean
   setAdminStatus: React.Dispatch<React.SetStateAction<boolean | null>>
   merkleProof?: MerkleProof | null
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export function SearchContainer({
@@ -29,8 +29,7 @@ export function SearchContainer({
   setAdminStatus,
   merkleProof,
   setOpen,
-}: SearchContainerProps)  {
-
+}: SearchContainerProps) {
   const [searchParams, setSearchParams] = useState<Listing>({
     chainId: BigInt(0),
     tokenId: BigInt(0),
@@ -95,25 +94,25 @@ export function SearchContainer({
       },
     })
 
-    return (
-      <Stack className="justify-center gap-4">
-        <SearchGallery nftMetadata={searchResults} />
-        <Stack className="w-full gap-y-4 p-4 pt-0">
-          <SearchInput
-            searchResults={searchResults}
-            setSearchResults={setSearchResults}
-            setSearchParams={handleSetSearchParams}
-          />
-          <Button
-            loading={sendDataLoading}
-            disabled={!sendData}
-            onClick={() => sendData?.()}
-            className="w-full"
-            variant="secondary"
-          >
-            {searchResults?.title ? `Add "${searchResults?.title}"` : 'Add'}
-          </Button>
-        </Stack>
+  return (
+    <Stack className="justify-center gap-4">
+      <SearchGallery nftMetadata={searchResults} />
+      <Stack className="w-full gap-y-4 p-4 pt-0">
+        <SearchInput
+          searchResults={searchResults}
+          setSearchResults={setSearchResults}
+          setSearchParams={handleSetSearchParams}
+        />
+        <Button
+          loading={sendDataLoading}
+          disabled={!sendData}
+          onClick={() => sendData?.()}
+          className="w-full"
+          variant="secondary"
+        >
+          {searchResults?.title ? `Add "${searchResults?.title}"` : 'Add'}
+        </Button>
       </Stack>
-    )
-  }
+    </Stack>
+  )
+}
