@@ -4,7 +4,7 @@ import {
   useWaitForTransaction,
 } from 'wagmi'
 import { PrepareWriteContractResult } from 'wagmi/actions'
-import { type Hex, type Hash, parseEther } from 'viem'
+import { type Hex, type Hash, parseEther, type TransactionReceipt } from 'viem'
 import { routerAbi } from '@/abi'
 import { router } from '@/constants'
 
@@ -18,6 +18,7 @@ interface SendDataProps {
 
 interface SendDataReturn {
   sendDataConfig: PrepareWriteContractResult
+  sendDataTxnReceipt?: TransactionReceipt
   sendData?: () => void
   sendDataLoading: boolean
   sendDataSuccess: boolean
@@ -41,15 +42,19 @@ export function useSendData({
 
   const { data: dataToSend, write: sendData } = useContractWrite(sendDataConfig)
 
-  const { isLoading: sendDataLoading, isSuccess: sendDataSuccess } =
-    useWaitForTransaction({
-      hash: dataToSend?.hash,
-      onSuccess() {
-        successCallback?.()
-      },
-    })
+  const {
+    data: sendDataTxnReceipt,
+    isLoading: sendDataLoading,
+    isSuccess: sendDataSuccess,
+  } = useWaitForTransaction({
+    hash: dataToSend?.hash,
+    onSuccess() {
+      successCallback?.()
+    },
+  })
 
   return {
+    sendDataTxnReceipt,
     sendDataConfig,
     sendData,
     sendDataLoading,

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import SearchGallery from './SearchGallery'
 import SearchInput from './SearchInput'
 import { Nft } from 'alchemy-sdk'
@@ -11,22 +11,20 @@ import {
   zeroAddress,
   isAddress,
   getAddress,
+  decodeAbiParameters,
 } from 'viem'
 import { Stack, Button } from '@river/estuary'
 import { type Listing } from '../../../../types/types'
 import { usePathname, useRouter } from 'next/navigation'
 import { type MerkleProof } from '@/client'
+import { getListing } from 'gql/requests'
 
 interface SearchContainerProps {
-  isAdmin: boolean
-  setAdminStatus: React.Dispatch<React.SetStateAction<boolean | null>>
   merkleProof?: MerkleProof | null
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export function SearchContainer({
-  isAdmin,
-  setAdminStatus,
   merkleProof,
   setOpen,
 }: SearchContainerProps) {
@@ -82,17 +80,56 @@ export function SearchContainer({
     ],
   )
 
-  const { sendDataConfig, sendData, sendDataLoading, sendDataSuccess } =
-    useSendData({
-      press: cleanedPathname,
-      data: sendInputs,
-      value: '0.0005',
-      prepareTxn: !!searchResults,
-      successCallback: () => {
+  function sendDataDecoder(data: Hash) {
+    return decodeAbiParameters(
+      parseAbiParameters(
+        'address sender, address press, uint256[] ids, bytes response, uint256 schema',
+      ),
+      data,
+    )
+  }
+
+  const pollForNewListing = async () => {
+    let found = false
+    let counter = 0
+    while (!found && counter < 10) {
+      const result = await getListing({
+        id: `1/${cleanedPathname}/${Number(
+          sendDataDecoder(sendDataTxnReceipt?.logs[0]?.data as Hash)[2][0],
+        )}`,
+      })
+      if (result.listings.length != 0) {
+        found = true
         router.refresh()
+      } else {
+        await new Promise((resolve) => setTimeout(resolve, 1000)) // Time before polling again
+        ++counter
+      }
+    }
+  }
+
+  const {
+    sendDataConfig,
+    sendData,
+    sendDataLoading,
+    sendDataSuccess,
+    sendDataTxnReceipt,
+  } = useSendData({
+    press: cleanedPathname,
+    data: sendInputs,
+    value: '0.0005',
+    prepareTxn: !!searchResults,
+  })
+
+  useEffect(() => {
+    if (sendDataTxnReceipt) {
+      // biome-ignore format:
+      (async () => {
+        await pollForNewListing()
         setOpen(false)
-      },
-    })
+      })()
+    }
+  }, [sendDataTxnReceipt])
 
   return (
     <Stack className="justify-center gap-4">
