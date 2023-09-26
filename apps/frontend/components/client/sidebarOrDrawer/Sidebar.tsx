@@ -19,7 +19,7 @@ export function Sidebar() {
               </Body>
               <Link href="/">
                 <Body className="text-label hover:underline">Home </Body>
-              </Link>
+              </Link>          
             </span>
             <Link href="/channel">
               <Body className="text-label-faint hover:text-label-faint/80 font-medium my-2">
