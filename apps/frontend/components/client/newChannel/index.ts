@@ -1,4 +1,4 @@
-export * from './UploadCard'
-export * from './NewChannelContainer'
-export * from './CreateChannelButton'
+export * from './ChannelSettings'
 export * from './LanyardMerkle'
+export * from './NewChannelContainer'
+export * from './UploadCard'

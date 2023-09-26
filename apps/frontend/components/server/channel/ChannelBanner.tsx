@@ -20,7 +20,8 @@ export async function ChannelBanner({ channels }: { channels: Channel }) {
     : ''
 
   return (
-    <Flex className="flex-wrap md:flex-nowrap gap-8">
+    <Flex className="flex-wrap md:flex-nowrap gap-2 md:gap-8">
+      {/* First Column: Channel cover image*/}
       <Card size="lg" className="relative shadow-reg w-full md:w-fit">
         <Image
           className="object-cover aspect-square"
@@ -33,35 +34,34 @@ export async function ChannelBanner({ channels }: { channels: Channel }) {
           fill
         />
       </Card>
-      {/* Channel settings */}
-      {/* Second Column: Text details */}
-      <Stack className="h-full justify-top md:justify-end  cursor-default h-[248px]">
-        <span className="inline-block mb-5">
-          <Headline className="font-medium text-label">
-            {truncateText(channels?.contractUri?.name ?? '', 20)
-              ? channels?.contractUri?.name
-              : 'Channel name missing'}
-          </Headline>
-          <BodyLarge className="text-label-muted">
-            {creatorEnsOrAddress}
-            {(channels?.logicTransmitterMerkleAdmin[0].accounts
-              ?.length as number) > 1
-              ? ` + ${
-                  (channels?.logicTransmitterMerkleAdmin[0].accounts
-                    ?.length as number) - 1
-                } others`
-              : ''}
-          </BodyLarge>
-        </span>
-        <Body className="text-label-muted mb-[44px]">
-          {channels?.contractUri?.description
-            ? channels?.contractUri?.description
-            : ''}
-        </Body>
-        <span>
+      {/* Second Column: Channel settings */}
+      <span>
+        <Stack className="h-full justify-end gap-12">
+          <span>
+            <Headline className="font-medium text-label">
+              {truncateText(channels?.contractUri?.name ?? '', 20)
+                ? channels?.contractUri?.name
+                : 'Channel name missing'}
+            </Headline>
+            <Headline className="text-label-muted font-normal">
+              {creatorEnsOrAddress}
+              {(channels?.logicTransmitterMerkleAdmin[0].accounts
+                ?.length as number) > 1
+                ? ` + ${
+                    (channels?.logicTransmitterMerkleAdmin[0].accounts
+                      ?.length as number) - 1
+                  } others`
+                : ''}
+            </Headline>
+            <Body className="text-label-muted">
+              {channels?.contractUri?.description
+                ? channels?.contractUri?.description
+                : ''}
+            </Body>
+          </span>
           <ChannelModal />
-        </span>
-      </Stack>
+        </Stack>
+      </span>
     </Flex>
   )
 }

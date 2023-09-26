@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Flex, Stack } from '@river/estuary'
+import { Flex, Stack, Debug, Button } from '@river/estuary'
 import { useWeb3Storage, useSetupPress } from '@/hooks'
-import { ChannelUri } from '../ChannelUri'
+import { ChannelSettings } from './ChannelSettings'
 import { UploadCard } from './UploadCard'
-import { CreateChannelButton } from './CreateChannelButton'
 import {
-  Hex,
   Hash,
   encodeAbiParameters,
   parseAbiParameters,
@@ -28,10 +26,6 @@ export function NewChannelContainer() {
   const [merkleRoot, setMerkleRoot] = useState<Hash>(zeroHash)
 
   const { client: web3StorageClient } = useWeb3Storage(uriCid)
-
-  useEffect(() => {
-    console.log('Received Merkle root in NewChannelContainer:', merkleRoot)
-  }, [merkleRoot])
 
   const handleUriUpload = useCallback(async () => {
     const contractUriData = {
@@ -91,23 +85,29 @@ export function NewChannelContainer() {
   }, [setupPressTxnReceipt])
 
   return (
-    <Flex className="gap-x-10 h-[248px]">
+    <Flex className="flex-wrap md:flex-nowrap gap-2 md:gap-8">
       {/* First Column: Channel image upload */}
       <UploadCard imageCid={imageCid} setImageCid={setImageCid} />
-      {/* Second Column: Channel name + description + create Trigger */}
-      <Stack className="h-full justify-end cursor-default">
-        <ChannelUri
-          setName={setName}
-          name={name}
-          setMerkleRoot={setMerkleRoot}
-          setDescription={setDescription}
-          description={description}
-        />
-        <CreateChannelButton
-          createReady={!!imageCid && !!name}
-          createTrigger={handleUriUpload}
-        />
-      </Stack>
+      {/* Second Column: Channel name + description + create button */}
+      <span>
+        <Stack className="h-full justify-end gap-12">
+          <ChannelSettings
+            setName={setName}
+            name={name}
+            setMerkleRoot={setMerkleRoot}
+            setDescription={setDescription}
+            description={description}
+          />
+          <Button
+            className="w-fit"
+            variant="secondary"
+            disabled={!(!!imageCid && !!name)}
+            onClick={handleUriUpload}
+          >
+            Create
+          </Button>
+        </Stack>
+      </span>
     </Flex>
   )
 }

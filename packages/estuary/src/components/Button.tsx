@@ -71,7 +71,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         <Body
-          className={variant === 'secondary' ? 'text-[#ffffff]' : 'text-label'}
+          className={variant === 'secondary' ? 'text-[#ffffff] font-medium' : 'text-label font-medium'}
         >
           {
             loading ? <Loader2Icon className='animate-spin' size='16' /> :
