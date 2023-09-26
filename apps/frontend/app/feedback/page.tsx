@@ -1,4 +1,4 @@
-import { BodyLarge, Stack } from "@river/estuary";
+import { BodyLarge, Stack } from '@river/estuary'
 
 export default function Feedback() {
   return (
@@ -22,5 +22,5 @@ export default function Feedback() {
         </BodyLarge>
       </Stack>
     </Stack>
-  );
+  )
 }
