@@ -13,8 +13,8 @@ import {
   isAddress,
   getAddress,
 } from 'viem'
-import { Stack } from '@river/estuary'
-import { Listing } from '../../../../types/types'
+import { Stack, Button } from '@river/estuary'
+import { type Listing } from '../../../../types/types'
 import { usePathname, useRouter } from 'next/navigation'
 import { MerkleProof } from 'hooks/useIsAdminOrInTree'
 
@@ -22,12 +22,15 @@ interface SearchContainerProps {
   isAdmin: boolean
   setAdminStatus: React.Dispatch<React.SetStateAction<boolean | null>>
   merkleProof?: MerkleProof | null
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+
 }
 
 export function SearchContainer({
   isAdmin,
   setAdminStatus,
   merkleProof,
+  setOpen,
 }: SearchContainerProps) {
   const [searchParams, setSearchParams] = useState<Listing>({
     chainId: BigInt(0),
@@ -86,25 +89,33 @@ export function SearchContainer({
       press: cleanedPathname,
       data: sendInputs,
       value: '0.0005',
-      prepareTxn: searchResults ? true : false,
-      successCallback: router.refresh,
+      prepareTxn: !!searchResults,
+      successCallback: () => {
+        router.refresh()
+        setOpen(false)
+      },
     })
 
-  return (
-    <Stack className="justify-center gap-4">
-      <SearchGallery nftMetadata={searchResults} />
-      <Stack className="w-full gap-y-4 p-4 pt-0">
-        <SearchInput
-          searchResults={searchResults}
-          setSearchResults={setSearchResults}
-          setSearchParams={handleSetSearchParams}
-        />
-        <SearchAction
-          nameOfAdd={searchResults?.title}
-          addReady={!!sendDataConfig ? true : false}
-          addTrigger={sendData}
-        />
+
+    return (
+      <Stack className="justify-center gap-4">
+        <SearchGallery nftMetadata={searchResults} />
+        <Stack className="w-full gap-y-4 p-4 pt-0">
+          <SearchInput
+            searchResults={searchResults}
+            setSearchResults={setSearchResults}
+            setSearchParams={handleSetSearchParams}
+          />
+          <Button
+            loading={sendDataLoading}
+            disabled={!sendData}
+            onClick={() => sendData?.()}
+            className="w-full"
+            variant="secondary"
+          >
+            {searchResults?.title ? `Add "${searchResults?.title}"` : 'Add'}
+          </Button>
+        </Stack>
       </Stack>
-    </Stack>
-  )
-}
+    )
+  }
