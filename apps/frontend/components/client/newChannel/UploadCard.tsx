@@ -32,31 +32,33 @@ export function UploadCard({
   }
 
   return (
-    <Card size="lg" className="relative object-contain">
-      <input
-        type="file"
-        ref={fileInputRef}
-        onChange={handleImageChange}
-        style={{ display: 'none' }}
-      />
-      <Button
-        size="icon"
-        className="h-full rounded w-full bg-base-shade hover:bg-base-shade/40 text-label-muted border-none"
-        onClick={() => fileInputRef.current?.click()}
-      >
-        <Body className="text-label-muted mx-8">
-          Upload a cover image for your channel
-        </Body>
-      </Button>
-      {image && (
-        <Image
-          className="object-cover aspect-square"
-          // biome-ignore lint:
-          src={localImageUrl!} // Use the local image as the source for the Image component
-          alt="Uploaded image"
-          fill
+    <Debug>
+      <Card size="lg" className="relative">
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleImageChange}
+          style={{ display: 'none' }}
         />
-      )}
-    </Card>
+        <Button
+          size="icon"
+          className="h-full rounded w-full bg-base-shade hover:bg-base-shade/40 text-label-muted border-none"
+          onClick={() => fileInputRef.current?.click()}
+        >
+          <Body className="text-label-muted p-8">
+            Upload a cover image for your channel
+          </Body>
+        </Button>
+        {image && (
+          <Image
+            className="object-cover aspect-square"
+            // biome-ignore lint:
+            src={localImageUrl!} // Use the local image as the source for the Image component
+            alt="Uploaded image"
+            fill
+          />
+        )}
+      </Card>
+    </Debug>
   )
 }
