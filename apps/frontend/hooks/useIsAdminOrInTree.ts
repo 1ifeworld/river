@@ -45,20 +45,23 @@ export function IsAdminOrInTree({
             address,
           ) || false
 
-        const merkleRoot = adminData?.logicTransmitterMerkleAdmin[0]
-          ?.merkleRoot as `0x${string}`
+        
+        if (!isAdminResult) {
+          const merkleRoot = adminData?.logicTransmitterMerkleAdmin[0]
+            ?.merkleRoot as Hash
 
-        if (merkleRoot) {
-          const tree = await getTreeFromRoot(merkleRoot, address)
+          if (merkleRoot) {
+            const tree = await getTreeFromRoot(merkleRoot, address)
 
-          isInTreeResult =
-            tree?.unhashedLeaves
-              ?.map((addr: Hex) => addr.toLowerCase())
-              .includes(address.toLowerCase()) || false
+            isInTreeResult =
+              tree?.unhashedLeaves
+                ?.map((addr: Hex) => addr.toLowerCase())
+                .includes(address.toLowerCase()) || false
 
-          if (isInTreeResult && onMerkleProofChange) {
-            const proof = await getMerkleProofs(merkleRoot, address)
-            onMerkleProofChange(proof)
+            if (isInTreeResult && onMerkleProofChange) {
+              const proof = await getMerkleProofs(merkleRoot, address)
+              onMerkleProofChange(proof)
+            }
           }
         }
       } catch (error) {

@@ -19,7 +19,7 @@ export function NewChannelContainer() {
   const { address } = useAccount()
   const initialAdmin = address || zeroAddress
   const router = useRouter()
-
+  const rendererInit = zeroHash; 
   const [imageCid, setImageCid] = useState<string>('')
   const [name, setName] = useState<string>('')
   const [description, setDescription] = useState<string>('')
@@ -27,7 +27,7 @@ export function NewChannelContainer() {
   const [channelCreated, setChannelCreated] = useState(false)
   const [merkleRoot, setMerkleRoot] = useState<Hash>(zeroHash)
 
-  const { client } = useWeb3Storage(uriCid)
+  const { client: web3StorageClient } = useWeb3Storage(uriCid)
 
   useEffect(() => {
     console.log('Received Merkle root in NewChannelContainer:', merkleRoot)
@@ -43,9 +43,9 @@ export function NewChannelContainer() {
       type: 'application/json',
     })
     const file = new File([blob], 'schema.json', { type: 'application/json' })
-    const schemaCid = await client.put([file], { wrapWithDirectory: false })
+    const schemaCid = await web3StorageClient.put([file], { wrapWithDirectory: false })
     setUriCid(`ipfs://${schemaCid}`)
-  }, [client, imageCid, name, description])
+  }, [web3StorageClient, imageCid, name, description])
 
   const setupInputs: Hash = encodeAbiParameters(
     parseAbiParameters(
@@ -62,13 +62,13 @@ export function NewChannelContainer() {
           merkleRoot,
         ]),
         renderer,
-        zeroHash,
+        rendererInit,
       ],
     ],
   )
 
   const { setupPress, setupPressTxnReceipt } = useSetupPress({
-    factory,
+    factory: factory,
     data: setupInputs,
     prepareTxn: uriCid ? true : false,
   })
@@ -90,7 +90,9 @@ export function NewChannelContainer() {
 
   return (
     <Flex className="gap-x-10 h-[248px]">
+      {/* First Column: Channel image upload */}
       <UploadCard imageCid={imageCid} setImageCid={setImageCid} />
+      {/* Second Column: Channel name + description + create Trigger */}
       <Stack className="h-full justify-end cursor-default">
         <ChannelUri
           setName={setName}

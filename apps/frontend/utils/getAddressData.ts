@@ -1,6 +1,7 @@
 import { type Hex } from 'viem'
 import { BasementSDK } from '@basementdev/sdk'
 import { shortenAddress } from './shortenAddress'
+import { isAddress } from 'viem'
 import { env } from '../services/env'
 
 function isHex(value: string): value is Hex {
@@ -43,11 +44,11 @@ export async function getAddressData(
     }
   }
 
-  if (isHex(input)) {
+  if (isAddress(input)) {
     console.log('Input is a valid Ethereum address:', input)
     return {
       address: input,
-      name: shortenAddress(input), // Assuming you want to use the shortened address as the name if no ENS name is found
+      name: shortenAddress(input), 
     }
   }
 
