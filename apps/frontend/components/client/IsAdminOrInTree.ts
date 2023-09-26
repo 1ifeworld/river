@@ -2,9 +2,8 @@ import { useState, useEffect, useRef } from 'react'
 import { useAccount } from 'wagmi'
 import { usePathname } from 'next/navigation'
 import { Hex, Hash, getAddress } from 'viem'
-import { getChannel } from 'gql/requests'
-import { getTreeFromRoot, getMerkleProofs } from '.'
-import { getTree } from 'lanyard'
+import { getChannel } from '@/gql'
+import { getTreeFromRoot, getMerkleProofs } from '@/hooks'
 
 export type MerkleProof = {
   unhashedLeaf: string

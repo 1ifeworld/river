@@ -4,7 +4,6 @@ import { shortenAddress } from './shortenAddress'
 import { isAddress } from 'viem'
 import { env } from '../services/env'
 
-
 export async function getAddressData(
   input: Hex | string,
 ): Promise<{ address: string; name: string }> {
