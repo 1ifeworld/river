@@ -1,13 +1,13 @@
-import { Drawer } from "vaul";
-import { Button, Flex, Stack, Body, Debug } from "@river/estuary";
-import { MenuIcon, LogOutIcon } from "lucide-react";
-import { Connect } from "@/client";
-import { useAccount, useDisconnect } from "wagmi";
-import Link from "next/link";
+import { Drawer } from 'vaul'
+import { Button, Flex, Stack, Body, Debug } from '@river/estuary'
+import { MenuIcon, LogOutIcon } from 'lucide-react'
+import { Connect } from '@/client'
+import { useAccount, useDisconnect } from 'wagmi'
+import Link from 'next/link'
 
 export function SidebarAsDrawer() {
-  const { isConnected } = useAccount();
-  const { disconnect } = useDisconnect();
+  const { isConnected } = useAccount()
+  const { disconnect } = useDisconnect()
   return (
     <Drawer.Root shouldScaleBackground>
       <Drawer.Trigger className="fixed right-[5%] bottom-[2.5%] z-40" asChild>
@@ -52,5 +52,5 @@ export function SidebarAsDrawer() {
         </Drawer.Content>
       </Drawer.Portal>
     </Drawer.Root>
-  );
+  )
 }

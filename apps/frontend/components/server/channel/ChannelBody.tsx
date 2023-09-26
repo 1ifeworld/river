@@ -3,10 +3,6 @@ import { Listing } from '@/gql'
 import { ListingCard } from '@/client'
 
 export function ChannelBody({ listings }: { listings: Listing[] }) {
-  if (!listings || listings.length === 0) {
-    return <div>No Listings available.</div>
-  }
-
   return (
     <Grid className="grid-cols-[repeat(auto-fill,_minmax(224px,_1fr))] gap-5 pb-4">
       {listings.map((listing: Listing) => (

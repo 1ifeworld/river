@@ -6,7 +6,7 @@ import { Hex } from 'viem'
 import { useAccount } from 'wagmi'
 
 export function Sidebar() {
-  const { isConnected, address } = useAccount();
+  const { isConnected, address } = useAccount()
 
   return (
     <Stack className="hidden md:flex bg-base border-r border-base-shade h-screen sticky top-0 px-5 pt-10 pb-5">
@@ -42,5 +42,5 @@ export function Sidebar() {
         </span>
       </Stack>
     </Stack>
-  );
+  )
 }
