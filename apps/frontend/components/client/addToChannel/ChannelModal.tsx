@@ -79,12 +79,7 @@ export function ChannelModal() {
                 </Button>
               </Flex>
               {activeTab === 'Search' && (
-                <SearchContainer
-                  setOpen={setOpen}
-                  isAdmin={isAdmin ?? false}
-                  setAdminStatus={setIsAdmin}
-                  merkleProof={merkleProof}
-                />
+                <SearchContainer setOpen={setOpen} merkleProof={merkleProof} />
               )}
             </DialogContent>
           </Dialog>
