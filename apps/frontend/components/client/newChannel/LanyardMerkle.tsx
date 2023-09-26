@@ -7,7 +7,6 @@ import { getAddressDisplay } from 'utils/getAddressDisplay'
 import { getAddressData } from 'utils/getAddressData'
 import { shortenAddress } from 'utils/shortenAddress'
 import { isAddress, Hash, Hex } from 'viem'
-// import { resolveEnsOrAddress } from '../../../utils/resolveENSorAddress'
 
 interface Props {
   onMerkleRootChange: (merkle: Hash) => void
