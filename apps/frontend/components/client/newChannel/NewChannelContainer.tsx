@@ -79,7 +79,8 @@ export function NewChannelContainer() {
 
   const pollForNewChannel = async () => {
     let found = false
-    while (!found) {
+    let counter = 0
+    while (!found && counter < 10) {
       const result = await getChannel({
         channel: setupPressTxnReceipt?.logs[0].address as string,
       })
@@ -88,6 +89,7 @@ export function NewChannelContainer() {
         router.push(`/channel/${setupPressTxnReceipt?.logs[0].address}`)
       } else {
         await new Promise((resolve) => setTimeout(resolve, 1000)) // Time before polling again
+        ++counter
       }
     }
   }
