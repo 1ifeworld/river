@@ -12,8 +12,10 @@ export default function Feedback() {
         <BodyLarge className="text-label ">
           You can leave anything that comes to mind at the following&nbsp;
           <a
-            className="italic underline "
+            className="italic underline"
             href="https://forms.gle/iXCnFcyiKj51fEeo6"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             link
           </a>
