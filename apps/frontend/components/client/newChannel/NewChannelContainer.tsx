@@ -12,6 +12,7 @@ import {
 import { factory, logic, renderer, zeroHash } from "@/constants";
 import { useAccount } from "wagmi";
 import { useRouter } from "next/navigation";
+import { getChannel } from "@/gql";
 
 export function NewChannelContainer() {
   const { address, isConnected } = useAccount();
