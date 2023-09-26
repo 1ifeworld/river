@@ -15,15 +15,6 @@ export function ListingView({ listings, error }: ListingViewProps) {
     return <Flex className="flex-col">{error}</Flex>
   }
 
-  // If no listings are available, display a message
-  if (!listings || listings.length === 0) {
-    return (
-      <Flex className="flex-col">
-        No listings found for the provided listingId
-      </Flex>
-    )
-  }
-
   // If listings are still being fetched, display a loading message
   if (!listings) {
     return <Flex className="flex-col">Loading...</Flex>
