@@ -1,12 +1,12 @@
-import { Stack, Body } from '@river/estuary'
-import Link from 'next/link'
-import { Connect } from '../Connect'
-import { AdminChannels } from '../AdminChannels'
-import { Hex } from 'viem'
-import { useAccount } from 'wagmi'
+import { Stack, Body } from "@river/estuary";
+import Link from "next/link";
+import { Connect } from "../Connect";
+import { AdminChannels } from "../AdminChannels";
+import { Hex } from "viem";
+import { useAccount } from "wagmi";
 
 export function Sidebar() {
-  const { isConnected, address } = useAccount()
+  const { isConnected, address } = useAccount();
 
   return (
     <Stack className="hidden md:flex bg-base border-r border-base-shade h-screen sticky top-0 px-5 pt-10 pb-5">
@@ -19,7 +19,7 @@ export function Sidebar() {
               </Body>
               <Link href="/">
                 <Body className="text-label hover:underline">Home </Body>
-              </Link>          
+              </Link>
             </span>
             <Link href="/channel">
               <Body className="text-label-faint hover:text-label-faint/80 font-medium my-2">
@@ -36,5 +36,5 @@ export function Sidebar() {
         </span>
       </Stack>
     </Stack>
-  )
+  );
 }
