@@ -10,7 +10,7 @@ export default async function Home() {
   const channelsWithNoName = channels.filter(
     (channel) => channel?.contractUri?.image !== '',
   )
-
+  
   return (
     <Grid className="grid-cols-2 md:grid-cols-[repeat(auto-fill,_minmax(224px,_1fr))] m-6 md:m-10 gap-5 pb-4">
       {channelsWithNoName.map((validChannel: Channel) => (
