@@ -79,13 +79,29 @@ export function NewChannelContainer() {
     }
   }, [uriCid, setupPress]);
 
-  useEffect(() => {
-    if (setupPressTxnReceipt) {
-      setTimeout(() => {
-        router.push(`/channel/${setupPressTxnReceipt.logs[0].address}`);
-      }, 5000);
+  const pollForNewChannel = async () => {
+    let found = false
+    let counter = 0
+    while (!found && counter < 10) {
+      const result = await getChannel({
+        channel: setupPressTxnReceipt?.logs[0].address as string,
+      })
+      if (result.channels.length != 0) {
+        found = true
+        router.push(`/channel/${setupPressTxnReceipt?.logs[0].address}`)
+      } else {
+        await new Promise((resolve) => setTimeout(resolve, 1000)) // Time before polling again
+        ++counter
+      }
     }
-  }, [setupPressTxnReceipt]);
+  }
+
+  useEffect(() => {
+    if (setupPressTxnReceipt)
+      (async () => {
+        await pollForNewChannel()
+      })()
+  }, [setupPressTxnReceipt])
 
   return (
     <Flex className="flex-wrap md:flex-nowrap gap-2 md:gap-8">
