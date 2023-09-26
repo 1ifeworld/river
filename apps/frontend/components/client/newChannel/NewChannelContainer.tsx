@@ -91,11 +91,11 @@ export function NewChannelContainer() {
   }, [setupPressTxnReceipt])
 
   return (
-    <Flex className="gap-x-10 h-[248px]">
+    <Flex className="flex-wrap md:flex-nowrap gap-8">
       {/* First Column: Channel image upload */}
       <UploadCard imageCid={imageCid} setImageCid={setImageCid} />
-      {/* Second Column: Channel name + description + create Trigger */}
-      <Stack className="h-full justify-end cursor-default">
+      {/* Second Column: Channel name + description + create button */}
+      <Stack className="h-full justify-top md:justify-end cursor-default h-[248px]">
         <ChannelUri
           setName={setName}
           name={name}

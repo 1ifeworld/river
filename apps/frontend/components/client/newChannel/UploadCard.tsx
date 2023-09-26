@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react'
 import { useWeb3Storage } from '@/hooks'
-import { Button, Body, Card } from '@river/estuary'
+import { Button, Body, Card, Debug } from '@river/estuary'
 import Image from 'next/image'
 
 export function UploadCard({
@@ -32,16 +32,16 @@ export function UploadCard({
   }
 
   return (
-    <Card size="lg" className="relative">
+    <Card size="lg" className="relative object-contain">
       <input
         type="file"
         ref={fileInputRef}
         onChange={handleImageChange}
-        style={{ display: 'none' }} // Hide the input
+        style={{ display: 'none' }}
       />
       <Button
         size="icon"
-        className="h-full rounded w-full bg-base-shade hover:bg-base-shade/80 text-label-muted"
+        className="h-full rounded w-full bg-base-shade hover:bg-base-shade/40 text-label-muted border-none"
         onClick={() => fileInputRef.current?.click()}
       >
         <Body className="text-label-muted mx-8">

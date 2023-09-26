@@ -35,7 +35,7 @@ export async function ChannelBanner({ channels }: { channels: Channel }) {
       </Card>
       {/* Channel settings */}
       {/* Second Column: Text details */}
-      <Stack className="h-full justify-top md:justify-end  cursor-default h-[248px]">
+      <Stack className="h-full justify-top md:justify-end cursor-default h-[248px]">
         <span className="inline-block mb-5">
           <Headline className="font-medium text-label">
             {truncateText(channels?.contractUri?.name ?? '', 20)
