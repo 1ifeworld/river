@@ -7,6 +7,9 @@ export default {
     'app/**/*.{ts,tsx}',
     'components/**/*.{ts,tsx}',
   ],
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
   theme: {
     // Replaces all of the default `fontSize` values
     fontSize: {
