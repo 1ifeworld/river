@@ -12,10 +12,8 @@ import {
 import { factory, logic, renderer, zeroHash } from "@/constants";
 import { useAccount } from "wagmi";
 import { useRouter } from "next/navigation";
-import { useModal } from "connectkit";
 
 export function NewChannelContainer() {
-  const { setOpen } = useModal();
   const { address, isConnected } = useAccount();
   const initialAdmin = address || zeroAddress;
   const router = useRouter();

@@ -1,5 +1,5 @@
 import { Avatar } from 'connectkit'
-import { ConnectKitButton, useModal } from 'connectkit'
+import { ConnectKitButton } from 'connectkit'
 import { type Hex } from 'viem'
 import { Flex, Body, Stack, Button, cn, Debug } from '@river/estuary'
 import { shortenAddress } from '@/utils'
@@ -36,7 +36,6 @@ function Auth({ address }: { address?: Hex }) {
 }
 
 export function Connect({ className }: { className?: string }) {
-  const {setOpen} = useModal()
   return (
     <ConnectKitButton.Custom>
       {({ isConnected, show, address }) => {
