@@ -19,7 +19,7 @@ export function NewChannelContainer() {
   const { address } = useAccount()
   const initialAdmin = address || zeroAddress
   const router = useRouter()
-  const rendererInit = zeroHash; 
+  const rendererInit = zeroHash
   const [imageCid, setImageCid] = useState<string>('')
   const [name, setName] = useState<string>('')
   const [description, setDescription] = useState<string>('')
@@ -43,7 +43,9 @@ export function NewChannelContainer() {
       type: 'application/json',
     })
     const file = new File([blob], 'schema.json', { type: 'application/json' })
-    const schemaCid = await web3StorageClient.put([file], { wrapWithDirectory: false })
+    const schemaCid = await web3StorageClient.put([file], {
+      wrapWithDirectory: false,
+    })
     setUriCid(`ipfs://${schemaCid}`)
   }, [web3StorageClient, imageCid, name, description])
 
