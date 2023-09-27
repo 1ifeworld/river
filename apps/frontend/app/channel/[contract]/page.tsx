@@ -12,10 +12,6 @@ export default async function Channel({
     channel: getAddress(params.contract) as string,
   })
 
-
-  console.log("listings: ", channels[0]?.listings[1].id)
-  console.log("listings: ", channels[0]?.listings[9].id)
-  
   return (
     <Stack className="m-6 md:m-10 gap-y-[88px]">
       <ChannelBanner channels={channels?.[0]} />
