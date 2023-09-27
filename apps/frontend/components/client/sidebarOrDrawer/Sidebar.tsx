@@ -16,7 +16,7 @@ export function Sidebar() {
             {/* River */}
             <Flex className="gap-2 items-center">
               <Link href="/">
-                <BodyLarge className="text-label font-medium cursor-default hover:text-label/80">
+                <BodyLarge className="text-label font-medium hover:text-label/80">
                   River
                 </BodyLarge>
               </Link>
