@@ -1,9 +1,10 @@
-import { Headline } from "@river/estuary";
+import { Headline, Stack, BodyLarge } from "@river/estuary";
 
 export default function Page() {
   return (
-    <>
-      <Headline className='mb-8'>Stack</Headline>
-    </>
+    <Stack className='gap-3'>
+      <Headline>Stack</Headline>
+      <BodyLarge>Container for arranging items in a flexbox column.</BodyLarge>
+    </Stack>
   );
 }
