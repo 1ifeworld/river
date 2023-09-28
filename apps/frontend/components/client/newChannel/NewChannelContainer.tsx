@@ -67,7 +67,7 @@ export function NewChannelContainer() {
     ]
   );
 
-  const { setupPress, setupPressTxnReceipt } = useSetupPress({
+  const { setupPress, setupPressTxnReceipt, setupPressLoading } = useSetupPress({
     factory: factory,
     data: setupInputs,
     prepareTxn: uriCid ? true : false,
@@ -119,9 +119,10 @@ export function NewChannelContainer() {
             description={description}
           />
           <Button
+            loading={setupPressLoading}
             className="w-fit"
             variant="secondary"
-            disabled={!(!!imageCid && !!name)}
+            disabled={setupPressLoading || !(!!imageCid && !!name)}
             onClick={handleUriUpload}
           >
             Create
