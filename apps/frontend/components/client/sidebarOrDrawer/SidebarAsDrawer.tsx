@@ -44,7 +44,9 @@ export function SidebarAsDrawer() {
               </Flex>
               {isConnected ? (
                 <Button className="w-full rounded-full">
-                  <Link href="/channel">New Channel</Link>
+                  <Drawer.Close asChild>
+                    <Link href="/channel">New Channel</Link>
+                  </Drawer.Close>
                 </Button>
               ) : null}
             </Stack>
