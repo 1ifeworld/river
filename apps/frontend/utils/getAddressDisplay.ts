@@ -9,13 +9,26 @@ export async function getAddressDisplay(address: Hex) {
     endpoint: 'https://beta.basement.dev/v2/graphql',
   })
 
-  const data = await sdk.address({
-    address: address,
-    include: { reverseProfile: true },
-  })
+  try {
+    const data = await sdk.address({
+      address: address,
+      include: { reverseProfile: true },
+    })
 
-  if (data?.reverseProfile?.name) {
-    return data?.reverseProfile?.name
+    const display = data?.reverseProfile?.name || shortenAddress(address)
+
+    return {
+      display,
+    }
+  } catch (error) {
+    console.error(
+      'Failed to get address display for address:',
+      address,
+      'Error:',
+      error,
+    )
+    return {
+      display: shortenAddress(address),
+    }
   }
-  return shortenAddress(address)
 }

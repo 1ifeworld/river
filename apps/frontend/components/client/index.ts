@@ -7,7 +7,6 @@ export * from './sidebarOrDrawer'
 
 // Individual components
 export * from './AdminChannels'
-export * from './ChannelCard'
 export * from './Connect'
 export * from './IsAdminOrInTree'
 export * from './ListingCard'
