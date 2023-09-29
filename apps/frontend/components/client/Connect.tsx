@@ -10,12 +10,11 @@ import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
-  IconContainer,
+  DropdownMenuItem,
 } from '@river/estuary'
 import { shortenAddress } from '@/utils'
 import { useDisconnect } from 'wagmi'
 import { useGetAddressDisplay, useMediaQuery } from '@/hooks'
-import { LogOutIcon } from 'lucide-react'
 
 function Auth({ address }: { address?: Hex }) {
   const { disconnect } = useDisconnect()
@@ -71,10 +70,12 @@ function Auth({ address }: { address?: Hex }) {
           </Flex>
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="mb-3 text-center">
-        <button type="button" onClick={() => disconnect()}>
-          <Body className="text-label hover:underline">Disconnect</Body>
-        </button>
+      <DropdownMenuContent className="mb-3">
+        <DropdownMenuItem>
+          <button type="button" onClick={() => disconnect()}>
+            <Body className="text-label">Disconnect</Body>
+          </button>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )
