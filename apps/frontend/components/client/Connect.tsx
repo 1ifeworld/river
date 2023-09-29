@@ -1,10 +1,21 @@
 import { Avatar } from 'connectkit'
 import { ConnectKitButton } from 'connectkit'
 import { type Hex } from 'viem'
-import { Flex, Body, Stack, Button, cn, Debug } from '@river/estuary'
+import {
+  Flex,
+  Body,
+  Stack,
+  Button,
+  cn,
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  IconContainer,
+} from '@river/estuary'
 import { shortenAddress } from '@/utils'
 import { useDisconnect } from 'wagmi'
 import { useGetAddressDisplay, useMediaQuery } from '@/hooks'
+import { LogOutIcon } from 'lucide-react'
 
 function Auth({ address }: { address?: Hex }) {
   const { disconnect } = useDisconnect()
@@ -34,29 +45,38 @@ function Auth({ address }: { address?: Hex }) {
       </button>
     )
   }
-
+  /**
+   * Auth Dropdown On Desktop
+   **/
   return (
-    <button
-      type="button"
-      onClick={() => disconnect()}
-      className="-my-2 hover:bg-base-hover hover:rounded-full transition-all md:p-2"
-    >
-      <Flex className="items-center gap-[10px]">
-        <Avatar address={address} size={40} />
-        <Stack className="pr-2 text-left">
-          {display !== shortenAddress(address) ? (
-            <>
-              <Body className="text-label">{display}</Body>
-              <Body className="text-label-muted">
-                {shortenAddress(address)}
-              </Body>
-            </>
-          ) : (
-            <Body className="text-label-muted">{shortenAddress(address)}</Body>
-          )}
-        </Stack>
-      </Flex>
-    </button>
+    <DropdownMenu>
+      <DropdownMenuTrigger className="focus:outline-none">
+        <div className="-my-2 hover:bg-base-hover hover:rounded-full transition-all md:p-2">
+          <Flex className="items-center gap-[10px]">
+            <Avatar address={address} size={40} />
+            <Stack className="pr-2 text-left">
+              {display !== shortenAddress(address) ? (
+                <>
+                  <Body className="text-label">{display}</Body>
+                  <Body className="text-label-muted">
+                    {shortenAddress(address)}
+                  </Body>
+                </>
+              ) : (
+                <Body className="text-label-muted">
+                  {shortenAddress(address)}
+                </Body>
+              )}
+            </Stack>
+          </Flex>
+        </div>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="mb-3 text-center">
+        <button type="button" onClick={() => disconnect()}>
+          <Body className="text-label hover:underline">Disconnect</Body>
+        </button>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
 
