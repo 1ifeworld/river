@@ -78,10 +78,10 @@ export function LanyardMerkle({
   // Resolve Ethereum address to its associated ENS name (if any)
   const resolveAddressToENS = async (address: string): Promise<string> => {
     console.log(`Checking if address ${address} has an associated ENS name.`)
-    const ensName = await getAddressDisplay(address as Hex)
-    if (ensName && ensName !== address) {
-      console.log(`Address ${address} has associated ENS name: ${ensName}`)
-      return ensName
+    const { display } = await getAddressDisplay(address as Hex)
+    if (display && display !== address) {
+      console.log(`Address ${address} has associated ENS name: ${display}`)
+      return display
     } else {
       console.log(`Address ${address} does not have an associated ENS name.`)
       return address
