@@ -67,11 +67,13 @@ export function NewChannelContainer() {
     ],
   )
 
-  const { setupPress, setupPressTxnReceipt, setupPressLoading } = useSetupPress({
-    factory: factory,
-    data: setupInputs,
-    prepareTxn: uriCid ? true : false,
-  })
+  const { setupPress, setupPressTxnReceipt, setupPressLoading } = useSetupPress(
+    {
+      factory: factory,
+      data: setupInputs,
+      prepareTxn: uriCid ? true : false,
+    },
+  )
 
   useEffect(() => {
     if (uriCid && !channelCreated && setupPress) {

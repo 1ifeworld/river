@@ -1,6 +1,6 @@
 import { Drawer } from 'vaul'
-import { Button, Flex, Stack, Body, Debug } from '@river/estuary'
-import { MenuIcon, LogOutIcon } from 'lucide-react'
+import { Button, Flex, Stack, Body, Debug, IconContainer } from '@river/estuary'
+import { MenuIcon, LogOutIcon, GlobeIcon } from 'lucide-react'
 import { Connect } from '@/client'
 import { useAccount, useDisconnect } from 'wagmi'
 import Link from 'next/link'
@@ -27,7 +27,7 @@ export function SidebarAsDrawer() {
             <Stack className="max-w-md mx-auto gap-6">
               <Drawer.Close asChild>
                 <Link href="/">
-                  <Body className="text-label hover:underline">Home </Body>
+                  <Body className="text-label">Home</Body>
                 </Link>
               </Drawer.Close>
               <Flex className="items-center justify-between">
@@ -44,7 +44,9 @@ export function SidebarAsDrawer() {
               </Flex>
               {isConnected ? (
                 <Button className="w-full rounded-full">
-                  <Link href="/channel">New Channel</Link>
+                  <Drawer.Close asChild>
+                    <Link href="/channel">New Channel</Link>
+                  </Drawer.Close>
                 </Button>
               ) : null}
             </Stack>
