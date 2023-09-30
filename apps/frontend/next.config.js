@@ -1,5 +1,9 @@
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+})
+
 /** @type {import('next').NextConfig} */
-module.exports = {
+module.exports = withBundleAnalyzer({
   reactStrictMode: true,
   images: {
     domains: ['ipfs.io', 'res.cloudinary.com', 'nft-cdn.alchemy.com'],
@@ -10,4 +14,4 @@ module.exports = {
     return config
   },
   transpilePackages: ['@river/estuary'],
-}
+})
