@@ -29,7 +29,7 @@ export function Tooltip({ side, align, children, content }: TooltipProps) {
         </TooltipTrigger>
         <TooltipPortal>
           <TooltipContent
-            className='bg-base border-[0.5px] border-base-border px-5 py-4 rounded-[10px] shadow-sm'
+            className='bg-base border-[0.5px] border-base-border px-5 py-4 rounded-[10px] shadow-soft'
             sideOffset={4}
             side={side}
             align={align}
