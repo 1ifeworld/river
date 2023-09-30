@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@basementdev/sdk": "^1.0.9",
+    "@next/bundle-analyzer": "^13.5.3",
     "@parcel/watcher": "^2.3.0",
     "@radix-ui/react-icons": "^1.3.0",
     "@river/estuary": "workspace:*",
