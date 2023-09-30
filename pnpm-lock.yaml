@@ -270,6 +270,9 @@ importers:
       '@river/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
+      '@types/node':
+        specifier: ^20.5.6
+        version: 20.5.6
       '@types/react':
         specifier: 18.2.21
         version: 18.2.21
