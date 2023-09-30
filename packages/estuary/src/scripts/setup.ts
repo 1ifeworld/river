@@ -11,13 +11,10 @@ interface ErrnoException extends Error {
   syscall?: string;
 }
 
-// Get the directory name of the current module
-const dirname = path.dirname(fileURLToPath(import.meta.url));
+const dirname = path.dirname(fileURLToPath(import.meta.url)); // get the directory name of the current module
 
-// Define the directory of the Estuary package's src/components directory
-const estuaryComponentsDir = path.join(dirname, '..', 'components');
+const estuaryComponentsDir = path.join(dirname, '..', 'components'); // define Estuary's `components` directory
 
-// Function to replace values in a file
 function replaceInFile(filePath: string) {
     fs.readFile(filePath, 'utf8', (err: ErrnoException | null, data: string) => {
       if (err) {
@@ -28,8 +25,7 @@ function replaceInFile(filePath: string) {
       let result = data;
       let changes: string[] = [];
   
-      // Replace values based on the mappings
-      for (const key of objectKeys(estuaryMapping)) {
+      for (const key of objectKeys(estuaryMapping)) { // replace values based on the mappings in `estuaryMapping`
         const oldValue = key;
         const newValue = estuaryMapping[key];
         if (result.includes(oldValue)) {
@@ -37,8 +33,7 @@ function replaceInFile(filePath: string) {
         }
       }
   
-      // Write the new content back to the file
-      fs.writeFile(filePath, result, 'utf8', (err: ErrnoException | null) => {
+      fs.writeFile(filePath, result, 'utf8', (err: ErrnoException | null) => { // write the new content back to the file
         if (err) {
           console.error(`Could not write to the file ${filePath}.`, err);
         } else if (changes.length > 0) {
@@ -47,8 +42,7 @@ function replaceInFile(filePath: string) {
       });
     });
   }
-  
-  // Function to process a directory
+
   function processDir(dirPath: string) {
     fs.readdir(dirPath, (err: ErrnoException | null, files: string[]) => {
       if (err) {
@@ -66,10 +60,8 @@ function replaceInFile(filePath: string) {
           }
   
           if (stat.isDirectory()) {
-            // Recursively process the subdirectory
             processDir(filePath);
           } else if (stat.isFile() && path.extname(filePath) === '.tsx') {
-            // Replace values in the .tsx file
             replaceInFile(filePath);
           }
         });
@@ -77,5 +69,4 @@ function replaceInFile(filePath: string) {
     });
   }
   
-  // Start processing the src/components directory
   processDir(estuaryComponentsDir);
