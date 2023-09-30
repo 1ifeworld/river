@@ -19,7 +19,6 @@ export const estuaryMapping = processKeys({
     'card-foreground': 'label',
     'popover': 'base',
     'popover-foreground': 'label',
-    'border': 'base-border',
     'accent': 'base-hover',
     'accent-foreground': 'label',
     'shadow-sm': 'shadow-soft',
