@@ -14,14 +14,11 @@ import { Channel } from '@/gql'
 import { ipfsToHttps, truncateText, getAddressDisplay } from '@/utils'
 
 export async function ChannelBanner({ channels }: { channels: Channel }) {
-  // Attempt to resolve relevant address/ens before component renders
-  const creatorEnsOrAddress = channels?.createdBy
-    ? await getAddressDisplay(channels.createdBy as Hex)
-    : ''
+  const { display } = await getAddressDisplay(channels.createdBy as Hex)
 
   return (
     <Flex className="flex-wrap md:flex-nowrap gap-2 md:gap-8">
-      {/* First Column: Channel cover image*/}
+      {/* First Column: Channel cover image */}
       <Card size="lg" className="relative shadow-reg w-full md:w-fit">
         <Image
           className="object-cover aspect-square"
@@ -44,7 +41,7 @@ export async function ChannelBanner({ channels }: { channels: Channel }) {
                 : 'Channel name missing'}
             </Headline>
             <Headline className="text-label-muted font-normal">
-              {creatorEnsOrAddress}
+              {display}
               {(channels?.logicTransmitterMerkleAdmin[0].accounts
                 ?.length as number) > 1
                 ? ` + ${

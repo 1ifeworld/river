@@ -2,22 +2,18 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Body, Card, BodySmall, Stack, cn, Flex, C } from '@river/estuary'
 import { type Channel } from '@/gql'
-import { truncateText, ipfsToHttps } from '@/utils'
-import { useGetAddressDisplay } from '@/hooks'
+import { truncateText, ipfsToHttps, getAddressDisplay } from '@/utils'
 import { Hex } from 'viem'
 
-export function ChannelCard({
+export async function ChannelCard({
   channel,
   className,
 }: {
   channel: Channel
   className?: string
 }) {
-  // Run useGetAddress hook on page load. Add in the display lag so that the cards dont jump
-  // in place initially before display has fetched a value. always show at least the address,
-  // and correct it to the ens. This should be replaced by a server side solution
-  const { display } = useGetAddressDisplay(channel.createdBy as Hex)
-  const frontEndDisplayLagFix = display ? display : (channel.createdBy as Hex)
+  const { display } = await getAddressDisplay(channel.createdBy as Hex)
+
   return (
     <Stack className={cn('gap-y-2', className)}>
       {/* Image */}
@@ -44,14 +40,14 @@ export function ChannelCard({
         {(channel?.logicTransmitterMerkleAdmin[0].accounts?.length as number) >
         1 ? (
           <BodySmall className="text-label-muted cursor-default">
-            {truncateText(frontEndDisplayLagFix, 20)} +{' '}
+            {display}
             {(channel?.logicTransmitterMerkleAdmin[0].accounts
               ?.length as number) - 1}{' '}
             others
           </BodySmall>
         ) : (
           <BodySmall className="text-label-muted cursor-default">
-            {truncateText(frontEndDisplayLagFix, 30)}
+            {display}
           </BodySmall>
         )}
       </Stack>
