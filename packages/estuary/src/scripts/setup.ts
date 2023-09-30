@@ -16,32 +16,35 @@ const dirname = path.dirname(fileURLToPath(import.meta.url)); // get the directo
 const estuaryComponentsDir = path.join(dirname, '..', 'components'); // define Estuary's `components` directory
 
 function replaceInFile(filePath: string) {
-    fs.readFile(filePath, 'utf8', (err: ErrnoException | null, data: string) => {
-      if (err) {
-        console.error(`Could not read the file ${filePath}.`, err);
-        return;
+  fs.readFile(filePath, 'utf8', (err: ErrnoException | null, data: string) => {
+    if (err) {
+      console.error(`Could not read the file ${filePath}.`, err);
+      return;
+    }
+
+    let result = data.split('\n').map(line => {
+      if (line.startsWith('import')) {
+        return line; // return the line as is if it starts with 'import'
       }
-  
-      let result = data;
-      let changes: string[] = [];
-  
-      for (const key of objectKeys(estuaryMapping)) { // replace values based on the mappings in `estuaryMapping`
+
+      let modifiedLine = line;
+      for (const key of objectKeys(estuaryMapping)) {
         const oldValue = key;
         const newValue = estuaryMapping[key];
-        if (result.includes(oldValue)) {
-          result = result.replace(new RegExp(`\\b${oldValue}\\b`, 'g'), newValue);
+        if (modifiedLine.includes(oldValue)) {
+          modifiedLine = modifiedLine.replace(new RegExp(`\\b${oldValue}\\b`, 'g'), newValue);
         }
       }
-  
-      fs.writeFile(filePath, result, 'utf8', (err: ErrnoException | null) => { // write the new content back to the file
-        if (err) {
-          console.error(`Could not write to the file ${filePath}.`, err);
-        } else if (changes.length > 0) {
-          console.log(`Modified ${filePath}:\n${changes.join('\n')}`);
-        }
-      });
+      return modifiedLine;
+    }).join('\n');
+
+    fs.writeFile(filePath, result, 'utf8', (err: ErrnoException | null) => {
+      if (err) {
+        console.error(`Could not write to the file ${filePath}.`, err);
+      }
     });
-  }
+  });
+}
 
   function processDir(dirPath: string) {
     fs.readdir(dirPath, (err: ErrnoException | null, files: string[]) => {
