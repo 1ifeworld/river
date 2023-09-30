@@ -11,17 +11,16 @@ const processKeys = (obj: {[key: string]: string}) => {
 }
 
 export const estuaryMapping = processKeys({
-    'background': 'base',
-    'foreground': 'label',
-    'muted': 'base-shade',
-    'muted-foreground': 'label-faint',
-    'card': 'base',
-    'card-foreground': 'label',
-    'popover': 'base',
-    'popover-foreground': 'label',
-    'border': 'base-border',
-    'accent': 'base-hover',
-    'accent-foreground': 'label',
+    'bg-background': 'bg-base',
+    'text-foreground': 'text-label',
+    'bg-muted': 'bg-base-shade',
+    'text-muted-foreground': 'text-label-faint',
+    'bg-card': 'bg-base',
+    'text-card-foreground': 'text-label',
+    'bg-popover': 'bg-base',
+    'text-popover-foreground': 'text-label',
+    'bg-accent': 'bg-base-hover',
+    'text-accent-foreground': 'text-label',
     'shadow-sm': 'shadow-soft',
     'shadow-md': 'shadow-soft-1',
     'shadow-lg': 'shadow-soft-2'
