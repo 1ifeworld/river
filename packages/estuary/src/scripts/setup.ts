@@ -31,7 +31,7 @@ function replaceInFile(filePath: string) {
       for (const key of objectKeys(estuaryMapping)) {
         const oldValue = key;
         const newValue = estuaryMapping[key];
-        if (modifiedLine.includes(oldValue)) {
+        if (modifiedLine.includes(oldValue as string)) {
           modifiedLine = modifiedLine.replace(new RegExp(`\\b${oldValue}\\b`, 'g'), newValue);
         }
       }
