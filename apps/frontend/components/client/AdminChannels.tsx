@@ -24,9 +24,7 @@ export function AdminChannels({ address }: { address: Hex }) {
 
   return (
     <Stack>
-      <Body className="text-label-faint font-medium cursor-default">
-        My Channels
-      </Body>
+      <Body className="text-label-faint font-medium">My Channels</Body>
       <ul>
         {adminChannels.map((channel) => (
           <li key={channel.id}>

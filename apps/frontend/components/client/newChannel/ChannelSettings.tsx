@@ -60,7 +60,7 @@ export function ChannelSettings({
           onChange={handleNameChange}
         />
         <Flex className="items-center gap-2">
-          <Headline className="text-label-muted font-normal cursor-default">
+          <Headline className="text-label-muted font-normal">
             {display}
           </Headline>
           <Popover>

@@ -9,6 +9,7 @@ export const estuaryMapping = {
     'text-popover-foreground': 'text-label',
     'bg-accent': 'bg-base-hover',
     'text-accent-foreground': 'text-label',
+    'bg-border': 'bg-base-border',
     'border-input': 'border-base-border',
     'shadow-sm': 'shadow-soft',
     'shadow-md': 'shadow-soft-1',

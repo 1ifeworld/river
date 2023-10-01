@@ -54,7 +54,7 @@ export function ListingCard({
             )}
           </Body>
         </Link>
-        <BodySmall className="text-label-muted cursor-default">
+        <BodySmall className="text-label-muted">
           {truncateText(frontEndDisplayLagFix, 30)}
         </BodySmall>
       </Stack>
