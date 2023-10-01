@@ -64,8 +64,6 @@ export default {
       'label-muted': 'hsl(var(--label-muted) / <alpha-value>)',
       'label-faint': 'hsl(var(--label-faint) / <alpha-value>)',
       // Remnants of the shadcn theming convention
-      border: 'hsl(var(--border))',
-      input: 'hsl(var(--input))',
       ring: 'hsl(var(--ring))',
     },
     extend: {

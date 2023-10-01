@@ -1,16 +1,4 @@
-const processKeys = (obj: {[key: string]: string}) => {
-  const newObj: {[key: string]: string} = {};
-  for (let key in obj) {
-      if (key.startsWith('border-')) {
-          newObj[key] = 'base-border';
-      } else {
-          newObj[key] = obj[key];
-      }
-  }
-  return newObj;
-}
-
-export const estuaryMapping = processKeys({
+export const estuaryMapping = {
     'bg-background': 'bg-base',
     'text-foreground': 'text-label',
     'bg-muted': 'bg-base-shade',
@@ -21,7 +9,8 @@ export const estuaryMapping = processKeys({
     'text-popover-foreground': 'text-label',
     'bg-accent': 'bg-base-hover',
     'text-accent-foreground': 'text-label',
+    'border-input': 'border-base-border',
     'shadow-sm': 'shadow-soft',
     'shadow-md': 'shadow-soft-1',
     'shadow-lg': 'shadow-soft-2'
-  });
+  };
