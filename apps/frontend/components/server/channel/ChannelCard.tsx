@@ -103,13 +103,12 @@ export async function ChannelCard({
           </HoverCard>
           <C />
         </Flex>
-        {(channel?.logicTransmitterMerkleAdmin[0].accounts?.length as number) >
-        1 ? (
+        {channel?.logicTransmitterMerkleAdmin[0].accounts?.length &&
+        channel?.logicTransmitterMerkleAdmin[0].accounts?.length > 1 ? (
           <BodySmall className="text-label-muted">
-            {display}
-            {(channel?.logicTransmitterMerkleAdmin[0].accounts
-              ?.length as number) - 1}{' '}
-            others
+            {`${display} + ${
+              channel?.logicTransmitterMerkleAdmin[0].accounts?.length - 1
+            } others`}
           </BodySmall>
         ) : (
           <BodySmall className="text-label-muted">{display}</BodySmall>
