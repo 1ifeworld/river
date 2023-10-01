@@ -12,6 +12,7 @@ import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
+  BodyLarge,
 } from '@river/estuary'
 import { type Channel } from '@/gql'
 import { truncateText, ipfsToHttps, getAddressDisplay } from '@/utils'
@@ -51,19 +52,45 @@ export async function ChannelCard({
               </Link>
             </HoverCardTrigger>
             <HoverCardContent className="w-80">
-              <Stack className='gap-16'>
+              <Stack className="gap-16">
                 <span>
-                  <Headline className='font-medium leading-none'>{channel.contractUri?.name}</Headline>
-                  <Headline className='text-label-muted font-normal leading-none'>{display}</Headline>
+                  <Headline className="font-medium leading-none">
+                    {channel.contractUri?.name}
+                  </Headline>
+                  <Headline className="text-label-muted font-normal leading-none">
+                    {display}
+                  </Headline>
                 </span>
-                <Body className='text-label'>{channel.contractUri?.description}</Body>
+                <Body className="text-label">
+                  {channel.contractUri?.description}
+                </Body>
+                <Flex className="gap-8">
+                  {/* Members */}
+                  <Stack>
+                    <Headline className="leading-none">
+                      {channel?.logicTransmitterMerkleAdmin[0].accounts?.length}
+                    </Headline>
+                    <BodyLarge className="text-label-muted leading-none">
+                      members
+                    </BodyLarge>
+                  </Stack>
+                  {/* Items */}
+                  <Stack>
+                    <Headline className="leading-none">
+                      {channel?.listings.length}{' '}
+                    </Headline>
+                    <BodyLarge className="text-label-muted leading-none">
+                      items
+                    </BodyLarge>
+                  </Stack>
+                </Flex>
               </Stack>
             </HoverCardContent>
           </HoverCard>
           <C />
         </Flex>
         {(channel?.logicTransmitterMerkleAdmin[0].accounts?.length as number) >
-          1 ? (
+        1 ? (
           <BodySmall className="text-label-muted">
             {display}
             {(channel?.logicTransmitterMerkleAdmin[0].accounts
@@ -71,9 +98,7 @@ export async function ChannelCard({
             others
           </BodySmall>
         ) : (
-          <BodySmall className="text-label-muted">
-            {display}
-          </BodySmall>
+          <BodySmall className="text-label-muted">{display}</BodySmall>
         )}
       </Stack>
     </Stack>
