@@ -17,6 +17,7 @@ export * from './IconContainer';
 export * from './Input';
 export * from './Label';
 export * from './Select';
+export * from './Separator'
 export * from './Sheet';
 export * from './SvgLoader';
 export * from './Tooltip';
