@@ -54,7 +54,7 @@ export async function ChannelCard({
               <Stack className='gap-16'>
                 <span>
                   <Headline className='font-medium leading-none'>{channel.contractUri?.name}</Headline>
-                  <Headline className='text-label-muted font-normal leading-none cursor-default'>{display}</Headline>
+                  <Headline className='text-label-muted font-normal leading-none'>{display}</Headline>
                 </span>
                 <Body className='text-label'>{channel.contractUri?.description}</Body>
               </Stack>
@@ -64,14 +64,14 @@ export async function ChannelCard({
         </Flex>
         {(channel?.logicTransmitterMerkleAdmin[0].accounts?.length as number) >
           1 ? (
-          <BodySmall className="text-label-muted cursor-default">
+          <BodySmall className="text-label-muted">
             {display}
             {(channel?.logicTransmitterMerkleAdmin[0].accounts
               ?.length as number) - 1}{' '}
             others
           </BodySmall>
         ) : (
-          <BodySmall className="text-label-muted cursor-default">
+          <BodySmall className="text-label-muted">
             {display}
           </BodySmall>
         )}

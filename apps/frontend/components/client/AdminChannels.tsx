@@ -24,7 +24,7 @@ export function AdminChannels({ address }: { address: Hex }) {
 
   return (
     <Stack>
-      <Body className="text-label-faint font-medium cursor-default">
+      <Body className="text-label-faint font-medium">
         My Channels
       </Body>
       <ul>
