@@ -13,6 +13,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
   BodyLarge,
+  Separator,
 } from '@river/estuary'
 import { type Channel } from '@/gql'
 import { truncateText, ipfsToHttps, getAddressDisplay } from '@/utils'
@@ -52,7 +53,7 @@ export async function ChannelCard({
               </Link>
             </HoverCardTrigger>
             <HoverCardContent className="w-80">
-              <Stack className="gap-16">
+              <Stack className="gap-8">
                 <span>
                   <Headline className="font-medium leading-none">
                     {channel.contractUri?.name}
@@ -61,29 +62,42 @@ export async function ChannelCard({
                     {display}
                   </Headline>
                 </span>
-                <Body className="text-label">
-                  {channel.contractUri?.description}
-                </Body>
-                <Flex className="gap-8">
-                  {/* Members */}
-                  <Stack>
-                    <Headline className="leading-none">
-                      {channel?.logicTransmitterMerkleAdmin[0].accounts?.length}
-                    </Headline>
-                    <BodyLarge className="text-label-muted leading-none">
-                      members
-                    </BodyLarge>
-                  </Stack>
-                  {/* Items */}
-                  <Stack>
-                    <Headline className="leading-none">
-                      {channel?.listings.length}{' '}
-                    </Headline>
-                    <BodyLarge className="text-label-muted leading-none">
-                      items
-                    </BodyLarge>
-                  </Stack>
-                </Flex>
+                <Stack className="gap-8">
+                  <Body className="text-label">
+                    {channel.contractUri?.description}
+                  </Body>
+                  <Separator className="bg-base-shade" />
+                  <Flex className="gap-8">
+                    {/* Members */}
+                    <Stack>
+                      <Headline className="font-medium leading-none">
+                        {
+                          channel?.logicTransmitterMerkleAdmin[0].accounts
+                            ?.length
+                        }
+                      </Headline>
+                      <Body className="text-label-muted leading-none">
+                        {channel?.logicTransmitterMerkleAdmin[0].accounts &&
+                        channel?.logicTransmitterMerkleAdmin[0].accounts
+                          ?.length > 1
+                          ? 'members'
+                          : 'member'}
+                      </Body>
+                    </Stack>
+                    {/* Items */}
+                    <Stack>
+                      <Headline className="font-medium leading-none">
+                        {channel?.listings.length}
+                      </Headline>
+                      <Body className="text-label-muted leading-none">
+                        {channel?.listings.length &&
+                        channel?.listings.length > 1
+                          ? 'items'
+                          : 'item'}
+                      </Body>
+                    </Stack>
+                  </Flex>
+                </Stack>
               </Stack>
             </HoverCardContent>
           </HoverCard>
