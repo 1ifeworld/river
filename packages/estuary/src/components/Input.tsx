@@ -9,7 +9,7 @@ const inputVariants = cva(
     variants: {
       variant: {
         default:
-          'border border-input placeholder:text-label-faint h-10 rounded-md px-3 py-2',
+          'border border-base-border placeholder:text-label-faint h-10 rounded-md px-3 py-2',
         ghost: 'placeholder:text-label h-fit',
       },
     },
