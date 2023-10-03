@@ -3,6 +3,7 @@ import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { Body } from './Typography';
 import { Loader2Icon } from 'lucide-react';
+import { ReactNodeNoStrings } from '../types';
 
 import { cn } from '../utils';
 
@@ -44,14 +45,15 @@ const buttonVariants = cva(
 
 export interface ButtonProps
   extends React.PropsWithChildren,
-  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'prefix'>,
   VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   loading?: boolean;
+  prefix?: ReactNodeNoStrings
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, shape, size, asChild = false, loading, ...props }, ref) => {
+  ({ className, variant, shape, size, asChild = false, loading, prefix, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button';
     if (size === 'icon') {
       return (
