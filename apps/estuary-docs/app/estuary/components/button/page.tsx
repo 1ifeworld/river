@@ -32,6 +32,9 @@ export default function Page() {
             <Button size='icon' shape='circle'>
               <PlusIcon />
             </Button>
+            <Button prefix={<PlusIcon />}>
+              Button
+            </Button>
           </Flex>
         </Stack>
         {/* Secondary */}

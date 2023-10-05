@@ -6,6 +6,7 @@ import { Loader2Icon } from 'lucide-react';
 import { ReactNodeNoStrings } from '../types';
 
 import { cn } from '../utils';
+import { IconContainer } from './IconContainer';
 
 const buttonVariants = cva(
   'inline-flex items-center justify-center text-label ring-offset-background transition-colors transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
@@ -55,6 +56,33 @@ export interface ButtonProps
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, shape, size, asChild = false, loading, prefix, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button';
+
+    const labelContent = (
+      <Body
+        className={variant === 'secondary' ? 'text-[#ffffff] font-medium' : 'text-label font-medium'}
+      >
+        {props.children}
+      </Body>
+    )
+
+    let childContent: React.ReactNode;
+
+    if (loading) {
+      childContent = <Loader2Icon className='animate-spin' size='16' />;
+    } else if (prefix) {
+      childContent = (
+        <>
+          <IconContainer>
+            {prefix}
+          </IconContainer>
+          {labelContent}
+        </>
+      );
+    } else {
+      childContent = labelContent
+    }
+
+
     if (size === 'icon') {
       return (
         <Comp
@@ -66,20 +94,14 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         </Comp>
       );
     }
+
     return (
       <Comp
         className={cn(buttonVariants({ variant, shape, size, className }))}
         ref={ref}
         {...props}
       >
-        <Body
-          className={variant === 'secondary' ? 'text-[#ffffff] font-medium' : 'text-label font-medium'}
-        >
-          {
-            loading ? <Loader2Icon className='animate-spin' size='16' /> :
-              props.children
-          }
-        </Body>
+        {childContent}
       </Comp>
     );
   }

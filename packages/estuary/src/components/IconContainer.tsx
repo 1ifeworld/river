@@ -4,52 +4,50 @@ import { Flex } from '../elements';
 
 import { cn } from '../utils';
 
+import { icons } from 'lucide-react';
+
 const iconContainerVariants = cva(
-  'bg-base justify-center items-center hover:bg-base-shade text-label-muted hover:text-label transition-all',
+  '',
   {
     variants: {
-      variant: {
-        default: 'rounded-full',
-        square: 'rounded',
-      },
       size: {
-        default: 'h-8 w-8 p-[0.5px]',
-        sm: 'h-4 w-4 p-1',
+        sm: '16',
+        md: '24',
+        lg: '32',
       },
     },
-    compoundVariants: [
-      {
-        variant: 'square',
-        size: 'sm',
-        className: 'rounded-[1px]',
-      },
-    ],
     defaultVariants: {
-      variant: 'default',
-      size: 'default',
+      size: 'sm',
     },
   }
 );
 
 export interface IconContainerProps
-  extends React.PropsWithChildren,
-    VariantProps<typeof iconContainerVariants> {
-  className?: string;
+  extends VariantProps<typeof iconContainerVariants> {
+    name: string
+    color: string
 }
 
-function IconContainer(props: IconContainerProps) {
-  return (
-    <Flex
-      className={cn(
-        iconContainerVariants({ variant: props.variant, size: props.size }),
-        props.className
-      )}
-    >
-      {props.children}
-    </Flex>
-  );
-}
+const IconContainer = ({ name, color = 'inherit', size, ...props }: IconContainerProps) => {
+  
+  const LucideIcon = icons[name as keyof typeof icons];
+
+  if (size === 'sm') {
+    return <LucideIcon color={color} size='16' />;
+  } 
+
+  if (size === 'md') {
+    return <LucideIcon color={color} size='24' />;
+  }
+
+  if (size === 'lg') {
+    return <LucideIcon color={color} size='32' />;
+  }
+};
+
 
 IconContainer.displayName = 'IconContainer';
 
 export { IconContainer, type iconContainerVariants };
+
+
