@@ -21,7 +21,10 @@ export async function ListingNav({ listing }: { listing: any }) {
           {channels?.[0].contractUri?.name}
         </Body>
       </Link>
-      <IconContainer className='stroke-base-border' icon='ChevronRight' />
+      
+      
+      
+            <IconContainer className="stroke-base-border" icon="ChevronRight" />
       <Body className="text-label">
         {listing.listingTargetMetadata.pieceName}
       </Body>
