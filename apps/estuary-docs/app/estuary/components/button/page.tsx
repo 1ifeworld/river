@@ -54,12 +54,6 @@ export default function Page() {
               Button
             </Button>
             <Button variant='secondary' loading={true} shape='circle'>Button</Button>
-            <Button variant='secondary' size='icon'>
-              <PlusIcon />
-            </Button>
-            <Button variant='secondary' size='icon' shape='circle'>
-              <PlusIcon />
-            </Button>
             <Button variant='secondary' prefix='Plus'>
               Button
             </Button>
