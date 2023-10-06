@@ -2,12 +2,13 @@ import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { Body } from './Typography';
-import { Loader2Icon } from 'lucide-react';
+import { Flex } from '../elements';
 
 import { cn } from '../utils';
+import { IconContainer } from './IconContainer';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center text-label ring-offset-background transition-colors transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex justify-center items-center justify-center text-label ring-offset-background transition-colors transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
@@ -21,7 +22,7 @@ const buttonVariants = cva(
       },
       size: {
         sm: 'h-9 px-3',
-        md: 'h-10 px-10 py-2',
+        md: 'h-10 px-7 py-2',
         lg: 'h-11 px-8',
         icon: 'h-8 w-8 p-2',
       },
@@ -32,6 +33,14 @@ const buttonVariants = cva(
         size: ['sm', 'md', 'lg'],
         shape: 'circle',
         className: 'px-6',
+      },
+      {
+        variant: ['link'],
+        className: 'px-0',
+      },
+      {
+        size: 'icon',
+        className: 'border-none'
       },
     ],
     defaultVariants: {
@@ -44,15 +53,49 @@ const buttonVariants = cva(
 
 export interface ButtonProps
   extends React.PropsWithChildren,
-  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'prefix'>,
   VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   loading?: boolean;
+  prefix?: string
+  suffix?: string
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, shape, size, asChild = false, loading, ...props }, ref) => {
+  ({ className, variant, shape, size, asChild = false, loading, prefix, suffix, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button';
+
+    const labelContent = (
+      <Body
+        className={variant === 'secondary' ? 'text-[#ffffff] font-medium' : 'text-label font-medium'}
+      >
+        {props.children}
+      </Body>
+    )
+
+    let childContent: React.ReactNode;
+
+    if (loading) {
+      childContent = <IconContainer icon='Loader2' className='animate-spin' />
+    } else if (prefix) {
+      childContent = (
+        <Flex className='items-center gap-2'>
+          <IconContainer icon={prefix} />
+          {labelContent}
+        </Flex>
+      );
+    } else if (suffix) {
+      childContent = (
+        <Flex className='items-center gap-2'>
+          {labelContent}
+          <IconContainer icon={suffix} />
+        </Flex>
+      );
+    } else {
+      childContent = labelContent
+    }
+
+
     if (size === 'icon') {
       return (
         <Comp
@@ -64,20 +107,14 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         </Comp>
       );
     }
+
     return (
       <Comp
         className={cn(buttonVariants({ variant, shape, size, className }))}
         ref={ref}
         {...props}
       >
-        <Body
-          className={variant === 'secondary' ? 'text-[#ffffff] font-medium' : 'text-label font-medium'}
-        >
-          {
-            loading ? <Loader2Icon className='animate-spin' size='16' /> :
-              props.children
-          }
-        </Body>
+        {childContent}
       </Comp>
     );
   }
