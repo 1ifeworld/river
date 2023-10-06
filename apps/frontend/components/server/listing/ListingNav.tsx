@@ -1,5 +1,5 @@
 import React from 'react'
-import { RightPointer, Flex, Body } from '@river/estuary'
+import { Flex, Body, IconContainer } from '@river/estuary'
 import { getChannel } from '@/gql'
 import { getAddress } from 'viem'
 import { extractAddressFromListingId } from '@/utils'
@@ -21,7 +21,7 @@ export async function ListingNav({ listing }: { listing: any }) {
           {channels?.[0].contractUri?.name}
         </Body>
       </Link>
-      <RightPointer />
+      <IconContainer className='stroke-base-border' icon='ChevronRight' />
       <Body className="text-label">
         {listing.listingTargetMetadata.pieceName}
       </Body>
