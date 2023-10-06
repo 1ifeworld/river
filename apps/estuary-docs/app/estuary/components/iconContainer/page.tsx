@@ -19,33 +19,20 @@ export default function Page() {
           Estuary Iconography
         </BodyLarge>
         <Flex className='gap-10'>
-          {/* Default */}
-          <Stack className='gap-2'>
-            <BodySmall className='text-label-muted'>Default</BodySmall>
-            <IconContainer>
-              <PlusIcon />
-            </IconContainer>
-          </Stack>
-          {/* Square */}
-          <Stack className='gap-2'>
-            <BodySmall className='text-label-muted'>Square</BodySmall>
-            <IconContainer variant='square'>
-              <PlusIcon />
-            </IconContainer>
-          </Stack>
           {/* Small */}
           <Stack className='gap-2'>
             <BodySmall className='text-label-muted'>Small</BodySmall>
-            <IconContainer size='sm'>
-              <PlusIcon />
-            </IconContainer>
+            <IconContainer icon='Plus' />
           </Stack>
-          {/* Small Square */}
+          {/* Medium */}
           <Stack className='gap-2'>
-            <BodySmall className='text-label-muted'>Small</BodySmall>
-            <IconContainer variant='square' size='sm'>
-              <PlusIcon />
-            </IconContainer>
+            <BodySmall className='text-label-muted'>Medium</BodySmall>
+            <IconContainer icon='Plus' size='24' />
+          </Stack>
+          {/* Large */}
+          <Stack className='gap-2'>
+            <BodySmall className='text-label-muted'>Large</BodySmall>
+            <IconContainer icon='Plus' size='32' />
           </Stack>
         </Flex>
       </Stack>

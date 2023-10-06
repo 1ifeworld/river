@@ -19,7 +19,7 @@ export default function Page() {
       <Stack className='gap-10'>
         {/* Primary */}
         <Stack className='gap-2'>
-          <BodySmall className='text-gray-400'>Default</BodySmall>
+          <BodySmall className='text-label'>Default</BodySmall>
           <Flex className='gap-x-2 items-center'>
             <Button size='sm'>Button</Button>
             <Button size='md'>Button</Button>
@@ -32,14 +32,14 @@ export default function Page() {
             <Button size='icon' shape='circle'>
               <PlusIcon />
             </Button>
-            <Button prefix={<PlusIcon />}>
+            <Button prefix='Plus'>
               Button
             </Button>
           </Flex>
         </Stack>
         {/* Secondary */}
         <Stack className='gap-2'>
-          <BodySmall className='text-gray-400'>Secondary</BodySmall>
+          <BodySmall className='text-label'>Secondary</BodySmall>
           <Flex className='gap-x-2 items-center'>
             <Button variant='secondary' size='sm'>
               Button
@@ -60,19 +60,16 @@ export default function Page() {
             <Button variant='secondary' size='icon' shape='circle'>
               <PlusIcon />
             </Button>
+            <Button variant='secondary' prefix='Plus'>
+              Button
+            </Button>
           </Flex>
         </Stack>
         {/* Link */}
         <Stack className='gap-2'>
-          <BodySmall className='text-gray-400'>Link</BodySmall>
+          <BodySmall className='text-label'>Link</BodySmall>
           <Flex className='gap-x-2 items-center'>
-            <Button variant='link' size='sm'>
-              Button
-            </Button>
-            <Button variant='link' size='md'>
-              Button
-            </Button>
-            <Button variant='link' size='lg'>
+            <Button variant='link'>
               Button
             </Button>
           </Flex>
