@@ -36,7 +36,7 @@ const buttonVariants = cva(
       },
       {
         variant: ['link'],
-        className: 'px-0',
+        className: 'p-0 h-4',
       },
       {
         size: 'icon',
