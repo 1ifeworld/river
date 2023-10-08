@@ -2,7 +2,7 @@ import '../styles/globals.css'
 import type { Metadata } from 'next'
 import { Providers } from './providers'
 import { helveticaNeue } from './fonts/fonts'
-import { SidebarOrDrawer } from '@/client'
+import { Drawer } from '@/client'
 import { Analytics } from '@vercel/analytics/react'
 
 export const metadata: Metadata = {
@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en" className={`${helveticaNeue.variable}`}>
       <body>
         <Providers>
-          <SidebarOrDrawer />
+          <Drawer />
           {children}
           <Analytics />
         </Providers>
