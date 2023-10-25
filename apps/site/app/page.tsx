@@ -1,11 +1,9 @@
 import { Header } from '@/client'
 
-// export const dynamic = 'force-dynamic'
-
 export default async function Home() {
   return (
-    <>
+    <span className="p-8">
       <Header />
-    </>
+    </span>
   )
 }

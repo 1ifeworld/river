@@ -5,4 +5,5 @@ export const fragmentMono = Fragment_Mono({
   display: 'swap',
   weight: '400',
   style: 'normal',
+  variable: '--font-fragment-mono',
 })
