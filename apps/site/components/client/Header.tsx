@@ -1,5 +1,13 @@
-import { Flex } from '@/design-system'
+import { Flex, Button } from '@/design-system'
+import { usePrivy } from '@privy-io/react-auth'
 
 export function Header() {
-  return <Flex className="items-center justify-between m-6 md:m-10"></Flex>
+  const { login } = usePrivy()
+  return (
+    <Flex className="w-full items-center justify-end">
+      <Button variant="link" onClick={login}>
+        Login
+      </Button>
+    </Flex>
+  )
 }

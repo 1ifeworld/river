@@ -1,7 +1,7 @@
 import '../styles/globals.css'
 import type { Metadata } from 'next'
 import { Providers } from './providers'
-// import { helveticaNeue } from './fonts/fonts'
+import { fragmentMono } from './fonts/fonts'
 import { Analytics } from '@vercel/analytics/react'
 
 export const metadata: Metadata = {
@@ -15,8 +15,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    // className={`${helveticaNeue.variable}`}
-    <html lang="en">
+    <html lang="en" className={`${fragmentMono.variable}`}>
       <body>
         <Providers>
           {children}

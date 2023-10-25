@@ -1,28 +1,9 @@
-import localFont from 'next/font/local'
+import { Fragment_Mono } from 'next/font/google'
 
-// export const helveticaNeue = localFont({
-//   src: [
-//     {
-//       path: './helvetica-neue/HelveticaNeue-Regular.woff2',
-//       weight: '400',
-//       style: 'normal',
-//     },
-//     {
-//       path: './helvetica-neue/HelveticaNeue-RegularItalic.woff2',
-//       weight: '400',
-//       style: 'italic',
-//     },
-//     {
-//       path: './helvetica-neue/HelveticaNeue-Medium.woff2',
-//       weight: '500',
-//       style: 'normal',
-//     },
-//     {
-//       path: './helvetica-neue/HelveticaNeue-Bold.woff2',
-//       weight: '700',
-//       style: 'normal',
-//     },
-//   ],
-//   display: 'swap',
-//   variable: '--font-helvetica-neue',
-// })
+export const fragmentMono = Fragment_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  weight: '400',
+  style: 'normal',
+  variable: '--font-fragment-mono',
+})
