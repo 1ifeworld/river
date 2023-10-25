@@ -1,9 +1,5 @@
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-})
-
 /** @type {import('next').NextConfig} */
-module.exports = withBundleAnalyzer({
+module.exports = {
   reactStrictMode: true,
   images: {
     domains: ['ipfs.io', 'res.cloudinary.com', 'nft-cdn.alchemy.com'],
@@ -13,4 +9,4 @@ module.exports = withBundleAnalyzer({
     config.externals.push('pino-pretty', 'lokijs', 'encoding')
     return config
   },
-})
+}
