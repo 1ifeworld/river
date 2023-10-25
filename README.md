@@ -2,14 +2,6 @@
 
 Set information free.
 
-### Background
-
-River facilitates the organization of onchain information in a user friendly way – designed to evoke the feeling of blogs, archives, and databases.
-
-The codebase consists of frontend, backend, and protocol ([separate repo](https://github.com/1ifeworld/river-contracts)) sections that combine to provide the rails for our platform and those who intersect it.
-
-Please see the local development instructions in the README.md for each section. Everything you see is under active development – use code at your own risk.
-
 ## Getting Started
 
 Clone the repository:
