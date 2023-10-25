@@ -1,0 +1,49 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "resolvePackageJsonExports": false, // Needed to resolve connectkit bug as of 1.5.1
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/abi": ["abi/index.ts"],
+      "@/client": ["components/client/index.ts"],
+      "@/server": ["components/server/index.ts"],
+      "@/constants": ["constants/index.ts"],
+      "@/design-system": ["design-system/index.ts"],
+      "@/gql": ["gql/index.ts"],
+      "@/utils": ["utils/index.ts"],
+      "@/services": ["services/index.ts"],
+      "@/hooks": ["hooks/index.ts"],
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

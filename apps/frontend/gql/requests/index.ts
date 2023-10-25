@@ -1,5 +1,0 @@
-export * from './getAdminChannels'
-export * from './getAllChannels'
-export * from './getChannel'
-export * from './getListing'
-export * from './getListings'

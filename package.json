@@ -13,6 +13,6 @@
   "author": "Lifeworld",
   "license": "ISC",
   "devDependencies": {
-    "turbo": "^1.10.13"
+    "turbo": "^1.10.16"
   }
 }
