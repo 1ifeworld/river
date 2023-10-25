@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"next dev\" \"graphql-codegen --config codegen.ts --watch\"",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "biome check . --apply",
