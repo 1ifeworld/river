@@ -16,7 +16,8 @@
       "./hooks/**",
       "./styles/**",
       "./utils/**"
-    ]
+    ],
+    "ignore": ["./.next/**"]
   },
   "linter": {
     "enabled": true,
@@ -40,6 +41,7 @@
       "./hooks/**",
       "./styles/**",
       "./utils/**"
-    ]
+    ],
+    "ignore": ["./.next/**"]
   }
 }

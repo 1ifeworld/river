@@ -1,2 +1,3 @@
-export * from './routerAbi'
-export * from './logicAbi'
+export * from './idRegistryAbi'
+export * from './lightAccountAbi'
+export * from './lightAccountFactoryAbi'
