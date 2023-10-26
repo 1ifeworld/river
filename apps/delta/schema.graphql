@@ -1,0 +1,11 @@
+type RiverValidatorV1 @entity {
+  id: String!
+  userId: BigInt!
+  status: Boolean!
+}
+
+type IdRegistry @entity {
+  id: String!
+  delegate: Bytes
+  backup: Bytes
+}
