@@ -1,5 +1,5 @@
-import { type Hex } from 'viem'
 import { BasementSDK } from '@basementdev/sdk'
+import { type Hex } from 'viem'
 import { shortenAddress } from './shortenAddress'
 
 export async function getAddressDisplay(address: Hex) {

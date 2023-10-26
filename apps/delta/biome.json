@@ -1,0 +1,23 @@
+{
+  "extends": ["../../biome.json"],
+  "formatter": {
+    "enabled": true,
+    "formatWithErrors": false,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 80,
+    "include": ["./src/**", "./abis/**"],
+    "ignore": ["./.ponder/**", "./generated/**"]
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "suspicious": {
+        "noRedeclare": "off"
+      }
+    },
+    "include": ["./src/**", "./abis/**"],
+    "ignore": ["./.ponder/**", "./generated/**"]
+  }
+}

@@ -3,7 +3,9 @@
   "scripts": {
     "dev": "ponder dev",
     "start": "ponder start",
-    "codegen": "ponder codegen"
+    "codegen": "ponder codegen",
+    "lint": "biome check . --apply",
+    "format": "biome format . --write"
   },
   "dependencies": {
     "@ponder/core": "^0.0.93"

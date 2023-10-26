@@ -1,0 +1,57 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "organizeImports": {
+    "enabled": false
+  },
+  "formatter": {
+    "enabled": true,
+    "formatWithErrors": false,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 80,
+    "ignore": [
+      "**/.turbo",
+      "**/node_modules",
+      "cache",
+      "coverage",
+      ".gitignore",
+      "LICENSE.md",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "README.md",
+      "turbo.json"
+    ]
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "suspicious": {
+        "noRedeclare": "off"
+      },
+      "complexity": {
+        "useOptionalChain": "off",
+        "noExtraBooleanCast": "off"
+      }
+    },
+    "ignore": [
+      "**/.turbo",
+      "**/node_modules",
+      "cache",
+      "coverage",
+      ".gitignore",
+      "LICENSE.md",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "README.md",
+      "turbo.json"
+    ]
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "trailingComma": "all",
+      "semicolons": "asNeeded"
+    }
+  }
+}
