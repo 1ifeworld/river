@@ -96,6 +96,9 @@ importers:
       next:
         specifier: 13.5.3
         version: 13.5.3(@babel/core@7.23.2)(react-dom@18.2.0)(react@18.2.0)
+      permissionless:
+        specifier: ^0.0.9
+        version: 0.0.9(viem@1.16.6)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -7942,6 +7945,14 @@ packages:
       multiformats: 9.9.0
       protobufjs: 6.11.4
       uint8arrays: 3.1.1
+    dev: false
+
+  /permissionless@0.0.9(viem@1.16.6):
+    resolution: {integrity: sha512-KtNggmRw3YvvsEZPPMJ26Gxk0AO9bAnZPvXYbDmAdIDXqqLElZnfcEmmeDMZe/K1aPHmwZmmG+EGG39g74dGrQ==}
+    peerDependencies:
+      viem: ^1.14.0
+    dependencies:
+      viem: 1.16.6(typescript@5.1.6)(zod@3.22.4)
     dev: false
 
   /pg-cloudflare@1.1.1:
