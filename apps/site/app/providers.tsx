@@ -1,8 +1,8 @@
 'use client'
 
-import * as React from 'react'
-import { ConnectKitProvider } from 'connectkit'
 import { PrivyProvider } from '@privy-io/react-auth'
+import { ConnectKitProvider } from 'connectkit'
+import * as React from 'react'
 import { WagmiConfig } from 'wagmi'
 import { config } from '../wagmiConfig'
 

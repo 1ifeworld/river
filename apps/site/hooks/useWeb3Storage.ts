@@ -1,6 +1,6 @@
+import { env } from '@/services'
 import * as React from 'react'
 import { Web3Storage } from 'web3.storage'
-import { env } from '@/services'
 
 export function useWeb3Storage(cid: string) {
   const [unpackedMetadata, setUnpackedMetadata] = React.useState<string>('')

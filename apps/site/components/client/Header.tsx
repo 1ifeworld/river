@@ -1,5 +1,5 @@
-import { Flex, Button, Typography } from '@/design-system'
-import { usePrivy, useLogin } from '@privy-io/react-auth'
+import { Button, Flex, Typography } from '@/design-system'
+import { useLogin, usePrivy } from '@privy-io/react-auth'
 import { useState } from 'react'
 import { UsernameDialog } from './UsernameDialog'
 

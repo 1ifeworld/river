@@ -1,5 +1,5 @@
 import {
-  Typography,
+  Button,
   Dialog,
   DialogContent,
   DialogDescription,
@@ -7,8 +7,6 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  Button,
-  Stack,
   Form,
   FormControl,
   FormDescription,
@@ -16,8 +14,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  Separator,
   Input,
+  Separator,
+  Stack,
+  Typography,
 } from '@/design-system'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
