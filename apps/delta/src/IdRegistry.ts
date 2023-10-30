@@ -1,11 +1,21 @@
 import { ponder } from "@/generated";
+import { operator } from "@/constants"
 
-// Adjusted event name to match ABI
+/*
+  NOTE: 
+
+  Be aware that we are relying on the fact that only register calls from
+  the operator are to be considered valid, and that all calls fromm the operator
+  will be registering ids to LightAccount proxies
+    
+  If this logic is ever invalid, we will not have an accurate read on what
+  certain custody addresses are
+*/
+
 ponder.on("IdRegistry:Register", async ({ event, context }) => {
+  
   const { IdRegistry } = context.entities;
   const { to, id, backup, data } = event.params;
-  
-
 
   await IdRegistry.create({
     id: `420/${to}/${id}`,
@@ -15,9 +25,7 @@ ponder.on("IdRegistry:Register", async ({ event, context }) => {
       backup: backup,
       data: data
     }
-
   });
-
 });
 
 
