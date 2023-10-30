@@ -11,7 +11,7 @@ import {
   getDefaultLightAccountFactory,
 } from '@alchemy/aa-accounts'
 import { AlchemyProvider } from '@alchemy/aa-alchemy'
-import { entryPoint } from '@/constants'
+import { entryPoint, opGoerliViem } from '@/constants'
 import { useWallets } from '@privy-io/react-auth'
 import { WalletClientSigner, type SmartAccountSigner } from '@alchemy/aa-core'
 import {
@@ -20,7 +20,6 @@ import {
   type Hex,
   type EIP1193Provider,
 } from 'viem'
-import { optimismGoerli } from 'viem/chains'
 
 const AlchemyContext = createContext<{
   alchemyProvider?: AlchemyProvider
@@ -45,7 +44,7 @@ export function AlchemyProviderComponent({
       const eip1193provider = await embeddedWallet?.getEthereumProvider()
       const privyClient = createWalletClient({
         account: embeddedWallet?.address as Hex,
-        chain: optimismGoerli,
+        chain: opGoerliViem,
         transport: custom(eip1193provider as EIP1193Provider),
       })
       // Create a smart account signer from the embedded wallet's viem client
@@ -57,7 +56,7 @@ export function AlchemyProviderComponent({
       setAlchemyProvider(
         new AlchemyProvider({
           apiKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY as string,
-          chain: optimismGoerli,
+          chain: opGoerliViem,
           entryPointAddress: entryPoint,
         }).connect(
           (rpcClient) =>
