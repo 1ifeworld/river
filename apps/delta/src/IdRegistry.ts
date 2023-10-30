@@ -1,11 +1,10 @@
 import { ponder } from "@/generated";
+import { operator } from "@/constants"
 
-// Adjusted event name to match ABI
 ponder.on("IdRegistry:Register", async ({ event, context }) => {
+  
   const { IdRegistry } = context.entities;
   const { to, id, backup, data } = event.params;
-  
-
 
   await IdRegistry.create({
     id: `420/${to}/${id}`,
@@ -15,9 +14,7 @@ ponder.on("IdRegistry:Register", async ({ event, context }) => {
       backup: backup,
       data: data
     }
-
   });
-
 });
 
 

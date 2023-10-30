@@ -6,8 +6,16 @@ type RiverValidatorV1 @entity {
 
 type IdRegistry @entity {
   id: String!
-  to: String
+  to: String!
   userId: BigInt!
-  backup: Bytes
+  backup: Bytes!
   data: String
+}
+
+type DelegateRegistry @entity {
+  id: String!
+  userId: BigInt!
+  transferNonce: BigInt!
+  target: String!
+  status: Boolean!
 }

@@ -17,13 +17,13 @@ export const config: Config = {
       address: '0xf89a7C9a0517da815dB66CdcAf61F44E01476697',
       startBlock: 16474518,
     },
-    // {
-    //   name: 'DelegateRegistry',
-    //   network: 'optimism-goerli',
-    //   abi: './abis/DelegateRegistry.json',
-    //   address: '0x995D4621B4B72cd2805f99972A1313bd9876c613',
-    //   startBlock: 13777523,
-    // },
+    {
+      name: 'DelegateRegistry',
+      network: 'optimism-goerli',
+      abi: './abis/DelegateRegistry.json',
+      address: '0x995D4621B4B72cd2805f99972A1313bd9876c613',
+      startBlock: 16474518,
+    },
     // {
     //   name: 'NodeRegistry',
     //   network: 'optimism-goerli',
@@ -38,13 +38,13 @@ export const config: Config = {
       address: '0x3E3522Ac4d89c56c8759F81a86ff94b8c39A45e3',
       startBlock: 16474518,
     },
-    // {
-    //   name: 'LightAccountFactory',
-    //   network: 'optimism-goerli',
-    //   abi: './abis/LightAccountFactory.json',
-    //   address: '0x000000893A26168158fbeaDD9335Be5bC96592E2',
-    //   startBlock: 13777523,
-    // },
+    {
+      name: 'LightAccountFactory',
+      network: 'optimism-goerli',
+      abi: './abis/LightAccountFactory.json',
+      address: '0x000000893A26168158fbeaDD9335Be5bC96592E2',
+      startBlock: 16474518,
+    },
   ],
 }
 
