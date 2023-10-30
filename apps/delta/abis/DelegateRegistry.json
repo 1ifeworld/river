@@ -6,7 +6,7 @@
     "stateMutability": "nonpayable",
     "type": "constructor"
   },
-  { "inputs": [], "name": "Only_Id_Owner", "type": "error" },
+  { "inputs": [], "name": "Has_No_Id", "type": "error" },
   {
     "anonymous": false,
     "inputs": [
@@ -72,7 +72,6 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "id", "type": "uint256" },
       { "internalType": "address", "name": "target", "type": "address" },
       { "internalType": "bool", "name": "status", "type": "bool" }
     ],
