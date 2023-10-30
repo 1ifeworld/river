@@ -48,6 +48,9 @@ importers:
       '@privy-io/react-auth':
         specifier: ^1.45.0
         version: 1.45.0(@babel/core@7.23.2)(@types/react@18.2.21)(react-dom@18.2.0)(react-is@18.2.0)(react@18.2.0)
+      '@privy-io/wagmi-connector':
+        specifier: ^0.1.5
+        version: 0.1.5(@privy-io/react-auth@1.45.0)(react-dom@18.2.0)(react@18.2.0)(viem@1.16.6)(wagmi@1.4.5)
       '@radix-ui/react-dialog':
         specifier: ^1.0.5
         version: 1.0.5(@types/react-dom@18.2.7)(@types/react@18.2.21)(react-dom@18.2.0)(react@18.2.0)
@@ -2514,6 +2517,22 @@ packages:
       - react-is
       - supports-color
       - utf-8-validate
+    dev: false
+
+  /@privy-io/wagmi-connector@0.1.5(@privy-io/react-auth@1.45.0)(react-dom@18.2.0)(react@18.2.0)(viem@1.16.6)(wagmi@1.4.5):
+    resolution: {integrity: sha512-EJ4V6Wk5XmNMSTWaahnU9r481oN5rODMk4/NCCZq2IXWss2EEBI1s71EBnN7cn7U+FAijA2QYeyVGnHUJmJI4A==}
+    peerDependencies:
+      '@privy-io/react-auth': ^1.33.0
+      react: ^18
+      react-dom: ^18
+      viem: '>=0.3.35'
+      wagmi: '>=1 <2'
+    dependencies:
+      '@privy-io/react-auth': 1.45.0(@babel/core@7.23.2)(@types/react@18.2.21)(react-dom@18.2.0)(react-is@18.2.0)(react@18.2.0)
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      viem: 1.16.6(typescript@5.1.6)(zod@3.22.4)
+      wagmi: 1.4.5(@types/react@18.2.21)(react-dom@18.2.0)(react@18.2.0)(typescript@5.1.6)(viem@1.16.6)(zod@3.22.4)
     dev: false
 
   /@protobufjs/aspromise@1.1.2:
