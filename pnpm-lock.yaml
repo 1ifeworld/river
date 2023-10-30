@@ -36,6 +36,15 @@ importers:
 
   apps/site:
     dependencies:
+      '@alchemy/aa-accounts':
+        specifier: ^0.1.1
+        version: 0.1.1(typescript@5.1.6)(zod@3.22.4)
+      '@alchemy/aa-alchemy':
+        specifier: ^0.1.1
+        version: 0.1.1(typescript@5.1.6)(zod@3.22.4)
+      '@alchemy/aa-core':
+        specifier: ^0.1.1
+        version: 0.1.1(typescript@5.1.6)(zod@3.22.4)
       '@basementdev/sdk':
         specifier: ^1.0.9
         version: 1.0.9
@@ -174,6 +183,43 @@ packages:
 
   /@adraffy/ens-normalize@1.9.4:
     resolution: {integrity: sha512-UK0bHA7hh9cR39V+4gl2/NnBBjoXIxkuWAPCaY4X7fbH4L/azIi7ilWOCjMUYfpJgraLUAqkRi2BqrjME8Rynw==}
+
+  /@alchemy/aa-accounts@0.1.1(typescript@5.1.6)(zod@3.22.4):
+    resolution: {integrity: sha512-nHHnJuIHXGdvH5i+7DlTeSPa3RJtNLt4NpJP+G+T8G3QP/k6mxHNWFTybOhqxuCC798DACxKc4thOL2Lj8phgA==}
+    dependencies:
+      '@alchemy/aa-core': 0.1.1(typescript@5.1.6)(zod@3.22.4)
+      viem: 1.16.6(typescript@5.1.6)(zod@3.22.4)
+    transitivePeerDependencies:
+      - bufferutil
+      - typescript
+      - utf-8-validate
+      - zod
+    dev: false
+
+  /@alchemy/aa-alchemy@0.1.1(typescript@5.1.6)(zod@3.22.4):
+    resolution: {integrity: sha512-rVQZNb1QmfQoxDyaXuinB0pfrKENLydwH57TWXJn4wFW+3c+iM6xM/tsfx6zxzA7HTwodcRw8//wMvdF+5KQmg==}
+    dependencies:
+      '@alchemy/aa-core': 0.1.1(typescript@5.1.6)(zod@3.22.4)
+      viem: 1.16.6(typescript@5.1.6)(zod@3.22.4)
+    transitivePeerDependencies:
+      - bufferutil
+      - typescript
+      - utf-8-validate
+      - zod
+    dev: false
+
+  /@alchemy/aa-core@0.1.1(typescript@5.1.6)(zod@3.22.4):
+    resolution: {integrity: sha512-vEfCx9MJMTCMpmB3cY+TcM65znP8zcMTaiYE7By3+krhd7ViflWdEILe5HGGzCALGqdr6pUaBI7n08eVoyo6KQ==}
+    dependencies:
+      abitype: 0.8.11(typescript@5.1.6)(zod@3.22.4)
+      eventemitter3: 5.0.1
+      viem: 1.16.6(typescript@5.1.6)(zod@3.22.4)
+    transitivePeerDependencies:
+      - bufferutil
+      - typescript
+      - utf-8-validate
+      - zod
+    dev: false
 
   /@alloc/quick-lru@5.2.0:
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
@@ -3873,6 +3919,19 @@ packages:
     dependencies:
       jsonparse: 1.3.1
       through: 2.3.8
+    dev: false
+
+  /abitype@0.8.11(typescript@5.1.6)(zod@3.22.4):
+    resolution: {integrity: sha512-bM4v2dKvX08sZ9IU38IN5BKmN+ZkOSd2oI4a9f0ejHYZQYV6cDr7j+d95ga0z2XHG36Y4jzoG5Z7qDqxp7fi/A==}
+    peerDependencies:
+      typescript: '>=5.0.4'
+      zod: ^3 >=3.19.1
+    peerDependenciesMeta:
+      zod:
+        optional: true
+    dependencies:
+      typescript: 5.1.6
+      zod: 3.22.4
     dev: false
 
   /abitype@0.8.11(typescript@5.2.2):

@@ -32,6 +32,9 @@
       "complexity": {
         "useOptionalChain": "off",
         "noExtraBooleanCast": "off"
+      },
+      "correctness": {
+        "useExhaustiveDependencies": "off"
       }
     },
     "ignore": [
