@@ -27,6 +27,7 @@
     "baseUrl": ".",
     "paths": {
       "@/abi": ["abi/index.ts"],
+      "@/context": ["context/index.ts"],
       "@/client": ["components/client/index.ts"],
       "@/server": ["components/server/index.ts"],
       "@/constants": ["constants/index.ts"],
