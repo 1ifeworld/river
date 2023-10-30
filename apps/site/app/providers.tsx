@@ -4,6 +4,7 @@ import { PrivyProviderWrapper } from '@/client'
 import * as React from 'react'
 import { PrivyWagmiConnector } from '@privy-io/wagmi-connector'
 import { configureChainsConfig } from '../wagmiConfig'
+import { AlchemyProviderComponent } from '@/context'
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = React.useState(false)
@@ -12,7 +13,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <PrivyProviderWrapper>
       <PrivyWagmiConnector wagmiChainsConfig={configureChainsConfig}>
         {/* <ConnectKitProvider> */}
-        {mounted && children}
+        <AlchemyProviderComponent>
+          {mounted && children}
+        </AlchemyProviderComponent>
         {/* </ConnectKitProvider> */}
       </PrivyWagmiConnector>
     </PrivyProviderWrapper>
