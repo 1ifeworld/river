@@ -2,6 +2,7 @@ import { Button, Flex, Typography } from '@/design-system'
 import { useLogin, usePrivy } from '@privy-io/react-auth'
 import { useState } from 'react'
 import { UsernameDialog } from './UsernameDialog'
+import { Register } from './Register'
 
 export function Header() {
   const { ready, authenticated, user } = usePrivy()
@@ -23,15 +24,16 @@ export function Header() {
   })
 
   // Show nothing if user is not authenticated or data is still loading
-  if (!(ready && authenticated) || !user) {
-    return null
-  }
+  // if (!(ready && authenticated) || !user) {
+  //   return null
+  // }
 
   return (
     <>
+      <Register />
       <Flex className="w-full items-center justify-end">
         {authenticated ? (
-          <Typography>{user.id}</Typography>
+          <Typography>{/* {user.id} */} Now Register</Typography>
         ) : (
           <Button variant="link" onClick={login}>
             Login

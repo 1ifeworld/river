@@ -23,5 +23,5 @@ export async function registerAndDelegate({
       data: delegate.calldata,
     },
   ])
-  console.log('Register txn hash:', hash)
+  console.log('Create account transaction hash:', hash)
 }
