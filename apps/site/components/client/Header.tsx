@@ -32,7 +32,7 @@ export function Header() {
   return (
     <>
       {/* <Register /> */}
-      <Flex className="w-full items-center justify-between">
+      <Flex className="items-center justify-between">
         <RiverLogo />
         {authenticated ? (
           <Typography>{/* {user.id} */} Now Register</Typography>
