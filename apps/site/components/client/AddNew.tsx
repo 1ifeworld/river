@@ -95,7 +95,9 @@ const DialogItem = React.forwardRef<HTMLDivElement, DialogItemProps>(
           </DropdownMenuItem>
         </DialogTrigger>
         <DialogPortal>
-          <DialogContent>{children}</DialogContent>
+          <DialogContent className="focus:outline-none">
+            {children}
+          </DialogContent>
         </DialogPortal>
       </Dialog>
     )
