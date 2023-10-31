@@ -1,22 +1,20 @@
-import { ponder } from "@/generated";
-import { operator } from "@/constants"
+import { ponder } from '@/generated'
+import { operator } from '@/constants'
 
-ponder.on("IdRegistry:Register", async ({ event, context }) => {
-  
-  const { IdRegistry } = context.entities;
-  const { to, id, backup, data } = event.params;
+ponder.on('IdRegistry:Register', async ({ event, context }) => {
+  const { IdRegistry } = context.entities
+  const { to, id, backup, data } = event.params
 
   await IdRegistry.create({
     id: `420/${to}/${id}`,
     data: {
-      to: to, 
-      userId: id, 
+      to: to,
+      userId: id,
       backup: backup,
-      data: data
-    }
-  });
-});
-
+      data: data,
+    },
+  })
+})
 
 // // Handle Attest event
 // ponder.on("IdRegistry:Attest", async ({ event, context }) => {
@@ -39,8 +37,6 @@ ponder.on("IdRegistry:Register", async ({ event, context }) => {
 //     },
 //   });
 // });
-
-
 
 // // Handle RevokeAttestation event
 // // Handle RevokeAttestation event
@@ -88,7 +84,6 @@ ponder.on("IdRegistry:Register", async ({ event, context }) => {
 //   });
 // });
 
-
 // // Handle TransferComplete event
 // ponder.on("IdRegistry:TransferComplete", async ({ event, context }) => {
 //   const { IDRegistry, TransferComplete } = context.entities;
@@ -111,7 +106,6 @@ ponder.on("IdRegistry:Register", async ({ event, context }) => {
 //     },
 //   });
 // });
-
 
 // // Handle TransferInitiated event
 // ponder.on("IdRegistry:TransferInitiated", async ({ event, context }) => {

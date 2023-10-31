@@ -13,7 +13,7 @@ export function PrivyProviderWrapper({
       config={{
         appearance: {
           showWalletLoginFirst: false,
-          logo: 'https://bafybeibjpp3pfnawvtmkqpemzhcsygj64ime7zngdpdd2evpzmvdespi7a.ipfs.nftstorage.link/river_logo.svg',
+          logo: 'https://bafybeif4qpiqpjhqx4urcn6alxwldtmsupj57zynpciitb2u55zjw6r57a.ipfs.nftstorage.link/river_logo_2x.svg',
         },
         loginMethods: ['email'],
         embeddedWallets: {
