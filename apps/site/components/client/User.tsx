@@ -17,7 +17,7 @@ export function User() {
       <DropdownMenuTrigger asChild>
         <Button variant="link">User</Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-32">
+      <DropdownMenuContent className="w-32" align="end">
         <DropdownMenuGroup>
           <DropdownMenuItem>
             <Button variant="link" onClick={logout}>
