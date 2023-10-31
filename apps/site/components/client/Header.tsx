@@ -1,8 +1,7 @@
 import { Button, Flex, Typography } from '@/design-system'
 import { useLogin, usePrivy } from '@privy-io/react-auth'
 import { useState } from 'react'
-import { UsernameDialog } from './UsernameDialog'
-import { Register } from './Register'
+import { Register, User, UsernameDialog } from '@/client'
 import { RiverLogo } from '@/server'
 
 export function Header() {
@@ -35,7 +34,7 @@ export function Header() {
       <Flex className="items-center justify-between">
         <RiverLogo />
         {authenticated ? (
-          <Typography>{/* {user.id} */} Now Register</Typography>
+          <User />
         ) : (
           <Button variant="link" onClick={login}>
             Login
