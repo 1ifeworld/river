@@ -3,6 +3,7 @@
 // Subdirectories
 
 // Individual components
+export * from './AddNew'
 export * from './Header'
 export * from './PrivyProviderWrapper'
 export * from './Register'

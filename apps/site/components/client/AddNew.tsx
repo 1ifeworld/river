@@ -7,22 +7,21 @@ import {
   DropdownMenuContent,
   Button,
 } from '@/design-system'
-import { useLogout } from '@privy-io/react-auth'
 
-export function User() {
-  const { logout } = useLogout()
-  // Fetch and return the username of the connected account
+export function AddNew() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="link">User</Button>
+        {/* TODO: Update spacing between the plus icon and "New" */}
+        <Button variant="link">+New</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-32">
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            <Button variant="link" onClick={logout}>
-              Logout
-            </Button>
+            <Button variant="link">Item</Button>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Button variant="link">Channel</Button>
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
