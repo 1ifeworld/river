@@ -29,6 +29,9 @@
       "complexity": {
         "useOptionalChain": "off",
         "noExtraBooleanCast": "off"
+      },
+      "a11y": {
+        "noSvgWithoutTitle": "off"
       }
     },
     "include": [

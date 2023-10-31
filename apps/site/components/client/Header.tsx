@@ -3,6 +3,7 @@ import { useLogin, usePrivy } from '@privy-io/react-auth'
 import { useState } from 'react'
 import { UsernameDialog } from './UsernameDialog'
 import { Register } from './Register'
+import { RiverLogo } from '@/server'
 
 export function Header() {
   const { ready, authenticated, user } = usePrivy()
@@ -30,8 +31,9 @@ export function Header() {
 
   return (
     <>
-      <Register />
-      <Flex className="w-full items-center justify-end">
+      {/* <Register /> */}
+      <Flex className="w-full items-center justify-between">
+        <RiverLogo />
         {authenticated ? (
           <Typography>{/* {user.id} */} Now Register</Typography>
         ) : (
