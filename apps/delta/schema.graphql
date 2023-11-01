@@ -12,6 +12,13 @@ type IdRegistry @entity {
   data: String
 }
 
+type Schema @entity {
+  id: String!
+  sender: String!
+  schema: Bytes!
+  data: Bytes
+}
+
 type DelegateRegistry @entity {
   id: String!
   userId: BigInt!
