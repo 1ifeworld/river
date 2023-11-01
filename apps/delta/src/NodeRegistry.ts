@@ -1,8 +1,6 @@
 import { ponder } from '@/generated'
 
-const decodeRegisterSchema = (data: any) => {
-
-}
+const decodeRegisterSchema = (data: any) => {}
 
 ponder.on('NodeRegistry:RegisterSchema', async ({ event, context }) => {
   const { Schema } = context.entities
