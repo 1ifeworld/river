@@ -1,8 +1,6 @@
-type RiverValidatorV1 @entity {
-  id: String!
-  userId: BigInt!
-  status: Boolean!
-}
+# ================================
+# ======== ID REGISTRY ===========
+# ================================
 
 type IdRegistry @entity {
   id: String!
@@ -12,6 +10,22 @@ type IdRegistry @entity {
   data: String
 }
 
+# ================================
+# ====== DELEGATE REGISTRY =======
+# ================================
+
+type DelegateRegistry @entity {
+  id: String!
+  userId: BigInt!
+  transferNonce: BigInt!
+  target: String!
+  status: Boolean!
+}
+
+# ================================
+# ======== NODE REGISTRY =========
+# ================================
+
 type Schema @entity {
   id: String!
   sender: String!
@@ -19,10 +33,26 @@ type Schema @entity {
   data: Bytes
 }
 
-type DelegateRegistry @entity {
+type Node @entity {
+  id: String!
+  sender: String!
+  nodeId: BigInt!
+  data: Bytes
+}
+
+type Message @entity {
+  id: String!
+  sender: String!
+  schema: Bytes!
+  data: Bytes
+}
+
+# ================================
+# ====== RIVER VALIDATOR V1 ======
+# ================================
+
+type RiverValidatorV1 @entity {
   id: String!
   userId: BigInt!
-  transferNonce: BigInt!
-  target: String!
   status: Boolean!
 }

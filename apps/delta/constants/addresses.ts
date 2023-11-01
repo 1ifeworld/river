@@ -1,3 +1,3 @@
 import { type Hex } from 'viem'
 
-export const operator: Hex = '0x004991c3bbcF3dd0596292C80351798965070D75'
+export const operator: Hex = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'

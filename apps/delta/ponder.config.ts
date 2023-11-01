@@ -24,7 +24,7 @@ export const config: Config = {
       name: 'IdRegistry',
       network: 'anvil',
       abi: './abis/IdRegistry.json',
-      address: '0x8A791620dd6260079BF849Dc5567aDC3F2FdC318',
+      address: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
     },
     // {
     //   name: 'DelegateRegistry',
@@ -34,10 +34,16 @@ export const config: Config = {
     //   startBlock: 16474518,
     // },
     {
+      name: 'DelegateRegistry',
+      network: 'anvil',
+      abi: './abis/DelegateRegistry.json',
+      address: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0'
+    },      
+    {
       name: 'NodeRegistry',
       network: 'anvil',
       abi: './abis/NodeRegistry.json',
-      address: '0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82'
+      address: '0x9A9f2CCfdE556A7E9Ff0848998Aa4a0CFD8863AE'
     },    
     // {
     //   name: 'NodeRegistry',
@@ -46,6 +52,7 @@ export const config: Config = {
     //   address: '0xa7E3142140983cc6DBBd27766492C0224CA77587',
     //   startBlock: 13777523,
     // },
+        
     // {
     //   name: 'RiverValidatorV1',
     //   network: 'optimism-goerli',
@@ -53,6 +60,12 @@ export const config: Config = {
     //   address: '0x3E3522Ac4d89c56c8759F81a86ff94b8c39A45e3',
     //   startBlock: 16474518,
     // },
+    {
+      name: 'RiverValidatorV1',
+      network: 'anvil',
+      abi: './abis/RiverValidatorV1.json',
+      address: '0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9'
+    },     
     // {
     //   name: 'LightAccountFactory',
     //   network: 'optimism-goerli',
