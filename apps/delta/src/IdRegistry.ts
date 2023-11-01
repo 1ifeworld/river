@@ -5,7 +5,7 @@ ponder.on('IdRegistry:Register', async ({ event, context }) => {
   const { IdRegistry } = context.entities
   const { to, id, backup, data } = event.params
 
-  console.log("ommg an id register event")
+  console.log('ommg an id register event')
 
   await IdRegistry.create({
     id: `420/${to}/${id}`,

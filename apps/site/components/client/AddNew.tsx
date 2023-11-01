@@ -12,6 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuGroup,
 } from '@/design-system'
+import { UploadDialog } from '@/server'
 
 export function AddNew() {
   const [dropdownOpen, setDropdownOpen] = React.useState(false)
@@ -51,13 +52,13 @@ export function AddNew() {
       >
         <DropdownMenuGroup>
           {/* Item */}
-          <DialogItem
+          <UploadDialog
             triggerChildren="Upload"
             onSelect={handleDialogItemSelect}
             onOpenChange={handleDialogItemOpenChange}
           >
             <DialogTitle>Edit</DialogTitle>
-          </DialogItem>
+          </UploadDialog>
           {/* Channel */}
           <DialogItem
             triggerChildren="Channel"

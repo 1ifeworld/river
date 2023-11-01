@@ -2,4 +2,4 @@
 
 // Individual components
 export * from './RiverLogo'
-// export * from './UploadDialog'
+export * from './UploadDialog'

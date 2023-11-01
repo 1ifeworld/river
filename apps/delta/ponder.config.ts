@@ -9,7 +9,7 @@ export const config: Config = {
       // transport: http(process.env.PONDER_RPC_URL_420),
       name: 'anvil',
       chainId: 31337,
-      transport: http(process.env.ANVIL_FORK_URL),      
+      transport: http(process.env.ANVIL_FORK_URL),
     },
   ],
   contracts: [
@@ -19,7 +19,7 @@ export const config: Config = {
     //   abi: './abis/IdRegistry.json',
     //   address: '0xf89a7C9a0517da815dB66CdcAf61F44E01476697',
     //   startBlock: 16474518,
-    // },    
+    // },
     {
       name: 'IdRegistry',
       network: 'anvil',
@@ -37,8 +37,8 @@ export const config: Config = {
       name: 'NodeRegistry',
       network: 'anvil',
       abi: './abis/NodeRegistry.json',
-      address: '0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82'
-    },    
+      address: '0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82',
+    },
     // {
     //   name: 'NodeRegistry',
     //   network: 'optimism-goerli',
