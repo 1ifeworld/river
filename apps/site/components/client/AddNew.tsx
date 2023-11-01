@@ -56,9 +56,7 @@ export function AddNew() {
             triggerChildren="Upload"
             onSelect={handleDialogItemSelect}
             onOpenChange={handleDialogItemOpenChange}
-          >
-            <DialogTitle>Edit</DialogTitle>
-          </UploadDialog>
+          />
           {/* Channel */}
           <DialogItem
             triggerChildren="Channel"
