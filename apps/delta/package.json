@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@ponder/core": "^0.0.93",
-    "offchain": "workspace:*"
+    "offchain-schema": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^18.11.18",
