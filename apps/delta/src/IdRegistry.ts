@@ -1,12 +1,11 @@
-import { operator } from './constants'
 import { ponder } from '@/generated'
-import { Hex } from 'viem'
+import {hey} from "offchain-schema"
 
 ponder.on('IdRegistry:Register', async ({ event, context }) => {
   const { IdRegistry } = context.entities
   const { to, id, backup, data } = event.params
 
-  console.log('ommg an id register event')
+  console.log(hey)
 
   await IdRegistry.create({
     id: `420/${to}/${id}`,
