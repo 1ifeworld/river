@@ -8,7 +8,7 @@
     "strict": true,
     "rootDir": ".",
     "paths": {
-      "@/constants": ["./constants/index.ts"],
+      "@/constants": ["src/constants/index.tsts"],
       "@/generated": ["./generated/index.ts"]
     }
   },

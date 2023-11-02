@@ -1,5 +1,6 @@
+import { operator } from './constants'
 import { ponder } from '@/generated'
-import { operator } from '@/constants'
+import { Hex } from 'viem'
 
 ponder.on('IdRegistry:Register', async ({ event, context }) => {
   const { IdRegistry } = context.entities
