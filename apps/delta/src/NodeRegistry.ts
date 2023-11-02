@@ -31,6 +31,8 @@ ponder.on('NodeRegistry:RegisterNode', async ({ event, context }) => {
       data: data,
     });
 
+    // Node.findMany
+
   // if (!isValidUserId(userId)) return;
   // if (!isValidNodeSchema(schema)) return;
   // if (!isValidReg(regType, regBody)) return;
