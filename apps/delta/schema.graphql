@@ -37,7 +37,10 @@ type Node @entity {
   id: String!
   sender: String!
   nodeId: BigInt!
-  data: Bytes
+  userId: BigInt!
+  schema: String!
+  regType: BigInt!
+  regBody: Bytes!
 }
 
 type Message @entity {

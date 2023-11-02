@@ -1,17 +1,16 @@
-import { Hash, decodeAbiParameters, parseAbiParameters } from "viem";
-import { nodeRegistrationData } from "./types";
+import { Hash, decodeAbiParameters } from 'viem'
+import { nodeRegistrationData } from './types'
 
 export function decodeNodeRegistrationData({ data }: { data: Hash }): {
-  userId: bigint;
-  schema: Hash;
-  regType: bigint;
-  regBody: Hash;
+  userId: bigint
+  schema: Hash
+  regType: bigint
+  regBody: Hash
 } {
-  
   const [decodedData] = decodeAbiParameters(
     nodeRegistrationData[0].outputs,
-    data
-  );
+    data,
+  )
 
-  return decodedData;
+  return decodedData
 }

@@ -1,9 +1,5 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# ponder
-.ponder/
-generated/
-
 # dependencies
 /node_modules
 /.pnp
