@@ -2,6 +2,8 @@ import { ponder } from '@/generated'
 import { isValidSchemaRegistration } from "./offchainSchema/idRegistry/filters";
 import { decodeNodeRegistrationData } from "./offchainSchema/nodeRegistry/decoders";
 
+const decodeRegisterSchema = (data: any) => {}
+
 ponder.on('NodeRegistry:RegisterSchema', async ({ event, context }) => {
   const { Schema } = context.entities
   const { sender, schema, data } = event.params
