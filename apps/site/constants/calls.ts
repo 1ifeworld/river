@@ -1,5 +1,5 @@
 import { type Hex, type Hash, encodeFunctionData } from 'viem'
-import { operatorAddress, idRegistry, delegateRegistry } from '@/constants'
+import { operator, idRegistry, delegateRegistry } from '@/constants'
 import { idRegistryAbi, delegateRegistryAbi } from '@/abi'
 
 const zeroBytes: Hash = '0x'
@@ -9,7 +9,7 @@ export const register = {
   calldata: encodeFunctionData({
     abi: idRegistryAbi,
     functionName: 'register',
-    args: [operatorAddress, zeroBytes],
+    args: [operator.address, zeroBytes],
   }),
 }
 
@@ -18,6 +18,6 @@ export const delegate = {
   calldata: encodeFunctionData({
     abi: delegateRegistryAbi,
     functionName: 'updateDelegate',
-    args: [operatorAddress, true],
+    args: [operator.address, true],
   }),
 }

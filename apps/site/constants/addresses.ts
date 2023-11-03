@@ -10,4 +10,7 @@ export const lightAccountFactory: Hex =
   '0x000000893A26168158fbeaDD9335Be5bC96592E2'
 // export const lightAccount: Hex = '0xc1B2fC4197c9187853243E6e4eb5A4aF8879a1c0'
 export const entryPoint: Hex = '0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789'
-export const operatorAddress: Hex = '0x004991c3bbcF3dd0596292C80351798965070D75'
+/**
+ * NOTE: Unusued in favor of operator object created using server-side private key
+ */
+// export const operatorAddress: Hex = '0x004991c3bbcF3dd0596292C80351798965070D75'
