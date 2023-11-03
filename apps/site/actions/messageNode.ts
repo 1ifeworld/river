@@ -1,4 +1,4 @@
-import { } from 'viem'
+import {} from 'viem'
 
 import { nodeRegistry } from '@/constants'
 import { publicClient, walletClient } from '@/config'
