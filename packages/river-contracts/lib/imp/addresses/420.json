@@ -1,0 +1,8 @@
+{
+    "IdRegistry": "0xf89a7C9a0517da815dB66CdcAf61F44E01476697",
+    "DelegateRegistry": "0x995D4621B4B72cd2805f99972A1313bd9876c613",
+    "NodeRegistry": "0xd8Dbf7dC3746B968485164c05b5c11C78a2BFebc",
+    "RiverValidatorV1": "0x3E3522Ac4d89c56c8759F81a86ff94b8c39A45e3",
+    "LightAccountFactory": "0xFBb085CF89D2622d19C632bbd6BeCD6Eb7E9418E",
+    "LightAccountImplementation": "0x6819478A8B2cc9DeFf0a47a2fEd408eea118156A"
+}
