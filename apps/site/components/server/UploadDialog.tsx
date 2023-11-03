@@ -12,7 +12,7 @@ import {
   DialogHeader,
   DropdownMenuItem,
 } from '@/design-system'
-import { uploadToIPFS } from '@/actions'
+import { uploadToIPFS } from '@/lib'
 import { useDropzone } from 'react-dropzone'
 
 interface UploadDialogProps {
@@ -28,7 +28,7 @@ export const UploadDialog = React.forwardRef<HTMLDivElement, UploadDialogProps>(
     const [filesToUpload, setFilesToUpload] = React.useState<File[]>([])
     const onDrop = React.useCallback((filesToUpload: File[]) => {
       setShowFilesToUpload(true)
-      setFilesToUpload(filesToUpload) //
+      setFilesToUpload(filesToUpload)
     }, [])
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({

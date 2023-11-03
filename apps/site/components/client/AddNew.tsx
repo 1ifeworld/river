@@ -12,6 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuGroup,
 } from '@/design-system'
+import { ChannelDialog } from '@/client'
 import { UploadDialog } from '@/server'
 
 export function AddNew() {
@@ -58,13 +59,11 @@ export function AddNew() {
             onOpenChange={handleDialogItemOpenChange}
           />
           {/* Channel */}
-          <DialogItem
+          <ChannelDialog
             triggerChildren="Channel"
             onSelect={handleDialogItemSelect}
             onOpenChange={handleDialogItemOpenChange}
-          >
-            <DialogTitle>Delete</DialogTitle>
-          </DialogItem>
+          />
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
