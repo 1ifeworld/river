@@ -7,7 +7,7 @@
     },
     "test": {
       "dependsOn": ["lint", "build"]
-    },
+    },    
     "dev": {
       "cache": false,
       "persistent": true
