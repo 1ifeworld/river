@@ -50,6 +50,8 @@ export const ChannelDialog = React.forwardRef<
   const { isConnected } = useAccount()
   const alchemyProvider = useAlchemyContext()
 
+  console.log('Alchemy provider', alchemyProvider)
+
   React.useEffect(() => {
     const fetchAddress = async () => {
       const address = await alchemyProvider?.getAddress()
@@ -90,9 +92,16 @@ export const ChannelDialog = React.forwardRef<
             {/* Channel form */}
             <Form {...form}>
               <form
-                // action={() => messageNode({ userId: smartAccountAddress })}
+                // action={() => messageNode({ userId: smartAccountAddress as Hex })}
+                action={messageNode}
                 className="w-2/3 space-y-6"
               >
+                {/* Pass additional data to our form handler */}
+                <input
+                  type="hidden"
+                  name="userId"
+                  value={smartAccountAddress}
+                />
                 <FormField
                   control={form.control}
                   name="channelName"

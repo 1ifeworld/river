@@ -1,13 +1,21 @@
 'use server'
 
-import { type Hex } from 'viem'
-
+import { type Hex, type Hash } from 'viem'
+import { privateKeyToAccount } from 'viem/accounts'
 import { nodeRegistry } from '@/constants'
 import { publicClient, walletClient } from '@/config'
 import { nodeRegistryAbi } from '@/abi'
-import { optimismGoerli } from 'viem/chains'
 
-export async function messageNode({ userId }: { userId: Hex }) {
+// { userId }: { userId: Hex }
+export async function messageNode(formData: FormData) {
+  // console.log('Suppled id', userId)
+
+  console.log('Form data', formData)
+
+  const userId = formData.get('userId');
+
+  console.log('User id', userId)
+
   const { request } = await publicClient.simulateContract({
     address: nodeRegistry,
     abi: nodeRegistryAbi,
@@ -15,12 +23,15 @@ export async function messageNode({ userId }: { userId: Hex }) {
     // uint256 userId // uint256 nodeId // uint256 msgType // bytes msgBody
     args: [
       // Why does this expect a Hex type?
-      userId,
+      userId as Hex
+      // userId,
       // nodeId,
       // msgType,
       // msgBody,
     ],
   })
+
+  console.log('Message node request', request)
 
   await walletClient.writeContract(request)
 }
