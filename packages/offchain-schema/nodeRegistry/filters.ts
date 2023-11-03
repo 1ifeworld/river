@@ -1,4 +1,4 @@
-import { operator } from '../../constants'
+import { operator } from '../constants/addresses'
 import { Hash, Hex } from 'viem'
 
 export function isValidNodeRegistration({
