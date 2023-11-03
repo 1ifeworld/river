@@ -1,1 +1,3 @@
-export * from './uploadToIPFS'
+'use server'
+
+export * from './messageNode'
