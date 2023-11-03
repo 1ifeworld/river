@@ -1,7 +1,6 @@
-const { BN, constants } = require('@openzeppelin/test-helpers');
+const { BN, constants, expectRevert } = require('@openzeppelin/test-helpers');
 
 const { expect } = require('chai');
-const { expectRevertCustomError } = require('../../../helpers/customError');
 
 const ERC721Pausable = artifacts.require('$ERC721Pausable');
 
@@ -27,37 +26,34 @@ contract('ERC721Pausable', function (accounts) {
     });
 
     it('reverts when trying to transferFrom', async function () {
-      await expectRevertCustomError(
+      await expectRevert(
         this.token.transferFrom(owner, receiver, firstTokenId, { from: owner }),
-        'EnforcedPause',
-        [],
+        'ERC721Pausable: token transfer while paused',
       );
     });
 
     it('reverts when trying to safeTransferFrom', async function () {
-      await expectRevertCustomError(
+      await expectRevert(
         this.token.safeTransferFrom(owner, receiver, firstTokenId, { from: owner }),
-        'EnforcedPause',
-        [],
+        'ERC721Pausable: token transfer while paused',
       );
     });
 
     it('reverts when trying to safeTransferFrom with data', async function () {
-      await expectRevertCustomError(
+      await expectRevert(
         this.token.methods['safeTransferFrom(address,address,uint256,bytes)'](owner, receiver, firstTokenId, mockData, {
           from: owner,
         }),
-        'EnforcedPause',
-        [],
+        'ERC721Pausable: token transfer while paused',
       );
     });
 
     it('reverts when trying to mint', async function () {
-      await expectRevertCustomError(this.token.$_mint(receiver, secondTokenId), 'EnforcedPause', []);
+      await expectRevert(this.token.$_mint(receiver, secondTokenId), 'ERC721Pausable: token transfer while paused');
     });
 
     it('reverts when trying to burn', async function () {
-      await expectRevertCustomError(this.token.$_burn(firstTokenId), 'EnforcedPause', []);
+      await expectRevert(this.token.$_burn(firstTokenId), 'ERC721Pausable: token transfer while paused');
     });
 
     describe('getApproved', function () {
@@ -78,6 +74,12 @@ contract('ERC721Pausable', function (accounts) {
       it('returns the amount of tokens owned by the given address', async function () {
         const ownerOfToken = await this.token.ownerOf(firstTokenId);
         expect(ownerOfToken).to.equal(owner);
+      });
+    });
+
+    describe('exists', function () {
+      it('returns token existence', async function () {
+        expect(await this.token.$_exists(firstTokenId)).to.equal(true);
       });
     });
 

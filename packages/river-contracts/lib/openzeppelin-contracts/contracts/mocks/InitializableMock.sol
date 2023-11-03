@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.0;
 
-import {Initializable} from "../proxy/utils/Initializable.sol";
+import "../proxy/utils/Initializable.sol";
 
 /**
  * @title InitializableMock
@@ -79,7 +79,7 @@ contract ChildConstructorInitializableMock is ConstructorInitializableMock {
 contract ReinitializerMock is Initializable {
     uint256 public counter;
 
-    function getInitializedVersion() public view returns (uint64) {
+    function getInitializedVersion() public view returns (uint8) {
         return _getInitializedVersion();
     }
 
@@ -87,15 +87,15 @@ contract ReinitializerMock is Initializable {
         doStuff();
     }
 
-    function reinitialize(uint64 i) public reinitializer(i) {
+    function reinitialize(uint8 i) public reinitializer(i) {
         doStuff();
     }
 
-    function nestedReinitialize(uint64 i, uint64 j) public reinitializer(i) {
+    function nestedReinitialize(uint8 i, uint8 j) public reinitializer(i) {
         reinitialize(j);
     }
 
-    function chainReinitialize(uint64 i, uint64 j) public {
+    function chainReinitialize(uint8 i, uint8 j) public {
         reinitialize(i);
         reinitialize(j);
     }

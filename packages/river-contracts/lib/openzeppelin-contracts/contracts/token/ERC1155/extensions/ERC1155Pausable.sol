@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
-// OpenZeppelin Contracts (last updated v5.0.0) (token/ERC1155/extensions/ERC1155Pausable.sol)
+// OpenZeppelin Contracts (last updated v4.8.2) (token/ERC1155/extensions/ERC1155Pausable.sol)
 
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.0;
 
-import {ERC1155} from "../ERC1155.sol";
-import {Pausable} from "../../../utils/Pausable.sol";
+import "../ERC1155.sol";
+import "../../../security/Pausable.sol";
 
 /**
  * @dev ERC1155 token with pausable token transfers, minting and burning.
@@ -17,22 +17,28 @@ import {Pausable} from "../../../utils/Pausable.sol";
  * addition to inheriting this contract, you must define both functions, invoking the
  * {Pausable-_pause} and {Pausable-_unpause} internal functions, with appropriate
  * access control, e.g. using {AccessControl} or {Ownable}. Not doing so will
- * make the contract pause mechanism of the contract unreachable, and thus unusable.
+ * make the contract unpausable.
+ *
+ * _Available since v3.1._
  */
 abstract contract ERC1155Pausable is ERC1155, Pausable {
     /**
-     * @dev See {ERC1155-_update}.
+     * @dev See {ERC1155-_beforeTokenTransfer}.
      *
      * Requirements:
      *
      * - the contract must not be paused.
      */
-    function _update(
+    function _beforeTokenTransfer(
+        address operator,
         address from,
         address to,
         uint256[] memory ids,
-        uint256[] memory values
-    ) internal virtual override whenNotPaused {
-        super._update(from, to, ids, values);
+        uint256[] memory amounts,
+        bytes memory data
+    ) internal virtual override {
+        super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
+
+        require(!paused(), "ERC1155Pausable: token transfer while paused");
     }
 }

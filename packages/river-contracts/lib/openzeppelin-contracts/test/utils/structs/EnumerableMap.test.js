@@ -1,5 +1,5 @@
 const { BN, constants } = require('@openzeppelin/test-helpers');
-const { mapValues } = require('../../helpers/iterate');
+const { mapValues } = require('../../helpers/map-values');
 
 const EnumerableMap = artifacts.require('$EnumerableMap');
 
@@ -41,6 +41,7 @@ contract('EnumerableMap', function (accounts) {
       getMethods({
         set: '$set(uint256,address,uint256)',
         get: '$get(uint256,address)',
+        getWithMessage: '$get(uint256,address,string)',
         tryGet: '$tryGet(uint256,address)',
         remove: '$remove(uint256,address)',
         length: `$length_${library}_AddressToUintMap(uint256)`,
@@ -64,6 +65,7 @@ contract('EnumerableMap', function (accounts) {
       getMethods({
         set: '$set(uint256,uint256,address)',
         get: `$get_${library}_UintToAddressMap(uint256,uint256)`,
+        getWithMessage: `$get_${library}_UintToAddressMap(uint256,uint256,string)`,
         tryGet: `$tryGet_${library}_UintToAddressMap(uint256,uint256)`,
         remove: `$remove_${library}_UintToAddressMap(uint256,uint256)`,
         length: `$length_${library}_UintToAddressMap(uint256)`,
@@ -87,6 +89,7 @@ contract('EnumerableMap', function (accounts) {
       getMethods({
         set: '$set(uint256,bytes32,bytes32)',
         get: `$get_${library}_Bytes32ToBytes32Map(uint256,bytes32)`,
+        getWithMessage: `$get_${library}_Bytes32ToBytes32Map(uint256,bytes32,string)`,
         tryGet: `$tryGet_${library}_Bytes32ToBytes32Map(uint256,bytes32)`,
         remove: `$remove_${library}_Bytes32ToBytes32Map(uint256,bytes32)`,
         length: `$length_${library}_Bytes32ToBytes32Map(uint256)`,
@@ -110,6 +113,7 @@ contract('EnumerableMap', function (accounts) {
       getMethods({
         set: '$set(uint256,uint256,uint256)',
         get: `$get_${library}_UintToUintMap(uint256,uint256)`,
+        getWithMessage: `$get_${library}_UintToUintMap(uint256,uint256,string)`,
         tryGet: `$tryGet_${library}_UintToUintMap(uint256,uint256)`,
         remove: `$remove_${library}_UintToUintMap(uint256,uint256)`,
         length: `$length_${library}_UintToUintMap(uint256)`,
@@ -133,6 +137,7 @@ contract('EnumerableMap', function (accounts) {
       getMethods({
         set: '$set(uint256,bytes32,uint256)',
         get: `$get_${library}_Bytes32ToUintMap(uint256,bytes32)`,
+        getWithMessage: `$get_${library}_Bytes32ToUintMap(uint256,bytes32,string)`,
         tryGet: `$tryGet_${library}_Bytes32ToUintMap(uint256,bytes32)`,
         remove: `$remove_${library}_Bytes32ToUintMap(uint256,bytes32)`,
         length: `$length_${library}_Bytes32ToUintMap(uint256)`,

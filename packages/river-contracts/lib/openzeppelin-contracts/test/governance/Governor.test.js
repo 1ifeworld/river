@@ -2,22 +2,19 @@ const { constants, expectEvent, expectRevert } = require('@openzeppelin/test-hel
 const { expect } = require('chai');
 const ethSigUtil = require('eth-sig-util');
 const Wallet = require('ethereumjs-wallet').default;
-
+const { fromRpcSig } = require('ethereumjs-util');
 const Enums = require('../helpers/enums');
 const { getDomain, domainType } = require('../helpers/eip712');
-const { GovernorHelper, proposalStatesToBitMap } = require('../helpers/governance');
+const { GovernorHelper } = require('../helpers/governance');
 const { clockFromReceipt } = require('../helpers/time');
-const { expectRevertCustomError } = require('../helpers/customError');
 
 const { shouldSupportInterfaces } = require('../utils/introspection/SupportsInterface.behavior');
 const { shouldBehaveLikeEIP6372 } = require('./utils/EIP6372.behavior');
-const { ZERO_BYTES32 } = require('@openzeppelin/test-helpers/src/constants');
 
 const Governor = artifacts.require('$GovernorMock');
 const CallReceiver = artifacts.require('CallReceiverMock');
 const ERC721 = artifacts.require('$ERC721');
 const ERC1155 = artifacts.require('$ERC1155');
-const ERC1271WalletMock = artifacts.require('ERC1271WalletMock');
 
 const TOKENS = [
   { Token: artifacts.require('$ERC20Votes'), mode: 'blocknumber' },
@@ -29,7 +26,6 @@ contract('Governor', function (accounts) {
   const [owner, proposer, voter1, voter2, voter3, voter4] = accounts;
 
   const name = 'OZ-Governor';
-  const version = '1';
   const tokenName = 'MockToken';
   const tokenSymbol = 'MTKN';
   const tokenSupply = web3.utils.toWei('100');
@@ -41,12 +37,7 @@ contract('Governor', function (accounts) {
     describe(`using ${Token._json.contractName}`, function () {
       beforeEach(async function () {
         this.chainId = await web3.eth.getChainId();
-        try {
-          this.token = await Token.new(tokenName, tokenSymbol, tokenName, version);
-        } catch {
-          // ERC20VotesLegacyMock has a different construction that uses version='1' by default.
-          this.token = await Token.new(tokenName, tokenSymbol, tokenName);
-        }
+        this.token = await Token.new(tokenName, tokenSymbol, tokenName);
         this.mock = await Governor.new(
           name, // name
           votingDelay, // initialVotingDelay
@@ -79,7 +70,7 @@ contract('Governor', function (accounts) {
         );
       });
 
-      shouldSupportInterfaces(['ERC165', 'ERC1155Receiver', 'Governor']);
+      shouldSupportInterfaces(['ERC165', 'ERC1155Receiver', 'Governor', 'GovernorWithParams', 'GovernorCancel']);
       shouldBehaveLikeEIP6372(mode);
 
       it('deployment check', async function () {
@@ -99,9 +90,6 @@ contract('Governor', function (accounts) {
         expect(await this.mock.hasVoted(this.proposal.id, voter2)).to.be.equal(false);
         expect(await web3.eth.getBalance(this.mock.address)).to.be.bignumber.equal(value);
         expect(await web3.eth.getBalance(this.receiver.address)).to.be.bignumber.equal('0');
-
-        expect(await this.mock.proposalEta(this.proposal.id)).to.be.bignumber.equal('0');
-        expect(await this.mock.proposalNeedsQueuing(this.proposal.id)).to.be.equal(false);
 
         // Run proposal
         const txPropose = await this.helper.propose({ from: proposer });
@@ -167,9 +155,46 @@ contract('Governor', function (accounts) {
         expect(await this.mock.hasVoted(this.proposal.id, voter2)).to.be.equal(true);
         expect(await web3.eth.getBalance(this.mock.address)).to.be.bignumber.equal('0');
         expect(await web3.eth.getBalance(this.receiver.address)).to.be.bignumber.equal(value);
+      });
 
-        expect(await this.mock.proposalEta(this.proposal.id)).to.be.bignumber.equal('0');
-        expect(await this.mock.proposalNeedsQueuing(this.proposal.id)).to.be.equal(false);
+      it('vote with signature', async function () {
+        const voterBySig = Wallet.generate();
+        const voterBySigAddress = web3.utils.toChecksumAddress(voterBySig.getAddressString());
+
+        const signature = (contract, message) =>
+          getDomain(contract)
+            .then(domain => ({
+              primaryType: 'Ballot',
+              types: {
+                EIP712Domain: domainType(domain),
+                Ballot: [
+                  { name: 'proposalId', type: 'uint256' },
+                  { name: 'support', type: 'uint8' },
+                ],
+              },
+              domain,
+              message,
+            }))
+            .then(data => ethSigUtil.signTypedMessage(voterBySig.getPrivateKey(), { data }))
+            .then(fromRpcSig);
+
+        await this.token.delegate(voterBySigAddress, { from: voter1 });
+
+        // Run proposal
+        await this.helper.propose();
+        await this.helper.waitForSnapshot();
+        expectEvent(await this.helper.vote({ support: Enums.VoteType.For, signature }), 'VoteCast', {
+          voter: voterBySigAddress,
+          support: Enums.VoteType.For,
+        });
+        await this.helper.waitForDeadline();
+        await this.helper.execute();
+
+        // After
+        expect(await this.mock.hasVoted(this.proposal.id, owner)).to.be.equal(false);
+        expect(await this.mock.hasVoted(this.proposal.id, voter1)).to.be.equal(false);
+        expect(await this.mock.hasVoted(this.proposal.id, voter2)).to.be.equal(false);
+        expect(await this.mock.hasVoted(this.proposal.id, voterBySigAddress)).to.be.equal(true);
       });
 
       it('send ethers', async function () {
@@ -201,154 +226,36 @@ contract('Governor', function (accounts) {
         expect(await web3.eth.getBalance(empty)).to.be.bignumber.equal(value);
       });
 
-      describe('vote with signature', function () {
-        const sign = privateKey => async (contract, message) => {
-          const domain = await getDomain(contract);
-          return ethSigUtil.signTypedMessage(privateKey, {
-            data: {
-              primaryType: 'Ballot',
-              types: {
-                EIP712Domain: domainType(domain),
-                Ballot: [
-                  { name: 'proposalId', type: 'uint256' },
-                  { name: 'support', type: 'uint8' },
-                  { name: 'voter', type: 'address' },
-                  { name: 'nonce', type: 'uint256' },
-                ],
-              },
-              domain,
-              message,
-            },
-          });
-        };
-
-        afterEach('no other votes are cast for proposalId', async function () {
-          expect(await this.mock.hasVoted(this.proposal.id, owner)).to.be.equal(false);
-          expect(await this.mock.hasVoted(this.proposal.id, voter1)).to.be.equal(false);
-          expect(await this.mock.hasVoted(this.proposal.id, voter2)).to.be.equal(false);
-        });
-
-        it('votes with an EOA signature', async function () {
-          const voterBySig = Wallet.generate();
-          const voterBySigAddress = web3.utils.toChecksumAddress(voterBySig.getAddressString());
-
-          await this.token.delegate(voterBySigAddress, { from: voter1 });
-
-          const nonce = await this.mock.nonces(voterBySigAddress);
-
-          // Run proposal
-          await this.helper.propose();
-          await this.helper.waitForSnapshot();
-          expectEvent(
-            await this.helper.vote({
-              support: Enums.VoteType.For,
-              voter: voterBySigAddress,
-              nonce,
-              signature: sign(voterBySig.getPrivateKey()),
-            }),
-            'VoteCast',
-            {
-              voter: voterBySigAddress,
-              support: Enums.VoteType.For,
-            },
-          );
-          await this.helper.waitForDeadline();
-          await this.helper.execute();
-
-          // After
-          expect(await this.mock.hasVoted(this.proposal.id, voterBySigAddress)).to.be.equal(true);
-          expect(await this.mock.nonces(voterBySigAddress)).to.be.bignumber.equal(nonce.addn(1));
-        });
-
-        it('votes with a valid EIP-1271 signature', async function () {
-          const ERC1271WalletOwner = Wallet.generate();
-          ERC1271WalletOwner.address = web3.utils.toChecksumAddress(ERC1271WalletOwner.getAddressString());
-
-          const wallet = await ERC1271WalletMock.new(ERC1271WalletOwner.address);
-
-          await this.token.delegate(wallet.address, { from: voter1 });
-
-          const nonce = await this.mock.nonces(wallet.address);
-
-          // Run proposal
-          await this.helper.propose();
-          await this.helper.waitForSnapshot();
-          expectEvent(
-            await this.helper.vote({
-              support: Enums.VoteType.For,
-              voter: wallet.address,
-              nonce,
-              signature: sign(ERC1271WalletOwner.getPrivateKey()),
-            }),
-            'VoteCast',
-            {
-              voter: wallet.address,
-              support: Enums.VoteType.For,
-            },
-          );
-          await this.helper.waitForDeadline();
-          await this.helper.execute();
-
-          // After
-          expect(await this.mock.hasVoted(this.proposal.id, wallet.address)).to.be.equal(true);
-          expect(await this.mock.nonces(wallet.address)).to.be.bignumber.equal(nonce.addn(1));
-        });
-
-        afterEach('no other votes are cast', async function () {
-          expect(await this.mock.hasVoted(this.proposal.id, owner)).to.be.equal(false);
-          expect(await this.mock.hasVoted(this.proposal.id, voter1)).to.be.equal(false);
-          expect(await this.mock.hasVoted(this.proposal.id, voter2)).to.be.equal(false);
-        });
-      });
-
       describe('should revert', function () {
         describe('on propose', function () {
           it('if proposal already exists', async function () {
             await this.helper.propose();
-            await expectRevertCustomError(this.helper.propose(), 'GovernorUnexpectedProposalState', [
-              this.proposal.id,
-              Enums.ProposalState.Pending,
-              ZERO_BYTES32,
-            ]);
-          });
-
-          it('if proposer has below threshold votes', async function () {
-            const votes = web3.utils.toWei('10');
-            const threshold = web3.utils.toWei('1000');
-            await this.mock.$_setProposalThreshold(threshold);
-            await expectRevertCustomError(this.helper.propose({ from: voter1 }), 'GovernorInsufficientProposerVotes', [
-              voter1,
-              votes,
-              threshold,
-            ]);
+            await expectRevert(this.helper.propose(), 'Governor: proposal already exists');
           });
         });
 
         describe('on vote', function () {
           it('if proposal does not exist', async function () {
-            await expectRevertCustomError(
+            await expectRevert(
               this.helper.vote({ support: Enums.VoteType.For }, { from: voter1 }),
-              'GovernorNonexistentProposal',
-              [this.proposal.id],
+              'Governor: unknown proposal id',
             );
           });
 
           it('if voting has not started', async function () {
             await this.helper.propose();
-            await expectRevertCustomError(
+            await expectRevert(
               this.helper.vote({ support: Enums.VoteType.For }, { from: voter1 }),
-              'GovernorUnexpectedProposalState',
-              [this.proposal.id, Enums.ProposalState.Pending, proposalStatesToBitMap([Enums.ProposalState.Active])],
+              'Governor: vote not currently active',
             );
           });
 
           it('if support value is invalid', async function () {
             await this.helper.propose();
             await this.helper.waitForSnapshot();
-            await expectRevertCustomError(
+            await expectRevert(
               this.helper.vote({ support: web3.utils.toBN('255') }),
-              'GovernorInvalidVoteType',
-              [],
+              'GovernorVotingSimple: invalid value for enum VoteType',
             );
           });
 
@@ -356,144 +263,50 @@ contract('Governor', function (accounts) {
             await this.helper.propose();
             await this.helper.waitForSnapshot();
             await this.helper.vote({ support: Enums.VoteType.For }, { from: voter1 });
-            await expectRevertCustomError(
+            await expectRevert(
               this.helper.vote({ support: Enums.VoteType.For }, { from: voter1 }),
-              'GovernorAlreadyCastVote',
-              [voter1],
+              'GovernorVotingSimple: vote already cast',
             );
           });
 
           it('if voting is over', async function () {
             await this.helper.propose();
             await this.helper.waitForDeadline();
-            await expectRevertCustomError(
+            await expectRevert(
               this.helper.vote({ support: Enums.VoteType.For }, { from: voter1 }),
-              'GovernorUnexpectedProposalState',
-              [this.proposal.id, Enums.ProposalState.Defeated, proposalStatesToBitMap([Enums.ProposalState.Active])],
+              'Governor: vote not currently active',
             );
-          });
-        });
-
-        describe('on vote by signature', function () {
-          beforeEach(async function () {
-            this.voterBySig = Wallet.generate();
-            this.voterBySig.address = web3.utils.toChecksumAddress(this.voterBySig.getAddressString());
-
-            this.data = (contract, message) =>
-              getDomain(contract).then(domain => ({
-                primaryType: 'Ballot',
-                types: {
-                  EIP712Domain: domainType(domain),
-                  Ballot: [
-                    { name: 'proposalId', type: 'uint256' },
-                    { name: 'support', type: 'uint8' },
-                    { name: 'voter', type: 'address' },
-                    { name: 'nonce', type: 'uint256' },
-                  ],
-                },
-                domain,
-                message,
-              }));
-
-            this.signature = (contract, message) =>
-              this.data(contract, message).then(data =>
-                ethSigUtil.signTypedMessage(this.voterBySig.getPrivateKey(), { data }),
-              );
-
-            await this.token.delegate(this.voterBySig.address, { from: voter1 });
-
-            // Run proposal
-            await this.helper.propose();
-            await this.helper.waitForSnapshot();
-          });
-
-          it('if signature does not match signer', async function () {
-            const nonce = await this.mock.nonces(this.voterBySig.address);
-
-            const voteParams = {
-              support: Enums.VoteType.For,
-              voter: this.voterBySig.address,
-              nonce,
-              signature: async (...params) => {
-                const sig = await this.signature(...params);
-                const tamperedSig = web3.utils.hexToBytes(sig);
-                tamperedSig[42] ^= 0xff;
-                return web3.utils.bytesToHex(tamperedSig);
-              },
-            };
-
-            await expectRevertCustomError(this.helper.vote(voteParams), 'GovernorInvalidSignature', [voteParams.voter]);
-          });
-
-          it('if vote nonce is incorrect', async function () {
-            const nonce = await this.mock.nonces(this.voterBySig.address);
-
-            const voteParams = {
-              support: Enums.VoteType.For,
-              voter: this.voterBySig.address,
-              nonce: nonce.addn(1),
-              signature: this.signature,
-            };
-
-            await expectRevertCustomError(
-              this.helper.vote(voteParams),
-              // The signature check implies the nonce can't be tampered without changing the signer
-              'GovernorInvalidSignature',
-              [voteParams.voter],
-            );
-          });
-        });
-
-        describe('on queue', function () {
-          it('always', async function () {
-            await this.helper.propose({ from: proposer });
-            await this.helper.waitForSnapshot();
-            await this.helper.vote({ support: Enums.VoteType.For }, { from: voter1 });
-            await this.helper.waitForDeadline();
-            await expectRevertCustomError(this.helper.queue(), 'GovernorQueueNotImplemented', []);
           });
         });
 
         describe('on execute', function () {
           it('if proposal does not exist', async function () {
-            await expectRevertCustomError(this.helper.execute(), 'GovernorNonexistentProposal', [this.proposal.id]);
+            await expectRevert(this.helper.execute(), 'Governor: unknown proposal id');
           });
 
           it('if quorum is not reached', async function () {
             await this.helper.propose();
             await this.helper.waitForSnapshot();
             await this.helper.vote({ support: Enums.VoteType.For }, { from: voter3 });
-            await expectRevertCustomError(this.helper.execute(), 'GovernorUnexpectedProposalState', [
-              this.proposal.id,
-              Enums.ProposalState.Active,
-              proposalStatesToBitMap([Enums.ProposalState.Succeeded, Enums.ProposalState.Queued]),
-            ]);
+            await expectRevert(this.helper.execute(), 'Governor: proposal not successful');
           });
 
           it('if score not reached', async function () {
             await this.helper.propose();
             await this.helper.waitForSnapshot();
             await this.helper.vote({ support: Enums.VoteType.Against }, { from: voter1 });
-            await expectRevertCustomError(this.helper.execute(), 'GovernorUnexpectedProposalState', [
-              this.proposal.id,
-              Enums.ProposalState.Active,
-              proposalStatesToBitMap([Enums.ProposalState.Succeeded, Enums.ProposalState.Queued]),
-            ]);
+            await expectRevert(this.helper.execute(), 'Governor: proposal not successful');
           });
 
           it('if voting is not over', async function () {
             await this.helper.propose();
             await this.helper.waitForSnapshot();
             await this.helper.vote({ support: Enums.VoteType.For }, { from: voter1 });
-            await expectRevertCustomError(this.helper.execute(), 'GovernorUnexpectedProposalState', [
-              this.proposal.id,
-              Enums.ProposalState.Active,
-              proposalStatesToBitMap([Enums.ProposalState.Succeeded, Enums.ProposalState.Queued]),
-            ]);
+            await expectRevert(this.helper.execute(), 'Governor: proposal not successful');
           });
 
           it('if receiver revert without reason', async function () {
-            this.helper.setProposal(
+            this.proposal = this.helper.setProposal(
               [
                 {
                   target: this.receiver.address,
@@ -507,11 +320,11 @@ contract('Governor', function (accounts) {
             await this.helper.waitForSnapshot();
             await this.helper.vote({ support: Enums.VoteType.For }, { from: voter1 });
             await this.helper.waitForDeadline();
-            await expectRevertCustomError(this.helper.execute(), 'FailedInnerCall', []);
+            await expectRevert(this.helper.execute(), 'Governor: call reverted without message');
           });
 
           it('if receiver revert with reason', async function () {
-            this.helper.setProposal(
+            this.proposal = this.helper.setProposal(
               [
                 {
                   target: this.receiver.address,
@@ -534,20 +347,14 @@ contract('Governor', function (accounts) {
             await this.helper.vote({ support: Enums.VoteType.For }, { from: voter1 });
             await this.helper.waitForDeadline();
             await this.helper.execute();
-            await expectRevertCustomError(this.helper.execute(), 'GovernorUnexpectedProposalState', [
-              this.proposal.id,
-              Enums.ProposalState.Executed,
-              proposalStatesToBitMap([Enums.ProposalState.Succeeded, Enums.ProposalState.Queued]),
-            ]);
+            await expectRevert(this.helper.execute(), 'Governor: proposal not successful');
           });
         });
       });
 
       describe('state', function () {
         it('Unset', async function () {
-          await expectRevertCustomError(this.mock.state(this.proposal.id), 'GovernorNonexistentProposal', [
-            this.proposal.id,
-          ]);
+          await expectRevert(this.mock.state(this.proposal.id), 'Governor: unknown proposal id');
         });
 
         it('Pending & Active', async function () {
@@ -590,9 +397,7 @@ contract('Governor', function (accounts) {
       describe('cancel', function () {
         describe('internal', function () {
           it('before proposal', async function () {
-            await expectRevertCustomError(this.helper.cancel('internal'), 'GovernorNonexistentProposal', [
-              this.proposal.id,
-            ]);
+            await expectRevert(this.helper.cancel('internal'), 'Governor: unknown proposal id');
           });
 
           it('after proposal', async function () {
@@ -602,10 +407,9 @@ contract('Governor', function (accounts) {
             expect(await this.mock.state(this.proposal.id)).to.be.bignumber.equal(Enums.ProposalState.Canceled);
 
             await this.helper.waitForSnapshot();
-            await expectRevertCustomError(
+            await expectRevert(
               this.helper.vote({ support: Enums.VoteType.For }, { from: voter1 }),
-              'GovernorUnexpectedProposalState',
-              [this.proposal.id, Enums.ProposalState.Canceled, proposalStatesToBitMap([Enums.ProposalState.Active])],
+              'Governor: vote not currently active',
             );
           });
 
@@ -618,11 +422,7 @@ contract('Governor', function (accounts) {
             expect(await this.mock.state(this.proposal.id)).to.be.bignumber.equal(Enums.ProposalState.Canceled);
 
             await this.helper.waitForDeadline();
-            await expectRevertCustomError(this.helper.execute(), 'GovernorUnexpectedProposalState', [
-              this.proposal.id,
-              Enums.ProposalState.Canceled,
-              proposalStatesToBitMap([Enums.ProposalState.Succeeded, Enums.ProposalState.Queued]),
-            ]);
+            await expectRevert(this.helper.execute(), 'Governor: proposal not successful');
           });
 
           it('after deadline', async function () {
@@ -634,11 +434,7 @@ contract('Governor', function (accounts) {
             await this.helper.cancel('internal');
             expect(await this.mock.state(this.proposal.id)).to.be.bignumber.equal(Enums.ProposalState.Canceled);
 
-            await expectRevertCustomError(this.helper.execute(), 'GovernorUnexpectedProposalState', [
-              this.proposal.id,
-              Enums.ProposalState.Canceled,
-              proposalStatesToBitMap([Enums.ProposalState.Succeeded, Enums.ProposalState.Queued]),
-            ]);
+            await expectRevert(this.helper.execute(), 'Governor: proposal not successful');
           });
 
           it('after execution', async function () {
@@ -648,22 +444,13 @@ contract('Governor', function (accounts) {
             await this.helper.waitForDeadline();
             await this.helper.execute();
 
-            await expectRevertCustomError(this.helper.cancel('internal'), 'GovernorUnexpectedProposalState', [
-              this.proposal.id,
-              Enums.ProposalState.Executed,
-              proposalStatesToBitMap(
-                [Enums.ProposalState.Canceled, Enums.ProposalState.Expired, Enums.ProposalState.Executed],
-                { inverted: true },
-              ),
-            ]);
+            await expectRevert(this.helper.cancel('internal'), 'Governor: proposal not active');
           });
         });
 
         describe('public', function () {
           it('before proposal', async function () {
-            await expectRevertCustomError(this.helper.cancel('external'), 'GovernorNonexistentProposal', [
-              this.proposal.id,
-            ]);
+            await expectRevert(this.helper.cancel('external'), 'Governor: unknown proposal id');
           });
 
           it('after proposal', async function () {
@@ -675,20 +462,14 @@ contract('Governor', function (accounts) {
           it('after proposal - restricted to proposer', async function () {
             await this.helper.propose();
 
-            await expectRevertCustomError(this.helper.cancel('external', { from: owner }), 'GovernorOnlyProposer', [
-              owner,
-            ]);
+            await expectRevert(this.helper.cancel('external', { from: owner }), 'Governor: only proposer can cancel');
           });
 
           it('after vote started', async function () {
             await this.helper.propose();
             await this.helper.waitForSnapshot(1); // snapshot + 1 block
 
-            await expectRevertCustomError(this.helper.cancel('external'), 'GovernorUnexpectedProposalState', [
-              this.proposal.id,
-              Enums.ProposalState.Active,
-              proposalStatesToBitMap([Enums.ProposalState.Pending]),
-            ]);
+            await expectRevert(this.helper.cancel('external'), 'Governor: too late to cancel');
           });
 
           it('after vote', async function () {
@@ -696,11 +477,7 @@ contract('Governor', function (accounts) {
             await this.helper.waitForSnapshot();
             await this.helper.vote({ support: Enums.VoteType.For }, { from: voter1 });
 
-            await expectRevertCustomError(this.helper.cancel('external'), 'GovernorUnexpectedProposalState', [
-              this.proposal.id,
-              Enums.ProposalState.Active,
-              proposalStatesToBitMap([Enums.ProposalState.Pending]),
-            ]);
+            await expectRevert(this.helper.cancel('external'), 'Governor: too late to cancel');
           });
 
           it('after deadline', async function () {
@@ -709,11 +486,7 @@ contract('Governor', function (accounts) {
             await this.helper.vote({ support: Enums.VoteType.For }, { from: voter1 });
             await this.helper.waitForDeadline();
 
-            await expectRevertCustomError(this.helper.cancel('external'), 'GovernorUnexpectedProposalState', [
-              this.proposal.id,
-              Enums.ProposalState.Succeeded,
-              proposalStatesToBitMap([Enums.ProposalState.Pending]),
-            ]);
+            await expectRevert(this.helper.cancel('external'), 'Governor: too late to cancel');
           });
 
           it('after execution', async function () {
@@ -723,11 +496,7 @@ contract('Governor', function (accounts) {
             await this.helper.waitForDeadline();
             await this.helper.execute();
 
-            await expectRevertCustomError(this.helper.cancel('external'), 'GovernorUnexpectedProposalState', [
-              this.proposal.id,
-              Enums.ProposalState.Executed,
-              proposalStatesToBitMap([Enums.ProposalState.Pending]),
-            ]);
+            await expectRevert(this.helper.cancel('external'), 'Governor: too late to cancel');
           });
         });
       });
@@ -735,7 +504,7 @@ contract('Governor', function (accounts) {
       describe('proposal length', function () {
         it('empty', async function () {
           this.helper.setProposal([], '<proposal description>');
-          await expectRevertCustomError(this.helper.propose(), 'GovernorInvalidProposalLength', [0, 0, 0]);
+          await expectRevert(this.helper.propose(), 'Governor: empty proposal');
         });
 
         it('mismatch #1', async function () {
@@ -747,7 +516,7 @@ contract('Governor', function (accounts) {
             },
             '<proposal description>',
           );
-          await expectRevertCustomError(this.helper.propose(), 'GovernorInvalidProposalLength', [0, 1, 1]);
+          await expectRevert(this.helper.propose(), 'Governor: invalid proposal length');
         });
 
         it('mismatch #2', async function () {
@@ -759,7 +528,7 @@ contract('Governor', function (accounts) {
             },
             '<proposal description>',
           );
-          await expectRevertCustomError(this.helper.propose(), 'GovernorInvalidProposalLength', [1, 1, 0]);
+          await expectRevert(this.helper.propose(), 'Governor: invalid proposal length');
         });
 
         it('mismatch #3', async function () {
@@ -771,7 +540,7 @@ contract('Governor', function (accounts) {
             },
             '<proposal description>',
           );
-          await expectRevertCustomError(this.helper.propose(), 'GovernorInvalidProposalLength', [1, 0, 1]);
+          await expectRevert(this.helper.propose(), 'Governor: invalid proposal length');
         });
       });
 
@@ -853,32 +622,22 @@ contract('Governor', function (accounts) {
           });
 
           it('someone else cannot propose', async function () {
-            await expectRevertCustomError(this.helper.propose({ from: voter1 }), 'GovernorRestrictedProposer', [
-              voter1,
-            ]);
+            await expectRevert(this.helper.propose({ from: voter1 }), 'Governor: proposer restricted');
           });
         });
       });
 
       describe('onlyGovernance updates', function () {
         it('setVotingDelay is protected', async function () {
-          await expectRevertCustomError(this.mock.setVotingDelay('0', { from: owner }), 'GovernorOnlyExecutor', [
-            owner,
-          ]);
+          await expectRevert(this.mock.setVotingDelay('0'), 'Governor: onlyGovernance');
         });
 
         it('setVotingPeriod is protected', async function () {
-          await expectRevertCustomError(this.mock.setVotingPeriod('32', { from: owner }), 'GovernorOnlyExecutor', [
-            owner,
-          ]);
+          await expectRevert(this.mock.setVotingPeriod('32'), 'Governor: onlyGovernance');
         });
 
         it('setProposalThreshold is protected', async function () {
-          await expectRevertCustomError(
-            this.mock.setProposalThreshold('1000000000000000000', { from: owner }),
-            'GovernorOnlyExecutor',
-            [owner],
-          );
+          await expectRevert(this.mock.setProposalThreshold('1000000000000000000'), 'Governor: onlyGovernance');
         });
 
         it('can setVotingDelay through governance', async function () {
@@ -924,12 +683,11 @@ contract('Governor', function (accounts) {
         });
 
         it('cannot setVotingPeriod to 0 through governance', async function () {
-          const votingPeriod = 0;
           this.helper.setProposal(
             [
               {
                 target: this.mock.address,
-                data: this.mock.contract.methods.setVotingPeriod(votingPeriod).encodeABI(),
+                data: this.mock.contract.methods.setVotingPeriod('0').encodeABI(),
               },
             ],
             '<proposal description>',
@@ -940,7 +698,7 @@ contract('Governor', function (accounts) {
           await this.helper.vote({ support: Enums.VoteType.For }, { from: voter1 });
           await this.helper.waitForDeadline();
 
-          await expectRevertCustomError(this.helper.execute(), 'GovernorInvalidVotingPeriod', [votingPeriod]);
+          await expectRevert(this.helper.execute(), 'GovernorSettings: voting period too low');
         });
 
         it('can setProposalThreshold to 0 through governance', async function () {

@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.0;
 
-import {EnumerableMap} from "../patched/utils/structs/EnumerableMap.sol";
+import "../patched/utils/structs/EnumerableMap.sol";
 
 contract EnumerableMapHarness {
     using EnumerableMap for EnumerableMap.Bytes32ToBytes32Map;

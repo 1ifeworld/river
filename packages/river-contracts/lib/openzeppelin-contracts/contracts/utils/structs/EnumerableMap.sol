@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
-// OpenZeppelin Contracts (last updated v5.0.0) (utils/structs/EnumerableMap.sol)
+// OpenZeppelin Contracts (last updated v4.9.0) (utils/structs/EnumerableMap.sol)
 // This file was procedurally generated from scripts/generate/templates/EnumerableMap.js.
 
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.0;
 
-import {EnumerableSet} from "./EnumerableSet.sol";
+import "./EnumerableSet.sol";
 
 /**
  * @dev Library for managing an enumerable variant of Solidity's
@@ -48,20 +48,19 @@ import {EnumerableSet} from "./EnumerableSet.sol";
 library EnumerableMap {
     using EnumerableSet for EnumerableSet.Bytes32Set;
 
-    // To implement this library for multiple types with as little code repetition as possible, we write it in
-    // terms of a generic Map type with bytes32 keys and values. The Map implementation uses private functions,
-    // and user-facing implementations such as `UintToAddressMap` are just wrappers around the underlying Map.
-    // This means that we can only create new EnumerableMaps for types that fit in bytes32.
-
-    /**
-     * @dev Query for a nonexistent map key.
-     */
-    error EnumerableMapNonexistentKey(bytes32 key);
+    // To implement this library for multiple types with as little code
+    // repetition as possible, we write it in terms of a generic Map type with
+    // bytes32 keys and values.
+    // The Map implementation uses private functions, and user-facing
+    // implementations (such as Uint256ToAddressMap) are just wrappers around
+    // the underlying Map.
+    // This means that we can only create new EnumerableMaps for types that fit
+    // in bytes32.
 
     struct Bytes32ToBytes32Map {
         // Storage of keys
         EnumerableSet.Bytes32Set _keys;
-        mapping(bytes32 key => bytes32) _values;
+        mapping(bytes32 => bytes32) _values;
     }
 
     /**
@@ -137,9 +136,23 @@ library EnumerableMap {
      */
     function get(Bytes32ToBytes32Map storage map, bytes32 key) internal view returns (bytes32) {
         bytes32 value = map._values[key];
-        if (value == 0 && !contains(map, key)) {
-            revert EnumerableMapNonexistentKey(key);
-        }
+        require(value != 0 || contains(map, key), "EnumerableMap: nonexistent key");
+        return value;
+    }
+
+    /**
+     * @dev Same as {get}, with a custom error message when `key` is not in the map.
+     *
+     * CAUTION: This function is deprecated because it requires allocating memory for the error
+     * message unnecessarily. For custom revert reasons use {tryGet}.
+     */
+    function get(
+        Bytes32ToBytes32Map storage map,
+        bytes32 key,
+        string memory errorMessage
+    ) internal view returns (bytes32) {
+        bytes32 value = map._values[key];
+        require(value != 0 || contains(map, key), errorMessage);
         return value;
     }
 
@@ -227,6 +240,16 @@ library EnumerableMap {
      */
     function get(UintToUintMap storage map, uint256 key) internal view returns (uint256) {
         return uint256(get(map._inner, bytes32(key)));
+    }
+
+    /**
+     * @dev Same as {get}, with a custom error message when `key` is not in the map.
+     *
+     * CAUTION: This function is deprecated because it requires allocating memory for the error
+     * message unnecessarily. For custom revert reasons use {tryGet}.
+     */
+    function get(UintToUintMap storage map, uint256 key, string memory errorMessage) internal view returns (uint256) {
+        return uint256(get(map._inner, bytes32(key), errorMessage));
     }
 
     /**
@@ -324,6 +347,20 @@ library EnumerableMap {
     }
 
     /**
+     * @dev Same as {get}, with a custom error message when `key` is not in the map.
+     *
+     * CAUTION: This function is deprecated because it requires allocating memory for the error
+     * message unnecessarily. For custom revert reasons use {tryGet}.
+     */
+    function get(
+        UintToAddressMap storage map,
+        uint256 key,
+        string memory errorMessage
+    ) internal view returns (address) {
+        return address(uint160(uint256(get(map._inner, bytes32(key), errorMessage))));
+    }
+
+    /**
      * @dev Return the an array containing all the keys
      *
      * WARNING: This operation will copy the entire storage to memory, which can be quite expensive. This is designed
@@ -418,6 +455,20 @@ library EnumerableMap {
     }
 
     /**
+     * @dev Same as {get}, with a custom error message when `key` is not in the map.
+     *
+     * CAUTION: This function is deprecated because it requires allocating memory for the error
+     * message unnecessarily. For custom revert reasons use {tryGet}.
+     */
+    function get(
+        AddressToUintMap storage map,
+        address key,
+        string memory errorMessage
+    ) internal view returns (uint256) {
+        return uint256(get(map._inner, bytes32(uint256(uint160(key))), errorMessage));
+    }
+
+    /**
      * @dev Return the an array containing all the keys
      *
      * WARNING: This operation will copy the entire storage to memory, which can be quite expensive. This is designed
@@ -509,6 +560,20 @@ library EnumerableMap {
      */
     function get(Bytes32ToUintMap storage map, bytes32 key) internal view returns (uint256) {
         return uint256(get(map._inner, key));
+    }
+
+    /**
+     * @dev Same as {get}, with a custom error message when `key` is not in the map.
+     *
+     * CAUTION: This function is deprecated because it requires allocating memory for the error
+     * message unnecessarily. For custom revert reasons use {tryGet}.
+     */
+    function get(
+        Bytes32ToUintMap storage map,
+        bytes32 key,
+        string memory errorMessage
+    ) internal view returns (uint256) {
+        return uint256(get(map._inner, key, errorMessage));
     }
 
     /**

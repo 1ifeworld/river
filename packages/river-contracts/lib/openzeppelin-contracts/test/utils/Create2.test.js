@@ -1,14 +1,10 @@
-const { ethers } = require('hardhat');
-const { expect } = require('chai');
 const { balance, ether, expectEvent, expectRevert, send } = require('@openzeppelin/test-helpers');
-const { expectRevertCustomError } = require('../helpers/customError');
+const { computeCreate2Address } = require('../helpers/create2');
+const { expect } = require('chai');
 
 const Create2 = artifacts.require('$Create2');
 const VestingWallet = artifacts.require('VestingWallet');
-// This should be a contract that:
-// - has no constructor arguments
-// - has no immutable variable populated during construction
-const ConstructorLessContract = Create2;
+const ERC1820Implementer = artifacts.require('$ERC1820Implementer');
 
 contract('Create2', function (accounts) {
   const [deployerAccount, other] = accounts;
@@ -26,11 +22,7 @@ contract('Create2', function (accounts) {
   describe('computeAddress', function () {
     it('computes the correct contract address', async function () {
       const onChainComputed = await this.factory.$computeAddress(saltHex, web3.utils.keccak256(constructorByteCode));
-      const offChainComputed = ethers.getCreate2Address(
-        this.factory.address,
-        saltHex,
-        ethers.keccak256(constructorByteCode),
-      );
+      const offChainComputed = computeCreate2Address(saltHex, constructorByteCode, this.factory.address);
       expect(onChainComputed).to.equal(offChainComputed);
     });
 
@@ -40,44 +32,30 @@ contract('Create2', function (accounts) {
         web3.utils.keccak256(constructorByteCode),
         deployerAccount,
       );
-      const offChainComputed = ethers.getCreate2Address(
-        deployerAccount,
-        saltHex,
-        ethers.keccak256(constructorByteCode),
-      );
+      const offChainComputed = computeCreate2Address(saltHex, constructorByteCode, deployerAccount);
       expect(onChainComputed).to.equal(offChainComputed);
     });
   });
 
   describe('deploy', function () {
-    it('deploys a contract without constructor', async function () {
-      const offChainComputed = ethers.getCreate2Address(
-        this.factory.address,
-        saltHex,
-        ethers.keccak256(ConstructorLessContract.bytecode),
-      );
+    it('deploys a ERC1820Implementer from inline assembly code', async function () {
+      const offChainComputed = computeCreate2Address(saltHex, ERC1820Implementer.bytecode, this.factory.address);
 
-      expectEvent(await this.factory.$deploy(0, saltHex, ConstructorLessContract.bytecode), 'return$deploy', {
+      expectEvent(await this.factory.$deploy(0, saltHex, ERC1820Implementer.bytecode), 'return$deploy', {
         addr: offChainComputed,
       });
 
-      expect(ConstructorLessContract.bytecode).to.include((await web3.eth.getCode(offChainComputed)).slice(2));
+      expect(ERC1820Implementer.bytecode).to.include((await web3.eth.getCode(offChainComputed)).slice(2));
     });
 
     it('deploys a contract with constructor arguments', async function () {
-      const offChainComputed = ethers.getCreate2Address(
-        this.factory.address,
-        saltHex,
-        ethers.keccak256(constructorByteCode),
-      );
+      const offChainComputed = computeCreate2Address(saltHex, constructorByteCode, this.factory.address);
 
       expectEvent(await this.factory.$deploy(0, saltHex, constructorByteCode), 'return$deploy', {
         addr: offChainComputed,
       });
 
-      const instance = await VestingWallet.at(offChainComputed);
-
-      expect(await instance.owner()).to.be.equal(other);
+      expect(await VestingWallet.at(offChainComputed).then(instance => instance.beneficiary())).to.be.equal(other);
     });
 
     it('deploys a contract with funds deposited in the factory', async function () {
@@ -85,11 +63,7 @@ contract('Create2', function (accounts) {
       await send.ether(deployerAccount, this.factory.address, deposit);
       expect(await balance.current(this.factory.address)).to.be.bignumber.equal(deposit);
 
-      const offChainComputed = ethers.getCreate2Address(
-        this.factory.address,
-        saltHex,
-        ethers.keccak256(constructorByteCode),
-      );
+      const offChainComputed = computeCreate2Address(saltHex, constructorByteCode, this.factory.address);
 
       expectEvent(await this.factory.$deploy(deposit, saltHex, constructorByteCode), 'return$deploy', {
         addr: offChainComputed,
@@ -101,22 +75,15 @@ contract('Create2', function (accounts) {
     it('fails deploying a contract in an existent address', async function () {
       expectEvent(await this.factory.$deploy(0, saltHex, constructorByteCode), 'return$deploy');
 
-      // TODO: Make sure it actually throws "Create2FailedDeployment".
-      // For some unknown reason, the revert reason sometimes return:
-      // `revert with unrecognized return data or custom error`
-      await expectRevert.unspecified(this.factory.$deploy(0, saltHex, constructorByteCode));
+      await expectRevert(this.factory.$deploy(0, saltHex, constructorByteCode), 'Create2: Failed on deploy');
     });
 
     it('fails deploying a contract if the bytecode length is zero', async function () {
-      await expectRevertCustomError(this.factory.$deploy(0, saltHex, '0x'), 'Create2EmptyBytecode', []);
+      await expectRevert(this.factory.$deploy(0, saltHex, '0x'), 'Create2: bytecode length is zero');
     });
 
     it('fails deploying a contract if factory contract does not have sufficient balance', async function () {
-      await expectRevertCustomError(
-        this.factory.$deploy(1, saltHex, constructorByteCode),
-        'Create2InsufficientBalance',
-        [0, 1],
-      );
+      await expectRevert(this.factory.$deploy(1, saltHex, constructorByteCode), 'Create2: insufficient balance');
     });
   });
 });

@@ -1,25 +1,23 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.0;
 
-import {IERC721Receiver} from "../../token/ERC721/IERC721Receiver.sol";
+import "../../token/ERC721/IERC721Receiver.sol";
 
 contract ERC721ReceiverMock is IERC721Receiver {
-    enum RevertType {
+    enum Error {
         None,
-        RevertWithoutMessage,
         RevertWithMessage,
-        RevertWithCustomError,
+        RevertWithoutMessage,
         Panic
     }
 
     bytes4 private immutable _retval;
-    RevertType private immutable _error;
+    Error private immutable _error;
 
     event Received(address operator, address from, uint256 tokenId, bytes data, uint256 gas);
-    error CustomError(bytes4);
 
-    constructor(bytes4 retval, RevertType error) {
+    constructor(bytes4 retval, Error error) {
         _retval = retval;
         _error = error;
     }
@@ -29,18 +27,15 @@ contract ERC721ReceiverMock is IERC721Receiver {
         address from,
         uint256 tokenId,
         bytes memory data
-    ) public returns (bytes4) {
-        if (_error == RevertType.RevertWithoutMessage) {
-            revert();
-        } else if (_error == RevertType.RevertWithMessage) {
+    ) public override returns (bytes4) {
+        if (_error == Error.RevertWithMessage) {
             revert("ERC721ReceiverMock: reverting");
-        } else if (_error == RevertType.RevertWithCustomError) {
-            revert CustomError(_retval);
-        } else if (_error == RevertType.Panic) {
+        } else if (_error == Error.RevertWithoutMessage) {
+            revert();
+        } else if (_error == Error.Panic) {
             uint256 a = uint256(0) / uint256(0);
             a;
         }
-
         emit Received(operator, from, tokenId, data, gasleft());
         return _retval;
     }

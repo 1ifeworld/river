@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
 
-import {DoubleEndedQueue} from "../patched/utils/structs/DoubleEndedQueue.sol";
+pragma solidity ^0.8.0;
+
+import "../patched/utils/structs/DoubleEndedQueue.sol";
 
 contract DoubleEndedQueueHarness {
     using DoubleEndedQueue for DoubleEndedQueue.Bytes32Deque;
@@ -28,11 +29,11 @@ contract DoubleEndedQueueHarness {
         _deque.clear();
     }
 
-    function begin() external view returns (uint128) {
+    function begin() external view returns (int128) {
         return _deque._begin;
     }
 
-    function end() external view returns (uint128) {
+    function end() external view returns (int128) {
         return _deque._end;
     }
 

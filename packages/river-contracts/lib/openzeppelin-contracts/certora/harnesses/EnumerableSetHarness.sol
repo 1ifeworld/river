@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.0;
 
-import {EnumerableSet} from "../patched/utils/structs/EnumerableSet.sol";
+import "../patched/utils/structs/EnumerableSet.sol";
 
 contract EnumerableSetHarness {
     using EnumerableSet for EnumerableSet.Bytes32Set;

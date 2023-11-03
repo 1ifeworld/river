@@ -1,7 +1,9 @@
-const { ethers } = require('hardhat');
+const ethSigUtil = require('eth-sig-util');
+const Wallet = require('ethereumjs-wallet').default;
+
 const { getDomain, domainType, domainSeparator, hashTypedData } = require('../../helpers/eip712');
 const { getChainId } = require('../../helpers/chainid');
-const { mapValues } = require('../../helpers/iterate');
+const { mapValues } = require('../../helpers/map-values');
 
 const EIP712Verifier = artifacts.require('$EIP712Verifier');
 const Clones = artifacts.require('$Clones');
@@ -78,26 +80,23 @@ contract('EIP712', function (accounts) {
           contents: 'very interesting',
         };
 
-        const types = {
-          Mail: [
-            { name: 'to', type: 'address' },
-            { name: 'contents', type: 'string' },
-          ],
+        const data = {
+          types: {
+            EIP712Domain: this.domainType,
+            Mail: [
+              { name: 'to', type: 'address' },
+              { name: 'contents', type: 'string' },
+            ],
+          },
+          domain: this.domain,
+          primaryType: 'Mail',
+          message,
         };
 
-        const signer = ethers.Wallet.createRandom();
-        const address = await signer.getAddress();
-        const signature = await signer.signTypedData(this.domain, types, message);
+        const wallet = Wallet.generate();
+        const signature = ethSigUtil.signTypedMessage(wallet.getPrivateKey(), { data });
 
-        await this.eip712.verify(signature, address, message.to, message.contents);
-      });
-
-      it('name', async function () {
-        expect(await this.eip712.$_EIP712Name()).to.be.equal(name);
-      });
-
-      it('version', async function () {
-        expect(await this.eip712.$_EIP712Version()).to.be.equal(version);
+        await this.eip712.verify(signature, wallet.getAddressString(), message.to, message.contents);
       });
     });
   }

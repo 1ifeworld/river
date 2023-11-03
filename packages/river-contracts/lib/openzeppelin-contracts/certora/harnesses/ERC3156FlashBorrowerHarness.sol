@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 
-import {IERC3156FlashBorrower} from "../patched/interfaces/IERC3156FlashBorrower.sol";
+import "../patched/interfaces/IERC3156FlashBorrower.sol";
 
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.0;
 
 contract ERC3156FlashBorrowerHarness is IERC3156FlashBorrower {
     bytes32 somethingToReturn;

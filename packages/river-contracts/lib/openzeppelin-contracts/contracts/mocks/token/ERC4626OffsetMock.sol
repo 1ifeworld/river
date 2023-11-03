@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.0;
 
-import {ERC4626} from "../../token/ERC20/extensions/ERC4626.sol";
+import "../../token/ERC20/extensions/ERC4626.sol";
 
 abstract contract ERC4626OffsetMock is ERC4626 {
     uint8 private immutable _offset;

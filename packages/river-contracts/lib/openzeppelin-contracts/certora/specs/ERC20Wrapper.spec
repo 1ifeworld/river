@@ -1,29 +1,31 @@
-import "helpers/helpers.spec";
-import "ERC20.spec";
+import "helpers/helpers.spec"
+import "ERC20.spec"
 
 methods {
-    function underlying()                       external returns(address) envfree;
-    function underlyingTotalSupply()            external returns(uint256) envfree;
-    function underlyingBalanceOf(address)       external returns(uint256) envfree;
-    function underlyingAllowanceToThis(address) external returns(uint256) envfree;
+    underlying()                       returns(address) envfree
+    underlyingTotalSupply()            returns(uint256) envfree
+    underlyingBalanceOf(address)       returns(uint256) envfree
+    underlyingAllowanceToThis(address) returns(uint256) envfree
 
-    function depositFor(address, uint256)       external returns(bool);
-    function withdrawTo(address, uint256)       external returns(bool);
-    function recover(address)                   external returns(uint256);
+    depositFor(address, uint256)       returns(bool)
+    withdrawTo(address, uint256)       returns(bool)
+    recover(address)                   returns(uint256)
 }
 
-use invariant totalSupplyIsSumOfBalances;
+use invariant totalSupplyIsSumOfBalances
 
 /*
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
 │ Helper: consequence of `totalSupplyIsSumOfBalances` applied to underlying                                           │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 */
-definition underlyingBalancesLowerThanUnderlyingSupply(address a) returns bool =
-    underlyingBalanceOf(a) <= underlyingTotalSupply();
+function underlyingBalancesLowerThanUnderlyingSupply(address a) returns bool {
+    return underlyingBalanceOf(a) <= underlyingTotalSupply();
+}
 
-definition sumOfUnderlyingBalancesLowerThanUnderlyingSupply(address a, address b) returns bool =
-    a != b => underlyingBalanceOf(a) + underlyingBalanceOf(b) <= to_mathint(underlyingTotalSupply());
+function sumOfUnderlyingBalancesLowerThanUnderlyingSupply(address a, address b) returns bool {
+    return a != b => underlyingBalanceOf(a) + underlyingBalanceOf(b) <= underlyingTotalSupply();
+}
 
 /*
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
@@ -45,7 +47,7 @@ invariant totalSupplyIsSmallerThanUnderlyingBalance()
     }
 
 invariant noSelfWrap()
-    currentContract != underlying();
+    currentContract != underlying()
 
 /*
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
@@ -83,7 +85,6 @@ rule depositFor(env e) {
     assert success <=> (
         sender   != currentContract               && // invalid sender
         sender   != 0                             && // invalid sender
-        receiver != currentContract               && // invalid receiver
         receiver != 0                             && // invalid receiver
         amount   <= senderUnderlyingBalanceBefore && // deposit doesn't exceed balance
         amount   <= senderUnderlyingAllowanceBefore  // deposit doesn't exceed allowance
@@ -91,10 +92,10 @@ rule depositFor(env e) {
 
     // effects
     assert success => (
-        to_mathint(balanceOf(receiver)) == balanceBefore + amount &&
-        to_mathint(totalSupply()) == supplyBefore + amount &&
-        to_mathint(underlyingBalanceOf(currentContract)) == wrapperUnderlyingBalanceBefore + amount &&
-        to_mathint(underlyingBalanceOf(sender)) == senderUnderlyingBalanceBefore - amount
+        balanceOf(receiver) == balanceBefore + amount &&
+        totalSupply() == supplyBefore + amount &&
+        underlyingBalanceOf(currentContract) == wrapperUnderlyingBalanceBefore + amount &&
+        underlyingBalanceOf(sender) == senderUnderlyingBalanceBefore - amount
     );
 
     // no side effect
@@ -136,18 +137,17 @@ rule withdrawTo(env e) {
 
     // liveness
     assert success <=> (
-        sender   != 0               && // invalid sender
-        receiver != currentContract && // invalid receiver
-        receiver != 0               && // invalid receiver
-        amount   <= balanceBefore      // withdraw doesn't exceed balance
+        sender   != 0          && // invalid sender
+        receiver != 0          && // invalid receiver
+        amount   <= balanceBefore // withdraw doesn't exceed balance
     );
 
     // effects
     assert success => (
-        to_mathint(balanceOf(sender)) == balanceBefore - amount &&
-        to_mathint(totalSupply()) == supplyBefore - amount &&
-        to_mathint(underlyingBalanceOf(currentContract)) == wrapperUnderlyingBalanceBefore - (currentContract != receiver ? amount : 0) &&
-        to_mathint(underlyingBalanceOf(receiver)) == receiverUnderlyingBalanceBefore + (currentContract != receiver ? amount : 0)
+        balanceOf(sender) == balanceBefore - amount &&
+        totalSupply() == supplyBefore - amount &&
+        underlyingBalanceOf(currentContract) == wrapperUnderlyingBalanceBefore - (currentContract != receiver ? amount : 0) &&
+        underlyingBalanceOf(receiver) == receiverUnderlyingBalanceBefore + (currentContract != receiver ? amount : 0)
     );
 
     // no side effect
@@ -172,7 +172,7 @@ rule recover(env e) {
     requireInvariant totalSupplyIsSumOfBalances;
     requireInvariant totalSupplyIsSmallerThanUnderlyingBalance;
 
-    mathint value                        = underlyingBalanceOf(currentContract) - totalSupply();
+    uint256 value                        = underlyingBalanceOf(currentContract) - totalSupply();
     uint256 supplyBefore                 = totalSupply();
     uint256 balanceBefore                = balanceOf(receiver);
 
@@ -187,8 +187,8 @@ rule recover(env e) {
 
     // effect
     assert success => (
-        to_mathint(balanceOf(receiver)) == balanceBefore + value &&
-        to_mathint(totalSupply()) == supplyBefore + value &&
+        balanceOf(receiver) == balanceBefore + value &&
+        totalSupply() == supplyBefore + value &&
         totalSupply() == underlyingBalanceOf(currentContract)
     );
 

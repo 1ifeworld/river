@@ -1,4 +1,5 @@
-const { ethers } = require('ethers');
+const ethSigUtil = require('eth-sig-util');
+const keccak256 = require('keccak256');
 
 const EIP712Domain = [
   { name: 'name', type: 'string' },
@@ -16,6 +17,14 @@ const Permit = [
   { name: 'deadline', type: 'uint256' },
 ];
 
+function bufferToHexString(buffer) {
+  return '0x' + buffer.toString('hex');
+}
+
+function hexStringToBuffer(hexstr) {
+  return Buffer.from(hexstr.replace(/^0x/, ''), 'hex');
+}
+
 async function getDomain(contract) {
   const { fields, name, version, chainId, verifyingContract, salt, extensions } = await contract.eip712Domain();
 
@@ -23,15 +32,7 @@ async function getDomain(contract) {
     throw Error('Extensions not implemented');
   }
 
-  const domain = {
-    name,
-    version,
-    // TODO: remove check when contracts are all migrated to ethers
-    chainId: web3.utils.isBN(chainId) ? chainId.toNumber() : chainId,
-    verifyingContract,
-    salt,
-  };
-
+  const domain = { name, version, chainId, verifyingContract, salt };
   for (const [i, { name }] of EIP712Domain.entries()) {
     if (!(fields & (1 << i))) {
       delete domain[name];
@@ -45,9 +46,15 @@ function domainType(domain) {
   return EIP712Domain.filter(({ name }) => domain[name] !== undefined);
 }
 
+function domainSeparator(domain) {
+  return bufferToHexString(
+    ethSigUtil.TypedDataUtils.hashStruct('EIP712Domain', domain, { EIP712Domain: domainType(domain) }),
+  );
+}
+
 function hashTypedData(domain, structHash) {
-  return ethers.keccak256(
-    Buffer.concat(['0x1901', ethers.TypedDataEncoder.hashDomain(domain), structHash].map(ethers.toBeArray)),
+  return bufferToHexString(
+    keccak256(Buffer.concat(['0x1901', domainSeparator(domain), structHash].map(str => hexStringToBuffer(str)))),
   );
 }
 
@@ -55,6 +62,6 @@ module.exports = {
   Permit,
   getDomain,
   domainType,
-  domainSeparator: ethers.TypedDataEncoder.hashDomain,
+  domainSeparator,
   hashTypedData,
 };

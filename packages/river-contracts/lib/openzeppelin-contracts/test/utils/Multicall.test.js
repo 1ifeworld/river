@@ -1,5 +1,4 @@
-const { BN } = require('@openzeppelin/test-helpers');
-const { expectRevertCustomError } = require('../helpers/customError');
+const { BN, expectRevert } = require('@openzeppelin/test-helpers');
 
 const ERC20MulticallMock = artifacts.require('$ERC20MulticallMock');
 
@@ -51,7 +50,7 @@ contract('Multicall', function (accounts) {
       { from: deployer },
     );
 
-    await expectRevertCustomError(call, 'ERC20InsufficientBalance', [deployer, 0, amount]);
+    await expectRevert(call, 'ERC20: transfer amount exceeds balance');
     expect(await this.multicallToken.balanceOf(alice)).to.be.bignumber.equal(new BN('0'));
   });
 
@@ -64,6 +63,6 @@ contract('Multicall', function (accounts) {
       { from: deployer },
     );
 
-    await expectRevertCustomError(call, 'ERC20InsufficientBalance', [deployer, 0, amount]);
+    await expectRevert(call, 'ERC20: transfer amount exceeds balance');
   });
 });

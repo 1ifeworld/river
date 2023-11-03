@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.0;
 
-import {Context} from "../utils/Context.sol";
+import "../utils/Context.sol";
 
 contract ContextMock is Context {
     event Sender(address sender);

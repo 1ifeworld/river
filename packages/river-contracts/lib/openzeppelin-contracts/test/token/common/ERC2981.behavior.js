@@ -1,9 +1,8 @@
-const { BN, constants } = require('@openzeppelin/test-helpers');
+const { BN, constants, expectRevert } = require('@openzeppelin/test-helpers');
 const { expect } = require('chai');
 const { ZERO_ADDRESS } = constants;
 
 const { shouldSupportInterfaces } = require('../../utils/introspection/SupportsInterface.behavior');
-const { expectRevertCustomError } = require('../../helpers/customError');
 
 function shouldBehaveLikeERC2981() {
   const royaltyFraction = new BN('10');
@@ -61,18 +60,11 @@ function shouldBehaveLikeERC2981() {
     });
 
     it('reverts if invalid parameters', async function () {
-      const royaltyDenominator = await this.token.$_feeDenominator();
-      await expectRevertCustomError(
-        this.token.$_setDefaultRoyalty(ZERO_ADDRESS, royaltyFraction),
-        'ERC2981InvalidDefaultRoyaltyReceiver',
-        [ZERO_ADDRESS],
-      );
+      await expectRevert(this.token.$_setDefaultRoyalty(ZERO_ADDRESS, royaltyFraction), 'ERC2981: invalid receiver');
 
-      const anotherRoyaltyFraction = new BN('11000');
-      await expectRevertCustomError(
-        this.token.$_setDefaultRoyalty(this.account1, anotherRoyaltyFraction),
-        'ERC2981InvalidDefaultRoyalty',
-        [anotherRoyaltyFraction, royaltyDenominator],
+      await expectRevert(
+        this.token.$_setDefaultRoyalty(this.account1, new BN('11000')),
+        'ERC2981: royalty fee will exceed salePrice',
       );
     });
   });
@@ -108,22 +100,18 @@ function shouldBehaveLikeERC2981() {
       const token2Info = await this.token.royaltyInfo(this.tokenId2, this.salePrice);
 
       // must be different even at the same this.salePrice
-      expect(token1Info[1]).to.not.be.bignumber.equal(token2Info[1]);
+      expect(token1Info[1]).to.not.be.equal(token2Info.royaltyFraction);
     });
 
     it('reverts if invalid parameters', async function () {
-      const royaltyDenominator = await this.token.$_feeDenominator();
-      await expectRevertCustomError(
+      await expectRevert(
         this.token.$_setTokenRoyalty(this.tokenId1, ZERO_ADDRESS, royaltyFraction),
-        'ERC2981InvalidTokenRoyaltyReceiver',
-        [this.tokenId1.toString(), ZERO_ADDRESS],
+        'ERC2981: Invalid parameters',
       );
 
-      const anotherRoyaltyFraction = new BN('11000');
-      await expectRevertCustomError(
-        this.token.$_setTokenRoyalty(this.tokenId1, this.account1, anotherRoyaltyFraction),
-        'ERC2981InvalidTokenRoyalty',
-        [this.tokenId1.toString(), anotherRoyaltyFraction, royaltyDenominator],
+      await expectRevert(
+        this.token.$_setTokenRoyalty(this.tokenId1, this.account1, new BN('11000')),
+        'ERC2981: royalty fee will exceed salePrice',
       );
     });
 

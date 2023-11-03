@@ -35,7 +35,7 @@ for (const [file, template] of Object.entries({
   'utils/math/SafeCast.sol': './templates/SafeCast.js',
   'utils/structs/EnumerableSet.sol': './templates/EnumerableSet.js',
   'utils/structs/EnumerableMap.sol': './templates/EnumerableMap.js',
-  'utils/structs/Checkpoints.sol': './templates/Checkpoints.js',
+  'utils/Checkpoints.sol': './templates/Checkpoints.js',
   'utils/StorageSlot.sol': './templates/StorageSlot.js',
 })) {
   generateFromTemplate(file, template, './contracts/');
@@ -43,7 +43,7 @@ for (const [file, template] of Object.entries({
 
 // Tests
 for (const [file, template] of Object.entries({
-  'utils/structs/Checkpoints.t.sol': './templates/Checkpoints.t.js',
+  'utils/Checkpoints.t.sol': './templates/Checkpoints.t.js',
 })) {
   generateFromTemplate(file, template, './test/');
 }

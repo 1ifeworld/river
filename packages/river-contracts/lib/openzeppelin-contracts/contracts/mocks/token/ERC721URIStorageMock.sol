@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.0;
 
-import {ERC721URIStorage} from "../../token/ERC721/extensions/ERC721URIStorage.sol";
+import "../../token/ERC721/extensions/ERC721URIStorage.sol";
 
 abstract contract ERC721URIStorageMock is ERC721URIStorage {
     string private _baseTokenURI;

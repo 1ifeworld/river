@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - next-v*
       - release-v*
   pull_request: {}
   workflow_dispatch: {}
@@ -20,7 +19,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
       - name: Set up environment
         uses: ./.github/actions/setup
       - run: npm run lint
@@ -31,11 +30,9 @@ jobs:
       FORCE_COLOR: 1
       GAS: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
       - name: Set up environment
         uses: ./.github/actions/setup
-      - name: Compile contracts # TODO: Remove after migrating tests to ethers
-        run: npm run compile
       - name: Run tests and generate gas report
         run: npm run test
       - name: Check linearisation of the inheritance graph
@@ -44,7 +41,6 @@ jobs:
         run: npm run test:generation
       - name: Compare gas costs
         uses: ./.github/actions/gas-compare
-        if: github.base_ref == 'master'
         with:
           token: ${{ github.token }}
 
@@ -53,51 +49,42 @@ jobs:
     env:
       FORCE_COLOR: 1
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0 # Include history so patch conflicts are resolved automatically
       - name: Set up environment
         uses: ./.github/actions/setup
-      - name: Copy non-upgradeable contracts as dependency
-        run: |
-          mkdir -p lib/openzeppelin-contracts
-          cp -rnT contracts lib/openzeppelin-contracts/contracts
       - name: Transpile to upgradeable
         run: bash scripts/upgradeable/transpile.sh
-      - name: Compile contracts # TODO: Remove after migrating tests to ethers
-        run: npm run compile
       - name: Run tests
         run: npm run test
       - name: Check linearisation of the inheritance graph
         run: npm run test:inheritance
       - name: Check storage layout
         uses: ./.github/actions/storage-layout
-        if: github.base_ref == 'master'
-        continue-on-error: ${{ contains(github.event.pull_request.labels.*.name, 'breaking change') }}
         with:
           token: ${{ github.token }}
 
   tests-foundry:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
         with:
           submodules: recursive
-      - name: Set up environment
-        uses: ./.github/actions/setup
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
       - name: Run tests
         run: forge test -vv
 
   coverage:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
       - name: Set up environment
         uses: ./.github/actions/setup
-      - name: Compile contracts # TODO: Remove after migrating tests to ethers
-        run: npm run compile
-      - name: Run coverage
-        run: npm run coverage
+      - run: npm run coverage
       - uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -105,7 +92,7 @@ jobs:
   slither:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
       - name: Set up environment
         uses: ./.github/actions/setup
       - run: rm foundry.toml
@@ -116,10 +103,9 @@ jobs:
   codespell:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
       - name: Run CodeSpell
-        uses: codespell-project/actions-codespell@v2.0
+        uses: codespell-project/actions-codespell@v1.0
         with:
-          check_hidden: true
           check_filenames: true
           skip: package-lock.json,*.pdf

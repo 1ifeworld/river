@@ -1,8 +1,7 @@
-const { expectEvent } = require('@openzeppelin/test-helpers');
+const { expectEvent, expectRevert } = require('@openzeppelin/test-helpers');
 const { expect } = require('chai');
 
 const zip = require('lodash.zip');
-const { expectRevertCustomError } = require('../../helpers/customError');
 
 function shouldBehaveLikeMap(keys, values, zeroValue, methods, events) {
   const [keyA, keyB, keyC] = keys;
@@ -151,10 +150,18 @@ function shouldBehaveLikeMap(keys, values, zeroValue, methods, events) {
         expect(await methods.get(this.map, keyA).then(r => r.toString())).to.be.equal(valueA.toString());
       });
       it('missing value', async function () {
-        const key = web3.utils.toHex(keyB);
-        await expectRevertCustomError(methods.get(this.map, keyB), 'EnumerableMapNonexistentKey', [
-          key.length == 66 ? key : web3.utils.padLeft(key, 64, '0'),
-        ]);
+        await expectRevert(methods.get(this.map, keyB), 'EnumerableMap: nonexistent key');
+      });
+    });
+
+    describe('get with message', function () {
+      it('existing value', async function () {
+        expect(await methods.getWithMessage(this.map, keyA, 'custom error string').then(r => r.toString())).to.be.equal(
+          valueA.toString(),
+        );
+      });
+      it('missing value', async function () {
+        await expectRevert(methods.getWithMessage(this.map, keyB, 'custom error string'), 'custom error string');
       });
     });
 

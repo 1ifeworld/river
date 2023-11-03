@@ -1,36 +1,36 @@
-import "./IERC5313.spec";
+import "./IERC5313.spec"
 
 methods {
     // === View ==
     
     // Default Admin
-    function defaultAdmin() external returns(address) envfree;
-    function pendingDefaultAdmin() external returns(address, uint48) envfree;
+    defaultAdmin() returns(address) envfree
+    pendingDefaultAdmin() returns(address, uint48) envfree
     
     // Default Admin Delay
-    function defaultAdminDelay() external returns(uint48);
-    function pendingDefaultAdminDelay() external returns(uint48, uint48);
-    function defaultAdminDelayIncreaseWait() external returns(uint48) envfree;
+    defaultAdminDelay() returns(uint48)
+    pendingDefaultAdminDelay() returns(uint48, uint48)
+    defaultAdminDelayIncreaseWait() returns(uint48) envfree
     
     // === Mutations ==
 
     // Default Admin
-    function beginDefaultAdminTransfer(address) external;
-    function cancelDefaultAdminTransfer() external;
-    function acceptDefaultAdminTransfer() external;
+    beginDefaultAdminTransfer(address)
+    cancelDefaultAdminTransfer()
+    acceptDefaultAdminTransfer()
 
     // Default Admin Delay
-    function changeDefaultAdminDelay(uint48) external;
-    function rollbackDefaultAdminDelay() external;
+    changeDefaultAdminDelay(uint48)
+    rollbackDefaultAdminDelay()
 
     // == FV ==
     
     // Default Admin
-    function pendingDefaultAdmin_() external returns (address) envfree;
-    function pendingDefaultAdminSchedule_() external returns (uint48) envfree;
+    pendingDefaultAdmin_() returns (address) envfree
+    pendingDefaultAdminSchedule_() returns (uint48) envfree
     
     // Default Admin Delay
-    function pendingDelay_() external returns (uint48);
-    function pendingDelaySchedule_() external returns (uint48);
-    function delayChangeWait_(uint48) external returns (uint48);
+    pendingDelay_() returns (uint48)
+    pendingDelaySchedule_() returns (uint48)
+    delayChangeWait_(uint48) returns (uint48)
 }

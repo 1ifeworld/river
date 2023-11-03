@@ -1,10 +1,67 @@
+const assert = require('assert');
 const format = require('../format-lines');
 const { range } = require('../../helpers');
 
 const LENGTHS = range(8, 256, 8).reverse(); // 248 → 8 (in steps of 8)
 
+// Returns the version of OpenZeppelin Contracts in which a particular function was introduced.
+// This is used in the docs for each function.
+const version = (selector, length) => {
+  switch (selector) {
+    case 'toUint(uint)': {
+      switch (length) {
+        case 8:
+        case 16:
+        case 32:
+        case 64:
+        case 128:
+          return '2.5';
+        case 96:
+        case 224:
+          return '4.2';
+        default:
+          assert(LENGTHS.includes(length));
+          return '4.7';
+      }
+    }
+    case 'toInt(int)': {
+      switch (length) {
+        case 8:
+        case 16:
+        case 32:
+        case 64:
+        case 128:
+          return '3.1';
+        default:
+          assert(LENGTHS.includes(length));
+          return '4.7';
+      }
+    }
+    case 'toUint(int)': {
+      switch (length) {
+        case 256:
+          return '3.0';
+        default:
+          assert(false);
+          return;
+      }
+    }
+    case 'toInt(uint)': {
+      switch (length) {
+        case 256:
+          return '3.0';
+        default:
+          assert(false);
+          return;
+      }
+    }
+    default:
+      assert(false);
+  }
+};
+
 const header = `\
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.0;
 
 /**
  * @dev Wrappers over Solidity's uintXX/intXX casting operators with added overflow
@@ -17,29 +74,10 @@ pragma solidity ^0.8.20;
  *
  * Using this library instead of the unchecked operations eliminates an entire
  * class of bugs, so it's recommended to use it always.
+ *
+ * Can be combined with {SafeMath} and {SignedSafeMath} to extend it to smaller types, by performing
+ * all math on \`uint256\` and \`int256\` and then downcasting.
  */
-`;
-
-const errors = `\
-  /**
-   * @dev Value doesn't fit in an uint of \`bits\` size.
-   */
-  error SafeCastOverflowedUintDowncast(uint8 bits, uint256 value);
-  
-  /**
-   * @dev An int value doesn't fit in an uint of \`bits\` size.
-   */
-  error SafeCastOverflowedIntToUint(int256 value);
-  
-  /**
-   * @dev Value doesn't fit in an int of \`bits\` size.
-   */
-  error SafeCastOverflowedIntDowncast(uint8 bits, int256 value);
-  
-  /**
-   * @dev An uint value doesn't fit in an int of \`bits\` size.
-   */
-  error SafeCastOverflowedUintToInt(uint256 value);
 `;
 
 const toUintDownCast = length => `\
@@ -52,11 +90,11 @@ const toUintDownCast = length => `\
  * Requirements:
  *
  * - input must fit into ${length} bits
+ *
+ * _Available since v${version('toUint(uint)', length)}._
  */
 function toUint${length}(uint256 value) internal pure returns (uint${length}) {
-    if (value > type(uint${length}).max) {
-      revert SafeCastOverflowedUintDowncast(${length}, value);
-    }
+    require(value <= type(uint${length}).max, "SafeCast: value doesn't fit in ${length} bits");
     return uint${length}(value);
 }
 `;
@@ -73,12 +111,12 @@ const toIntDownCast = length => `\
  * Requirements:
  *
  * - input must fit into ${length} bits
+ *
+ * _Available since v${version('toInt(int)', length)}._
  */
 function toInt${length}(int256 value) internal pure returns (int${length} downcasted) {
     downcasted = int${length}(value);
-    if (downcasted != value) {
-      revert SafeCastOverflowedIntDowncast(${length}, value);
-    }
+    require(downcasted == value, "SafeCast: value doesn't fit in ${length} bits");
 }
 `;
 /* eslint-enable max-len */
@@ -90,12 +128,12 @@ const toInt = length => `\
  * Requirements:
  *
  * - input must be less than or equal to maxInt${length}.
+ *
+ * _Available since v${version('toInt(uint)', length)}._
  */
 function toInt${length}(uint${length} value) internal pure returns (int${length}) {
     // Note: Unsafe cast below is okay because \`type(int${length}).max\` is guaranteed to be positive
-    if (value > uint${length}(type(int${length}).max)) {
-      revert SafeCastOverflowedUintToInt(value);
-    }
+    require(value <= uint${length}(type(int${length}).max), "SafeCast: value doesn't fit in an int${length}");
     return int${length}(value);
 }
 `;
@@ -107,11 +145,11 @@ const toUint = length => `\
  * Requirements:
  *
  * - input must be greater than or equal to 0.
+ *
+ * _Available since v${version('toUint(int)', length)}._
  */
 function toUint${length}(int${length} value) internal pure returns (uint${length}) {
-    if (value < 0) {
-      revert SafeCastOverflowedIntToUint(value);
-    }
+    require(value >= 0, "SafeCast: value must be positive");
     return uint${length}(value);
 }
 `;
@@ -120,7 +158,6 @@ function toUint${length}(int${length} value) internal pure returns (uint${length
 module.exports = format(
   header.trimEnd(),
   'library SafeCast {',
-  errors,
   [...LENGTHS.map(toUintDownCast), toUint(256), ...LENGTHS.map(toIntDownCast), toInt(256)],
   '}',
 );

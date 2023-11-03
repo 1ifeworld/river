@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.0;
 
-import {Initializable} from "../proxy/utils/Initializable.sol";
+import "../proxy/utils/Initializable.sol";
 
 /**
  * @title MigratableMockV1

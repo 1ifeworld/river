@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
-// OpenZeppelin Contracts (last updated v5.0.0) (utils/StorageSlot.sol)
+// OpenZeppelin Contracts (last updated v4.9.0) (utils/StorageSlot.sol)
 // This file was procedurally generated from scripts/generate/templates/StorageSlot.js.
 
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.0;
 
 /**
  * @dev Library for reading and writing primitive types to specific storage slots.
@@ -22,11 +22,14 @@ pragma solidity ^0.8.20;
  *     }
  *
  *     function _setImplementation(address newImplementation) internal {
- *         require(newImplementation.code.length > 0);
+ *         require(Address.isContract(newImplementation), "ERC1967: new implementation is not a contract");
  *         StorageSlot.getAddressSlot(_IMPLEMENTATION_SLOT).value = newImplementation;
  *     }
  * }
  * ```
+ *
+ * _Available since v4.1 for `address`, `bool`, `bytes32`, `uint256`._
+ * _Available since v4.9 for `string`, `bytes`._
  */
 library StorageSlot {
     struct AddressSlot {

@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.0;
 
-import {Test} from "forge-std/Test.sol";
+import "forge-std/Test.sol";
 
-import {ShortStrings, ShortString} from "@openzeppelin/contracts/utils/ShortStrings.sol";
+import "../../contracts/utils/ShortStrings.sol";
 
 contract ShortStringsTest is Test {
     string _fallback;

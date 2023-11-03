@@ -1,7 +1,5 @@
-const { expectEvent } = require('@openzeppelin/test-helpers');
+const { expectEvent, expectRevert } = require('@openzeppelin/test-helpers');
 const { expect } = require('chai');
-const { expectRevertCustomError } = require('../../helpers/customError');
-const { MAX_UINT64 } = require('../../helpers/constants');
 
 const InitializableMock = artifacts.require('InitializableMock');
 const ConstructorInitializableMock = artifacts.require('ConstructorInitializableMock');
@@ -42,13 +40,13 @@ contract('Initializable', function () {
       });
 
       it('initializer does not run again', async function () {
-        await expectRevertCustomError(this.contract.initialize(), 'InvalidInitialization', []);
+        await expectRevert(this.contract.initialize(), 'Initializable: contract is already initialized');
       });
     });
 
     describe('nested under an initializer', function () {
       it('initializer modifier reverts', async function () {
-        await expectRevertCustomError(this.contract.initializerNested(), 'InvalidInitialization', []);
+        await expectRevert(this.contract.initializerNested(), 'Initializable: contract is already initialized');
       });
 
       it('onlyInitializing modifier succeeds', async function () {
@@ -58,7 +56,7 @@ contract('Initializable', function () {
     });
 
     it('cannot call onlyInitializable function outside the scope of an initializable function', async function () {
-      await expectRevertCustomError(this.contract.initializeOnlyInitializing(), 'NotInitializing', []);
+      await expectRevert(this.contract.initializeOnlyInitializing(), 'Initializable: contract is not initializing');
     });
   });
 
@@ -100,9 +98,9 @@ contract('Initializable', function () {
 
     it('cannot nest reinitializers', async function () {
       expect(await this.contract.counter()).to.be.bignumber.equal('0');
-      await expectRevertCustomError(this.contract.nestedReinitialize(2, 2), 'InvalidInitialization', []);
-      await expectRevertCustomError(this.contract.nestedReinitialize(2, 3), 'InvalidInitialization', []);
-      await expectRevertCustomError(this.contract.nestedReinitialize(3, 2), 'InvalidInitialization', []);
+      await expectRevert(this.contract.nestedReinitialize(2, 2), 'Initializable: contract is already initialized');
+      await expectRevert(this.contract.nestedReinitialize(2, 3), 'Initializable: contract is already initialized');
+      await expectRevert(this.contract.nestedReinitialize(3, 2), 'Initializable: contract is already initialized');
     });
 
     it('can chain reinitializers', async function () {
@@ -121,18 +119,18 @@ contract('Initializable', function () {
     describe('contract locking', function () {
       it('prevents initialization', async function () {
         await this.contract.disableInitializers();
-        await expectRevertCustomError(this.contract.initialize(), 'InvalidInitialization', []);
+        await expectRevert(this.contract.initialize(), 'Initializable: contract is already initialized');
       });
 
       it('prevents re-initialization', async function () {
         await this.contract.disableInitializers();
-        await expectRevertCustomError(this.contract.reinitialize(255), 'InvalidInitialization', []);
+        await expectRevert(this.contract.reinitialize(255), 'Initializable: contract is already initialized');
       });
 
       it('can lock contract after initialization', async function () {
         await this.contract.initialize();
         await this.contract.disableInitializers();
-        await expectRevertCustomError(this.contract.reinitialize(255), 'InvalidInitialization', []);
+        await expectRevert(this.contract.reinitialize(255), 'Initializable: contract is already initialized');
       });
     });
   });
@@ -207,14 +205,14 @@ contract('Initializable', function () {
 
   describe('disabling initialization', function () {
     it('old and new patterns in bad sequence', async function () {
-      await expectRevertCustomError(DisableBad1.new(), 'InvalidInitialization', []);
-      await expectRevertCustomError(DisableBad2.new(), 'InvalidInitialization', []);
+      await expectRevert(DisableBad1.new(), 'Initializable: contract is already initialized');
+      await expectRevert(DisableBad2.new(), 'Initializable: contract is initializing');
     });
 
     it('old and new patterns in good sequence', async function () {
       const ok = await DisableOk.new();
       await expectEvent.inConstruction(ok, 'Initialized', { version: '1' });
-      await expectEvent.inConstruction(ok, 'Initialized', { version: MAX_UINT64 });
+      await expectEvent.inConstruction(ok, 'Initialized', { version: '255' });
     });
   });
 });
