@@ -1,11 +1,8 @@
 import { ponder } from '@/generated'
-import {hey} from "offchain-schema"
 
 ponder.on('IdRegistry:Register', async ({ event, context }) => {
   const { IdRegistry } = context.entities
   const { to, id, backup, data } = event.params
-
-  console.log(hey)
 
   await IdRegistry.create({
     id: `420/${to}/${id}`,

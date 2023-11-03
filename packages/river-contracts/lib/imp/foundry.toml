@@ -1,0 +1,18 @@
+[profile.default]
+src = 'src'
+out = 'out'
+libs = ['lib']
+solc_version = '0.8.21'
+optimizer = true
+optimizer_runs = 50000
+# via_ir = false
+evm_version = 'paris'
+fs_permissions = [{ access = "read", path = "./out"}, { access = "read", path = "./broadcast"}, { access = "read", path = "./"}]
+
+[rpc_endpoints]
+opMainnet = "${RPC_URL}"
+
+[etherscan]
+opMainnet = { key = "${ETHERSCAN_API_KEY}" }
+
+# See more config options https://github.com/foundry-rs/foundry/tree/master/config

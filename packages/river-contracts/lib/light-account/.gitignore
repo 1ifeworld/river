@@ -1,0 +1,7 @@
+# Foundry build and cache directories
+out/
+cache/
+.env
+
+broadcast/**/run-latest.json
+broadcast/**/dry-run/**/*

@@ -49,8 +49,8 @@ export const config: Config = {
     //   name: 'NodeRegistry',
     //   network: 'optimism-goerli',
     //   abi: './abis/NodeRegistry.json',
-    //   address: '0xa7E3142140983cc6DBBd27766492C0224CA77587',
-    //   startBlock: 13777523,
+    //   address: '0xd8Dbf7dC3746B968485164c05b5c11C78a2BFebc',
+    //   startBlock: 16774340,
     // },
 
     // {

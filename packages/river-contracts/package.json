@@ -1,12 +1,21 @@
 {
   "name": "river-contracts",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "devDependencies": {
+    "@types/prettier": "^2",
+    "@types/qrcode": "^1"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "envfile": "^6.18.0",
+    "ethers": "^5.7.1",
+    "prettier": "^2.8.8",
+    "qrcode": "^1.5.3",
+    "toml": "^3.0.0"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC"  
 }
