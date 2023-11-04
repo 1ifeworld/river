@@ -3156,6 +3156,47 @@
         }
       }
     },
+    "src/types/publication/PublicationMessageTypes.sol": {
+      "lastModificationDate": 1699119958580,
+      "contentHash": "0b083b020645cc0e56b55309945ddc69",
+      "sourceName": "src/types/publication/PublicationMessageTypes.sol",
+      "solcConfig": {
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "metadata": {
+            "useLiteralContent": false,
+            "bytecodeHash": "ipfs",
+            "appendCBOR": true
+          },
+          "outputSelection": {
+            "*": {
+              "": [
+                "ast"
+              ],
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ]
+            }
+          },
+          "evmVersion": "paris",
+          "libraries": {}
+        }
+      },
+      "imports": [],
+      "versionRequirement": "=0.8.21",
+      "artifacts": {
+        "PublicationlMessageTypes": {
+          "0.8.21+commit.d9974bed.Darwin.appleclang": "PublicationMessageTypes.sol/PublicationlMessageTypes.json"
+        }
+      }
+    },
     "src/validators/RiverValidatorV1.sol": {
       "lastModificationDate": 1698979411857,
       "contentHash": "8ae21bf1ec80a1213b3239d723483e9d",
