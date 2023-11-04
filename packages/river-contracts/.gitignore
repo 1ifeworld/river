@@ -2,6 +2,13 @@
 cache/
 out/
 
+# Do not ignore these files
+!out/AccessTypes.sol
+!out/AdminWithMembers.sol
+!out/ChannelMessageTypes.sol
+!out/NodeRegistryTypes.sol
+!out/PublicationMessageTypes.sol
+
 # Ignores development broadcast logs
 !/broadcast
 /broadcast/*/31337/
