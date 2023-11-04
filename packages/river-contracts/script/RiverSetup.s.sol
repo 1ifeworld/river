@@ -12,7 +12,6 @@ import {DelegateRegistry} from "imp/core/DelegateRegistry.sol";
 import {NodeRegistry} from "imp/core/NodeRegistry.sol";
 
 import {RiverValidatorV1} from "../src/validators/RiverValidatorV1.sol";
-import {INodeRegistryTypes} from "../src/types/INodeRegistryTypes.sol";
 
 contract RiverSetupScript is Script {
 
