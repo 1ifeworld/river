@@ -28,6 +28,7 @@
     "paths": {
       "@/abi": ["abi/index.ts"],
       "@/actions": ["actions/index.ts"],
+      "@/config": ["config/index.ts"],
       "@/client": ["components/client/index.ts"],
       "@/constants": ["constants/index.ts"],
       "@/context": ["context/index.ts"],

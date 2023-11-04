@@ -1,5 +1,3 @@
-// 'use server'
-
 import { Web3Storage } from 'web3.storage'
 
 export async function uploadToIPFS({
