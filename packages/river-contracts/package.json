@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "description": "",
   "main": "index.js",
+  "scripts": {
+    "dev": "anvil"
+  },
   "devDependencies": {
     "@types/prettier": "^2",
     "@types/qrcode": "^1"
