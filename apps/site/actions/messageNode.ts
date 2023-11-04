@@ -12,7 +12,7 @@ export async function messageNode(formData: FormData) {
 
   console.log('Form data', formData)
 
-  const userId = formData.get('userId');
+  const userId = formData.get('userId')
 
   console.log('User id', userId)
 
@@ -23,7 +23,7 @@ export async function messageNode(formData: FormData) {
     // uint256 userId // uint256 nodeId // uint256 msgType // bytes msgBody
     args: [
       // Why does this expect a Hex type?
-      userId as Hex
+      userId as Hex,
       // userId,
       // nodeId,
       // msgType,

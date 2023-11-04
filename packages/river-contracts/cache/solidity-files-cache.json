@@ -3034,8 +3034,8 @@
       }
     },
     "src/types/access/AdminWithMembers.sol": {
-      "lastModificationDate": 1699119158649,
-      "contentHash": "ff2b8b6aa9bbf197f7fb6fce6fc5c820",
+      "lastModificationDate": 1699132936853,
+      "contentHash": "239b10a62962af4778957d894d397f65",
       "sourceName": "src/types/access/AdminWithMembers.sol",
       "solcConfig": {
         "settings": {
@@ -3116,8 +3116,8 @@
       }
     },
     "src/types/general/NodeRegistryTypes.sol": {
-      "lastModificationDate": 1699132109178,
-      "contentHash": "543bd72a901bd1e8529dfd7112dd7092",
+      "lastModificationDate": 1699132795613,
+      "contentHash": "7d7b1e7be7085ef017605f7f5a29c726",
       "sourceName": "src/types/general/NodeRegistryTypes.sol",
       "solcConfig": {
         "settings": {

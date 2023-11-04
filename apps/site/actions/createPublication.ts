@@ -5,31 +5,16 @@ import { privateKeyToAccount } from 'viem/accounts'
 import { nodeRegistry } from '@/constants'
 import { nodeRegistryAbi } from '@/abi'
 import { publicClient, walletClient } from '@/config'
-import { adminWithMembersABI } from '@/abi'
-
-export const adminWithMembersAbi = [{
-  components: [
-    {
-      internalType: 'uint256',
-      name: 'admin',
-      type: 'uint256',
-    },
-    {
-      internalType: 'uint256[]',
-      name: 'members',
-      type: 'uint256[]',
-    },
-  ],
-  internalType: 'struct AdminWithMembers.Initialize_100',
-  name: '',
-  type: 'tuple',
-}]  as const
+import {
+  adminWithMembersABI,
+  nodeRegistryTypesABI,
+  publicationMessageTypesABI,
+} from '@/abi'
 
 export async function createPublication() {
   // Register Publication node
   const encodedAdminInitializeStruct = encodeAbiParameters(
-    adminWithMembersABI[0].outputs[0].components[0].,
-    // adminWithMembersAbi.abi[0].outputs,
+    adminWithMembersABI[0].outputs,
     [
       {
         admin: BigInt(1),
@@ -39,13 +24,13 @@ export async function createPublication() {
   )
 
   const encodedNodeRegistrationStruct = encodeAbiParameters(
-    nodeRegistryTypesAbi.abi[1].outputs,
+    nodeRegistryTypesABI[1].outputs,
     [
       {
         schema:
           '0x1234567890123456789012345678901234567890123456789012345678901234' as Hash,
-        userId: 1,
-        msgType: 1,
+        userId: BigInt(1),
+        msgType: BigInt(1),
         msgBody: encodedAdminInitializeStruct,
       },
     ],
@@ -58,44 +43,44 @@ export async function createPublication() {
     args: [encodedNodeRegistrationStruct],
   })
 
-  // console.log('Register publication request', registerPublication)
+  const registerPublicationHash = await walletClient.writeContract(
+    registerPublication,
+  )
 
-  const hash = await walletClient.writeContract(registerPublication)
+  console.log('Register publication hash:', registerPublicationHash)
 
-  console.log(hash)
+  const encodedPublicationUriStruct = encodeAbiParameters(
+    publicationMessageTypesABI[0].outputs,
+    [
+      {
+        uri: 'uri',
+      },
+    ],
+  )
 
-  // Part two
+  // Message Publication node
+  const encodedNodeCallStruct = encodeAbiParameters(
+    nodeRegistryTypesABI[0].outputs,
+    [
+      {
+        nodeId: BigInt(1),
+        userId: BigInt(1),
+        msgType: BigInt(1),
+        msgBody: encodedPublicationUriStruct,
+      },
+    ],
+  )
 
-  // const encodedPublicationUriStruct = encodeAbiParameters(
-  //   publicationMessageTypesAbi.abi[0].outputs,
-  //   [
-  //     {
-  //       uri: 'uri',
-  //     },
-  //   ],
-  // )
+  const { request: callPublication } = await publicClient.simulateContract({
+    address: nodeRegistry,
+    abi: nodeRegistryAbi,
+    functionName: 'messageNode',
+    args: [encodedNodeCallStruct],
+  })
 
-  // // Message Publication node
-  // const encodedNodeCallStruct = encodeAbiParameters(
-  //   nodeRegistryTypesAbi.abi[0].outputs,
-  //   [
-  //     {
-  //       nodeId: 1,
-  //       userId: 1,
-  //       msgType: 1,
-  //       msgBody: encodedPublicationUriStruct,
-  //     },
-  //   ],
-  // )
+  const callPublicationHash = await walletClient.writeContract(callPublication)
 
-  // const { request: callPublication } = await publicClient.simulateContract({
-  //   address: nodeRegistry,
-  //   abi: nodeRegistryAbi,
-  //   functionName: 'messageNode',
-  //   args: [encodedNodeCallStruct],
-  // })
-
-  // await walletClient.writeContract(callPublication)
+  console.log('Register publication hash:', callPublicationHash)
 }
 
 createPublication()

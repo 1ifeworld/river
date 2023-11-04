@@ -7,7 +7,7 @@ export const adminWithMembersABI = [
     stateMutability: 'view',
     type: 'function',
     inputs: [],
-    name: 'exportTypes',
+    name: 'exportInitialize_100Type',
     outputs: [
       {
         name: '',
@@ -18,6 +18,14 @@ export const adminWithMembersABI = [
           { name: 'members', internalType: 'uint256[]', type: 'uint256[]' },
         ],
       },
+    ],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'exportUpdate_200Type',
+    outputs: [
       {
         name: '',
         internalType: 'struct AdminWithMembers.Update_200',

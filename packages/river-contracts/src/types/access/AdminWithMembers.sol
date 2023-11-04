@@ -39,12 +39,12 @@ abstract contract AdminWithMembers {
     /// @notice This function will never be called
     /// @notice Only in use to allow for types to be visible in contract ABI
     function exportInitialize_100Type() external view returns (Initialize_100 memory) {
-        return _initialize_100, 
+        return _initialize_100;
     }    
 
     /// @notice This function will never be called
     /// @notice Only in use to allow for types to be visible in contract ABI
     function exportUpdate_200Type() external view returns (Update_200 memory) {
-        return _update_200
+        return _update_200;
     }
 }
