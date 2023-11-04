@@ -31,12 +31,13 @@ abstract contract NodeRegistryTypes {
     Registration internal _registration;
     Call internal _call;     
 
+    function exportRegistrationType() external view returns (Registration memory) {
+        return _registration;
+    } 
+
     /// @notice This function will never be called
     /// @notice Only in use to allow for types to be visible in contract ABI
-    function exportTypes() external view returns (Registration memory, Call memory) {
-        return (
-            _registration, 
-            _call
-        );
-    } 
+    function exportCallType() external view returns (Call memory) {
+        return _call;
+    }
 }
