@@ -5,9 +5,7 @@ import { privateKeyToAccount } from 'viem/accounts'
 import { nodeRegistry } from '@/constants'
 import { nodeRegistryAbi } from '@/abi'
 import { publicClient, walletClient } from '@/config'
-// import * as adminWithMembersAbi from 'river-contracts/out/AdminWithMembers.sol/AdminWithMembers.json'
-import * as nodeRegistryTypesAbi from 'river-contracts/out/NodeRegistryTypes.sol/NodeRegistryTypes.json'
-import * as publicationMessageTypesAbi from 'river-contracts/out/PublicationMessageTypes.sol/PublicationMessageTypes.json'
+import { adminWithMembersABI } from '@/abi'
 
 export const adminWithMembersAbi = [{
   components: [
@@ -30,7 +28,7 @@ export const adminWithMembersAbi = [{
 export async function createPublication() {
   // Register Publication node
   const encodedAdminInitializeStruct = encodeAbiParameters(
-    adminWithMembersAbi,
+    adminWithMembersABI[0].outputs[0].components[0].,
     // adminWithMembersAbi.abi[0].outputs,
     [
       {
