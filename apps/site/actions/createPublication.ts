@@ -9,35 +9,28 @@ import { publicClient, walletClient } from '@/config'
 import * as nodeRegistryTypesAbi from 'river-contracts/out/NodeRegistryTypes.sol/NodeRegistryTypes.json'
 import * as publicationMessageTypesAbi from 'river-contracts/out/PublicationMessageTypes.sol/PublicationMessageTypes.json'
 
-export const adminWithMembersAbi = [
-  {
-    name: 'admin',
-    inputs: [
-      {
-        components: [
-          {
-            // internalType: "uint256",
-            name: 'admin',
-            type: 'uint256',
-          },
-          {
-            // internalType: "uint256[]",
-            name: 'members',
-            type: 'uint256[]',
-          },
-        ],
-        // "internalType": "struct AdminWithMembers.Initialize_100",
-        name: '',
-        type: 'tuple',
-      },
-    ],
-  },
-] as const
+export const adminWithMembersAbi = [{
+  components: [
+    {
+      internalType: 'uint256',
+      name: 'admin',
+      type: 'uint256',
+    },
+    {
+      internalType: 'uint256[]',
+      name: 'members',
+      type: 'uint256[]',
+    },
+  ],
+  internalType: 'struct AdminWithMembers.Initialize_100',
+  name: '',
+  type: 'tuple',
+}]  as const
 
 export async function createPublication() {
   // Register Publication node
   const encodedAdminInitializeStruct = encodeAbiParameters(
-    adminWithMembersAbi[0].inputs,
+    adminWithMembersAbi,
     // adminWithMembersAbi.abi[0].outputs,
     [
       {
@@ -51,7 +44,8 @@ export async function createPublication() {
     nodeRegistryTypesAbi.abi[1].outputs,
     [
       {
-        schema: '0x1234567890123456789012345678901234567890123456789012345678901234' as Hash,
+        schema:
+          '0x1234567890123456789012345678901234567890123456789012345678901234' as Hash,
         userId: 1,
         msgType: 1,
         msgBody: encodedAdminInitializeStruct,
@@ -70,7 +64,7 @@ export async function createPublication() {
 
   const hash = await walletClient.writeContract(registerPublication)
 
-console.log(hash)
+  console.log(hash)
 
   // Part two
 
