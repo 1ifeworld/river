@@ -3116,8 +3116,8 @@
       }
     },
     "src/types/general/NodeRegistryTypes.sol": {
-      "lastModificationDate": 1699117416826,
-      "contentHash": "1a812ca3c7667687ce99c5cc0e016f61",
+      "lastModificationDate": 1699132109178,
+      "contentHash": "543bd72a901bd1e8529dfd7112dd7092",
       "sourceName": "src/types/general/NodeRegistryTypes.sol",
       "solcConfig": {
         "settings": {
@@ -3157,8 +3157,8 @@
       }
     },
     "src/types/publication/PublicationMessageTypes.sol": {
-      "lastModificationDate": 1699119958580,
-      "contentHash": "0b083b020645cc0e56b55309945ddc69",
+      "lastModificationDate": 1699132109178,
+      "contentHash": "bfc29a122a8b7a4d38cd3d75fef2c6d5",
       "sourceName": "src/types/publication/PublicationMessageTypes.sol",
       "solcConfig": {
         "settings": {
@@ -3192,8 +3192,8 @@
       "imports": [],
       "versionRequirement": "=0.8.21",
       "artifacts": {
-        "PublicationlMessageTypes": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "PublicationMessageTypes.sol/PublicationlMessageTypes.json"
+        "PublicationMessageTypes": {
+          "0.8.21+commit.d9974bed.Darwin.appleclang": "PublicationMessageTypes.sol/PublicationMessageTypes.json"
         }
       }
     },
