@@ -1,14 +1,14 @@
 import { Hash, decodeAbiParameters } from 'viem'
-import { nodeRegistrationData } from './types'
+import { nodeRegistryTypesABI } from '../abi'
 
 export function decodeNodeRegistrationData({ data }: { data: Hash }): {
-  userId: bigint
-  schema: Hash
-  regType: bigint
-  regBody: Hash
+  schema: Hash,
+  userId: bigint,
+  msgType: bigint,
+  msgBody: Hash,
 } {
   const [decodedData] = decodeAbiParameters(
-    nodeRegistrationData[0].outputs,
+    nodeRegistryTypesABI[1].outputs,
     data,
   )
 
