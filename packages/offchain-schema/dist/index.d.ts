@@ -9,10 +9,10 @@ declare function isValidSchemaRegistration({ sender, schema, data, }: {
 declare function decodeNodeRegistrationData({ data }: {
     data: Hash;
 }): {
-    userId: bigint;
     schema: Hash;
-    regType: bigint;
-    regBody: Hash;
+    userId: bigint;
+    msgType: bigint;
+    msgBody: Hash;
 };
 
 declare const nodeRegistrationData: readonly [{

@@ -47,57 +47,6 @@ function isValidSchemaRegistration({
 // nodeRegistry/decoders.ts
 var import_viem = require("viem");
 
-// nodeRegistry/types.ts
-var nodeRegistrationData = [
-  {
-    name: "nodeRegisrationStruct",
-    outputs: [
-      {
-        components: [
-          {
-            name: "userId",
-            type: "uint256"
-          },
-          {
-            name: "schema",
-            type: "bytes32"
-          },
-          {
-            name: "regType",
-            type: "uint256"
-          },
-          {
-            name: "regBody",
-            type: "bytes"
-          }
-        ],
-        name: "nodeRegistration",
-        type: "tuple"
-      }
-    ]
-  }
-];
-
-// nodeRegistry/decoders.ts
-function decodeNodeRegistrationData({ data }) {
-  const [decodedData] = (0, import_viem.decodeAbiParameters)(
-    nodeRegistrationData[0].outputs,
-    data
-  );
-  return decodedData;
-}
-
-// nodeRegistry/filters.ts
-function isValidNodeRegistration({
-  sender,
-  nodeId,
-  data
-}) {
-  if (sender != operator)
-    return false;
-  return true;
-}
-
 // abi/generated.ts
 var adminWithMembersABI = [
   {
@@ -234,6 +183,57 @@ var publicationMessageTypesABI = [
     ]
   }
 ];
+
+// nodeRegistry/decoders.ts
+function decodeNodeRegistrationData({ data }) {
+  const [decodedData] = (0, import_viem.decodeAbiParameters)(
+    nodeRegistryTypesABI[1].outputs,
+    data
+  );
+  return decodedData;
+}
+
+// nodeRegistry/types.ts
+var nodeRegistrationData = [
+  {
+    name: "nodeRegisrationStruct",
+    outputs: [
+      {
+        components: [
+          {
+            name: "userId",
+            type: "uint256"
+          },
+          {
+            name: "schema",
+            type: "bytes32"
+          },
+          {
+            name: "regType",
+            type: "uint256"
+          },
+          {
+            name: "regBody",
+            type: "bytes"
+          }
+        ],
+        name: "nodeRegistration",
+        type: "tuple"
+      }
+    ]
+  }
+];
+
+// nodeRegistry/filters.ts
+function isValidNodeRegistration({
+  sender,
+  nodeId,
+  data
+}) {
+  if (sender != operator)
+    return false;
+  return true;
+}
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   adminWithMembersABI,
