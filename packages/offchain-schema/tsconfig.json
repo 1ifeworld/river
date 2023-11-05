@@ -1,7 +1,15 @@
 {
-    "compilerOptions": {
-      "moduleResolution": "nodenext",
-      "target": "ESNext",
-      "module": "NodeNext",      
-    }
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "target": "ESNext",
+    "module": "ESNext",
+    "strict": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "noEmit": true,
+    "noImplicitReturns": true,
+    "skipLibCheck": true,
+    "outDir": "./dist",
   }
+}
