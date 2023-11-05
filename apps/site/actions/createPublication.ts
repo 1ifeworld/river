@@ -5,11 +5,11 @@ import { privateKeyToAccount } from 'viem/accounts'
 import { nodeRegistry } from '@/constants'
 import { nodeRegistryAbi } from '@/abi'
 import { publicClient, walletClient } from '@/config'
-import {
+import { 
   adminWithMembersABI,
   nodeRegistryTypesABI,
-  publicationMessageTypesABI,
-} from '@/abi'
+  publicationMessageTypesABI
+} from 'offchain-schema'
 
 export async function createPublication() {
   // Register Publication node
@@ -80,7 +80,7 @@ export async function createPublication() {
 
   const callPublicationHash = await walletClient.writeContract(callPublication)
 
-  console.log('Register publication hash:', callPublicationHash)
+  console.log('Message publication hash:', callPublicationHash)
 }
 
 createPublication()

@@ -19,10 +19,14 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 // index.ts
 var offchain_schema_exports = {};
 __export(offchain_schema_exports, {
+  adminWithMembersABI: () => adminWithMembersABI,
+  channelMessageTypesABI: () => channelMessageTypesABI,
   decodeNodeRegistrationData: () => decodeNodeRegistrationData,
   isValidNodeRegistration: () => isValidNodeRegistration,
   isValidSchemaRegistration: () => isValidSchemaRegistration,
-  nodeRegistrationData: () => nodeRegistrationData
+  nodeRegistrationData: () => nodeRegistrationData,
+  nodeRegistryTypesABI: () => nodeRegistryTypesABI,
+  publicationMessageTypesABI: () => publicationMessageTypesABI
 });
 module.exports = __toCommonJS(offchain_schema_exports);
 
@@ -93,10 +97,151 @@ function isValidNodeRegistration({
     return false;
   return true;
 }
+
+// abi/generated.ts
+var adminWithMembersABI = [
+  {
+    stateMutability: "view",
+    type: "function",
+    inputs: [],
+    name: "exportInitialize_100Type",
+    outputs: [
+      {
+        name: "",
+        internalType: "struct AdminWithMembers.Initialize_100",
+        type: "tuple",
+        components: [
+          { name: "admin", internalType: "uint256", type: "uint256" },
+          { name: "members", internalType: "uint256[]", type: "uint256[]" }
+        ]
+      }
+    ]
+  },
+  {
+    stateMutability: "view",
+    type: "function",
+    inputs: [],
+    name: "exportUpdate_200Type",
+    outputs: [
+      {
+        name: "",
+        internalType: "struct AdminWithMembers.Update_200",
+        type: "tuple",
+        components: [
+          { name: "admin", internalType: "uint256", type: "uint256" },
+          { name: "members", internalType: "uint256[]", type: "uint256[]" },
+          { name: "roles", internalType: "uint8[]", type: "uint8[]" }
+        ]
+      }
+    ]
+  }
+];
+var channelMessageTypesABI = [
+  {
+    stateMutability: "view",
+    type: "function",
+    inputs: [],
+    name: "exportTypes",
+    outputs: [
+      {
+        name: "",
+        internalType: "struct ChannelMessageTypes.Uri_100",
+        type: "tuple",
+        components: [{ name: "uri", internalType: "string", type: "string" }]
+      },
+      {
+        name: "",
+        internalType: "struct ChannelMessageTypes.Add_110",
+        type: "tuple",
+        components: [
+          {
+            name: "pointer",
+            internalType: "struct ChannelMessageTypes.CustomParam_Pointer",
+            type: "tuple",
+            components: [
+              { name: "chainId", internalType: "uint256", type: "uint256" },
+              { name: "id", internalType: "uint256", type: "uint256" },
+              { name: "target", internalType: "address", type: "address" },
+              { name: "hasId", internalType: "bool", type: "bool" }
+            ]
+          }
+        ]
+      },
+      {
+        name: "",
+        internalType: "struct ChannelMessageTypes.Remove_120",
+        type: "tuple",
+        components: [
+          { name: "channelIndex", internalType: "uint256", type: "uint256" }
+        ]
+      }
+    ]
+  }
+];
+var nodeRegistryTypesABI = [
+  {
+    stateMutability: "view",
+    type: "function",
+    inputs: [],
+    name: "exportCallType",
+    outputs: [
+      {
+        name: "",
+        internalType: "struct NodeRegistryTypes.Call",
+        type: "tuple",
+        components: [
+          { name: "nodeId", internalType: "uint256", type: "uint256" },
+          { name: "userId", internalType: "uint256", type: "uint256" },
+          { name: "msgType", internalType: "uint256", type: "uint256" },
+          { name: "msgBody", internalType: "bytes", type: "bytes" }
+        ]
+      }
+    ]
+  },
+  {
+    stateMutability: "view",
+    type: "function",
+    inputs: [],
+    name: "exportRegistrationType",
+    outputs: [
+      {
+        name: "",
+        internalType: "struct NodeRegistryTypes.Registration",
+        type: "tuple",
+        components: [
+          { name: "schema", internalType: "bytes32", type: "bytes32" },
+          { name: "userId", internalType: "uint256", type: "uint256" },
+          { name: "msgType", internalType: "uint256", type: "uint256" },
+          { name: "msgBody", internalType: "bytes", type: "bytes" }
+        ]
+      }
+    ]
+  }
+];
+var publicationMessageTypesABI = [
+  {
+    stateMutability: "view",
+    type: "function",
+    inputs: [],
+    name: "exportTypes",
+    outputs: [
+      {
+        name: "",
+        internalType: "struct PublicationMessageTypes.Uri_100",
+        type: "tuple",
+        components: [{ name: "uri", internalType: "string", type: "string" }]
+      }
+    ]
+  }
+];
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
+  adminWithMembersABI,
+  channelMessageTypesABI,
   decodeNodeRegistrationData,
   isValidNodeRegistration,
   isValidSchemaRegistration,
-  nodeRegistrationData
+  nodeRegistrationData,
+  nodeRegistryTypesABI,
+  publicationMessageTypesABI
 });
