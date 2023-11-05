@@ -179,9 +179,6 @@ importers:
       '@types/react-dom':
         specifier: 18.2.7
         version: 18.2.7
-      '@wagmi/cli':
-        specifier: ^1.5.2
-        version: 1.5.2(typescript@5.1.6)(wagmi@1.4.5)
       autoprefixer:
         specifier: 10.4.15
         version: 10.4.15(postcss@8.4.28)

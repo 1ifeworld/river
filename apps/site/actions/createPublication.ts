@@ -1,15 +1,15 @@
 'use server'
 
-import { type Hex, type Hash, encodeAbiParameters } from 'viem'
-import { privateKeyToAccount } from 'viem/accounts'
+import { type Hash, encodeAbiParameters } from 'viem'
 import { nodeRegistry } from '@/constants'
-import { nodeRegistryAbi } from '@/abi'
 import { publicClient, walletClient } from '@/config'
 import { 
   adminWithMembersABI,
   nodeRegistryTypesABI,
   publicationMessageTypesABI
 } from 'offchain-schema'
+// TODO: do the same wagmi/cli abi generation in the offchain schema for node reigstry
+import { nodeRegistryAbi } from '@/abi'
 
 export async function createPublication() {
   // Register Publication node
