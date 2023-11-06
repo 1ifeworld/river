@@ -9,7 +9,7 @@ import {
   adminWithMembersABI,
   nodeRegistryTypesABI,
   publicationMessageTypesABI,
-} from '@/abi'
+} from 'offchain-schema'
 
 export async function createPublication() {
   // Register Publication node

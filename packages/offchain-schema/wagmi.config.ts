@@ -4,7 +4,7 @@ import { foundry } from '@wagmi/cli/plugins'
 export default defineConfig({
   plugins: [
     foundry({
-      project: '../../packages/river-contracts',
+      project: '../river-contracts',
       include: [
         'AdminWithMembers.json',
         'ChannelMessageTypes.json',
