@@ -35,6 +35,7 @@
     "lanyard": "^1.1.2",
     "lucide-react": "^0.269.0",
     "next": "13.5.3",
+    "offchain-schema": "workspace:*",
     "permissionless": "^0.0.9",
     "react": "18.2.0",
     "react-dom": "18.2.0",

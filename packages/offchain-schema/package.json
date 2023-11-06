@@ -1,14 +1,11 @@
 {
   "name": "offchain-schema",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.0",
   "main": "./dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsup index.ts --dts"
+    "build": "tsc"
   },
-  "keywords": [],
-  "author": "",
+  "author": "Lifeworld",
   "license": "ISC",
   "devDependencies": {
     "@wagmi/cli": "^1.5.2",
