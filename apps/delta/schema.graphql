@@ -39,15 +39,39 @@ type Node @entity {
   nodeId: BigInt!
   userId: BigInt!
   schema: String!
-  regType: BigInt!
-  regBody: Bytes!
+  msgType: BigInt!
+  msgBody: Bytes!
+  nodeAdmin: BigInt!
+  nodeMembers: [BigInt]!
 }
 
-type Message @entity {
+type Call @entity {
   id: String!
   sender: String!
+  nodeId: BigInt!
   schema: Bytes!
-  data: Bytes
+  userId: BigInt!
+  msgType: BigInt!
+  msgBody: Bytes!
+}
+
+type Publication @entity {
+  id: String!
+  uri: String!
+}
+
+type Item @entity {
+  id: String!
+  chainId: BigInt!
+  targetId: BigInt!
+  target: String!
+  hasId: Boolean!
+  channel: Channel!
+}
+
+type Channel @entity {
+  id: String!
+  items: [Item!]! @derivedFrom(field: "channel")
 }
 
 # ================================

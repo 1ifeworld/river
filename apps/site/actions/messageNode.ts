@@ -2,9 +2,8 @@
 
 import { type Hex, type Hash } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
-import { nodeRegistry } from '@/constants'
+import { nodeRegistry, nodeRegistryABI } from 'offchain-schema'
 import { publicClient, walletClient } from '@/config'
-import { nodeRegistryAbi } from '@/abi'
 
 // { userId }: { userId: Hex }
 export async function messageNode(formData: FormData) {
@@ -18,7 +17,7 @@ export async function messageNode(formData: FormData) {
 
   const { request } = await publicClient.simulateContract({
     address: nodeRegistry,
-    abi: nodeRegistryAbi,
+    abi: nodeRegistryABI,
     functionName: 'messageNode',
     // uint256 userId // uint256 nodeId // uint256 msgType // bytes msgBody
     args: [
