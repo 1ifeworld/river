@@ -12,9 +12,8 @@ abstract contract ChannelMessageTypes {
         string uri;
     }    
 
-    // "removeFromChannel" functionality
-    // NOTE: this facilitates the removal of an existing
-    //      item in a channel
+    // "addToChannel" functionality
+    // NOTE: this facilitates the adding of an item to a channel
     // how the fuck do people know whats in a channel???    
     struct Add_110 {
         CustomParam_Pointer pointer;
@@ -41,12 +40,20 @@ abstract contract ChannelMessageTypes {
 
     /// @notice This function will never be called
     /// @notice Only in use to allow for types to be visible in contract ABI
-    function exportTypes() external view returns (Uri_100 memory, Add_110 memory, Remove_120 memory) {
-        return (
-            _uri_100, 
-            _add_110,
-            _remove_120
-        );
+    function exportUri_100Type() external view returns (Uri_100 memory) {
+        return _uri_100;
+    }     
+
+    /// @notice This function will never be called
+    /// @notice Only in use to allow for types to be visible in contract ABI
+    function exportAdd_110Type() external view returns (Add_110 memory) {
+        return _add_110;
+    }     
+
+    /// @notice This function will never be called
+    /// @notice Only in use to allow for types to be visible in contract ABI
+    function exportRemove_120Type() external view returns (Remove_120 memory) {
+        return _remove_120;
     }     
 
     //////////////////////////////////////////////////

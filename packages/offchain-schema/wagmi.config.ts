@@ -10,8 +10,20 @@ export default defineConfig({
         'ChannelMessageTypes.json',
         'NodeRegistryTypes.json',
         'PublicationMessageTypes.json',
+        'RiverValidatorV1.json'
       ],
     }),
+    foundry({
+      project: '../river-contracts/lib/imp',
+      forge: {
+        build: true
+      },
+      include: [
+        'NodeRegistry.json',
+        'IdRegistry.json',
+        'DelegateRegistry.json'
+      ]
+    })
   ],
   out: './abi/generated.ts',
 })

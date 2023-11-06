@@ -1,5 +1,16 @@
 import type { Config } from '@ponder/core'
 import { http } from 'viem'
+import {
+  idRegistry,
+  delegateRegistry,
+  nodeRegistry,
+  riverValidatorV1,
+  lightAccountFactory,
+  idRegistryABI,
+  delegateRegistryABI,
+  nodeRegistryABI,
+  riverValidatorV1ABI
+} from 'offchain-schema'
 
 export const config: Config = {
   networks: [
@@ -16,60 +27,60 @@ export const config: Config = {
     // {
     //   name: 'IdRegistry',
     //   network: 'optimism-goerli',
-    //   abi: './abis/IdRegistry.json',
-    //   address: '0xf89a7C9a0517da815dB66CdcAf61F44E01476697',
+    //   abi: idRegistryABI,
+    //   address: idRegistry,
     //   startBlock: 16474518,
     // },
     // {
     //   name: 'IdRegistry',
     //   network: 'anvil',
-    //   abi: './abis/IdRegistry.json',
+    //   abi: idRegistryABI,
     //   address: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
     // },
     // {
     //   name: 'DelegateRegistry',
     //   network: 'optimism-goerli',
-    //   abi: './abis/DelegateRegistry.json',
-    //   address: '0x995D4621B4B72cd2805f99972A1313bd9876c613',
+    //   abi: delegateRegistryABI,
+    //   address: delegateRegistry,
     //   startBlock: 16474518,
     // },
     // {
     //   name: 'DelegateRegistry',
     //   network: 'anvil',
-    //   abi: './abis/DelegateRegistry.json',
+    //   abi: delegateRegistryABI,
     //   address: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0',
     // },
     // {
     //   name: 'NodeRegistry',
     //   network: 'anvil',
-    //   abi: './abis/NodeRegistry.json',
+    //   abi: nodeRegistryABI,
     //   address: '0x5FbDB2315678afecb367f032d93F642f64180aa3',
     // },
     {
       name: 'NodeRegistry',
       network: 'optimism-goerli',
-      abi: './abis/NodeRegistry.json',
-      address: '0xd8Dbf7dC3746B968485164c05b5c11C78a2BFebc',
+      abi: nodeRegistryABI,
+      address: nodeRegistry,
       startBlock: 16774340,
     },
     // {
     //   name: 'RiverValidatorV1',
     //   network: 'optimism-goerli',
-    //   abi: './abis/RiverValidatorV1.json',
-    //   address: '0x3E3522Ac4d89c56c8759F81a86ff94b8c39A45e3',
+    //   abi: riverValidatorV1ABI,
+    //   address: riverValidatorV1,
     //   startBlock: 16474518,
     // },
     // {
     //   name: 'RiverValidatorV1',
     //   network: 'anvil',
-    //   abi: './abis/RiverValidatorV1.json',
-    //   address: '0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9',
+    //   abi: riverValidatorV1ABI,
+    //   address: riverValidatorV1,
     // },
     // {
     //   name: 'LightAccountFactory',
     //   network: 'optimism-goerli',
     //   abi: './abis/LightAccountFactory.json',
-    //   address: '0x000000893A26168158fbeaDD9335Be5bC96592E2',
+    //   address: lightAccountFactory,
     //   startBlock: 16474518,
     // },
   ],

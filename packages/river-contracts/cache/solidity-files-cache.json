@@ -3034,7 +3034,7 @@
       }
     },
     "src/types/access/AdminWithMembers.sol": {
-      "lastModificationDate": 1699139001694,
+      "lastModificationDate": 1699236742415,
       "contentHash": "239b10a62962af4778957d894d397f65",
       "sourceName": "src/types/access/AdminWithMembers.sol",
       "solcConfig": {
@@ -3075,8 +3075,8 @@
       }
     },
     "src/types/channel/ChannelMessageTypes.sol": {
-      "lastModificationDate": 1699120239768,
-      "contentHash": "14350db088ba2704ff3f2930bb8ec713",
+      "lastModificationDate": 1699304917886,
+      "contentHash": "8b1376cca2ebed5d612302de3c6aedcd",
       "sourceName": "src/types/channel/ChannelMessageTypes.sol",
       "solcConfig": {
         "settings": {
@@ -3116,7 +3116,7 @@
       }
     },
     "src/types/general/NodeRegistryTypes.sol": {
-      "lastModificationDate": 1699139001694,
+      "lastModificationDate": 1699236745623,
       "contentHash": "7d7b1e7be7085ef017605f7f5a29c726",
       "sourceName": "src/types/general/NodeRegistryTypes.sol",
       "solcConfig": {
@@ -3157,7 +3157,7 @@
       }
     },
     "src/types/publication/PublicationMessageTypes.sol": {
-      "lastModificationDate": 1699139001695,
+      "lastModificationDate": 1699236750196,
       "contentHash": "bfc29a122a8b7a4d38cd3d75fef2c6d5",
       "sourceName": "src/types/publication/PublicationMessageTypes.sol",
       "solcConfig": {
@@ -3198,7 +3198,7 @@
       }
     },
     "src/validators/RiverValidatorV1.sol": {
-      "lastModificationDate": 1699120239770,
+      "lastModificationDate": 1699236752702,
       "contentHash": "8ae21bf1ec80a1213b3239d723483e9d",
       "sourceName": "src/validators/RiverValidatorV1.sol",
       "solcConfig": {
@@ -3239,8 +3239,8 @@
       }
     },
     "test/NodeRegistry.t.sol": {
-      "lastModificationDate": 1699240687773,
-      "contentHash": "b711289683ba1135a57c6af1dff7acf2",
+      "lastModificationDate": 1699240723029,
+      "contentHash": "dc6dd3a393e54617923d5524e05e93d6",
       "sourceName": "test/NodeRegistry.t.sol",
       "solcConfig": {
         "settings": {

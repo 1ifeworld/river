@@ -1,15 +1,16 @@
 'use server'
 
-import { type Hash, encodeAbiParameters } from 'viem'
-import { nodeRegistry } from '@/constants'
-import { publicClient, walletClient } from '@/config'
+import { encodeAbiParameters } from 'viem'
 import { 
+  nodeRegistry,
+  publicationSchema,
+  channelSchema,
   adminWithMembersABI,
   nodeRegistryTypesABI,
-  publicationMessageTypesABI
+  publicationMessageTypesABI,
+  nodeRegistryABI
 } from 'offchain-schema'
-// TODO: do the same wagmi/cli abi generation in the offchain schema for node reigstry
-import { nodeRegistryAbi } from '@/abi'
+import { publicClient, walletClient } from '@/config'
 
 export async function createPublication() {
   // Register Publication node
@@ -27,8 +28,8 @@ export async function createPublication() {
     nodeRegistryTypesABI[1].outputs,
     [
       {
-        schema:
-          '0x1234567890123456789012345678901234567890123456789012345678901234' as Hash,
+        schema: publicationSchema,
+        // schema: channelSchema,
         userId: BigInt(1),
         msgType: BigInt(1),
         msgBody: encodedAdminInitializeStruct,
@@ -36,24 +37,24 @@ export async function createPublication() {
     ],
   )
 
-  const { request: registerPublication } = await publicClient.simulateContract({
-    address: nodeRegistry,
-    abi: nodeRegistryAbi,
-    functionName: 'registerNode',
-    args: [encodedNodeRegistrationStruct],
-  })
+  // const { request: registerPublication } = await publicClient.simulateContract({
+  //   address: nodeRegistry,
+  //   abi: nodeRegistryABI,
+  //   functionName: 'registerNode',
+  //   args: [encodedNodeRegistrationStruct],
+  // })
 
-  const registerPublicationHash = await walletClient.writeContract(
-    registerPublication,
-  )
+  // const registerPublicationHash = await walletClient.writeContract(
+  //   registerPublication,
+  // )
 
-  console.log('Register publication hash:', registerPublicationHash)
+  // console.log('Register publication hash:', registerPublicationHash)
 
   const encodedPublicationUriStruct = encodeAbiParameters(
     publicationMessageTypesABI[0].outputs,
     [
       {
-        uri: 'uri',
+        uri: 'ipfs://bafybeidw4rmzno2ovlppggmhoal3tvuzi2ufbtaudyc37jqnj5pm5fyble/1',
       },
     ],
   )
@@ -63,7 +64,7 @@ export async function createPublication() {
     nodeRegistryTypesABI[0].outputs,
     [
       {
-        nodeId: BigInt(1),
+        nodeId: BigInt(10),
         userId: BigInt(1),
         msgType: BigInt(1),
         msgBody: encodedPublicationUriStruct,
@@ -73,7 +74,7 @@ export async function createPublication() {
 
   const { request: callPublication } = await publicClient.simulateContract({
     address: nodeRegistry,
-    abi: nodeRegistryAbi,
+    abi: nodeRegistryABI,
     functionName: 'messageNode',
     args: [encodedNodeCallStruct],
   })
