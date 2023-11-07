@@ -1,14 +1,14 @@
 'use server'
 
 import { encodeAbiParameters } from 'viem'
-import { 
+import {
   nodeRegistry,
   publicationSchema,
   channelSchema,
   adminWithMembersABI,
   nodeRegistryTypesABI,
   publicationMessageTypesABI,
-  nodeRegistryABI
+  nodeRegistryABI,
 } from 'offchain-schema'
 import { publicClient, walletClient } from '@/config'
 
@@ -43,9 +43,8 @@ export async function createPublicationNode() {
     args: [encodedNodeRegistrationStruct],
   })
 
-  const registerPublicationHash = await walletClient.writeContract(
-    registerPublication,
-  )
+  const registerPublicationHash =
+    await walletClient.writeContract(registerPublication)
 
   console.log('Register publication hash:', registerPublicationHash)
 }
