@@ -7,7 +7,9 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "format": "turbo format"
+    "format": "turbo format",
+    "delta": "pnpm --filter delta dev",
+    "site": "pnpm --filter site dev"
   },
   "keywords": [],
   "author": "Lifeworld",
