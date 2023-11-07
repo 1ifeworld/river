@@ -1,5 +1,4 @@
 import { ponder } from "@/generated";
-// import { isValidSchemaRegistration } from "offchain-schema";
 import {
   decodeNodeRegistrationData,
   decodeAdminWithMembersData,

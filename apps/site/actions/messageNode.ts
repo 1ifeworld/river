@@ -1,7 +1,6 @@
 'use server'
 
 import { type Hex, type Hash } from 'viem'
-import { privateKeyToAccount } from 'viem/accounts'
 import { nodeRegistry, nodeRegistryABI } from 'offchain-schema'
 import { publicClient, walletClient } from '@/config'
 

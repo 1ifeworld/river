@@ -2,13 +2,15 @@
   "name": "offchain-schema",
   "version": "0.0.0",
   "main": "./dist/index.js",
+  
   "scripts": {
-    "build": "tsc"
+    "build": "tsup --format esm index.ts"
   },
   "author": "Lifeworld",
   "license": "ISC",
   "devDependencies": {
     "@wagmi/cli": "^1.5.2",
+    "tsup": "^7.2.0",
     "typescript": "5.1.6"
   },
   "dependencies": {

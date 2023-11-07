@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "Set information free",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
