@@ -5,13 +5,17 @@ ponder.on("RiverValidatorV1:Validate", async ({ event, context }) => {
 
   const { id, status } = event.params
 
-  await RiverValidatorV1.create({
+  await RiverValidatorV1.upsert({
     // chain // validatorAddress // userId
     id: `${420}/${event.transaction.from}/${id}`,
-    data: { 
+    create: { 
         userId: id, 
-        status: status },
-  })
+        status: status 
+      },
+   update: {
+        status: status 
+  }
+    })
 })
 
 ponder.on("RiverValidatorV1:OperatorUpdated", async ({ event, context }) => {
@@ -23,6 +27,7 @@ ponder.on("RiverValidatorV1:OperatorUpdated", async ({ event, context }) => {
     // chain // validatorAddress // userId
     id: `${420}/${event.transaction.from}/${operator}`,
     data: { 
-       operator: operator},
+       operator: operator
+      },
   }) 
 }) 

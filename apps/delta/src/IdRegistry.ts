@@ -21,52 +21,47 @@ ponder.on("IdRegistry:RevokeAttestation", async ({event, context}) => {
   const {IdRegistry} = context.entities;
   const {id, attestor} = event.params
 
-  await IdRegistry.upsert({
+  await IdRegistry.update({
     id: `420/${id}/${attestor}`,
-    create: {
+    data: {
       userId: id,
       attestor: attestor,
-    },
-    update: {
-      attestor: attestor
     }
-
   })
-
 })
 
 // keep track of every cancelled attempt to transfer
 
-ponder.on("IdRegistry:TransferCancelled", async ({event, context}) => {
-  const {IdRegistry} = context.entities;
-  const {from, to, id} = event.params
-
-  await IdRegistry.create({
-    id: `420/${from}/${to}/${id}`,
-    data: {
-      from: from,
-      to: to,
-      userId: id,
-    }
-  })
-
-})
 // keep track of every initiated attempt to transfer 
 ponder.on("IdRegistry:TransferInitiated", async ({event, context}) => {
   const {IdRegistry} = context.entities;
   const {from, to, id} = event.params
 
   await IdRegistry.create({
-    id: `420/${from}/${to}/${id}`,
+    id: `420/${event}/${from}/${to}/${id}`,
     data: {
       from: from,
       to: to,
       userId: id,
     },
+  })
+})
 
+ponder.on("IdRegistry:TransferCancelled", async ({event, context}) => {
+  const {IdRegistry} = context.entities;
+  const {from, to, id} = event.params
+
+  await IdRegistry.create({
+    id: `420/${event}/${from}/${to}/${id}`,
+    data: {
+      from: from,
+      to: to,
+      userId: id,
+    }
   })
 
 })
+
 
 // update the to field of the ID which is now new owner of ID
 // we've update the to: userId . but we're missing backup 
