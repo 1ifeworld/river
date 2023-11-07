@@ -4,10 +4,13 @@
 
 type IdRegistry @entity {
   id: String!
-  to: String!
-  userId: BigInt!
-  backup: Bytes!
+  to: String
+  from: String
+  userId: BigInt
+  backup: Bytes
   data: String
+  attestor: String
+
 }
 
 # ================================
