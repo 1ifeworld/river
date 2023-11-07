@@ -11,7 +11,8 @@ import {
   getDefaultLightAccountFactory,
 } from '@alchemy/aa-accounts'
 import { AlchemyProvider } from '@alchemy/aa-alchemy'
-import { entryPoint, opGoerliViem } from '@/constants'
+import { opGoerliViem } from '@/constants'
+import { entryPoint } from 'offchain-schema'
 import { useWallets } from '@privy-io/react-auth'
 import { WalletClientSigner, type SmartAccountSigner } from '@alchemy/aa-core'
 import {

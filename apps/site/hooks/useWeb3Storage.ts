@@ -1,4 +1,3 @@
-import { env } from '@/services'
 import * as React from 'react'
 import { Web3Storage } from 'web3.storage'
 
@@ -7,7 +6,7 @@ export function useWeb3Storage(cid: string) {
   const [imageCid, setImageCid] = React.useState<string>('')
 
   const client = new Web3Storage({
-    token: env.NEXT_PUBLIC_WEB3STORAGE_TOKEN,
+    token: process.env.NEXT_PUBLIC_WEB3STORAGE_TOKEN as string,
   })
 
   React.useEffect(() => {

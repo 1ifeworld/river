@@ -8,14 +8,15 @@ import {
   type GetUserOperationReceiptReturnType,
 } from 'permissionless'
 import { pimlicoBundlerClient, pimlicoPaymasterClient } from '../pimlicoConfig'
-import { config } from '../wagmiConfig'
+import { publicClient } from '@/config'
 import {
   entryPoint,
   idRegistry,
   lightAccountFactory,
-  salt,
   operator,
-} from '@/constants'
+} from 'offchain-schema'
+
+import { salt } from '@/constants'
 import { idRegistryAbi, lightAccountAbi, lightAccountFactoryAbi } from '@/abi'
 
 export function buildInitCode({ initialAdmin }: { initialAdmin: Hex }) {
@@ -37,8 +38,7 @@ export async function createAndRegisterAccount({
 }) {
   const initCode = buildInitCode({ initialAdmin })
 
-  // Is this an appropriate way to grab the underlying public client in an async environment
-  const senderAddress = await getSenderAddress(config.getPublicClient(), {
+  const senderAddress = await getSenderAddress(publicClient, {
     initCode: initCode,
     entryPoint: entryPoint,
   })

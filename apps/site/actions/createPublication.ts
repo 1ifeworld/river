@@ -1,14 +1,14 @@
 'use server'
 
 import { encodeAbiParameters } from 'viem'
-import { 
+import {
   nodeRegistry,
   publicationSchema,
   channelSchema,
   adminWithMembersABI,
   nodeRegistryTypesABI,
   publicationMessageTypesABI,
-  nodeRegistryABI
+  nodeRegistryABI,
 } from 'offchain-schema'
 import { publicClient, walletClient } from '@/config'
 

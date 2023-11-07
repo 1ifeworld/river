@@ -3,7 +3,7 @@ import { registerAndDelegate } from '@/lib'
 import { AlchemyProvider } from '@alchemy/aa-alchemy'
 import { Hex } from 'viem'
 import { usePrivy } from '@privy-io/react-auth'
-import { entryPoint } from '@/constants'
+import { entryPoint } from 'offchain-schema'
 
 export function Register() {
   const { authenticated } = usePrivy()
