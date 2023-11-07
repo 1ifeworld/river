@@ -118,6 +118,9 @@ importers:
       next:
         specifier: 13.5.3
         version: 13.5.3(@babel/core@7.23.2)(react-dom@18.2.0)(react@18.2.0)
+      offchain-schema:
+        specifier: workspace:*
+        version: link:../../packages/offchain-schema
       permissionless:
         specifier: ^0.0.9
         version: 0.0.9(viem@1.16.6)
