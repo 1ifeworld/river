@@ -4,10 +4,13 @@
 
 type IdRegistry @entity {
   id: String!
-  to: String!
-  userId: BigInt!
-  backup: Bytes!
+  to: String
+  from: String
+  userId: BigInt
+  backup: Bytes
   data: String
+  attestor: String
+
 }
 
 # ================================
@@ -80,6 +83,7 @@ type Channel @entity {
 
 type RiverValidatorV1 @entity {
   id: String!
-  userId: BigInt!
-  status: Boolean!
+  userId: BigInt
+  status: Boolean
+  operator: String
 }

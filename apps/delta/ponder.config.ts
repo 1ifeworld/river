@@ -24,26 +24,26 @@ export const config: Config = {
     },
   ],
   contracts: [
-    // {
-    //   name: 'IdRegistry',
-    //   network: 'optimism-goerli',
-    //   abi: idRegistryABI,
-    //   address: idRegistry,
-    //   startBlock: 16474518,
-    // },
+    {
+      name: 'IdRegistry',
+      network: 'optimism-goerli',
+      abi: idRegistryABI,
+      address: idRegistry,
+      startBlock: 16474518,
+    },
     // {
     //   name: 'IdRegistry',
     //   network: 'anvil',
     //   abi: idRegistryABI,
     //   address: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
     // },
-    // {
-    //   name: 'DelegateRegistry',
-    //   network: 'optimism-goerli',
-    //   abi: delegateRegistryABI,
-    //   address: delegateRegistry,
-    //   startBlock: 16474518,
-    // },
+    {
+      name: 'DelegateRegistry',
+      network: 'optimism-goerli',
+      abi: delegateRegistryABI,
+      address: delegateRegistry,
+      startBlock: 16474518,
+    },
     // {
     //   name: 'DelegateRegistry',
     //   network: 'anvil',
@@ -63,13 +63,13 @@ export const config: Config = {
       address: nodeRegistry,
       startBlock: 16774340,
     },
-    // {
-    //   name: 'RiverValidatorV1',
-    //   network: 'optimism-goerli',
-    //   abi: riverValidatorV1ABI,
-    //   address: riverValidatorV1,
-    //   startBlock: 16474518,
-    // },
+    {
+      name: 'RiverValidatorV1',
+      network: 'optimism-goerli',
+      abi: riverValidatorV1ABI,
+      address: riverValidatorV1,
+      startBlock: 16474518,
+    },
     // {
     //   name: 'RiverValidatorV1',
     //   network: 'anvil',
