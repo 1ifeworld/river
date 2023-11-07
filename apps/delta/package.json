@@ -1,4 +1,5 @@
 {
+  "name": "delta",
   "private": true,
   "scripts": {
     "dev": "ponder dev",

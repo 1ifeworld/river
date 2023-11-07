@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
     "moduleResolution": "node",
-    "target": "ESNext",
-    "module": "ESNext",
+    "target": "es2016",
+    "module": "commonjs",
     "strict": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "esModuleInterop": true,
-    "noEmit": true,
+    "noEmit": false,
     "noImplicitReturns": true,
     "skipLibCheck": true,
     "outDir": "./dist",
