@@ -41,8 +41,9 @@ export async function createChannelNode() {
     args: [encodedNodeRegistrationStruct],
   })
 
-  const registerPublicationHash =
-    await walletClient.writeContract(registerPublication)
+  const registerPublicationHash = await walletClient.writeContract(
+    registerPublication,
+  )
 
   console.log('Register publication hash:', registerPublicationHash)
 }

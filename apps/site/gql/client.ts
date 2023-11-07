@@ -1,5 +1,5 @@
 import { GraphQLClient } from 'graphql-request'
-// import { getSdk } from './sdk.generated'
+import { getSdk } from './sdk.generated'
 
 const client = new GraphQLClient(
   process.env.NEXT_PUBLIC_GRAPHQL_API as string,
@@ -10,6 +10,6 @@ const client = new GraphQLClient(
   },
 )
 
-// const sdk = getSdk(client)
+const sdk = getSdk(client)
 
-// export default sdk
+export default sdk
