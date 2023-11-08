@@ -69,13 +69,13 @@ export function UsernameDialog({ open }: { open: boolean }) {
     console.log('LOGS', logs)
     console.log('ID', logs[0].args?.id)
 
+    const userId: string = (logs[0].args.id as bigint).toString()
+
     await setUsername({
       registrationParameters: {
-        // TODO: Pass the appropriate user id
-        id: '23',
+        id: userId,
         name: `${data.username}.sbvrsv.eth`,
-        // TODO: Pass the appropriate smart account address
-        owner: String(zeroAddress),
+        owner: String(smartAccountAddress),
       },
     })
   }
