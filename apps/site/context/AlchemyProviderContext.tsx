@@ -23,12 +23,14 @@ import {
 
 const AlchemyContext = createContext<{
   alchemyProvider?: AlchemyProvider
+  userId?: string
 }>({})
 
 export function AlchemyProviderComponent({
   children,
 }: { children: ReactNode }) {
   const [alchemyProvider, setAlchemyProvider] = useState<AlchemyProvider>()
+  const [userId, setUserId] = useState<string>()
   const { wallets } = useWallets()
 
   const embeddedWallet = wallets.find(
@@ -68,6 +70,25 @@ export function AlchemyProviderComponent({
             }),
         ),
       )
+
+      const smartAccountAddress = await alchemyProvider?.getAddress()
+
+      // Set the state variable for a user's id
+      await fetch(
+        `https://server.talktomenice.workers.dev/id/${smartAccountAddress}`,
+        {
+          method: 'GET',
+        },
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            setUserId(userId)
+            console.log('Id returned successfully')
+          } else {
+            console.error('Error:', data.error)
+          }
+        })
     }
 
     if (embeddedWallet) createLightAccount(embeddedWallet)
