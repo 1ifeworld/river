@@ -23,6 +23,7 @@ import {
 
 const AlchemyContext = createContext<{
   alchemyProvider?: AlchemyProvider
+  userId?: string
 }>({})
 
 export function AlchemyProviderComponent({
@@ -68,6 +69,9 @@ export function AlchemyProviderComponent({
             }),
         ),
       )
+
+      // TODO: Update this to bet in state to avoid refetching it elsewhere
+      const smartAccountAddress = await alchemyProvider?.getAddress()
     }
 
     if (embeddedWallet) createLightAccount(embeddedWallet)
@@ -80,7 +84,7 @@ export function AlchemyProviderComponent({
   )
 }
 
-// Access the context value of the ProviderContext
+// Access the context value of the AlchemyContext
 export const useAlchemyContext = () => {
   const context = useContext(AlchemyContext)
   if (!context) {

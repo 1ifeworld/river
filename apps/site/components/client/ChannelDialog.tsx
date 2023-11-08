@@ -21,12 +21,12 @@ import {
   FormMessage,
 } from '@/design-system'
 import { type Hex } from 'viem'
+import { getUserId } from '@/lib'
 import { messageNode } from '@/actions'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useAlchemyContext } from 'context/AlchemyProviderContext'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
-import { useAccount } from 'wagmi'
 
 const ChannelNameSchema = z.object({
   channelName: z.string().min(2, {
@@ -47,18 +47,21 @@ export const ChannelDialog = React.forwardRef<
   // async
 >(({ triggerChildren, onSelect, onOpenChange }, forwardedRef) => {
   const [smartAccountAddress, setSmartAccountAddress] = React.useState<Hex>()
-  const { isConnected } = useAccount()
+  const [userId, setUserId] = React.useState<string>()
   const alchemyProvider = useAlchemyContext()
 
   console.log('Alchemy provider', alchemyProvider)
 
   React.useEffect(() => {
-    const fetchAddress = async () => {
-      const address = await alchemyProvider?.getAddress()
-      setSmartAccountAddress(address as Hex)
-    }
-    fetchAddress()
-  }, [isConnected, alchemyProvider])
+    ;(async () => {
+      const smartAccountAddress = await alchemyProvider?.getAddress()
+      setSmartAccountAddress(smartAccountAddress)
+      const userId = await getUserId({
+        smartAccountAddress: smartAccountAddress as Hex,
+      })
+      setUserId(userId)
+    })()
+  }, [alchemyProvider])
 
   const form = useForm<z.infer<typeof ChannelNameSchema>>({
     resolver: zodResolver(ChannelNameSchema),
