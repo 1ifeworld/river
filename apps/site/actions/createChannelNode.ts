@@ -11,7 +11,6 @@ import {
 import { publicClient, walletClient } from '@/config'
 
 export async function createChannelNode(formData: FormData) {
-
   const userId = formData.get('userId')
 
   console.log('User id', userId)

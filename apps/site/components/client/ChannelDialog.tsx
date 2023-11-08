@@ -94,16 +94,9 @@ export const ChannelDialog = React.forwardRef<
             <Separator />
             {/* Channel form */}
             <Form {...form}>
-              <form
-                action={createChannelNode}
-                className="w-2/3 space-y-6"
-              >
+              <form action={createChannelNode} className="w-2/3 space-y-6">
                 {/* Pass additional data to our form handler */}
-                <input
-                  type="hidden"
-                  name="userId"
-                  value={userId}
-                />
+                <input type="hidden" name="userId" value={userId} />
                 <FormField
                   control={form.control}
                   name="channelName"
