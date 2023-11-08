@@ -3,6 +3,7 @@ import { useLogin, usePrivy } from '@privy-io/react-auth'
 import { useState } from 'react'
 import { Register, User, UsernameDialog, AddNew } from '@/client'
 import { RiverLogo } from '@/server'
+import { useAlchemyContext } from '@/context'
 
 export function Header() {
   const { ready, authenticated, user } = usePrivy()

@@ -5,7 +5,6 @@ import {
   useState,
   useEffect,
 } from 'react'
-import { useAccount, useWalletClient } from 'wagmi'
 import {
   LightSmartContractAccount,
   getDefaultLightAccountFactory,
@@ -13,7 +12,7 @@ import {
 import { AlchemyProvider } from '@alchemy/aa-alchemy'
 import { opGoerliViem } from '@/constants'
 import { entryPoint } from 'offchain-schema'
-import { useWallets } from '@privy-io/react-auth'
+import { ConnectedWallet, useWallets } from '@privy-io/react-auth'
 import { WalletClientSigner, type SmartAccountSigner } from '@alchemy/aa-core'
 import {
   createWalletClient,
@@ -29,26 +28,25 @@ const AlchemyContext = createContext<{
 export function AlchemyProviderComponent({
   children,
 }: { children: ReactNode }) {
-  const { isConnected } = useAccount()
-  const { data: walletClientData } = useWalletClient()
   const [alchemyProvider, setAlchemyProvider] = useState<AlchemyProvider>()
   const { wallets } = useWallets()
 
-  useEffect(() => {
-    if (!isConnected) return
+  const embeddedWallet = wallets.find(
+    (wallet) => wallet.walletClientType === 'privy',
+  )
 
-    const embeddedWallet = wallets.find(
-      (wallet) => wallet.walletClientType === 'privy',
-    )
-    ;(async () => {
-      // Get a viem client from the embedded wallet
+  useEffect(() => {
+    const createLightAccount = async (embeddedWallet: ConnectedWallet) => {
+      // Create a viem client from the embedded wallet
       const eip1193provider = await embeddedWallet?.getEthereumProvider()
+
       const privyClient = createWalletClient({
         account: embeddedWallet?.address as Hex,
         chain: opGoerliViem,
         transport: custom(eip1193provider as EIP1193Provider),
       })
-      // Create a smart account signer from the embedded wallet's viem client
+
+      // Initialize the account's signer from the embedded wallet's viem client
       const privySigner: SmartAccountSigner = new WalletClientSigner(
         privyClient,
         'json-rpc', // signerType
@@ -70,8 +68,10 @@ export function AlchemyProviderComponent({
             }),
         ),
       )
-    })()
-  }, [isConnected, walletClientData])
+    }
+
+    if (embeddedWallet) createLightAccount(embeddedWallet)
+  }, [embeddedWallet?.address])
 
   return (
     <AlchemyContext.Provider value={{ alchemyProvider }}>
