@@ -12,8 +12,6 @@ export async function setUsername({
     headers: {
       'Content-Type': 'application/json',
     },
-    // TODO: Determine if the CORS parameters of our worker need to be adjusted
-    mode: 'no-cors',
     body: JSON.stringify(registrationParameters),
   })
     .then((response) => response.json())
