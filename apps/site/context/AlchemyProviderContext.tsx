@@ -101,7 +101,7 @@ export function AlchemyProviderComponent({
   )
 }
 
-// Access the context value of the ProviderContext
+// Access the context value of the AlchemyContext
 export const useAlchemyContext = () => {
   const context = useContext(AlchemyContext)
   if (!context) {
