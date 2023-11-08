@@ -10,7 +10,11 @@ import {
 } from 'offchain-schema'
 import { publicClient, walletClient } from '@/config'
 
-export async function createChannelNode() {
+export async function createChannelNode(formData: FormData) {
+  const userId = formData.get('userId')
+
+  console.log('User id', userId)
+
   // Register Channel node
   const encodedAdminInitializeStruct = encodeAbiParameters(
     adminWithMembersABI[0].outputs,
@@ -27,7 +31,8 @@ export async function createChannelNode() {
     [
       {
         schema: channelSchema,
-        userId: BigInt(1),
+        // @ts-expect-error
+        userId: BigInt(userId),
         msgType: BigInt(1),
         msgBody: encodedAdminInitializeStruct,
       },
@@ -47,5 +52,3 @@ export async function createChannelNode() {
 
   console.log('Register publication hash:', registerPublicationHash)
 }
-
-createChannelNode()
