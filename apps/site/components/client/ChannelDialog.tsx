@@ -22,7 +22,7 @@ import {
 } from '@/design-system'
 import { type Hex } from 'viem'
 import { getUserId } from '@/lib'
-import { messageNode } from '@/actions'
+import { createChannelNode } from '@/actions'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useAlchemyContext } from 'context/AlchemyProviderContext'
 import { useForm } from 'react-hook-form'
@@ -95,15 +95,14 @@ export const ChannelDialog = React.forwardRef<
             {/* Channel form */}
             <Form {...form}>
               <form
-                // action={() => messageNode({ userId: smartAccountAddress as Hex })}
-                action={messageNode}
+                action={createChannelNode}
                 className="w-2/3 space-y-6"
               >
                 {/* Pass additional data to our form handler */}
                 <input
                   type="hidden"
                   name="userId"
-                  value={smartAccountAddress}
+                  value={userId}
                 />
                 <FormField
                   control={form.control}
