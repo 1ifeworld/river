@@ -66,9 +66,6 @@ export function UsernameDialog({ open }: { open: boolean }) {
       ),
     })
 
-    console.log('LOGS', logs)
-    console.log('ID', logs[0].args?.id)
-
     const userId: string = (logs[0].args.id as bigint).toString()
 
     await setUsername({
