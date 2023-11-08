@@ -2,25 +2,21 @@ import {
   Button,
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
   Input,
-  Separator,
   Stack,
   Typography,
 } from '@/design-system'
+import { setUsername } from '@/lib'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { zeroAddress } from 'viem'
 import * as z from 'zod'
 
 const FormSchema = z.object({
@@ -38,7 +34,17 @@ export function UsernameDialog({ open }: { open: boolean }) {
     },
   })
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {}
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    await setUsername({
+      registrationParameters: {
+        // TODO: Pass the appropriate user id
+        id: '22',
+        name: `${data.username}.sbvrsv.eth`,
+        // TODO: Pass the appropriate smart account address
+        owner: String(zeroAddress),
+      },
+    })
+  }
   return (
     <Dialog open={open}>
       <DialogContent className="sm:max-w-[425px]">
