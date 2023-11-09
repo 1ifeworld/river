@@ -74,7 +74,7 @@ export function UsernameDialog({ open }: { open: boolean }) {
       ),
     })
 
-    const userId: string = (logs[0].args.id as bigint).toString()
+    const userId: string = (logs[0]?.args?.id as bigint).toString()
 
     await setUsername({
       registrationParameters: {
