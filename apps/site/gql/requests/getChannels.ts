@@ -1,8 +1,11 @@
 import sdk from '../client'
-import { type Hash } from 'viem'
 
-export async function getChannels({ schema }: { schema: Hash }) {
-  const channels = await sdk.Nodes({ schema: schema as string })
+// TODO: This should get moved to our offchain-schema package as a constant.
+const channelSchema =
+  '0x1234567890123456789012345678901234567890123456789012345678901234'
+
+export async function getChannels() {
+  const channels = await sdk.Nodes({ schema: channelSchema })
 
   return {
     channels: channels.nodes,

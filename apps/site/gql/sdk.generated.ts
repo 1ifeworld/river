@@ -193,14 +193,26 @@ export type DelegateRegistryFilter = {
 
 export type IdRegistry = {
   __typename?: 'IdRegistry'
-  backup: Scalars['String']['output']
+  attestor?: Maybe<Scalars['String']['output']>
+  backup?: Maybe<Scalars['String']['output']>
   data?: Maybe<Scalars['String']['output']>
+  from?: Maybe<Scalars['String']['output']>
   id: Scalars['String']['output']
-  to: Scalars['String']['output']
-  userId: Scalars['BigInt']['output']
+  to?: Maybe<Scalars['String']['output']>
+  userId?: Maybe<Scalars['BigInt']['output']>
 }
 
 export type IdRegistryFilter = {
+  attestor?: InputMaybe<Scalars['String']['input']>
+  attestor_contains?: InputMaybe<Scalars['String']['input']>
+  attestor_ends_with?: InputMaybe<Scalars['String']['input']>
+  attestor_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
+  attestor_not?: InputMaybe<Scalars['String']['input']>
+  attestor_not_contains?: InputMaybe<Scalars['String']['input']>
+  attestor_not_ends_with?: InputMaybe<Scalars['String']['input']>
+  attestor_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
+  attestor_not_starts_with?: InputMaybe<Scalars['String']['input']>
+  attestor_starts_with?: InputMaybe<Scalars['String']['input']>
   backup?: InputMaybe<Scalars['String']['input']>
   backup_contains?: InputMaybe<Scalars['String']['input']>
   backup_ends_with?: InputMaybe<Scalars['String']['input']>
@@ -221,6 +233,16 @@ export type IdRegistryFilter = {
   data_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
   data_not_starts_with?: InputMaybe<Scalars['String']['input']>
   data_starts_with?: InputMaybe<Scalars['String']['input']>
+  from?: InputMaybe<Scalars['String']['input']>
+  from_contains?: InputMaybe<Scalars['String']['input']>
+  from_ends_with?: InputMaybe<Scalars['String']['input']>
+  from_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
+  from_not?: InputMaybe<Scalars['String']['input']>
+  from_not_contains?: InputMaybe<Scalars['String']['input']>
+  from_not_ends_with?: InputMaybe<Scalars['String']['input']>
+  from_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
+  from_not_starts_with?: InputMaybe<Scalars['String']['input']>
+  from_starts_with?: InputMaybe<Scalars['String']['input']>
   id?: InputMaybe<Scalars['String']['input']>
   id_contains?: InputMaybe<Scalars['String']['input']>
   id_ends_with?: InputMaybe<Scalars['String']['input']>
@@ -605,8 +627,9 @@ export type QuerySchemasArgs = {
 export type RiverValidatorV1 = {
   __typename?: 'RiverValidatorV1'
   id: Scalars['String']['output']
-  status: Scalars['Boolean']['output']
-  userId: Scalars['BigInt']['output']
+  operator?: Maybe<Scalars['String']['output']>
+  status?: Maybe<Scalars['Boolean']['output']>
+  userId?: Maybe<Scalars['BigInt']['output']>
 }
 
 export type RiverValidatorV1Filter = {
@@ -620,6 +643,16 @@ export type RiverValidatorV1Filter = {
   id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
   id_not_starts_with?: InputMaybe<Scalars['String']['input']>
   id_starts_with?: InputMaybe<Scalars['String']['input']>
+  operator?: InputMaybe<Scalars['String']['input']>
+  operator_contains?: InputMaybe<Scalars['String']['input']>
+  operator_ends_with?: InputMaybe<Scalars['String']['input']>
+  operator_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
+  operator_not?: InputMaybe<Scalars['String']['input']>
+  operator_not_contains?: InputMaybe<Scalars['String']['input']>
+  operator_not_ends_with?: InputMaybe<Scalars['String']['input']>
+  operator_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
+  operator_not_starts_with?: InputMaybe<Scalars['String']['input']>
+  operator_starts_with?: InputMaybe<Scalars['String']['input']>
   status?: InputMaybe<Scalars['Boolean']['input']>
   status_in?: InputMaybe<Array<InputMaybe<Scalars['Boolean']['input']>>>
   status_not?: InputMaybe<Scalars['Boolean']['input']>
@@ -705,6 +738,26 @@ export type NodesQuery = {
   }>
 }
 
+export type UserPublicationsQueryVariables = Exact<{
+  schema: Scalars['String']['input']
+  userId: Scalars['BigInt']['input']
+}>
+
+export type UserPublicationsQuery = {
+  __typename?: 'Query'
+  nodes: Array<{
+    __typename?: 'Node'
+    id: string
+    msgBody: string
+    msgType: any
+    nodeAdmin: any
+    nodeId: any
+    nodeMembers: Array<any | null>
+    schema: string
+    sender: string
+  }>
+}
+
 export const NodesDocument = gql`
     query Nodes($schema: String!) {
   nodes(where: {schema: $schema}) {
@@ -717,6 +770,20 @@ export const NodesDocument = gql`
     schema
     sender
     userId
+  }
+}
+    `
+export const UserPublicationsDocument = gql`
+    query UserPublications($schema: String!, $userId: BigInt!) {
+  nodes(where: {schema: $schema, userId: $userId}) {
+    id
+    msgBody
+    msgType
+    nodeAdmin
+    nodeId
+    nodeMembers
+    schema
+    sender
   }
 }
     `
@@ -749,6 +816,21 @@ export function getSdk(
             ...wrappedRequestHeaders,
           }),
         'Nodes',
+        'query',
+      )
+    },
+    UserPublications(
+      variables: UserPublicationsQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<UserPublicationsQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<UserPublicationsQuery>(
+            UserPublicationsDocument,
+            variables,
+            { ...requestHeaders, ...wrappedRequestHeaders },
+          ),
+        'UserPublications',
         'query',
       )
     },
