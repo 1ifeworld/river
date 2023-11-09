@@ -22,7 +22,7 @@ import {
 } from '@/design-system'
 import { type Hex } from 'viem'
 import { getUserId } from '@/lib'
-import { createChannelNode } from '@/actions'
+import { createChannel } from '@/actions'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useAlchemyContext } from 'context/AlchemyProviderContext'
 import { useForm } from 'react-hook-form'

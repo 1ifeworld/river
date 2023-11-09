@@ -10,17 +10,17 @@ import {
 } from 'offchain-schema'
 import { publicClient, walletClient } from '@/config'
 
-export async function createChannelNode(formData: FormData) {
-  const userId = formData.get('userId')
+export async function createChannel(userId: bigint, formData: FormData) {
 
-  console.log('User id', userId)
+  // TODO: Ensure members are actually being passed through
+  const members = formData.get('members')
 
-  // Register Channel node
   const encodedAdminInitializeStruct = encodeAbiParameters(
     adminWithMembersABI[0].outputs,
     [
       {
-        admin: BigInt(1),
+        admin: userId,
+        // TODO: Replace with members object
         members: [BigInt(2), BigInt(4)],
       },
     ],
@@ -31,24 +31,23 @@ export async function createChannelNode(formData: FormData) {
     [
       {
         schema: channelSchema,
-        // @ts-expect-error
-        userId: BigInt(userId),
+        userId: userId,
         msgType: BigInt(1),
         msgBody: encodedAdminInitializeStruct,
       },
     ],
   )
 
-  const { request: registerPublication } = await publicClient.simulateContract({
+  const { request: registerChannel } = await publicClient.simulateContract({
     address: nodeRegistry,
     abi: nodeRegistryABI,
     functionName: 'registerNode',
     args: [encodedNodeRegistrationStruct],
   })
 
-  const registerPublicationHash = await walletClient.writeContract(
-    registerPublication,
+  const registerChannelHash = await walletClient.writeContract(
+    registerChannel,
   )
 
-  console.log('Register publication hash:', registerPublicationHash)
+  console.log('Register channel hash:', registerChannelHash)
 }
