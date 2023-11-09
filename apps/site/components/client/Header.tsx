@@ -1,12 +1,11 @@
 import { Button, Flex, Typography } from '@/design-system'
 import { useLogin, usePrivy } from '@privy-io/react-auth'
 import { useState } from 'react'
-import { Register, User, UsernameDialog, AddNew } from '@/client'
+import { User, UsernameDialog, AddNew } from '@/client'
 import { RiverLogo } from '@/server'
-import { useAlchemyContext } from '@/context'
 
 export function Header() {
-  const { ready, authenticated, user } = usePrivy()
+  const { ready, authenticated } = usePrivy()
 
   const [open, setOpen] = useState<boolean>(false)
 
@@ -31,7 +30,6 @@ export function Header() {
 
   return (
     <>
-      {/* <Register /> */}
       <Flex className="items-center justify-between">
         <RiverLogo />
         {authenticated ? (

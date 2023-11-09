@@ -18,17 +18,12 @@ import { registerAndDelegate } from '@/lib'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useAlchemyContext } from 'context/AlchemyProviderContext'
+import { usePrivy } from '@privy-io/react-auth'
 import { AlchemyProvider } from '@alchemy/aa-alchemy'
-import { zeroAddress, Hex, parseAbiItem } from 'viem'
-import {
-  entryPoint,
-  idRegistry,
-  idRegistryABI,
-  lightAccountFactory,
-} from 'offchain-schema'
+import { Hex, parseAbiItem } from 'viem'
+import { entryPoint, idRegistry } from 'offchain-schema'
 import * as z from 'zod'
 import { publicClient } from 'config/clients'
-import { lightAccountAbi } from 'abi/lightAccountAbi'
 
 const FormSchema = z.object({
   username: z.string().min(2, {
@@ -38,6 +33,7 @@ const FormSchema = z.object({
 })
 
 export function UsernameDialog({ open }: { open: boolean }) {
+  const { ready, authenticated, user } = usePrivy()
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -52,30 +48,46 @@ export function UsernameDialog({ open }: { open: boolean }) {
   })
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    const smartAccountAddress = (await alchemyProvider?.getAddress()) as Hex
+    try {
+      const smartAccountAddress = (await alchemyProvider?.getAddress()) as Hex
+      const hash = await registerAndDelegate({
+        from: smartAccountAddress,
+        provider: alchemyProvider as AlchemyProvider,
+      })
 
-    await registerAndDelegate({
-      from: smartAccountAddress,
-      provider: alchemyProvider as AlchemyProvider,
-    })
+      if (hash) {
+        // Only proceed if a hash value was returned
+        const logs = await publicClient.getLogs({
+          address: idRegistry,
+          event: parseAbiItem(
+            'event Register(address indexed to, uint256 indexed id, address backup, bytes data)',
+          ),
+        })
 
-    const logs = await publicClient.getLogs({
-      address: idRegistry,
-      event: parseAbiItem(
-        'event Register(address indexed to, uint256 indexed id, address backup, bytes data)',
-      ),
-    })
+        // Ensure logs array is not empty and has the expected structure
+        if (logs.length > 0 && logs[0].args.id !== undefined) {
+          const userId: string = (logs[0].args.id as bigint).toString()
 
-    const userId: string = (logs[0].args.id as bigint).toString()
-
-    await setUsername({
-      registrationParameters: {
-        id: userId,
-        name: `${data.username}.sbvrsv.eth`,
-        owner: String(smartAccountAddress),
-      },
-    })
+          await setUsername({
+            registrationParameters: {
+              id: userId,
+              name: `${data.username}.sbvrsv.eth`,
+              owner: String(smartAccountAddress),
+              email: user?.email?.address as string,
+              signer: user?.wallet?.address as string,
+            },
+          })
+        } else {
+          console.error('No logs found for the transaction.')
+        }
+      } else {
+        console.error('No transaction hash returned from registerAndDelegate.')
+      }
+    } catch (error) {
+      console.error('An error occurred during the registration process:', error)
+    }
   }
+
   return (
     <Dialog open={open}>
       <DialogContent className="sm:max-w-[425px]">
