@@ -11,7 +11,6 @@ import {
 import { publicClient, walletClient } from '@/config'
 
 export async function createChannel(userId: bigint, formData: FormData) {
-
   // TODO: Ensure members are actually being passed through
   const members = formData.get('members')
 
@@ -45,9 +44,7 @@ export async function createChannel(userId: bigint, formData: FormData) {
     args: [encodedNodeRegistrationStruct],
   })
 
-  const registerChannelHash = await walletClient.writeContract(
-    registerChannel,
-  )
+  const registerChannelHash = await walletClient.writeContract(registerChannel)
 
   console.log('Register channel hash:', registerChannelHash)
 }

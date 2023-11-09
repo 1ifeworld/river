@@ -30,8 +30,7 @@ import * as z from 'zod'
 
 const ChannelNameSchema = z.object({
   channelName: z.string().min(2, {
-    message: 'Username must be at least 2 characters.',
-    // Username not available, please try another
+    message: 'Channel name must be at least 2 characters.',
   }),
 })
 
@@ -44,10 +43,8 @@ interface ChannelDialogProps {
 export const ChannelDialog = React.forwardRef<
   HTMLDivElement,
   ChannelDialogProps
-  // async
 >(({ triggerChildren, onSelect, onOpenChange }, forwardedRef) => {
-  const [smartAccountAddress, setSmartAccountAddress] = React.useState<Hex>()
-  const [userId, setUserId] = React.useState<string>()
+  const [userId, setUserId] = React.useState<bigint>()
   const alchemyProvider = useAlchemyContext()
 
   console.log('Alchemy provider', alchemyProvider)
@@ -55,7 +52,6 @@ export const ChannelDialog = React.forwardRef<
   React.useEffect(() => {
     ;(async () => {
       const smartAccountAddress = await alchemyProvider?.getAddress()
-      setSmartAccountAddress(smartAccountAddress)
       const userId = await getUserId({
         smartAccountAddress: smartAccountAddress as Hex,
       })
@@ -94,9 +90,11 @@ export const ChannelDialog = React.forwardRef<
             <Separator />
             {/* Channel form */}
             <Form {...form}>
-              <form action={createChannelNode} className="w-2/3 space-y-6">
-                {/* Pass additional data to our form handler */}
-                <input type="hidden" name="userId" value={userId} />
+              <form
+                // TODO: Confirm binding the user id inline is appropriate
+                action={createChannel.bind(null, userId as bigint)}
+                className="w-2/3 space-y-6"
+              >
                 <FormField
                   control={form.control}
                   name="channelName"
