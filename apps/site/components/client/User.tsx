@@ -1,5 +1,4 @@
 import {
-  Typography,
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuGroup,

@@ -16,20 +16,12 @@ import {
 import { setUsername } from '@/lib'
 import { registerAndDelegate } from '@/lib'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Email } from '@privy-io/react-auth'
 import { useForm } from 'react-hook-form'
 import { useAlchemyContext } from 'context/AlchemyProviderContext'
-import { useUserContext } from 'context/UserContext'
-import { UserContext } from 'context/UserContext'
+import { usePrivy } from '@privy-io/react-auth'
 import { AlchemyProvider } from '@alchemy/aa-alchemy'
-import { zeroAddress, Hex, parseAbiItem } from 'viem'
-import { useContext } from 'react'
-import {
-  entryPoint,
-  idRegistry,
-  idRegistryABI,
-  lightAccountFactory,
-} from 'offchain-schema'
+import { Hex, parseAbiItem } from 'viem'
+import { entryPoint, idRegistry } from 'offchain-schema'
 import * as z from 'zod'
 import { publicClient } from 'config/clients'
 
@@ -41,7 +33,7 @@ const FormSchema = z.object({
 })
 
 export function UsernameDialog({ open }: { open: boolean }) {
-  const { email, signer } = useContext(UserContext)
+  const { ready, authenticated, user } = usePrivy()
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -56,10 +48,6 @@ export function UsernameDialog({ open }: { open: boolean }) {
   })
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    const emailObj: Email = {
-      address: email?.address as string,
-    }
-
     const smartAccountAddress = (await alchemyProvider?.getAddress()) as Hex
 
     await registerAndDelegate({
@@ -74,15 +62,19 @@ export function UsernameDialog({ open }: { open: boolean }) {
       ),
     })
 
-    const userId: string = (logs[0]?.args?.id as bigint).toString()
+    const id = logs[0].args.id
+    if (typeof id !== 'bigint') {
+      throw new Error('ID is not of type bigint.')
+    }
+    const userId: string = id.toString()
 
     await setUsername({
       registrationParameters: {
         id: userId,
         name: `${data.username}.sbvrsv.eth`,
         owner: String(smartAccountAddress),
-        email: emailObj.address,
-        signer: String(signer),
+        email: user?.email?.address as string,
+        signer: user?.wallet?.address as string,
       },
     })
   }
