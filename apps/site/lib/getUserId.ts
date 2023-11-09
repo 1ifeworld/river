@@ -3,7 +3,6 @@ import { Hex } from 'viem'
 export async function getUserId({
   smartAccountAddress,
 }: { smartAccountAddress: Hex }) {
-  // Set the state variable for a user's id
   const userId = await fetch(
     `https://server.talktomenice.workers.dev/id/${smartAccountAddress}`,
     {
