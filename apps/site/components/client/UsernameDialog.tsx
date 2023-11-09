@@ -18,6 +18,7 @@ import { registerAndDelegate } from '@/lib'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useAlchemyContext } from 'context/AlchemyProviderContext'
+import { useUserContext } from 'context/UserContext';
 import { AlchemyProvider } from '@alchemy/aa-alchemy'
 import { zeroAddress, Hex, parseAbiItem } from 'viem'
 import {
@@ -28,9 +29,10 @@ import {
 } from 'offchain-schema'
 import * as z from 'zod'
 import { publicClient } from 'config/clients'
-import { lightAccountAbi } from 'abi/lightAccountAbi'
+
 
 const FormSchema = z.object({
+  
   username: z.string().min(2, {
     message: 'Username must be at least 2 characters.',
     // Username not available, please try another
@@ -38,6 +40,7 @@ const FormSchema = z.object({
 })
 
 export function UsernameDialog({ open }: { open: boolean }) {
+  const { email, signer } = useUserContext()
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -51,7 +54,11 @@ export function UsernameDialog({ open }: { open: boolean }) {
     entryPoint: entryPoint,
   })
 
+  
   async function onSubmit(data: z.infer<typeof FormSchema>) {
+    console.log("Context email:", email)
+    console.log("Context signer:", signer)
+  
     const smartAccountAddress = (await alchemyProvider?.getAddress()) as Hex
 
     await registerAndDelegate({
@@ -68,11 +75,14 @@ export function UsernameDialog({ open }: { open: boolean }) {
 
     const userId: string = (logs[0].args.id as bigint).toString()
 
+
     await setUsername({
       registrationParameters: {
         id: userId,
         name: `${data.username}.sbvrsv.eth`,
         owner: String(smartAccountAddress),
+        email: String(email),
+        signer: String(signer) ,
       },
     })
   }
