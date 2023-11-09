@@ -1,0 +1,12 @@
+query UserPublications($schema: String!, $userId: BigInt!) {
+  nodes(where: {schema: $schema, userId: $userId}) {
+    id
+    msgBody
+    msgType
+    nodeAdmin
+    nodeId
+    nodeMembers
+    schema
+    sender
+  }
+}
