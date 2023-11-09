@@ -48,36 +48,46 @@ export function UsernameDialog({ open }: { open: boolean }) {
   })
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    const smartAccountAddress = (await alchemyProvider?.getAddress()) as Hex
+    try {
+      const smartAccountAddress = (await alchemyProvider?.getAddress()) as Hex
+      const hash = await registerAndDelegate({
+        from: smartAccountAddress,
+        provider: alchemyProvider as AlchemyProvider,
+      })
 
-    await registerAndDelegate({
-      from: smartAccountAddress,
-      provider: alchemyProvider as AlchemyProvider,
-    })
+      if (hash) {
+        // Only proceed if a hash value was returned
+        const logs = await publicClient.getLogs({
+          address: idRegistry,
+          event: parseAbiItem(
+            'event Register(address indexed to, uint256 indexed id, address backup, bytes data)',
+          ),
+        })
 
-    const logs = await publicClient.getLogs({
-      address: idRegistry,
-      event: parseAbiItem(
-        'event Register(address indexed to, uint256 indexed id, address backup, bytes data)',
-      ),
-    })
+        // Ensure logs array is not empty and has the expected structure
+        if (logs.length > 0 && logs[0].args.id !== undefined) {
+          const userId: string = (logs[0].args.id as bigint).toString()
 
-    const id = logs[0].args.id
-    if (typeof id !== 'bigint') {
-      throw new Error('ID is not of type bigint.')
+          await setUsername({
+            registrationParameters: {
+              id: userId,
+              name: `${data.username}.sbvrsv.eth`,
+              owner: String(smartAccountAddress),
+              email: user?.email?.address as string,
+              signer: user?.wallet?.address as string,
+            },
+          })
+        } else {
+          console.error('No logs found for the transaction.')
+        }
+      } else {
+        console.error('No transaction hash returned from registerAndDelegate.')
+      }
+    } catch (error) {
+      console.error('An error occurred during the registration process:', error)
     }
-    const userId: string = id.toString()
-
-    await setUsername({
-      registrationParameters: {
-        id: userId,
-        name: `${data.username}.sbvrsv.eth`,
-        owner: String(smartAccountAddress),
-        email: user?.email?.address as string,
-        signer: user?.wallet?.address as string,
-      },
-    })
   }
+
   return (
     <Dialog open={open}>
       <DialogContent className="sm:max-w-[425px]">

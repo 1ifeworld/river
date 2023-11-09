@@ -24,4 +24,5 @@ export async function registerAndDelegate({
     },
   ])
   console.log('Create account transaction hash:', hash)
+  return hash
 }
