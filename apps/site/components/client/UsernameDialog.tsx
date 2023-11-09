@@ -16,11 +16,14 @@ import {
 import { setUsername } from '@/lib'
 import { registerAndDelegate } from '@/lib'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Email } from '@privy-io/react-auth'
 import { useForm } from 'react-hook-form'
 import { useAlchemyContext } from 'context/AlchemyProviderContext'
-import { useUserContext } from 'context/UserContext';
+import { useUserContext } from 'context/UserContext'
+import { UserContext } from 'context/UserContext'
 import { AlchemyProvider } from '@alchemy/aa-alchemy'
 import { zeroAddress, Hex, parseAbiItem } from 'viem'
+import { useContext } from 'react'
 import {
   entryPoint,
   idRegistry,
@@ -30,9 +33,7 @@ import {
 import * as z from 'zod'
 import { publicClient } from 'config/clients'
 
-
 const FormSchema = z.object({
-  
   username: z.string().min(2, {
     message: 'Username must be at least 2 characters.',
     // Username not available, please try another
@@ -40,7 +41,7 @@ const FormSchema = z.object({
 })
 
 export function UsernameDialog({ open }: { open: boolean }) {
-  const { email, signer } = useUserContext()
+  const { email, signer } = useContext(UserContext)
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -54,11 +55,11 @@ export function UsernameDialog({ open }: { open: boolean }) {
     entryPoint: entryPoint,
   })
 
-  
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log("Context email:", email)
-    console.log("Context signer:", signer)
-  
+    const emailObj: Email = {
+      address: email?.address as string,
+    }
+
     const smartAccountAddress = (await alchemyProvider?.getAddress()) as Hex
 
     await registerAndDelegate({
@@ -75,14 +76,13 @@ export function UsernameDialog({ open }: { open: boolean }) {
 
     const userId: string = (logs[0].args.id as bigint).toString()
 
-
     await setUsername({
       registrationParameters: {
         id: userId,
         name: `${data.username}.sbvrsv.eth`,
         owner: String(smartAccountAddress),
-        email: String(email),
-        signer: String(signer) ,
+        email: emailObj.address,
+        signer: String(signer),
       },
     })
   }

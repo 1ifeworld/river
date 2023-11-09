@@ -1,12 +1,24 @@
 import { Button, Flex, Typography } from '@/design-system'
 import { useLogin, usePrivy } from '@privy-io/react-auth'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Register, User, UsernameDialog, AddNew } from '@/client'
+import { Email } from '@privy-io/react-auth'
+import { Hex } from 'viem'
 import { RiverLogo } from '@/server'
-import { useAlchemyContext } from '@/context'
+import { UserContext } from '@/context'
 
 export function Header() {
-  const { ready, authenticated, user } = usePrivy()
+  const { ready, authenticated, user: privyUser } = usePrivy()
+  const [user, setUser] = useState<{ email?: Email; signer?: Hex | string }>({})
+
+  useEffect(() => {
+    if (authenticated && privyUser) {
+      setUser({
+        email: privyUser.email,
+        signer: privyUser.wallet?.address,
+      })
+    }
+  }, [authenticated, privyUser])
 
   const [open, setOpen] = useState<boolean>(false)
 
@@ -32,20 +44,22 @@ export function Header() {
   return (
     <>
       {/* <Register /> */}
-      <Flex className="items-center justify-between">
-        <RiverLogo />
-        {authenticated ? (
-          <Flex className="gap-4">
-            <AddNew />
-            <User />
-          </Flex>
-        ) : (
-          <Button variant="link" onClick={login}>
-            Login
-          </Button>
-        )}
-      </Flex>
-      <UsernameDialog open={open} />
+      <UserContext.Provider value={{ email: user.email, signer: user.signer }}>
+        <Flex className="items-center justify-between">
+          <RiverLogo />
+          {authenticated ? (
+            <Flex className="gap-4">
+              <AddNew />
+              <User />
+            </Flex>
+          ) : (
+            <Button variant="link" onClick={login}>
+              Login
+            </Button>
+          )}
+        </Flex>
+        <UsernameDialog open={open} />
+      </UserContext.Provider>
     </>
   )
 }

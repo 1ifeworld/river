@@ -1,3 +1,5 @@
+import { Email } from '@privy-io/react-auth'
+
 interface RegistrationParameters {
   id: string
   name: string
