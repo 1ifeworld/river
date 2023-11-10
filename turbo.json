@@ -13,6 +13,7 @@
       "persistent": true
     },
     "lint": {},
-    "format": {}
+    "format": {},
+    "start": {}
   }
 }
