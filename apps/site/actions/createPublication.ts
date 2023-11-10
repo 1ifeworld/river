@@ -29,7 +29,6 @@ export async function createPublication() {
     [
       {
         schema: publicationSchema,
-        // schema: channelSchema,
         userId: BigInt(1),
         msgType: BigInt(1),
         msgBody: encodedAdminInitializeStruct,
@@ -84,4 +83,4 @@ export async function createPublication() {
   console.log('Message publication hash:', callPublicationHash)
 }
 
-createPublication()
+// createPublication()

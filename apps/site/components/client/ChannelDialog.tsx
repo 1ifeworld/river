@@ -22,7 +22,7 @@ import {
 } from '@/design-system'
 import { type Hex } from 'viem'
 import { getUserId } from '@/lib'
-import { createChannel } from '@/actions'
+import { createChannel, createPublication } from '@/actions'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useAlchemyContext } from 'context/AlchemyProviderContext'
 import { useForm } from 'react-hook-form'
@@ -94,7 +94,8 @@ export const ChannelDialog = React.forwardRef<
             <Form {...form}>
               <form
                 // TODO: Confirm binding the user id inline is appropriate
-                action={createChannel.bind(null, userId as bigint)}
+                // action={createChannel.bind(null, userId as bigint)}
+                action={createPublication}
                 className="w-2/3 space-y-6"
               >
                 <FormField

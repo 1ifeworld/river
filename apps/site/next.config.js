@@ -12,4 +12,7 @@ module.exports = {
   experimental: {
     serverActions: true,
   },
+  env: {
+    PRIVATE_KEY: process.env.PRIVATE_KEY,
+  },
 }
