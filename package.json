@@ -11,7 +11,6 @@
     "start": "turbo start",
     "lint": "turbo lint",
     "format": "turbo format",
-    "build:delta": "pnpm build --filter=delta",
     "start:delta": "pnpm start --filter=delta",
     "build:site": "pnpm build --filter=site",
     "dev:site": "pnpm dev --filter=site"
