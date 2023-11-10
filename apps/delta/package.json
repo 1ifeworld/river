@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "ponder dev",
+    "build": "tsc --noEmit",
     "start": "ponder start",
     "codegen": "ponder codegen",
     "lint": "biome check . --apply",
