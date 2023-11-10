@@ -9,11 +9,13 @@ export async function getUserId({
       method: 'GET',
     },
   )
-    .then((response) => response.json())
+    .then((response) => {
+      return response.json()
+    })
     .then((data) => {
-      if (data.success) {
+      if (data) {
         console.log('Id returned successfully')
-        return data.id
+        return data
       } else {
         console.error('Error:', data.error)
       }

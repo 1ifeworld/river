@@ -49,6 +49,8 @@ export const ChannelDialog = React.forwardRef<
 
   console.log('Alchemy provider', alchemyProvider)
 
+  console.log('User id', userId)
+
   React.useEffect(() => {
     ;(async () => {
       const smartAccountAddress = await alchemyProvider?.getAddress()
@@ -57,7 +59,7 @@ export const ChannelDialog = React.forwardRef<
       })
       setUserId(userId)
     })()
-  }, [alchemyProvider])
+  }, [])
 
   const form = useForm<z.infer<typeof ChannelNameSchema>>({
     resolver: zodResolver(ChannelNameSchema),
