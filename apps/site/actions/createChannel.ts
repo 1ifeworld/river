@@ -10,9 +10,10 @@ import {
 } from 'offchain-schema'
 import { publicClient, walletClient } from '@/config'
 
-export async function createChannel(userId: bigint, formData: FormData) {
+export async function createChannel(userId: bigint, formData?: FormData) {
   // TODO: Ensure members are actually being passed through
-  const members = formData.get('members')
+  // const members = formData.get('members')
+  console.log('userId', userId)
 
   const encodedAdminInitializeStruct = encodeAbiParameters(
     adminWithMembersABI[0].outputs,
@@ -44,7 +45,11 @@ export async function createChannel(userId: bigint, formData: FormData) {
     args: [encodedNodeRegistrationStruct],
   })
 
+  // console.log(registerChannel)
+
   const registerChannelHash = await walletClient.writeContract(registerChannel)
 
   console.log('Register channel hash:', registerChannelHash)
 }
+
+createChannel(BigInt(38))

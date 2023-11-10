@@ -1,4 +1,4 @@
-import { Hex } from 'viem'
+import { type Hex } from 'viem'
 
 export async function getUserId({
   smartAccountAddress,
@@ -13,11 +13,12 @@ export async function getUserId({
       return response.json()
     })
     .then((data) => {
-      if (data) {
+      if (data && data.id) {
         console.log('Id returned successfully')
-        return data
+        return data.id
       } else {
         console.error('Error:', data.error)
+        return null
       }
     })
   return userId
