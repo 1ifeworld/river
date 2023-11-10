@@ -11,7 +11,7 @@
     "start": "turbo start",
     "lint": "turbo lint",
     "format": "turbo format",
-    "start:delta": "pnpm start --filter=delta",
+    "start:delta": "pnpm build --filter=offchain-schema && pnpm start --filter=delta",
     "build:site": "pnpm build --filter=site",
     "dev:site": "pnpm dev --filter=site"
   },
