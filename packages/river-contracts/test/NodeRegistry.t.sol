@@ -1,202 +1,190 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.21;
+pragma solidity 0.8.23;
 
 import {Test, console2} from "forge-std/Test.sol";
 
-import {NodeRegistry} from "imp/core/NodeRegistry.sol";
-
-import {NodeRegistryTypes} from "../src/types/general/NodeRegistryTypes.sol";
-import {AdminWithMembers} from "../src/types/access/AdminWithMembers.sol";
-import {ChannelMessageTypes} from "../src/types/channel/ChannelMessageTypes.sol";
-import {PublicationMessageTypes} from "../src/types/publication/PublicationMessageTypes.sol";
+import {NodeRegistry} from "imp/NodeRegistry.sol";
 
 contract NodeRegistryTest is Test {       
-
-    //////////////////////////////////////////////////
-    // EVENTS
-    //////////////////////////////////////////////////    
-
-    event RegisterSchema(address indexed sender, bytes32 indexed schema, bytes data);
-    event RegisterNode(address indexed sender, uint256 indexed nodeId, bytes data);
-    event MessageNode(address indexed sender, uint256 indexed messageId, bytes data);       
 
     //////////////////////////////////////////////////
     // CONSTANTS
     //////////////////////////////////////////////////   
 
-    // MSG VALUES
-    uint256 constant mockUserId = 1;
-    uint256 constant mockNodeId = 1;    
-    bytes32 constant mockSchema = keccak256(abi.encode(1));
-    uint256 constant mockMsgType = 1;
-    string constant mockUri = "ipfs://bafybeihax3e3suai6qrnjrgletfaqfzriziokl7zozrq3nh42df7u74jyu";
-    // HELPERS
-    bytes public constant zeroBytes = new bytes(0);    
+    address constant MOCK_USER = address(0x123);
+    uint256 constant ADMIN_ID = 1;
+    address constant ADMIN_ID_OWNER = address(0x47);
+    bytes constant ZERO_BYTES = new bytes(0);
+    bytes32 constant ZERO_BYTES32 = keccak256(new bytes(0));
+    bytes32 constant PUB_SCHEMA = 0xF36F2F0432F99EA34A360F154CEA9D1FAD45C7319E27ADED55CC0D28D0924068;
+    bytes32 constant CHANNEL_SCHEMA = 0x08B83A3AFF9950D7F88522AC4A172BD8405BE30B0D3B416D42FD73C30AC27C9F;
+    bytes constant ipfsExample = abi.encode("ipfs/bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf354");
 
     //////////////////////////////////////////////////
     // PARAMETERS
-    //////////////////////////////////////////////////  
+    //////////////////////////////////////////////////   
 
-    Account public eoa_operator;
-    NodeRegistry public nodeRegistry;
+    NodeRegistry nodeRegistry;
 
     //////////////////////////////////////////////////
     // SETUP
     //////////////////////////////////////////////////   
 
-    // Set-up called before each test
+    // Set-up called before each test to clear 0 -> 1 gas costs for counter storage
     function setUp() public {
-        eoa_operator = makeAccount("operator");
-        nodeRegistry = new NodeRegistry();
-        // Increment counters for each function to clear 0 -> 1 gas costs
-        nodeRegistry.registerSchema(zeroBytes);
-        nodeRegistry.registerNode(zeroBytes);
-        nodeRegistry.messageNode(zeroBytes);        
+        nodeRegistry = new NodeRegistry();  
+        bytes[] memory array = new bytes[](1);
+        array[0] = ZERO_BYTES;
+        nodeRegistry.register(ZERO_BYTES32, array);
+    }    
+    
+    //////////////////////////////////////////////////
+    // PUBLICATION TESTS
+    //////////////////////////////////////////////////    
+
+    /*
+    *
+     REGISTER
+    *
+    */
+
+    function test_pub_register() public {
+        // Prep input data
+        bytes[] memory messages = new bytes[](2);
+        uint256[] memory members = new uint256[](2);
+        members[0] = 2;
+        members[1] = 3;
+        // MESSAGE:     101_Access_AdminWithMembers
+        // FORMAT:      (userId, msgType, msgBody)
+        messages[0] = abi.encode(1, 101 ,abi.encode(1, members));
+        // MESSAGE:     201_Pub_SetUri
+        // FOMRAT:      (userId, msgType, msgBody)
+        messages[1] = abi.encode(1, 201, abi.encode("yourIpfsStringHere"));
+        // Calculate post increment node count
+        uint256 expectedCount = nodeRegistry.nodeCount() + 1;
+        vm.startPrank(MOCK_USER);        
+        // Checks if topics 1, 2, 3, non-indexed data and event emitter match expected emitter + event signature + event values
+        vm.expectEmit(true, true, true, true, address(nodeRegistry));    
+        // Emit event with expected value
+        emit NodeRegistry.Register(MOCK_USER, PUB_SCHEMA, expectedCount, messages);        
+        // Call `register()` on nodeRegistry
+        nodeRegistry.register(PUB_SCHEMA, messages);
+        // Check storage updated correctly
+        assertEq(nodeRegistry.nodeCount(), expectedCount);
+    }        
+
+    function test_pub_batchRegister() public {
+        uint256 batchQuantity = 5;
+        uint256 expectedCount = nodeRegistry.nodeCount() + batchQuantity;
+        vm.startPrank(MOCK_USER);
+        nodeRegistry.registerBatch(
+            generateBytes32ArrayData(batchQuantity),
+            generateBatchData(batchQuantity)
+        );
+        assertEq(nodeRegistry.nodeCount(), expectedCount);
+    }
+
+    /*
+    *
+     UPDATE
+    *
+    */
+
+    function test_pub_update() public {
+        // Prep input data
+        bytes[] memory messages = new bytes[](2);
+        uint256[] memory members = new uint256[](2);
+        members[0] = 2;
+        members[1] = 3;
+        // MESSAGE:     101_Access_AdminWithMembers
+        // FORMAT:      (userId, msgType, msgBody)
+        messages[0] = abi.encode(1, 101 ,abi.encode(1, members));
+        // MESSAGE:     201_Pub_SetUri
+        // FOMRAT:      (userId, msgType, msgBody)
+        messages[1] = abi.encode(1, 201, abi.encode("yourIpfsStringHere"));
+        // Calculate node count
+        uint256 expectedCount = nodeRegistry.nodeCount();   
+        vm.startPrank(MOCK_USER);        
+        // Checks if topics 1, 2, 3, non-indexed data and event emitter match expected emitter + event signature + event values
+        vm.expectEmit(true, true, false, true, address(nodeRegistry));    
+        // Emit event with expected value
+        emit NodeRegistry.Update(MOCK_USER, expectedCount, messages);        
+        // Call `update()` on nodeRegistry
+        nodeRegistry.update(1, messages);
+        // Check storage updated correctly
+        assertEq(nodeRegistry.nodeCount(), expectedCount);
+    }        
+
+    function test_pub_batchUpdate() public {
+        uint256 batchQuantity = 5;
+        uint256 expectedCount = nodeRegistry.nodeCount();
+        vm.startPrank(MOCK_USER);
+        nodeRegistry.updateBatch(
+            generateUint256ArrayData(batchQuantity),
+            generateBatchData(batchQuantity)
+        );
+        assertEq(nodeRegistry.nodeCount(), expectedCount);
     }    
 
+    /*
+    *
+     UTILS
+    *
+    */
+
+    function generateBatchData(uint256 quantity) public pure returns (bytes[][] memory batchData) {                   
+        batchData = new bytes[][](quantity);
+        uint256[] memory admins = new uint256[](1);
+        admins[0] = 2;
+        uint256[] memory members = new uint256[](2);
+        members[1] = 3;
+        uint256 userId = 1;
+        uint256 msgType = 101;
+        for (uint256 i; i < quantity; ++i) {            
+            batchData[i] = new bytes[](2);            
+            batchData[i][0] = abi.encode(userId, msgType, abi.encode(admins, members));
+            batchData[i][1] = abi.encode(userId, msgType, abi.encode(ipfsExample));
+        }
+    }            
+
     //////////////////////////////////////////////////
-    // REGISTER SCHEMA TESTS
+    // CHANNEL TESTS
     //////////////////////////////////////////////////   
 
     /*
-        Gas breakdown:
-        * registerSchema (7,982) -- passing in no data along with call
+    *
+     REGISTER
+    *
     */
-
-    function test_registerSchema() public {
-        // prank into eoa that was set as operator for validator
-        vm.startPrank(eoa_operator.addr); 
-        // expect emit
-        vm.expectEmit(true, true, false, false, address(nodeRegistry));
-        // Calculate expected schemaHash
-        bytes32 expectedHash = keccak256(abi.encode(block.chainid, address(nodeRegistry), 2));
-        // emit what we expect
-        emit RegisterSchema(eoa_operator.addr, expectedHash, zeroBytes);
-        // call registerSchema on nodeRegistry
-        nodeRegistry.registerSchema(zeroBytes);
-    }                 
-
-
-    //////////////////////////////////////////////////
-    // REGISTER NODE TESTS
-    //////////////////////////////////////////////////   
 
     /*
-        Gas breakdown:
-        * registerNode (11,205) -- passing in adminWithMembers data as msgBody
+    *
+     UPDATE
+    *
     */
-
-    function test_registerNode() public {
-        // prank into eoa that was set as operator for validator
-        vm.startPrank(eoa_operator.addr); 
-        // expect emit
-        vm.expectEmit(true, true, false, true, address(nodeRegistry));
-        // emit what we expect
-        emit RegisterNode(eoa_operator.addr, 2, generateRegistrationData());
-        // call registerNode on nodeRegistry
-        nodeRegistry.registerNode(generateRegistrationData());
-    }              
-
-    //////////////////////////////////////////////////
-    // CALL NODE TESTS
-    //////////////////////////////////////////////////   
-
-    /*
-        Gas breakdown:
-        * callNode (10,398) -- Channel: Passing in data representing an `addToChannel` message (encoded Pointer struct)
-        * callNode (10,922) -- Publicaton: Passing in data representing an `updateUri` message (encoded uri)
-    */
-
-    function test_channel_callNode() public {
-        // prank into eoa that was set as operator for validator
-        vm.startPrank(eoa_operator.addr); 
-        // expect emit
-        vm.expectEmit(true, true, false, true, address(nodeRegistry));
-        // emit what we expect
-        // TODO: update to CallNode once that change is mode to node registry
-        emit MessageNode(eoa_operator.addr, 2, generateCallData(0));
-        // call registerNode on nodeRegistry
-        nodeRegistry.messageNode(generateCallData(0));
-    }              
-
-    function test_publication_callNode() public {
-        // prank into eoa that was set as operator for validator
-        vm.startPrank(eoa_operator.addr); 
-        // expect emit
-        vm.expectEmit(true, true, false, true, address(nodeRegistry));
-        // emit what we expect
-        // TODO: update to CallNode once that change is mode to node registry
-        emit MessageNode(eoa_operator.addr, 2, generateCallData(1));
-        // call registerNode on nodeRegistry
-        nodeRegistry.messageNode(generateCallData(1));
-    }           
 
     //////////////////////////////////////////////////
     // HELPERS
     //////////////////////////////////////////////////  
 
-    /*
-        Register Node
-    */
-
-    function generateRegistrationMsgBody() public pure returns (bytes memory msgBody) {
-        // generate members array input
-        uint256[] memory mockMembers = new uint256[](3);
-        mockMembers[0] = 2;
-        mockMembers[1] = 3;
-        mockMembers[2] = 4;
-        // generate encoded access control struct
-        msgBody = abi.encode(AdminWithMembers.Initialize_100({
-            admin: mockUserId,
-            members: mockMembers
-        }));
-    }
-
-    function generateRegistrationData() public pure returns (bytes memory data) {
-        data = abi.encode(NodeRegistryTypes.Registration({
-            schema: mockSchema,
-            userId: mockUserId,
-            msgType: mockMsgType,
-            msgBody: generateRegistrationMsgBody()
-        }));
-    }
-
-    /*
-        Call Node
-    */    
-
-    /// @notice Use bodyFlag = 0 to generate Channel data, 1 for Publication data
-    function generateCallData(uint8 bodyFlag) public pure returns (bytes memory data) {
-        data = abi.encode(NodeRegistryTypes.Call({
-            nodeId: mockNodeId,
-            userId: mockUserId,
-            msgType: mockMsgType,
-            msgBody: bodyFlag == 0 ? genereateAddToChannelData() : genereateUpdateUriData()
-        }));
+    function generateBytes32ArrayData(uint256 quantity) public pure returns (bytes32[] memory schemas) {                   
+        schemas = new bytes32[](quantity);
+        for (uint256 i; i < quantity; ++i) {
+            schemas[i] = PUB_SCHEMA;
+        }
     }        
 
-    /*
-        Channel helpers
-    */      
+    function generateUint256ArrayData(uint256 quantity) public pure returns (uint256[] memory ids) {                   
+        ids = new uint256[](quantity);
+        for (uint256 i; i < quantity; ++i) {
+            ids[i] = 1;
+        }
+    }         
 
-    function genereateAddToChannelData() public pure returns (bytes memory data) {
-        data = abi.encode(ChannelMessageTypes.Add_110({
-            pointer: ChannelMessageTypes.CustomParam_Pointer({
-                chainId: 10,
-                id: 1, // ex: this can represent a specific publication node, nft tokenId, etc
-                target: address(0x123),
-                hasId: true
-            })
-        }));
-    }
-
-    /*
-        Publication helpers
-    */      
-
-    function genereateUpdateUriData() public pure returns (bytes memory data) {
-        data = abi.encode(PublicationMessageTypes.Uri_100({
-            uri: mockUri
-        }));
-    }     
+    function generateEmptyData(uint256 quantity) public pure returns (bytes[] memory batchData) {                   
+        batchData = new bytes[](quantity);
+        for (uint256 i; i < quantity; ++i) {
+            batchData[i] = new bytes(0);
+        }
+    }                       
 }

@@ -48,7 +48,7 @@
       "versionRequirement": ">=0.5.0",
       "artifacts": {
         "DSTest": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "test.sol/DSTest.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "test.sol/DSTest.json"
         }
       }
     },
@@ -92,13 +92,13 @@
       "versionRequirement": ">=0.6.2, <0.9.0",
       "artifacts": {
         "CommonBase": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "Base.sol/CommonBase.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "Base.sol/CommonBase.json"
         },
         "ScriptBase": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "Base.sol/ScriptBase.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "Base.sol/ScriptBase.json"
         },
         "TestBase": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "Base.sol/TestBase.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "Base.sol/TestBase.json"
         }
       }
     },
@@ -153,7 +153,7 @@
       "versionRequirement": ">=0.6.2, <0.9.0",
       "artifacts": {
         "Script": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "Script.sol/Script.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "Script.sol/Script.json"
         }
       }
     },
@@ -197,7 +197,7 @@
       "versionRequirement": ">=0.6.2, <0.9.0",
       "artifacts": {
         "StdAssertions": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "StdAssertions.sol/StdAssertions.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "StdAssertions.sol/StdAssertions.json"
         }
       }
     },
@@ -240,7 +240,7 @@
       "versionRequirement": ">=0.6.2, <0.9.0",
       "artifacts": {
         "StdChains": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "StdChains.sol/StdChains.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "StdChains.sol/StdChains.json"
         }
       }
     },
@@ -285,10 +285,10 @@
       "versionRequirement": ">=0.6.2, <0.9.0",
       "artifacts": {
         "StdCheats": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "StdCheats.sol/StdCheats.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "StdCheats.sol/StdCheats.json"
         },
         "StdCheatsSafe": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "StdCheats.sol/StdCheatsSafe.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "StdCheats.sol/StdCheatsSafe.json"
         }
       }
     },
@@ -329,7 +329,7 @@
       "versionRequirement": ">=0.6.2, <0.9.0",
       "artifacts": {
         "stdError": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "StdError.sol/stdError.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "StdError.sol/stdError.json"
         }
       }
     },
@@ -370,7 +370,7 @@
       "versionRequirement": ">=0.6.2, <0.9.0",
       "artifacts": {
         "StdInvariant": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "StdInvariant.sol/StdInvariant.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "StdInvariant.sol/StdInvariant.json"
         }
       }
     },
@@ -413,7 +413,7 @@
       "versionRequirement": ">=0.6.0, <0.9.0",
       "artifacts": {
         "stdJson": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "StdJson.sol/stdJson.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "StdJson.sol/stdJson.json"
         }
       }
     },
@@ -454,7 +454,7 @@
       "versionRequirement": ">=0.6.2, <0.9.0",
       "artifacts": {
         "stdMath": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "StdMath.sol/stdMath.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "StdMath.sol/stdMath.json"
         }
       }
     },
@@ -497,10 +497,10 @@
       "versionRequirement": ">=0.6.2, <0.9.0",
       "artifacts": {
         "stdStorage": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "StdStorage.sol/stdStorage.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "StdStorage.sol/stdStorage.json"
         },
         "stdStorageSafe": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "StdStorage.sol/stdStorageSafe.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "StdStorage.sol/stdStorageSafe.json"
         }
       }
     },
@@ -543,7 +543,7 @@
       "versionRequirement": ">=0.4.22, <0.9.0",
       "artifacts": {
         "StdStyle": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "StdStyle.sol/StdStyle.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "StdStyle.sol/StdStyle.json"
         }
       }
     },
@@ -587,7 +587,7 @@
       "versionRequirement": ">=0.6.2, <0.9.0",
       "artifacts": {
         "StdUtils": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "StdUtils.sol/StdUtils.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "StdUtils.sol/StdUtils.json"
         }
       }
     },
@@ -646,7 +646,7 @@
       "versionRequirement": ">=0.6.2, <0.9.0",
       "artifacts": {
         "Test": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "Test.sol/Test.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "Test.sol/Test.json"
         }
       }
     },
@@ -687,10 +687,10 @@
       "versionRequirement": ">=0.6.2, <0.9.0",
       "artifacts": {
         "Vm": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "Vm.sol/Vm.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "Vm.sol/Vm.json"
         },
         "VmSafe": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "Vm.sol/VmSafe.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "Vm.sol/VmSafe.json"
         }
       }
     },
@@ -731,7 +731,7 @@
       "versionRequirement": ">=0.4.22, <0.9.0",
       "artifacts": {
         "console": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "console.sol/console.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "console.sol/console.json"
         }
       }
     },
@@ -772,7 +772,7 @@
       "versionRequirement": ">=0.4.22, <0.9.0",
       "artifacts": {
         "console2": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "console2.sol/console2.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "console2.sol/console2.json"
         }
       }
     },
@@ -813,7 +813,7 @@
       "versionRequirement": ">=0.6.2, <0.9.0",
       "artifacts": {
         "IMulticall3": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "IMulticall3.sol/IMulticall3.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "IMulticall3.sol/IMulticall3.json"
         }
       }
     },
@@ -854,14 +854,14 @@
       "versionRequirement": ">=0.6.2, <0.9.0",
       "artifacts": {
         "safeconsole": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "safeconsole.sol/safeconsole.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "safeconsole.sol/safeconsole.json"
         }
       }
     },
-    "lib/imp/src/core/DelegateRegistry.sol": {
-      "lastModificationDate": 1699120239371,
-      "contentHash": "d07183b27646ced91d90acab0271bf97",
-      "sourceName": "lib/imp/src/core/DelegateRegistry.sol",
+    "lib/imp/src/AttestationRegistry.sol": {
+      "lastModificationDate": 1699677041726,
+      "contentHash": "9dc66e02ee2662eefade2cb416fce78a",
+      "sourceName": "lib/imp/src/AttestationRegistry.sol",
       "solcConfig": {
         "settings": {
           "optimizer": {
@@ -892,9 +892,7 @@
         }
       },
       "imports": [
-        "lib/imp/src/core/IdRegistry.sol",
-        "lib/imp/src/core/interfaces/IDelegateRegistry.sol",
-        "lib/imp/src/core/interfaces/IIdRegistry.sol",
+        "lib/imp/src/abstract/Signatures.sol",
         "lib/openzeppelin-contracts/contracts/interfaces/IERC1271.sol",
         "lib/openzeppelin-contracts/contracts/utils/Strings.sol",
         "lib/openzeppelin-contracts/contracts/utils/cryptography/ECDSA.sol",
@@ -902,17 +900,62 @@
         "lib/openzeppelin-contracts/contracts/utils/math/Math.sol",
         "lib/openzeppelin-contracts/contracts/utils/math/SignedMath.sol"
       ],
-      "versionRequirement": "=0.8.21",
+      "versionRequirement": "=0.8.23",
+      "artifacts": {
+        "AttestationRegistry": {
+          "0.8.23+commit.f704f362.Darwin.appleclang": "AttestationRegistry.sol/AttestationRegistry.json"
+        }
+      }
+    },
+    "lib/imp/src/DelegateRegistry.sol": {
+      "lastModificationDate": 1699677041726,
+      "contentHash": "e29d01949e6d5f295031bdc2597dff6b",
+      "sourceName": "lib/imp/src/DelegateRegistry.sol",
+      "solcConfig": {
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 500000
+          },
+          "metadata": {
+            "useLiteralContent": false,
+            "bytecodeHash": "ipfs",
+            "appendCBOR": true
+          },
+          "outputSelection": {
+            "*": {
+              "": [
+                "ast"
+              ],
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ]
+            }
+          },
+          "evmVersion": "paris",
+          "libraries": {}
+        }
+      },
+      "imports": [
+        "lib/imp/src/IdRegistry.sol",
+        "lib/imp/src/interfaces/IDelegateRegistry.sol",
+        "lib/imp/src/interfaces/IIdRegistry.sol"
+      ],
+      "versionRequirement": "=0.8.23",
       "artifacts": {
         "DelegateRegistry": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "DelegateRegistry.sol/DelegateRegistry.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "DelegateRegistry.sol/DelegateRegistry.json"
         }
       }
     },
-    "lib/imp/src/core/IdRegistry.sol": {
-      "lastModificationDate": 1699120239371,
-      "contentHash": "b8f9347f468aa05e6c127574844bbdb0",
-      "sourceName": "lib/imp/src/core/IdRegistry.sol",
+    "lib/imp/src/IdRegistry.sol": {
+      "lastModificationDate": 1699677041726,
+      "contentHash": "66d0c814c2884a6c476cb04e6a63f576",
+      "sourceName": "lib/imp/src/IdRegistry.sol",
       "solcConfig": {
         "settings": {
           "optimizer": {
@@ -943,25 +986,19 @@
         }
       },
       "imports": [
-        "lib/imp/src/core/interfaces/IIdRegistry.sol",
-        "lib/openzeppelin-contracts/contracts/interfaces/IERC1271.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Strings.sol",
-        "lib/openzeppelin-contracts/contracts/utils/cryptography/ECDSA.sol",
-        "lib/openzeppelin-contracts/contracts/utils/cryptography/SignatureChecker.sol",
-        "lib/openzeppelin-contracts/contracts/utils/math/Math.sol",
-        "lib/openzeppelin-contracts/contracts/utils/math/SignedMath.sol"
+        "lib/imp/src/interfaces/IIdRegistry.sol"
       ],
-      "versionRequirement": "=0.8.21",
+      "versionRequirement": "=0.8.23",
       "artifacts": {
         "IdRegistry": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "IdRegistry.sol/IdRegistry.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "IdRegistry.sol/IdRegistry.json"
         }
       }
     },
-    "lib/imp/src/core/NodeRegistry.sol": {
-      "lastModificationDate": 1699120239371,
-      "contentHash": "677fe7a788833b694634a5948ecc86bc",
-      "sourceName": "lib/imp/src/core/NodeRegistry.sol",
+    "lib/imp/src/NodeRegistry.sol": {
+      "lastModificationDate": 1699677041726,
+      "contentHash": "b4c6f94fee37b78a4c1adf4d3f023ae7",
+      "sourceName": "lib/imp/src/NodeRegistry.sol",
       "solcConfig": {
         "settings": {
           "optimizer": {
@@ -992,19 +1029,19 @@
         }
       },
       "imports": [
-        "lib/imp/src/core/interfaces/INodeRegistry.sol"
+        "lib/imp/src/interfaces/INodeRegistry.sol"
       ],
-      "versionRequirement": "=0.8.21",
+      "versionRequirement": "=0.8.23",
       "artifacts": {
         "NodeRegistry": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "NodeRegistry.sol/NodeRegistry.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "NodeRegistry.sol/NodeRegistry.json"
         }
       }
     },
-    "lib/imp/src/core/interfaces/IDelegateRegistry.sol": {
-      "lastModificationDate": 1699120239372,
-      "contentHash": "6c374176b56872d8049ec11619de5db5",
-      "sourceName": "lib/imp/src/core/interfaces/IDelegateRegistry.sol",
+    "lib/imp/src/abstract/Signatures.sol": {
+      "lastModificationDate": 1699677041726,
+      "contentHash": "2a79cd5ca0efa8a449697e660ddc6ad3",
+      "sourceName": "lib/imp/src/abstract/Signatures.sol",
       "solcConfig": {
         "settings": {
           "optimizer": {
@@ -1035,8 +1072,6 @@
         }
       },
       "imports": [
-        "lib/imp/src/core/IdRegistry.sol",
-        "lib/imp/src/core/interfaces/IIdRegistry.sol",
         "lib/openzeppelin-contracts/contracts/interfaces/IERC1271.sol",
         "lib/openzeppelin-contracts/contracts/utils/Strings.sol",
         "lib/openzeppelin-contracts/contracts/utils/cryptography/ECDSA.sol",
@@ -1044,17 +1079,61 @@
         "lib/openzeppelin-contracts/contracts/utils/math/Math.sol",
         "lib/openzeppelin-contracts/contracts/utils/math/SignedMath.sol"
       ],
-      "versionRequirement": "=0.8.21",
+      "versionRequirement": "=0.8.23",
+      "artifacts": {
+        "Signatures": {
+          "0.8.23+commit.f704f362.Darwin.appleclang": "Signatures.sol/Signatures.json"
+        }
+      }
+    },
+    "lib/imp/src/interfaces/IDelegateRegistry.sol": {
+      "lastModificationDate": 1699677041726,
+      "contentHash": "dde0ca1b8cae494234ed5aed9786de93",
+      "sourceName": "lib/imp/src/interfaces/IDelegateRegistry.sol",
+      "solcConfig": {
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 500000
+          },
+          "metadata": {
+            "useLiteralContent": false,
+            "bytecodeHash": "ipfs",
+            "appendCBOR": true
+          },
+          "outputSelection": {
+            "*": {
+              "": [
+                "ast"
+              ],
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ]
+            }
+          },
+          "evmVersion": "paris",
+          "libraries": {}
+        }
+      },
+      "imports": [
+        "lib/imp/src/IdRegistry.sol",
+        "lib/imp/src/interfaces/IIdRegistry.sol"
+      ],
+      "versionRequirement": "=0.8.23",
       "artifacts": {
         "IDelegateRegistry": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "IDelegateRegistry.sol/IDelegateRegistry.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "IDelegateRegistry.sol/IDelegateRegistry.json"
         }
       }
     },
-    "lib/imp/src/core/interfaces/IIdRegistry.sol": {
-      "lastModificationDate": 1699120239372,
-      "contentHash": "97a95405d21e97b2ead4a5a074531f1a",
-      "sourceName": "lib/imp/src/core/interfaces/IIdRegistry.sol",
+    "lib/imp/src/interfaces/IIdRegistry.sol": {
+      "lastModificationDate": 1699677041726,
+      "contentHash": "11293deaa72b36521d861ec9ed89a009",
+      "sourceName": "lib/imp/src/interfaces/IIdRegistry.sol",
       "solcConfig": {
         "settings": {
           "optimizer": {
@@ -1085,17 +1164,17 @@
         }
       },
       "imports": [],
-      "versionRequirement": "=0.8.21",
+      "versionRequirement": "=0.8.23",
       "artifacts": {
         "IIdRegistry": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "IIdRegistry.sol/IIdRegistry.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "IIdRegistry.sol/IIdRegistry.json"
         }
       }
     },
-    "lib/imp/src/core/interfaces/INodeRegistry.sol": {
-      "lastModificationDate": 1699120239372,
-      "contentHash": "770684be440b9f9fd62cca5b80632d35",
-      "sourceName": "lib/imp/src/core/interfaces/INodeRegistry.sol",
+    "lib/imp/src/interfaces/INodeRegistry.sol": {
+      "lastModificationDate": 1699677041726,
+      "contentHash": "39e93eb938cfaf1b71eb478aa0af8e0b",
+      "sourceName": "lib/imp/src/interfaces/INodeRegistry.sol",
       "solcConfig": {
         "settings": {
           "optimizer": {
@@ -1126,1445 +1205,10 @@
         }
       },
       "imports": [],
-      "versionRequirement": "=0.8.21",
+      "versionRequirement": "=0.8.23",
       "artifacts": {
         "INodeRegistry": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "INodeRegistry.sol/INodeRegistry.json"
-        }
-      }
-    },
-    "lib/light-account/lib/account-abstraction/contracts/core/BaseAccount.sol": {
-      "lastModificationDate": 1699120239388,
-      "contentHash": "a53a173b72742916b9c1cfef610f64b1",
-      "sourceName": "lib/light-account/lib/account-abstraction/contracts/core/BaseAccount.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [
-        "lib/light-account/lib/account-abstraction/contracts/core/Helpers.sol",
-        "lib/light-account/lib/account-abstraction/contracts/interfaces/IAccount.sol",
-        "lib/light-account/lib/account-abstraction/contracts/interfaces/IAggregator.sol",
-        "lib/light-account/lib/account-abstraction/contracts/interfaces/IEntryPoint.sol",
-        "lib/light-account/lib/account-abstraction/contracts/interfaces/INonceManager.sol",
-        "lib/light-account/lib/account-abstraction/contracts/interfaces/IStakeManager.sol",
-        "lib/light-account/lib/account-abstraction/contracts/interfaces/UserOperation.sol"
-      ],
-      "versionRequirement": "^0.8.12",
-      "artifacts": {
-        "BaseAccount": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "BaseAccount.sol/BaseAccount.json"
-        }
-      }
-    },
-    "lib/light-account/lib/account-abstraction/contracts/core/Helpers.sol": {
-      "lastModificationDate": 1699120239389,
-      "contentHash": "3cbc58efa815f026e5e180817b65c653",
-      "sourceName": "lib/light-account/lib/account-abstraction/contracts/core/Helpers.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [],
-      "versionRequirement": "^0.8.12",
-      "artifacts": {
-        "Helpers": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "Helpers.sol/Helpers.json"
-        }
-      }
-    },
-    "lib/light-account/lib/account-abstraction/contracts/interfaces/IAccount.sol": {
-      "lastModificationDate": 1699120239389,
-      "contentHash": "6d787a742dcf67af8bebad8a8db7b78e",
-      "sourceName": "lib/light-account/lib/account-abstraction/contracts/interfaces/IAccount.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [
-        "lib/light-account/lib/account-abstraction/contracts/core/Helpers.sol",
-        "lib/light-account/lib/account-abstraction/contracts/interfaces/UserOperation.sol"
-      ],
-      "versionRequirement": "^0.8.12",
-      "artifacts": {
-        "IAccount": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "IAccount.sol/IAccount.json"
-        }
-      }
-    },
-    "lib/light-account/lib/account-abstraction/contracts/interfaces/IAggregator.sol": {
-      "lastModificationDate": 1699120239390,
-      "contentHash": "70c22a1f7e8ee0bd97fcabb493c4fca6",
-      "sourceName": "lib/light-account/lib/account-abstraction/contracts/interfaces/IAggregator.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [
-        "lib/light-account/lib/account-abstraction/contracts/core/Helpers.sol",
-        "lib/light-account/lib/account-abstraction/contracts/interfaces/UserOperation.sol"
-      ],
-      "versionRequirement": "^0.8.12",
-      "artifacts": {
-        "IAggregator": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "IAggregator.sol/IAggregator.json"
-        }
-      }
-    },
-    "lib/light-account/lib/account-abstraction/contracts/interfaces/IEntryPoint.sol": {
-      "lastModificationDate": 1699120239390,
-      "contentHash": "f88a97ac988a378551551be9ea4ee65e",
-      "sourceName": "lib/light-account/lib/account-abstraction/contracts/interfaces/IEntryPoint.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [
-        "lib/light-account/lib/account-abstraction/contracts/core/Helpers.sol",
-        "lib/light-account/lib/account-abstraction/contracts/interfaces/IAggregator.sol",
-        "lib/light-account/lib/account-abstraction/contracts/interfaces/INonceManager.sol",
-        "lib/light-account/lib/account-abstraction/contracts/interfaces/IStakeManager.sol",
-        "lib/light-account/lib/account-abstraction/contracts/interfaces/UserOperation.sol"
-      ],
-      "versionRequirement": "^0.8.12",
-      "artifacts": {
-        "IEntryPoint": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "IEntryPoint.sol/IEntryPoint.json"
-        }
-      }
-    },
-    "lib/light-account/lib/account-abstraction/contracts/interfaces/INonceManager.sol": {
-      "lastModificationDate": 1699120239390,
-      "contentHash": "58293337a68c401ac395a955ab972702",
-      "sourceName": "lib/light-account/lib/account-abstraction/contracts/interfaces/INonceManager.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [],
-      "versionRequirement": "^0.8.12",
-      "artifacts": {
-        "INonceManager": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "INonceManager.sol/INonceManager.json"
-        }
-      }
-    },
-    "lib/light-account/lib/account-abstraction/contracts/interfaces/IStakeManager.sol": {
-      "lastModificationDate": 1699120239390,
-      "contentHash": "e5c534a14fbf384a02ed5f007d54b1f0",
-      "sourceName": "lib/light-account/lib/account-abstraction/contracts/interfaces/IStakeManager.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [],
-      "versionRequirement": "^0.8.12",
-      "artifacts": {
-        "IStakeManager": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "IStakeManager.sol/IStakeManager.json"
-        }
-      }
-    },
-    "lib/light-account/lib/account-abstraction/contracts/interfaces/UserOperation.sol": {
-      "lastModificationDate": 1699120239390,
-      "contentHash": "e605ec59ee4889ea6ef8b5332e7da0d8",
-      "sourceName": "lib/light-account/lib/account-abstraction/contracts/interfaces/UserOperation.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [
-        "lib/light-account/lib/account-abstraction/contracts/core/Helpers.sol"
-      ],
-      "versionRequirement": "^0.8.12",
-      "artifacts": {
-        "UserOperationLib": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "UserOperation.sol/UserOperationLib.json"
-        }
-      }
-    },
-    "lib/light-account/lib/account-abstraction/contracts/samples/callback/TokenCallbackHandler.sol": {
-      "lastModificationDate": 1699120239393,
-      "contentHash": "21bec772e7d7c8f85367728487148cf3",
-      "sourceName": "lib/light-account/lib/account-abstraction/contracts/samples/callback/TokenCallbackHandler.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [
-        "lib/light-account/lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155Receiver.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/token/ERC721/IERC721Receiver.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/token/ERC777/IERC777Recipient.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol"
-      ],
-      "versionRequirement": "^0.8.12",
-      "artifacts": {
-        "TokenCallbackHandler": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "TokenCallbackHandler.sol/TokenCallbackHandler.json"
-        }
-      }
-    },
-    "lib/light-account/lib/openzeppelin-contracts/contracts/interfaces/IERC1271.sol": {
-      "lastModificationDate": 1699120239465,
-      "contentHash": "8fe867b95c856b204f954a1910e28a1e",
-      "sourceName": "lib/light-account/lib/openzeppelin-contracts/contracts/interfaces/IERC1271.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "IERC1271": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "interfaces/IERC1271.sol/IERC1271.json"
-        }
-      }
-    },
-    "lib/light-account/lib/openzeppelin-contracts/contracts/interfaces/IERC1967.sol": {
-      "lastModificationDate": 1699120239466,
-      "contentHash": "d0d060231a45da7a1eecbb5cd286fa40",
-      "sourceName": "lib/light-account/lib/openzeppelin-contracts/contracts/interfaces/IERC1967.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "IERC1967": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "IERC1967.sol/IERC1967.json"
-        }
-      }
-    },
-    "lib/light-account/lib/openzeppelin-contracts/contracts/interfaces/draft-IERC1822.sol": {
-      "lastModificationDate": 1699120239469,
-      "contentHash": "2858d98e74e67987ec81b39605230b74",
-      "sourceName": "lib/light-account/lib/openzeppelin-contracts/contracts/interfaces/draft-IERC1822.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "IERC1822Proxiable": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "draft-IERC1822.sol/IERC1822Proxiable.json"
-        }
-      }
-    },
-    "lib/light-account/lib/openzeppelin-contracts/contracts/proxy/ERC1967/ERC1967Proxy.sol": {
-      "lastModificationDate": 1699120239478,
-      "contentHash": "3fc3c7c0a2956f36e766691bb9473b06",
-      "sourceName": "lib/light-account/lib/openzeppelin-contracts/contracts/proxy/ERC1967/ERC1967Proxy.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [
-        "lib/light-account/lib/openzeppelin-contracts/contracts/interfaces/IERC1967.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/interfaces/draft-IERC1822.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/proxy/ERC1967/ERC1967Upgrade.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/proxy/Proxy.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/proxy/beacon/IBeacon.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/Address.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol"
-      ],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "ERC1967Proxy": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "ERC1967Proxy.sol/ERC1967Proxy.json"
-        }
-      }
-    },
-    "lib/light-account/lib/openzeppelin-contracts/contracts/proxy/ERC1967/ERC1967Upgrade.sol": {
-      "lastModificationDate": 1699120239478,
-      "contentHash": "a127706394bead18392601a20d44867a",
-      "sourceName": "lib/light-account/lib/openzeppelin-contracts/contracts/proxy/ERC1967/ERC1967Upgrade.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [
-        "lib/light-account/lib/openzeppelin-contracts/contracts/interfaces/IERC1967.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/interfaces/draft-IERC1822.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/proxy/beacon/IBeacon.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/Address.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol"
-      ],
-      "versionRequirement": "^0.8.2",
-      "artifacts": {
-        "ERC1967Upgrade": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "ERC1967Upgrade.sol/ERC1967Upgrade.json"
-        }
-      }
-    },
-    "lib/light-account/lib/openzeppelin-contracts/contracts/proxy/Proxy.sol": {
-      "lastModificationDate": 1699120239478,
-      "contentHash": "40b3d81a836d50ff47e03893dcaaf204",
-      "sourceName": "lib/light-account/lib/openzeppelin-contracts/contracts/proxy/Proxy.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "Proxy": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "Proxy.sol/Proxy.json"
-        }
-      }
-    },
-    "lib/light-account/lib/openzeppelin-contracts/contracts/proxy/beacon/IBeacon.sol": {
-      "lastModificationDate": 1699120239479,
-      "contentHash": "b6bd23bf19e90b771337037706470933",
-      "sourceName": "lib/light-account/lib/openzeppelin-contracts/contracts/proxy/beacon/IBeacon.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "IBeacon": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "IBeacon.sol/IBeacon.json"
-        }
-      }
-    },
-    "lib/light-account/lib/openzeppelin-contracts/contracts/proxy/utils/UUPSUpgradeable.sol": {
-      "lastModificationDate": 1699120239480,
-      "contentHash": "ef5dcf877816ad119a42c741dd257d0a",
-      "sourceName": "lib/light-account/lib/openzeppelin-contracts/contracts/proxy/utils/UUPSUpgradeable.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [
-        "lib/light-account/lib/openzeppelin-contracts/contracts/interfaces/IERC1967.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/interfaces/draft-IERC1822.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/proxy/ERC1967/ERC1967Upgrade.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/proxy/beacon/IBeacon.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/Address.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol"
-      ],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "UUPSUpgradeable": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "UUPSUpgradeable.sol/UUPSUpgradeable.json"
-        }
-      }
-    },
-    "lib/light-account/lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155Receiver.sol": {
-      "lastModificationDate": 1699120239482,
-      "contentHash": "9f8822b72fe2702979e40160cb6d9636",
-      "sourceName": "lib/light-account/lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155Receiver.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol"
-      ],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "IERC1155Receiver": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "IERC1155Receiver.sol/IERC1155Receiver.json"
-        }
-      }
-    },
-    "lib/light-account/lib/openzeppelin-contracts/contracts/token/ERC721/IERC721Receiver.sol": {
-      "lastModificationDate": 1699120239486,
-      "contentHash": "c22d4395e33763de693fd440c6fd10e1",
-      "sourceName": "lib/light-account/lib/openzeppelin-contracts/contracts/token/ERC721/IERC721Receiver.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "IERC721Receiver": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "IERC721Receiver.sol/IERC721Receiver.json"
-        }
-      }
-    },
-    "lib/light-account/lib/openzeppelin-contracts/contracts/token/ERC777/IERC777Recipient.sol": {
-      "lastModificationDate": 1699120239490,
-      "contentHash": "268af1696d7a83a7e78a1a8f5ba1c685",
-      "sourceName": "lib/light-account/lib/openzeppelin-contracts/contracts/token/ERC777/IERC777Recipient.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "IERC777Recipient": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "IERC777Recipient.sol/IERC777Recipient.json"
-        }
-      }
-    },
-    "lib/light-account/lib/openzeppelin-contracts/contracts/utils/Address.sol": {
-      "lastModificationDate": 1699120239491,
-      "contentHash": "211ffd288c1588ba8c10eae668ca3c66",
-      "sourceName": "lib/light-account/lib/openzeppelin-contracts/contracts/utils/Address.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [],
-      "versionRequirement": "^0.8.1",
-      "artifacts": {
-        "Address": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "Address.sol/Address.json"
-        }
-      }
-    },
-    "lib/light-account/lib/openzeppelin-contracts/contracts/utils/Create2.sol": {
-      "lastModificationDate": 1699120239491,
-      "contentHash": "752ff0901adbdac182deace414d9e75f",
-      "sourceName": "lib/light-account/lib/openzeppelin-contracts/contracts/utils/Create2.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "Create2": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "Create2.sol/Create2.json"
-        }
-      }
-    },
-    "lib/light-account/lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol": {
-      "lastModificationDate": 1699120239492,
-      "contentHash": "682f7dd1f2e1147c8390e7575deceb2d",
-      "sourceName": "lib/light-account/lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "StorageSlot": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "StorageSlot.sol/StorageSlot.json"
-        }
-      }
-    },
-    "lib/light-account/lib/openzeppelin-contracts/contracts/utils/Strings.sol": {
-      "lastModificationDate": 1699120239492,
-      "contentHash": "48686fc32a22a3754b8e63321857dd2a",
-      "sourceName": "lib/light-account/lib/openzeppelin-contracts/contracts/utils/Strings.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/math/Math.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/math/SignedMath.sol"
-      ],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "Strings": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "utils/Strings.sol/Strings.json"
-        }
-      }
-    },
-    "lib/light-account/lib/openzeppelin-contracts/contracts/utils/cryptography/ECDSA.sol": {
-      "lastModificationDate": 1699120239493,
-      "contentHash": "d822a8a9468649cab463f29f5decf5cc",
-      "sourceName": "lib/light-account/lib/openzeppelin-contracts/contracts/utils/cryptography/ECDSA.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/Strings.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/math/Math.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/math/SignedMath.sol"
-      ],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "ECDSA": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "cryptography/ECDSA.sol/ECDSA.json"
-        }
-      }
-    },
-    "lib/light-account/lib/openzeppelin-contracts/contracts/utils/cryptography/SignatureChecker.sol": {
-      "lastModificationDate": 1699120239493,
-      "contentHash": "53d16b3bec482493405bdc74852eb2cd",
-      "sourceName": "lib/light-account/lib/openzeppelin-contracts/contracts/utils/cryptography/SignatureChecker.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [
-        "lib/light-account/lib/openzeppelin-contracts/contracts/interfaces/IERC1271.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/Strings.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/cryptography/ECDSA.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/math/Math.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/math/SignedMath.sol"
-      ],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "SignatureChecker": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "cryptography/SignatureChecker.sol/SignatureChecker.json"
-        }
-      }
-    },
-    "lib/light-account/lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol": {
-      "lastModificationDate": 1699120239495,
-      "contentHash": "03e6768535ac4da0e9756f1d8a4a018a",
-      "sourceName": "lib/light-account/lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "IERC165": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "IERC165.sol/IERC165.json"
-        }
-      }
-    },
-    "lib/light-account/lib/openzeppelin-contracts/contracts/utils/math/Math.sol": {
-      "lastModificationDate": 1699120239495,
-      "contentHash": "fe63409d8a06818b926cf89e0ea88b1b",
-      "sourceName": "lib/light-account/lib/openzeppelin-contracts/contracts/utils/math/Math.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "Math": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "math/Math.sol/Math.json"
-        }
-      }
-    },
-    "lib/light-account/lib/openzeppelin-contracts/contracts/utils/math/SignedMath.sol": {
-      "lastModificationDate": 1699120239496,
-      "contentHash": "9488ebd4daacfee8ad04811600d7d061",
-      "sourceName": "lib/light-account/lib/openzeppelin-contracts/contracts/utils/math/SignedMath.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "SignedMath": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "math/SignedMath.sol/SignedMath.json"
-        }
-      }
-    },
-    "lib/light-account/src/CustomSlotInitializable.sol": {
-      "lastModificationDate": 1699120239568,
-      "contentHash": "3a40c6dbafc5ea2cb081c1cb9076e263",
-      "sourceName": "lib/light-account/src/CustomSlotInitializable.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [],
-      "versionRequirement": "^0.8.21",
-      "artifacts": {
-        "CustomSlotInitializable": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "CustomSlotInitializable.sol/CustomSlotInitializable.json"
-        }
-      }
-    },
-    "lib/light-account/src/LightAccount.sol": {
-      "lastModificationDate": 1699120239569,
-      "contentHash": "db919d523e2e806f4a08cb5377fd38ef",
-      "sourceName": "lib/light-account/src/LightAccount.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [
-        "lib/light-account/lib/account-abstraction/contracts/core/BaseAccount.sol",
-        "lib/light-account/lib/account-abstraction/contracts/core/Helpers.sol",
-        "lib/light-account/lib/account-abstraction/contracts/interfaces/IAccount.sol",
-        "lib/light-account/lib/account-abstraction/contracts/interfaces/IAggregator.sol",
-        "lib/light-account/lib/account-abstraction/contracts/interfaces/IEntryPoint.sol",
-        "lib/light-account/lib/account-abstraction/contracts/interfaces/INonceManager.sol",
-        "lib/light-account/lib/account-abstraction/contracts/interfaces/IStakeManager.sol",
-        "lib/light-account/lib/account-abstraction/contracts/interfaces/UserOperation.sol",
-        "lib/light-account/lib/account-abstraction/contracts/samples/callback/TokenCallbackHandler.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/interfaces/IERC1271.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/interfaces/IERC1967.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/interfaces/draft-IERC1822.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/proxy/ERC1967/ERC1967Upgrade.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/proxy/beacon/IBeacon.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/proxy/utils/UUPSUpgradeable.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155Receiver.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/token/ERC721/IERC721Receiver.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/token/ERC777/IERC777Recipient.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/Address.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/Strings.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/cryptography/ECDSA.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/cryptography/SignatureChecker.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/math/Math.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/math/SignedMath.sol",
-        "lib/light-account/src/CustomSlotInitializable.sol"
-      ],
-      "versionRequirement": "^0.8.21",
-      "artifacts": {
-        "LightAccount": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "LightAccount.sol/LightAccount.json"
-        }
-      }
-    },
-    "lib/light-account/src/LightAccountFactory.sol": {
-      "lastModificationDate": 1699120239569,
-      "contentHash": "0543e09288c05cba152ab6ccddc7b8ad",
-      "sourceName": "lib/light-account/src/LightAccountFactory.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [
-        "lib/light-account/lib/account-abstraction/contracts/core/BaseAccount.sol",
-        "lib/light-account/lib/account-abstraction/contracts/core/Helpers.sol",
-        "lib/light-account/lib/account-abstraction/contracts/interfaces/IAccount.sol",
-        "lib/light-account/lib/account-abstraction/contracts/interfaces/IAggregator.sol",
-        "lib/light-account/lib/account-abstraction/contracts/interfaces/IEntryPoint.sol",
-        "lib/light-account/lib/account-abstraction/contracts/interfaces/INonceManager.sol",
-        "lib/light-account/lib/account-abstraction/contracts/interfaces/IStakeManager.sol",
-        "lib/light-account/lib/account-abstraction/contracts/interfaces/UserOperation.sol",
-        "lib/light-account/lib/account-abstraction/contracts/samples/callback/TokenCallbackHandler.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/interfaces/IERC1271.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/interfaces/IERC1967.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/interfaces/draft-IERC1822.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/proxy/ERC1967/ERC1967Proxy.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/proxy/ERC1967/ERC1967Upgrade.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/proxy/Proxy.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/proxy/beacon/IBeacon.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/proxy/utils/UUPSUpgradeable.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155Receiver.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/token/ERC721/IERC721Receiver.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/token/ERC777/IERC777Recipient.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/Address.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/Create2.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/Strings.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/cryptography/ECDSA.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/cryptography/SignatureChecker.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/math/Math.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/math/SignedMath.sol",
-        "lib/light-account/src/CustomSlotInitializable.sol",
-        "lib/light-account/src/LightAccount.sol"
-      ],
-      "versionRequirement": "^0.8.21",
-      "artifacts": {
-        "LightAccountFactory": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "LightAccountFactory.sol/LightAccountFactory.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "INodeRegistry.sol/INodeRegistry.json"
         }
       }
     },
@@ -2605,7 +1249,7 @@
       "versionRequirement": "^0.8.0",
       "artifacts": {
         "IERC1271": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "IERC1271.sol/IERC1271.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "IERC1271.sol/IERC1271.json"
         }
       }
     },
@@ -2649,7 +1293,7 @@
       "versionRequirement": "^0.8.0",
       "artifacts": {
         "Strings": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "Strings.sol/Strings.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "Strings.sol/Strings.json"
         }
       }
     },
@@ -2694,7 +1338,7 @@
       "versionRequirement": "^0.8.0",
       "artifacts": {
         "ECDSA": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "ECDSA.sol/ECDSA.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "ECDSA.sol/ECDSA.json"
         }
       }
     },
@@ -2741,7 +1385,7 @@
       "versionRequirement": "^0.8.0",
       "artifacts": {
         "SignatureChecker": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "SignatureChecker.sol/SignatureChecker.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "SignatureChecker.sol/SignatureChecker.json"
         }
       }
     },
@@ -2782,7 +1426,7 @@
       "versionRequirement": "^0.8.0",
       "artifacts": {
         "Math": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "Math.sol/Math.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "Math.sol/Math.json"
         }
       }
     },
@@ -2823,14 +1467,14 @@
       "versionRequirement": "^0.8.0",
       "artifacts": {
         "SignedMath": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "SignedMath.sol/SignedMath.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "SignedMath.sol/SignedMath.json"
         }
       }
     },
-    "script/RiverSetup.s.sol": {
-      "lastModificationDate": 1699120239766,
-      "contentHash": "54c29cf3dbfe1112eb88fdb18b540b05",
-      "sourceName": "script/RiverSetup.s.sol",
+    "script/ImpSetup.s.sol": {
+      "lastModificationDate": 1699678291437,
+      "contentHash": "e87e5db95d7bc52839375cec271d1cc7",
+      "sourceName": "script/ImpSetup.s.sol",
       "solcConfig": {
         "settings": {
           "optimizer": {
@@ -2875,62 +1519,31 @@
         "lib/forge-std/src/console2.sol",
         "lib/forge-std/src/interfaces/IMulticall3.sol",
         "lib/forge-std/src/safeconsole.sol",
-        "lib/imp/src/core/DelegateRegistry.sol",
-        "lib/imp/src/core/IdRegistry.sol",
-        "lib/imp/src/core/NodeRegistry.sol",
-        "lib/imp/src/core/interfaces/IDelegateRegistry.sol",
-        "lib/imp/src/core/interfaces/IIdRegistry.sol",
-        "lib/imp/src/core/interfaces/INodeRegistry.sol",
-        "lib/light-account/lib/account-abstraction/contracts/core/BaseAccount.sol",
-        "lib/light-account/lib/account-abstraction/contracts/core/Helpers.sol",
-        "lib/light-account/lib/account-abstraction/contracts/interfaces/IAccount.sol",
-        "lib/light-account/lib/account-abstraction/contracts/interfaces/IAggregator.sol",
-        "lib/light-account/lib/account-abstraction/contracts/interfaces/IEntryPoint.sol",
-        "lib/light-account/lib/account-abstraction/contracts/interfaces/INonceManager.sol",
-        "lib/light-account/lib/account-abstraction/contracts/interfaces/IStakeManager.sol",
-        "lib/light-account/lib/account-abstraction/contracts/interfaces/UserOperation.sol",
-        "lib/light-account/lib/account-abstraction/contracts/samples/callback/TokenCallbackHandler.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/interfaces/IERC1271.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/interfaces/IERC1967.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/interfaces/draft-IERC1822.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/proxy/ERC1967/ERC1967Proxy.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/proxy/ERC1967/ERC1967Upgrade.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/proxy/Proxy.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/proxy/beacon/IBeacon.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/proxy/utils/UUPSUpgradeable.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155Receiver.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/token/ERC721/IERC721Receiver.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/token/ERC777/IERC777Recipient.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/Address.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/Create2.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/Strings.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/cryptography/ECDSA.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/cryptography/SignatureChecker.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/math/Math.sol",
-        "lib/light-account/lib/openzeppelin-contracts/contracts/utils/math/SignedMath.sol",
-        "lib/light-account/src/CustomSlotInitializable.sol",
-        "lib/light-account/src/LightAccount.sol",
-        "lib/light-account/src/LightAccountFactory.sol",
+        "lib/imp/src/AttestationRegistry.sol",
+        "lib/imp/src/DelegateRegistry.sol",
+        "lib/imp/src/IdRegistry.sol",
+        "lib/imp/src/NodeRegistry.sol",
+        "lib/imp/src/abstract/Signatures.sol",
+        "lib/imp/src/interfaces/IDelegateRegistry.sol",
+        "lib/imp/src/interfaces/IIdRegistry.sol",
+        "lib/imp/src/interfaces/INodeRegistry.sol",
         "lib/openzeppelin-contracts/contracts/interfaces/IERC1271.sol",
         "lib/openzeppelin-contracts/contracts/utils/Strings.sol",
         "lib/openzeppelin-contracts/contracts/utils/cryptography/ECDSA.sol",
         "lib/openzeppelin-contracts/contracts/utils/cryptography/SignatureChecker.sol",
         "lib/openzeppelin-contracts/contracts/utils/math/Math.sol",
-        "lib/openzeppelin-contracts/contracts/utils/math/SignedMath.sol",
-        "src/validators/RiverValidatorV1.sol"
+        "lib/openzeppelin-contracts/contracts/utils/math/SignedMath.sol"
       ],
       "versionRequirement": "^0.8.13",
       "artifacts": {
-        "RiverSetupScript": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "RiverSetup.s.sol/RiverSetupScript.json"
+        "ImpSetupScript": {
+          "0.8.23+commit.f704f362.Darwin.appleclang": "ImpSetup.s.sol/ImpSetupScript.json"
         }
       }
     },
     "script/transactions/IdRegistry.s.sol": {
-      "lastModificationDate": 1699120239767,
-      "contentHash": "aa0c99e950376d04ff62ddf31b702d23",
+      "lastModificationDate": 1699678354660,
+      "contentHash": "9bce55a3d0f1227122f995da4844b4c1",
       "sourceName": "script/transactions/IdRegistry.s.sol",
       "solcConfig": {
         "settings": {
@@ -2961,39 +1574,16 @@
           "libraries": {}
         }
       },
-      "imports": [
-        "lib/forge-std/src/Base.sol",
-        "lib/forge-std/src/Script.sol",
-        "lib/forge-std/src/StdChains.sol",
-        "lib/forge-std/src/StdCheats.sol",
-        "lib/forge-std/src/StdJson.sol",
-        "lib/forge-std/src/StdMath.sol",
-        "lib/forge-std/src/StdStorage.sol",
-        "lib/forge-std/src/StdStyle.sol",
-        "lib/forge-std/src/StdUtils.sol",
-        "lib/forge-std/src/Vm.sol",
-        "lib/forge-std/src/console.sol",
-        "lib/forge-std/src/console2.sol",
-        "lib/forge-std/src/interfaces/IMulticall3.sol",
-        "lib/forge-std/src/safeconsole.sol",
-        "lib/imp/src/core/IdRegistry.sol",
-        "lib/imp/src/core/interfaces/IIdRegistry.sol",
-        "lib/openzeppelin-contracts/contracts/interfaces/IERC1271.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Strings.sol",
-        "lib/openzeppelin-contracts/contracts/utils/cryptography/ECDSA.sol",
-        "lib/openzeppelin-contracts/contracts/utils/cryptography/SignatureChecker.sol",
-        "lib/openzeppelin-contracts/contracts/utils/math/Math.sol",
-        "lib/openzeppelin-contracts/contracts/utils/math/SignedMath.sol"
-      ],
-      "versionRequirement": "^0.8.13",
+      "imports": [],
+      "versionRequirement": null,
       "artifacts": {
-        "IdRegistryScript": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "IdRegistry.s.sol/IdRegistryScript.json"
+        "IdRegistry.s": {
+          "0.8.23+commit.f704f362.Darwin.appleclang": "IdRegistry.s.sol/IdRegistry.s.json"
         }
       }
     },
     "script/transactions/NodeRegistry.s.sol": {
-      "lastModificationDate": 1699235741564,
+      "lastModificationDate": 1699676550424,
       "contentHash": "63cef9cbbccf7c6998a28e06d31c9cab",
       "sourceName": "script/transactions/NodeRegistry.s.sol",
       "solcConfig": {
@@ -3029,13 +1619,13 @@
       "versionRequirement": "^0.8.13",
       "artifacts": {
         "NodeRegistry.s": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "NodeRegistry.s.sol/NodeRegistry.s.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "NodeRegistry.s.sol/NodeRegistry.s.json"
         }
       }
     },
     "src/types/access/AdminWithMembers.sol": {
-      "lastModificationDate": 1699236742415,
-      "contentHash": "239b10a62962af4778957d894d397f65",
+      "lastModificationDate": 1699677993589,
+      "contentHash": "d607e2a9d55e112d88bfa16e90ba565d",
       "sourceName": "src/types/access/AdminWithMembers.sol",
       "solcConfig": {
         "settings": {
@@ -3067,16 +1657,16 @@
         }
       },
       "imports": [],
-      "versionRequirement": "=0.8.21",
+      "versionRequirement": "^0.8.23",
       "artifacts": {
         "AdminWithMembers": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "AdminWithMembers.sol/AdminWithMembers.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "AdminWithMembers.sol/AdminWithMembers.json"
         }
       }
     },
     "src/types/channel/ChannelMessageTypes.sol": {
-      "lastModificationDate": 1699304917886,
-      "contentHash": "8b1376cca2ebed5d612302de3c6aedcd",
+      "lastModificationDate": 1699678012068,
+      "contentHash": "d6926533ff795c2a58b03080bbb86d97",
       "sourceName": "src/types/channel/ChannelMessageTypes.sol",
       "solcConfig": {
         "settings": {
@@ -3108,17 +1698,17 @@
         }
       },
       "imports": [],
-      "versionRequirement": "=0.8.21",
+      "versionRequirement": "^0.8.23",
       "artifacts": {
         "ChannelMessageTypes": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "ChannelMessageTypes.sol/ChannelMessageTypes.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "ChannelMessageTypes.sol/ChannelMessageTypes.json"
         }
       }
     },
-    "src/types/general/NodeRegistryTypes.sol": {
-      "lastModificationDate": 1699236745623,
-      "contentHash": "7d7b1e7be7085ef017605f7f5a29c726",
-      "sourceName": "src/types/general/NodeRegistryTypes.sol",
+    "src/types/generic/NodeRegistryTypes.sol": {
+      "lastModificationDate": 1699677974292,
+      "contentHash": "5194ff97fdff5939def869ba09797259",
+      "sourceName": "src/types/generic/NodeRegistryTypes.sol",
       "solcConfig": {
         "settings": {
           "optimizer": {
@@ -3149,16 +1739,16 @@
         }
       },
       "imports": [],
-      "versionRequirement": "=0.8.21",
+      "versionRequirement": "^0.8.23",
       "artifacts": {
         "NodeRegistryTypes": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "NodeRegistryTypes.sol/NodeRegistryTypes.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "NodeRegistryTypes.sol/NodeRegistryTypes.json"
         }
       }
     },
     "src/types/publication/PublicationMessageTypes.sol": {
-      "lastModificationDate": 1699236750196,
-      "contentHash": "bfc29a122a8b7a4d38cd3d75fef2c6d5",
+      "lastModificationDate": 1699678017530,
+      "contentHash": "92dc9e27ca4e6cb0b730a69afc84ebb9",
       "sourceName": "src/types/publication/PublicationMessageTypes.sol",
       "solcConfig": {
         "settings": {
@@ -3190,16 +1780,16 @@
         }
       },
       "imports": [],
-      "versionRequirement": "=0.8.21",
+      "versionRequirement": "^0.8.23",
       "artifacts": {
         "PublicationMessageTypes": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "PublicationMessageTypes.sol/PublicationMessageTypes.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "PublicationMessageTypes.sol/PublicationMessageTypes.json"
         }
       }
     },
     "src/validators/RiverValidatorV1.sol": {
-      "lastModificationDate": 1699236752702,
-      "contentHash": "8ae21bf1ec80a1213b3239d723483e9d",
+      "lastModificationDate": 1699677942331,
+      "contentHash": "9e713c0086dc4f36cfc252c801f7dfe1",
       "sourceName": "src/validators/RiverValidatorV1.sol",
       "solcConfig": {
         "settings": {
@@ -3231,16 +1821,16 @@
         }
       },
       "imports": [],
-      "versionRequirement": "=0.8.21",
+      "versionRequirement": "^0.8.23",
       "artifacts": {
         "RiverValidatorV1": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "RiverValidatorV1.sol/RiverValidatorV1.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "RiverValidatorV1.sol/RiverValidatorV1.json"
         }
       }
     },
     "test/NodeRegistry.t.sol": {
-      "lastModificationDate": 1699240723029,
-      "contentHash": "dc6dd3a393e54617923d5524e05e93d6",
+      "lastModificationDate": 1699682335509,
+      "contentHash": "eb54956945fc5f627f5ea380fb532c03",
       "sourceName": "test/NodeRegistry.t.sol",
       "solcConfig": {
         "settings": {
@@ -3290,23 +1880,60 @@
         "lib/forge-std/src/console2.sol",
         "lib/forge-std/src/interfaces/IMulticall3.sol",
         "lib/forge-std/src/safeconsole.sol",
-        "lib/imp/src/core/NodeRegistry.sol",
-        "lib/imp/src/core/interfaces/INodeRegistry.sol",
-        "src/types/access/AdminWithMembers.sol",
-        "src/types/channel/ChannelMessageTypes.sol",
-        "src/types/general/NodeRegistryTypes.sol",
-        "src/types/publication/PublicationMessageTypes.sol"
+        "lib/imp/src/NodeRegistry.sol",
+        "lib/imp/src/interfaces/INodeRegistry.sol"
       ],
-      "versionRequirement": "=0.8.21",
+      "versionRequirement": "=0.8.23",
       "artifacts": {
         "NodeRegistryTest": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "NodeRegistry.t.sol/NodeRegistryTest.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "NodeRegistry.t.sol/NodeRegistryTest.json"
+        }
+      }
+    },
+    "test/NodeRegistry2.t.sol": {
+      "lastModificationDate": 1699678411640,
+      "contentHash": "b4ec15e42c7a9febb1e1ccbd18202500",
+      "sourceName": "test/NodeRegistry2.t.sol",
+      "solcConfig": {
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 500000
+          },
+          "metadata": {
+            "useLiteralContent": false,
+            "bytecodeHash": "ipfs",
+            "appendCBOR": true
+          },
+          "outputSelection": {
+            "*": {
+              "": [
+                "ast"
+              ],
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ]
+            }
+          },
+          "evmVersion": "paris",
+          "libraries": {}
+        }
+      },
+      "imports": [],
+      "versionRequirement": null,
+      "artifacts": {
+        "NodeRegistry2.t": {
+          "0.8.23+commit.f704f362.Darwin.appleclang": "NodeRegistry2.t.sol/NodeRegistry2.t.json"
         }
       }
     },
     "test/RiverValidatorV1.t.sol": {
-      "lastModificationDate": 1699237271865,
-      "contentHash": "f8b583fa3790f9c70df591d8c6ea8167",
+      "lastModificationDate": 1699677354907,
+      "contentHash": "bfe7d4a24ba99ecd44b560767a3ea242",
       "sourceName": "test/RiverValidatorV1.t.sol",
       "solcConfig": {
         "settings": {
@@ -3358,10 +1985,10 @@
         "lib/forge-std/src/safeconsole.sol",
         "src/validators/RiverValidatorV1.sol"
       ],
-      "versionRequirement": "=0.8.21",
+      "versionRequirement": "^0.8.23",
       "artifacts": {
         "RiverValidatorV1Test": {
-          "0.8.21+commit.d9974bed.Darwin.appleclang": "RiverValidatorV1.t.sol/RiverValidatorV1Test.json"
+          "0.8.23+commit.f704f362.Darwin.appleclang": "RiverValidatorV1.t.sol/RiverValidatorV1Test.json"
         }
       }
     }
