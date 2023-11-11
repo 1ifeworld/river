@@ -1,4 +1,0 @@
-# Foundry build and cache directories
-out/
-cache/
-.env

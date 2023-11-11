@@ -1,6 +1,0 @@
-sstore2/=lib/sstore2/contracts/
-openzeppelin-contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/
-openzeppelin-contracts/=lib/openzeppelin-contracts/contracts/
-solady/=lib/solady/src/
-solmate/=lib/solmate/src/
-light-account/=lib/light-account/
