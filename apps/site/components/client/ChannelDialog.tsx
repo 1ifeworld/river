@@ -45,7 +45,7 @@ export const ChannelDialog = React.forwardRef<
   ChannelDialogProps
 >(({ triggerChildren, onSelect, onOpenChange }, forwardedRef) => {
   const [userId, setUserId] = React.useState<bigint>()
-  const alchemyProvider = useAlchemyContext()
+  const { alchemyProvider } = useAlchemyContext()
 
   console.log('Alchemy provider', alchemyProvider)
 
