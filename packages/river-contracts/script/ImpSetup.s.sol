@@ -24,9 +24,9 @@ contract ImpSetupScript is Script {
         vm.startBroadcast(deployerPrivateKey);
 
         nodeRegistry = new NodeRegistry();
-        idRegistry = new IdRegistry();
-        delegateRegistry = new DelegateRegistry(address(idRegistry));
-        attestationRegistry = new AttestationRegistry();
+        // idRegistry = new IdRegistry();
+        // delegateRegistry = new DelegateRegistry(address(idRegistry));
+        // attestationRegistry = new AttestationRegistry();
 
         vm.stopBroadcast();
     }
@@ -38,5 +38,6 @@ contract ImpSetupScript is Script {
 // forge script script/ImpSetup.s.sol:ImpSetupScript -vvvv --rpc-url $RPC_URL --broadcast --verify --verifier-url https://api-goerli-optimistic.etherscan.io/api
 // forge script script/ImpSetup.s.sol:ImpSetupScript -vvvv --rpc-url $RPC_URL --broadcast --verify --verifier-url https://api-optimistic.etherscan.io/api
 // forge script script/ImpSetup.s.sol:ImpSetupScript -vvvv --rpc-url $RPC_URL --broadcast --verify --verifier-url https://api.arbiscan.io/api
-// forge script script/ImpSetup.s.sol:ImpSetupScript -vvvv --rpc-url $RPC_URL --broadcast --with-gas-price 19999926  --verify --verifier-url https://api-nova.arbiscan.io/api
+// forge script script/ImpSetup.s.sol:ImpSetupScript -vvvv --rpc-url $RPC_URL --broadcast --verify --verifier-url https://api-goerli.arbiscan.io/api
+// forge script script/ImpSetup.s.sol:ImpSetupScript -vvvv --rpc-url $RPC_URL --broadcast --gas-estimate-multiplier 200 --verify --verifier-url https://api-nova.arbiscan.io/api
 // forge script script/ImpSetup.s.sol:ImpSetupScript -vvvv --broadcast --fork-url http://localhost:8545

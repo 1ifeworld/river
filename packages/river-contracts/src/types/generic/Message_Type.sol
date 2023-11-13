@@ -2,10 +2,10 @@
 pragma solidity ^0.8.23;
 
 /**
- * @title NodeRegistryTypes
+ * @title Message_Type
  * @author Lifeworld
  */
-abstract contract NodeRegistryTypes {
+abstract contract Message_Type {
 
     //////////////////////////////////////////////////
     // GENERIC

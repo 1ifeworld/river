@@ -1472,8 +1472,8 @@
       }
     },
     "script/ImpSetup.s.sol": {
-      "lastModificationDate": 1699678291437,
-      "contentHash": "e87e5db95d7bc52839375cec271d1cc7",
+      "lastModificationDate": 1699832624141,
+      "contentHash": "39b0bd98ef09f4b43c6b69d7402843e9",
       "sourceName": "script/ImpSetup.s.sol",
       "solcConfig": {
         "settings": {
@@ -1623,10 +1623,10 @@
         }
       }
     },
-    "src/types/access/AdminWithMembers.sol": {
-      "lastModificationDate": 1699677993589,
-      "contentHash": "d607e2a9d55e112d88bfa16e90ba565d",
-      "sourceName": "src/types/access/AdminWithMembers.sol",
+    "src/types/access/Access_100_Types.sol": {
+      "lastModificationDate": 1699831087944,
+      "contentHash": "4a262776955a94fab24029b136d99db9",
+      "sourceName": "src/types/access/Access_100_Types.sol",
       "solcConfig": {
         "settings": {
           "optimizer": {
@@ -1659,15 +1659,15 @@
       "imports": [],
       "versionRequirement": "^0.8.23",
       "artifacts": {
-        "AdminWithMembers": {
-          "0.8.23+commit.f704f362.Darwin.appleclang": "AdminWithMembers.sol/AdminWithMembers.json"
+        "Access_100_Types": {
+          "0.8.23+commit.f704f362.Darwin.appleclang": "Access_100_Types.sol/Access_100_Types.json"
         }
       }
     },
-    "src/types/channel/ChannelMessageTypes.sol": {
-      "lastModificationDate": 1699678012068,
-      "contentHash": "d6926533ff795c2a58b03080bbb86d97",
-      "sourceName": "src/types/channel/ChannelMessageTypes.sol",
+    "src/types/channel/Channel_300_Types.sol": {
+      "lastModificationDate": 1699831034212,
+      "contentHash": "0c648d42e43394290ac0e0a4abda769d",
+      "sourceName": "src/types/channel/Channel_300_Types.sol",
       "solcConfig": {
         "settings": {
           "optimizer": {
@@ -1700,15 +1700,15 @@
       "imports": [],
       "versionRequirement": "^0.8.23",
       "artifacts": {
-        "ChannelMessageTypes": {
-          "0.8.23+commit.f704f362.Darwin.appleclang": "ChannelMessageTypes.sol/ChannelMessageTypes.json"
+        "Channel_300_Types": {
+          "0.8.23+commit.f704f362.Darwin.appleclang": "Channel_300_Types.sol/Channel_300_Types.json"
         }
       }
     },
-    "src/types/generic/NodeRegistryTypes.sol": {
-      "lastModificationDate": 1699677974292,
-      "contentHash": "5194ff97fdff5939def869ba09797259",
-      "sourceName": "src/types/generic/NodeRegistryTypes.sol",
+    "src/types/generic/Message_Type.sol": {
+      "lastModificationDate": 1699831136249,
+      "contentHash": "7574f6509149a40886f6b73be51c13ab",
+      "sourceName": "src/types/generic/Message_Type.sol",
       "solcConfig": {
         "settings": {
           "optimizer": {
@@ -1741,15 +1741,15 @@
       "imports": [],
       "versionRequirement": "^0.8.23",
       "artifacts": {
-        "NodeRegistryTypes": {
-          "0.8.23+commit.f704f362.Darwin.appleclang": "NodeRegistryTypes.sol/NodeRegistryTypes.json"
+        "Message_Type": {
+          "0.8.23+commit.f704f362.Darwin.appleclang": "Message_Type.sol/Message_Type.json"
         }
       }
     },
-    "src/types/publication/PublicationMessageTypes.sol": {
-      "lastModificationDate": 1699678017530,
-      "contentHash": "92dc9e27ca4e6cb0b730a69afc84ebb9",
-      "sourceName": "src/types/publication/PublicationMessageTypes.sol",
+    "src/types/publication/Publication_200_Types.sol": {
+      "lastModificationDate": 1699831162227,
+      "contentHash": "998707664bf5c2999f5ad2f5c58b6eb6",
+      "sourceName": "src/types/publication/Publication_200_Types.sol",
       "solcConfig": {
         "settings": {
           "optimizer": {
@@ -1782,8 +1782,8 @@
       "imports": [],
       "versionRequirement": "^0.8.23",
       "artifacts": {
-        "PublicationMessageTypes": {
-          "0.8.23+commit.f704f362.Darwin.appleclang": "PublicationMessageTypes.sol/PublicationMessageTypes.json"
+        "Publication_200_Types": {
+          "0.8.23+commit.f704f362.Darwin.appleclang": "Publication_200_Types.sol/Publication_200_Types.json"
         }
       }
     },
@@ -1829,8 +1829,8 @@
       }
     },
     "test/NodeRegistry.t.sol": {
-      "lastModificationDate": 1699682335509,
-      "contentHash": "eb54956945fc5f627f5ea380fb532c03",
+      "lastModificationDate": 1699830912781,
+      "contentHash": "deda6d13043b554c5db256e556fc931f",
       "sourceName": "test/NodeRegistry.t.sol",
       "solcConfig": {
         "settings": {
@@ -1887,47 +1887,6 @@
       "artifacts": {
         "NodeRegistryTest": {
           "0.8.23+commit.f704f362.Darwin.appleclang": "NodeRegistry.t.sol/NodeRegistryTest.json"
-        }
-      }
-    },
-    "test/NodeRegistry2.t.sol": {
-      "lastModificationDate": 1699678411640,
-      "contentHash": "b4ec15e42c7a9febb1e1ccbd18202500",
-      "sourceName": "test/NodeRegistry2.t.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 500000
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [],
-      "versionRequirement": null,
-      "artifacts": {
-        "NodeRegistry2.t": {
-          "0.8.23+commit.f704f362.Darwin.appleclang": "NodeRegistry2.t.sol/NodeRegistry2.t.json"
         }
       }
     },

@@ -6,10 +6,10 @@ export default defineConfig({
     foundry({
       project: '../river-contracts',
       include: [
-        'AdminWithMembers.json',
-        'ChannelMessageTypes.json',
-        'NodeRegistryTypes.json',
-        'PublicationMessageTypes.json',
+        'Access_100_Types.json',
+        'Publication_200_Types.json',
+        'Channel_300_Types.json',
+        'Message_Type.json',
         'RiverValidatorV1.json'
       ],
     }),
@@ -22,6 +22,15 @@ export default defineConfig({
         'NodeRegistry.json',
         'IdRegistry.json',
         'DelegateRegistry.json'
+      ]
+    }),
+    foundry({
+      project: '../river-contracts/lib/light-account',
+      forge: {
+        build: true
+      },
+      include: [
+        'LightAccountFactory.json',
       ]
     })
   ],

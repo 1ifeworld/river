@@ -1,104 +1,51 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// AdminWithMembers
+// Access_100_Types
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const adminWithMembersABI = [
+export const access_100TypesABI = [
   {
-    stateMutability: 'view',
+    stateMutability: 'pure',
     type: 'function',
     inputs: [],
-    name: 'exportInitialize_100Type',
+    name: 'export_101_Access_AdminWithMembers',
     outputs: [
-      {
-        name: '',
-        internalType: 'struct AdminWithMembers.Initialize_100',
-        type: 'tuple',
-        components: [
-          { name: 'admin', internalType: 'uint256', type: 'uint256' },
-          { name: 'members', internalType: 'uint256[]', type: 'uint256[]' },
-        ],
-      },
-    ],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'exportUpdate_200Type',
-    outputs: [
-      {
-        name: '',
-        internalType: 'struct AdminWithMembers.Update_200',
-        type: 'tuple',
-        components: [
-          { name: 'admin', internalType: 'uint256', type: 'uint256' },
-          { name: 'members', internalType: 'uint256[]', type: 'uint256[]' },
-          { name: 'roles', internalType: 'uint8[]', type: 'uint8[]' },
-        ],
-      },
+      { name: 'admins', internalType: 'uint256[]', type: 'uint256[]' },
+      { name: 'members', internalType: 'uint256[]', type: 'uint256[]' },
     ],
   },
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// ChannelMessageTypes
+// Channel_300_Types
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const channelMessageTypesABI = [
+export const channel_300TypesABI = [
   {
-    stateMutability: 'view',
+    stateMutability: 'pure',
     type: 'function',
     inputs: [],
-    name: 'exportAdd_110Type',
+    name: 'export_301_Channel_SetUri',
+    outputs: [{ name: 'uri', internalType: 'string', type: 'string' }],
+  },
+  {
+    stateMutability: 'pure',
+    type: 'function',
+    inputs: [],
+    name: 'export_302_Channel_AddItem',
     outputs: [
-      {
-        name: '',
-        internalType: 'struct ChannelMessageTypes.Add_110',
-        type: 'tuple',
-        components: [
-          {
-            name: 'pointer',
-            internalType: 'struct ChannelMessageTypes.CustomParam_Pointer',
-            type: 'tuple',
-            components: [
-              { name: 'chainId', internalType: 'uint256', type: 'uint256' },
-              { name: 'id', internalType: 'uint256', type: 'uint256' },
-              { name: 'target', internalType: 'address', type: 'address' },
-              { name: 'hasId', internalType: 'bool', type: 'bool' },
-            ],
-          },
-        ],
-      },
+      { name: 'chainId', internalType: 'uint256', type: 'uint256' },
+      { name: 'id', internalType: 'uint256', type: 'uint256' },
+      { name: 'pointer', internalType: 'address', type: 'address' },
+      { name: 'hasId', internalType: 'bool', type: 'bool' },
     ],
   },
   {
-    stateMutability: 'view',
+    stateMutability: 'pure',
     type: 'function',
     inputs: [],
-    name: 'exportRemove_120Type',
+    name: 'export_303_Channel_RemoveItem',
     outputs: [
-      {
-        name: '',
-        internalType: 'struct ChannelMessageTypes.Remove_120',
-        type: 'tuple',
-        components: [
-          { name: 'channelIndex', internalType: 'uint256', type: 'uint256' },
-        ],
-      },
-    ],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'exportUri_100Type',
-    outputs: [
-      {
-        name: '',
-        internalType: 'struct ChannelMessageTypes.Uri_100',
-        type: 'tuple',
-        components: [{ name: 'uri', internalType: 'string', type: 'string' }],
-      },
+      { name: 'channelIndex', internalType: 'uint256', type: 'uint256' },
     ],
   },
 ] as const
@@ -120,12 +67,6 @@ export const delegateRegistryABI = [
     inputs: [
       { name: 'id', internalType: 'uint256', type: 'uint256', indexed: true },
       {
-        name: 'nonce',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      {
         name: 'target',
         internalType: 'address',
         type: 'address',
@@ -139,7 +80,6 @@ export const delegateRegistryABI = [
     stateMutability: 'view',
     type: 'function',
     inputs: [
-      { name: '', internalType: 'uint256', type: 'uint256' },
       { name: '', internalType: 'uint256', type: 'uint256' },
       { name: '', internalType: 'address', type: 'address' },
     ],
@@ -182,26 +122,34 @@ export const delegateRegistryABI = [
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const idRegistryABI = [
-  { type: 'error', inputs: [], name: 'Has_Attested' },
   { type: 'error', inputs: [], name: 'Has_Id' },
   { type: 'error', inputs: [], name: 'Has_No_Id' },
-  { type: 'error', inputs: [], name: 'Invalid_Signature' },
-  { type: 'error', inputs: [], name: 'No_Active_Attestation' },
   { type: 'error', inputs: [], name: 'Not_Transfer_Initiator' },
   { type: 'error', inputs: [], name: 'Not_Transfer_Recipient' },
+  { type: 'error', inputs: [], name: 'Unauthorized_Backup' },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address', indexed: true },
+      { name: 'to', internalType: 'address', type: 'address', indexed: true },
+      { name: 'id', internalType: 'uint256', type: 'uint256', indexed: true },
+    ],
+    name: 'Backup',
+  },
   {
     type: 'event',
     anonymous: false,
     inputs: [
       { name: 'id', internalType: 'uint256', type: 'uint256', indexed: true },
       {
-        name: 'attestor',
+        name: 'backup',
         internalType: 'address',
         type: 'address',
         indexed: true,
       },
     ],
-    name: 'Attest',
+    name: 'ChangeBackupAddress',
   },
   {
     type: 'event',
@@ -218,20 +166,6 @@ export const idRegistryABI = [
       { name: 'data', internalType: 'bytes', type: 'bytes', indexed: false },
     ],
     name: 'Register',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      { name: 'id', internalType: 'uint256', type: 'uint256', indexed: true },
-      {
-        name: 'attestor',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'RevokeAttestation',
   },
   {
     type: 'event',
@@ -274,32 +208,17 @@ export const idRegistryABI = [
     stateMutability: 'nonpayable',
     type: 'function',
     inputs: [
-      { name: 'hash', internalType: 'bytes32', type: 'bytes32' },
-      { name: 'sig', internalType: 'bytes', type: 'bytes' },
-      { name: 'signerOverride', internalType: 'address', type: 'address' },
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
     ],
-    name: 'attest',
+    name: 'backup',
     outputs: [],
   },
   {
     stateMutability: 'view',
     type: 'function',
-    inputs: [{ name: '', internalType: 'address', type: 'address' }],
-    name: 'attestedBy',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
     inputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    name: 'attestedFor',
-    outputs: [{ name: '', internalType: 'address', type: 'address' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    name: 'backupForId',
+    name: 'backupFor',
     outputs: [{ name: '', internalType: 'address', type: 'address' }],
   },
   {
@@ -307,6 +226,15 @@ export const idRegistryABI = [
     type: 'function',
     inputs: [{ name: 'id', internalType: 'uint256', type: 'uint256' }],
     name: 'cancelTransfer',
+    outputs: [],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      { name: 'backupAddress', internalType: 'address', type: 'address' },
+    ],
+    name: 'changeBackupAddress',
     outputs: [],
   },
   {
@@ -344,25 +272,11 @@ export const idRegistryABI = [
     stateMutability: 'nonpayable',
     type: 'function',
     inputs: [
-      { name: 'backup', internalType: 'address', type: 'address' },
+      { name: 'backupAddress', internalType: 'address', type: 'address' },
       { name: 'data', internalType: 'bytes', type: 'bytes' },
     ],
     name: 'register',
     outputs: [{ name: 'id', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [],
-    name: 'revokeAttestation',
-    outputs: [],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    name: 'transferCountForId',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
   },
   {
     stateMutability: 'view',
@@ -384,6 +298,73 @@ export const idRegistryABI = [
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// LightAccountFactory
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const lightAccountFactoryABI = [
+  {
+    stateMutability: 'nonpayable',
+    type: 'constructor',
+    inputs: [
+      {
+        name: '_entryPoint',
+        internalType: 'contract IEntryPoint',
+        type: 'address',
+      },
+    ],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'accountImplementation',
+    outputs: [
+      { name: '', internalType: 'contract LightAccount', type: 'address' },
+    ],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'salt', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'createAccount',
+    outputs: [
+      { name: 'ret', internalType: 'contract LightAccount', type: 'address' },
+    ],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'salt', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'getAddress',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Message_Type
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const messageTypeABI = [
+  {
+    stateMutability: 'pure',
+    type: 'function',
+    inputs: [],
+    name: 'export_000_Message',
+    outputs: [
+      { name: 'userId', internalType: 'uint256', type: 'uint256' },
+      { name: 'msgType', internalType: 'uint256', type: 'uint256' },
+      { name: 'msgBody', internalType: 'bytes', type: 'bytes' },
+    ],
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // NodeRegistry
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -399,14 +380,25 @@ export const nodeRegistryABI = [
         indexed: true,
       },
       {
-        name: 'messageId',
+        name: 'schema',
+        internalType: 'bytes32',
+        type: 'bytes32',
+        indexed: true,
+      },
+      {
+        name: 'nodeId',
         internalType: 'uint256',
         type: 'uint256',
         indexed: true,
       },
-      { name: 'data', internalType: 'bytes', type: 'bytes', indexed: false },
+      {
+        name: 'messages',
+        internalType: 'bytes[]',
+        type: 'bytes[]',
+        indexed: false,
+      },
     ],
-    name: 'MessageNode',
+    name: 'Register',
   },
   {
     type: 'event',
@@ -424,52 +416,14 @@ export const nodeRegistryABI = [
         type: 'uint256',
         indexed: true,
       },
-      { name: 'data', internalType: 'bytes', type: 'bytes', indexed: false },
-    ],
-    name: 'RegisterNode',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
       {
-        name: 'sender',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
+        name: 'messages',
+        internalType: 'bytes[]',
+        type: 'bytes[]',
+        indexed: false,
       },
-      {
-        name: 'schema',
-        internalType: 'bytes32',
-        type: 'bytes32',
-        indexed: true,
-      },
-      { name: 'data', internalType: 'bytes', type: 'bytes', indexed: false },
     ],
-    name: 'RegisterSchema',
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'messageCount',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [{ name: 'data', internalType: 'bytes', type: 'bytes' }],
-    name: 'messageNode',
-    outputs: [{ name: 'messageId', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [{ name: 'datas', internalType: 'bytes[]', type: 'bytes[]' }],
-    name: 'messageNodeBatch',
-    outputs: [
-      { name: 'messageIds', internalType: 'uint256[]', type: 'uint256[]' },
-    ],
+    name: 'Update',
   },
   {
     stateMutability: 'view',
@@ -481,15 +435,21 @@ export const nodeRegistryABI = [
   {
     stateMutability: 'nonpayable',
     type: 'function',
-    inputs: [{ name: 'data', internalType: 'bytes', type: 'bytes' }],
-    name: 'registerNode',
+    inputs: [
+      { name: 'schema', internalType: 'bytes32', type: 'bytes32' },
+      { name: 'messages', internalType: 'bytes[]', type: 'bytes[]' },
+    ],
+    name: 'register',
     outputs: [{ name: 'nodeId', internalType: 'uint256', type: 'uint256' }],
   },
   {
     stateMutability: 'nonpayable',
     type: 'function',
-    inputs: [{ name: 'datas', internalType: 'bytes[]', type: 'bytes[]' }],
-    name: 'registerNodeBatch',
+    inputs: [
+      { name: 'schemas', internalType: 'bytes32[]', type: 'bytes32[]' },
+      { name: 'messages', internalType: 'bytes[][]', type: 'bytes[][]' },
+    ],
+    name: 'registerBatch',
     outputs: [
       { name: 'nodeIds', internalType: 'uint256[]', type: 'uint256[]' },
     ],
@@ -497,91 +457,36 @@ export const nodeRegistryABI = [
   {
     stateMutability: 'nonpayable',
     type: 'function',
-    inputs: [{ name: 'data', internalType: 'bytes', type: 'bytes' }],
-    name: 'registerSchema',
-    outputs: [{ name: 'schema', internalType: 'bytes32', type: 'bytes32' }],
+    inputs: [
+      { name: 'nodeId', internalType: 'uint256', type: 'uint256' },
+      { name: 'messages', internalType: 'bytes[]', type: 'bytes[]' },
+    ],
+    name: 'update',
+    outputs: [],
   },
   {
     stateMutability: 'nonpayable',
     type: 'function',
-    inputs: [{ name: 'datas', internalType: 'bytes[]', type: 'bytes[]' }],
-    name: 'registerSchemaBatch',
-    outputs: [
-      { name: 'schemas', internalType: 'bytes32[]', type: 'bytes32[]' },
+    inputs: [
+      { name: 'nodeIds', internalType: 'uint256[]', type: 'uint256[]' },
+      { name: 'messages', internalType: 'bytes[][]', type: 'bytes[][]' },
     ],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'schemaCount',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    name: 'updateBatch',
+    outputs: [],
   },
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// NodeRegistryTypes
+// Publication_200_Types
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const nodeRegistryTypesABI = [
+export const publication_200TypesABI = [
   {
-    stateMutability: 'view',
+    stateMutability: 'pure',
     type: 'function',
     inputs: [],
-    name: 'exportCallType',
-    outputs: [
-      {
-        name: '',
-        internalType: 'struct NodeRegistryTypes.Call',
-        type: 'tuple',
-        components: [
-          { name: 'nodeId', internalType: 'uint256', type: 'uint256' },
-          { name: 'userId', internalType: 'uint256', type: 'uint256' },
-          { name: 'msgType', internalType: 'uint256', type: 'uint256' },
-          { name: 'msgBody', internalType: 'bytes', type: 'bytes' },
-        ],
-      },
-    ],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'exportRegistrationType',
-    outputs: [
-      {
-        name: '',
-        internalType: 'struct NodeRegistryTypes.Registration',
-        type: 'tuple',
-        components: [
-          { name: 'schema', internalType: 'bytes32', type: 'bytes32' },
-          { name: 'userId', internalType: 'uint256', type: 'uint256' },
-          { name: 'msgType', internalType: 'uint256', type: 'uint256' },
-          { name: 'msgBody', internalType: 'bytes', type: 'bytes' },
-        ],
-      },
-    ],
-  },
-] as const
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// PublicationMessageTypes
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-export const publicationMessageTypesABI = [
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'exportTypes',
-    outputs: [
-      {
-        name: '',
-        internalType: 'struct PublicationMessageTypes.Uri_100',
-        type: 'tuple',
-        components: [{ name: 'uri', internalType: 'string', type: 'string' }],
-      },
-    ],
+    name: 'export_201_Publication_SetUri',
+    outputs: [{ name: 'uri', internalType: 'string', type: 'string' }],
   },
 ] as const
 

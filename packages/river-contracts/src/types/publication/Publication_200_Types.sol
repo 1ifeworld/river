@@ -5,7 +5,7 @@ pragma solidity ^0.8.23;
  * @title PublicationMessageTypes
  * @author Lifeworld
  */
-abstract contract PublicationMessageTypes {    
+abstract contract Publication_200_Types {    
 
     //////////////////////////////////////////////////
     // PUBLICATION

@@ -3,10 +3,10 @@ pragma solidity ^0.8.23;
 
 
 /**
- * @title ChannelMessageTypes
+ * @title Channel_300_Types
  * @author Lifeworld
  */
-abstract contract ChannelMessageTypes {    
+abstract contract Channel_300_Types {    
 
     //////////////////////////////////////////////////
     // CHANNEL
