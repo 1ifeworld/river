@@ -52,7 +52,8 @@ export const ChannelDialog = React.forwardRef<
   console.log('User id', userId)
 
   React.useEffect(() => {
-    ;(async () => {
+    // biome-ignore format:
+    (async () => {
       const smartAccountAddress = await alchemyProvider?.getAddress()
       const userId = await getUserId({
         smartAccountAddress: smartAccountAddress as Hex,
