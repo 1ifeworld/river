@@ -23,13 +23,14 @@ import {
 
 const AlchemyContext = createContext<{
   alchemyProvider?: AlchemyProvider
-  userId?: string
+  smartAccountAddress?: Hex
 }>({})
 
 export function AlchemyProviderComponent({
   children,
 }: { children: ReactNode }) {
   const [alchemyProvider, setAlchemyProvider] = useState<AlchemyProvider>()
+  const [smartAccountAddress, setSmartAccountAddress] = useState<Hex>()
   const { wallets } = useWallets()
 
   const embeddedWallet = wallets.find(
@@ -70,15 +71,14 @@ export function AlchemyProviderComponent({
         ),
       )
 
-      // TODO: Update this to bet in state to avoid refetching it elsewhere
-      const smartAccountAddress = await alchemyProvider?.getAddress()
+      setSmartAccountAddress(await alchemyProvider?.getAddress())
     }
 
     if (embeddedWallet) createLightAccount(embeddedWallet)
   }, [embeddedWallet?.address])
 
   return (
-    <AlchemyContext.Provider value={{ alchemyProvider }}>
+    <AlchemyContext.Provider value={{ alchemyProvider, smartAccountAddress }}>
       {children}
     </AlchemyContext.Provider>
   )
