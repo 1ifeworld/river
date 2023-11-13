@@ -14,30 +14,26 @@ import { type Hex } from 'viem'
 
 export function User() {
   const { logout } = useLogout()
-  // Fetch and return the username of the connected account
 
   const [userId, setUserId] = useState<bigint>()
+
   const { alchemyProvider, smartAccountAddress } = useAlchemyContext()
-
-  console.log('Alchemy provider', alchemyProvider)
-
-  console.log('User id', userId)
 
   useEffect(() => {
     // biome-ignore format:
     (async () => {
-      const smartAccountAddress = await alchemyProvider?.getAddress()
       const userId = await getUserId({
         smartAccountAddress: smartAccountAddress as Hex,
       })
       setUserId(userId)
     })()
-  }, [])
+  }, [alchemyProvider])
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="link">{userId?.toString()}</Button>
+        {/* TODO: Update to fetch and return the username of the connected account */}
+        <Button variant="link">User</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-32" align="end">
         <DropdownMenuGroup>

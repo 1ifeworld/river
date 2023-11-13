@@ -90,5 +90,5 @@ export const useAlchemyContext = () => {
   if (!context) {
     throw Error('useAlchemyContext hook must be used within a AlchemyContext')
   }
-  return context.alchemyProvider
+  return context
 }

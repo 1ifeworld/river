@@ -41,7 +41,7 @@ export function UsernameDialog({ open }: { open: boolean }) {
     },
   })
 
-  const alchemyProvider = useAlchemyContext()
+  const { alchemyProvider } = useAlchemyContext()
   alchemyProvider?.withAlchemyGasManager({
     policyId: process.env.NEXT_PUBLIC_ALCHEMY_GAS_MANAGER_POLICY as string,
     entryPoint: entryPoint,
