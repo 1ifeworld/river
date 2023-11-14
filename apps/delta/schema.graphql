@@ -51,8 +51,16 @@ type Node @entity {
   nodeId: BigInt!
   msgType: BigInt
   msgBody: Bytes
+  accessControl: AccessControl
+
+}
+
+type AccessControl @entity {
+  id: String!
   nodeAdmin: [BigInt!]!
   nodeMembers: [BigInt!]!
+  node: Node!
+
 }
 
 type Message @entity {

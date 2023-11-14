@@ -14,7 +14,7 @@ import {
 } from "scrypt";
 
 ponder.on("NodeRegistry:Register", async ({ event, context }) => {
-    const { Node, Message, Publication, Channel, Item } = context.entities;
+    const { Node, Message, Publication, Channel, Item, AccessControl} = context.entities;
     const { sender, userId, schema, nodeId, messages } = event.params;
     
     console.log(`Node $${nodeId} Registered`);  
@@ -40,10 +40,18 @@ ponder.on("NodeRegistry:Register", async ({ event, context }) => {
                 nodeId: nodeId,
                 msgType: BigInt(0),   // empty
                 msgBody: '0x',        // empty
-                nodeAdmin: [],        // empty
-                nodeMembers: []       // empty
             },
         });          
+                // Create corresponding AccessControl entity for the Node
+                await AccessControl.create({
+                    id: `420/${event.transaction.from}/${nodeId}`,
+                    data: {
+                        node:`420/${event.transaction.from}/${nodeId}`, 
+                        nodeAdmin: [],
+                        nodeMembers: []
+                    },
+                });
+        
         // Well need to update this to something like:
         // -- if the first message being sent is NOT a VALID 100 level access message
         // -- then dont enter the processing loop everythign
@@ -73,7 +81,7 @@ ponder.on("NodeRegistry:Register", async ({ event, context }) => {
                     const decoded = decodeAccess101({msgBody: decodedMsg.msgBody})
                     // if successful, enter crud logic, if not exit
                     if (decoded) {                        
-                        await Node.update({
+                        await AccessControl.update({
                             id: `420/${event.transaction.from}/${nodeId}`,
                             data: {
                                 nodeAdmin: decoded?.admins as bigint[],
@@ -138,7 +146,7 @@ ponder.on("NodeRegistry:Register", async ({ event, context }) => {
 })
 
 ponder.on("NodeRegistry:Update", async ({ event, context }) => {
-    const { Node, Message, Publication, Channel, Item } = context.entities;
+    const { Node, Message, Publication, Channel, Item, AccessControl } = context.entities;
     const { sender, userId, nodeId, messages } = event.params;
     
     console.log(`Node $${nodeId} Updated`);  
@@ -185,7 +193,7 @@ ponder.on("NodeRegistry:Update", async ({ event, context }) => {
                     const decoded = decodeAccess101({msgBody: decodedMsg.msgBody})
                     // if successful, enter crud logic, if not exit
                     if (decoded) {                        
-                        await Node.update({
+                        await AccessControl.update({
                             id: `420/${event.transaction.from}/${nodeId}`,
                             data: {
                                 nodeAdmin: decoded?.admins as bigint[],
