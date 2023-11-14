@@ -7,7 +7,7 @@ import {
   adminWithMembersABI,
   nodeRegistryTypesABI,
   nodeRegistryABI,
-} from 'offchain-schema'
+} from 'scrypt'
 import { publicClient, walletClient } from '@/config'
 
 export async function createChannel(userId: bigint, formData?: FormData) {

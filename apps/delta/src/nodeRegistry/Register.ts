@@ -11,7 +11,7 @@ import {
   channelSchema,
   isValidMessageId,
   addresses
-} from "offchain-schema";
+} from "scrypt";
 
 ponder.on("NodeRegistry:Register", async ({ event, context }) => {
     const { Node, Message, Publication, Channel, Item } = context.entities;
