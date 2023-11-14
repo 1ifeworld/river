@@ -260,5 +260,11 @@ contract NodeRegistryTest is Test {
         for (uint256 i; i < quantity; ++i) {
             batchData[i] = new bytes(0);
         }
-    }                       
+    }
+
+
+    // function _sign(uint256 privateKey, bytes32 digest) internal pure returns (bytes memory) {
+    //     (uint8 v, bytes32 r, bytes32 s) = vm.sign(privateKey, digest);
+    //     return abi.encodePacked(r, s, v);
+    // }                       
 }
