@@ -109,4 +109,5 @@ type RiverValidatorV1 @entity {
   id: String!
   userId: BigInt
   status: Boolean
+  operator: String
 }
