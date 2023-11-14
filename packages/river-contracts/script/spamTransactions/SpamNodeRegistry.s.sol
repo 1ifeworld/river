@@ -32,8 +32,8 @@ contract NodeRegistryScript is Script {
         for (uint256 i; i < num_ops; i++) {
             // registerPubNode();
             // updatePubNode();
-            // registerChannelNode();
-            updateChannelNode();
+            registerChannelNode();
+            // updateChannelNode();
         }
     }
 
