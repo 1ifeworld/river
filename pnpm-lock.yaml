@@ -7,10 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      offchain-schema:
-        specifier: workspace:^
-        version: link:packages/offchain-schema
     devDependencies:
       '@biomejs/biome':
         specifier: ^1.3.1
@@ -24,9 +20,9 @@ importers:
       '@ponder/core':
         specifier: ^0.0.93
         version: 0.0.93(typescript@5.2.2)
-      offchain-schema:
+      scrypt:
         specifier: workspace:*
-        version: link:../../packages/offchain-schema
+        version: link:../../packages/scrypt
     devDependencies:
       '@types/node':
         specifier: ^18.11.18
@@ -118,9 +114,6 @@ importers:
       next:
         specifier: 13.5.3
         version: 13.5.3(@babel/core@7.23.2)(react-dom@18.2.0)(react@18.2.0)
-      offchain-schema:
-        specifier: workspace:*
-        version: link:../../packages/offchain-schema
       permissionless:
         specifier: ^0.0.9
         version: 0.0.9(viem@1.16.6)
@@ -136,6 +129,9 @@ importers:
       react-hook-form:
         specifier: ^7.47.0
         version: 7.47.0(react@18.2.0)
+      scrypt:
+        specifier: workspace:*
+        version: link:../../packages/scrypt
       tailwind-merge:
         specifier: ^1.14.0
         version: 1.14.0
@@ -198,19 +194,6 @@ importers:
         specifier: 5.1.6
         version: 5.1.6
 
-  packages/offchain-schema:
-    dependencies:
-      viem:
-        specifier: ^1.12.2
-        version: 1.16.6(typescript@5.1.6)(zod@3.22.4)
-    devDependencies:
-      '@wagmi/cli':
-        specifier: ^1.5.2
-        version: 1.5.2(typescript@5.1.6)
-      typescript:
-        specifier: 5.1.6
-        version: 5.1.6
-
   packages/river-contracts:
     dependencies:
       dotenv:
@@ -238,6 +221,19 @@ importers:
       '@types/qrcode':
         specifier: ^1
         version: 1.2.0
+
+  packages/scrypt:
+    dependencies:
+      viem:
+        specifier: ^1.12.2
+        version: 1.16.6(typescript@5.1.6)(zod@3.22.4)
+    devDependencies:
+      '@wagmi/cli':
+        specifier: ^1.5.2
+        version: 1.5.2(typescript@5.1.6)
+      typescript:
+        specifier: 5.1.6
+        version: 5.1.6
 
 packages:
 

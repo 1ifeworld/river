@@ -1,6 +1,6 @@
 import sdk from '../client'
 
-// TODO: This should get moved to our offchain-schema package as a constant.
+// TODO: This should get moved to our scrypt package as a constant.
 const channelSchema =
   '0x1234567890123456789012345678901234567890123456789012345678901234'
 

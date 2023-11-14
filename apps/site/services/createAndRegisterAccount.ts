@@ -14,7 +14,7 @@ import {
   idRegistry,
   lightAccountFactory,
   operator,
-} from 'offchain-schema'
+} from 'scrypt'
 
 import { salt } from '@/constants'
 import { idRegistryAbi, lightAccountAbi, lightAccountFactoryAbi } from '@/abi'

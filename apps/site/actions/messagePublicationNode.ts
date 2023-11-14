@@ -6,7 +6,7 @@ import {
   nodeRegistryTypesABI,
   publicationMessageTypesABI,
   nodeRegistryABI,
-} from 'offchain-schema'
+} from 'scrypt'
 import { publicClient, walletClient } from '@/config'
 
 export async function messagePublicationNode(nodeId: bigint) {

@@ -7,7 +7,7 @@ import {
   nodeRegistryABI,
   riverValidatorV1ABI,
   lightAccountFactoryABI
-} from 'offchain-schema'
+} from '../../packages/scrypt'
 
 export const config: Config = {
   networks: [

@@ -1,5 +1,5 @@
 import { type Hex, type Hash, encodeFunctionData } from 'viem'
-import { operator, idRegistry, delegateRegistry } from 'offchain-schema'
+import { operator, idRegistry, delegateRegistry } from 'scrypt'
 import { idRegistryAbi, delegateRegistryAbi } from '@/abi'
 
 const zeroBytes: Hash = '0x'

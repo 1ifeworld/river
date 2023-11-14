@@ -21,7 +21,7 @@ import { useAlchemyContext } from 'context/AlchemyProviderContext'
 import { usePrivy } from '@privy-io/react-auth'
 import { AlchemyProvider } from '@alchemy/aa-alchemy'
 import { Hex, parseAbiItem } from 'viem'
-import { entryPoint, idRegistry } from 'offchain-schema'
+import { entryPoint, idRegistry } from 'scrypt'
 import * as z from 'zod'
 import { publicClient } from 'config/clients'
 

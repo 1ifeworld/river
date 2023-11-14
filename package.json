@@ -11,15 +11,12 @@
     "start": "turbo start",
     "lint": "turbo lint",
     "format": "turbo format",
-    "start:delta": "pnpm build --filter=offchain-schema && pnpm start --filter=delta",
+    "start:delta": "pnpm build --filter=scrypt && pnpm start --filter=delta",
     "build:site": "pnpm build --filter=site",
     "dev:site": "pnpm dev --filter=site"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.3.1",
     "turbo": "^1.10.16"
-  },
-  "dependencies": {
-    "offchain-schema": "workspace:^"
   }
 }
