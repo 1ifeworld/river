@@ -1,3 +1,3 @@
 export * from "./addresses"
-export * from "./nodeSchemas"
+export * from "./schemas"
 export * from "./messageIds"
