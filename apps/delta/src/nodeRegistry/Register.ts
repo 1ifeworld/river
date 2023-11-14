@@ -14,8 +14,9 @@ import {
 } from "scrypt";
 
 ponder.on("NodeRegistry:Register", async ({ event, context }) => {
-    const { Node, Message, Publication, Channel, Item, AccessControl, RiverValidatorV1} = context.entities;
-    // const { Node, Message, Publication, Channel, Item, AccessControl} = context.entities;
+    // with rivervalidator check happening
+    // const { Node, Message, Publication, Channel, Item, AccessControl, RiverValidatorV1} = context.entities;
+    const { Node, Message, Publication, Channel, Item, AccessControl} = context.entities;
 
     const { sender, userId, schema, nodeId, messages } = event.params;
     
@@ -28,19 +29,20 @@ ponder.on("NodeRegistry:Register", async ({ event, context }) => {
     // })
 
     // all events will go through for now
-    // const validUser = true; 
+    const validUser = true; 
 
        // Fetch the validation status for the user
-    const validationRecord = await RiverValidatorV1.findUnique({
-    id: `420/${event.transaction.from}/${userId}`
-    });
+    // const validationRecord = await RiverValidatorV1.findUnique({
+    // id: `420/${event.transaction.from}/${userId}`
+    // });
 
-    // Check if user is validated
-    const isValidUser = validationRecord && validationRecord.status;
+    // // Check if user is validated
+    // const isValidUser = validationRecord && validationRecord.status;
 
 
     // Check if user is valid
-    if (isValidUser) {
+    // if (isValidUser) {
+       if (validUser) {
         // Create valid node ids regardless if init msgs are valid
         await Node.create({
             id: `420/${event.transaction.from}/${nodeId}`,
