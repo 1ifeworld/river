@@ -1583,8 +1583,8 @@
       }
     },
     "script/transactions/NodeRegistry.s.sol": {
-      "lastModificationDate": 1699933811554,
-      "contentHash": "d2a153c51bb75882363b5a760bcc1782",
+      "lastModificationDate": 1699982415779,
+      "contentHash": "431a5ff30b8439a7cbfa9252b7360755",
       "sourceName": "script/transactions/NodeRegistry.s.sol",
       "solcConfig": {
         "settings": {

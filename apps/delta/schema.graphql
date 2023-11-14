@@ -58,6 +58,7 @@ type Node @entity {
 type Message @entity {
   id: String!
   sender: String
+  userId: BigInt
   msgType: BigInt
   msgBody: Bytes
 }
