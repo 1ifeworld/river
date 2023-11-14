@@ -7,7 +7,7 @@ import {NodeRegistry} from "imp/NodeRegistry.sol";
 
 contract NodeRegistryScript is Script {
 
-    NodeRegistry nodeRegistry = NodeRegistry(0xF26F07040922992DF06091235A50872e31C85Ab8);
+    NodeRegistry nodeRegistry = NodeRegistry(0x5FbDB2315678afecb367f032d93F642f64180aa3);
     uint256 constant MOCK_USER_ID = 1;
     bytes32 constant PUB_SCHEMA = 0xF36F2F0432F99EA34A360F154CEA9D1FAD45C7319E27ADED55CC0D28D0924068;
     bytes32 constant CHANNEL_SCHEMA = 0x08B83A3AFF9950D7F88522AC4A172BD8405BE30B0D3B416D42FD73C30AC27C9F;
