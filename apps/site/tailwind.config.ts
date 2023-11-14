@@ -23,6 +23,7 @@ export default {
     extend: {
       colors: {
         border: 'hsl(var(--border))',
+        dialogBorder: 'hsl(var(--dialog-border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',

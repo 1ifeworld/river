@@ -11,6 +11,7 @@ import {
   DialogTitle,
   DialogHeader,
   DropdownMenuItem,
+  Form,
 } from '@/design-system'
 import { uploadToIPFS } from '@/lib'
 import { useDropzone } from 'react-dropzone'
@@ -36,8 +37,7 @@ export const UploadDialog = React.forwardRef<HTMLDivElement, UploadDialogProps>(
     })
 
     return (
-      // Remove persistent open
-      <Dialog open={true} onOpenChange={onOpenChange}>
+      <Dialog onOpenChange={onOpenChange}>
         <DialogTrigger asChild>
           <DropdownMenuItem
             ref={forwardedRef}
@@ -59,36 +59,39 @@ export const UploadDialog = React.forwardRef<HTMLDivElement, UploadDialogProps>(
               </DialogHeader>
               <Separator />
               {/* Upload form */}
-              <form
-                onSubmit={async (event) => {
-                  event.preventDefault()
-                  await uploadToIPFS({ filesToUpload })
-                }}
-                // TODO: Debug why server actions fail in this instance
-                // action={await uploadToIPFS({filesToUpload})}
-                {...getRootProps()}
-                className="focus:outline-none text-center"
-              >
-                {!showFilesToUpload ? (
-                  <>
-                    <input {...getInputProps()} />
-                    {isDragActive ? (
-                      <p>Drop the files here...</p>
-                    ) : (
-                      <Typography className="hover:cursor-pointer">
-                        Drag and drop your files here or click here to browse
-                      </Typography>
-                    )}
-                  </>
-                ) : (
-                  <Stack className="gap-4">
-                    <FileList filesToUpload={filesToUpload} />
-                    <Button type="submit" variant="link">
-                      Next
-                    </Button>
-                  </Stack>
-                )}
-              </form>
+              <Stack className="py-[8rem]">
+                <form
+                  onSubmit={async (event) => {
+                    event.preventDefault()
+                    await uploadToIPFS({ filesToUpload })
+                  }}
+                  // TODO: Debug why server actions fail in this instance
+                  // action={await uploadToIPFS({filesToUpload})}
+                  {...getRootProps()}
+                  className="focus:outline-none text-center"
+                >
+                  {!showFilesToUpload ? (
+                    <>
+                      <input {...getInputProps()} />
+                      {isDragActive ? (
+                        <p>Drop the files here...</p>
+                      ) : (
+                        <Typography className="hover:cursor-pointer">
+                          Drag and drop your files here or click here to{' '}
+                          <span className="underline">browse</span>
+                        </Typography>
+                      )}
+                    </>
+                  ) : (
+                    <Stack className="gap-4">
+                      <FileList filesToUpload={filesToUpload} />
+                      <Button type="submit" variant="link">
+                        Next
+                      </Button>
+                    </Stack>
+                  )}
+                </form>
+              </Stack>
             </Stack>
           </DialogContent>
         </DialogPortal>
