@@ -20,6 +20,7 @@ contract NodeRegistryTest is Test {
 
     // OTHER
     address constant MOCK_USER = address(0x123);
+    uint256 constant MOCK_USER_ID = 1;
     uint256 constant ADMIN_ID = 1;
     address constant ADMIN_ID_OWNER = address(0x47);
     bytes constant ZERO_BYTES = new bytes(0);
@@ -43,7 +44,7 @@ contract NodeRegistryTest is Test {
         nodeRegistry = new NodeRegistry();  
         bytes[] memory array = new bytes[](1);
         array[0] = ZERO_BYTES;
-        nodeRegistry.register(ZERO_BYTES32, array);
+        nodeRegistry.register(MOCK_USER_ID, ZERO_BYTES32, array);
     }    
     
     //////////////////////////////////////////////////
@@ -63,20 +64,20 @@ contract NodeRegistryTest is Test {
         members[0] = 2;
         members[1] = 3;
         // MESSAGE:     101_Access_AdminWithMembers
-        // FORMAT:      (userId, msgType, msgBody)
-        messages[0] = abi.encode(1, ACCESS_101 ,abi.encode(1, members));
+        // FORMAT:      (msgType, msgBody)
+        messages[0] = abi.encode(ACCESS_101 ,abi.encode(1, members));
         // MESSAGE:     201_Pub_SetUri
-        // FOMRAT:      (userId, msgType, msgBody)
-        messages[1] = abi.encode(1, PUB_201, abi.encode("yourIpfsStringHere"));
+        // FOMRAT:      (msgType, msgBody)
+        messages[1] = abi.encode(PUB_201, abi.encode("yourIpfsStringHere"));
         // Calculate post increment node count
         uint256 expectedCount = nodeRegistry.nodeCount() + 1;
         vm.startPrank(MOCK_USER);        
         // Checks if topics 1, 2, 3, non-indexed data and event emitter match expected emitter + event signature + event values
         vm.expectEmit(true, true, true, true, address(nodeRegistry));    
         // Emit event with expected value
-        emit NodeRegistry.Register(MOCK_USER, PUB_SCHEMA, expectedCount, messages);        
+        emit NodeRegistry.Register(MOCK_USER, MOCK_USER_ID, PUB_SCHEMA, expectedCount, messages);        
         // Call `register()` on nodeRegistry
-        nodeRegistry.register(PUB_SCHEMA, messages);
+        nodeRegistry.register(MOCK_USER_ID, PUB_SCHEMA, messages);
         // Check storage updated correctly
         assertEq(nodeRegistry.nodeCount(), expectedCount);
     }        
@@ -86,6 +87,7 @@ contract NodeRegistryTest is Test {
         uint256 expectedCount = nodeRegistry.nodeCount() + batchQuantity;
         vm.startPrank(MOCK_USER);
         nodeRegistry.registerBatch(
+            generateUint256ArrayData(batchQuantity),
             generateBytes32ArrayData(batchQuantity),
             generateBatchMessages(batchQuantity)
         );
@@ -105,20 +107,20 @@ contract NodeRegistryTest is Test {
         members[0] = 2;
         members[1] = 3;
         // MESSAGE:     101_Access_AdminWithMembers
-        // FORMAT:      (userId, msgType, msgBody)
-        messages[0] = abi.encode(1, ACCESS_101 ,abi.encode(1, members));
+        // FORMAT:      (msgType, msgBody)
+        messages[0] = abi.encode(ACCESS_101 ,abi.encode(1, members));
         // MESSAGE:     201_Pub_SetUri
-        // FOMRAT:      (userId, msgType, msgBody)
-        messages[1] = abi.encode(1, PUB_201, abi.encode("yourIpfsStringHere"));
+        // FOMRAT:      (msgType, msgBody)
+        messages[1] = abi.encode(PUB_201, abi.encode("yourIpfsStringHere"));
         // Calculate node count
         uint256 expectedCount = nodeRegistry.nodeCount();   
         vm.startPrank(MOCK_USER);        
         // Checks if topics 1, 2, 3, non-indexed data and event emitter match expected emitter + event signature + event values
         vm.expectEmit(true, true, false, true, address(nodeRegistry));    
         // Emit event with expected value
-        emit NodeRegistry.Update(MOCK_USER, expectedCount, messages);        
+        emit NodeRegistry.Update(MOCK_USER, MOCK_USER_ID, expectedCount, messages);        
         // Call `update()` on nodeRegistry
-        nodeRegistry.update(1, messages);
+        nodeRegistry.update(MOCK_USER_ID, 1, messages);
         // Check storage updated correctly
         assertEq(nodeRegistry.nodeCount(), expectedCount);
     }        
@@ -128,6 +130,7 @@ contract NodeRegistryTest is Test {
         uint256 expectedCount = nodeRegistry.nodeCount();
         vm.startPrank(MOCK_USER);
         nodeRegistry.updateBatch(
+            generateUint256ArrayData(batchQuantity),
             generateUint256ArrayData(batchQuantity),
             generateBatchMessages(batchQuantity)
         );
@@ -162,9 +165,9 @@ contract NodeRegistryTest is Test {
         // Checks if topics 1, 2, 3, non-indexed data and event emitter match expected emitter + event signature + event values
         vm.expectEmit(true, true, true, true, address(nodeRegistry));    
         // Emit event with expected value
-        emit NodeRegistry.Register(MOCK_USER, CHANNEL_SCHEMA, expectedCount, messages);        
+        emit NodeRegistry.Register(MOCK_USER, MOCK_USER_ID, CHANNEL_SCHEMA, expectedCount, messages);        
         // Call `register()` on nodeRegistry
-        nodeRegistry.register(CHANNEL_SCHEMA, messages);
+        nodeRegistry.register(MOCK_USER_ID, CHANNEL_SCHEMA, messages);
         // Check storage updated correctly
         assertEq(nodeRegistry.nodeCount(), expectedCount);
     }        
@@ -175,6 +178,7 @@ contract NodeRegistryTest is Test {
         uint256 expectedCount = nodeRegistry.nodeCount() + batchQuantity;
         vm.startPrank(MOCK_USER);
         nodeRegistry.registerBatch(
+            generateUint256ArrayData(batchQuantity),
             generateBytes32ArrayData(batchQuantity),
             generateBatchMessages(batchQuantity)
         );
@@ -205,9 +209,9 @@ contract NodeRegistryTest is Test {
         // Checks if topics 1, 2, 3, non-indexed data and event emitter match expected emitter + event signature + event values
         vm.expectEmit(true, true, false, true, address(nodeRegistry));    
         // Emit event with expected value
-        emit NodeRegistry.Update(MOCK_USER, expectedCount, messages);        
+        emit NodeRegistry.Update(MOCK_USER, MOCK_USER_ID, expectedCount, messages);        
         // Call `update()` on nodeRegistry
-        nodeRegistry.update(1, messages);
+        nodeRegistry.update(MOCK_USER_ID, 1, messages);
         // Check storage updated correctly
         assertEq(nodeRegistry.nodeCount(), expectedCount);
     }        
@@ -217,6 +221,7 @@ contract NodeRegistryTest is Test {
         uint256 expectedCount = nodeRegistry.nodeCount();
         vm.startPrank(MOCK_USER);
         nodeRegistry.updateBatch(
+            generateUint256ArrayData(batchQuantity),
             generateUint256ArrayData(batchQuantity),
             generateBatchMessages(batchQuantity)
         );
@@ -233,11 +238,10 @@ contract NodeRegistryTest is Test {
         admins[0] = 2;
         uint256[] memory members = new uint256[](2);
         members[1] = 3;
-        uint256 userId = 1;
         for (uint256 i; i < quantity; ++i) {            
             batchData[i] = new bytes[](2);            
-            batchData[i][0] = abi.encode(userId, ACCESS_101, abi.encode(admins, members));
-            batchData[i][1] = abi.encode(userId, PUB_201, abi.encode(ipfsExample));
+            batchData[i][0] = abi.encode(ACCESS_101, abi.encode(admins, members));
+            batchData[i][1] = abi.encode(PUB_201, abi.encode(ipfsExample));
         }
     }                   
 

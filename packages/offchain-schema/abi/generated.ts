@@ -357,7 +357,6 @@ export const messageTypeABI = [
     inputs: [],
     name: 'export_000_Message',
     outputs: [
-      { name: 'userId', internalType: 'uint256', type: 'uint256' },
       { name: 'msgType', internalType: 'uint256', type: 'uint256' },
       { name: 'msgBody', internalType: 'bytes', type: 'bytes' },
     ],
@@ -378,6 +377,12 @@ export const nodeRegistryABI = [
         internalType: 'address',
         type: 'address',
         indexed: true,
+      },
+      {
+        name: 'userId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
       },
       {
         name: 'schema',
@@ -411,6 +416,12 @@ export const nodeRegistryABI = [
         indexed: true,
       },
       {
+        name: 'userId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
         name: 'nodeId',
         internalType: 'uint256',
         type: 'uint256',
@@ -436,6 +447,7 @@ export const nodeRegistryABI = [
     stateMutability: 'nonpayable',
     type: 'function',
     inputs: [
+      { name: 'userId', internalType: 'uint256', type: 'uint256' },
       { name: 'schema', internalType: 'bytes32', type: 'bytes32' },
       { name: 'messages', internalType: 'bytes[]', type: 'bytes[]' },
     ],
@@ -446,6 +458,7 @@ export const nodeRegistryABI = [
     stateMutability: 'nonpayable',
     type: 'function',
     inputs: [
+      { name: 'userIds', internalType: 'uint256[]', type: 'uint256[]' },
       { name: 'schemas', internalType: 'bytes32[]', type: 'bytes32[]' },
       { name: 'messages', internalType: 'bytes[][]', type: 'bytes[][]' },
     ],
@@ -458,6 +471,7 @@ export const nodeRegistryABI = [
     stateMutability: 'nonpayable',
     type: 'function',
     inputs: [
+      { name: 'userId', internalType: 'uint256', type: 'uint256' },
       { name: 'nodeId', internalType: 'uint256', type: 'uint256' },
       { name: 'messages', internalType: 'bytes[]', type: 'bytes[]' },
     ],
@@ -468,6 +482,7 @@ export const nodeRegistryABI = [
     stateMutability: 'nonpayable',
     type: 'function',
     inputs: [
+      { name: 'userIds', internalType: 'uint256[]', type: 'uint256[]' },
       { name: 'nodeIds', internalType: 'uint256[]', type: 'uint256[]' },
       { name: 'messages', internalType: 'bytes[][]', type: 'bytes[][]' },
     ],

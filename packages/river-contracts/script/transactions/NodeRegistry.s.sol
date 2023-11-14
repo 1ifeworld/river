@@ -1,75 +1,41 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-// import "forge-std/Script.sol";
+import "forge-std/Script.sol";
 
-// import {NodeRegistry} from "imp/core/NodeRegistry.sol";
-// // import {NodeRegistryTypes} from "../../src/types/NodeRegistryTypes.sol";
+import {NodeRegistry} from "imp/NodeRegistry.sol";
 
-// contract NodeRegistryScript is NodeRegistryTypes, Script {
+contract NodeRegistryScript is Script {
 
-//     NodeRegistry nodeRegistry;
+    NodeRegistry nodeRegistry = NodeRegistry(0xF26F07040922992DF06091235A50872e31C85Ab8);
+    uint256 constant MOCK_USER_ID = 1;
+    bytes32 constant PUB_SCHEMA = 0xF36F2F0432F99EA34A360F154CEA9D1FAD45C7319E27ADED55CC0D28D0924068;
     
-//     function setUp() public {
-        
-//         // NOTE: replace address of NodeRegistry with one you want to target
-//         nodeRegistry = NodeRegistry(0x5FbDB2315678afecb367f032d93F642f64180aa3);
-//     }
+    function setUp() public {}
 
-//     function run() public {
-//         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
+    function run() public {
+        bytes32 privateKeyBytes = vm.envBytes32("PRIVATE_KEY");
+        uint256 deployerPrivateKey = uint256(privateKeyBytes);
 
-//         vm.startBroadcast(deployerPrivateKey);
-        
-//         // fullCycle();
+        vm.startBroadcast(deployerPrivateKey);
 
-//         registerNode(1, keccak256(bytes("hi")), 1, new bytes(0));
+        // prep message data
+        bytes[] memory messages = new bytes[](2);
+        uint256[] memory admins = new uint256[](1);
+        admins[0] = 1;
+        uint256[] memory members = new uint256[](2);
+        members[0] = 2;
+        members[1] = 3;
+        messages[0] = abi.encode(101, abi.encode(admins, members));
+        messages[1] = abi.encode(201, abi.encode("yourIpfsStringHere"));
 
-//         vm.stopBroadcast();
-//     }
+        nodeRegistry.register(MOCK_USER_ID, PUB_SCHEMA, messages);
 
-//     //////////////////////////////////////////////////
-//     // FUNCTIONS
-//     //////////////////////////////////////////////////
+        vm.stopBroadcast();
+    }
+}
 
-//     // function registerSchema(uint256 userId, uint256 regType, bytes memory regBody) public returns (bytes32 schema) {
-//     //     SchemaRegistration memory schemaRegistration = SchemaRegistration({
-//     //         userId: userId, 
-//     //         regType: regType,
-//     //         regBody: regBody
-//     //     });        
-//     //     schema = nodeRegistry.registerSchema(abi.encode(schemaRegistration));
-//     // }
+// ======= DEPLOY SCRIPTS =====
 
-//     // function registerNode(uint256 userId, bytes32 schema, uint256 regType, bytes memory regBody) public returns (uint256 nodeId) {
-//     //     NodeRegistration memory nodeRegistration = NodeRegistration({
-//     //         userId: userId, 
-//     //         schema: schema, 
-//     //         regType: regType,
-//     //         regBody: regBody
-//     //     });                 
-//     //     nodeId = nodeRegistry.registerNode(abi.encode(nodeRegistration));
-//     // }
-
-//     // function messageNode(uint256 userId, uint256 nodeId, uint256 msgType, bytes memory msgBody) public {
-//     //     NodeMessage memory nodeMessage = NodeMessage({
-//     //         userId: userId, 
-//     //         nodeId: nodeId, 
-//     //         msgType: msgType,
-//     //         msgBody: msgBody
-//     //     });               
-//     //     nodeRegistry.messageNode(abi.encode(nodeMessage));
-//     // }
-
-//     function fullCycle() public {
-//         uint256 userId = 1;
-//         bytes32 schema = registerSchema(userId, 0, new bytes(0));
-//         uint256 nodeId = registerNode(userId, schema, 0, new bytes(0));
-//         messageNode(userId, nodeId, 0, new bytes(0));
-//     }
-// }
-
-// // ======= DEPLOY SCRIPTS =====
-
-// // source .env
-// // forge script script/transactions/NodeRegistry.s.sol:NodeRegistryScript -vvvv --broadcast --fork-url http://localhost:8545
+// source .env
+// forge script script/transactions/NodeRegistry.s.sol:NodeRegistryScript -vvvv --rpc-url $RPC_URL --broadcast

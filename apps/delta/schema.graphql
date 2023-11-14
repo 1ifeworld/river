@@ -35,6 +35,14 @@ type Schema @entity {
   data: Bytes
 }
 
+type Register @entity {
+  id: String!
+  sender: String
+  nodeId: BigInt
+  schema: Bytes
+  messages: [Bytes]
+}
+
 type Node @entity {
   id: String!
   sender: String!
@@ -43,14 +51,13 @@ type Node @entity {
   nodeId: BigInt!
   msgType: BigInt
   msgBody: Bytes
-  nodeAdmin: [BigInt]!
-  nodeMembers: [BigInt]!
+  nodeAdmin: [BigInt!]!
+  nodeMembers: [BigInt!]!
 }
 
 type Message @entity {
   id: String!
   sender: String
-  userId: BigInt
   msgType: BigInt
   msgBody: Bytes
 }
@@ -81,6 +88,7 @@ type Item @entity {
 
 type Channel @entity {
   id: String!
+  uri: String
   items: [Item!]! @derivedFrom(field: "channel")
 }
 

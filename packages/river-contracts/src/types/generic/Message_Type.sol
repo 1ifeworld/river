@@ -11,8 +11,8 @@ abstract contract Message_Type {
     // GENERIC
     //////////////////////////////////////////////////
 
-    function export_000_Message() external pure returns (uint256 userId, uint256 msgType, bytes memory msgBody) {
-        return (userId, msgType, msgBody);
+    function export_000_Message() external pure returns (uint256 msgType, bytes memory msgBody) {
+        return (msgType, msgBody);
     }
 
 }

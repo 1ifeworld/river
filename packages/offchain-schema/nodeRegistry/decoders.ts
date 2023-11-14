@@ -11,18 +11,16 @@ import {
 //////////////////////////////////////////////////
 
 export function decodeMessage000({ encodedMsg }: { encodedMsg: Hash }): {
-  userId: bigint;
   msgType: bigint;
   msgBody: Hash;
 } | null {
   try {
-    const [userId, msgType, msgBody] = decodeAbiParameters(
+    const [msgType, msgBody] = decodeAbiParameters(
       messageTypeABI[0].outputs, // generic Message type
       encodedMsg
     );
 
     return {
-      userId: userId,
       msgType: msgType,
       msgBody: msgBody,
     };

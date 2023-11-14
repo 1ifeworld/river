@@ -859,7 +859,7 @@
       }
     },
     "lib/imp/src/AttestationRegistry.sol": {
-      "lastModificationDate": 1699677041726,
+      "lastModificationDate": 1699928785009,
       "contentHash": "9dc66e02ee2662eefade2cb416fce78a",
       "sourceName": "lib/imp/src/AttestationRegistry.sol",
       "solcConfig": {
@@ -908,7 +908,7 @@
       }
     },
     "lib/imp/src/DelegateRegistry.sol": {
-      "lastModificationDate": 1699677041726,
+      "lastModificationDate": 1699928785009,
       "contentHash": "e29d01949e6d5f295031bdc2597dff6b",
       "sourceName": "lib/imp/src/DelegateRegistry.sol",
       "solcConfig": {
@@ -953,7 +953,7 @@
       }
     },
     "lib/imp/src/IdRegistry.sol": {
-      "lastModificationDate": 1699677041726,
+      "lastModificationDate": 1699928785009,
       "contentHash": "66d0c814c2884a6c476cb04e6a63f576",
       "sourceName": "lib/imp/src/IdRegistry.sol",
       "solcConfig": {
@@ -996,8 +996,8 @@
       }
     },
     "lib/imp/src/NodeRegistry.sol": {
-      "lastModificationDate": 1699677041726,
-      "contentHash": "b4c6f94fee37b78a4c1adf4d3f023ae7",
+      "lastModificationDate": 1699928785009,
+      "contentHash": "92e401ab14020787d325422c6307909d",
       "sourceName": "lib/imp/src/NodeRegistry.sol",
       "solcConfig": {
         "settings": {
@@ -1039,7 +1039,7 @@
       }
     },
     "lib/imp/src/abstract/Signatures.sol": {
-      "lastModificationDate": 1699677041726,
+      "lastModificationDate": 1699928785010,
       "contentHash": "2a79cd5ca0efa8a449697e660ddc6ad3",
       "sourceName": "lib/imp/src/abstract/Signatures.sol",
       "solcConfig": {
@@ -1087,7 +1087,7 @@
       }
     },
     "lib/imp/src/interfaces/IDelegateRegistry.sol": {
-      "lastModificationDate": 1699677041726,
+      "lastModificationDate": 1699928785010,
       "contentHash": "dde0ca1b8cae494234ed5aed9786de93",
       "sourceName": "lib/imp/src/interfaces/IDelegateRegistry.sol",
       "solcConfig": {
@@ -1131,7 +1131,7 @@
       }
     },
     "lib/imp/src/interfaces/IIdRegistry.sol": {
-      "lastModificationDate": 1699677041726,
+      "lastModificationDate": 1699928785010,
       "contentHash": "11293deaa72b36521d861ec9ed89a009",
       "sourceName": "lib/imp/src/interfaces/IIdRegistry.sol",
       "solcConfig": {
@@ -1172,8 +1172,8 @@
       }
     },
     "lib/imp/src/interfaces/INodeRegistry.sol": {
-      "lastModificationDate": 1699677041726,
-      "contentHash": "39e93eb938cfaf1b71eb478aa0af8e0b",
+      "lastModificationDate": 1699928785010,
+      "contentHash": "b212ba3b99866daf8e3490863b7ed99d",
       "sourceName": "lib/imp/src/interfaces/INodeRegistry.sol",
       "solcConfig": {
         "settings": {
@@ -1583,9 +1583,67 @@
       }
     },
     "script/transactions/NodeRegistry.s.sol": {
+      "lastModificationDate": 1699933811554,
+      "contentHash": "d2a153c51bb75882363b5a760bcc1782",
+      "sourceName": "script/transactions/NodeRegistry.s.sol",
+      "solcConfig": {
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 500000
+          },
+          "metadata": {
+            "useLiteralContent": false,
+            "bytecodeHash": "ipfs",
+            "appendCBOR": true
+          },
+          "outputSelection": {
+            "*": {
+              "": [
+                "ast"
+              ],
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ]
+            }
+          },
+          "evmVersion": "paris",
+          "libraries": {}
+        }
+      },
+      "imports": [
+        "lib/forge-std/src/Base.sol",
+        "lib/forge-std/src/Script.sol",
+        "lib/forge-std/src/StdChains.sol",
+        "lib/forge-std/src/StdCheats.sol",
+        "lib/forge-std/src/StdJson.sol",
+        "lib/forge-std/src/StdMath.sol",
+        "lib/forge-std/src/StdStorage.sol",
+        "lib/forge-std/src/StdStyle.sol",
+        "lib/forge-std/src/StdUtils.sol",
+        "lib/forge-std/src/Vm.sol",
+        "lib/forge-std/src/console.sol",
+        "lib/forge-std/src/console2.sol",
+        "lib/forge-std/src/interfaces/IMulticall3.sol",
+        "lib/forge-std/src/safeconsole.sol",
+        "lib/imp/src/NodeRegistry.sol",
+        "lib/imp/src/interfaces/INodeRegistry.sol"
+      ],
+      "versionRequirement": "^0.8.13",
+      "artifacts": {
+        "NodeRegistryScript": {
+          "0.8.23+commit.f704f362.Darwin.appleclang": "NodeRegistry.s.sol/NodeRegistryScript.json"
+        }
+      }
+    },
+    "script/transactions/NodeRegistryOld.s.sol": {
       "lastModificationDate": 1699676550424,
       "contentHash": "63cef9cbbccf7c6998a28e06d31c9cab",
-      "sourceName": "script/transactions/NodeRegistry.s.sol",
+      "sourceName": "script/transactions/NodeRegistryOld.s.sol",
       "solcConfig": {
         "settings": {
           "optimizer": {
@@ -1618,8 +1676,8 @@
       "imports": [],
       "versionRequirement": "^0.8.13",
       "artifacts": {
-        "NodeRegistry.s": {
-          "0.8.23+commit.f704f362.Darwin.appleclang": "NodeRegistry.s.sol/NodeRegistry.s.json"
+        "NodeRegistryOld.s": {
+          "0.8.23+commit.f704f362.Darwin.appleclang": "NodeRegistryOld.s.sol/NodeRegistryOld.s.json"
         }
       }
     },
@@ -1706,8 +1764,8 @@
       }
     },
     "src/types/generic/Message_Type.sol": {
-      "lastModificationDate": 1699831136249,
-      "contentHash": "7574f6509149a40886f6b73be51c13ab",
+      "lastModificationDate": 1699928823195,
+      "contentHash": "58ced8ad7d6b012ac85daac3850b902f",
       "sourceName": "src/types/generic/Message_Type.sol",
       "solcConfig": {
         "settings": {
@@ -1829,8 +1887,8 @@
       }
     },
     "test/NodeRegistry.t.sol": {
-      "lastModificationDate": 1699830912781,
-      "contentHash": "deda6d13043b554c5db256e556fc931f",
+      "lastModificationDate": 1699929093191,
+      "contentHash": "c54b793748d6c622485ac3d2277839b1",
       "sourceName": "test/NodeRegistry.t.sol",
       "solcConfig": {
         "settings": {
