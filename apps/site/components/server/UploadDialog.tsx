@@ -36,7 +36,8 @@ export const UploadDialog = React.forwardRef<HTMLDivElement, UploadDialogProps>(
     })
 
     return (
-      <Dialog onOpenChange={onOpenChange}>
+      // Remove persistent open
+      <Dialog open={true} onOpenChange={onOpenChange}>
         <DialogTrigger asChild>
           <DropdownMenuItem
             ref={forwardedRef}
@@ -53,7 +54,7 @@ export const UploadDialog = React.forwardRef<HTMLDivElement, UploadDialogProps>(
             <Stack className="items-center gap-4">
               <DialogHeader>
                 <DialogTitle>
-                  <Typography>Add New Item</Typography>
+                  <Typography>New item</Typography>
                 </DialogTitle>
               </DialogHeader>
               <Separator />
