@@ -3,7 +3,7 @@ pragma solidity ^0.8.13;
 
 import "forge-std/Script.sol";
 
-import {IdRegistry} from "imp/core/IdRegistry.sol";
+import {IdRegistry} from "imp/IdRegistry.sol";
 
 contract IdRegistryScript is Script {
 

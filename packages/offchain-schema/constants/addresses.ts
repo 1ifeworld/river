@@ -1,12 +1,44 @@
 import {Hex} from "viem"
 
-export const idRegistry: Hex = '0xf89a7C9a0517da815dB66CdcAf61F44E01476697'
-export const delegateRegistry: Hex =
-  '0x995D4621B4B72cd2805f99972A1313bd9876c613'
-export const nodeRegistry: Hex = '0xd8Dbf7dC3746B968485164c05b5c11C78a2BFebc'
-export const riverValidatorV1: Hex =
-  '0x3E3522Ac4d89c56c8759F81a86ff94b8c39A45e3'
-export const lightAccountFactory: Hex =
-  '0x000000893A26168158fbeaDD9335Be5bC96592E2'
-export const entryPoint: Hex = '0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789'
-export const operator: Hex = '0x004991c3bbcF3dd0596292C80351798965070D75'
+type AddressMap = {
+  [chainName: string]: Hex;
+};
+
+type AddressBook = {
+  [contractName: string]: AddressMap;
+};
+
+export const addresses: AddressBook = {
+  idRegistry: {
+      opGoerli: "0xD1afC5DBC6870b17e598273dB2cC6bbA9233b905",
+  },
+  delegateRegistry: {
+      opGoerli: "0x513B15394BFd615fF4efFBFb4ee3DBFF641D63F8",
+  },
+  attestationRegistry: {
+      opGoerli: "0x6d8313bBac1C0596Ff115DE28c8E0E4d3328DbE3",
+  },
+  nodeRegistry: {
+      opGoerli: "0xF26F07040922992DF06091235A50872e31C85Ab8",
+      // ... add more chains as needed
+  },
+  riverValidatorV1: {
+      opGoerli: "0x3E3522Ac4d89c56c8759F81a86ff94b8c39A45e3",
+      // ... add more chains as needed
+  },
+  lightAccountFactory: {
+      opGoerli: "0x00006B00f8Ee98Eb4eA288B1E89d00702361e055",
+      // ... add more chains as needed
+  },
+  operator: {
+      opGoerli: "0x004991c3bbcF3dd0596292C80351798965070D75",
+      arbGoerli: "0x33F59bfD58c16dEfB93612De65A5123F982F58bA",
+      arbNova: "0x33F59bfD58c16dEfB93612De65A5123F982F58bA",
+      // ... add more chains as needed
+  },
+  entrypoint: {
+      opGoerli: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",
+      // ... add more chains as needed
+  },
+};
+

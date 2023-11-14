@@ -9,12 +9,18 @@ import {IEntryPoint} from "account-abstraction/interfaces/IEntryPoint.sol";
 import {LightAccount} from "./LightAccount.sol";
 
 /**
+ * @notice This contract was modified by Lifeworld to add an event in the `createAccount` function
  * @title A factory contract for LightAccount
  * @dev A UserOperations "initCode" holds the address of the factory, and a method call (to createAccount, in this sample factory).
  * The factory's createAccount returns the target account address even if it is already installed.
  * This way, the entryPoint.getSenderAddress() can be called either before or after the account is created.
  */
 contract LightAccountFactory {
+    /**
+     * @notice Emmitted when a new account instance is created.
+     */
+    event LightAccountCreated(address indexed deployedAddress, uint256 salt);
+
     LightAccount public immutable accountImplementation;
 
     constructor(IEntryPoint _entryPoint) {
@@ -44,6 +50,9 @@ contract LightAccountFactory {
                 )
             )
         );
+
+        // Modification to the original Alchemy modification
+        emit LightAccountCreated(address(ret), salt);
     }
 
     /**

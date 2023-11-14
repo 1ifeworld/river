@@ -1,13 +1,14 @@
 [profile.default]
 solc = '0.8.21'
 evm_version = 'paris'
-via_ir = true
+# via_ir = true
 src = 'src'
 out = 'out'
 test = 'test'
 libs = ['lib']
 optimizer = true
-optimizer_runs = 10_000_000
+# optimizer_runs = 10_000_000
+optimizer_runs = 50_000
 
 [fuzz]
 runs = 5000

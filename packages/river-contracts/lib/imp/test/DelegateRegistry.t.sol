@@ -1,20 +1,12 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.21;
+pragma solidity 0.8.23;
 
 import {Test, console2} from "forge-std/Test.sol";
 
-import {IdRegistry} from "../src/core/IdRegistry.sol";
-import {DelegateRegistry} from "../src/core/DelegateRegistry.sol";
-
-// TODO: Add tests that confirm all delegates are cleared for a given id post id transfer
+import {IdRegistry} from "../src/IdRegistry.sol";
+import {DelegateRegistry} from "../src/DelegateRegistry.sol";
 
 contract DelegateRegistryTest is Test {       
-
-    //////////////////////////////////////////////////
-    // EVENTS
-    ////////////////////////////////////////////////// 
-
-    event Delegate(uint256 indexed id, uint256 nonce, address indexed target, bool status); 
 
     //////////////////////////////////////////////////
     // CONSTANTS
@@ -51,7 +43,7 @@ contract DelegateRegistryTest is Test {
     // UPDATE DELEGATE TESTS
     //////////////////////////////////////////////////   
 
-    function test_updateDelegate() public {
+    function test_assign_delegate() public {
         // prank into eoa that will call register and delegate functions
         vm.startPrank(eoa_owner.addr); 
         // call register on idRegistry
@@ -59,13 +51,32 @@ contract DelegateRegistryTest is Test {
         // expect emit
         vm.expectEmit(true, true, true, false, address(delegateRegistry));
         // emit what we expect
-        emit Delegate(1, 1, eoa_delegate.addr, true);
+        emit DelegateRegistry.Delegate(1, eoa_delegate.addr, true);
         // call updateDelegate on delegateRegistry
         delegateRegistry.updateDelegate(eoa_delegate.addr, true);
         // check expected values
         require(delegateRegistry.isDelegate(1, eoa_delegate.addr) == true, "delegate set incorrectly");
-        require(delegateRegistry.idDelegates(1, 1, eoa_delegate.addr) == true, "delegate set incorrectly");
     }           
+
+    function test_remove_delegate() public {
+        // prank into eoa that will call register and delegate functions
+        vm.startPrank(eoa_owner.addr); 
+        // call register on idRegistry
+        idRegistry.register(mockRegisterBackup, zeroBytes);
+        // call updateDelegate on delegateRegistry
+        delegateRegistry.updateDelegate(eoa_delegate.addr, true);
+        /*
+            SHIFT TO DELEGATION REMOVAL
+        */
+        // expect emit
+        vm.expectEmit(true, true, true, false, address(delegateRegistry));
+        // emit what we expect
+        emit DelegateRegistry.Delegate(1, eoa_delegate.addr, false);
+        // call updateDelegate on delegateRegistry
+        delegateRegistry.updateDelegate(eoa_delegate.addr, false);        
+        // check expected values
+        require(delegateRegistry.isDelegate(1, eoa_delegate.addr) == false, "delegate set incorrectly");        
+    }          
 
     function test_Revert_HasNoId_updateDelegate() public {
         // prank into eoa that is the owner of light account

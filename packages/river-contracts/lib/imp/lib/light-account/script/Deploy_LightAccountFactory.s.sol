@@ -7,15 +7,15 @@ import {IEntryPoint} from "account-abstraction/interfaces/IEntryPoint.sol";
 
 import {LightAccountFactory} from "../src/LightAccountFactory.sol";
 
-// @notice Deploys LightAccountFactory to the address `0x000000893A26168158fbeaDD9335Be5bC96592E2`
+// @notice Deploys LightAccountFactory to the address `0x00006B00f8Ee98Eb4eA288B1E89d00702361e055`
 // @dev Note: Script uses EntryPoint at address 0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789
-// @dev To run: `forge script script/Deploy_LightAccountFactory.s.sol:Deploy_LightAccountFactory --broadcast --rpc-url ${RPC_URL} --verify -vvvv`
+// @dev To run: `forge script script/Deploy_LightAccountFactory.s.sol:Deploy_LightAccountFactory --broadcast --rpc-url $RPC_URL_GOERLI --verify --verifier-url https://api-goerli-optimistic.etherscan.io/api -vvvv`
 contract Deploy_LightAccountFactory is Script {
     error InitCodeHashMismatch(bytes32 initCodeHash);
     error DeployedAddressMismatch(address deployed);
 
     function run() public {
-        uint256 deployerPrivateKey = uint256(vm.envBytes32("DEPLOYER_PRIVATE_KEY"));
+        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
 
         vm.startBroadcast(deployerPrivateKey);
 
@@ -28,7 +28,10 @@ contract Deploy_LightAccountFactory is Script {
             abi.encodePacked(type(LightAccountFactory).creationCode, bytes32(uint256(uint160(address(entryPoint)))))
         );
 
-        if (initCodeHash != 0x3043a72812fec9b9987853a9b869c1a469dc6e04b0f80da3af2ecb8cf8eed209) {
+        // Log init code hash
+        console.logBytes32(initCodeHash);
+
+        if (initCodeHash != 0x3fd089820df67839c6d2ed1ddb05b163d4ff67bf917b8a6addcb8d6a98499821) {
             revert InitCodeHashMismatch(initCodeHash);
         }
 
@@ -42,10 +45,9 @@ contract Deploy_LightAccountFactory is Script {
         console.log("********************************");
 
         LightAccountFactory factory =
-        new LightAccountFactory{salt: 0x00000000000000000000000000000000000000007845d3459c316000001d6f83}(entryPoint);
-
+        new LightAccountFactory{salt: 0x004991c3bbcf3dd0596292c80351798965070d75ffbfc94e11540400000e05c0}(entryPoint);
         // Deployed address check
-        if (address(factory) != 0x000000893A26168158fbeaDD9335Be5bC96592E2) {
+        if (address(factory) != 0x00006B00f8Ee98Eb4eA288B1E89d00702361e055) {
             revert DeployedAddressMismatch(address(factory));
         }
 

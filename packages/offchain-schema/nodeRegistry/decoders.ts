@@ -1,136 +1,147 @@
 import { Hash, Hex, decodeAbiParameters } from "viem";
 import {
-  nodeRegistryTypesABI,
-  adminWithMembersABI,
-  publicationMessageTypesABI,
-  channelMessageTypesABI,
+  messageTypeABI,
+  access_100TypesABI,
+  publication_200TypesABI,
+  channel_300TypesABI,
 } from "../abi";
 
 //////////////////////////////////////////////////
-// NODE REGISTRATION
+// 000 MESSAGE DECODERS
 //////////////////////////////////////////////////
 
-export function decodeNodeRegistrationData({ data }: { data: Hash }): {
-  schema: Hash;
-  userId: bigint;
+export function decodeMessage000({ encodedMsg }: { encodedMsg: Hash }): {
   msgType: bigint;
   msgBody: Hash;
 } | null {
   try {
-    const [decodedData] = decodeAbiParameters(
-      nodeRegistryTypesABI[1].outputs,
-      data
+    const [msgType, msgBody] = decodeAbiParameters(
+      messageTypeABI[0].outputs, // generic Message type
+      encodedMsg
     );
 
-    return decodedData;
+    return {
+      msgType: msgType,
+      msgBody: msgBody,
+    };
   } catch (error) {
     // If an error is caught during decoding, return null.
-    console.error("Failed to decode node registration data:", error);
+    console.error("Failed to decode Message", error);
     return null;
   }
 }
 
-export function decodeAdminWithMembersData({
-  msgType,
-  msgBody,
-}: {
-  msgType: bigint;
-  msgBody: Hash;
-}): {
-  admin: bigint;
+//////////////////////////////////////////////////
+// 100 ACCESS DECODERS
+//////////////////////////////////////////////////
+
+export function decodeAccess101({ msgBody }: { msgBody: Hash }): {
+  admins: readonly bigint[];
   members: readonly bigint[];
 } | null {
   try {
-    const [decodedData] = decodeAbiParameters(
-      adminWithMembersABI[0].outputs,
+    const [admins, members] = decodeAbiParameters(
+      access_100TypesABI[0].outputs, // setup AdminWithMembers
       msgBody
     );
 
-    return decodedData;
-  } catch (error) {
-    // If an error is caught during decoding or casting, return null.
-    console.error("Failed to decode admin with members data:", error);
-    return null;
-  }
-}
-
-//////////////////////////////////////////////////
-// NODE CALL
-//////////////////////////////////////////////////
-
-export function decodeNodeCallData({ data }: { data: Hash }): {
-  nodeId: bigint;
-  userId: bigint;
-  msgType: bigint;
-  msgBody: Hash;
-} | null {
-  try {
-    const [decodedData] = decodeAbiParameters(
-      nodeRegistryTypesABI[0].outputs,
-      data
-    );
-
-    return decodedData;
+    return {
+      admins: admins,
+      members: members,
+    };
   } catch (error) {
     // If an error is caught during decoding, return null.
-    console.error("Failed to decode node call data:", error);
+    console.error("Failed to decode Message", error);
     return null;
   }
 }
 
-/***  PUBLICATION SPECIFIC ***/
+//////////////////////////////////////////////////
+// 200 PUBLICATION DECODERS
+//////////////////////////////////////////////////
 
-export function decodeMessagePublicationData({
-  msgType,
-  msgBody,
-}: {
-  msgType: bigint;
-  msgBody: Hash;
-}): {
+export function decodePublication201({ msgBody }: { msgBody: Hash }): {
   uri: string;
 } | null {
   try {
-    const [decodedData] = decodeAbiParameters(
-      publicationMessageTypesABI[0].outputs,
+    const [uri] = decodeAbiParameters(
+      publication_200TypesABI[0].outputs, // setUri
       msgBody
     );
 
-    return decodedData;
+    return {
+      uri: uri,
+    };
   } catch (error) {
     // If an error is caught during decoding, return null.
-    console.error("Failed to decode message Publication data:", error);
+    console.error("Failed to decode MsgType: 201", error);
     return null;
   }
 }
-/***  CHANNEL SPECIFIC ***/
 
-export function decodeMessageChannelData({
-  msgType,
-  msgBody,
-}: {
-  msgType: bigint;
-  msgBody: Hash;
-}): {
-  chainId: bigint,
-  id: bigint,
-  target: Hex,
-  hasId: boolean
+//////////////////////////////////////////////////
+// 300 CHANNEL DECODERS
+//////////////////////////////////////////////////
+
+export function decodeChannel301({ msgBody }: { msgBody: Hash }): {
+  uri: string;
 } | null {
   try {
-    const [chainId, id, target, hasId] = decodeAbiParameters(
-      channelMessageTypesABI[0].outputs[0].components[0].components,
+    const [uri] = decodeAbiParameters(
+      channel_300TypesABI[0].outputs, // setUri
+      msgBody
+    );
+
+    return {
+      uri: uri,
+    };
+  } catch (error) {
+    // If an error is caught during decoding, return null.
+    console.error("Failed to decode MsgType: 301", error);
+    return null;
+  }
+}
+
+export function decodeChannel302({ msgBody }: { msgBody: Hash }): {
+  chainId: bigint;
+  id: bigint;
+  pointer: Hex;
+  hasId: boolean;
+} | null {
+  try {
+    const [chainId, id, pointer, hasId] = decodeAbiParameters(
+      channel_300TypesABI[1].outputs, // addItem
       msgBody
     );
 
     return {
       chainId: chainId,
       id: id,
-      target: target,
-      hasId: hasId
-    }
+      pointer: pointer,
+      hasId: hasId,
+    };
   } catch (error) {
     // If an error is caught during decoding, return null.
-    console.error("Failed to decode message Channel data:", error);
+    console.error("Failed to decode MsgType: 302", error);
+    return null;
+  }
+}
+
+export function decodeChannel303({ msgBody }: { msgBody: Hash }): {
+  index: bigint;
+} | null {
+  try {
+    const [index] = decodeAbiParameters(
+      channel_300TypesABI[2].outputs, // removeItem
+      msgBody
+    );
+
+    return {
+      index: index,
+    };
+  } catch (error) {
+    // If an error is caught during decoding, return null.
+    console.error("Failed to decode MsgType: 303", error);
     return null;
   }
 }

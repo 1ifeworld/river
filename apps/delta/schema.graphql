@@ -10,7 +10,6 @@ type IdRegistry @entity {
   backup: Bytes
   data: String
   attestor: String
-
 }
 
 # ================================
@@ -36,16 +35,32 @@ type Schema @entity {
   data: Bytes
 }
 
+type Register @entity {
+  id: String!
+  sender: String
+  nodeId: BigInt
+  schema: Bytes
+  messages: [Bytes]
+}
+
 type Node @entity {
   id: String!
   sender: String!
-  nodeId: BigInt!
   userId: BigInt!
   schema: String!
-  msgType: BigInt!
-  msgBody: Bytes!
-  nodeAdmin: BigInt!
-  nodeMembers: [BigInt]!
+  nodeId: BigInt!
+  msgType: BigInt
+  msgBody: Bytes
+  nodeAdmin: [BigInt!]!
+  nodeMembers: [BigInt!]!
+}
+
+type Message @entity {
+  id: String!
+  sender: String
+  userId: BigInt
+  msgType: BigInt
+  msgBody: Bytes
 }
 
 type Call @entity {
@@ -74,6 +89,7 @@ type Item @entity {
 
 type Channel @entity {
   id: String!
+  uri: String
   items: [Item!]! @derivedFrom(field: "channel")
 }
 
@@ -85,5 +101,4 @@ type RiverValidatorV1 @entity {
   id: String!
   userId: BigInt
   status: Boolean
-  operator: String
 }
