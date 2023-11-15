@@ -21,8 +21,8 @@ import {
   FormMessage,
 } from '@/design-system'
 import { type Hex } from 'viem'
-import { getUserId } from '@/lib'
-import { createPublication } from '@/actions'
+import { getUserId, uploadToIPFS } from '@/lib'
+import { createChannel } from '@/actions'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useAlchemyContext } from 'context/AlchemyProviderContext'
 import { useForm } from 'react-hook-form'
@@ -45,16 +45,11 @@ export const ChannelDialog = React.forwardRef<
   ChannelDialogProps
 >(({ triggerChildren, onSelect, onOpenChange }, forwardedRef) => {
   const [userId, setUserId] = React.useState<bigint>()
-  const { alchemyProvider } = useAlchemyContext()
-
-  console.log('Alchemy provider', alchemyProvider)
-
-  console.log('User id', userId)
+  const { alchemyProvider, smartAccountAddress } = useAlchemyContext()
 
   React.useEffect(() => {
     // biome-ignore format:
     (async () => {
-      const smartAccountAddress = await alchemyProvider?.getAddress()
       const userId = await getUserId({
         smartAccountAddress: smartAccountAddress as Hex,
       })
@@ -94,9 +89,19 @@ export const ChannelDialog = React.forwardRef<
             {/* Channel form */}
             <Form {...form}>
               <form
-                // TODO: Confirm binding the user id inline is appropriate
-                // action={createChannel.bind(null, userId as bigint)}
-                // action={createPublication}
+                action={async () => {
+                  // Create an IPFS pointer containing the name of the channel
+                  const channelUri = await uploadToIPFS({
+                    filesToUpload: form.getValues().channelName,
+                  })
+
+                  createChannel({
+                    userId: userId as bigint,
+                    adminIds: [userId as bigint],
+                    memberIds: [],
+                    channelUri: undefined,
+                  })
+                }}
                 className="w-2/3 space-y-6"
               >
                 <FormField
