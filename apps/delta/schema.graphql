@@ -64,7 +64,7 @@ type AccessControl @entity {
 
 type Message @entity {
   id: String!
-  node: Node! 
+  node: Node
   nodeId: BigInt! 
   sender: String
   userId: BigInt
