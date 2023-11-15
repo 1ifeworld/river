@@ -8,4 +8,5 @@ export async function uploadToIPFS({
   })
   const cid = await client.put(filesToUpload, { wrapWithDirectory: false })
   console.log('Content identifier:', cid)
+  return cid
 }

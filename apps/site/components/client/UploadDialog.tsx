@@ -14,16 +14,18 @@ import {
   Form,
 } from '@/design-system'
 import { uploadToIPFS } from '@/lib'
+import { createPublication } from '@/actions'
 import { useDropzone } from 'react-dropzone'
 
 interface UploadDialogProps {
   triggerChildren: React.ReactNode
   onSelect: () => void
   onOpenChange: (open: boolean) => void
+  userId: bigint
 }
 
 export const UploadDialog = React.forwardRef<HTMLDivElement, UploadDialogProps>(
-  ({ triggerChildren, onSelect, onOpenChange }, forwardedRef) => {
+  ({ triggerChildren, onSelect, onOpenChange, userId }, forwardedRef) => {
     const [showFilesToUpload, setShowFilesToUpload] =
       React.useState<boolean>(false)
     const [filesToUpload, setFilesToUpload] = React.useState<File[]>([])
@@ -35,6 +37,8 @@ export const UploadDialog = React.forwardRef<HTMLDivElement, UploadDialogProps>(
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
       onDrop,
     })
+
+    // createPublication.bind(null, userId as bigint)
 
     return (
       <Dialog onOpenChange={onOpenChange}>
@@ -61,12 +65,19 @@ export const UploadDialog = React.forwardRef<HTMLDivElement, UploadDialogProps>(
               {/* Upload form */}
               <Stack className="py-[8rem]">
                 <form
-                  onSubmit={async (event) => {
-                    event.preventDefault()
-                    await uploadToIPFS({ filesToUpload })
+                  action={async () => {
+                    const pubUri = await uploadToIPFS({ filesToUpload })
+
+                    const adminIds: bigint[] = [userId]
+                    const memberIds: bigint[] = []
+
+                    createPublication.bind(null, {
+                      userId: userId as bigint,
+                      adminIds: adminIds,
+                      pubUri: pubUri,
+                      memberIds: memberIds,
+                    })
                   }}
-                  // TODO: Debug why server actions fail in this instance
-                  // action={await uploadToIPFS({filesToUpload})}
                   {...getRootProps()}
                   className="focus:outline-none text-center"
                 >
