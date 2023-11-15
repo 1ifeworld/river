@@ -13,6 +13,7 @@ import {
   addresses
 } from "scrypt";
 
+// register
 ponder.on("NodeRegistry:Register", async ({ event, context }) => {
     // with rivervalidator check happening
     // const { Node, Message, Publication, Channel, Item, AccessControl, RiverValidatorV1} = context.entities;
