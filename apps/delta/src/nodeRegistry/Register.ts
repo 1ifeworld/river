@@ -51,8 +51,6 @@ ponder.on("NodeRegistry:Register", async ({ event, context }) => {
                 userId: userId,
                 schema: schema,
                 nodeId: nodeId,
-                msgType: BigInt(0),   // empty
-                msgBody: '0x',        // empty
             },
         });          
                 // Create corresponding AccessControl entity for the Node
@@ -84,6 +82,7 @@ ponder.on("NodeRegistry:Register", async ({ event, context }) => {
                     data: {
                         sender: sender,
                         userId: userId,
+                        nodeId: nodeId,
                         msgType: decodedMsg.msgType,
                         msgBody: decodedMsg.msgBody                          
                     }
@@ -196,8 +195,10 @@ ponder.on("NodeRegistry:Update", async ({ event, context }) => {
                     data: {
                         sender: sender,
                         userId: userId,
+                        nodeId: nodeId,
+                        node: '', // TODO: FIX
                         msgType: decodedMsg.msgType,
-                        msgBody: decodedMsg.msgBody                          
+                        msgBody: decodedMsg.msgBody                           
                     }
                 })                               
                 // process msgBody depending on msgType
