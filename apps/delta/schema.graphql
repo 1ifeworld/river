@@ -49,29 +49,29 @@ type Node @entity {
   userId: BigInt!
   schema: String!
   nodeId: BigInt!
-  msgType: BigInt
-  msgBody: Bytes
+  messages: [Message!]! @derivedFrom(field: "node")
+  accessControl: AccessControl
+
+}
+
+type AccessControl @entity {
+  id: String!
   nodeAdmin: [BigInt!]!
   nodeMembers: [BigInt!]!
+  node: Node!
+
 }
 
 type Message @entity {
   id: String!
+  node: Node! 
+  nodeId: BigInt! 
   sender: String
   userId: BigInt
   msgType: BigInt
   msgBody: Bytes
 }
 
-type Call @entity {
-  id: String!
-  sender: String!
-  nodeId: BigInt!
-  schema: Bytes!
-  userId: BigInt!
-  msgType: BigInt!
-  msgBody: Bytes!
-}
 
 type Publication @entity {
   id: String!
@@ -101,4 +101,5 @@ type RiverValidatorV1 @entity {
   id: String!
   userId: BigInt
   status: Boolean
+  operator: String
 }

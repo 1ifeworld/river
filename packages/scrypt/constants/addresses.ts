@@ -20,6 +20,8 @@ export const addresses: AddressBook = {
   },
   nodeRegistry: {
       opGoerli: "0xF26F07040922992DF06091235A50872e31C85Ab8",
+    //   arbGoerli: "0x",
+    //   anvil: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
       // ... add more chains as needed
   },
   riverValidatorV1: {
