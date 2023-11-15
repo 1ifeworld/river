@@ -1,23 +1,23 @@
 import { type Hex, type Hash, encodeFunctionData } from 'viem'
-import { operator, idRegistry, delegateRegistry } from 'scrypt'
-import { idRegistryAbi, delegateRegistryAbi } from '@/abi'
+import { addresses } from 'scrypt'
+import { idRegistryABI, delegateRegistryABI } from 'scrypt'
 
 const zeroBytes: Hash = '0x'
 
 export const register = {
-  target: idRegistry,
+  target: addresses.idRegistry.opGoerli,
   calldata: encodeFunctionData({
-    abi: idRegistryAbi,
+    abi: idRegistryABI,
     functionName: 'register',
-    args: [operator, zeroBytes],
+    args: [addresses.operator.opGoerli, zeroBytes],
   }),
 }
 
 export const delegate = {
-  target: delegateRegistry,
+  target: addresses.delegateRegistry.opGoerli,
   calldata: encodeFunctionData({
-    abi: delegateRegistryAbi,
+    abi: delegateRegistryABI,
     functionName: 'updateDelegate',
-    args: [operator, true],
+    args: [addresses.operator.opGoerli, true],
   }),
 }

@@ -11,13 +11,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
   React.useEffect(() => setMounted(true), [])
   return (
     <PrivyProviderWrapper>
-      <PrivyWagmiConnector wagmiChainsConfig={configureChainsConfig}>
-        {/* <ConnectKitProvider> */}
-        <AlchemyProviderComponent>
-          {mounted && children}
-        </AlchemyProviderComponent>
-        {/* </ConnectKitProvider> */}
-      </PrivyWagmiConnector>
+      {/* <PrivyWagmiConnector wagmiChainsConfig={configureChainsConfig}> */}
+      {/* <ConnectKitProvider> */}
+      <AlchemyProviderComponent>{mounted && children}</AlchemyProviderComponent>
+      {/* </ConnectKitProvider> */}
+      {/* </PrivyWagmiConnector> */}
     </PrivyProviderWrapper>
   )
 }

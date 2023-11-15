@@ -21,7 +21,7 @@ import { useAlchemyContext } from 'context/AlchemyProviderContext'
 import { usePrivy } from '@privy-io/react-auth'
 import { AlchemyProvider } from '@alchemy/aa-alchemy'
 import { Hex, parseAbiItem } from 'viem'
-import { entryPoint, idRegistry } from 'scrypt'
+import { addresses } from 'scrypt'
 import * as z from 'zod'
 import { publicClient } from 'config/clients'
 
@@ -41,24 +41,24 @@ export function UsernameDialog({ open }: { open: boolean }) {
     },
   })
 
-  const { alchemyProvider } = useAlchemyContext()
+  const { alchemyProvider, smartAccountAddress } = useAlchemyContext()
   alchemyProvider?.withAlchemyGasManager({
     policyId: process.env.NEXT_PUBLIC_ALCHEMY_GAS_MANAGER_POLICY as string,
-    entryPoint: entryPoint,
+    entryPoint: addresses.entryPoint.opGoerli,
   })
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
-      const smartAccountAddress = (await alchemyProvider?.getAddress()) as Hex
+      // const smartAccountAddress = (await alchemyProvider?.getAddress()) as Hex
       const hash = await registerAndDelegate({
-        from: smartAccountAddress,
+        from: smartAccountAddress as Hex,
         provider: alchemyProvider as AlchemyProvider,
       })
 
       if (hash) {
         // Only proceed if a hash value was returned
         const logs = await publicClient.getLogs({
-          address: idRegistry,
+          address: addresses.entryPoint.idRegistry,
           event: parseAbiItem(
             'event Register(address indexed to, uint256 indexed id, address backup, bytes data)',
           ),

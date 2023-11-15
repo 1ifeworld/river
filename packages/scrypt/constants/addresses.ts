@@ -36,7 +36,7 @@ export const addresses: AddressBook = {
       arbNova: "0x33F59bfD58c16dEfB93612De65A5123F982F58bA",
       // ... add more chains as needed
   },
-  entrypoint: {
+  entryPoint: {
       opGoerli: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",
       // ... add more chains as needed
   },

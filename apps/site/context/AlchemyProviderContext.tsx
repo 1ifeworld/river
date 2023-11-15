@@ -11,7 +11,7 @@ import {
 } from '@alchemy/aa-accounts'
 import { AlchemyProvider } from '@alchemy/aa-alchemy'
 import { opGoerliViem } from '@/constants'
-import { entryPoint } from 'scrypt'
+import { addresses } from 'scrypt'
 import { ConnectedWallet, useWallets } from '@privy-io/react-auth'
 import { WalletClientSigner, type SmartAccountSigner } from '@alchemy/aa-core'
 import {
@@ -58,11 +58,11 @@ export function AlchemyProviderComponent({
         new AlchemyProvider({
           apiKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY as string,
           chain: opGoerliViem,
-          entryPointAddress: entryPoint,
+          entryPointAddress: addresses.entryPoint.opGoerli,
         }).connect(
           (rpcClient) =>
             new LightSmartContractAccount({
-              entryPointAddress: entryPoint,
+              entryPointAddress: addresses.entryPoint.opGoerli,
               chain: rpcClient.chain,
               owner: privySigner,
               factoryAddress: getDefaultLightAccountFactory(rpcClient.chain),
