@@ -9,6 +9,9 @@ export async function uploadBlob({ dataToUpload }: { dataToUpload: string }) {
   // @ts-ignore
   const cid = await client.put([blobData], { wrapWithDirectory: false })
 
-  console.log('Content identifier:', cid)
-  return cid
+  const uri = `ipfs://${cid}`
+
+  console.log('Blob uri:', uri)
+
+  return uri
 }
