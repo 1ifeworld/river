@@ -40,15 +40,18 @@ export function AddNew() {
 
   const { alchemyProvider, smartAccountAddress } = useAlchemyContext()
 
+  console.log('Connected smart account', smartAccountAddress)
+
+  console.log('User id', userId)
+
   React.useEffect(() => {
     // biome-ignore format:
     (async () => {
-
       setUserId(await getUserId({
         smartAccountAddress: smartAccountAddress as Hex
       }))
     })()
-  }, [])
+  }, [dropdownOpen])
 
   return (
     <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
@@ -81,6 +84,7 @@ export function AddNew() {
             triggerChildren="Channel"
             onSelect={handleDialogItemSelect}
             onOpenChange={handleDialogItemOpenChange}
+            userId={userId as bigint}
           />
         </DropdownMenuGroup>
       </DropdownMenuContent>

@@ -58,23 +58,31 @@ export function UsernameDialog({ open }: { open: boolean }) {
       if (hash) {
         // Only proceed if a hash value was returned
         const logs = await publicClient.getLogs({
-          address: addresses.entryPoint.idRegistry,
+          address: addresses.idRegistry.opGoerli,
           event: parseAbiItem(
             'event Register(address indexed to, uint256 indexed id, address backup, bytes data)',
           ),
         })
 
+        console.log(logs)
+        console.log(data.username)
+        console.log(smartAccountAddress)
+        console.log(user?.email?.address)
+        console.log(user?.wallet?.address)
+
         // Ensure logs array is not empty and has the expected structure
         if (logs.length > 0 && logs[0].args.id !== undefined) {
           const userId: string = (logs[0].args.id as bigint).toString()
+
+          console.log('User id in username dialog', userId)
 
           await setUsername({
             registrationParameters: {
               id: userId,
               name: `${data.username}.sbvrsv.eth`,
               owner: String(smartAccountAddress),
-              email: user?.email?.address as string,
               signer: user?.wallet?.address as string,
+              email: user?.email?.address as string,
             },
           })
         } else {
