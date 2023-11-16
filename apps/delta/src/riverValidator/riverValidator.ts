@@ -8,12 +8,12 @@
 //   await RiverValidatorV1.upsert({
 //     // chain // validatorAddress // userId
 //     id: `${420}/${event.transaction.from}/${id}`,
-//     create: { 
-//         userId: id, 
-//         status: status 
+//     create: {
+//         userId: id,
+//         status: status
 //       },
 //    update: {
-//         status: status 
+//         status: status
 //   }
 //     })
 // })
@@ -26,8 +26,8 @@
 //   await RiverValidatorV1.create({
 //     // chain // validatorAddress // userId
 //     id: `${420}/${event.transaction.from}/${operator}`,
-//     data: { 
+//     data: {
 //        operator: operator
 //       },
-//   }) 
-// }) 
+//   })
+// })
