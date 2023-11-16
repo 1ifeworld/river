@@ -57,6 +57,7 @@ export function UsernameDialog({ open }: { open: boolean }) {
       });
   
       if (hash) {
+
         // If a hash is returned, proceed to get the userId
         const userIdResponse = await getUserIdByAddress(smartAccountAddress as string);
   
@@ -64,6 +65,7 @@ export function UsernameDialog({ open }: { open: boolean }) {
           const userId = userIdResponse.userId;
   
           // Now call setUsername with the obtained userId
+
           await setUsername({
             registrationParameters: {
               id: userId,
