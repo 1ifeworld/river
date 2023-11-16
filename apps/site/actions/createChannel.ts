@@ -8,7 +8,8 @@ import {
   encodeChannel301,
   nodeRegistryABI,
 } from 'scrypt'
-import { publicClient, walletClient } from '@/config'
+import { publicClient } from '@/config/publicClient'
+import { walletClient } from '@/config/walletClient'
 
 interface CreateChannelProps {
   userId: bigint
@@ -27,7 +28,23 @@ export async function createChannel({
 
   const channelUriMessage = encodeChannel301({ channelUri })
 
-  const { request } = await publicClient.simulateContract({
+  // TODO: Determine why writing with a simulated request fails
+
+  // const { request } = await publicClient.simulateContract({
+  //   address: addresses.nodeRegistry.opGoerli,
+  //   abi: nodeRegistryABI,
+  //   functionName: 'register',
+  //   args: [
+  //     userId,
+  //     channelSchema,
+  //     [
+  //       accessControlMessage?.msgBody as Hash,
+  //       channelUriMessage?.msgBody as Hash,
+  //     ],
+  //   ],
+  // })
+
+  const registerChannelHash = await walletClient.writeContract({
     address: addresses.nodeRegistry.opGoerli,
     abi: nodeRegistryABI,
     functionName: 'register',
@@ -40,8 +57,6 @@ export async function createChannel({
       ],
     ],
   })
-
-  const registerChannelHash = await walletClient.writeContract(request)
 
   console.log('Register channel hash:', registerChannelHash)
 }

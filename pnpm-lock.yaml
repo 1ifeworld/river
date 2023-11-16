@@ -132,6 +132,9 @@ importers:
       scrypt:
         specifier: workspace:*
         version: link:../../packages/scrypt
+      server-only:
+        specifier: ^0.0.1
+        version: 0.0.1
       tailwind-merge:
         specifier: ^1.14.0
         version: 1.14.0

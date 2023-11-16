@@ -24,7 +24,6 @@ import { Hex, parseAbiItem } from 'viem'
 import { getUserId } from 'gql/requests/getUserId'
 import { addresses } from 'scrypt'
 import * as z from 'zod'
-import { publicClient } from 'config/clients'
 
 const FormSchema = z.object({
   username: z.string().min(2, {
