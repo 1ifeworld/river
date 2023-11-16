@@ -8,11 +8,11 @@ export async function ChannelCard({ channel }: { channel: Node }) {
     <Stack className="border px-3 py-5 justify-between aspect-square">
       {/* Channel Name */}
       {/* TODO: Replace with decoded message body */}
-      <Typography variant="smallText">Public Space</Typography>
+      <Typography variant="small">Public Space</Typography>
       {/* <Typography>{channel.msgBody}</Typography> */}
       {/* Channel Owner */}
       {/* TODO: Replace with username */}
-      <Typography variant="smallText">{channel.nodeAdmin}</Typography>
+      <Typography variant="small">{channel.nodeAdmin}</Typography>
       {/* Number of Items */}
       {/* <Typography>{channe;}</Typography> */}
     </Stack>
