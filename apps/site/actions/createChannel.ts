@@ -28,10 +28,6 @@ export async function createChannel({
 
   const channelUriMessage = encodeChannel301({ channelUri })
 
-  const transactionCount = await walletClient.getTransactionCount({
-    address: '0x004991c3bbcF3dd0596292C80351798965070D75',
-  })
-
   const { request } = await walletClient.simulateContract({
     address: addresses.nodeRegistry.opGoerli,
     abi: nodeRegistryABI,
@@ -44,8 +40,6 @@ export async function createChannel({
         channelUriMessage?.message as Hash,
       ],
     ],
-    chain: opGoerliViem,
-    nonce: transactionCount,
   })
 
   // const registerHash = await walletClient.writeContract(request)
@@ -62,7 +56,6 @@ export async function createChannel({
         channelUriMessage?.message as Hash,
       ],
     ],
-    nonce: 190,
   })
 
   console.log('Register hash:', registerHash)
