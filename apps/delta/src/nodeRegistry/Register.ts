@@ -1,5 +1,5 @@
 import { ponder } from '@/generated'
-import { Hex } from 'viem'
+import { Hex, stringToHex, keccak256 } from 'viem'
 import {
   decodeMessage000,
   decodeAccess101,
@@ -37,7 +37,7 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
     // Create valid node ids regardless if init msgs are valid
 
     await Node.create({
-      id: `420/${event.transaction.from}/${nodeId}`,
+      id: `420/${event.transaction.to}/${nodeId}`,
       data: {
         sender: sender,
         userId: userId,
@@ -63,11 +63,11 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
       if (decodedMsg && isValidMessageId(decodedMsg.msgType)) {
         // record every properly decoded msg
         await Message.create({
-          id: `420/${event.transaction.from}/${event.transaction.hash}/${event.log.logIndex}/${i}`,
+          id: `420/${event.transaction.to}/${event.transaction.hash}/${event.log.logIndex}/${i}`,
           data: {
             sender: sender,
             userId: userId,
-            node: `420/${event.transaction.from}/${nodeId}`,
+            node: `420/${event.transaction.to}/${nodeId}`,
             nodeId: nodeId,
             msgType: decodedMsg.msgType,
             msgBody: decodedMsg.msgBody,
@@ -80,7 +80,7 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
           // if successful, enter crud logic, if not exit
           if (decoded) {
             await Node.update({
-              id: `420/${event.transaction.from}/${nodeId}`,
+              id: `420/${event.transaction.to}/${nodeId}`,
               data: {
                 nodeAdmin: decoded?.admins as bigint[],
                 nodeMembers: decoded?.members as bigint[],
@@ -94,7 +94,7 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
           const decoded = decodePublication201({ msgBody: decodedMsg.msgBody })
           if (decoded) {
             await Publication.create({
-              id: `420/${event.transaction.from}/${schema}/${nodeId}`,
+              id: `420/${event.transaction.to}/${schema}/${nodeId}`,
               data: {
                 uri: decoded.uri,
               },
@@ -103,9 +103,12 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
         } else if (decodedMsg.msgType == BigInt(301)) {
           const decoded = decodeChannel301({ msgBody: decodedMsg.msgBody })
           if (decoded) {
+            // Generate ponder id for channel
+            const ponderChannelId: string = `420/${event.transaction.to}/${schema}/${nodeId}`
             await Channel.upsert({
-              id: `420/${event.transaction.from}/${schema}/${nodeId}`,
+              id: ponderChannelId,
               create: {
+                hashId: keccak256(stringToHex(ponderChannelId)),
                 uri: decoded.uri,
               },
               update: {
@@ -118,16 +121,20 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
           if (decoded) {
             // create channel if it doesnt already exist by this point
             //      it might already exist, but if it does, we dont want to update the uri
+            // Generate ponder id for channel
+            const ponderChannelId: string = `420/${event.transaction.to}/${schema}/${nodeId}`
             await Channel.upsert({
-              id: `420/${event.transaction.from}/${schema}/${nodeId}`,
-              create: {},
+              id: ponderChannelId,
+              create: {
+                hashId: ponderChannelId
+              },
               update: {},
             })
             // create item and associate it with the parent
             console.log('Decoded channel', decoded)
 
             await Item.create({
-              id: `420/${event.transaction.from}/${schema}/${nodeId}/${event.transaction.hash}/${event.log.logIndex}`,
+              id: `420/${event.transaction.to}/${schema}/${nodeId}/${event.transaction.hash}/${event.log.logIndex}`,
               data: {
                 chainId: decoded.chainId,
                 targetId: decoded.id,
@@ -172,11 +179,11 @@ ponder.on('NodeRegistry:Update', async ({ event, context }) => {
       if (decodedMsg && isValidMessageId(decodedMsg.msgType)) {
         // record every properly decoded msg
         await Message.create({
-          id: `420/${event.transaction.from}/${event.transaction.hash}/${event.log.logIndex}/${i}`,
+          id: `420/${event.transaction.to}/${event.transaction.hash}/${event.log.logIndex}/${i}`,
           data: {
             sender: sender,
             userId: userId,
-            node: `420/${event.transaction.from}/${nodeId}`,
+            node: `420/${event.transaction.to}/${nodeId}`,
             nodeId: nodeId,
             msgType: decodedMsg.msgType,
             msgBody: decodedMsg.msgBody,
@@ -189,7 +196,7 @@ ponder.on('NodeRegistry:Update', async ({ event, context }) => {
           // if successful, enter crud logic, if not exit
           if (decoded) {
             await Node.update({
-              id: `420/${event.transaction.from}/${nodeId}`,
+              id: `420/${event.transaction.to}/${nodeId}`,
               data: {
                 nodeAdmin: decoded?.admins as bigint[],
                 nodeMembers: decoded?.members as bigint[],
@@ -223,13 +230,13 @@ ponder.on('NodeRegistry:Update', async ({ event, context }) => {
           const decoded = decodeChannel302({ msgBody: decodedMsg.msgBody })
           if (decoded) {
             await Item.create({
-              id: `420/${event.transaction.from}/${schema}/${nodeId}/${event.transaction.hash}/${event.log.logIndex}`,
+              id: `420/${event.transaction.to}/${schema}/${nodeId}/${event.transaction.hash}/${event.log.logIndex}`,
               data: {
                 chainId: decoded.chainId,
                 targetId: decoded.id,
                 target: decoded.pointer,
                 hasId: decoded.hasId,
-                channel: `420/${event.transaction.from}/${schema}/${nodeId}`,
+                channel: `420/${event.transaction.to}/${schema}/${nodeId}`,
               },
             })
           }
