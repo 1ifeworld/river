@@ -15,5 +15,5 @@ module.exports = {
   env: {
     PRIVATE_KEY: process.env.PRIVATE_KEY,
   },
-  transpilePackages: ['scrypt']
+  transpilePackages: ['scrypt'],
 }
