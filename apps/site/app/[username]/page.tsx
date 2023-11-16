@@ -1,5 +1,5 @@
-import { Header } from '@/client'
 import { getChannels, type Node } from '@/gql'
+import { Stack } from '@/design-system'
 import { ActivityBanner, ActivityChannels, ActivityItems } from '@/server'
 
 export default async function User({
@@ -43,10 +43,10 @@ export default async function User({
   }
 
   return (
-    <div className="pt-[72px] space-y-[57px]">      
+    <Stack className="pt-[72px] gap-14">      
       <ActivityBanner user={mockUserObject} />
       <ActivityChannels user={mockUserObject} />
       <ActivityItems user={mockUserObject} />
-    </div>
+    </Stack>
   )
 }
