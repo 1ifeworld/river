@@ -35,7 +35,7 @@ importers:
         version: 5.1.6
       viem:
         specifier: ^1.2.6
-        version: 1.12.2(typescript@5.1.6)(zod@3.22.4)
+        version: 1.12.2(typescript@5.1.6)
 
   apps/site:
     dependencies:
@@ -202,8 +202,8 @@ importers:
   packages/scrypt:
     dependencies:
       viem:
-        specifier: ^1.12.2
-        version: 1.12.2(typescript@5.1.6)(zod@3.22.4)
+        specifier: ^1.19.3
+        version: 1.19.3(typescript@5.1.6)(zod@3.22.4)
     devDependencies:
       '@wagmi/cli':
         specifier: ^1.5.2
@@ -216,7 +216,6 @@ packages:
 
   /@adraffy/ens-normalize@1.10.0:
     resolution: {integrity: sha512-nA9XHtlAkYfJxY7bce8DcN7eKxWWCWkU+1GR9d+U6MbNpfwQp8TI7vqOsBsMcHoT4mBu2kypKoSKnghEzOOq5Q==}
-    dev: false
 
   /@adraffy/ens-normalize@1.9.4:
     resolution: {integrity: sha512-UK0bHA7hh9cR39V+4gl2/NnBBjoXIxkuWAPCaY4X7fbH4L/azIi7ilWOCjMUYfpJgraLUAqkRi2BqrjME8Rynw==}
@@ -2971,7 +2970,7 @@ packages:
       retry: 0.13.1
       stacktrace-parser: 0.1.10
       tsc-alias: 1.8.8
-      viem: 1.12.2(typescript@5.1.6)(zod@3.22.4)
+      viem: 1.12.2(typescript@5.1.6)
     transitivePeerDependencies:
       - '@types/react'
       - bufferutil
@@ -4053,7 +4052,7 @@ packages:
       picocolors: 1.0.0
       prettier: 2.8.8
       typescript: 5.1.6
-      viem: 1.12.2(typescript@5.1.6)(zod@3.22.4)
+      viem: 1.19.3(typescript@5.1.6)(zod@3.22.4)
       zod: 3.22.4
     transitivePeerDependencies:
       - bufferutil
@@ -8167,7 +8166,6 @@ packages:
       ws: '*'
     dependencies:
       ws: 8.13.0
-    dev: false
 
   /it-all@1.0.6:
     resolution: {integrity: sha512-3cmCc6Heqe3uWi3CVM/k51fa/XbMFpQVzFoDsV0IZNHSQDyAXl3c4MjHkFX5kF3922OGj7Myv1nSEUgRtcuM1A==}
@@ -11544,7 +11542,7 @@ packages:
       - '@types/react-dom'
     dev: false
 
-  /viem@1.12.2(typescript@5.1.6)(zod@3.22.4):
+  /viem@1.12.2(typescript@5.1.6):
     resolution: {integrity: sha512-aCaUCyg72ES+jK4s6tVYOMnOt4if71RwzgiUAUpAuaCgvHFfh9DCnwuEfwkxEZLE2vafOsirgJ3fcn7nsDVQoQ==}
     peerDependencies:
       typescript: '>=5.0.4'
@@ -11588,7 +11586,6 @@ packages:
       - bufferutil
       - utf-8-validate
       - zod
-    dev: false
 
   /w3name@1.0.8:
     resolution: {integrity: sha512-MjCUGATeNm70YE1Zro4mykaoRI9dTTlr44AB83Qt6OaRlcLvH9g0gyLwAMd3gBm8oDVU/RrDAxsDGcO8r+RIuQ==}
