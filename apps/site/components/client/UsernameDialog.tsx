@@ -58,7 +58,7 @@ export function UsernameDialog({ open }: { open: boolean }) {
       if (hash) {
         // Only proceed if a hash value was returned
         const logs = await publicClient.getLogs({
-          address: addresses.entryPoint.idRegistry,
+          address: addresses.idRegistry.opGoerli,
           event: parseAbiItem(
             'event Register(address indexed to, uint256 indexed id, address backup, bytes data)',
           ),
