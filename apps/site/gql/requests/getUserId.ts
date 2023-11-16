@@ -8,7 +8,7 @@ export async function getUserId({ custodyAddress }: { custodyAddress: Hex }) {
       throw new Error('Address is required')
     }
 
-    const response = await sdk.getUser()
+    const response = await sdk.getUserId()
 
     const userId = response.idRegistrys[0].userId
 

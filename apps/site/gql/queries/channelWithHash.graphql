@@ -1,0 +1,14 @@
+query ChannelWithHash($hashId: String!) {
+  channels(where: { hashId: $hashId }) {
+    id
+    uri
+    hashId
+    items {
+      chainId
+      id
+      target
+      targetId
+      userId
+    }
+  }
+}

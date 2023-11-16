@@ -73,7 +73,7 @@ type Publication @entity {
 
 type Channel @entity {
   id: String!
-  hashId: Bytes!
+  hashId: String!
   uri: String
   items: [Item!]! @derivedFrom(field: "channel")
   # nodeId: BigInt
