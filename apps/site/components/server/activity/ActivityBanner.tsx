@@ -7,9 +7,9 @@ export async function ActivityBanner({
   user: any
 }) {
   return (
-    <Stack className="gap-[10px]">
-      <Typography variant="smallText">{user.name}</Typography>
-      <Typography variant="smallText" className="text-[#747474]">
+    <Stack>
+      <Typography variant="h1">{user.name}</Typography>
+      <Typography variant="h1" className="text-secondary-foreground">
         {user.desc}
       </Typography>
     </Stack>

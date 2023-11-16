@@ -10,7 +10,9 @@ import {
 
 // This is a placeholder component to represent a cover image
 const WhiteBox = () => {
-  return <div className="border-gray-200 border-2 bg-white w-10 h-10" />
+  return (
+    <div className="border-muted-foreground border-[.2px] bg-white w-10 h-10" />
+  )
 }
 
 export async function ActivityItems({
@@ -24,17 +26,15 @@ export async function ActivityItems({
       <TableHeader>
         <TableRow>
           <TableHead>
-            <Typography variant="smallText" className="text-[#414141]">
-              Recent activity
-            </Typography>
+            <Typography variant="h1">Recent activity</Typography>
           </TableHead>
           <TableHead className="text-right">
-            <Typography variant="smallText" className="text-[#747474]">
+            <Typography variant="small" className="text-secondary-foreground">
               Added to
             </Typography>
           </TableHead>
           <TableHead className="text-right">
-            <Typography variant="smallText" className="text-[#747474]">
+            <Typography variant="small" className="text-secondary-foreground">
               Date added
             </Typography>
           </TableHead>
@@ -46,10 +46,14 @@ export async function ActivityItems({
           <TableRow key={item.id}>
             <TableCell className="flex gap-2 items-center">
               <WhiteBox />
-              {item.name}
+              <Typography>{item.name}</Typography>
             </TableCell>
-            <TableCell className="text-right">{item.creator}</TableCell>
-            <TableCell className="text-right">{item.added}</TableCell>
+            <TableCell className="text-right">
+              <Typography>{item.creator}</Typography>
+            </TableCell>
+            <TableCell className="text-right">
+              <Typography>{item.added}</Typography>
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
