@@ -1,5 +1,6 @@
 import { ponder } from '@/generated'
 import { Hex, stringToHex, keccak256 } from 'viem'
+import { nodeRegistryChain } from '../constants'
 import {
   decodeMessage000,
   decodeAccess101,
@@ -11,6 +12,7 @@ import {
   channelSchema,
   isValidMessageId,
   addresses,
+  generateChannelHash
 } from 'scrypt'
 
 // register
@@ -24,7 +26,7 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
 
   // Fetch the validation status for the user
   // const validationRecord = await RiverValidatorV1.findUnique({
-  // id: `420/${event.transaction.from}/${userId}`
+  // id: `${nodeRegistryChain}/${event.transaction.from}/${userId}`
   // });
 
   // // Check if user is validated
@@ -37,7 +39,7 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
     // Create valid node ids regardless if init msgs are valid
 
     await Node.create({
-      id: `420/${event.transaction.to}/${nodeId}`,
+      id: `${nodeRegistryChain}/${event.transaction.to}/${nodeId}`,
       data: {
         sender: sender,
         userId: userId,
@@ -63,11 +65,11 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
       if (decodedMsg && isValidMessageId(decodedMsg.msgType)) {
         // record every properly decoded msg
         await Message.create({
-          id: `420/${event.transaction.to}/${event.transaction.hash}/${event.log.logIndex}/${i}`,
+          id: `${nodeRegistryChain}/${event.transaction.to}/${event.transaction.hash}/${event.log.logIndex}/${i}`,
           data: {
             sender: sender,
             userId: userId,
-            node: `420/${event.transaction.to}/${nodeId}`,
+            node: `${nodeRegistryChain}/${event.transaction.to}/${nodeId}`,
             nodeId: nodeId,
             msgType: decodedMsg.msgType,
             msgBody: decodedMsg.msgBody,
@@ -80,7 +82,7 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
           // if successful, enter crud logic, if not exit
           if (decoded) {
             await Node.update({
-              id: `420/${event.transaction.to}/${nodeId}`,
+              id: `${nodeRegistryChain}/${event.transaction.to}/${nodeId}`,
               data: {
                 nodeAdmin: decoded?.admins as bigint[],
                 nodeMembers: decoded?.members as bigint[],
@@ -94,7 +96,7 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
           const decoded = decodePublication201({ msgBody: decodedMsg.msgBody })
           if (decoded) {
             await Publication.create({
-              id: `420/${event.transaction.to}/${schema}/${nodeId}`,
+              id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
               data: {
                 uri: decoded.uri,
               },
@@ -103,12 +105,15 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
         } else if (decodedMsg.msgType == BigInt(301)) {
           const decoded = decodeChannel301({ msgBody: decodedMsg.msgBody })
           if (decoded) {
-            // Generate ponder id for channel
-            const ponderChannelId: string = `420/${event.transaction.to}/${schema}/${nodeId}`
             await Channel.upsert({
-              id: ponderChannelId,
+              id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
               create: {
-                hashId: keccak256(stringToHex(ponderChannelId)),
+                hashId: generateChannelHash({
+                  chainId: nodeRegistryChain,
+                  nodeRegistryAddress: event.transaction.to as Hex,
+                  schema: schema,
+                  nodeId: nodeId
+                }),
                 uri: decoded.uri,
               },
               update: {
@@ -121,12 +126,15 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
           if (decoded) {
             // create channel if it doesnt already exist by this point
             //      it might already exist, but if it does, we dont want to update the uri
-            // Generate ponder id for channel
-            const ponderChannelId: string = `420/${event.transaction.to}/${schema}/${nodeId}`
             await Channel.upsert({
-              id: ponderChannelId,
+              id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
               create: {
-                hashId: ponderChannelId
+                hashId: generateChannelHash({
+                  chainId: nodeRegistryChain,
+                  nodeRegistryAddress: event.transaction.to as Hex,
+                  schema: schema,
+                  nodeId: nodeId
+                }),
               },
               update: {},
             })
@@ -134,14 +142,14 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
             console.log('Decoded channel', decoded)
 
             await Item.create({
-              id: `420/${event.transaction.to}/${schema}/${nodeId}/${event.transaction.hash}/${event.log.logIndex}`,
+              id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}/${event.transaction.hash}/${event.log.logIndex}`,
               data: {
                 chainId: decoded.chainId,
                 targetId: decoded.id,
                 target: decoded.pointer,
                 userId: userId,
                 hasId: decoded.hasId,
-                channel: `420/${event.transaction.from}/${schema}/${nodeId}`,
+                channel: `${nodeRegistryChain}/${event.transaction.from}/${schema}/${nodeId}`,
               },
             })
           }
@@ -162,7 +170,7 @@ ponder.on('NodeRegistry:Update', async ({ event, context }) => {
 
   // check that target node exists
   const targetNode = await Node.findUnique({
-    id: `420/${event.transaction.from}/${nodeId}`,
+    id: `${nodeRegistryChain}/${event.transaction.from}/${nodeId}`,
   })
 
   // Check if user is valid
@@ -179,11 +187,11 @@ ponder.on('NodeRegistry:Update', async ({ event, context }) => {
       if (decodedMsg && isValidMessageId(decodedMsg.msgType)) {
         // record every properly decoded msg
         await Message.create({
-          id: `420/${event.transaction.to}/${event.transaction.hash}/${event.log.logIndex}/${i}`,
+          id: `${nodeRegistryChain}/${event.transaction.to}/${event.transaction.hash}/${event.log.logIndex}/${i}`,
           data: {
             sender: sender,
             userId: userId,
-            node: `420/${event.transaction.to}/${nodeId}`,
+            node: `${nodeRegistryChain}/${event.transaction.to}/${nodeId}`,
             nodeId: nodeId,
             msgType: decodedMsg.msgType,
             msgBody: decodedMsg.msgBody,
@@ -196,7 +204,7 @@ ponder.on('NodeRegistry:Update', async ({ event, context }) => {
           // if successful, enter crud logic, if not exit
           if (decoded) {
             await Node.update({
-              id: `420/${event.transaction.to}/${nodeId}`,
+              id: `${nodeRegistryChain}/${event.transaction.to}/${nodeId}`,
               data: {
                 nodeAdmin: decoded?.admins as bigint[],
                 nodeMembers: decoded?.members as bigint[],
@@ -210,7 +218,7 @@ ponder.on('NodeRegistry:Update', async ({ event, context }) => {
           const decoded = decodePublication201({ msgBody: decodedMsg.msgBody })
           if (decoded) {
             await Publication.update({
-              id: `420/${event.transaction.from}/${schema}/${nodeId}`,
+              id: `${nodeRegistryChain}/${event.transaction.from}/${schema}/${nodeId}`,
               data: {
                 uri: decoded.uri,
               },
@@ -220,7 +228,7 @@ ponder.on('NodeRegistry:Update', async ({ event, context }) => {
           const decoded = decodeChannel301({ msgBody: decodedMsg.msgBody })
           if (decoded) {
             await Channel.update({
-              id: `420/${event.transaction.from}/${schema}/${nodeId}`,
+              id: `${nodeRegistryChain}/${event.transaction.from}/${schema}/${nodeId}`,
               data: {
                 uri: decoded.uri,
               },
@@ -230,13 +238,13 @@ ponder.on('NodeRegistry:Update', async ({ event, context }) => {
           const decoded = decodeChannel302({ msgBody: decodedMsg.msgBody })
           if (decoded) {
             await Item.create({
-              id: `420/${event.transaction.to}/${schema}/${nodeId}/${event.transaction.hash}/${event.log.logIndex}`,
+              id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}/${event.transaction.hash}/${event.log.logIndex}`,
               data: {
                 chainId: decoded.chainId,
                 targetId: decoded.id,
                 target: decoded.pointer,
                 hasId: decoded.hasId,
-                channel: `420/${event.transaction.to}/${schema}/${nodeId}`,
+                channel: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
               },
             })
           }
