@@ -10,7 +10,9 @@ import {
 
 // This is a placeholder component to represent a cover image
 const WhiteBox = () => {
-  return <div className="border-gray-200 border-2 bg-white w-10 h-10" />
+  return (
+    <div className="border-muted-foreground border-[.2px] bg-white w-10 h-10" />
+  )
 }
 
 export async function ActivityChannels({
@@ -24,17 +26,15 @@ export async function ActivityChannels({
       <TableHeader>
         <TableRow>
           <TableHead>
-            <Typography variant="smallText" className="text-[#414141]">
-              Channels
-            </Typography>
+            <Typography variant="h1">Channels</Typography>
           </TableHead>
           <TableHead className="text-right">
-            <Typography variant="smallText" className="text-[#747474]">
+            <Typography variant="small" className="text-secondary-foreground">
               Creator
             </Typography>
           </TableHead>
           <TableHead className="text-right">
-            <Typography variant="smallText" className="text-[#747474]">
+            <Typography variant="small" className="text-secondary-foreground">
               Date modified
             </Typography>
           </TableHead>
@@ -46,10 +46,14 @@ export async function ActivityChannels({
           <TableRow key={channel.id}>
             <TableCell className="flex gap-2 items-center">
               <WhiteBox />
-              {channel.name}
+              <Typography>{channel.name}</Typography>
             </TableCell>
-            <TableCell className="text-right">{channel.creator}</TableCell>
-            <TableCell className="text-right">{channel.modified}</TableCell>
+            <TableCell className="text-right">
+              <Typography>{channel.creator}</Typography>
+            </TableCell>
+            <TableCell className="text-right">
+              <Typography>{channel.modified}</Typography>
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>

@@ -9,6 +9,7 @@ const typographyVariants = cva('text-foreground tracking-tight', {
       h1: 'text-2xl',
       h2: 'text-xl',
       p: 'text-base leading-6',
+      small: 'text-sm',
     },
   },
 })
@@ -22,6 +23,7 @@ const variantElementMap: Record<
   h1: 'h1',
   h2: 'h2',
   p: 'p',
+  small: 'small',
 }
 
 type Element = keyof JSX.IntrinsicElements
@@ -33,7 +35,7 @@ type TypographyProps<T extends Element> = {
 
 export const Typography = React.forwardRef(
   <T extends Element>(
-    { className, as, variant, ...props }: TypographyProps<T>,
+    { className, as, variant = 'p', ...props }: TypographyProps<T>,
     ref: React.Ref<T>,
   ) => {
     const Component =
