@@ -6,7 +6,7 @@ import {
   delegateRegistryABI,
   nodeRegistryABI,
   riverValidatorV1ABI,
-  lightAccountFactoryABI
+  lightAccountFactoryABI,
 } from 'scrypt'
 
 export const config: Config = {
@@ -16,16 +16,16 @@ export const config: Config = {
       chainId: 420,
       transport: http(process.env.PONDER_RPC_URL_420),
     },
-    {
-      name: 'arbitrum-goerli',
-      chainId: 421613,
-      transport: http(process.env.PONDER_RPC_URL_421613),
-    },
-    {
-      name: 'anvil',
-      chainId: 31337,
-      transport: http(process.env.ANVIL_FORK_URL),
-    },
+    // {
+    //   name: 'arbitrum-goerli',
+    //   chainId: 421613,
+    //   transport: http(process.env.PONDER_RPC_URL_421613),
+    // },
+    // {
+    //   name: 'anvil',
+    //   chainId: 31337,
+    //   transport: http(process.env.ANVIL_FORK_URL),
+    // },
   ],
   contracts: [
     {
@@ -35,20 +35,20 @@ export const config: Config = {
       address: addresses.nodeRegistry.opGoerli,
       startBlock: 16774340,
     },
-    {
-      name: 'NodeRegistry',
-      abi: nodeRegistryABI,
-      network: 'arbitrum-goerli',
-      address: addresses.nodeRegistry.arbGoerli,
-      startBlock: 54683831,
-    },
-    {
-      name: 'NodeRegistry',
-      abi: nodeRegistryABI,
-      network: 'anvil',
-      address: addresses.nodeRegistry.anvil,
-      startBlock: 0,
-    },
+    // {
+    //   name: 'NodeRegistry',
+    //   abi: nodeRegistryABI,
+    //   network: 'arbitrum-goerli',
+    //   address: addresses.nodeRegistry.arbGoerli,
+    //   startBlock: 54683831,
+    // },
+    // {
+    //   name: 'NodeRegistry',
+    //   abi: nodeRegistryABI,
+    //   network: 'anvil',
+    //   address: addresses.nodeRegistry.anvil,
+    //   startBlock: 0,
+    // },
     // {
     //   name: 'IdRegistry',
     //   abi: idRegistryABI,
@@ -88,7 +88,7 @@ export const config: Config = {
     //   name: 'RiverValidatorV1',
     //   abi: riverValidatorV1ABI,
     //   network: 'anvil',
-    //   address: '0x', 
+    //   address: '0x',
     //   startBlock: 0,
     // },
     // {
