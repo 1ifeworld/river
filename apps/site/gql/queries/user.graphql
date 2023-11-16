@@ -1,4 +1,4 @@
-query getUser {
+query getUserId {
   idRegistrys(where: {to: ""}) {
     userId
   }

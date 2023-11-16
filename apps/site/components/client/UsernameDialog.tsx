@@ -21,7 +21,7 @@ import { useAlchemyContext } from 'context/AlchemyProviderContext'
 import { usePrivy } from '@privy-io/react-auth'
 import { AlchemyProvider } from '@alchemy/aa-alchemy'
 import { Hex, parseAbiItem } from 'viem'
-import { getUserIdByAddress } from 'gql/requests/getUser'
+import { getUserId } from 'gql/requests/getUserId'
 import { addresses } from 'scrypt'
 import * as z from 'zod'
 import { publicClient } from 'config/clients'
@@ -54,16 +54,17 @@ export function UsernameDialog({ open }: { open: boolean }) {
       const hash = await registerAndDelegate({
         from: smartAccountAddress as Hex,
         provider: alchemyProvider as AlchemyProvider,
-      });
-  
-      if (hash) {
+      })
 
+      if (hash && smartAccountAddress) {
         // If a hash is returned, proceed to get the userId
-        const userIdResponse = await getUserIdByAddress(smartAccountAddress as string);
-  
+        const userIdResponse = await getUserId({
+          custodyAddress: smartAccountAddress,
+        })
+
         if (userIdResponse?.userId) {
-          const userId = userIdResponse.userId;
-  
+          const userId = userIdResponse.userId
+
           // Now call setUsername with the obtained userId
 
           await setUsername({
@@ -74,18 +75,18 @@ export function UsernameDialog({ open }: { open: boolean }) {
               email: user?.email?.address as string,
               signer: user?.wallet?.address as string,
             },
-          });
+          })
         } else {
-          console.error('No valid user ID found for the given address.');
+          console.error('No valid user ID found for the given address.')
         }
       } else {
-        console.error('No transaction hash returned from registerAndDelegate.');
+        console.error('No transaction hash returned from registerAndDelegate.')
       }
     } catch (error) {
-      console.error('An error occurred during the registration process:', error);
+      console.error('An error occurred during the registration process:', error)
     }
   }
-  
+
   return (
     <Dialog open={open}>
       <DialogContent className="sm:max-w-[425px]">
