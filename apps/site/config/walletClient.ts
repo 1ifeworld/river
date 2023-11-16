@@ -1,6 +1,6 @@
 import 'server-only'
 
-import { http, createWalletClient, type Hash } from 'viem'
+import { http, createWalletClient, type Hash, publicActions } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 import { opGoerliViem } from '@/constants'
 
@@ -17,4 +17,4 @@ export const walletClient = createWalletClient({
   account: operator,
   chain: opGoerliViem,
   transport: transport,
-})
+}).extend(publicActions)

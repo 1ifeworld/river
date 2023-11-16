@@ -1,22 +1,23 @@
-import { Hash, decodeAbiParameters, encodeAbiParameters } from "viem";
-import { publication_200TypesABI } from "../../../abi";
+import { Hash, decodeAbiParameters, encodeAbiParameters } from 'viem'
+import { publication_200TypesABI, messageTypeABI } from '../../../abi'
 
 //////////////////////////////////////////////////
 // ENCODING
 //////////////////////////////////////////////////
 
 export function encodePublication201({ pubUri }: { pubUri: string }): {
-  msgBody: Hash;
+  message: Hash
 } | null {
   try {
-    const encodedMsg = encodeAbiParameters(publication_200TypesABI[0].outputs, [
-      pubUri,
-    ]);
+    const encodedMsg = encodeAbiParameters(messageTypeABI[0].outputs, [
+      BigInt(201),
+      encodeAbiParameters(publication_200TypesABI[0].outputs, [pubUri]),
+    ])
 
-    return { msgBody: encodedMsg };
+    return { message: encodedMsg }
   } catch (error) {
-    console.error("Failed to encode Publication_201", error);
-    return null;
+    console.error('Failed to encode Publication_201', error)
+    return null
   }
 }
 
@@ -25,19 +26,19 @@ export function encodePublication201({ pubUri }: { pubUri: string }): {
 //////////////////////////////////////////////////
 
 export function decodePublication201({ msgBody }: { msgBody: Hash }): {
-  uri: string;
+  uri: string
 } | null {
   try {
     const [uri] = decodeAbiParameters(
       publication_200TypesABI[0].outputs,
-      msgBody
-    );
+      msgBody,
+    )
 
     return {
       uri: uri,
-    };
+    }
   } catch (error) {
-    console.error("Failed to decode Publication_201", error);
-    return null;
+    console.error('Failed to decode Publication_201', error)
+    return null
   }
 }

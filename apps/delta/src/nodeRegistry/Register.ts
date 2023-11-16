@@ -31,7 +31,6 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
       },
     })
 
-    console.log('register messages.length', messages.length)
     for (let i = 0; i < messages.length; ++i) {
       const decodedMsg = decodeMessage000({ encodedMsg: messages[i] })
       if (decodedMsg && isValidMessageId(decodedMsg.msgType)) {

@@ -1,4 +1,6 @@
-import { Hash } from "viem";
+import { Hash } from 'viem'
 
-export const publicationSchema: Hash = '0xF36F2F0432F99EA34A360F154CEA9D1FAD45C7319E27ADED55CC0D28D0924068'
-export const channelSchema: Hash = '0x08B83A3AFF9950D7F88522AC4A172BD8405BE30B0D3B416D42FD73C30AC27C9F'
+export const publicationSchema: Hash =
+  '0xf36f2f0432f99ea34a360f154cea9d1fad45c7319e27aded55cc0d28d0924068'
+export const channelSchema: Hash =
+  '0x08b83a3aff9950d7f88522ac4a172bd8405be30b0d3b416d42fd73c30ac27c9f'

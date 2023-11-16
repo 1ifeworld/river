@@ -19,15 +19,15 @@ export function User() {
 
   const { alchemyProvider, smartAccountAddress } = useAlchemyContext()
 
-  useEffect(() => {
-    // biome-ignore format:
-    (async () => {
-      const userId = await getUserId({
-        smartAccountAddress: smartAccountAddress as Hex,
-      })
-      setUserId(userId)
-    })()
-  }, [alchemyProvider])
+  // useEffect(() => {
+  //   // biome-ignore format:
+  //   (async () => {
+  //     const userId = await getUserId({
+  //       smartAccountAddress: smartAccountAddress as Hex,
+  //     })
+  //     setUserId(userId)
+  //   })()
+  // }, [alchemyProvider])
 
   return (
     <DropdownMenu>

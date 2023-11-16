@@ -8,8 +8,8 @@ import {
   encodeChannel301,
   nodeRegistryABI,
 } from 'scrypt'
-import { publicClient } from '@/config/publicClient'
 import { walletClient } from '@/config/walletClient'
+import { opGoerliViem } from 'constants/chains'
 
 interface CreateChannelProps {
   userId: bigint
@@ -28,23 +28,11 @@ export async function createChannel({
 
   const channelUriMessage = encodeChannel301({ channelUri })
 
-  // TODO: Determine why writing with a simulated request fails
+  const transactionCount = await walletClient.getTransactionCount({
+    address: '0x004991c3bbcF3dd0596292C80351798965070D75',
+  })
 
-  // const { request } = await publicClient.simulateContract({
-  //   address: addresses.nodeRegistry.opGoerli,
-  //   abi: nodeRegistryABI,
-  //   functionName: 'register',
-  //   args: [
-  //     userId,
-  //     channelSchema,
-  //     [
-  //       accessControlMessage?.msgBody as Hash,
-  //       channelUriMessage?.msgBody as Hash,
-  //     ],
-  //   ],
-  // })
-
-  const registerChannelHash = await walletClient.writeContract({
+  const { request } = await walletClient.simulateContract({
     address: addresses.nodeRegistry.opGoerli,
     abi: nodeRegistryABI,
     functionName: 'register',
@@ -52,11 +40,30 @@ export async function createChannel({
       userId,
       channelSchema,
       [
-        accessControlMessage?.msgBody as Hash,
-        channelUriMessage?.msgBody as Hash,
+        accessControlMessage?.message as Hash,
+        channelUriMessage?.message as Hash,
       ],
     ],
+    chain: opGoerliViem,
+    nonce: transactionCount,
   })
 
-  console.log('Register channel hash:', registerChannelHash)
+  // const registerHash = await walletClient.writeContract(request)
+
+  const registerHash = await walletClient.writeContract({
+    address: addresses.nodeRegistry.opGoerli,
+    abi: nodeRegistryABI,
+    functionName: 'register',
+    args: [
+      userId,
+      channelSchema,
+      [
+        accessControlMessage?.message as Hash,
+        channelUriMessage?.message as Hash,
+      ],
+    ],
+    nonce: 190,
+  })
+
+  console.log('Register hash:', registerHash)
 }
