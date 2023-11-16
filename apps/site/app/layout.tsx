@@ -3,6 +3,8 @@ import type { Metadata } from 'next'
 import '../styles/globals.css'
 import { fragmentMono } from './fonts/fonts'
 import { Providers } from './providers'
+import { Stack } from 'design-system/elements'
+import { Header } from '@/client'
 
 export const metadata: Metadata = {
   title: 'River',
@@ -18,7 +20,10 @@ export default function RootLayout({
     <html lang="en" className={`${fragmentMono.variable}`}>
       <body>
         <Providers>
+          <div className='p-4'>     
+          <Header />
           {children}
+          </div>
           <Analytics />
         </Providers>
       </body>

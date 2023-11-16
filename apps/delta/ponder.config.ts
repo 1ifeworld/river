@@ -14,7 +14,7 @@ export const config: Config = {
     {
       name: 'optimism-goerli',
       chainId: 420,
-      transport: http(''),
+      transport: http('https://opt-goerli.g.alchemy.com/v2/FAXyCsRGoMoPTbpLvGUcRyp8qZDTBMcU'),
     },
     // {
     //   name: 'arbitrum-goerli',

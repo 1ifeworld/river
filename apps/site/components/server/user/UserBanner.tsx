@@ -8,7 +8,7 @@ export async function UserBanner({
 }) {
 
   return (
-    <Stack className="border">
+    <Stack className="border border-2">
       {/* User Name */}
       <Typography variant="smallText">{user.name}</Typography>
       <Typography variant="smallText">{user.desc}</Typography>

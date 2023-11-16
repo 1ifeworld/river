@@ -35,8 +35,7 @@ export default async function User({
   }
 
   return (
-    <div className="p-4">
-      <Header />
+    <div className="pt-4">      
       <UserBanner user={mockUserObject} />
       <br />
       <br />
