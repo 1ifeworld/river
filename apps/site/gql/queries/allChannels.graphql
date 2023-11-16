@@ -1,0 +1,16 @@
+query allChannels {
+  nodes {
+    nodeId
+    schema
+    messages {
+      msgBody
+      msgType
+      userId
+      nodeId
+    }
+  }
+  channels {
+    id
+    uri
+  }
+}

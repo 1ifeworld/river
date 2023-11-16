@@ -1,0 +1,12 @@
+query Channel {
+  channel(id: "") {
+    id
+    uri
+    items(orderBy: "") {
+      chainId
+      id
+      target
+      targetId
+    }
+  }
+}
