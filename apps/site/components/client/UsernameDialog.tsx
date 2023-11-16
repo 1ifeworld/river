@@ -21,6 +21,7 @@ import { useAlchemyContext } from 'context/AlchemyProviderContext'
 import { usePrivy } from '@privy-io/react-auth'
 import { AlchemyProvider } from '@alchemy/aa-alchemy'
 import { Hex, parseAbiItem } from 'viem'
+import { getUserIdByAddress } from 'gql/requests/getUser'
 import { addresses } from 'scrypt'
 import * as z from 'zod'
 import { publicClient } from 'config/clients'
@@ -49,25 +50,20 @@ export function UsernameDialog({ open }: { open: boolean }) {
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
-      // const smartAccountAddress = (await alchemyProvider?.getAddress()) as Hex
+      // Execute the registerAndDelegate function
       const hash = await registerAndDelegate({
         from: smartAccountAddress as Hex,
         provider: alchemyProvider as AlchemyProvider,
-      })
-
+      });
+  
       if (hash) {
-        // Only proceed if a hash value was returned
-        const logs = await publicClient.getLogs({
-          address: addresses.entryPoint.idRegistry,
-          event: parseAbiItem(
-            'event Register(address indexed to, uint256 indexed id, address backup, bytes data)',
-          ),
-        })
-
-        // Ensure logs array is not empty and has the expected structure
-        if (logs.length > 0 && logs[0].args.id !== undefined) {
-          const userId: string = (logs[0].args.id as bigint).toString()
-
+        // If a hash is returned, proceed to get the userId
+        const userIdResponse = await getUserIdByAddress(smartAccountAddress as string);
+  
+        if (userIdResponse?.userId) {
+          const userId = userIdResponse.userId;
+  
+          // Now call setUsername with the obtained userId
           await setUsername({
             registrationParameters: {
               id: userId,
@@ -76,18 +72,18 @@ export function UsernameDialog({ open }: { open: boolean }) {
               email: user?.email?.address as string,
               signer: user?.wallet?.address as string,
             },
-          })
+          });
         } else {
-          console.error('No logs found for the transaction.')
+          console.error('No valid user ID found for the given address.');
         }
       } else {
-        console.error('No transaction hash returned from registerAndDelegate.')
+        console.error('No transaction hash returned from registerAndDelegate.');
       }
     } catch (error) {
-      console.error('An error occurred during the registration process:', error)
+      console.error('An error occurred during the registration process:', error);
     }
   }
-
+  
   return (
     <Dialog open={open}>
       <DialogContent className="sm:max-w-[425px]">
