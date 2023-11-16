@@ -8,7 +8,8 @@ import {
   encodePublication201,
   nodeRegistryABI,
 } from 'scrypt'
-import { publicClient, walletClient } from '@/config'
+import { publicClient } from '@/config/publicClient'
+import { walletClient } from '@/config/walletClient'
 
 interface CreatePublicationProps {
   userId: bigint

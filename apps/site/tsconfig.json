@@ -27,7 +27,7 @@
     "baseUrl": ".",
     "paths": {
       "@/actions": ["actions/index.ts"],
-      "@/config": ["config/index.ts"],
+      "@/config/*": ["config/*"],
       "@/client": ["components/client/index.ts"],
       "@/constants": ["constants/index.ts"],
       "@/context": ["context/index.ts"],

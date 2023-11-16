@@ -1,1 +1,1 @@
-export * from "./nodeRegistryChain"
+export * from './nodeRegistryChain'

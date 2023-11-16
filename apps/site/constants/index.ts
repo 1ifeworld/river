@@ -1,5 +1,4 @@
 export * from './calls'
 export * from './chains'
 export * from './networks'
-export * from './operator'
 export * from './salt'

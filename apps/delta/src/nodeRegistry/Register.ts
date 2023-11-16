@@ -8,15 +8,15 @@ import {
   decodeChannel301,
   decodeChannel302,
   isValidMessageId,
-  generateChannelHash
+  generateChannelHash,
 } from 'scrypt'
 
 ponder.on('NodeRegistry:Register', async ({ event, context }) => {
-  const { Node, Message, Publication, Channel, Item } = context.entities;
-  const { sender, userId, schema, nodeId, messages } = event.params;
+  const { Node, Message, Publication, Channel, Item } = context.entities
+  const { sender, userId, schema, nodeId, messages } = event.params
 
-  console.log(`Node $${nodeId} Registered`);
-  const validUser = true;
+  console.log(`Node $${nodeId} Registered`)
+  const validUser = true
 
   if (validUser) {
     await Node.create({
@@ -29,11 +29,11 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
         nodeAdmin: [],
         nodeMembers: [],
       },
-    });
+    })
 
-    console.log('register messages.length', messages.length);
+    console.log('register messages.length', messages.length)
     for (let i = 0; i < messages.length; ++i) {
-      const decodedMsg = decodeMessage000({ encodedMsg: messages[i] });
+      const decodedMsg = decodeMessage000({ encodedMsg: messages[i] })
       if (decodedMsg && isValidMessageId(decodedMsg.msgType)) {
         await Message.create({
           id: `${nodeRegistryChain}/${event.transaction.to}/${event.transaction.hash}/${event.log.logIndex}/${i}`,
@@ -45,10 +45,10 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
             msgType: decodedMsg.msgType,
             msgBody: decodedMsg.msgBody,
           },
-        });
+        })
 
         if (decodedMsg.msgType === BigInt(101)) {
-          const decoded = decodeAccess101({ msgBody: decodedMsg.msgBody });
+          const decoded = decodeAccess101({ msgBody: decodedMsg.msgBody })
           if (decoded) {
             await Node.update({
               id: `${nodeRegistryChain}/${event.transaction.to}/${nodeId}`,
@@ -56,22 +56,22 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
                 nodeAdmin: decoded?.admins as bigint[],
                 nodeMembers: decoded?.members as bigint[],
               },
-            });
+            })
           } else {
-            return;
+            return
           }
         } else if (decodedMsg.msgType === BigInt(201)) {
-          const decoded = decodePublication201({ msgBody: decodedMsg.msgBody });
+          const decoded = decodePublication201({ msgBody: decodedMsg.msgBody })
           if (decoded) {
             await Publication.create({
               id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
               data: {
                 uri: decoded.uri,
               },
-            });
+            })
           }
         } else if (decodedMsg.msgType == BigInt(301)) {
-          const decoded = decodeChannel301({ msgBody: decodedMsg.msgBody });
+          const decoded = decodeChannel301({ msgBody: decodedMsg.msgBody })
           if (decoded) {
             await Channel.upsert({
               id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
@@ -80,17 +80,17 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
                   chainId: nodeRegistryChain,
                   nodeRegistryAddress: event.transaction.to as Hex,
                   schema: schema,
-                  nodeId: nodeId
+                  nodeId: nodeId,
                 }),
                 uri: decoded.uri,
               },
               update: {
                 uri: decoded.uri,
               },
-            });
+            })
           }
         } else if (decodedMsg.msgType == BigInt(302)) {
-          const decoded = decodeChannel302({ msgBody: decodedMsg.msgBody });
+          const decoded = decodeChannel302({ msgBody: decodedMsg.msgBody })
           if (decoded) {
             await Channel.upsert({
               id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
@@ -99,11 +99,11 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
                   chainId: nodeRegistryChain,
                   nodeRegistryAddress: event.transaction.to as Hex,
                   schema: schema,
-                  nodeId: nodeId
+                  nodeId: nodeId,
                 }),
               },
               update: {},
-            });
+            })
 
             await Item.create({
               id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}/${event.transaction.hash}/${event.log.logIndex}`,

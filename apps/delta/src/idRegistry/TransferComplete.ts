@@ -1,8 +1,8 @@
-import { ponder } from '@/generated';
+import { ponder } from '@/generated'
 
-ponder.on("IdRegistry:TransferComplete", async ({ event, context }) => {
-  const { IdRegistry } = context.entities;
-  const { from, to, id } = event.params;
+ponder.on('IdRegistry:TransferComplete', async ({ event, context }) => {
+  const { IdRegistry } = context.entities
+  const { from, to, id } = event.params
 
   await IdRegistry.upsert({
     id: `420/${from}/${to}/${id}`,
@@ -12,7 +12,7 @@ ponder.on("IdRegistry:TransferComplete", async ({ event, context }) => {
       user: String(id),
     },
     update: {
-      to: to
-    }
-  });
-});
+      to: to,
+    },
+  })
+})
