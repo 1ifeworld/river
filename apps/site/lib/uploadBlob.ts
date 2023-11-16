@@ -13,7 +13,7 @@ export async function uploadBlob({ dataToUpload }: { dataToUpload: string }) {
 
   const blobData = new Blob([JSON.stringify(jsonObject)])
 
-  // @ts-expect-error
+  // @ts-ignore
   const cid = await client.put([blobData], { wrapWithDirectory: false })
 
   const uri = `ipfs://${cid}`
