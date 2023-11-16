@@ -20,13 +20,19 @@ import {
   FormLabel,
   FormMessage,
 } from '@/design-system'
-import { type Hex } from 'viem'
-import { getUserId } from '@/lib'
-import { createPublication } from '@/actions'
+import { uploadBlob } from '@/lib'
+import { createChannel } from '@/actions'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useAlchemyContext } from 'context/AlchemyProviderContext'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
+
+interface ChannelDialogProps {
+  triggerChildren: React.ReactNode
+  onSelect: () => void
+  onOpenChange: (open: boolean) => void
+  userId: bigint
+}
 
 const ChannelNameSchema = z.object({
   channelName: z.string().min(2, {
@@ -34,33 +40,11 @@ const ChannelNameSchema = z.object({
   }),
 })
 
-interface ChannelDialogProps {
-  triggerChildren: React.ReactNode
-  onSelect: () => void
-  onOpenChange: (open: boolean) => void
-}
-
 export const ChannelDialog = React.forwardRef<
   HTMLDivElement,
   ChannelDialogProps
->(({ triggerChildren, onSelect, onOpenChange }, forwardedRef) => {
-  const [userId, setUserId] = React.useState<bigint>()
+>(({ triggerChildren, onSelect, onOpenChange, userId }, forwardedRef) => {
   const { alchemyProvider } = useAlchemyContext()
-
-  console.log('Alchemy provider', alchemyProvider)
-
-  console.log('User id', userId)
-
-  React.useEffect(() => {
-    // biome-ignore format:
-    (async () => {
-      const smartAccountAddress = await alchemyProvider?.getAddress()
-      const userId = await getUserId({
-        smartAccountAddress: smartAccountAddress as Hex,
-      })
-      setUserId(userId)
-    })()
-  }, [alchemyProvider])
 
   const form = useForm<z.infer<typeof ChannelNameSchema>>({
     resolver: zodResolver(ChannelNameSchema),
@@ -94,9 +78,21 @@ export const ChannelDialog = React.forwardRef<
             {/* Channel form */}
             <Form {...form}>
               <form
-                // TODO: Confirm binding the user id inline is appropriate
-                // action={createChannel.bind(null, userId as bigint)}
-                // action={createPublication}
+                action={async () => {
+                  // Create an IPFS pointer containing the name of the channel
+                  const channelUri = await uploadBlob({
+                    dataToUpload: form.getValues().channelName,
+                  })
+
+                  await createChannel({
+                    userId: userId as bigint,
+                    adminIds: [userId as bigint],
+                    memberIds: [],
+                    channelUri: channelUri,
+                  })
+
+                  // TODO: Close the dialog after successfully completing the action
+                }}
                 className="w-2/3 space-y-6"
               >
                 <FormField
