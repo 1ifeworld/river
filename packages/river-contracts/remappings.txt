@@ -1,6 +1,4 @@
 imp/=lib/imp/src
-imp-test/=lib/imp/test
-imp-scripts/=lib/imp/scripts
 light-account/=lib/light-account/src/
 light-account-lib/=lib/light-account/lib/
 openzeppelin-contracts/=lib/openzeppelin-contracts/contracts/
