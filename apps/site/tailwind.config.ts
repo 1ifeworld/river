@@ -20,14 +20,20 @@ export default {
         '2xl': '1400px',
       },
     },
+    fontSize: {
+      sm: '0.625rem',
+      base: '0.71875rem',
+      xl: '0.8125rem',
+      '2xl': '0.9375rem',
+    },
     extend: {
       colors: {
         border: 'hsl(var(--border))',
-        dialogBorder: 'hsl(var(--dialog-border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
+        divider: 'hsl(var(--divider))',
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',

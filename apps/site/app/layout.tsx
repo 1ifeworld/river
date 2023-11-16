@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en" className={`${fragmentMono.variable}`}>
       <body>
         <Providers>
-          <div className="p-4">
+          <div className="p-4 px-5">
             <Header />
             {children}
           </div>
