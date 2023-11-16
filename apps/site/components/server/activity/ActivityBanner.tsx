@@ -1,6 +1,6 @@
 import { Stack, Typography } from '@/design-system'
 
-export async function UserBanner({ 
+export async function ActivityBanner({ 
     user 
 }: { 
     // user: User 
@@ -8,10 +8,9 @@ export async function UserBanner({
 }) {
 
   return (
-    <Stack className="border border-2">
-      {/* User Name */}
+    <Stack className="space-y-[10px]">
       <Typography variant="smallText">{user.name}</Typography>
-      <Typography variant="smallText">{user.desc}</Typography>
+      <Typography variant="smallText" className='text-[#747474]'  >{user.desc}</Typography>
     </Stack>
   )
 }
