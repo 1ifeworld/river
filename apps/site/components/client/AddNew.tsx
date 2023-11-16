@@ -81,6 +81,7 @@ export function AddNew() {
             triggerChildren="Channel"
             onSelect={handleDialogItemSelect}
             onOpenChange={handleDialogItemOpenChange}
+            userId={userId as bigint}
           />
         </DropdownMenuGroup>
       </DropdownMenuContent>
