@@ -1,15 +1,16 @@
-query Nodes($schema: String!) {
-  nodes(
-    where: {schema: $schema}
-  ) {
+query Nodes {
+  nodes {
     id
-    msgBody
-    msgType
-    nodeAdmin
     nodeId
+    userId
     nodeMembers
     schema
     sender
-    userId
+    messages {
+      msgBody
+      msgType
+      id
+      sender
+    }
   }
 }
