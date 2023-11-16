@@ -21,6 +21,7 @@ import { useAlchemyContext } from 'context/AlchemyProviderContext'
 import { usePrivy } from '@privy-io/react-auth'
 import { AlchemyProvider } from '@alchemy/aa-alchemy'
 import { Hex, parseAbiItem } from 'viem'
+import { getUserId } from 'gql/requests/getUserId'
 import { addresses } from 'scrypt'
 import * as z from 'zod'
 import { publicClient } from 'config/clients'
@@ -49,24 +50,22 @@ export function UsernameDialog({ open }: { open: boolean }) {
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
-      // const smartAccountAddress = (await alchemyProvider?.getAddress()) as Hex
+      // Execute the registerAndDelegate function
       const hash = await registerAndDelegate({
         from: smartAccountAddress as Hex,
         provider: alchemyProvider as AlchemyProvider,
       })
 
-      if (hash) {
-        // Only proceed if a hash value was returned
-        const logs = await publicClient.getLogs({
-          address: addresses.idRegistry.opGoerli,
-          event: parseAbiItem(
-            'event Register(address indexed to, uint256 indexed id, address backup, bytes data)',
-          ),
+      if (hash && smartAccountAddress) {
+        // If a hash is returned, proceed to get the userId
+        const userIdResponse = await getUserId({
+          custodyAddress: smartAccountAddress,
         })
 
-        // Ensure logs array is not empty and has the expected structure
-        if (logs.length > 0 && logs[0].args.id !== undefined) {
-          const userId: string = (logs[0].args.id as bigint).toString()
+        if (userIdResponse?.userId) {
+          const userId = userIdResponse.userId
+
+          // Now call setUsername with the obtained userId
 
           await setUsername({
             registrationParameters: {
@@ -78,7 +77,7 @@ export function UsernameDialog({ open }: { open: boolean }) {
             },
           })
         } else {
-          console.error('No logs found for the transaction.')
+          console.error('No valid user ID found for the given address.')
         }
       } else {
         console.error('No transaction hash returned from registerAndDelegate.')

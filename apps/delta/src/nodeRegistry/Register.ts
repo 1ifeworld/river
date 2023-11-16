@@ -15,22 +15,11 @@ import {
 
 // register
 ponder.on('NodeRegistry:Register', async ({ event, context }) => {
-  // with rivervalidator check happening
-  // const { Node, Message, Publication, Channel, Item, AccessControl, RiverValidatorV1} = context.entities;
-  const { Node, Message, Publication, Channel, Item, AccessControl } =
-    context.entities
+  const { Node, Message, Publication, Channel, Item } = context.entities
 
   const { sender, userId, schema, nodeId, messages } = event.params
 
   console.log(`Node $${nodeId} Registered`)
-
-  // the future version is
-  // check if sender is either the owner or a delegate address for this id
-  // const targetUser = await RiverValidatorV1.findUnique({
-  //     id: `420/${addresses.riverValidatorV1.opGoerli}/${userId}`
-  // })
-
-  // all events will go through for now
   const validUser = true
 
   // Fetch the validation status for the user
@@ -43,8 +32,10 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
 
   // Check if user is valid
   // if (isValidUser) {
+
   if (validUser) {
     // Create valid node ids regardless if init msgs are valid
+
     await Node.create({
       id: `420/${event.transaction.from}/${nodeId}`,
       data: {
@@ -52,13 +43,6 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
         userId: userId,
         schema: schema,
         nodeId: nodeId,
-      },
-    })
-    // Create corresponding AccessControl entity for the Node
-    await AccessControl.create({
-      id: `420/${event.transaction.from}/${nodeId}`,
-      data: {
-        node: `420/${event.transaction.from}/${nodeId}`,
         nodeAdmin: [],
         nodeMembers: [],
       },
@@ -83,6 +67,7 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
           data: {
             sender: sender,
             userId: userId,
+            node: `420/${event.transaction.from}/${nodeId}`,
             nodeId: nodeId,
             msgType: decodedMsg.msgType,
             msgBody: decodedMsg.msgBody,
@@ -94,7 +79,7 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
           const decoded = decodeAccess101({ msgBody: decodedMsg.msgBody })
           // if successful, enter crud logic, if not exit
           if (decoded) {
-            await AccessControl.update({
+            await Node.update({
               id: `420/${event.transaction.from}/${nodeId}`,
               data: {
                 nodeAdmin: decoded?.admins as bigint[],
@@ -147,6 +132,7 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
                 chainId: decoded.chainId,
                 targetId: decoded.id,
                 target: decoded.pointer,
+                userId: userId,
                 hasId: decoded.hasId,
                 channel: `420/${event.transaction.from}/${schema}/${nodeId}`,
               },
@@ -159,17 +145,10 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
 })
 
 ponder.on('NodeRegistry:Update', async ({ event, context }) => {
-  const { Node, Message, Publication, Channel, Item, AccessControl } =
-    context.entities
+  const { Node, Message, Publication, Channel, Item } = context.entities
   const { sender, userId, nodeId, messages } = event.params
 
   console.log(`Node $${nodeId} Updated`)
-
-  // the future version is
-  // check if sender is either the owner or a delegate address for this id
-  // const targetUser = await RiverValidatorV1.findUnique({
-  //     id: `420/${addresses.riverValidatorV1.opGoerli}/${userId}`
-  // })
 
   // all events will go through for now
   const validUser = true
@@ -185,6 +164,7 @@ ponder.on('NodeRegistry:Update', async ({ event, context }) => {
     const schema = targetNode.schema
 
     console.log('update messages.length', messages.length)
+
     for (let i = 0; i < messages.length; ++i) {
       // decode msg. will be null if invalid data, so add logic check after
       const decodedMsg = decodeMessage000({ encodedMsg: messages[i] })
@@ -196,8 +176,8 @@ ponder.on('NodeRegistry:Update', async ({ event, context }) => {
           data: {
             sender: sender,
             userId: userId,
+            node: `420/${event.transaction.from}/${nodeId}`,
             nodeId: nodeId,
-            node: '', // TODO: FIX
             msgType: decodedMsg.msgType,
             msgBody: decodedMsg.msgBody,
           },
@@ -208,7 +188,7 @@ ponder.on('NodeRegistry:Update', async ({ event, context }) => {
           const decoded = decodeAccess101({ msgBody: decodedMsg.msgBody })
           // if successful, enter crud logic, if not exit
           if (decoded) {
-            await AccessControl.update({
+            await Node.update({
               id: `420/${event.transaction.from}/${nodeId}`,
               data: {
                 nodeAdmin: decoded?.admins as bigint[],

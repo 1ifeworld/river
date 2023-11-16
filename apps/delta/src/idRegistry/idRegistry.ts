@@ -1,4 +1,6 @@
-// import { ponder } from "@/generated";
+import { ponder } from '@/generated'
+
+// keep track of every cancelled attempt to transfer
 
 // ponder.on("IdRegistry:Attest" ,  async ({event, context}) => {
 //   const {IdRegistry} = context.entities;
@@ -35,17 +37,18 @@
 // // keep track of every initiated attempt to transfer
 // ponder.on("IdRegistry:TransferInitiated", async ({event, context}) => {
 //   const {IdRegistry} = context.entities;
-//   const {from, to, id} = event.params
+//   const {from, to, id } = event.params
 
 //   await IdRegistry.create({
-//     id: `420/${event}/${from}/${to}/${id}`,
+//     id: `420/${event.transaction.hash}/${from}/${to}/${id}`,
 //     data: {
 //       from: from,
 //       to: to,
 //       userId: id,
+
 //     },
-//   })
-// })
+//   });
+// });
 
 // ponder.on("IdRegistry:TransferCancelled", async ({event, context}) => {
 //   const {IdRegistry} = context.entities;
@@ -56,7 +59,7 @@
 //     data: {
 //       from: from,
 //       to: to,
-//       userId: id,
+//       user: String(id),
 //     }
 //   })
 
@@ -75,8 +78,8 @@
 //     create: {
 //       from: from,
 //       to: to,
-//       userId: id,
-//     },
+//       user: String(id),
+//         },
 //     update: {
 //       to: to
 //     }
@@ -84,6 +87,32 @@
 
 // })
 
+// should we assume backup is always us? should folks be able to update this
+ponder.on('IdRegistry:Register', async ({ event, context }) => {
+  const { IdRegistry } = context.entities
+  const { to, id, backup, data } = event.params
+
+  // // Retrieve or create a User entity with the given userId
+  // let userEntity = await User.findUnique({ id: `RIVER_USER_${id}` });
+  // if (!userEntity) {
+  //   userEntity = await User.create({
+  //     id: `${id}`,
+  //     data: {
+  //       userId: id,
+  //     }
+  //   });
+  // }
+
+  await IdRegistry.create({
+    id: `420/${to}/${id}`,
+    data: {
+      to: to,
+      userId: id,
+      backup: backup,
+      data: data,
+    },
+  })
+})
 // // should we assume backup is always us? should folks be able to update this
 
 // ponder.on("IdRegistry:Register", async ({ event, context }) => {

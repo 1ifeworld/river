@@ -1,16 +1,16 @@
-query Nodes {
+query allChannels {
   nodes {
-    id
     nodeId
-    userId
-    nodeMembers
     schema
-    sender
     messages {
       msgBody
       msgType
-      id
-      sender
+      userId
+      nodeId
     }
+  }
+  channels {
+    id
+    uri
   }
 }

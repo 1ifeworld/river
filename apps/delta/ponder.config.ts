@@ -14,6 +14,7 @@ export const config: Config = {
     {
       name: 'optimism-goerli',
       chainId: 420,
+
       transport: http(process.env.PONDER_RPC_URL_420),
     },
     // {
@@ -49,13 +50,28 @@ export const config: Config = {
     //   address: addresses.nodeRegistry.anvil,
     //   startBlock: 0,
     // },
+
     // {
-    //   name: 'IdRegistry',
-    //   abi: idRegistryABI,
-    //   network: 'optimism-goerli',
-    //   address: addresses.idRegistry.opGoerli,
-    //   startBlock: 16474518,
+    //   name: 'NodeRegistry',
+    //   abi: nodeRegistryABI,
+    //   network: 'arbitrum-goerli',
+    //   address: addresses.nodeRegistry.arbGoerli,
+    //   startBlock: 54683831,
     // },
+    // {
+    //   name: 'NodeRegistry',
+    //   abi: nodeRegistryABI,
+    //   network: 'anvil',
+    //   address: addresses.nodeRegistry.anvil,
+    //   startBlock: 0,
+    // },
+    {
+      name: 'IdRegistry',
+      abi: idRegistryABI,
+      network: 'optimism-goerli',
+      address: addresses.idRegistry.opGoerli,
+      startBlock: 16474518,
+    },
     // {
     //   name: 'IdRegistry',
     //   abi: idRegistryABI,

@@ -1,4 +1,18 @@
 # ================================
+# ====== DELEGATE REGISTRY =======
+# ================================
+
+# Uncomment and use if needed in the future
+# type DelegateRegistry @entity {
+#   id: String!
+#   status: Boolean!
+#   target: String!
+#   transferNonce: BigInt!
+#   userId: BigInt
+#   user: User! @derivedFrom(field: "DelegateRegistry")
+# }
+
+# ================================
 # ======== ID REGISTRY ===========
 # ================================
 
@@ -6,80 +20,68 @@ type IdRegistry @entity {
   id: String!
   to: String
   from: String
-  userId: BigInt
   backup: Bytes
   data: String
-  attestor: String
-}
-
-# ================================
-# ====== DELEGATE REGISTRY =======
-# ================================
-
-type DelegateRegistry @entity {
-  id: String!
-  userId: BigInt!
-  transferNonce: BigInt!
-  target: String!
-  status: Boolean!
+  userId: BigInt
+  # user: User!
 }
 
 # ================================
 # ======== NODE REGISTRY =========
 # ================================
 
-type Schema @entity {
-  id: String!
-  sender: String!
-  schema: Bytes!
-  data: Bytes
-}
-
-type Register @entity {
-  id: String!
-  sender: String
-  nodeId: BigInt
-  schema: Bytes
-  messages: [Bytes]
-}
-
 type Node @entity {
   id: String!
   sender: String!
   userId: BigInt!
-  schema: String!
   nodeId: BigInt!
+  schema: String!
   messages: [Message!]! @derivedFrom(field: "node")
-  accessControl: AccessControl
-
-}
-
-type AccessControl @entity {
-  id: String!
+  # accessControl: AccessControl
   nodeAdmin: [BigInt!]!
   nodeMembers: [BigInt!]!
-  node: Node!
-
+  # channel: Channel
+  # publication: Publication
 }
 
 type Message @entity {
   id: String!
-  node: Node
-  nodeId: BigInt! 
+  nodeId: BigInt
+  node: Node 
   sender: String
-  userId: BigInt
   msgType: BigInt
   msgBody: Bytes
+  userId: BigInt
+  # user: User! 
 }
 
+
+# type AccessControl @entity {
+#   id: String!
+#   nodeAdmin: [BigInt!]!
+#   nodeMembers: [BigInt!]!
+#   node: Node!
+#   }
 
 type Publication @entity {
   id: String!
   uri: String!
+  # nodeId: BigInt
+  # node: Node! 
+}
+
+
+type Channel @entity {
+  id: String!
+  uri: String
+  items: [Item!]! @derivedFrom(field: "channel")
+  # nodeId: BigInt
+  # node: Node!
 }
 
 type Item @entity {
   id: String!
+  userId: BigInt
   chainId: BigInt!
   targetId: BigInt!
   target: String!
@@ -87,19 +89,42 @@ type Item @entity {
   channel: Channel!
 }
 
-type Channel @entity {
-  id: String!
-  uri: String
-  items: [Item!]! @derivedFrom(field: "channel")
-}
+
+# type Register @entity {
+#   id: String!
+#   sender: String
+#   nodeId: BigInt
+#   node: Node! @derivedFrom(field: "nodeId")
+#   schema: Bytes
+#   messages: [Bytes]
+#   userId: BigInt
+#   user: User! 
+# }
 
 # ================================
 # ====== RIVER VALIDATOR V1 ======
 # ================================
 
-type RiverValidatorV1 @entity {
-  id: String!
-  userId: BigInt
-  status: Boolean
-  operator: String
-}
+# type RiverValidatorV1 @entity {
+#   id: String!
+#   status: Boolean
+#   operator: String
+#   user: User! @derivedFrom(field: "RiverValidatorV1")
+# }
+
+# ================================
+# ============ USER ==============
+# ================================
+
+
+# type User @entity {
+#   id: String!
+#   userId: BigInt!
+#   IdRegistry: [IdRegistry!]! @derivedFrom(field: "userId")
+#   # DelegateRegistry: [DelegateRegistry!]!
+#   # nodeId: BigInt
+#   # node: [Node] @deriveFrom(field: "nodeId")
+#   accessControl: [AccessControl] @derivedFrom(field: "nodeAdmin")
+#   messages: [Message] @derivedFrom(field: "userId")
+#   # riverValidatorV1: [RiverValidatorV1!]!
+# }
