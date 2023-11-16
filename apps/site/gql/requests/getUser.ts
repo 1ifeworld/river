@@ -1,7 +1,8 @@
 import sdk from '../client'
+import { Hex } from 'viem';
 
 
-export async function getUserIdByAddress(address: string) {
+export async function getUserIdByAddress(address: Hex) {
     try {
       // Make sure the address is provided
       if (!address) {
