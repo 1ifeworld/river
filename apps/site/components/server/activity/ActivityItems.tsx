@@ -1,34 +1,58 @@
-import { Stack, Flex, Typography } from '@/design-system'
-import { ItemList } from '../ItemList'
+import { Typography } from '@/design-system'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/design-system'
 
-export async function ActivityItems({ 
-    user 
-}: { 
-    // user: User 
-    user:  any
+// This is a placeholder component to represent a cover image
+const WhiteBox = () => {
+  return <div className="border-gray-200 border-2 bg-white w-10 h-10" />
+}
+
+export async function ActivityItems({
+  user,
+}: {
+  /* biome-ignore lint: */
+  user: any
 }) {
-
   return (
-    <Stack className="">  
-      <Flex>Items</Flex>
-
-      <Flex className="mb-[10px] justify-start items-center w-full text-[#747474] text-[11.5px] ">
-        <div className="w-[38px]"></div> {/* empty space over thumbnail */}
-        <div className="w-[57%] ml-[12px]"></div> {/* empty space over name */}
-        <div className="w-[20%] ml-[12px]">Added to</div>
-        <div className="w-[20%] ml-[12px]">Date added</div>
-      </Flex>
-
-      {user.items.map((item: any) => (
-        <ItemList 
-            key={item.id} 
-            name={item.name} 
-            creator={item.creator} 
-            imageUri={item.imageUri} 
-            channel={item.channel} 
-            added={item.added} 
-        />
-      ))}
-    </Stack>
+    <Table className="w-full">
+      <TableHeader>
+        <TableRow>
+          <TableHead>
+            <Typography variant="smallText" className="text-[#414141]">
+              Recent activity
+            </Typography>
+          </TableHead>
+          <TableHead className="text-right">
+            <Typography variant="smallText" className="text-[#747474]">
+              Added to
+            </Typography>
+          </TableHead>
+          <TableHead className="text-right">
+            <Typography variant="smallText" className="text-[#747474]">
+              Date added
+            </Typography>
+          </TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {/* biome-ignore lint: */}
+        {user.items.map((item: any) => (
+          <TableRow key={item.id}>
+            <TableCell className="flex gap-2 items-center">
+              <WhiteBox />
+              {item.name}
+            </TableCell>
+            <TableCell className="text-right">{item.creator}</TableCell>
+            <TableCell className="text-right">{item.added}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
   )
 }

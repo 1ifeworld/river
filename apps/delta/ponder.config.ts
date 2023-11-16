@@ -6,7 +6,7 @@ import {
   delegateRegistryABI,
   nodeRegistryABI,
   riverValidatorV1ABI,
-  lightAccountFactoryABI
+  lightAccountFactoryABI,
 } from 'scrypt'
 
 export const config: Config = {
@@ -88,7 +88,7 @@ export const config: Config = {
     //   name: 'RiverValidatorV1',
     //   abi: riverValidatorV1ABI,
     //   network: 'anvil',
-    //   address: '0x', 
+    //   address: '0x',
     //   startBlock: 0,
     // },
     // {

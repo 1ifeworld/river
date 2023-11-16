@@ -7,9 +7,9 @@
 //   await IdRegistry.upsert({
 //     id: `420/${id}/${attestor}`,
 //     create: {
-//       userId: id, 
+//       userId: id,
 //       attestor: attestor,
-//     }, 
+//     },
 //     update : {
 //       attestor: attestor
 //     }
@@ -32,7 +32,7 @@
 
 // // keep track of every cancelled attempt to transfer
 
-// // keep track of every initiated attempt to transfer 
+// // keep track of every initiated attempt to transfer
 // ponder.on("IdRegistry:TransferInitiated", async ({event, context}) => {
 //   const {IdRegistry} = context.entities;
 //   const {from, to, id} = event.params
@@ -62,9 +62,8 @@
 
 // })
 
-
 // // update the to field of the ID which is now new owner of ID
-// // we've update the to: userId . but we're missing backup 
+// // we've update the to: userId . but we're missing backup
 
 // ponder.on("IdRegistry:TransferComplete", async ({event, context}) => {
 
@@ -85,7 +84,7 @@
 
 // })
 
-// // should we assume backup is always us? should folks be able to update this 
+// // should we assume backup is always us? should folks be able to update this
 
 // ponder.on("IdRegistry:Register", async ({ event, context }) => {
 
@@ -95,8 +94,8 @@
 //   await IdRegistry.create({
 //     id: `420/${to}/${id}`,
 //     data: {
-//       to: to, 
-//       userId: id, 
+//       to: to,
+//       userId: id,
 //       backup: backup,
 //       data: data
 //     }
