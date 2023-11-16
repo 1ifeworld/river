@@ -531,6 +531,11 @@ export type NodesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type NodesQuery = { __typename?: 'Query', nodes: Array<{ __typename?: 'Node', id: string, nodeId: any, userId: any, nodeMembers: Array<any>, schema: string, sender: string, messages: Array<{ __typename?: 'Message', msgBody?: string | null, msgType?: any | null, id: string, sender?: string | null }> }> };
 
+export type GetUserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUserQuery = { __typename?: 'Query', idRegistrys: Array<{ __typename?: 'IdRegistry', userId?: any | null }> };
+
 export type UserPublicationsQueryVariables = Exact<{
   schema: Scalars['String']['input'];
   userId: Scalars['BigInt']['input'];
@@ -601,6 +606,13 @@ export const NodesDocument = gql`
   }
 }
     `;
+export const GetUserDocument = gql`
+    query getUser {
+  idRegistrys(where: {to: ""}) {
+    userId
+  }
+}
+    `;
 export const UserPublicationsDocument = gql`
     query UserPublications($schema: String!, $userId: BigInt!) {
   nodes(where: {schema: $schema, userId: $userId}) {
@@ -632,6 +644,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     Nodes(variables?: NodesQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<NodesQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<NodesQuery>(NodesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'Nodes', 'query');
+    },
+    getUser(variables?: GetUserQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetUserQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetUserQuery>(GetUserDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getUser', 'query');
     },
     UserPublications(variables: UserPublicationsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<UserPublicationsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<UserPublicationsQuery>(UserPublicationsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'UserPublications', 'query');

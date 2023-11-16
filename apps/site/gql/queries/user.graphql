@@ -1,8 +1,5 @@
-# query MyQuery {
-#   nodes {
-#     userId
-#     id
-#     nodeId
-#     schema
-#   }
-# }
+query getUser {
+  idRegistrys(where: {to: ""}) {
+    userId
+  }
+}

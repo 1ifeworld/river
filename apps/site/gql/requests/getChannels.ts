@@ -8,3 +8,4 @@ export async function getChannels() {
     channels: channels,
   }
 }
+  
