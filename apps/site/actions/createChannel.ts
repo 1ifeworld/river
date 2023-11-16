@@ -8,8 +8,8 @@ import {
   encodeChannel301,
   nodeRegistryABI,
 } from 'scrypt'
+import { publicClient } from '@/config/publicClient'
 import { walletClient } from '@/config/walletClient'
-import { opGoerliViem } from 'constants/chains'
 
 interface CreateChannelProps {
   userId: bigint
@@ -28,7 +28,7 @@ export async function createChannel({
 
   const channelUriMessage = encodeChannel301({ channelUri })
 
-  const { request } = await walletClient.simulateContract({
+  const { request } = await publicClient.simulateContract({
     address: addresses.nodeRegistry.opGoerli,
     abi: nodeRegistryABI,
     functionName: 'register',
@@ -42,21 +42,7 @@ export async function createChannel({
     ],
   })
 
-  // const registerHash = await walletClient.writeContract(request)
-
-  const registerHash = await walletClient.writeContract({
-    address: addresses.nodeRegistry.opGoerli,
-    abi: nodeRegistryABI,
-    functionName: 'register',
-    args: [
-      userId,
-      channelSchema,
-      [
-        accessControlMessage?.message as Hash,
-        channelUriMessage?.message as Hash,
-      ],
-    ],
-  })
+  const registerHash = await walletClient.writeContract(request)
 
   console.log('Register hash:', registerHash)
 }

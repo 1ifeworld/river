@@ -17,4 +17,6 @@ export const walletClient = createWalletClient({
   account: operator,
   chain: opGoerliViem,
   transport: transport,
-}).extend(publicActions)
+})
+
+// .extend(publicActions)
