@@ -81,7 +81,11 @@ export const ChannelDialog = React.forwardRef<
                 action={async () => {
                   // Create an IPFS pointer containing the name of the channel
                   const channelUri = await uploadBlob({
-                    dataToUpload: form.getValues().channelName,
+                    dataToUpload: {
+                      name: form.getValues().channelName,
+                      description: '',
+                      coverImageUri: '',
+                    },
                   })
 
                   await createChannel({
