@@ -20,7 +20,7 @@ export async function uploadBlob({
 
   const uri = `ipfs://${cid}`
 
-  console.log('Link to uploaded data:', `https://w3s.link/ipfs/${cid}`)
+  console.log('Link to uploaded data:', `https://ipfs.io/ipfs/${cid}`)
 
   return uri
 }
