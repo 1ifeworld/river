@@ -21,6 +21,6 @@ query allActivity($userId: BigInt!) {
   publications {
     name
     description
-    thumbnailURL
+    uri
   }
 }
