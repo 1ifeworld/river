@@ -1,11 +1,11 @@
 import 'server-only'
 
-import { http, createWalletClient, type Hash, publicActions } from 'viem'
+import { http, createWalletClient, type Hash, createPublicClient } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 import { opGoerliViem } from '@/constants'
 
 const transport = http(
-  `https://opt-goerli.g.alchemy.com/v2/${process.env.ALCHEMY_KEY}`,
+  `https://optimism-goerli.infura.io/v3/${process.env.INFURA_KEY}`,
 )
 
 export const operator = privateKeyToAccount(process.env.PRIVATE_KEY as Hash)
@@ -16,4 +16,7 @@ export const walletClient = createWalletClient({
   transport: transport,
 })
 
-// .extend(publicActions)
+export const serverSidePublicClient = createPublicClient({
+  chain: opGoerliViem,
+  transport: transport,
+})
