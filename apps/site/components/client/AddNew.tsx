@@ -43,7 +43,6 @@ export function AddNew() {
   React.useEffect(() => {
     // biome-ignore format:
     (async () => {
-
       setUserId(await getUserId({
         smartAccountAddress: smartAccountAddress as Hex
       }))

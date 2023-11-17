@@ -4,6 +4,7 @@ import '../styles/globals.css'
 import { fragmentMono } from './fonts/fonts'
 import { Providers } from './providers'
 import { Header } from '@/client'
+import { Toaster } from 'sonner'
 
 export const metadata: Metadata = {
   title: 'River',
@@ -22,6 +23,16 @@ export default function RootLayout({
           <div className="p-4 px-5">
             <Header />
             {children}
+            <Toaster
+              position="bottom-center"
+              toastOptions={{
+                className:
+                  'bg-background border-secondary-foreground rounded-none shadow-none',
+                style: {
+                  boxShadow: 'none',
+                },
+              }}
+            />
           </div>
           <Analytics />
         </Providers>
