@@ -12,15 +12,3 @@ export function Toast({ children }: ToastProps) {
     </Flex>
   )
 }
-
-// interface ToastProps {
-//   toastText: string
-// }
-
-// export function Toast({ toastText }: ToastProps) {
-//   return (
-//     <Flex className="bg-background border-[0.5px] border-secondary-foreground px-4 py-2 text-base font-mono">
-//       <Typography>{toastText}</Typography>
-//     </Flex>
-//   )
-// }
