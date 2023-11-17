@@ -10,29 +10,27 @@ export default defineConfig({
         'Publication_200_Types.json',
         'Channel_300_Types.json',
         'Message_Type.json',
-        'RiverValidatorV1.json'
+        'RiverValidatorV1.json',
       ],
     }),
     foundry({
       project: '../river-contracts/lib/imp',
       forge: {
-        build: true
+        build: true,
       },
       include: [
         'NodeRegistry.json',
         'IdRegistry.json',
-        'DelegateRegistry.json'
-      ]
+        'DelegateRegistry.json',
+      ],
     }),
     foundry({
       project: '../river-contracts/lib/light-account',
       forge: {
-        build: true
+        build: true,
       },
-      include: [
-        'LightAccountFactory.json',
-      ]
-    })
+      include: ['LightAccountFactory.json'],
+    }),
   ],
   out: './abi/generated.ts',
 })

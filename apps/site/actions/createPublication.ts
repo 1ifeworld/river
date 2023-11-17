@@ -38,8 +38,8 @@ export async function createPublication({
       userId,
       publicationSchema,
       [
-        accessControlMessage?.msgBody as Hash,
-        publicationUriMessage?.msgBody as Hash,
+        accessControlMessage?.message as Hash,
+        publicationUriMessage?.message as Hash,
       ],
     ],
   })

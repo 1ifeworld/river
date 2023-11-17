@@ -1,2 +1,2 @@
-export * from "./isValidMessageId"
-export * from "./generateChannelHash"
+export * from './isValidMessageId'
+export * from './generateChannelHash'

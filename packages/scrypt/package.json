@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "lint": "biome check . --apply",
+    "format": "biome format . --write"
   },
   "author": "Lifeworld",
   "license": "ISC",

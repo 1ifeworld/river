@@ -1,5 +1,5 @@
-import { messageIds } from "../constants";
+import { messageIds } from '../constants'
 
 export function isValidMessageId(messageId: bigint): boolean {
-    return messageIds.has(messageId);
+  return messageIds.has(messageId)
 }

@@ -1,1 +1,1 @@
-export * from "./nodeRegistry"
+export * from './nodeRegistry'
