@@ -90,7 +90,7 @@ type Channel @entity {
   description: String,
   coverImageURI: String
   createdAt: String
-  createdByID: String
+  createdByID:  
   # metadata: Metadata FUTURE
   # nodeId: BigInt
   # node: Node!
