@@ -19,6 +19,7 @@ import {
   Input,
   FormLabel,
   FormMessage,
+  Toast,
 } from '@/design-system'
 import { uploadBlob } from '@/lib'
 import { createChannel } from '@/actions'
@@ -26,6 +27,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useAlchemyContext } from 'context/AlchemyProviderContext'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
+import { toast } from 'sonner'
 
 interface ChannelDialogProps {
   triggerChildren: React.ReactNode
@@ -95,7 +97,17 @@ export const ChannelDialog = React.forwardRef<
                     channelUri: channelUri,
                   })
 
-                  // TODO: Close the dialog after successfully completing the action
+                  onOpenChange(false)
+
+                  // Render a toast with the name of the channel
+                  toast.custom((t) => (
+                    <Toast>
+                      {'Successfully created '}
+                      <span className="font-bold">
+                        {form.getValues().channelName}
+                      </span>
+                    </Toast>
+                  ))
                 }}
                 className="w-2/3 space-y-6"
               >
