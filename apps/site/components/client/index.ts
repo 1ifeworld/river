@@ -3,6 +3,7 @@
 // Subdirectories
 
 // Individual components
+export * from './Add'
 export * from './AddNew'
 export * from './ChannelDialog'
 export * from './Header'
