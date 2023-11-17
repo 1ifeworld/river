@@ -34,9 +34,14 @@ export type Scalars = {
 
 export type Channel = {
   __typename?: 'Channel'
+  coverImageURI?: Maybe<Scalars['String']['output']>
+  createdAt?: Maybe<Scalars['BigInt']['output']>
+  createdByID?: Maybe<Scalars['BigInt']['output']>
+  description?: Maybe<Scalars['String']['output']>
   hashId: Scalars['String']['output']
   id: Scalars['String']['output']
   items: Array<Item>
+  name?: Maybe<Scalars['String']['output']>
   uri?: Maybe<Scalars['String']['output']>
 }
 
@@ -49,6 +54,44 @@ export type ChannelItemsArgs = {
 }
 
 export type ChannelFilter = {
+  coverImageURI?: InputMaybe<Scalars['String']['input']>
+  coverImageURI_contains?: InputMaybe<Scalars['String']['input']>
+  coverImageURI_ends_with?: InputMaybe<Scalars['String']['input']>
+  coverImageURI_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
+  coverImageURI_not?: InputMaybe<Scalars['String']['input']>
+  coverImageURI_not_contains?: InputMaybe<Scalars['String']['input']>
+  coverImageURI_not_ends_with?: InputMaybe<Scalars['String']['input']>
+  coverImageURI_not_in?: InputMaybe<
+    Array<InputMaybe<Scalars['String']['input']>>
+  >
+  coverImageURI_not_starts_with?: InputMaybe<Scalars['String']['input']>
+  coverImageURI_starts_with?: InputMaybe<Scalars['String']['input']>
+  createdAt?: InputMaybe<Scalars['BigInt']['input']>
+  createdAt_gt?: InputMaybe<Scalars['BigInt']['input']>
+  createdAt_gte?: InputMaybe<Scalars['BigInt']['input']>
+  createdAt_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
+  createdAt_lt?: InputMaybe<Scalars['BigInt']['input']>
+  createdAt_lte?: InputMaybe<Scalars['BigInt']['input']>
+  createdAt_not?: InputMaybe<Scalars['BigInt']['input']>
+  createdAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
+  createdByID?: InputMaybe<Scalars['BigInt']['input']>
+  createdByID_gt?: InputMaybe<Scalars['BigInt']['input']>
+  createdByID_gte?: InputMaybe<Scalars['BigInt']['input']>
+  createdByID_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
+  createdByID_lt?: InputMaybe<Scalars['BigInt']['input']>
+  createdByID_lte?: InputMaybe<Scalars['BigInt']['input']>
+  createdByID_not?: InputMaybe<Scalars['BigInt']['input']>
+  createdByID_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
+  description?: InputMaybe<Scalars['String']['input']>
+  description_contains?: InputMaybe<Scalars['String']['input']>
+  description_ends_with?: InputMaybe<Scalars['String']['input']>
+  description_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
+  description_not?: InputMaybe<Scalars['String']['input']>
+  description_not_contains?: InputMaybe<Scalars['String']['input']>
+  description_not_ends_with?: InputMaybe<Scalars['String']['input']>
+  description_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
+  description_not_starts_with?: InputMaybe<Scalars['String']['input']>
+  description_starts_with?: InputMaybe<Scalars['String']['input']>
   hashId?: InputMaybe<Scalars['String']['input']>
   hashId_contains?: InputMaybe<Scalars['String']['input']>
   hashId_ends_with?: InputMaybe<Scalars['String']['input']>
@@ -69,6 +112,16 @@ export type ChannelFilter = {
   id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
   id_not_starts_with?: InputMaybe<Scalars['String']['input']>
   id_starts_with?: InputMaybe<Scalars['String']['input']>
+  name?: InputMaybe<Scalars['String']['input']>
+  name_contains?: InputMaybe<Scalars['String']['input']>
+  name_ends_with?: InputMaybe<Scalars['String']['input']>
+  name_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
+  name_not?: InputMaybe<Scalars['String']['input']>
+  name_not_contains?: InputMaybe<Scalars['String']['input']>
+  name_not_ends_with?: InputMaybe<Scalars['String']['input']>
+  name_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
+  name_not_starts_with?: InputMaybe<Scalars['String']['input']>
+  name_starts_with?: InputMaybe<Scalars['String']['input']>
   uri?: InputMaybe<Scalars['String']['input']>
   uri_contains?: InputMaybe<Scalars['String']['input']>
   uri_ends_with?: InputMaybe<Scalars['String']['input']>
@@ -381,11 +434,33 @@ export type NodeFilter = {
 
 export type Publication = {
   __typename?: 'Publication'
+  createdAt?: Maybe<Scalars['BigInt']['output']>
+  description?: Maybe<Scalars['String']['output']>
   id: Scalars['String']['output']
+  name?: Maybe<Scalars['String']['output']>
+  thumbnailURL?: Maybe<Scalars['String']['output']>
   uri: Scalars['String']['output']
 }
 
 export type PublicationFilter = {
+  createdAt?: InputMaybe<Scalars['BigInt']['input']>
+  createdAt_gt?: InputMaybe<Scalars['BigInt']['input']>
+  createdAt_gte?: InputMaybe<Scalars['BigInt']['input']>
+  createdAt_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
+  createdAt_lt?: InputMaybe<Scalars['BigInt']['input']>
+  createdAt_lte?: InputMaybe<Scalars['BigInt']['input']>
+  createdAt_not?: InputMaybe<Scalars['BigInt']['input']>
+  createdAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
+  description?: InputMaybe<Scalars['String']['input']>
+  description_contains?: InputMaybe<Scalars['String']['input']>
+  description_ends_with?: InputMaybe<Scalars['String']['input']>
+  description_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
+  description_not?: InputMaybe<Scalars['String']['input']>
+  description_not_contains?: InputMaybe<Scalars['String']['input']>
+  description_not_ends_with?: InputMaybe<Scalars['String']['input']>
+  description_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
+  description_not_starts_with?: InputMaybe<Scalars['String']['input']>
+  description_starts_with?: InputMaybe<Scalars['String']['input']>
   id?: InputMaybe<Scalars['String']['input']>
   id_contains?: InputMaybe<Scalars['String']['input']>
   id_ends_with?: InputMaybe<Scalars['String']['input']>
@@ -396,6 +471,28 @@ export type PublicationFilter = {
   id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
   id_not_starts_with?: InputMaybe<Scalars['String']['input']>
   id_starts_with?: InputMaybe<Scalars['String']['input']>
+  name?: InputMaybe<Scalars['String']['input']>
+  name_contains?: InputMaybe<Scalars['String']['input']>
+  name_ends_with?: InputMaybe<Scalars['String']['input']>
+  name_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
+  name_not?: InputMaybe<Scalars['String']['input']>
+  name_not_contains?: InputMaybe<Scalars['String']['input']>
+  name_not_ends_with?: InputMaybe<Scalars['String']['input']>
+  name_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
+  name_not_starts_with?: InputMaybe<Scalars['String']['input']>
+  name_starts_with?: InputMaybe<Scalars['String']['input']>
+  thumbnailURL?: InputMaybe<Scalars['String']['input']>
+  thumbnailURL_contains?: InputMaybe<Scalars['String']['input']>
+  thumbnailURL_ends_with?: InputMaybe<Scalars['String']['input']>
+  thumbnailURL_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
+  thumbnailURL_not?: InputMaybe<Scalars['String']['input']>
+  thumbnailURL_not_contains?: InputMaybe<Scalars['String']['input']>
+  thumbnailURL_not_ends_with?: InputMaybe<Scalars['String']['input']>
+  thumbnailURL_not_in?: InputMaybe<
+    Array<InputMaybe<Scalars['String']['input']>>
+  >
+  thumbnailURL_not_starts_with?: InputMaybe<Scalars['String']['input']>
+  thumbnailURL_starts_with?: InputMaybe<Scalars['String']['input']>
   uri?: InputMaybe<Scalars['String']['input']>
   uri_contains?: InputMaybe<Scalars['String']['input']>
   uri_ends_with?: InputMaybe<Scalars['String']['input']>
@@ -521,6 +618,37 @@ export type QueryPublicationsArgs = {
   where?: InputMaybe<PublicationFilter>
 }
 
+export type AllActivityQueryVariables = Exact<{ [key: string]: never }>
+
+export type AllActivityQuery = {
+  __typename?: 'Query'
+  channels: Array<{
+    __typename?: 'Channel'
+    uri?: string | null
+    coverImageURI?: string | null
+    createdAt?: any | null
+    createdByID?: any | null
+    description?: string | null
+    items: Array<{
+      __typename?: 'Item'
+      chainId: any
+      id: string
+      target: string
+      targetId: any
+      userId?: any | null
+      hasId: boolean
+    }>
+  }>
+  publications: Array<{
+    __typename?: 'Publication'
+    name?: string | null
+    id: string
+    thumbnailURL?: string | null
+    description?: string | null
+    createdAt?: any | null
+  }>
+}
+
 export type AllChannelsQueryVariables = Exact<{ [key: string]: never }>
 
 export type AllChannelsQuery = {
@@ -641,6 +769,32 @@ export type UserPublicationsQuery = {
   }>
 }
 
+export const AllActivityDocument = gql`
+    query allActivity {
+  channels {
+    uri
+    coverImageURI
+    createdAt
+    createdByID
+    description
+    items {
+      chainId
+      id
+      target
+      targetId
+      userId
+      hasId
+    }
+  }
+  publications {
+    name
+    id
+    thumbnailURL
+    description
+    createdAt
+  }
+}
+    `
 export const AllChannelsDocument = gql`
     query allChannels {
   nodes {
@@ -755,6 +909,20 @@ export function getSdk(
   withWrapper: SdkFunctionWrapper = defaultWrapper,
 ) {
   return {
+    allActivity(
+      variables?: AllActivityQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<AllActivityQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<AllActivityQuery>(AllActivityDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'allActivity',
+        'query',
+      )
+    },
     allChannels(
       variables?: AllChannelsQueryVariables,
       requestHeaders?: GraphQLClientRequestHeaders,

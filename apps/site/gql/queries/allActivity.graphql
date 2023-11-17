@@ -1,0 +1,24 @@
+query allActivity {
+  channels {
+    uri
+    coverImageURI
+    createdAt
+    createdByID
+    description
+    items {
+      chainId
+      id
+      target
+      targetId
+      userId
+      hasId
+    }
+  }
+  publications {
+    name
+    id
+    thumbnailURL
+    description
+    createdAt
+  }
+}
