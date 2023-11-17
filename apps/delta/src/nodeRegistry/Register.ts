@@ -10,13 +10,14 @@ import {
   isValidMessageId,
   generateChannelHash,
 } from 'scrypt'
+import fetchIPFSData from "../utils/fetchIPFSData"
 
 ponder.on('NodeRegistry:Register', async ({ event, context }) => {
   const { Node, Message, Publication, Channel, Item } = context.entities
   const { sender, userId, schema, nodeId, messages } = event.params
 
-  console.log(`Node $${nodeId} Registered`)
-  const validUser = true
+  console.log(`Node ${nodeId} Registered`)
+  const validUser = true // Placeholder for user validation logic
 
   if (validUser) {
     await Node.create({
@@ -37,15 +38,14 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
         await Message.create({
           id: `${nodeRegistryChain}/${event.transaction.to}/${event.transaction.hash}/${event.log.logIndex}/${i}`,
           data: {
-            sender: sender,
-            userId: userId,
-            node: `${nodeRegistryChain}/${event.transaction.to}/${nodeId}`,
             nodeId: nodeId,
+            node: `${nodeRegistryChain}/${event.transaction.to}/${nodeId}`,
+            sender: sender,
             msgType: decodedMsg.msgType,
             msgBody: decodedMsg.msgBody,
+            userId: userId,
           },
         })
-
         if (decodedMsg.msgType === BigInt(101)) {
           const decoded = decodeAccess101({ msgBody: decodedMsg.msgBody })
           if (decoded) {
@@ -62,62 +62,84 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
         } else if (decodedMsg.msgType === BigInt(201)) {
           const decoded = decodePublication201({ msgBody: decodedMsg.msgBody })
           if (decoded) {
-            await Publication.create({
-              id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
-              data: {
-                uri: decoded.uri,
-              },
-            })
+            const ipfsData = await fetchIPFSData(decoded.uri)
+            if (ipfsData) {
+              await Publication.create({
+                id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
+                data: {
+                  uri: decoded.uri,
+                  name: ipfsData.name,
+                  // creator: '', 
+                  description: ipfsData.description,
+                  thumbnail: ipfsData.image,
+                  // fullRes: ipfsData.image, // Assuming the full resolution image is the same as thumbnail
+                  // animationUrl: ipfsData.image, // Assuming the animation URL, if any, is the same as the image URL
+                  createdDate: new Date().toISOString(), // Using current date-time as creation date
+                  // contentType: '', // Assuming content type, adjust as needed
+                },
+              })
+            }
           }
-        } else if (decodedMsg.msgType == BigInt(301)) {
+        } else if (decodedMsg.msgType === BigInt(301)) {
           const decoded = decodeChannel301({ msgBody: decodedMsg.msgBody })
           if (decoded) {
-            await Channel.upsert({
-              id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
-              create: {
-                hashId: generateChannelHash({
-                  chainId: nodeRegistryChain,
-                  nodeRegistryAddress: event.transaction.to as Hex,
-                  schema: schema,
-                  nodeId: nodeId,
-                }),
-                uri: decoded.uri,
-              },
-              update: {
-                uri: decoded.uri,
-              },
-            })
-          }
-        } else if (decodedMsg.msgType == BigInt(302)) {
-          const decoded = decodeChannel302({ msgBody: decodedMsg.msgBody })
-          if (decoded) {
-            await Channel.upsert({
-              id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
-              create: {
-                hashId: generateChannelHash({
-                  chainId: nodeRegistryChain,
-                  nodeRegistryAddress: event.transaction.to as Hex,
-                  schema: schema,
-                  nodeId: nodeId,
-                }),
-              },
-              update: {},
-            })
-
-            await Item.create({
-              id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}/${event.transaction.hash}/${event.log.logIndex}`,
-              data: {
-                chainId: decoded.chainId,
-                targetId: decoded.id,
-                target: decoded.pointer,
-                userId: userId,
-                hasId: decoded.hasId,
-                channel: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
-              },
-            })
+            const ipfsData = await fetchIPFSData(decoded.uri)
+            if (ipfsData) {
+              await Channel.upsert({
+                id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
+                create: {
+                  hashId: generateChannelHash({
+                    chainId: nodeRegistryChain,
+                    nodeRegistryAddress: event.transaction.to as Hex,
+                    schema: schema,
+                    nodeId: nodeId,
+                  }),
+                  uri: decoded.uri,
+                  name: ipfsData.name,
+                  description: ipfsData.description,
+                  coverImageUri: ipfsData.image,
+                  createdAt: BigInt(Date.now()), 
+                },
+                update: {
+                  uri: decoded.uri,
+                  name: ipfsData.name,
+                  description: ipfsData.description,
+                  coverImageUri: ipfsData.image,
+                  createdAt: BigInt(Date.now()),
+                },
+              })
+            }
+          } else if (decodedMsg.msgType == BigInt(302)) {
+            const decoded = decodeChannel302({ msgBody: decodedMsg.msgBody })
+            if (decoded) {
+              await Channel.upsert({
+                id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
+                create: {
+                  hashId: generateChannelHash({
+                    chainId: nodeRegistryChain,
+                    nodeRegistryAddress: event.transaction.to as Hex,
+                    schema: schema,
+                    nodeId: nodeId,
+                  }),
+                },
+                update: {},
+              })
+  
+              await Item.create({
+                id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}/${event.transaction.hash}/${event.log.logIndex}`,
+                data: {
+                  chainId: decoded.chainId,
+                  targetId: decoded.id,
+                  target: decoded.pointer,
+                  userId: userId,
+                  hasId: decoded.hasId,
+                  channel: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
+                },
+              })
+            }
           }
         }
       }
     }
   }
-})
+  })
