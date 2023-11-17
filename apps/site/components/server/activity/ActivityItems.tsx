@@ -33,7 +33,7 @@ export async function ActivityItems({
               Added to
             </Typography>
           </TableHead>
-          <TableHead className="text-right">
+          <TableHead className="text-right w-[200px]">
             <Typography variant="small" className="text-secondary-foreground">
               Date added
             </Typography>

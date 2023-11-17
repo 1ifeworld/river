@@ -8,9 +8,9 @@ const cardVariants = cva(
   {
     variants: {
       size: {
-        default: 'md:min-h-[224px] md:min-w-[224px] rounded',
-        sm: 'min-h-[160px] min-w-[160px] rounded',
-        lg: 'min-h-[248px] min-w-[248px] rounded-[7px]',
+        default: 'md:min-h-[224px] md:min-w-[224px]',
+        sm: 'min-h-[160px] min-w-[160px]',
+        lg: 'min-h-[248px] min-w-[248px]',
         icon: 'min-h-[48px] min-w-[48px] rounded-[1.5px]',
       },
     },

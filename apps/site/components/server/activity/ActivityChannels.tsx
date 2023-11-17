@@ -33,7 +33,7 @@ export async function ActivityChannels({
               Creator
             </Typography>
           </TableHead>
-          <TableHead className="text-right">
+          <TableHead className="text-right w-[200px]">
             <Typography variant="small" className="text-secondary-foreground">
               Date modified
             </Typography>

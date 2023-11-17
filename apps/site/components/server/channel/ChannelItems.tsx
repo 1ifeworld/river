@@ -1,36 +1,39 @@
-import { Typography } from '@/design-system'
 import {
+  Typography,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
-} from '@/design-system'
+} from "@/design-system";
+import { ChannelWithHashQuery, Item } from "@/gql";
 
 // This is a placeholder component to represent a cover image
 const WhiteBox = () => {
   return (
     <div className="border-muted-foreground border-[.2px] bg-white w-10 h-10" />
-  )
-}
+  );
+};
 
-export async function ChannelItems({
-  user,
-}: {
-  /* biome-ignore lint: */
-  user: any
-}) {
+export async function ChannelItems({ channel }: { channel: ChannelWithHashQuery }) {
   return (
     <Table className="w-full">
       <TableHeader>
         <TableRow>
           <TableHead>
-            <Typography variant="h1">Recent activity</Typography>
+            <Typography variant="small" className="text-secondary-foreground">
+              #
+            </Typography>
+          </TableHead>
+          <TableHead>
+            <Typography variant="small" className="text-secondary-foreground">
+              Item
+            </Typography>
           </TableHead>
           <TableHead className="text-right">
             <Typography variant="small" className="text-secondary-foreground">
-              Added to
+              Type
             </Typography>
           </TableHead>
           <TableHead className="text-right">
@@ -40,23 +43,25 @@ export async function ChannelItems({
           </TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody>
-        {/* biome-ignore lint: */}
-        {user.items.map((item: any) => (
-          <TableRow key={item.id}>
+      {/* <TableBody>        
+        {channel.items.map((item: Item, index: number) => (
+          <TableRow key={index}>
+            TableCell className="flex gap-2 items-center">
+              <Typography>{index.toString()}</Typography>
+            </TableCell>
             <TableCell className="flex gap-2 items-center">
               <WhiteBox />
-              <Typography>{item.name}</Typography>
+              <Typography>{item.target}</Typography>
             </TableCell>
             <TableCell className="text-right">
-              <Typography>{item.creator}</Typography>
+              <Typography>{item.target}</Typography>
             </TableCell>
             <TableCell className="text-right">
-              <Typography>{item.added}</Typography>
+              <Typography>{item.target}</Typography>
             </TableCell>
           </TableRow>
         ))}
-      </TableBody>
+      </TableBody> */}
     </Table>
-  )
+  );
 }
