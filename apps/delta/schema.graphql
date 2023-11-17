@@ -69,12 +69,12 @@ type Publication @entity {
   name: String
   creator: String
   description: String
-  thumbnail: String
-  fullRes: String
-  animationUrl: String
+  thumbnailURL: String
+  fullResURL: String
+  animationURL: String
   createdDate: String
   contentType: String
-  createdBy: String
+  createdByAddress: String
 
   # nodeId: BigInt
   # node: Node! 
@@ -88,9 +88,9 @@ type Channel @entity {
   items: [Item!]! @derivedFrom(field: "channel")
   name: String,
   description: String,
-  coverImageUri: String
+  coverImageURI: String
   createdAt: BigInt
-  createdBy: String
+  createdByID: String
   # metadata: Metadata FUTURE
   # nodeId: BigInt
   # node: Node!

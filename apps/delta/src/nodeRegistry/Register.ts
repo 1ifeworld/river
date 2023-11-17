@@ -61,55 +61,55 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
           }
         } else if (decodedMsg.msgType === BigInt(201)) {
           const decoded = decodePublication201({ msgBody: decodedMsg.msgBody })
+          let ipfsData;
           if (decoded) {
-            const ipfsData = await fetchIPFSData(decoded.uri)
-            if (ipfsData) {
-              await Publication.create({
-                id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
-                data: {
-                  uri: decoded.uri,
-                  name: ipfsData.name,
-                  // creator: '', 
-                  description: ipfsData.description,
-                  thumbnail: ipfsData.image,
-                  // fullRes: ipfsData.image, // Assuming the full resolution image is the same as thumbnail
-                  // animationUrl: ipfsData.image, // Assuming the animation URL, if any, is the same as the image URL
-                  createdDate: new Date().toISOString(), // Using current date-time as creation date
-                  // contentType: '', // Assuming content type, adjust as needed
-                },
-              })
-            }
+            ipfsData = await fetchIPFSData(decoded.uri);
           }
+            // some fields were removed please check publication entity for full schema
+            await Publication.upsert({
+            id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
+            create: {
+              uri: decoded ? decoded.uri : '',
+              name: ipfsData ? ipfsData.name : '',
+              description: ipfsData ? ipfsData.description : '',
+              thumbnailURL: ipfsData ? ipfsData.image : '',
+              createdDate: new Date().toISOString(),
+            },
+            update: {
+              uri: decoded ? decoded.uri : '',
+              name: ipfsData ? ipfsData.name : '',
+              description: ipfsData ? ipfsData.description : '',
+              thumbnailURL: ipfsData ? ipfsData.image : '',
+            },
+          })
         } else if (decodedMsg.msgType === BigInt(301)) {
-          const decoded = decodeChannel301({ msgBody: decodedMsg.msgBody })
+          const decoded = decodeChannel301({ msgBody: decodedMsg.msgBody });
           if (decoded) {
-            const ipfsData = await fetchIPFSData(decoded.uri)
-            if (ipfsData) {
+              const ipfsData = await fetchIPFSData(decoded.uri);
               await Channel.upsert({
-                id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
-                create: {
-                  hashId: generateChannelHash({
-                    chainId: nodeRegistryChain,
-                    nodeRegistryAddress: event.transaction.to as Hex,
-                    schema: schema,
-                    nodeId: nodeId,
-                  }),
-                  uri: decoded.uri,
-                  name: ipfsData.name,
-                  description: ipfsData.description,
-                  coverImageUri: ipfsData.image,
-                  createdAt: BigInt(Date.now()), 
-                },
-                update: {
-                  uri: decoded.uri,
-                  name: ipfsData.name,
-                  description: ipfsData.description,
-                  coverImageUri: ipfsData.image,
-                  createdAt: BigInt(Date.now()),
-                },
+                  id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
+                  create: {
+                      hashId: generateChannelHash({
+                          chainId: nodeRegistryChain,
+                          nodeRegistryAddress: event.transaction.to as Hex,
+                          schema: schema,
+                          nodeId: nodeId,
+                      }),
+                      uri: decoded.uri,
+                      name: ipfsData ? ipfsData.name : '',
+                      description: ipfsData ? ipfsData.description : '',
+                      coverImageURI: ipfsData ? ipfsData.image : '',
+                      createdAt: BigInt(Date.now()), 
+                  },
+                  update: {
+                      uri: decoded.uri,
+                      name: ipfsData ? ipfsData.name : '',
+                      description: ipfsData ? ipfsData.description : '',
+                      coverImageURI: ipfsData ? ipfsData.image : '',
+                      createdAt: BigInt(Date.now()),
+                  },
               })
-            }
-          } else if (decodedMsg.msgType == BigInt(302)) {
+      } else if (decodedMsg.msgType === BigInt(302)) {
             const decoded = decodeChannel302({ msgBody: decodedMsg.msgBody })
             if (decoded) {
               await Channel.upsert({
@@ -128,12 +128,14 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
               await Item.create({
                 id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}/${event.transaction.hash}/${event.log.logIndex}`,
                 data: {
+                  // pointer 
                   chainId: decoded.chainId,
                   targetId: decoded.id,
                   target: decoded.pointer,
-                  userId: userId,
                   hasId: decoded.hasId,
                   channel: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
+                  // item 
+                  userId: userId,
                 },
               })
             }
