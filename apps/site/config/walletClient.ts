@@ -6,9 +6,6 @@ import { opGoerliViem } from '@/constants'
 
 const transport = http(
   `https://opt-goerli.g.alchemy.com/v2/${process.env.ALCHEMY_KEY}`,
-  {
-    batch: true,
-  },
 )
 
 export const operator = privateKeyToAccount(process.env.PRIVATE_KEY as Hash)
