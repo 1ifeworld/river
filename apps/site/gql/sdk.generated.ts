@@ -195,6 +195,7 @@ export type Item = {
   __typename?: 'Item';
   chainId: Scalars['BigInt']['output'];
   channel?: Maybe<Channel>;
+  createdAt?: Maybe<Scalars['BigInt']['output']>;
   hasId: Scalars['Boolean']['output'];
   id: Scalars['String']['output'];
   target: Scalars['String']['output'];
@@ -221,6 +222,14 @@ export type ItemFilter = {
   channel_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   channel_not_starts_with?: InputMaybe<Scalars['String']['input']>;
   channel_starts_with?: InputMaybe<Scalars['String']['input']>;
+  createdAt?: InputMaybe<Scalars['BigInt']['input']>;
+  createdAt_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  createdAt_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  createdAt_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  createdAt_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  createdAt_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  createdAt_not?: InputMaybe<Scalars['BigInt']['input']>;
+  createdAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
   hasId?: InputMaybe<Scalars['Boolean']['input']>;
   hasId_in?: InputMaybe<Array<InputMaybe<Scalars['Boolean']['input']>>>;
   hasId_not?: InputMaybe<Scalars['Boolean']['input']>;
@@ -422,6 +431,7 @@ export type NodeFilter = {
 export type Publication = {
   __typename?: 'Publication';
   createdAt?: Maybe<Scalars['BigInt']['output']>;
+  createdByID?: Maybe<Scalars['BigInt']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
   name?: Maybe<Scalars['String']['output']>;
@@ -438,6 +448,14 @@ export type PublicationFilter = {
   createdAt_lte?: InputMaybe<Scalars['BigInt']['input']>;
   createdAt_not?: InputMaybe<Scalars['BigInt']['input']>;
   createdAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  createdByID?: InputMaybe<Scalars['BigInt']['input']>;
+  createdByID_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  createdByID_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  createdByID_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  createdByID_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  createdByID_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  createdByID_not?: InputMaybe<Scalars['BigInt']['input']>;
+  createdByID_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
   description?: InputMaybe<Scalars['String']['input']>;
   description_contains?: InputMaybe<Scalars['String']['input']>;
   description_ends_with?: InputMaybe<Scalars['String']['input']>;
@@ -620,7 +638,7 @@ export type AllActivityQueryVariables = Exact<{
 }>;
 
 
-export type AllActivityQuery = { __typename?: 'Query', nodes: Array<{ __typename?: 'Node', nodeMembers: Array<any>, nodeAdmin: Array<any> }>, channels: Array<{ __typename?: 'Channel', uri?: string | null, coverImageURI?: string | null, createdAt?: any | null, createdByID?: any | null, description?: string | null, items: Array<{ __typename?: 'Item', chainId: any, id: string, target: string, targetId: any, userId?: any | null, hasId: boolean }> }>, publications: Array<{ __typename?: 'Publication', name?: string | null, description?: string | null, thumbnailURL?: string | null }> };
+export type AllActivityQuery = { __typename?: 'Query', nodes: Array<{ __typename?: 'Node', nodeMembers: Array<any>, nodeAdmin: Array<any> }>, channels: Array<{ __typename?: 'Channel', uri?: string | null, coverImageURI?: string | null, createdAt?: any | null, createdByID?: any | null, description?: string | null, items: Array<{ __typename?: 'Item', chainId: any, id: string, target: string, targetId: any, userId?: any | null, hasId: boolean, createdAt?: any | null }> }>, publications: Array<{ __typename?: 'Publication', name?: string | null, description?: string | null, createdAt?: any | null, createdByID?: any | null, uri: string }> };
 
 export type AllChannelsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -684,12 +702,15 @@ export const AllActivityDocument = gql`
       targetId
       userId
       hasId
+      createdAt
     }
   }
   publications {
     name
     description
-    thumbnailURL
+    createdAt
+    createdByID
+    uri
   }
 }
     `;

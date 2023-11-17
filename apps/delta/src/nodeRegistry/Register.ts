@@ -74,6 +74,8 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
               description: ipfsData ? ipfsData.description : '',
               thumbnailURL: ipfsData ? ipfsData.image : '',
               createdAt: event.block.timestamp,
+              createdByID: userId,
+
             },
             update: {
               uri: decoded ? decoded.uri : '',
@@ -135,6 +137,7 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
                   targetId: decoded.id,
                   target: decoded.pointer,
                   hasId: decoded.hasId,
+                  createdAt: event.block.timestamp,
                   channel: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
                   // item 
                   userId: userId,

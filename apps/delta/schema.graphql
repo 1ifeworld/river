@@ -70,6 +70,8 @@ type Publication @entity {
   # creator: String
   description: String
   thumbnailURL: String
+  createdByID: BigInt
+
   # fullResURL: String
   # animationURL: String
   createdAt: BigInt
@@ -124,6 +126,7 @@ type Item @entity {
   userId: BigInt
   chainId: BigInt!
   targetId: BigInt!
+  createdAt: BigInt
   target: String!
   hasId: Boolean!
   channel: Channel!
