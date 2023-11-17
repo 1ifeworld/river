@@ -1,17 +1,19 @@
 import { Web3Storage } from 'web3.storage'
 
-export async function uploadBlob({ dataToUpload }: { dataToUpload: string }) {
+interface UploadBlobProps {
+  name: string
+  description: string
+  coverImageUri: string
+}
+
+export async function uploadBlob({
+  dataToUpload,
+}: { dataToUpload: UploadBlobProps }) {
   const client = new Web3Storage({
     token: process.env.NEXT_PUBLIC_WEB3STORAGE_TOKEN as string,
   })
 
-  const jsonObject = {
-    name: 'name',
-    description: 'description',
-    coverImageUri: 'coverImageUri',
-  }
-
-  const blobData = new Blob([JSON.stringify(jsonObject)])
+  const blobData = new Blob([JSON.stringify(dataToUpload)])
 
   // @ts-ignore
   const cid = await client.put([blobData], { wrapWithDirectory: false })
