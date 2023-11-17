@@ -95,7 +95,7 @@ export const ChannelDialog = React.forwardRef<
                     channelUri: channelUri,
                   })
 
-                  // TODO: Close the dialog after successfully completing the action
+                  onOpenChange(false)
                 }}
                 className="w-2/3 space-y-6"
               >
