@@ -1,0 +1,29 @@
+query allActivity($userId: BigInt!) {
+  nodes(where: {userId_in: [$userId], nodeMembers_has: $userId, nodeAdmin_has: $userId}) {
+    nodeMembers
+    nodeAdmin
+  }
+  channels {
+    uri
+    coverImageURI
+    createdAt
+    createdByID
+    description
+    items {
+      chainId
+      id
+      target
+      targetId
+      userId
+      hasId
+      createdAt
+    }
+  }
+  publications {
+    name
+    description
+    createdAt
+    createdByID
+    uri
+  }
+}
