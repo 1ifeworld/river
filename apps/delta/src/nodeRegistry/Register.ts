@@ -73,7 +73,7 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
               name: ipfsData ? ipfsData.name : '',
               description: ipfsData ? ipfsData.description : '',
               thumbnailURL: ipfsData ? ipfsData.image : '',
-              createdDate: event.block.timestamp.toString(),
+              createdDate: event.block.timestamp,
             },
             update: {
               uri: decoded ? decoded.uri : '',
@@ -99,7 +99,7 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
                       name: ipfsData ? ipfsData.name : '',
                       description: ipfsData ? ipfsData.description : '',
                       coverImageURI: ipfsData ? ipfsData.image : '',
-                      createdAt: event.block.timestamp.toString(), 
+                      createdAt: event.block.timestamp, 
                       createdByID: userId,
 
                   },
@@ -108,7 +108,7 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
                       name: ipfsData ? ipfsData.name : '',
                       description: ipfsData ? ipfsData.description : '',
                       coverImageURI: ipfsData ? ipfsData.image : '',
-                      createdAt: event.block.timestamp.toString(), 
+                      createdAt: event.block.timestamp 
                   },
               })
       } else if (decodedMsg.msgType === BigInt(302)) {

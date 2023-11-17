@@ -72,7 +72,7 @@ type Publication @entity {
   thumbnailURL: String
   # fullResURL: String
   # animationURL: String
-  createdDate: String
+  createdDate: BigInt
   # contentType: String
   # createdByAddress: String
 
@@ -89,8 +89,8 @@ type Channel @entity {
   name: String,
   description: String,
   coverImageURI: String
-  createdAt: String
-  createdByID:  
+  createdAt: BigInt
+  createdByID: BigInt
   # metadata: Metadata FUTURE
   # nodeId: BigInt
   # node: Node!
