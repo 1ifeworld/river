@@ -8,8 +8,7 @@ import {
   encodeChannel301,
   nodeRegistryABI,
 } from 'scrypt'
-import { publicClient } from '@/config/publicClient'
-import { walletClient } from '@/config/walletClient'
+import { walletClient, serverSidePublicClient } from '@/config/walletClient'
 
 interface CreateChannelProps {
   userId: bigint
@@ -28,7 +27,7 @@ export async function createChannel({
 
   const channelUriMessage = encodeChannel301({ channelUri })
 
-  const { request } = await publicClient.simulateContract({
+  const { request } = await serverSidePublicClient.simulateContract({
     address: addresses.nodeRegistry.opGoerli,
     abi: nodeRegistryABI,
     functionName: 'register',
