@@ -73,7 +73,7 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
               name: ipfsData ? ipfsData.name : '',
               description: ipfsData ? ipfsData.description : '',
               thumbnailURL: ipfsData ? ipfsData.image : '',
-              createdDate: event.block.timestamp,
+              createdAt: event.block.timestamp,
             },
             update: {
               uri: decoded ? decoded.uri : '',

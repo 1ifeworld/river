@@ -72,7 +72,7 @@ type Publication @entity {
   thumbnailURL: String
   # fullResURL: String
   # animationURL: String
-  createdDate: BigInt
+  createdAt: BigInt
   # contentType: String
   # createdByAddress: String
 
