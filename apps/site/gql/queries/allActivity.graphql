@@ -1,4 +1,8 @@
-query allActivity {
+query allActivity($userId: BigInt!) {
+  nodes(where: {userId_in: [$userId], nodeMembers_has: $userId, nodeAdmin_has: $userId}) {
+    nodeMembers
+    nodeAdmin
+  }
   channels {
     uri
     coverImageURI
@@ -16,9 +20,7 @@ query allActivity {
   }
   publications {
     name
-    id
-    thumbnailURL
     description
-    createdAt
+    thumbnailURL
   }
 }

@@ -1,12 +1,19 @@
-import sdk from '../client'
+import sdk from '../client';
 
-export async function getAllActivity() {
-  const response = await sdk.allActivity({})
+export async function getAllActivity({ userId }: { userId: bigint }) {
 
-  const { channels, publications } = response
 
-  return {
-    channels: channels ?? [],
-    publications: publications ?? [],
-  }
+
+    const response = await sdk.allActivity({
+        userId: userId
+    })
+
+    const { channels, publications } = response
+
+
+    return {
+      channels: channels ?? [],
+      publications: publications ?? [],
+    }
+
 }
