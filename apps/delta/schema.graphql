@@ -66,6 +66,16 @@ type Message @entity {
 type Publication @entity {
   id: String!
   uri: String!
+  name: String
+  # creator: String
+  description: String
+  thumbnailURL: String
+  # fullResURL: String
+  # animationURL: String
+  createdAt: BigInt
+  # contentType: String
+  # createdByAddress: String
+
   # nodeId: BigInt
   # node: Node! 
 }
@@ -76,9 +86,38 @@ type Channel @entity {
   hashId: String!
   uri: String
   items: [Item!]! @derivedFrom(field: "channel")
+  name: String,
+  description: String,
+  coverImageURI: String
+  createdAt: BigInt
+  createdByID: BigInt
+  # metadata: Metadata FUTURE
   # nodeId: BigInt
   # node: Node!
 }
+
+
+# type Metadata @entity {
+#   id: String # this would be based off the ipfs cid, so updating the metadata for something requires updating the cid
+#   uri: String, 
+#   name: String,
+#   desecription: String,
+#   imageUri: String,
+#   animtationUri: String,
+#   thumbnailUri: String
+#   ###
+#   ###
+#   ###
+#   ###
+#   ###
+# }
+
+# type ChannelMetadata @entity {
+#   name
+#   description 
+#   uri 
+#   type 
+# }
 
 type Item @entity {
   id: String!
