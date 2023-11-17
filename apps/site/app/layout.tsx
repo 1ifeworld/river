@@ -23,14 +23,7 @@ export default function RootLayout({
           <div className="p-4 px-5">
             <Header />
             {children}
-            <Toaster
-              position="bottom-center"
-              toastOptions={{
-                style: {
-                  boxShadow: 'none',
-                },
-              }}
-            />
+            <Toaster position="bottom-center" />
           </div>
           <Analytics />
         </Providers>
