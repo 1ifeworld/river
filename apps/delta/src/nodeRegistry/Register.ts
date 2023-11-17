@@ -88,6 +88,7 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
           const decoded = decodeChannel301({ msgBody: decodedMsg.msgBody });
           if (decoded) {
               const ipfsData = await fetchIPFSData(decoded.uri);
+              console.log("DATA", ipfsData?.name)
               await Channel.upsert({
                   id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
                   create: {
