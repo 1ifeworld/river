@@ -67,14 +67,14 @@ type Publication @entity {
   id: String!
   uri: String!
   name: String
-  creator: String
+  # creator: String
   description: String
   thumbnailURL: String
-  fullResURL: String
-  animationURL: String
+  # fullResURL: String
+  # animationURL: String
   createdDate: String
-  contentType: String
-  createdByAddress: String
+  # contentType: String
+  # createdByAddress: String
 
   # nodeId: BigInt
   # node: Node! 
@@ -89,7 +89,7 @@ type Channel @entity {
   name: String,
   description: String,
   coverImageURI: String
-  createdAt: BigInt
+  createdAt: String
   createdByID: String
   # metadata: Metadata FUTURE
   # nodeId: BigInt
