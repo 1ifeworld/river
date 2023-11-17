@@ -26,8 +26,6 @@ export default function RootLayout({
             <Toaster
               position="bottom-center"
               toastOptions={{
-                className:
-                  'bg-background border-secondary-foreground rounded-none shadow-none',
                 style: {
                   boxShadow: 'none',
                 },
