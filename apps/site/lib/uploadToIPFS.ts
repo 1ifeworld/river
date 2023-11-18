@@ -7,6 +7,8 @@ export async function uploadToIPFS({
     token: process.env.NEXT_PUBLIC_WEB3STORAGE_TOKEN as string,
   })
   const cid = await client.put(filesToUpload, { wrapWithDirectory: false })
-  console.log('Content identifier:', cid)
+
+  console.log('Link to uploaded data:', `https://ipfs.io/ipfs/${cid}`)
+
   return cid
 }
