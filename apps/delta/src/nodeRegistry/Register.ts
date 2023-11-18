@@ -30,8 +30,6 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
         userId: userId,
         schema: schema,
         nodeId: nodeId,
-        nodeAdmin: [],
-        nodeMembers: [],
       },
     })
 
@@ -55,8 +53,6 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
             await Node.update({
               id: `${nodeRegistryChain}/${event.transaction.to}/${nodeId}`,
               data: {
-                nodeAdmin: decoded?.admins as bigint[],
-                nodeMembers: decoded?.members as bigint[],
               },
             })
           } else {

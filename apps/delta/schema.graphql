@@ -37,6 +37,14 @@ type Node @entity {
   nodeId: BigInt!
   schema: String!
   messages: [Message!]! @derivedFrom(field: "node")
+  AccessControl: AccessControl
+}
+
+type AccessControl @entity {
+  id: String!
+  node: Node!
+  nodeId: BigInt!
+  channel: Channel! 
   nodeAdmin: [BigInt!]!
   nodeMembers: [BigInt!]!
 }
@@ -70,6 +78,7 @@ type Channel @entity {
   createdAt: BigInt
   createdByID: BigInt
   nodeId: BigInt
+  accessControl: AccessControl
 }
 
 
