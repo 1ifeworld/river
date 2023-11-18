@@ -40,6 +40,8 @@ type Node @entity {
   # accessControl: AccessControl
   nodeAdmin: [BigInt!]!
   nodeMembers: [BigInt!]!
+  channels: [Channel!]! @derivedFrom(field: "nodeId")
+
   # channel: Channel
   # publication: Publication
 }
@@ -85,6 +87,8 @@ type Channel @entity {
   items: [Item!]! @derivedFrom(field: "channel")
   createdAt: BigInt
   createdByID: BigInt
+  nodeId: BigInt! 
+
   # metadata: Metadata FUTURE
   # nodeId: BigInt
   # node: Node!

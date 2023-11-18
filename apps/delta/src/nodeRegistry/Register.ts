@@ -123,6 +123,7 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
                 uri: decoded.uri,
                 createdAt: event.block.timestamp,
                 createdByID: userId,
+                nodeId: nodeId,
               },
               update: {
                 uri: decoded.uri,
@@ -141,6 +142,7 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
                     schema: schema,
                     nodeId: nodeId,
                   }),
+                  nodeId: nodeId
                 },
                 update: {},
               })
