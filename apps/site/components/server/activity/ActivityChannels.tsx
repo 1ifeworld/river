@@ -55,8 +55,8 @@ export async function ActivityChannels({
               <Typography>{channel.modified}</Typography>
             </TableCell>
             <TableCell className="text-right w-[100px]">
-              <Typography>{"..."}</Typography>
-            </TableCell>             
+              <Typography>{'...'}</Typography>
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>

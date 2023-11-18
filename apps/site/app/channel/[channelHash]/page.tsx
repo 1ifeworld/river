@@ -7,7 +7,9 @@ export default async function Channel({
 }: {
   params: { channelHash: string }
 }) {
-  const channel: ChannelWithHashQuery = await getChannel({ hashId: params.channelHash })
+  const channel: ChannelWithHashQuery = await getChannel({
+    hashId: params.channelHash,
+  })
 
   if (channel.channels.length == 0) {
     return (
@@ -16,8 +18,7 @@ export default async function Channel({
   }
 
   // channel banner
-  // name, desc, imageUri, createdAt, items, nodeAdmins, nodeMembers, 
-
+  // name, desc, imageUri, createdAt, items, nodeAdmins, nodeMembers,
 
   return (
     <Stack className="pt-[72px] gap-14 h-full">

@@ -1,10 +1,9 @@
 import sdk from '../client'
-import { channelSchema } from 'scrypt'
 
 export async function getChannels() {
-  const channels = await sdk.Channel()
+  const channels = await sdk.allChannels()
 
   return {
-    channels: channels,
+    channels: channels.channels,
   }
 }

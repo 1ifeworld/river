@@ -1,7 +1,7 @@
-import * as React from 'react';
-import { cva, type VariantProps } from 'class-variance-authority';
+import * as React from 'react'
+import { cva, type VariantProps } from 'class-variance-authority'
 
-import { cn } from '../utils';
+import { cn } from '../utils'
 
 const cardVariants = cva(
   'aspect-square overflow-hidden object-cover outline outline-[0.5px] outline-base-border',
@@ -17,13 +17,13 @@ const cardVariants = cva(
     defaultVariants: {
       size: 'default',
     },
-  }
-);
+  },
+)
 
 interface CardProps
   extends React.PropsWithChildren,
     VariantProps<typeof cardVariants> {
-  className?: string;
+  className?: string
 }
 
 function Card(props: CardProps) {
@@ -31,14 +31,14 @@ function Card(props: CardProps) {
     <div
       className={cn(
         cardVariants({ size: props.size ?? 'default' }),
-        props.className
+        props.className,
       )}
     >
       {props.children}
     </div>
-  );
+  )
 }
 
-Card.displayName = 'Card';
+Card.displayName = 'Card'
 
-export { Card, type CardProps };
+export { Card, type CardProps }
