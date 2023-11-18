@@ -9,14 +9,13 @@ import {
   nodeRegistryABI,
 } from 'scrypt'
 import { publicClient } from '@/config/publicClient'
-import { walletClient } from '@/config/walletClient'
+import { walletClient, serverSidePublicClient } from '@/config/walletClient'
 
 interface CreatePublicationProps {
   userId: bigint
   adminIds: bigint[]
   memberIds: bigint[]
   pubUri: string
-  // formData?: FormData
 }
 
 export async function createPublication({
@@ -24,13 +23,12 @@ export async function createPublication({
   adminIds,
   memberIds,
   pubUri,
-  // formData
 }: CreatePublicationProps) {
   const accessControlMessage = encodeAccess101({ adminIds, memberIds })
 
   const publicationUriMessage = encodePublication201({ pubUri })
 
-  const { request } = await publicClient.simulateContract({
+  const { request } = await serverSidePublicClient.simulateContract({
     address: addresses.nodeRegistry.opGoerli,
     abi: nodeRegistryABI,
     functionName: 'register',
@@ -44,7 +42,7 @@ export async function createPublication({
     ],
   })
 
-  const registerPublicationHash = await walletClient.writeContract(request)
+  const registerHash = await walletClient.writeContract(request)
 
-  console.log('Register publication hash:', registerPublicationHash)
+  console.log('Register hash:', registerHash)
 }
