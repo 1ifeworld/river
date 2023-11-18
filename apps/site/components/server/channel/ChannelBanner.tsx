@@ -7,7 +7,7 @@ import { ipfsToHttps } from "@/lib";
 export async function ChannelBanner({ channel }: { channel: ChannelWithHashQuery }) {
 
   return (
-    <Flex className="items-end w-full h-full border-2 border-red-500 gap-x-[22px]">
+    <Flex className="items-end w-full h-full gap-x-[22px]">
       {/* column 1 */}
       <Card className="relative w-[218px] h-[218px] outline-none border-none">
         <Image

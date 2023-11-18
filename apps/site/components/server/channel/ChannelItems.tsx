@@ -6,6 +6,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  Stack,
 } from "@/design-system";
 import { ChannelWithHashQuery, Item } from "@/gql";
 
@@ -21,7 +22,7 @@ export async function ChannelItems({ channel }: { channel: ChannelWithHashQuery 
     <Table className="w-full">
       <TableHeader>
         <TableRow>
-          <TableHead>
+          <TableHead className="w-[10px]">
             <Typography variant="small" className="text-secondary-foreground">
               #
             </Typography>
@@ -43,10 +44,31 @@ export async function ChannelItems({ channel }: { channel: ChannelWithHashQuery 
           </TableHead>
         </TableRow>
       </TableHeader>
-      {/* <TableBody>        
-        {channel.items.map((item: Item, index: number) => (
+      <TableBody>        
+          <TableRow key={"1"}>
+            <TableCell className="text-right text-primary-foreground">
+              <Typography>{"1"}</Typography>
+            </TableCell>
+            <TableCell className="flex gap-4 items-center text-primary-foreground">
+              <WhiteBox />
+              <Stack className="">
+                <Typography className="text-primary-foreground">{"name"}</Typography>
+                <Typography className="text-secondary-foreground">{"creator"}</Typography>
+              </Stack>
+            </TableCell>
+            <TableCell className="text-right text-primary-foreground">
+              <Typography>{"PNG image"}</Typography>
+            </TableCell>
+            <TableCell className="text-right text-primary-foreground">
+              <Typography>{"2 days ago"}</Typography>
+            </TableCell> 
+            <TableCell className="text-right w-[100px] text-primary-foreground">
+              <Typography>{"..."}</Typography>
+            </TableCell> 
+          </TableRow>
+        {/* {channel.channels[0].items.map((item: any, index: number) => (
           <TableRow key={index}>
-            TableCell className="flex gap-2 items-center">
+            <TableCell className="flex gap-2 items-center">
               <Typography>{index.toString()}</Typography>
             </TableCell>
             <TableCell className="flex gap-2 items-center">
@@ -60,8 +82,8 @@ export async function ChannelItems({ channel }: { channel: ChannelWithHashQuery 
               <Typography>{item.target}</Typography>
             </TableCell>
           </TableRow>
-        ))}
-      </TableBody> */}
+        ))} */}
+      </TableBody>
     </Table>
   );
 }

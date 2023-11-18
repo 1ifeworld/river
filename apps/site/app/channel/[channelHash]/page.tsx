@@ -20,7 +20,7 @@ export default async function Channel({
 
 
   return (
-    <Stack className="pt-[72px] gap-14 border-2 h-full">
+    <Stack className="pt-[72px] gap-14 h-full">
       <ChannelBanner channel={channel} />
       <ChannelItems channel={channel} />
     </Stack>

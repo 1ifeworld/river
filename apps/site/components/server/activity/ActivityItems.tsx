@@ -54,6 +54,9 @@ export async function ActivityItems({
             <TableCell className="text-right">
               <Typography>{item.added}</Typography>
             </TableCell>
+            <TableCell className="text-right w-[100px]">
+              <Typography>{"..."}</Typography>
+            </TableCell>             
           </TableRow>
         ))}
       </TableBody>
