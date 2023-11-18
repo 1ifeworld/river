@@ -1,4 +1,4 @@
-import { getChannel, type Channel, ChannelWithHashQuery } from '@/gql'
+import { getChannel} from '@/gql'
 import { Stack } from '@/design-system'
 import { ChannelBanner, ChannelItems } from '@/server'
 
@@ -7,11 +7,11 @@ export default async function Channel({
 }: {
   params: { channelHash: string }
 }) {
-  const channel: ChannelWithHashQuery = await getChannel({
+  const { channel } = await getChannel({
     hashId: params.channelHash,
   })
 
-  if (channel.channels.length == 0) {
+  if (!channel) {
     return (
       <Stack className="pt-[72px] gap-14">This is not a valid channel :/</Stack>
     )

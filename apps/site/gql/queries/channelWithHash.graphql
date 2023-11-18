@@ -8,12 +8,14 @@ query ChannelWithHash($hashId: String!) {
       description
       name
     }
+    nodeId
     items {
       chainId
       id
       target
       targetId
       userId
+      hasId
       createdAt
     }
   }
