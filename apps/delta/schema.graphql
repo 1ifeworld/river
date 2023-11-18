@@ -37,13 +37,8 @@ type Node @entity {
   nodeId: BigInt!
   schema: String!
   messages: [Message!]! @derivedFrom(field: "node")
-  # accessControl: AccessControl
   nodeAdmin: [BigInt!]!
   nodeMembers: [BigInt!]!
-  channels: [Channel!]! @derivedFrom(field: "nodeId")
-
-  # channel: Channel
-  # publication: Publication
 }
 
 type Message @entity {
@@ -54,29 +49,17 @@ type Message @entity {
   msgType: BigInt
   msgBody: Bytes
   userId: BigInt
-  # user: User! 
 }
 
 
-# type AccessControl @entity {
-#   id: String!
-#   nodeAdmin: [BigInt!]!
-#   nodeMembers: [BigInt!]!
-#   node: Node!
-#   }
 
 type Publication @entity {
   id: String!
   createdByID: BigInt
   uri: Metadata
-  # fullResURL: String
-  # animationURL: String
-  createdAt: BigInt
-  # contentType: String
-  # createdByAddress: String
 
-  # nodeId: BigInt
-  # node: Node! 
+  createdAt: BigInt
+
 }
 
 
@@ -87,11 +70,7 @@ type Channel @entity {
   items: [Item!]! @derivedFrom(field: "channel")
   createdAt: BigInt
   createdByID: BigInt
-  nodeId: BigInt! 
-
-  # metadata: Metadata FUTURE
-  # nodeId: BigInt
-  # node: Node!
+  nodeId: BigInt
 }
 
 
@@ -100,21 +79,9 @@ type Metadata @entity {
   name: String,
   description: String,
   imageUri: String,
-  # animtationUri: String,
-  # thumbnailUri: String
-  ###
-  ###
-  ###
-  ###
-  ###
+
 }
 
-# type ChannelMetadata @entity {
-#   name
-#   description 
-#   uri 
-#   type 
-# }
 
 type Item @entity {
   id: String!

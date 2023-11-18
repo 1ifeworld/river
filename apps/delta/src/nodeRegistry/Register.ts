@@ -20,7 +20,7 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
   const { sender, userId, schema, nodeId, messages } = event.params
 
   console.log(`Node ${nodeId} Registered`)
-  const validUser = true // Placeholder for user validation logic
+  const validUser = true 
 
   if (validUser) {
     await Node.create({
@@ -121,9 +121,9 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
                   nodeId: nodeId,
                 }),
                 uri: decoded.uri,
+                nodeId: nodeId,
                 createdAt: event.block.timestamp,
                 createdByID: userId,
-                nodeId: nodeId,
               },
               update: {
                 uri: decoded.uri,
@@ -142,7 +142,7 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
                     schema: schema,
                     nodeId: nodeId,
                   }),
-                  nodeId: nodeId
+                  nodeId: nodeId,
                 },
                 update: {},
               })
@@ -151,8 +151,6 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
                 const targetPublication = await Publication.findUnique({id:`${nodeRegistryChain}/${addresses.nodeRegistry.opGoerli}/${publicationSchema}/${decoded.id}` }) 
                 const targetMetadata = await Metadata.findUnique({id: targetPublication?.id as string}) 
             
-
-
               await Item.create({
                 id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}/${event.transaction.hash}/${event.log.logIndex}`,
                 data: {
