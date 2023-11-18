@@ -42,6 +42,7 @@ export type Channel = {
   id: Scalars['String']['output']
   items: Array<Item>
   name?: Maybe<Scalars['String']['output']>
+  nodeId?: Maybe<Scalars['BigInt']['output']>
   uri?: Maybe<Scalars['String']['output']>
 }
 
@@ -122,6 +123,14 @@ export type ChannelFilter = {
   name_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
   name_not_starts_with?: InputMaybe<Scalars['String']['input']>
   name_starts_with?: InputMaybe<Scalars['String']['input']>
+  nodeId?: InputMaybe<Scalars['BigInt']['input']>
+  nodeId_gt?: InputMaybe<Scalars['BigInt']['input']>
+  nodeId_gte?: InputMaybe<Scalars['BigInt']['input']>
+  nodeId_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
+  nodeId_lt?: InputMaybe<Scalars['BigInt']['input']>
+  nodeId_lte?: InputMaybe<Scalars['BigInt']['input']>
+  nodeId_not?: InputMaybe<Scalars['BigInt']['input']>
+  nodeId_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
   uri?: InputMaybe<Scalars['String']['input']>
   uri_contains?: InputMaybe<Scalars['String']['input']>
   uri_ends_with?: InputMaybe<Scalars['String']['input']>
@@ -679,19 +688,24 @@ export type AllChannelsQueryVariables = Exact<{ [key: string]: never }>
 
 export type AllChannelsQuery = {
   __typename?: 'Query'
-  nodes: Array<{
-    __typename?: 'Node'
-    nodeId: any
-    schema: string
-    messages: Array<{
-      __typename?: 'Message'
-      msgBody?: string | null
-      msgType?: any | null
+  channels: Array<{
+    __typename?: 'Channel'
+    hashId: string
+    id: string
+    uri?: string | null
+    nodeId?: any | null
+    name?: string | null
+    items: Array<{
+      __typename?: 'Item'
+      chainId: any
+      id: string
+      target: string
+      targetId: any
       userId?: any | null
-      nodeId?: any | null
+      hasId: boolean
+      createdAt?: any | null
     }>
   }>
-  channels: Array<{ __typename?: 'Channel'; id: string; uri?: string | null }>
 }
 
 export type ChannelQueryVariables = Exact<{ [key: string]: never }>
@@ -716,7 +730,26 @@ export type ChannelWithHashQueryVariables = Exact<{
   hashId: Scalars['String']['input']
 }>
 
-export type ChannelWithHashQuery = { __typename?: 'Query', channels: Array<{ __typename?: 'Channel', hashId: string, id: string, name?: string | null, description?: string | null, coverImageURI?: string | null, items: Array<{ __typename?: 'Item', chainId: any, id: string, target: string, targetId: any, userId?: any | null, createdAt?: any | null }> }> };
+export type ChannelWithHashQuery = {
+  __typename?: 'Query'
+  channels: Array<{
+    __typename?: 'Channel'
+    hashId: string
+    id: string
+    name?: string | null
+    description?: string | null
+    coverImageURI?: string | null
+    items: Array<{
+      __typename?: 'Item'
+      chainId: any
+      id: string
+      target: string
+      targetId: any
+      userId?: any | null
+      createdAt?: any | null
+    }>
+  }>
+}
 
 export type ItemsQueryVariables = Exact<{ [key: string]: never }>
 
@@ -814,19 +847,21 @@ export const AllActivityDocument = gql`
     `
 export const AllChannelsDocument = gql`
     query allChannels {
-  nodes {
-    nodeId
-    schema
-    messages {
-      msgBody
-      msgType
-      userId
-      nodeId
-    }
-  }
-  channels {
+  channels(orderBy: "nodeId", orderDirection: "desc") {
+    hashId
     id
     uri
+    nodeId
+    items {
+      chainId
+      id
+      target
+      targetId
+      userId
+      hasId
+      createdAt
+    }
+    name
   }
 }
     `

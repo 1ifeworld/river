@@ -1,16 +1,18 @@
 query allChannels {
-  nodes {
-    nodeId
-    schema
-    messages {
-      msgBody
-      msgType
-      userId
-      nodeId
-    }
-  }
-  channels {
+  channels(orderBy: "nodeId", orderDirection: "desc") {
+    hashId
     id
     uri
+    nodeId
+    items {
+      chainId
+      id
+      target
+      targetId
+      userId
+      hasId
+      createdAt
+    }
+    name
   }
 }
