@@ -13,8 +13,8 @@ export async function ChannelBanner({
       <Card className="relative w-[218px] h-[218px] outline-none border-none">
         <Image
           className="object-cover aspect-square"
-          src={ipfsToHttps(channel.channels[0].coverImageURI as string)}
-          alt={channel.channels[0].name as string}
+          src={ipfsToHttps(channel.channels[0].uri?.imageUri as string)}
+          alt={channel.channels[0].uri?.name as string}
           fill
         />
       </Card>

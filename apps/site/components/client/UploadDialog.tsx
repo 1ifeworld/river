@@ -157,7 +157,7 @@ const ChannelList = ({ channels }: { channels: Channel[] }) => {
           channels.slice(0, 5).map((channel: Channel) => (
             <li key={channel.id}>
               <Typography>
-                {`${channel.name} - ${channel.items.length} items`}
+                {`${channel.uri?.name} - ${channel.items.length} items`}
               </Typography>
             </li>
           ))}

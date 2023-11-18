@@ -18,7 +18,7 @@ export default async function fetchIPFSData(
     if (response.headers.get('Content-Type')?.includes('application/json')) {
       const data = await response.json()
       if ('name' in data) {
-        console.log('DATA', data.name)
+        // console.log('DATA', data.name)
         return data
       }
     } else {

@@ -67,10 +67,9 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
           let ipfsData
           if (decoded) {
             ipfsData = await fetchIPFSData(decoded.uri);
-          }
             // Create or update Metadata entity
             await Metadata.upsert({
-              id: decoded.uri,
+              id: decoded.uri ,
               create: {
                 name: ipfsData ? ipfsData.name : '',
                 description: ipfsData ? ipfsData.description : '',
@@ -81,19 +80,20 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
                 description: ipfsData ? ipfsData.description : '',
                 imageUri: ipfsData ? ipfsData.image : '',
               },
-            })          
-        
+            })                
+          }
+  
           // some fields were removed please check publication entity for full schema
           await Publication.upsert({
             id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
             create: {
-              uri: decoded.uri,
+              uri: decoded ? decoded.uri : "",
               createdAt: event.block.timestamp,
               createdByID: userId,
-
+              nodeId: nodeId
             },
             update: {
-              uri: decoded.uri
+              uri: decoded ? decoded.uri : ""
             },
           })
         } else if (decodedMsg.msgType === BigInt(301)) {
@@ -151,7 +151,10 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
               },
               update: {},
             })
-            console.log(" creating an Item!! ")
+
+            const targetPublication = await Publication.findUnique({id:`${nodeRegistryChain}/${addresses.nodeRegistry.opGoerli.toLowerCase()}/${publicationSchema}/${decoded.id}` }) 
+            const targetMetadata = await Metadata.findUnique({id: targetPublication?.uri as string}) 
+
             await Item.create({
               id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}/${event.transaction.hash}/${event.log.logIndex}`,
               data: {
@@ -164,6 +167,7 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
                 channel: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
                 // item 
                 userId: userId,
+                targetMetadata: targetMetadata?.id
               },
             })
           }        
