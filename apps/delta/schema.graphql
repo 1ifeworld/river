@@ -42,9 +42,7 @@ type Node @entity {
 
 type AccessControl @entity {
   id: String!
-  node: Node!
   nodeId: BigInt!
-  channel: Channel! 
   nodeAdmin: [BigInt!]!
   nodeMembers: [BigInt!]!
 }
