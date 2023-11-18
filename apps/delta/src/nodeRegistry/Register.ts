@@ -2,6 +2,7 @@ import { ponder } from '@/generated'
 import { Hex } from 'viem'
 import { nodeRegistryChain } from '../constants'
 import {
+  addresses,
   decodeMessage000,
   decodeAccess101,
   decodePublication201,
@@ -9,15 +10,17 @@ import {
   decodeChannel302,
   isValidMessageId,
   generateChannelHash,
+  publicationSchema,
 } from 'scrypt'
-import fetchIPFSData from "../utils/fetchIPFSData"
+import fetchIPFSData from '../utils/fetchIPFSData'
 
 ponder.on('NodeRegistry:Register', async ({ event, context }) => {
-  const { Node, Message, Publication, Channel, Item } = context.entities
+  const { Node, Message, Publication, Channel, Item, Metadata } =
+    context.entities
   const { sender, userId, schema, nodeId, messages } = event.params
 
   console.log(`Node ${nodeId} Registered`)
-  const validUser = true // Placeholder for user validation logic
+  const validUser = true 
 
   if (validUser) {
     await Node.create({
@@ -61,34 +64,56 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
           }
         } else if (decodedMsg.msgType === BigInt(201)) {
           const decoded = decodePublication201({ msgBody: decodedMsg.msgBody })
-          let ipfsData;
+          let ipfsData
           if (decoded) {
             ipfsData = await fetchIPFSData(decoded.uri);
           }
+            // Create or update Metadata entity
+            await Metadata.upsert({
+              id: decoded.uri,
+              create: {
+                name: ipfsData ? ipfsData.name : '',
+                description: ipfsData ? ipfsData.description : '',
+                imageUri: ipfsData ? ipfsData.image : '',
+              },
+              update: {
+                name: ipfsData ? ipfsData.name : '',
+                description: ipfsData ? ipfsData.description : '',
+                imageUri: ipfsData ? ipfsData.image : '',
+              },
+            })          
+        
           // some fields were removed please check publication entity for full schema
           await Publication.upsert({
             id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
             create: {
-              uri: decoded ? decoded.uri : '',
-              name: ipfsData ? ipfsData.name : '',
-              description: ipfsData ? ipfsData.description : '',
-              thumbnailURL: ipfsData ? ipfsData.image : '',
+              uri: decoded.uri,
               createdAt: event.block.timestamp,
               createdByID: userId,
 
             },
             update: {
-              uri: decoded ? decoded.uri : '',
-              name: ipfsData ? ipfsData.name : '',
-              description: ipfsData ? ipfsData.description : '',
-              thumbnailURL: ipfsData ? ipfsData.image : '',
+              uri: decoded.uri
             },
           })
         } else if (decodedMsg.msgType === BigInt(301)) {
-          const decoded = decodeChannel301({ msgBody: decodedMsg.msgBody });
+          const decoded = decodeChannel301({ msgBody: decodedMsg.msgBody })
           if (decoded) {
             const ipfsData = await fetchIPFSData(decoded.uri);
-            console.log("DATA", ipfsData?.name)
+              await Metadata.upsert({
+              id: decoded.uri,
+              create: {
+                name: ipfsData ? ipfsData.name : '',
+                description: ipfsData ? ipfsData.description : '',
+                imageUri: ipfsData ? ipfsData.image : '',
+              },
+              update: {
+                name: ipfsData ? ipfsData.name : '',
+                description: ipfsData ? ipfsData.description : '',
+                imageUri: ipfsData ? ipfsData.image : '',
+              },
+            })
+            
             await Channel.upsert({
               id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
               create: {
@@ -100,17 +125,11 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
                 }),
                 nodeId: nodeId,
                 uri: decoded.uri,
-                name: ipfsData ? ipfsData.name : '',
-                description: ipfsData ? ipfsData.description : '',
-                coverImageURI: ipfsData ? ipfsData.image : '',
                 createdAt: event.block.timestamp,
                 createdByID: userId
               },
               update: {
                 uri: decoded.uri,
-                name: ipfsData ? ipfsData.name : '',
-                description: ipfsData ? ipfsData.description : '',
-                coverImageURI: ipfsData ? ipfsData.image : '',
                 createdAt: event.block.timestamp
               },
             })
@@ -118,6 +137,7 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
         } else if (decodedMsg.msgType === BigInt(302)) {
           const decoded = decodeChannel302({ msgBody: decodedMsg.msgBody })
           if (decoded) {
+
             await Channel.upsert({
               id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
               create: {

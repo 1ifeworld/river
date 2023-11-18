@@ -37,11 +37,8 @@ type Node @entity {
   nodeId: BigInt!
   schema: String!
   messages: [Message!]! @derivedFrom(field: "node")
-  # accessControl: AccessControl
   nodeAdmin: [BigInt!]!
   nodeMembers: [BigInt!]!
-  # channel: Channel
-  # publication: Publication
 }
 
 type Message @entity {
@@ -52,75 +49,39 @@ type Message @entity {
   msgType: BigInt
   msgBody: Bytes
   userId: BigInt
-  # user: User! 
 }
 
 
-# type AccessControl @entity {
-#   id: String!
-#   nodeAdmin: [BigInt!]!
-#   nodeMembers: [BigInt!]!
-#   node: Node!
-#   }
 
 type Publication @entity {
   id: String!
-  uri: String!
-  name: String
-  # creator: String
-  description: String
-  thumbnailURL: String
   createdByID: BigInt
+  uri: Metadata
 
-  # fullResURL: String
-  # animationURL: String
   createdAt: BigInt
-  # contentType: String
-  # createdByAddress: String
 
-  # nodeId: BigInt
-  # node: Node! 
 }
 
 
 type Channel @entity {
   id: String!
   hashId: String!
-  uri: String
+  uri: Metadata 
   items: [Item!]! @derivedFrom(field: "channel")
-  name: String,
-  description: String,
-  coverImageURI: String
   createdAt: BigInt
   createdByID: BigInt
   nodeId: BigInt
-  # metadata: Metadata FUTURE
-  # nodeId: BigInt
-  # node: Node!
 }
 
 
-# type Metadata @entity {
-#   id: String # this would be based off the ipfs cid, so updating the metadata for something requires updating the cid
-#   uri: String, 
-#   name: String,
-#   desecription: String,
-#   imageUri: String,
-#   animtationUri: String,
-#   thumbnailUri: String
-#   ###
-#   ###
-#   ###
-#   ###
-#   ###
-# }
+type Metadata @entity {
+  id: String! # this would be based off the ipfs cid, so updating the metadata for something requires updating the cid, ID is uri
+  name: String,
+  description: String,
+  imageUri: String,
 
-# type ChannelMetadata @entity {
-#   name
-#   description 
-#   uri 
-#   type 
-# }
+}
+
 
 type Item @entity {
   id: String!
@@ -130,6 +91,7 @@ type Item @entity {
   createdAt: BigInt
   target: String!
   hasId: Boolean!
+  targetMetadata: Metadata
   channel: Channel!
 }
 
