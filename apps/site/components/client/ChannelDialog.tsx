@@ -94,7 +94,7 @@ export const ChannelDialog = React.forwardRef<
                     userId: userId as bigint,
                     adminIds: [userId as bigint],
                     memberIds: [],
-                    channelUri: channelUri,
+                    channelUri,
                   })
 
                   onOpenChange(false)

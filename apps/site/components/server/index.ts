@@ -1,5 +1,6 @@
 // Subdirectories
 export * from './activity'
+export * from './channel'
 
 // Individual components
 export * from './ChannelCard'

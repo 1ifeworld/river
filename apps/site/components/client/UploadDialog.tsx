@@ -12,10 +12,13 @@ import {
   DialogHeader,
   DropdownMenuItem,
   Form,
+  Toast,
 } from '@/design-system'
-import { uploadToIPFS } from '@/lib'
+import { uploadFile, uploadBlob } from '@/lib'
+import { getChannels, type Channel } from '@/gql'
 import { createPublication } from '@/actions'
 import { useDropzone } from 'react-dropzone'
+import { toast } from 'sonner'
 
 interface UploadDialogProps {
   triggerChildren: React.ReactNode
@@ -34,11 +37,22 @@ export const UploadDialog = React.forwardRef<HTMLDivElement, UploadDialogProps>(
       setFilesToUpload(filesToUpload)
     }, [])
 
+    const [allChannels, setAllChannels] = React.useState<Channel[]>()
+
+    const [uriSet, setUriSet] = React.useState<boolean>(false)
+
+    React.useEffect(() => {
+      const fetchChannels = async () => {
+        const channelData = await getChannels()
+        setAllChannels(channelData.channels)
+      }
+
+      fetchChannels()
+    }, [uriSet])
+
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
       onDrop,
     })
-
-    // createPublication.bind(null, userId as bigint)
 
     return (
       <Dialog onOpenChange={onOpenChange}>
@@ -66,17 +80,40 @@ export const UploadDialog = React.forwardRef<HTMLDivElement, UploadDialogProps>(
               <Stack className="py-[8rem]">
                 <form
                   action={async () => {
-                    const pubUri = await uploadToIPFS({ filesToUpload })
-
-                    const adminIds: bigint[] = [userId]
-                    const memberIds: bigint[] = []
-
-                    createPublication.bind(null, {
-                      userId: userId as bigint,
-                      adminIds: adminIds,
-                      pubUri: pubUri,
-                      memberIds: memberIds,
+                    // Create an IPFS pointer for the uploaded item
+                    const pubUri = await uploadBlob({
+                      dataToUpload: {
+                        name: filesToUpload[0]?.name || '',
+                        description: '',
+                        image: await uploadFile({ filesToUpload }),
+                      },
                     })
+
+                    setUriSet(true)
+
+                    const nodeId = BigInt(1)
+
+                    console.log('nodeId', allChannels?.[0].nodeId)
+
+                    await createPublication({
+                      userId: userId as bigint,
+                      adminIds: [userId as bigint],
+                      memberIds: [],
+                      pubUri,
+                      nodeId: allChannels?.[0].nodeId,
+                    })
+
+                    onOpenChange(false)
+
+                    // Render a toast with the name of the uploaded item(s)
+                    for (const [index, file] of filesToUpload.entries()) {
+                      toast.custom((t) => (
+                        <Toast key={index}>
+                          {'Successfully uploaded '}
+                          <span className="font-bold">{file.name}</span>
+                        </Toast>
+                      ))
+                    }
                   }}
                   {...getRootProps()}
                   className="focus:outline-none text-center"
@@ -95,6 +132,7 @@ export const UploadDialog = React.forwardRef<HTMLDivElement, UploadDialogProps>(
                     </>
                   ) : (
                     <Stack className="gap-4">
+                      <ChannelList channels={allChannels as Channel[]} />
                       <FileList filesToUpload={filesToUpload} />
                       <Button type="submit" variant="link">
                         Next
@@ -110,6 +148,23 @@ export const UploadDialog = React.forwardRef<HTMLDivElement, UploadDialogProps>(
     )
   },
 )
+
+const ChannelList = ({ channels }: { channels: Channel[] }) => {
+  return (
+    <>
+      <ul>
+        {channels &&
+          channels.slice(0, 5).map((channel: Channel) => (
+            <li key={channel.id}>
+              <Typography>
+                {`${channel.name} - ${channel.items.length} items`}
+              </Typography>
+            </li>
+          ))}
+      </ul>
+    </>
+  )
+}
 
 const FileList = ({ filesToUpload }: { filesToUpload: File[] }) => {
   return (

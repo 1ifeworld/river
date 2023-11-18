@@ -33,7 +33,7 @@ export async function ActivityItems({
               Added to
             </Typography>
           </TableHead>
-          <TableHead className="text-right">
+          <TableHead className="text-right w-[200px]">
             <Typography variant="small" className="text-secondary-foreground">
               Date added
             </Typography>
@@ -53,6 +53,9 @@ export async function ActivityItems({
             </TableCell>
             <TableCell className="text-right">
               <Typography>{item.added}</Typography>
+            </TableCell>
+            <TableCell className="text-right w-[100px]">
+              <Typography>{'...'}</Typography>
             </TableCell>
           </TableRow>
         ))}

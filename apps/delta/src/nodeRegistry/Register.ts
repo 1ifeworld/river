@@ -66,8 +66,8 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
           const decoded = decodePublication201({ msgBody: decodedMsg.msgBody })
           let ipfsData
           if (decoded) {
-            const ipfsData = await fetchIPFSData(decoded.uri)
-
+            ipfsData = await fetchIPFSData(decoded.uri);
+          }
             // Create or update Metadata entity
             await Metadata.upsert({
               id: decoded.uri,
@@ -81,24 +81,26 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
                 description: ipfsData ? ipfsData.description : '',
                 imageUri: ipfsData ? ipfsData.image : '',
               },
-            })
-            // some fields were removed please check publication entity for full schema
-            await Publication.upsert({
-              id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
-              create: {
-                uri: decoded.uri,
-              },
-              update: {
-                uri: decoded.uri,
-              },
-            })
-          }
+            })          
+        
+          // some fields were removed please check publication entity for full schema
+          await Publication.upsert({
+            id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
+            create: {
+              uri: decoded.uri,
+              createdAt: event.block.timestamp,
+              createdByID: userId,
+
+            },
+            update: {
+              uri: decoded.uri
+            },
+          })
         } else if (decodedMsg.msgType === BigInt(301)) {
           const decoded = decodeChannel301({ msgBody: decodedMsg.msgBody })
           if (decoded) {
-            const ipfsData = await fetchIPFSData(decoded.uri)
-            console.log('DATA', ipfsData?.name)
-            await Metadata.upsert({
+            const ipfsData = await fetchIPFSData(decoded.uri);
+              await Metadata.upsert({
               id: decoded.uri,
               create: {
                 name: ipfsData ? ipfsData.name : '',
@@ -111,6 +113,7 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
                 imageUri: ipfsData ? ipfsData.image : '',
               },
             })
+            
             await Channel.upsert({
               id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
               create: {
@@ -120,57 +123,52 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
                   schema: schema,
                   nodeId: nodeId,
                 }),
-                uri: decoded.uri,
                 nodeId: nodeId,
+                uri: decoded.uri,
                 createdAt: event.block.timestamp,
-                createdByID: userId,
+                createdByID: userId
               },
               update: {
                 uri: decoded.uri,
-                createdAt: event.block.timestamp,
+                createdAt: event.block.timestamp
               },
             })
-          } else if (decodedMsg.msgType === BigInt(302)) {
-            const decoded = decodeChannel302({ msgBody: decodedMsg.msgBody })
-            if (decoded) {
-              await Channel.upsert({
-                id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
-                create: {
-                  hashId: generateChannelHash({
-                    chainId: nodeRegistryChain,
-                    nodeRegistryAddress: event.transaction.to as Hex,
-                    schema: schema,
-                    nodeId: nodeId,
-                  }),
-                  nodeId: nodeId,
-                },
-                update: {},
-              })
+          }          
+        } else if (decodedMsg.msgType === BigInt(302)) {
+          const decoded = decodeChannel302({ msgBody: decodedMsg.msgBody })
+          if (decoded) {
 
-              // if (decoded.pointer === addresses.nodeRegistry.opGoerli && decoded.hasId) {
-                const targetPublication = await Publication.findUnique({id:`${nodeRegistryChain}/${addresses.nodeRegistry.opGoerli}/${publicationSchema}/${decoded.id}` }) 
-                const targetMetadata = await Metadata.findUnique({id: targetPublication?.id as string}) 
-            
-              await Item.create({
-                id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}/${event.transaction.hash}/${event.log.logIndex}`,
-                data: {
-                  // pointer
-                  chainId: decoded.chainId,
-                  targetId: decoded.id,
-                  target: decoded.pointer,
-                  hasId: decoded.hasId,
-                  createdAt: event.block.timestamp,
-                  channel: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
-                  // item
-                  userId: userId,
-                  targetMetadata: targetMetadata?.id
-                },
-              })
-            }
-          }
+            await Channel.upsert({
+              id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
+              create: {
+                hashId: generateChannelHash({
+                  chainId: nodeRegistryChain,
+                  nodeRegistryAddress: event.transaction.to as Hex,
+                  schema: schema,
+                  nodeId: nodeId,
+                }),
+                nodeId: nodeId
+              },
+              update: {},
+            })
+            console.log(" creating an Item!! ")
+            await Item.create({
+              id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}/${event.transaction.hash}/${event.log.logIndex}`,
+              data: {
+                // pointer 
+                chainId: decoded.chainId,
+                targetId: decoded.id,
+                target: decoded.pointer,
+                hasId: decoded.hasId,
+                createdAt: event.block.timestamp,
+                channel: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
+                // item 
+                userId: userId,
+              },
+            })
+          }        
         }
       }
     }
-  } 
+  }
 })
-
