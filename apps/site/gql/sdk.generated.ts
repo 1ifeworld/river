@@ -716,23 +716,7 @@ export type ChannelWithHashQueryVariables = Exact<{
   hashId: Scalars['String']['input']
 }>
 
-export type ChannelWithHashQuery = {
-  __typename?: 'Query'
-  channels: Array<{
-    __typename?: 'Channel'
-    id: string
-    uri?: string | null
-    hashId: string
-    items: Array<{
-      __typename?: 'Item'
-      chainId: any
-      id: string
-      target: string
-      targetId: any
-      userId?: any | null
-    }>
-  }>
-}
+export type ChannelWithHashQuery = { __typename?: 'Query', channels: Array<{ __typename?: 'Channel', hashId: string, id: string, name?: string | null, description?: string | null, coverImageURI?: string | null, items: Array<{ __typename?: 'Item', chainId: any, id: string, target: string, targetId: any, userId?: any | null, createdAt?: any | null }> }> };
 
 export type ItemsQueryVariables = Exact<{ [key: string]: never }>
 
@@ -863,15 +847,18 @@ export const ChannelDocument = gql`
 export const ChannelWithHashDocument = gql`
     query ChannelWithHash($hashId: String!) {
   channels(where: {hashId: $hashId}) {
-    id
-    uri
     hashId
+    id
+    name
+    description
+    coverImageURI
     items {
       chainId
       id
       target
       targetId
       userId
+      createdAt
     }
   }
 }
