@@ -1,10 +1,10 @@
 import { Header } from '@/client'
 import { Grid } from '@/design-system'
-import { getChannels, type Node } from '@/gql'
+import { getChannels, type Channel } from '@/gql'
 import { ChannelCard } from '@/server'
 
 export default async function Home() {
-  // const { channels } = await getChannels()
+  const { channels } = await getChannels()
 
   return (
     <div>

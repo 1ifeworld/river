@@ -1,7 +1,12 @@
 query Channel {
   channel(id: "") {
     id
-    uri
+    uri {
+      id
+      imageUri
+      description
+      name
+    }
     items(orderBy: "") {
       chainId
       id

@@ -1,6 +1,8 @@
 import { ponder } from '@/generated'
 import { nodeRegistryChain } from '../constants'
 import {
+  addresses,
+  publicationSchema,
   decodeMessage000,
   decodeAccess101,
   decodePublication201,
@@ -10,7 +12,7 @@ import {
 } from 'scrypt'
 
 ponder.on('NodeRegistry:Update', async ({ event, context }) => {
-  const { Node, Message, Publication, Channel, Item } = context.entities
+  const { Node, Message, Publication, Channel, Item, Metadata } = context.entities
   const { sender, userId, nodeId, messages } = event.params
 
   console.log(`Node $${nodeId} Updated`)
@@ -24,7 +26,6 @@ ponder.on('NodeRegistry:Update', async ({ event, context }) => {
     if (targetNode) {
       const schema = targetNode.schema
 
-      console.log('update messages.length', messages.length)
       for (let i = 0; i < messages.length; ++i) {
         const decodedMsg = decodeMessage000({ encodedMsg: messages[i] })
         if (decodedMsg && isValidMessageId(decodedMsg.msgType)) {
@@ -39,8 +40,6 @@ ponder.on('NodeRegistry:Update', async ({ event, context }) => {
               msgBody: decodedMsg.msgBody,
             },
           })
-
-          console.log("what msg type is in this update: ", decodedMsg.msgType)
 
           if (decodedMsg.msgType === BigInt(101)) {
             const decoded = decodeAccess101({ msgBody: decodedMsg.msgBody })
@@ -78,9 +77,12 @@ ponder.on('NodeRegistry:Update', async ({ event, context }) => {
               })
             }
           } else if (decodedMsg.msgType === BigInt(302)) {
-            console.log(" update message type 302")
             const decoded = decodeChannel302({ msgBody: decodedMsg.msgBody })
             if (decoded) {
+
+              const targetPublication = await Publication.findUnique({id:`${nodeRegistryChain}/${addresses.nodeRegistry.opGoerli.toLowerCase()}/${publicationSchema}/${decoded.id}` }) 
+              const targetMetadata = await Metadata.findUnique({id: targetPublication?.uri as string}) 
+
               await Item.create({
                 id: `420/${event.transaction.from}/${schema}/${nodeId}/${event.transaction.hash}/${event.log.logIndex}`,
                 data: {
@@ -93,6 +95,7 @@ ponder.on('NodeRegistry:Update', async ({ event, context }) => {
                   channel: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
                   // item 
                   userId: userId,
+                  targetMetadata: targetMetadata?.id
                 },
               })
             }
