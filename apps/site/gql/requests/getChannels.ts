@@ -1,9 +1,9 @@
 import sdk from '../client'
 
 export async function getChannels() {
-  const response = await sdk.allChannels()
+  const channels = await sdk.allChannels()
 
   return {
-    channels: response.channels,
+    channels: channels.channels,
   }
 }

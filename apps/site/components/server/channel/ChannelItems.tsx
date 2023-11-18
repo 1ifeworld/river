@@ -8,7 +8,7 @@ import {
   TableRow,
   Stack,
 } from '@/design-system'
-import { Channel, Item } from '@/gql'
+import { ChannelWithHashQuery, Item } from '@/gql'
 
 // This is a placeholder component to represent a cover image
 const WhiteBox = () => {
@@ -19,7 +19,7 @@ const WhiteBox = () => {
 
 export async function ChannelItems({
   channel,
-}: { channel: Channel }) {
+}: { channel: ChannelWithHashQuery }) {
   return (
     <Table className="w-full">
       <TableHeader>
@@ -72,7 +72,7 @@ export async function ChannelItems({
             <Typography>{'...'}</Typography>
           </TableCell>
         </TableRow>
-        {/* {channel.items.map((item: Item, index: number) => (
+        {/* {channel.channels[0].items.map((item: any, index: number) => (
           <TableRow key={index}>
             <TableCell className="flex gap-2 items-center">
               <Typography>{index.toString()}</Typography>

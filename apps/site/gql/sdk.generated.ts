@@ -689,7 +689,7 @@ export type ChannelWithHashQueryVariables = Exact<{
 }>;
 
 
-export type ChannelWithHashQuery = { __typename?: 'Query', channels: Array<{ __typename?: 'Channel', hashId: string, id: string, nodeId?: any | null, uri?: { __typename?: 'Metadata', id: string, imageUri?: string | null, description?: string | null, name?: string | null } | null, items: Array<{ __typename?: 'Item', chainId: any, id: string, target: string, targetId: any, userId?: any | null, hasId: boolean, createdAt?: any | null }> }> };
+export type ChannelWithHashQuery = { __typename?: 'Query', channels: Array<{ __typename?: 'Channel', hashId: string, id: string, uri?: { __typename?: 'Metadata', id: string, imageUri?: string | null, description?: string | null, name?: string | null } | null, items: Array<{ __typename?: 'Item', chainId: any, id: string, target: string, targetId: any, userId?: any | null, createdAt?: any | null }> }> };
 
 export type ItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -808,14 +808,12 @@ export const ChannelWithHashDocument = gql`
       description
       name
     }
-    nodeId
     items {
       chainId
       id
       target
       targetId
       userId
-      hasId
       createdAt
     }
   }
