@@ -29,6 +29,7 @@
     "clsx": "^2.0.0",
     "concurrently": "^8.2.1",
     "connectkit": "^1.5.2",
+    "ethers": "^6.8.1",
     "graphql": "^16.8.0",
     "graphql-request": "^6.1.0",
     "graphql-tag": "^2.12.6",
