@@ -1,4 +1,4 @@
-import { getChannel} from '@/gql'
+import { getChannel } from '@/gql'
 import { Stack } from '@/design-system'
 import { ChannelBanner, ChannelItems } from '@/server'
 

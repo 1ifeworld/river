@@ -40,6 +40,7 @@ export const addresses: AddressBook = {
   },
   entryPoint: {
     opGoerli: '0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789',
+    arbGoerli: '0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789'
     // ... add more chains as needed
   },
 }
