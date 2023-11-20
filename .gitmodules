@@ -1,0 +1,3 @@
+[submodule "packages/river-contracts/lib/imp"]
+	path = packages/river-contracts/lib/imp
+	url = https://github.com/1ifeworld/imp
