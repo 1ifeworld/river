@@ -1,3 +1,5 @@
+'use client'
+
 import {
   createContext,
   ReactNode,
@@ -6,9 +8,7 @@ import {
   useEffect,
   useMemo,
 } from 'react'
-import {
-  LightSmartContractAccount,
-} from '@alchemy/aa-accounts'
+import { LightSmartContractAccount } from '@alchemy/aa-accounts'
 import { AlchemyProvider } from '@alchemy/aa-alchemy'
 import { addresses } from 'scrypt'
 import { ConnectedWallet, useWallets } from '@privy-io/react-auth'
@@ -17,10 +17,12 @@ import {
   type SmartAccountSigner,
   PublicErc4337Client,
   createPublicErc4337Client,
+  UserOperationStruct,
 } from '@alchemy/aa-core'
 import {
   createWalletClient,
   createPublicClient,
+  RpcTransactionRequest,
   custom,
   http,
   type Client,
@@ -28,10 +30,15 @@ import {
   type EIP1193Provider,
 } from 'viem'
 import { arbitrumGoerli } from 'viem/chains'
+import { populateWithPaymaster, signUserOp } from '@/lib'
 
 const AlchemyContext = createContext<{
   alchemyProvider?: AlchemyProvider
   smartAccountAddress?: Hex
+  /** Method to send a user operation from a transaction request, with gas sponsored by Biconomy Paymaster */
+  sendSponsoredUserOperation?: (
+    transactionRequest: RpcTransactionRequest,
+  ) => Promise<`0x${string}`>
 }>({})
 
 export function AlchemyProviderComponent({
@@ -46,29 +53,29 @@ export function AlchemyProviderComponent({
   )
 
   // Initialize RPC client connected to the Arbitrum Goerli Paymaster. Used to populate
-      // `paymasterAndData` field of user operations.
-      const paymaster: Client = useMemo(
-        () =>
-          createPublicClient({
-            chain: arbitrumGoerli,
-            transport: http(
-              'https://paymaster.biconomy.io/api/v1/421613/-krdQD3UI.c27a25ff-9cd5-421c-9bb5-fa423b6274a1',
-            ),
-          }),
-        [],
-      )
+  // `paymasterAndData` field of user operations.
+  const paymaster: Client = useMemo(
+    () =>
+      createPublicClient({
+        chain: arbitrumGoerli,
+        transport: http(
+          'https://paymaster.biconomy.io/api/v1/421613/-krdQD3UI.c27a25ff-9cd5-421c-9bb5-fa423b6274a1',
+        ),
+      }),
+    [],
+  )
 
-      // Initialize RPC client connected to Alchemy's Base Goerli RPC URL. Used to submit
-      // signed user operations to the network
-      const bundler: PublicErc4337Client = useMemo(
-        () =>
-          createPublicErc4337Client({
-            chain: arbitrumGoerli,
-            rpcUrl:
-              'https://bundler.biconomy.io/api/v2/421613/nJPK7B3ru.dd7f7861-190d-41bd-af80-6877f74b8f44',
-          }),
-        [],
-      )
+  // Initialize RPC client connected to Alchemy's Base Goerli RPC URL. Used to submit
+  // signed user operations to the network
+  const bundler: PublicErc4337Client = useMemo(
+    () =>
+      createPublicErc4337Client({
+        chain: arbitrumGoerli,
+        rpcUrl:
+          'https://bundler.biconomy.io/api/v2/421613/nJPK7B3ru.dd7f7861-190d-41bd-af80-6877f74b8f44',
+      }),
+    [],
+  )
 
   useEffect(() => {
     const createLightAccount = async (embeddedWallet: ConnectedWallet) => {
@@ -111,8 +118,46 @@ export function AlchemyProviderComponent({
     if (embeddedWallet) createLightAccount(embeddedWallet)
   }, [embeddedWallet?.address])
 
+  const sendSponsoredUserOperation = async (
+    transactionRequest: RpcTransactionRequest,
+  ) => {
+    if (!smartAccountAddress) {
+      throw new Error('Smart account has not yet initialized.')
+    }
+
+    // (1) Construct a user operation from the transaction request
+    const userOp = await alchemyProvider?.buildUserOperationFromTx(
+      transactionRequest,
+    )
+
+    // (2) Populate the user operation with `paymasterAndData` from the Base Goerli paymaster
+    const populatedUserOp = await populateWithPaymaster(
+      userOp as UserOperationStruct,
+      paymaster,
+    )
+
+    // (3) Hash and sign the populated user operation
+    const signedUserOp = await signUserOp(
+      populatedUserOp,
+      alchemyProvider as AlchemyProvider,
+    )
+
+    // (5) Submit the signed user operation to the bundler and return its hash
+    const userOpHash = await bundler.sendUserOperation(
+      signedUserOp,
+      addresses.entryPoint.arbGoerli,
+    )
+    return userOpHash
+  }
+
   return (
-    <AlchemyContext.Provider value={{ alchemyProvider, smartAccountAddress }}>
+    <AlchemyContext.Provider
+      value={{
+        alchemyProvider,
+        smartAccountAddress,
+        sendSponsoredUserOperation,
+      }}
+    >
       {children}
     </AlchemyContext.Provider>
   )

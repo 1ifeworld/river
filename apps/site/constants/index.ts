@@ -1,4 +1,5 @@
 export * from './calls'
 export * from './chains'
+export * from './gas'
 export * from './networks'
 export * from './salt'
