@@ -22,6 +22,8 @@ import { usePrivy } from '@privy-io/react-auth'
 import { AlchemyProvider } from '@alchemy/aa-alchemy'
 import { Hex, parseAbiItem } from 'viem'
 import { getUserId } from 'gql/requests/getUserId'
+import React, { useState, useEffect, useCallback } from 'react'
+
 import { addresses } from 'scrypt'
 import * as z from 'zod'
 
@@ -32,6 +34,41 @@ const FormSchema = z.object({
   }),
 })
 
+function debounce(func: (...args: any[]) => void, wait: number): (...args: any[]) => void {
+  let timeout: NodeJS.Timeout | null = null
+
+  return function executedFunction(...args: any[]) {
+    const later = () => {
+      timeout = null
+      func(...args)
+    }
+
+    if (timeout) {
+      clearTimeout(timeout)
+    }
+    timeout = setTimeout(later, wait)
+  }
+}
+
+interface CheckUsernameResponse {
+  exists: boolean
+}
+
+async function checkUsernameAvailability(username: string): Promise<CheckUsernameResponse> {
+  try {
+    const response = await fetch(`https://server.talktomenice.workers.dev/get/${`${username}.sbvrsv.eth`}`)
+    if (response.status === 200) {
+      return { exists: true }
+    } else if (response.status === 404) {
+      return { exists: false }
+    }
+    throw new Error('Unexpected response from the server')
+  } catch (error) {
+    console.error('Error checking username:', error)
+    throw error
+  }
+}
+
 export function UsernameDialog({ open }: { open: boolean }) {
   const { ready, authenticated, user } = usePrivy()
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -40,6 +77,30 @@ export function UsernameDialog({ open }: { open: boolean }) {
       username: '',
     },
   })
+
+  const [usernameExists, setUsernameExists] = useState<boolean | null>(null)
+  const [isCheckingUsername, setIsCheckingUsername] = useState(false);
+
+  const debouncedCheckUsername = useCallback(
+    debounce(async (username: string) => {
+      setIsCheckingUsername(true); // Start checking username
+      const result = await checkUsernameAvailability(username);
+      setUsernameExists(result.exists);
+      setIsCheckingUsername(false); // Done checking username
+    }, 500),
+    [],
+  );
+
+  useEffect(() => {
+    const username = form.watch('username');
+    if (username) {
+      debouncedCheckUsername(username);
+    } else {
+      setUsernameExists(null); // Reset when the field is cleared
+      setIsCheckingUsername(false);
+    }
+  }, [form.watch('username'), debouncedCheckUsername]);
+
 
   const { alchemyProvider, smartAccountAddress } = useAlchemyContext()
   alchemyProvider?.withAlchemyGasManager({
@@ -109,6 +170,7 @@ export function UsernameDialog({ open }: { open: boolean }) {
                     <FormControl>
                       <Input placeholder="username" {...field} />
                     </FormControl>
+                    {usernameExists && <FormMessage>Username already exists!</FormMessage>}
                     <FormMessage />
                   </FormItem>
                 )}
@@ -119,6 +181,7 @@ export function UsernameDialog({ open }: { open: boolean }) {
             onClick={form.handleSubmit(onSubmit)}
             type="submit"
             variant="link"
+            disabled={usernameExists || isCheckingUsername || !form.watch('username')}
           >
             Complete
           </Button>
