@@ -978,6 +978,7 @@ export const NodesDocument = gql`
   }
 }
     `
+
 export const GetUserIdDocument = gql`
     query getUserId {
   idRegistrys(where: {to: ""}) {

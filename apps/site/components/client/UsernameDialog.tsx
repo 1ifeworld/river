@@ -13,26 +13,26 @@ import {
   Stack,
   Typography,
 } from '@/design-system'
-import { setUsername } from '@/lib'
-import { registerAndDelegate } from '@/lib'
+import {
+  setUsername,
+  registerAndDelegate,
+  checkUsernameAvailability,
+} from '@/lib'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { useAlchemyContext } from 'context/AlchemyProviderContext'
+import { useAlchemyContext } from '@/context'
 import { usePrivy } from '@privy-io/react-auth'
 import { AlchemyProvider } from '@alchemy/aa-alchemy'
 import { Hex } from 'viem'
-import { getUserId } from 'gql/requests/getUserId'
-import React, { useState, useEffect, useCallback } from 'react'
+import { getUserId } from '@/gql'
+import React, { useState, useEffect } from 'react'
 import { useDebounce } from 'usehooks-ts'
-import { checkUsernameAvailability } from 'lib/checkUsernameAvailability'
-
 import { addresses } from 'scrypt'
 import * as z from 'zod'
 
 const FormSchema = z.object({
   username: z.string().min(2, {
     message: 'Username must be at least 2 characters.',
-    // Username not available, please try another
   }),
 })
 
@@ -94,13 +94,11 @@ export function UsernameDialog({ open }: { open: boolean }) {
 
       if (hash && smartAccountAddress) {
         // If a hash is returned, proceed to get the userId
-        const userIdResponse = await getUserId({
+        const { userId } = await getUserId({
           custodyAddress: smartAccountAddress,
         })
 
-        if (userIdResponse?.userId) {
-          const userId = userIdResponse.userId
-
+        if (userId) {
           await setUsername({
             registrationParameters: {
               id: userId,
