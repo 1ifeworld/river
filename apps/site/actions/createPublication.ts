@@ -26,6 +26,9 @@ export async function createPublication({
   pubUri,
   nodeId,
 }: CreatePublicationProps) {
+  /**
+   * Encode necessary function data to register a node
+   */
   const accessControlMessage = encodeAccess101({ adminIds, memberIds })
 
   const publicationUriMessage = encodePublication201({ pubUri })
@@ -43,8 +46,12 @@ export async function createPublication({
     ],
   })
 
+  // Initialize a variable to hold the nodeId after successful registration
   let pubNodeIdCreated
 
+  /**
+   * Process the registration call
+   */
   try {
     const regTxn = await nonceManager.sendTransaction({
       to: addresses.nodeRegistry.opGoerli,
@@ -58,6 +65,10 @@ export async function createPublication({
   } catch (error) {
     console.error('Register transaction failed: ', error)
   }
+
+  /**
+   * If the registration transaction was successful, prepare and execute the update transaction
+   */
   if (pubNodeIdCreated) {
     const addItemMessage = encodeChannel302({
       chainId: BigInt(420),
@@ -72,17 +83,15 @@ export async function createPublication({
       args: [userId, nodeId, [addItemMessage?.message as Hash]],
     })
 
+    /**
+     * Process the update call
+     */
     try {
       const updTxn = await nonceManager.sendTransaction({
         to: addresses.nodeRegistry.opGoerli,
         data: updateEncodedData,
       })
       const updTxnReceipt = await updTxn.wait()
-
-      pubNodeIdCreated = parseInt(
-        updTxnReceipt?.logs[0].topics[3] as string,
-        16,
-      )
 
       console.log('updTxnReceipt: ', updTxnReceipt)
     } catch (error) {
