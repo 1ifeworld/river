@@ -1,6 +1,6 @@
 'use server'
 
-import { type Hex, type Hash, encodeAbiParameters } from 'viem'
+import { type Hash, encodeFunctionData } from 'viem'
 import {
   addresses,
   publicationSchema,
@@ -9,8 +9,7 @@ import {
   encodeChannel302,
   nodeRegistryABI,
 } from 'scrypt'
-import { publicClient } from '@/config/publicClient'
-import { walletClient, serverSidePublicClient } from '@/config/walletClient'
+import { nonceManager } from '@/config/ethersClient'
 
 interface CreatePublicationProps {
   userId: bigint
@@ -31,43 +30,63 @@ export async function createPublication({
 
   const publicationUriMessage = encodePublication201({ pubUri })
 
-  const { request: registerRequest, result: registerResult } =
-    await serverSidePublicClient.simulateContract({
-      address: addresses.nodeRegistry.opGoerli,
-      abi: nodeRegistryABI,
-      functionName: 'register',
-      args: [
-        userId,
-        publicationSchema,
-        [
-          accessControlMessage?.message as Hash,
-          publicationUriMessage?.message as Hash,
-        ],
+  const registerEncodedData = encodeFunctionData({
+    abi: nodeRegistryABI,
+    functionName: 'register',
+    args: [
+      userId,
+      publicationSchema,
+      [
+        accessControlMessage?.message as Hash,
+        publicationUriMessage?.message as Hash,
       ],
-      nonce: 269,
-    })
-
-  console.log('Register result', registerResult)
-
-  await walletClient.writeContract(registerRequest)
-
-  const addItemMessage = encodeChannel302({
-    chainId: BigInt(420),
-    id: registerResult,
-    pointer: addresses.nodeRegistry.opGoerli,
-    hasId: true,
+    ],
   })
 
-  const { request: updateRequest, result: updateResult } =
-    await serverSidePublicClient.simulateContract({
-      address: addresses.nodeRegistry.opGoerli,
+  let pubNodeIdCreated
+
+  try {
+    const regTxn = await nonceManager.sendTransaction({
+      to: addresses.nodeRegistry.opGoerli,
+      data: registerEncodedData,
+    })
+    const regTxnReceipt = await regTxn.wait()
+
+    pubNodeIdCreated = parseInt(regTxnReceipt?.logs[0].topics[3] as string, 16)
+
+    console.log('pubNodeIdCreated: ', pubNodeIdCreated)
+  } catch (error) {
+    console.error('Register transaction failed: ', error)
+  }
+  if (pubNodeIdCreated) {
+    const addItemMessage = encodeChannel302({
+      chainId: BigInt(420),
+      id: BigInt(pubNodeIdCreated),
+      pointer: addresses.nodeRegistry.opGoerli,
+      hasId: true,
+    })
+
+    const updateEncodedData = encodeFunctionData({
       abi: nodeRegistryABI,
       functionName: 'update',
       args: [userId, nodeId, [addItemMessage?.message as Hash]],
-      nonce: 270,
     })
 
-  const updateHash = await walletClient.writeContract(updateRequest)
+    try {
+      const updTxn = await nonceManager.sendTransaction({
+        to: addresses.nodeRegistry.opGoerli,
+        data: updateEncodedData,
+      })
+      const updTxnReceipt = await updTxn.wait()
 
-  console.log('Update hash:', updateHash)
+      pubNodeIdCreated = parseInt(
+        updTxnReceipt?.logs[0].topics[3] as string,
+        16,
+      )
+
+      console.log('updTxnReceipt: ', updTxnReceipt)
+    } catch (error) {
+      console.error('Update transaction failed: ', error)
+    }
+  }
 }
