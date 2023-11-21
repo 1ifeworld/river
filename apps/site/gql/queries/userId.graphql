@@ -1,0 +1,5 @@
+query UserId($custodyAddress: String!) {
+  idRegistrys(where: {to: $custodyAddress}) {
+    userId
+  }
+}

@@ -1,5 +1,0 @@
-query getUserId {
-  idRegistrys(where: {to: ""}) {
-    userId
-  }
-}

@@ -1,3 +1,4 @@
+export * from './checkUsernameAvailability'
 export * from './getUserId'
 export * from './getUsername'
 export * from './ipfsToHttps'
