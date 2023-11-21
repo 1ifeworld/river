@@ -3,7 +3,7 @@ import * as React from 'react'
 
 import { cn } from '@/design-system'
 
-const typographyVariants = cva('text-foreground tracking-tight', {
+const typographyVariants = cva('text-primary-foreground tracking-tight', {
   variants: {
     variant: {
       h1: 'text-2xl',
