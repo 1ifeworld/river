@@ -1,6 +1,7 @@
-import { Stack, Typography } from '@/design-system'
+import { Stack, Typography, Flex } from '@/design-system'
 import { type Channel } from '@/gql'
 import { getUsername } from '@/lib'
+import { pluralize } from '@/utils'
 
 export async function ChannelCard({ channel }: { channel: Channel }) {
   const username = await getUsername({ id: channel.createdByID })
@@ -9,16 +10,17 @@ export async function ChannelCard({ channel }: { channel: Channel }) {
     <Stack className="border px-3 py-5 justify-between aspect-square hover:bg-primary/[0.025] transition-all">
       {/* Channel Name */}
       <Typography>{channel.uri?.name}</Typography>
-      {/* Channel Owner */}
-      <Typography>{username}</Typography>
-      {/* Number of Items */}
-      {channel.items.length === 0 ? (
-        <Typography className="text-secondary-foreground">0 items</Typography>
-      ) : (
-        <Typography className="text-secondary-foreground">{`${
-          channel.items.length
-        } ${channel.items.length > 1 ? 'items' : 'item'}`}</Typography>
-      )}
+      <Flex>
+        {/* Channel Owner */}
+        <Typography className="text-secondary-foreground">
+          {username?.username ?? ''}
+        </Typography>
+        <span className="text-secondary-foreground">{'·'}</span>
+        {/* Number of Items */}
+        <Typography className="text-secondary-foreground">
+          {pluralize(channel.items.length, 'item', 'items')}
+        </Typography>
+      </Flex>
     </Stack>
   )
 }
