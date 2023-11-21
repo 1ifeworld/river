@@ -10,7 +10,7 @@ export async function ChannelCard({ channel }: { channel: Channel }) {
       {/* Channel Name */}
       <Typography>{channel.uri?.name}</Typography>
       {/* Channel Owner */}
-      {/* <Typography>{username}</Typography> */}
+      <Typography>{username}</Typography>
       {/* Number of Items */}
       {channel.items.length === 0 ? (
         <Typography className="text-secondary-foreground">0 items</Typography>

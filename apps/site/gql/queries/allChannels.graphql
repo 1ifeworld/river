@@ -2,13 +2,15 @@ query allChannels {
   channels(orderBy: "nodeId", orderDirection: "desc") {
     hashId
     id
+    createdAt
+    createdByID
+    nodeId
     uri {
       id
       imageUri
       description
       name
     }
-    nodeId
     items {
       chainId
       id

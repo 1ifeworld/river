@@ -3,7 +3,6 @@ query Nodes {
     id
     nodeId
     userId
-    nodeMembers
     schema
     sender
     messages {
