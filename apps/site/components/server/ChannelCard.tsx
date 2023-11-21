@@ -6,7 +6,7 @@ export async function ChannelCard({ channel }: { channel: Channel }) {
   const username = await getUsername({ id: channel.createdByID })
 
   return (
-    <Stack className="border px-3 py-5 justify-between aspect-square">
+    <Stack className="border px-3 py-5 justify-between aspect-square hover:bg-primary/[0.025] transition-all">
       {/* Channel Name */}
       <Typography>{channel.uri?.name}</Typography>
       {/* Channel Owner */}
