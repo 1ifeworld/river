@@ -20,8 +20,12 @@ import { useForm } from 'react-hook-form'
 import { useAlchemyContext } from 'context/AlchemyProviderContext'
 import { usePrivy } from '@privy-io/react-auth'
 import { AlchemyProvider } from '@alchemy/aa-alchemy'
-import { Hex, parseAbiItem } from 'viem'
+import { Hex } from 'viem'
 import { getUserId } from 'gql/requests/getUserId'
+import React, { useState, useEffect, useCallback } from 'react'
+import { useDebounce } from 'usehooks-ts'
+import { checkUsernameAvailability } from 'lib/checkUsernameAvailability'
+
 import { addresses } from 'scrypt'
 import * as z from 'zod'
 
@@ -40,6 +44,39 @@ export function UsernameDialog({ open }: { open: boolean }) {
       username: '',
     },
   })
+
+  const [usernameExists, setUsernameExists] = useState<boolean | null>(null)
+  const [isCheckingUsername, setIsCheckingUsername] = useState(false)
+  const username = form.watch('username')
+  const debouncedUsername = useDebounce(username, 500)
+  const [checkState, setCheckState] = useState({ isChecking: false, debounceFinished: false })
+  const [canSubmit, setCanSubmit] = useState(false)
+
+
+
+  useEffect(() => {
+    let isMounted = true
+    setCheckState({ isChecking: true, debounceFinished: false })
+  
+    if (debouncedUsername) {
+      checkUsernameAvailability(debouncedUsername)
+        .then(result => {
+          if (isMounted) {
+            setUsernameExists(result.exists)
+            setCheckState({ isChecking: false, debounceFinished: true })
+            setCanSubmit(!result.exists)
+          }
+        })
+    } else {
+      setUsernameExists(null)
+      setCheckState({ isChecking: false, debounceFinished: true })
+      setCanSubmit(false)
+    }
+  
+    return () => {
+      isMounted = false
+    }
+  }, [debouncedUsername])
 
   const { alchemyProvider, smartAccountAddress } = useAlchemyContext()
   alchemyProvider?.withAlchemyGasManager({
@@ -64,7 +101,6 @@ export function UsernameDialog({ open }: { open: boolean }) {
         if (userIdResponse?.userId) {
           const userId = userIdResponse.userId
 
-          // Now call setUsername with the obtained userId
 
           await setUsername({
             registrationParameters: {
@@ -107,21 +143,24 @@ export function UsernameDialog({ open }: { open: boolean }) {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Input placeholder="username" {...field} />
+                    <Input placeholder="username" {...field} disabled={isCheckingUsername} />
                     </FormControl>
+                    {usernameExists && checkState.debounceFinished && <FormMessage>Username already exists!</FormMessage>}
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </form>
           </Form>
-          <Button
-            onClick={form.handleSubmit(onSubmit)}
-            type="submit"
-            variant="link"
-          >
-            Complete
-          </Button>
+          {canSubmit && (
+  <Button
+    onClick={form.handleSubmit(onSubmit)}
+    type="submit"
+    variant="link"
+  >
+    Complete
+  </Button>
+)}
         </Stack>
       </DialogContent>
     </Dialog>
