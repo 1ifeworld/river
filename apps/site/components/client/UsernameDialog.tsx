@@ -49,30 +49,30 @@ export function UsernameDialog({ open }: { open: boolean }) {
   const [isCheckingUsername, setIsCheckingUsername] = useState(false)
   const username = form.watch('username')
   const debouncedUsername = useDebounce(username, 500)
-  const [checkState, setCheckState] = useState({ isChecking: false, debounceFinished: false })
+  const [checkState, setCheckState] = useState({
+    isChecking: false,
+    debounceFinished: false,
+  })
   const [canSubmit, setCanSubmit] = useState(false)
-
-
 
   useEffect(() => {
     let isMounted = true
     setCheckState({ isChecking: true, debounceFinished: false })
-  
+
     if (debouncedUsername) {
-      checkUsernameAvailability(debouncedUsername)
-        .then(result => {
-          if (isMounted) {
-            setUsernameExists(result.exists)
-            setCheckState({ isChecking: false, debounceFinished: true })
-            setCanSubmit(!result.exists)
-          }
-        })
+      checkUsernameAvailability(debouncedUsername).then((result) => {
+        if (isMounted) {
+          setUsernameExists(result.exists)
+          setCheckState({ isChecking: false, debounceFinished: true })
+          setCanSubmit(!result.exists)
+        }
+      })
     } else {
       setUsernameExists(null)
       setCheckState({ isChecking: false, debounceFinished: true })
       setCanSubmit(false)
     }
-  
+
     return () => {
       isMounted = false
     }
@@ -100,7 +100,6 @@ export function UsernameDialog({ open }: { open: boolean }) {
 
         if (userIdResponse?.userId) {
           const userId = userIdResponse.userId
-
 
           await setUsername({
             registrationParameters: {
@@ -143,9 +142,15 @@ export function UsernameDialog({ open }: { open: boolean }) {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                    <Input placeholder="username" {...field} disabled={isCheckingUsername} />
+                      <Input
+                        placeholder="username"
+                        {...field}
+                        disabled={isCheckingUsername}
+                      />
                     </FormControl>
-                    {usernameExists && checkState.debounceFinished && <FormMessage>Username already exists!</FormMessage>}
+                    {usernameExists && checkState.debounceFinished && (
+                      <FormMessage>Username already exists!</FormMessage>
+                    )}
                     <FormMessage />
                   </FormItem>
                 )}
@@ -153,14 +158,14 @@ export function UsernameDialog({ open }: { open: boolean }) {
             </form>
           </Form>
           {canSubmit && (
-  <Button
-    onClick={form.handleSubmit(onSubmit)}
-    type="submit"
-    variant="link"
-  >
-    Complete
-  </Button>
-)}
+            <Button
+              onClick={form.handleSubmit(onSubmit)}
+              type="submit"
+              variant="link"
+            >
+              Complete
+            </Button>
+          )}
         </Stack>
       </DialogContent>
     </Dialog>
