@@ -858,11 +858,9 @@ export type NodesQuery = {
   }>
 }
 
-export type UserIdQueryVariables = Exact<{
-  custodyAddress: Scalars['String']['input']
-}>
+export type GetUserIdQueryVariables = Exact<{ [key: string]: never }>
 
-export type UserIdQuery = {
+export type GetUserIdQuery = {
   __typename?: 'Query'
   idRegistrys: Array<{ __typename?: 'IdRegistry'; userId?: any | null }>
 }
@@ -980,9 +978,10 @@ export const NodesDocument = gql`
   }
 }
     `
-export const UserIdDocument = gql`
-    query UserId($custodyAddress: String!) {
-  idRegistrys(where: {to: $custodyAddress}) {
+
+export const GetUserIdDocument = gql`
+    query getUserId {
+  idRegistrys(where: {to: ""}) {
     userId
   }
 }
@@ -1086,17 +1085,17 @@ export function getSdk(
         'query',
       )
     },
-    UserId(
-      variables: UserIdQueryVariables,
+    getUserId(
+      variables?: GetUserIdQueryVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<UserIdQuery> {
+    ): Promise<GetUserIdQuery> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.request<UserIdQuery>(UserIdDocument, variables, {
+          client.request<GetUserIdQuery>(GetUserIdDocument, variables, {
             ...requestHeaders,
             ...wrappedRequestHeaders,
           }),
-        'UserId',
+        'getUserId',
         'query',
       )
     },

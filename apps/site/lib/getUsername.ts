@@ -1,7 +1,7 @@
 export async function getUsername({ id }: { id: string }) {
   try {
     const response = await fetch(
-      `https://server.talktomenice.workers.dev/get/${id}`,
+      `https://server.talktomenice.workers.dev/username/${id}`,
       {
         method: 'GET',
       },
