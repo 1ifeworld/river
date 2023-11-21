@@ -4,9 +4,7 @@ import { Channel } from '@/gql'
 import { Add } from '@/client'
 import { ipfsToHttps } from '@/lib'
 
-export async function ChannelBanner({
-  channel,
-}: { channel: Channel }) {
+export async function ChannelBanner({ channel }: { channel: Channel }) {
   return (
     <Flex className="items-end w-full h-full gap-x-[22px]">
       {/* column 1 */}

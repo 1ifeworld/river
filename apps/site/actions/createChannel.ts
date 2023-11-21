@@ -1,6 +1,6 @@
 'use server'
 
-import { type Hash } from 'viem'
+import { type Hash, encodeFunctionData } from 'viem'
 import {
   addresses,
   channelSchema,
@@ -8,7 +8,7 @@ import {
   encodeChannel301,
   nodeRegistryABI,
 } from 'scrypt'
-import { walletClient, serverSidePublicClient } from '@/config/walletClient'
+import { nonceManager } from '@/config/ethersClient'
 
 interface CreateChannelProps {
   userId: bigint
@@ -27,8 +27,7 @@ export async function createChannel({
 
   const channelUriMessage = encodeChannel301({ channelUri })
 
-  const { request } = await serverSidePublicClient.simulateContract({
-    address: addresses.nodeRegistry.opGoerli,
+  const registerEncodedData = encodeFunctionData({
     abi: nodeRegistryABI,
     functionName: 'register',
     args: [
@@ -41,7 +40,14 @@ export async function createChannel({
     ],
   })
 
-  const registerHash = await walletClient.writeContract(request)
-
-  console.log('Register hash:', registerHash)
+  try {
+    const regTxn = await nonceManager.sendTransaction({
+      to: addresses.nodeRegistry.opGoerli,
+      data: registerEncodedData,
+    })
+    const regTxnReceipt = await regTxn.wait()
+    console.log('Register transaction receipt: ', regTxnReceipt)
+  } catch (error) {
+    console.error('Register transaction failed: ', error)
+  }
 }

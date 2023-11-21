@@ -17,9 +17,7 @@ const WhiteBox = () => {
   )
 }
 
-export async function ChannelItems({
-  channel,
-}: { channel: Channel }) {
+export async function ChannelItems({ channel }: { channel: Channel }) {
   return (
     <Table className="w-full">
       <TableHeader>
