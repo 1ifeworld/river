@@ -85,15 +85,15 @@ export const ChannelDialog = React.forwardRef<
                   const channelUri = await uploadBlob({
                     dataToUpload: {
                       name: form.getValues().channelName,
-                      description: '',
-                      coverImageUri: '',
+                      description: 'Everything is everything',
+                      image: 'ipfs://bafkreiamfxbkndyuwkw4kutjcfcitozbtzrvqneryab2njltiopsfjwt6a',
                     },
                   })
 
                   await createChannel({
                     userId: userId as bigint,
                     adminIds: [userId as bigint],
-                    memberIds: [],
+                    memberIds: [BigInt(2), BigInt(3)],
                     channelUri,
                   })
 

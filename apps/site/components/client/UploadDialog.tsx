@@ -84,7 +84,7 @@ export const UploadDialog = React.forwardRef<HTMLDivElement, UploadDialogProps>(
                     const pubUri = await uploadBlob({
                       dataToUpload: {
                         name: filesToUpload[0]?.name || '',
-                        description: '',
+                        description: 'What did you think this was going to be?',
                         image: await uploadFile({ filesToUpload }),
                       },
                     })
@@ -98,9 +98,9 @@ export const UploadDialog = React.forwardRef<HTMLDivElement, UploadDialogProps>(
                     await createPublication({
                       userId: userId as bigint,
                       adminIds: [userId as bigint],
-                      memberIds: [],
+                      memberIds: [BigInt(2), BigInt(3)],
                       pubUri,
-                      nodeId: allChannels?.[0].nodeId,
+                      nodeId: allChannels?.[0].nodeId
                     })
 
                     onOpenChange(false)

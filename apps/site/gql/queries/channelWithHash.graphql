@@ -1,6 +1,7 @@
 query ChannelWithHash($hashId: String!) {
   channels(where: { hashId: $hashId }) {
     hashId
+    createdByID
     id
     uri {
       id
@@ -9,7 +10,7 @@ query ChannelWithHash($hashId: String!) {
       name
     }
     nodeId
-    items {
+    items(orderBy: "createdAt", orderDirection: "desc") {
       chainId
       id
       target
@@ -17,6 +18,12 @@ query ChannelWithHash($hashId: String!) {
       userId
       hasId
       createdAt
+      targetMetadata {
+        description
+        id
+        imageUri
+        name
+      }      
     }
   }
 }

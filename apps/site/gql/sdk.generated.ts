@@ -751,7 +751,7 @@ export type ChannelWithHashQueryVariables = Exact<{
 }>;
 
 
-export type ChannelWithHashQuery = { __typename?: 'Query', channels: Array<{ __typename?: 'Channel', hashId: string, id: string, nodeId?: any | null, uri?: { __typename?: 'Metadata', id: string, imageUri?: string | null, description?: string | null, name?: string | null } | null, items: Array<{ __typename?: 'Item', chainId: any, id: string, target: string, targetId: any, userId?: any | null, hasId: boolean, createdAt?: any | null }> }> };
+export type ChannelWithHashQuery = { __typename?: 'Query', channels: Array<{ __typename?: 'Channel', hashId: string, createdByID?: any | null, id: string, nodeId?: any | null, uri?: { __typename?: 'Metadata', id: string, imageUri?: string | null, description?: string | null, name?: string | null } | null, items: Array<{ __typename?: 'Item', chainId: any, id: string, target: string, targetId: any, userId?: any | null, hasId: boolean, createdAt?: any | null, targetMetadata?: { __typename?: 'Metadata', description?: string | null, id: string, imageUri?: string | null, name?: string | null } | null }> }> };
 
 export type ItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -828,6 +828,7 @@ export const ChannelWithHashDocument = gql`
     query ChannelWithHash($hashId: String!) {
   channels(where: {hashId: $hashId}) {
     hashId
+    createdByID
     id
     uri {
       id
@@ -836,7 +837,7 @@ export const ChannelWithHashDocument = gql`
       name
     }
     nodeId
-    items {
+    items(orderBy: "createdAt", orderDirection: "desc") {
       chainId
       id
       target
@@ -844,6 +845,12 @@ export const ChannelWithHashDocument = gql`
       userId
       hasId
       createdAt
+      targetMetadata {
+        description
+        id
+        imageUri
+        name
+      }
     }
   }
 }

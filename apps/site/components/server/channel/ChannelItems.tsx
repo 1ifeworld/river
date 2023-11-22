@@ -7,8 +7,12 @@ import {
   TableHeader,
   TableRow,
   Stack,
+  Card
 } from '@/design-system'
 import { Channel, Item } from '@/gql'
+import { unixTimeConverter, ipfsToHttps } from '@/utils'
+import { Username } from '@/server'
+import Image from 'next/image'
 
 // This is a placeholder component to represent a cover image
 const WhiteBox = () => {
@@ -45,31 +49,40 @@ export async function ChannelItems({ channel }: { channel: Channel }) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        <TableRow key={'1'}>
+      {channel.items.map((item: Item, index: number) => (
+        <TableRow key={index}>
           <TableCell className="text-right text-primary-foreground">
-            <Typography>{'1'}</Typography>
+            <Typography>{index + 1}</Typography>
           </TableCell>
           <TableCell className="flex gap-4 items-center text-primary-foreground">
-            <WhiteBox />
+              <Image
+                className="object-cover aspect-square "
+                src={ipfsToHttps(item.targetMetadata?.imageUri as string)}
+                alt={item.targetMetadata?.name as string}
+                width={40}
+                height={40}
+              />
             <Stack className="">
               <Typography className="text-primary-foreground">
-                {'name'}
+                {item.targetMetadata?.name}
               </Typography>
-              <Typography className="text-secondary-foreground">
-                {'creator'}
-              </Typography>
+              <Username id={item.userId} />
+              {/* <Typography className="text-secondary-foreground">
+                {`user id: ` + item.userId}
+              </Typography> */}
             </Stack>
           </TableCell>
           <TableCell className="text-right text-primary-foreground">
-            <Typography>{'PNG image'}</Typography>
+            <Typography>{'** type **'}</Typography>
           </TableCell>
           <TableCell className="text-right text-primary-foreground">
-            <Typography>{'2 days ago'}</Typography>
+            <Typography>{unixTimeConverter(item.createdAt)}</Typography>
           </TableCell>
           <TableCell className="text-right w-[100px] text-primary-foreground">
             <Typography>{'...'}</Typography>
           </TableCell>
         </TableRow>
+        ))}
         {/* {channel.items.map((item: Item, index: number) => (
           <TableRow key={index}>
             <TableCell className="flex gap-2 items-center">
