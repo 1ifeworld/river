@@ -100,7 +100,7 @@ export const UploadDialog = React.forwardRef<HTMLDivElement, UploadDialogProps>(
                       adminIds: [userId as bigint],
                       memberIds: [BigInt(2), BigInt(3)],
                       pubUri,
-                      nodeId: allChannels?.[0].nodeId
+                      nodeId: allChannels?.[0].nodeId,
                     })
 
                     onOpenChange(false)

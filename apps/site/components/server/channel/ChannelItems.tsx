@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
   Stack,
-  Card
+  Card,
 } from '@/design-system'
 import { Channel, Item } from '@/gql'
 import { unixTimeConverter, ipfsToHttps } from '@/utils'
@@ -49,12 +49,12 @@ export async function ChannelItems({ channel }: { channel: Channel }) {
         </TableRow>
       </TableHeader>
       <TableBody>
-      {channel.items.map((item: Item, index: number) => (
-        <TableRow key={index}>
-          <TableCell className="text-right text-primary-foreground">
-            <Typography>{index + 1}</Typography>
-          </TableCell>
-          <TableCell className="flex gap-4 items-center text-primary-foreground">
+        {channel.items.map((item: Item, index: number) => (
+          <TableRow key={index}>
+            <TableCell className="text-right text-primary-foreground">
+              <Typography>{index + 1}</Typography>
+            </TableCell>
+            <TableCell className="flex gap-4 items-center text-primary-foreground">
               <Image
                 className="object-cover aspect-square "
                 src={ipfsToHttps(item.targetMetadata?.imageUri as string)}
@@ -62,26 +62,26 @@ export async function ChannelItems({ channel }: { channel: Channel }) {
                 width={40}
                 height={40}
               />
-            <Stack className="">
-              <Typography className="text-primary-foreground">
-                {item.targetMetadata?.name}
-              </Typography>
-              <Username id={item.userId} />
-              {/* <Typography className="text-secondary-foreground">
+              <Stack className="">
+                <Typography className="text-primary-foreground">
+                  {item.targetMetadata?.name}
+                </Typography>
+                <Username id={item.userId} />
+                {/* <Typography className="text-secondary-foreground">
                 {`user id: ` + item.userId}
               </Typography> */}
-            </Stack>
-          </TableCell>
-          <TableCell className="text-right text-primary-foreground">
-            <Typography>{'** type **'}</Typography>
-          </TableCell>
-          <TableCell className="text-right text-primary-foreground">
-            <Typography>{unixTimeConverter(item.createdAt)}</Typography>
-          </TableCell>
-          <TableCell className="text-right w-[100px] text-primary-foreground">
-            <Typography>{'...'}</Typography>
-          </TableCell>
-        </TableRow>
+              </Stack>
+            </TableCell>
+            <TableCell className="text-right text-primary-foreground">
+              <Typography>{'** type **'}</Typography>
+            </TableCell>
+            <TableCell className="text-right text-primary-foreground">
+              <Typography>{unixTimeConverter(item.createdAt)}</Typography>
+            </TableCell>
+            <TableCell className="text-right w-[100px] text-primary-foreground">
+              <Typography>{'...'}</Typography>
+            </TableCell>
+          </TableRow>
         ))}
         {/* {channel.items.map((item: Item, index: number) => (
           <TableRow key={index}>

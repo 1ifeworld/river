@@ -20,15 +20,28 @@ import {
 } from '@/lib'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { useAlchemyContext } from '@/context'
-import { usePrivy } from '@privy-io/react-auth'
-import { AlchemyProvider } from '@alchemy/aa-alchemy'
-import { Hex } from 'viem'
+import {  usePrivy, useWallets } from '@privy-io/react-auth'
+import { publicClient } from '@/config/publicClient'
 import { getUserId } from '@/gql'
 import React, { useState, useEffect } from 'react'
 import { useDebounce } from 'usehooks-ts'
 import { addresses } from 'scrypt'
 import * as z from 'zod'
+import {
+  LightSmartContractAccount,
+  getDefaultLightAccountFactory,
+} from '@alchemy/aa-accounts'
+import { AlchemyProvider } from '@alchemy/aa-alchemy'
+import { opGoerliViem } from '@/constants'
+import { type SmartAccountSigner, WalletClientSigner } from '@alchemy/aa-core'
+import {
+  createWalletClient,
+  custom,
+  type Hex,
+  type EIP1193Provider,
+  Address,
+} from 'viem'
+
 
 const FormSchema = z.object({
   username: z.string().min(2, {
@@ -78,45 +91,71 @@ export function UsernameDialog({ open }: { open: boolean }) {
     }
   }, [debouncedUsername])
 
-  const { alchemyProvider, smartAccountAddress } = useAlchemyContext()
-  alchemyProvider?.withAlchemyGasManager({
-    policyId: process.env.NEXT_PUBLIC_ALCHEMY_GAS_MANAGER_POLICY as string,
-    entryPoint: addresses.entryPoint.opGoerli,
-  })
+  const { wallets } = useWallets()
+
+  const embeddedWallet = wallets.find(
+    (wallet) => wallet.walletClientType === 'privy',
+  )
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    try {
-      // Execute the registerAndDelegate function
-      const hash = await registerAndDelegate({
-        from: smartAccountAddress as Hex,
-        provider: alchemyProvider as AlchemyProvider,
-      })
 
-      if (hash && smartAccountAddress) {
-        // If a hash is returned, proceed to get the userId
-        const { userId } = await getUserId({
-          custodyAddress: smartAccountAddress,
-        })
+    const eip1193provider = await embeddedWallet?.getEthereumProvider()
 
-        if (userId) {
-          await setUsername({
-            registrationParameters: {
-              id: userId,
-              name: `${data.username}.sbvrsv.eth`,
-              owner: String(smartAccountAddress),
-              email: user?.email?.address as string,
-              signer: user?.wallet?.address as string,
-            },
-          })
-        } else {
-          console.error('No valid user ID found for the given address.')
-        }
-      } else {
-        console.error('No transaction hash returned from registerAndDelegate.')
-      }
-    } catch (error) {
-      console.error('An error occurred during the registration process:', error)
-    }
+    const privyClient = createWalletClient({
+      account: embeddedWallet?.address as Address,
+      chain: opGoerliViem,
+      transport: custom(eip1193provider as EIP1193Provider),
+    })
+
+    // Initialize the account's signer from the embedded wallet's viem client
+    const privySigner: SmartAccountSigner = new WalletClientSigner(
+      privyClient,
+      'json-rpc', 
+    )
+
+    const alchemyProvider = new AlchemyProvider({
+      apiKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY as string,
+      chain: opGoerliViem,
+      entryPointAddress: addresses.entryPoint.opGoerli,
+    }).connect(
+      (rpcClient) =>
+        new LightSmartContractAccount({
+          entryPointAddress: addresses.entryPoint.opGoerli,
+          chain: rpcClient.chain,
+          owner: privySigner,
+          factoryAddress: getDefaultLightAccountFactory(rpcClient.chain),
+          rpcClient,
+        }),
+    )
+
+    const smartAccountAddress = await alchemyProvider.getAddress()
+
+    alchemyProvider?.withAlchemyGasManager({
+      policyId: process.env.NEXT_PUBLIC_ALCHEMY_GAS_MANAGER_POLICY as string,
+      entryPoint: addresses.entryPoint.opGoerli,
+    })
+
+    const transactionHash = await registerAndDelegate({
+      from: smartAccountAddress,
+      provider: alchemyProvider,
+    })
+
+    const transaction = await publicClient.waitForTransactionReceipt({
+      hash: transactionHash,
+    })
+
+    const userIdRegistered = parseInt(
+      transaction.logs[6].topics[2] as string,
+      16,
+    )
+
+    await setUsername({
+      registrationParameters: {
+        id: String(userIdRegistered),
+        name: `${data.username}.sbvrsv.eth`,
+        owner: String(smartAccountAddress),
+      },
+    })
   }
 
   return (
@@ -130,10 +169,7 @@ export function UsernameDialog({ open }: { open: boolean }) {
           </DialogHeader>
           {/* <Separator /> */}
           <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="w-2/3 space-y-6"
-            >
+            <form className="w-2/3 space-y-6">
               <FormField
                 control={form.control}
                 name="username"
@@ -153,17 +189,16 @@ export function UsernameDialog({ open }: { open: boolean }) {
                   </FormItem>
                 )}
               />
+              <Button
+                onClick={form.handleSubmit(onSubmit)}
+                type="submit"
+                variant="link"
+                disabled={!embeddedWallet || !canSubmit}
+              >
+                Complete
+              </Button>
             </form>
           </Form>
-          {canSubmit && (
-            <Button
-              onClick={form.handleSubmit(onSubmit)}
-              type="submit"
-              variant="link"
-            >
-              Complete
-            </Button>
-          )}
         </Stack>
       </DialogContent>
     </Dialog>
