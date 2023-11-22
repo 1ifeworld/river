@@ -30,8 +30,6 @@ export async function createPublication({
    * Encode necessary function data to register a node
    */
   
-  console.log("nonce manager: ", nonceManager)
-  
   const accessControlMessage = encodeAccess101({ adminIds, memberIds })
 
   const publicationUriMessage = encodePublication201({ pubUri })
