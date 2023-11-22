@@ -86,7 +86,8 @@ export const ChannelDialog = React.forwardRef<
                     dataToUpload: {
                       name: form.getValues().channelName,
                       description: 'Everything is everything',
-                      image: 'ipfs://bafkreiamfxbkndyuwkw4kutjcfcitozbtzrvqneryab2njltiopsfjwt6a',
+                      image:
+                        'ipfs://bafkreiamfxbkndyuwkw4kutjcfcitozbtzrvqneryab2njltiopsfjwt6a',
                     },
                   })
 

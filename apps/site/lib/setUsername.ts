@@ -2,8 +2,6 @@ interface RegistrationParameters {
   id: string
   name: string
   owner: string
-  email: string
-  signer: string
 }
 
 export async function setUsername({

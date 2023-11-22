@@ -12,7 +12,8 @@ import {
 } from 'scrypt'
 
 ponder.on('NodeRegistry:Update', async ({ event, context }) => {
-  const { Node, Message, Publication, Channel, Item, Metadata } = context.entities
+  const { Node, Message, Publication, Channel, Item, Metadata } =
+    context.entities
   const { sender, userId, nodeId, messages } = event.params
 
   console.log(`Node $${nodeId} Updated`)
@@ -45,10 +46,10 @@ ponder.on('NodeRegistry:Update', async ({ event, context }) => {
             const decoded = decodeAccess101({ msgBody: decodedMsg.msgBody })
             if (decoded) {
               await Node.update({
-              id: `${nodeRegistryChain}/${event.transaction.from}/${nodeId}`,
+                id: `${nodeRegistryChain}/${event.transaction.from}/${nodeId}`,
                 data: {
-                  nodeAdmin: decoded.admins.map(admin => BigInt(admin)),
-                  nodeMembers: decoded.members.map(member => BigInt(member)),
+                  nodeAdmin: decoded.admins.map((admin) => BigInt(admin)),
+                  nodeMembers: decoded.members.map((member) => BigInt(member)),
                 },
               })
             } else {
@@ -79,23 +80,28 @@ ponder.on('NodeRegistry:Update', async ({ event, context }) => {
           } else if (decodedMsg.msgType === BigInt(302)) {
             const decoded = decodeChannel302({ msgBody: decodedMsg.msgBody })
             if (decoded) {
-
-              const targetPublication = await Publication.findUnique({id:`${nodeRegistryChain}/${addresses.nodeRegistry.opGoerli.toLowerCase()}/${publicationSchema}/${decoded.id}` }) 
-              const targetMetadata = await Metadata.findUnique({id: targetPublication?.uri as string}) 
+              const targetPublication = await Publication.findUnique({
+                id: `${nodeRegistryChain}/${addresses.nodeRegistry.opGoerli.toLowerCase()}/${publicationSchema}/${
+                  decoded.id
+                }`,
+              })
+              const targetMetadata = await Metadata.findUnique({
+                id: targetPublication?.uri as string,
+              })
 
               await Item.create({
                 id: `${nodeRegistryChain}/${event.transaction.from}/${schema}/${nodeId}/${event.transaction.hash}/${event.log.logIndex}`,
                 data: {
-                  // pointer 
+                  // pointer
                   chainId: decoded.chainId,
                   targetId: decoded.id,
                   target: decoded.pointer,
                   hasId: decoded.hasId,
                   createdAt: event.block.timestamp,
                   channel: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
-                  // item 
+                  // item
                   userId: userId,
-                  targetMetadata: targetMetadata?.id
+                  targetMetadata: targetMetadata?.id,
                 },
               })
             }
