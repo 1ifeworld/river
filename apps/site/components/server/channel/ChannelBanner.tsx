@@ -5,6 +5,7 @@ import { Add } from '@/client'
 import { ipfsToHttps } from '@/lib'
 
 export async function ChannelBanner({ channel }: { channel: Channel }) {
+
   return (
     <Flex className="items-end w-full h-full gap-x-[22px]">
       {/* column 1 */}
@@ -23,11 +24,11 @@ export async function ChannelBanner({ channel }: { channel: Channel }) {
             {channel.uri?.name}
           </Typography>
           <Typography variant="h2" className="text-secondary-foreground">
-            {'junghwan.eth + 4 others' /* channel.admins */}
+            {'** channel members **' /* channel.admins */}
           </Typography>
         </Stack>
         <Typography className="text-primary-foreground">
-          {'Description' /* channel.uri.description */}
+          {channel.uri?.description ? channel.uri?.description : "example description"}
         </Typography>
         <Add />
       </Stack>

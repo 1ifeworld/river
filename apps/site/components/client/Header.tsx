@@ -7,6 +7,8 @@ import { RiverLogo } from '@/server'
 export function Header() {
   const { ready, authenticated } = usePrivy()
 
+  console.log("am i authenticated", authenticated)
+
   const [open, setOpen] = useState<boolean>(false)
 
   const { login } = useLogin({

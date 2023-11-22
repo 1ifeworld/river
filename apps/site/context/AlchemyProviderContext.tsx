@@ -54,6 +54,8 @@ export function AlchemyProviderComponent({
         'json-rpc', // signerType
       )
 
+      console.log("privy signer: ", privySigner)
+
       setAlchemyProvider(
         new AlchemyProvider({
           apiKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY as string,
