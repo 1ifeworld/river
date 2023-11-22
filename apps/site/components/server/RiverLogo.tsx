@@ -1,7 +1,9 @@
 import React from 'react'
+import Link from 'next/link'
 
 export function RiverLogo() {
   return (
+    <Link href={"/"}>
     <svg
       width="43"
       height="17"
@@ -15,5 +17,6 @@ export function RiverLogo() {
         fill="black"
       />
     </svg>
+    </Link>
   )
 }
