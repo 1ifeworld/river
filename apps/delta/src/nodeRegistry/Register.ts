@@ -137,9 +137,9 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
           const decoded = decodeChannel302({ msgBody: decodedMsg.msgBody })
           if (decoded) {
 
-            await Channel.update({
+            await Channel.upsert({
               id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
-              data: {
+              create: {
                 hashId: generateChannelHash({
                   chainId: nodeRegistryChain,
                   nodeRegistryAddress: event.transaction.to as Hex,
@@ -148,6 +148,15 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
                 }),
                 nodeId: nodeId
               },
+              update: {
+                  hashId: generateChannelHash({
+                    chainId: nodeRegistryChain,
+                    nodeRegistryAddress: event.transaction.to as Hex,
+                    schema: schema,
+                    nodeId: nodeId,
+                  }),
+                  nodeId: nodeId
+              }
             })
 
             const targetPublication = await Publication.findUnique({id:`${nodeRegistryChain}/${addresses.nodeRegistry.opGoerli.toLowerCase()}/${publicationSchema}/${decoded.id}` }) 
