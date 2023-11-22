@@ -30,11 +30,11 @@ ponder.on('NodeRegistry:Update', async ({ event, context }) => {
         const decodedMsg = decodeMessage000({ encodedMsg: messages[i] })
         if (decodedMsg && isValidMessageId(decodedMsg.msgType)) {
           await Message.create({
-            id: `420/${event.transaction.from}/${event.transaction.hash}/${event.log.logIndex}/${i}`,
+            id: `${nodeRegistryChain}/${event.transaction.from}/${event.transaction.hash}/${event.log.logIndex}/${i}`,
             data: {
               sender: sender,
               userId: userId,
-              node: `420/${event.transaction.from}/${nodeId}`,
+              node: `${nodeRegistryChain}/${event.transaction.from}/${nodeId}`,
               nodeId: nodeId,
               msgType: decodedMsg.msgType,
               msgBody: decodedMsg.msgBody,
@@ -45,10 +45,10 @@ ponder.on('NodeRegistry:Update', async ({ event, context }) => {
             const decoded = decodeAccess101({ msgBody: decodedMsg.msgBody })
             if (decoded) {
               await Node.update({
-                id: `420/${event.transaction.from}/${nodeId}`,
+              id: `${nodeRegistryChain}/${event.transaction.from}/${nodeId}`,
                 data: {
-                  nodeAdmin: decoded?.admins as bigint[],
-                  nodeMembers: decoded?.members as bigint[],
+                  nodeAdmin: decoded.admins.map(admin => BigInt(admin)),
+                  nodeMembers: decoded.members.map(member => BigInt(member)),
                 },
               })
             } else {
@@ -60,7 +60,7 @@ ponder.on('NodeRegistry:Update', async ({ event, context }) => {
             })
             if (decoded) {
               await Publication.update({
-                id: `420/${event.transaction.from}/${schema}/${nodeId}`,
+                id: `${nodeRegistryChain}/${event.transaction.from}/${schema}/${nodeId}`,
                 data: {
                   uri: decoded.uri,
                 },
@@ -70,7 +70,7 @@ ponder.on('NodeRegistry:Update', async ({ event, context }) => {
             const decoded = decodeChannel301({ msgBody: decodedMsg.msgBody })
             if (decoded) {
               await Channel.update({
-                id: `420/${event.transaction.from}/${schema}/${nodeId}`,
+                id: `${nodeRegistryChain}/${event.transaction.from}/${schema}/${nodeId}`,
                 data: {
                   uri: decoded.uri,
                 },
@@ -84,7 +84,7 @@ ponder.on('NodeRegistry:Update', async ({ event, context }) => {
               const targetMetadata = await Metadata.findUnique({id: targetPublication?.uri as string}) 
 
               await Item.create({
-                id: `420/${event.transaction.from}/${schema}/${nodeId}/${event.transaction.hash}/${event.log.logIndex}`,
+                id: `${nodeRegistryChain}/${event.transaction.from}/${schema}/${nodeId}/${event.transaction.hash}/${event.log.logIndex}`,
                 data: {
                   // pointer 
                   chainId: decoded.chainId,

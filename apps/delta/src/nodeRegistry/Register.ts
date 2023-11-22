@@ -15,7 +15,7 @@ import {
 import fetchIPFSData from '../utils/fetchIPFSData'
 
 ponder.on('NodeRegistry:Register', async ({ event, context }) => {
-  const { Node, Message, Publication, Channel, Item, Metadata, AccessControl } =
+  const { Node, Message, Publication, Channel, Item, Metadata } =
     context.entities
   const { sender, userId, schema, nodeId, messages } = event.params
 
@@ -45,17 +45,17 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
             msgType: decodedMsg.msgType,
             msgBody: decodedMsg.msgBody,
             userId: userId,
+    
           },
         })
         if (decodedMsg.msgType === BigInt(101)) {
           const decoded = decodeAccess101({ msgBody: decodedMsg.msgBody })
           if (decoded) {
-            await AccessControl.create({
+            await Node.update({
               id: `${nodeRegistryChain}/${event.transaction.to}/${nodeId}`,
               data: {
-                nodeId: nodeId,
-                nodeAdmin: [decoded.admins],
-                nodeMembers: [decoded.members],
+                nodeAdmin: decoded.admins.map(admin => BigInt(admin)),
+                nodeMembers: decoded.members.map(member => BigInt(member)),
               }
             })
           } else {
