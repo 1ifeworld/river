@@ -50,16 +50,12 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
         if (decodedMsg.msgType === BigInt(101)) {
           const decoded = decodeAccess101({ msgBody: decodedMsg.msgBody })
           if (decoded) {
-            await AccessControl.upsert({
+            await AccessControl.create({
               id: `${nodeRegistryChain}/${event.transaction.to}/${nodeId}`,
-              create: {
+              data: {
                 nodeId: nodeId,
-                nodeAdmin: [],
-                nodeMembers: [],
-              },
-              update: {
-                nodeAdmin: [],
-                nodeMembers: [],
+                nodeAdmin: [decoded.admins],
+                nodeMembers: [decoded.members],
               }
             })
           } else {
@@ -152,14 +148,6 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
                 }),
                 nodeId: nodeId
               },
-            })
-
-            await AccessControl.update({
-              id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
-              data:{
-                nodeAdmin: [],
-                nodeMembers: [],
-              }
             })
 
             const targetPublication = await Publication.findUnique({id:`${nodeRegistryChain}/${addresses.nodeRegistry.opGoerli.toLowerCase()}/${publicationSchema}/${decoded.id}` }) 

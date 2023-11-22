@@ -43,8 +43,8 @@ type Node @entity {
 type AccessControl @entity {
   id: String!
   nodeId: BigInt!
-  nodeAdmin: [BigInt!]!
-  nodeMembers: [BigInt!]!
+  nodeAdmin: [[BigInt!]]!
+  nodeMembers: [[BigInt!]]!
 }
 
 type Message @entity {
