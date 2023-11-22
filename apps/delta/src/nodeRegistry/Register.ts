@@ -45,6 +45,7 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
             msgType: decodedMsg.msgType,
             msgBody: decodedMsg.msgBody,
             userId: userId,
+    
           },
         })
         if (decodedMsg.msgType === BigInt(101)) {
@@ -53,7 +54,9 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
             await Node.update({
               id: `${nodeRegistryChain}/${event.transaction.to}/${nodeId}`,
               data: {
-              },
+                nodeAdmin: decoded.admins.map(admin => BigInt(admin)),
+                nodeMembers: decoded.members.map(member => BigInt(member)),
+              }
             })
           } else {
             return
@@ -145,7 +148,15 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
                 }),
                 nodeId: nodeId
               },
-              update: {},
+              update: {
+                  hashId: generateChannelHash({
+                    chainId: nodeRegistryChain,
+                    nodeRegistryAddress: event.transaction.to as Hex,
+                    schema: schema,
+                    nodeId: nodeId,
+                  }),
+                  nodeId: nodeId
+              }
             })
 
             const targetPublication = await Publication.findUnique({id:`${nodeRegistryChain}/${addresses.nodeRegistry.opGoerli.toLowerCase()}/${publicationSchema}/${decoded.id}` }) 

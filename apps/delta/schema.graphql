@@ -37,26 +37,27 @@ type Node @entity {
   nodeId: BigInt!
   schema: String!
   messages: [Message!]! @derivedFrom(field: "node")
-  AccessControl: AccessControl
-}
-
-type AccessControl @entity {
-  id: String!
-  nodeId: BigInt!
-  nodeAdmin: [BigInt!]!
-  nodeMembers: [BigInt!]!
+  nodeAdmin: [BigInt]
+  nodeMembers: [BigInt]
 }
 
 type Message @entity {
   id: String!
   nodeId: BigInt
-  node: Node 
+  node: Node
   sender: String
   msgType: BigInt
   msgBody: Bytes
   userId: BigInt
 }
 
+
+# type AccessControl @entity {
+#   id: String!
+#   node: Node
+#   nodeAdmin: [BigInt]
+#   nodeMembers: [BigInt]
+# }
 
 
 type Publication @entity {
@@ -76,7 +77,6 @@ type Channel @entity {
   createdAt: BigInt
   createdByID: BigInt
   nodeId: BigInt
-  accessControl: AccessControl
 }
 
 
