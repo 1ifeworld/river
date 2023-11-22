@@ -15,7 +15,7 @@ import {
 import fetchIPFSData from '../utils/fetchIPFSData'
 
 ponder.on('NodeRegistry:Register', async ({ event, context }) => {
-  const { Node, Message, Publication, Channel, Item, Metadata } =
+  const { Node, Message, Publication, Channel, Item, Metadata, AccessControl } =
     context.entities
   const { sender, userId, schema, nodeId, messages } = event.params
 
@@ -50,10 +50,17 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
         if (decodedMsg.msgType === BigInt(101)) {
           const decoded = decodeAccess101({ msgBody: decodedMsg.msgBody })
           if (decoded) {
-            await Node.update({
+            await AccessControl.upsert({
               id: `${nodeRegistryChain}/${event.transaction.to}/${nodeId}`,
-              data: {
+              create: {
+                nodeId: nodeId,
+                nodeAdmin: [],
+                nodeMembers: [],
               },
+              update: {
+                nodeAdmin: [],
+                nodeMembers: [],
+              }
             })
           } else {
             return
@@ -134,9 +141,9 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
           const decoded = decodeChannel302({ msgBody: decodedMsg.msgBody })
           if (decoded) {
 
-            await Channel.upsert({
+            await Channel.update({
               id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
-              create: {
+              data: {
                 hashId: generateChannelHash({
                   chainId: nodeRegistryChain,
                   nodeRegistryAddress: event.transaction.to as Hex,
@@ -145,7 +152,14 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
                 }),
                 nodeId: nodeId
               },
-              update: {},
+            })
+
+            await AccessControl.update({
+              id: `${nodeRegistryChain}/${event.transaction.to}/${schema}/${nodeId}`,
+              data:{
+                nodeAdmin: [],
+                nodeMembers: [],
+              }
             })
 
             const targetPublication = await Publication.findUnique({id:`${nodeRegistryChain}/${addresses.nodeRegistry.opGoerli.toLowerCase()}/${publicationSchema}/${decoded.id}` }) 
