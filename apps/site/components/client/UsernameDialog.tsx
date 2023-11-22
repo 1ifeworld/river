@@ -20,15 +20,13 @@ import {
 } from '@/lib'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { useAlchemyContext } from '@/context'
-import { ConnectedWallet, usePrivy, useWallets } from '@privy-io/react-auth'
+import {  usePrivy, useWallets } from '@privy-io/react-auth'
 import { publicClient } from '@/config/publicClient'
 import { getUserId } from '@/gql'
 import React, { useState, useEffect } from 'react'
 import { useDebounce } from 'usehooks-ts'
 import { addresses } from 'scrypt'
 import * as z from 'zod'
-// import { createLightAccount } from '@/lib'
 import {
   LightSmartContractAccount,
   getDefaultLightAccountFactory,
@@ -43,15 +41,7 @@ import {
   type EIP1193Provider,
   Address,
 } from 'viem'
-import { createClient, http } from 'viem'
-import { bundlerActions } from 'permissionless'
 
-export const bundlerClient = createClient({
-  chain: opGoerliViem,
-  transport: http(
-    'https://api.pimlico.io/v1/optimism-goerli/rpc?apikey=6e962c16-cc02-4631-84fe-b79fddce8b67',
-  ),
-}).extend(bundlerActions)
 
 const FormSchema = z.object({
   username: z.string().min(2, {
@@ -108,7 +98,6 @@ export function UsernameDialog({ open }: { open: boolean }) {
   )
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    // e.preventDefault()
 
     const eip1193provider = await embeddedWallet?.getEthereumProvider()
 
@@ -121,7 +110,7 @@ export function UsernameDialog({ open }: { open: boolean }) {
     // Initialize the account's signer from the embedded wallet's viem client
     const privySigner: SmartAccountSigner = new WalletClientSigner(
       privyClient,
-      'json-rpc', // signerType
+      'json-rpc', 
     )
 
     const alchemyProvider = new AlchemyProvider({
@@ -139,11 +128,7 @@ export function UsernameDialog({ open }: { open: boolean }) {
         }),
     )
 
-    console.log('Alchemy provider', alchemyProvider)
-
     const smartAccountAddress = await alchemyProvider.getAddress()
-
-    console.log('Smart acccount address', smartAccountAddress)
 
     alchemyProvider?.withAlchemyGasManager({
       policyId: process.env.NEXT_PUBLIC_ALCHEMY_GAS_MANAGER_POLICY as string,
@@ -154,8 +139,6 @@ export function UsernameDialog({ open }: { open: boolean }) {
       from: smartAccountAddress,
       provider: alchemyProvider,
     })
-
-    console.log('Transaction hash', transactionHash)
 
     const transaction = await publicClient.waitForTransactionReceipt({
       hash: transactionHash,
