@@ -4,8 +4,6 @@ export async function getUserId({
   smartAccountAddress,
 }: { smartAccountAddress: Hex }) {
 
-  console.log("smart accoutn address: ", smartAccountAddress)
-
   const userId = await fetch(
     `https://server.talktomenice.workers.dev/id/${smartAccountAddress}`,
     {
