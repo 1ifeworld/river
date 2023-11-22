@@ -33,11 +33,8 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
       },
     })
 
-    console.log("messages.length", messages.length)
-
     for (let i = 0; i < messages.length; ++i) {
       const decodedMsg = decodeMessage000({ encodedMsg: messages[i] })
-      console.log("msg type: ", decodedMsg?.msgType)
       if (decodedMsg && isValidMessageId(decodedMsg.msgType)) {
         await Message.create({
           id: `${nodeRegistryChain}/${event.transaction.to}/${event.transaction.hash}/${event.log.logIndex}/${i}`,
@@ -98,10 +95,7 @@ ponder.on('NodeRegistry:Register', async ({ event, context }) => {
         } else if (decodedMsg.msgType === BigInt(301)) {
           const decoded = decodeChannel301({ msgBody: decodedMsg.msgBody })
           if (decoded) {
-            console.log("whats the decoded uri ", decoded.uri)
             const ipfsData = await fetchIPFSData(decoded.uri);
-            console.log("whats the ipfs data reutrn: ", ipfsData)
-            console.log("whats the ipfs string specifically", ipfsData?.image)
               await Metadata.upsert({
               id: decoded.uri,
               create: {
