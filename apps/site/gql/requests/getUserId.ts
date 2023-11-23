@@ -4,6 +4,7 @@ import { type Address } from 'viem'
 export async function getUserId({
   custodyAddress,
 }: { custodyAddress: Address }) {
+
   if (!custodyAddress) {
     throw new Error('Address is required')
   }

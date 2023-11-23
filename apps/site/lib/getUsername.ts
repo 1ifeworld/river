@@ -1,4 +1,9 @@
 export async function getUsername({ id }: { id: number }) {
+
+  if (!id) {
+    throw new Error('id is required')
+  }  
+
   try {
     const response = await fetch(
       `https://server.talktomenice.workers.dev/username/${id}`,
@@ -16,7 +21,7 @@ export async function getUsername({ id }: { id: number }) {
 
     if (data.success) {
       // console.log('Username returned successfully')
-      return data
+      return data.username
     } else {
       console.error('Error:', data.error)
     }
