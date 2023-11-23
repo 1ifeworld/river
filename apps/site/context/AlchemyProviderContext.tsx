@@ -4,55 +4,56 @@ import {
   useContext,
   useState,
   useEffect,
-} from 'react'
+} from "react";
 import {
   LightSmartContractAccount,
   getDefaultLightAccountFactory,
-} from '@alchemy/aa-accounts'
-import { AlchemyProvider } from '@alchemy/aa-alchemy'
-import { opGoerliViem } from '@/constants'
-import { addresses } from 'scrypt'
-import { ConnectedWallet, useWallets } from '@privy-io/react-auth'
-import { WalletClientSigner, type SmartAccountSigner } from '@alchemy/aa-core'
+} from "@alchemy/aa-accounts";
+import { AlchemyProvider } from "@alchemy/aa-alchemy";
+import { opGoerliViem } from "@/constants";
+import { addresses } from "scrypt";
+import { ConnectedWallet, useWallets } from "@privy-io/react-auth";
+import { WalletClientSigner, type SmartAccountSigner } from "@alchemy/aa-core";
 import {
   createWalletClient,
   custom,
   type Hex,
   type EIP1193Provider,
-} from 'viem'
+} from "viem";
 
 const AlchemyContext = createContext<{
-  alchemyProvider?: AlchemyProvider
-  smartAccountAddress?: Hex
-}>({})
+  alchemyProvider?: AlchemyProvider;
+  smartAccountAddress?: Hex;
+}>({});
 
 export function AlchemyProviderComponent({
   children,
-}: { children: ReactNode }) {
-  const [alchemyProvider, setAlchemyProvider] = useState<AlchemyProvider>()
-  const [smartAccountAddress, setSmartAccountAddress] = useState<Hex>()
-  const { wallets } = useWallets()
+}: {
+  children: ReactNode;
+}) {
+  const [alchemyProvider, setAlchemyProvider] = useState<AlchemyProvider>();
+  const { wallets } = useWallets();
 
   const embeddedWallet = wallets.find(
-    (wallet) => wallet.walletClientType === 'privy',
-  )
+    (wallet) => wallet.walletClientType === "privy"
+  );
 
   useEffect(() => {
-    const createLightAccount = async (embeddedWallet: ConnectedWallet) => {
+    const initializeProvider = async (embeddedWallet: ConnectedWallet) => {
       // Create a viem client from the embedded wallet
-      const eip1193provider = await embeddedWallet?.getEthereumProvider()
+      const eip1193provider = await embeddedWallet?.getEthereumProvider();
 
       const privyClient = createWalletClient({
         account: embeddedWallet?.address as Hex,
         chain: opGoerliViem,
         transport: custom(eip1193provider as EIP1193Provider),
-      })
+      });
 
       // Initialize the account's signer from the embedded wallet's viem client
       const privySigner: SmartAccountSigner = new WalletClientSigner(
         privyClient,
-        'json-rpc', // signerType
-      )
+        "json-rpc" // signerType
+      );
 
       setAlchemyProvider(
         new AlchemyProvider({
@@ -67,28 +68,26 @@ export function AlchemyProviderComponent({
               owner: privySigner,
               factoryAddress: getDefaultLightAccountFactory(rpcClient.chain),
               rpcClient,
-            }),
-        ),
-      )
+            })
+        )
+      );
+    };
 
-      setSmartAccountAddress(await alchemyProvider?.getAddress())
-    }
-
-    if (embeddedWallet) createLightAccount(embeddedWallet)
-  }, [embeddedWallet?.address])
+    if (embeddedWallet) initializeProvider(embeddedWallet);
+  }, [embeddedWallet?.address]);
 
   return (
-    <AlchemyContext.Provider value={{ alchemyProvider, smartAccountAddress }}>
+    <AlchemyContext.Provider value={{ alchemyProvider }}>
       {children}
     </AlchemyContext.Provider>
-  )
+  );
 }
 
 // Access the context value of the AlchemyContext
 export const useAlchemyContext = () => {
-  const context = useContext(AlchemyContext)
+  const context = useContext(AlchemyContext);
   if (!context) {
-    throw Error('useAlchemyContext hook must be used within a AlchemyContext')
+    throw Error("useAlchemyContext hook must be used within a AlchemyContext");
   }
-  return context
-}
+  return context;
+};

@@ -1,5 +1,6 @@
 export * from './checkUsernameAvailability'
 export * from './createLightAccount'
+export * from './getCounterFactual'
 export * from './getUserId'
 export * from './getUsername'
 export * from './ipfsToHttps'
