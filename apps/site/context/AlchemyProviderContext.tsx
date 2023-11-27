@@ -4,90 +4,88 @@ import {
   useContext,
   useState,
   useEffect,
-} from "react";
+} from 'react'
 import {
   LightSmartContractAccount,
   getDefaultLightAccountFactory,
-} from "@alchemy/aa-accounts";
-import { AlchemyProvider } from "@alchemy/aa-alchemy";
-import { opGoerliViem } from "@/constants";
-import { addresses } from "scrypt";
-import { ConnectedWallet, useWallets } from "@privy-io/react-auth";
-import { WalletClientSigner, type SmartAccountSigner } from "@alchemy/aa-core";
+} from '@alchemy/aa-accounts'
+import { AlchemyProvider } from '@alchemy/aa-alchemy'
+import { opGoerliViem } from '@/constants'
+import { addresses } from 'scrypt'
+import { ConnectedWallet, useWallets } from '@privy-io/react-auth'
+import { WalletClientSigner, type SmartAccountSigner } from '@alchemy/aa-core'
 import {
   createWalletClient,
   custom,
   type Hex,
   type EIP1193Provider,
-} from "viem";
+} from 'viem'
+import { optimismGoerli } from 'viem/chains'
 
 const AlchemyContext = createContext<{
-  alchemyProvider?: AlchemyProvider;
-  smartAccountAddress?: Hex;
-}>({});
+  alchemyProvider?: AlchemyProvider
+  smartAccountAddress?: Hex
+}>({})
 
 export function AlchemyProviderComponent({
   children,
-}: {
-  children: ReactNode;
-}) {
-  const [alchemyProvider, setAlchemyProvider] = useState<AlchemyProvider>();
-  const { wallets } = useWallets();
-
-  const embeddedWallet = wallets.find(
-    (wallet) => wallet.walletClientType === "privy"
-  );
+}: { children: ReactNode }) {
+  const [alchemyProvider, setAlchemyProvider] = useState<AlchemyProvider>()
+  const { wallets } = useWallets()
 
   useEffect(() => {
-    const initializeProvider = async (embeddedWallet: ConnectedWallet) => {
-      // Create a viem client from the embedded wallet
-      const eip1193provider = await embeddedWallet?.getEthereumProvider();
+    const initializeProvider = async () => {
+      const embeddedWallet = wallets.find(
+        (wallet) => wallet.walletClientType === 'privy',
+      )
+      if (!embeddedWallet) return
+
+      const eip1193provider = await embeddedWallet.getEthereumProvider()
 
       const privyClient = createWalletClient({
-        account: embeddedWallet?.address as Hex,
+        account: embeddedWallet.address as Hex,
         chain: opGoerliViem,
         transport: custom(eip1193provider as EIP1193Provider),
-      });
+      })
 
-      // Initialize the account's signer from the embedded wallet's viem client
       const privySigner: SmartAccountSigner = new WalletClientSigner(
         privyClient,
-        "json-rpc" // signerType
-      );
+        'json-rpc', // signerType
+      )
 
-      setAlchemyProvider(
-        new AlchemyProvider({
-          apiKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY as string,
-          chain: opGoerliViem,
-          entryPointAddress: addresses.entryPoint.opGoerli,
-        }).connect(
-          (rpcClient) =>
-            new LightSmartContractAccount({
-              entryPointAddress: addresses.entryPoint.opGoerli,
-              chain: rpcClient.chain,
-              owner: privySigner,
-              factoryAddress: getDefaultLightAccountFactory(rpcClient.chain),
-              rpcClient,
-            })
-        )
-      );
-    };
+      const newAlchemyProvider = new AlchemyProvider({
+        apiKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY as string,
+        chain: optimismGoerli,
+        entryPointAddress: addresses.entrypoint.opGoerli,
+      }).connect(
+        (rpcClient) =>
+          new LightSmartContractAccount({
+            entryPointAddress: addresses.entrypoint.opGoerli,
+            chain: rpcClient.chain,
+            owner: privySigner,
+            factoryAddress: getDefaultLightAccountFactory(rpcClient.chain),
+            rpcClient,
+          }),
+      )
 
-    if (embeddedWallet) initializeProvider(embeddedWallet);
-  }, [embeddedWallet?.address]);
+      setAlchemyProvider(newAlchemyProvider)
+      await newAlchemyProvider.getAddress()
+    }
+
+    initializeProvider()
+  }, [wallets]) // Dependency array
 
   return (
     <AlchemyContext.Provider value={{ alchemyProvider }}>
       {children}
     </AlchemyContext.Provider>
-  );
+  )
 }
 
-// Access the context value of the AlchemyContext
 export const useAlchemyContext = () => {
-  const context = useContext(AlchemyContext);
+  const context = useContext(AlchemyContext)
   if (!context) {
-    throw Error("useAlchemyContext hook must be used within a AlchemyContext");
+    throw Error('useAlchemyContext hook must be used within a AlchemyContext')
   }
-  return context;
-};
+  return context
+}

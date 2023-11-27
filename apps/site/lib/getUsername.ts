@@ -1,8 +1,7 @@
-export async function getUsername({ id }: { id: number }) {
-
+export async function getUsername({ id }: { id: bigint }) {
   if (!id) {
     throw new Error('id is required')
-  }  
+  }
 
   try {
     const response = await fetch(

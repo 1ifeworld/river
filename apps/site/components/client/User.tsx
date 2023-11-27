@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react'
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -7,49 +8,48 @@ import {
   Button,
 } from '@/design-system'
 import { useLogout } from '@privy-io/react-auth'
-import { useState, useEffect } from 'react'
 import { getUserId } from '@/gql'
 import { type Hex } from 'viem'
-import { getCounterfactual, getUsername } from '@/lib'
-import { useWallets } from "@privy-io/react-auth";
+import { getUsername } from '@/lib'
+import { useAlchemyContext } from 'context/AlchemyProviderContext'
 
 export function User() {
   const { logout } = useLogout()
-  const [userId, setUserId] = useState<number>()
-  const [username, setUsername] = useState<number>()
+  const [userId, setUserId] = useState<bigint | undefined>(undefined)
+  const [username, setUsername] = useState<string | undefined>(undefined)
 
-  const { wallets } = useWallets();
-
-  const embeddedWallet = wallets.find(
-    (wallet) => wallet.walletClientType === "privy"
-  );
+  const { alchemyProvider } = useAlchemyContext()
 
   useEffect(() => {
-    if (!!embeddedWallet) {
-      (async () => {
-        // Get counter factual
-        const smartAccountAddress = await getCounterfactual({connectedPrivyAccount: embeddedWallet })
-        // console.log("counter factual address: ", smartAccountAddress)
-        // Get id for custody address
-        const { userId } = await getUserId({
-          custodyAddress: smartAccountAddress as Hex,
-        })
-        // console.log("userId from counter factual: ", userId)
-        setUserId(Number(userId))
-        // Get username for id
-        const usernameResponse = await getUsername({id: userId})
-        // console.log("username from offhcina db: ", usernameResponse.slice(0, -11))
-        setUsername(usernameResponse.slice(0, -11))        
-      })()
-    }
-  }, [embeddedWallet])
+    const fetchData = async () => {
+      if (!alchemyProvider) {
+        console.error('Alchemy provider is not initialized')
+        return
+      }
 
+      const smartAccountAddress = await alchemyProvider.getAddress()
+      const userIdResponse = await getUserId({
+        custodyAddress: smartAccountAddress as Hex,
+      })
+
+      if (userIdResponse && userIdResponse.userId) {
+        setUserId(BigInt(userIdResponse.userId))
+      } else {
+        console.error('UserId not found')
+        return
+      }
+      const usernameResponse = await getUsername({
+        id: BigInt(userIdResponse.userId),
+      })
+      setUsername(usernameResponse.slice(0, -11))
+    }
+
+    fetchData()
+  }, [alchemyProvider])
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        {/* TODO: Update to fetch and return the username of the connected account */}
-        <Button variant="link">{username ? username : "NaN"}</Button>
-        {/* <Button variant="link">User</Button> */}
+        <Button variant="link">{username || 'NaN'}</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-32" align="end">
         <DropdownMenuGroup>
