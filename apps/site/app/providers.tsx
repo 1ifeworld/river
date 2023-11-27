@@ -13,9 +13,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <PrivyProviderWrapper>
       {/* <PrivyWagmiConnector wagmiChainsConfig={configureChainsConfig}> */}
       {/* <ConnectKitProvider> */}
-      {/* <AlchemyProviderComponent> */}
+      <AlchemyProviderComponent>
       {mounted && children}
-      {/* </AlchemyProviderComponent> */}
+      </AlchemyProviderComponent>
       {/* </ConnectKitProvider> */}
       {/* </PrivyWagmiConnector> */}
     </PrivyProviderWrapper>

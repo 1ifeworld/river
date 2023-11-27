@@ -49,6 +49,7 @@ const FormSchema = z.object({
   }),
 })
 
+
 export function UsernameDialog({ open }: { open: boolean }) {
   const { ready, authenticated, user } = usePrivy()
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -91,15 +92,12 @@ export function UsernameDialog({ open }: { open: boolean }) {
     }
   }, [debouncedUsername])
 
-  const { alchemyProvider } = useAlchemyContext()
+  const {alchemyProvider} = useAlchemyContext()
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    if (!alchemyProvider) {
-      console.error('Alchemy provider is not initialized')
-      return
-    }
 
-    const smartAccountAddress = await alchemyProvider.getAddress()
+    const smartAccountAddress = await alchemyProvider?.getAddress()
+    console.log("SMART", smartAccountAddress)
 
     alchemyProvider?.withAlchemyGasManager({
       policyId: process.env.NEXT_PUBLIC_ALCHEMY_GAS_MANAGER_POLICY as string,
@@ -107,8 +105,8 @@ export function UsernameDialog({ open }: { open: boolean }) {
     })
 
     const transactionHash = await registerAndDelegate({
-      from: smartAccountAddress,
-      provider: alchemyProvider,
+      from: smartAccountAddress as Hex,
+      provider: alchemyProvider as AlchemyProvider,
     })
 
     const transaction = await publicClient.waitForTransactionReceipt({
