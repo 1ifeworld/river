@@ -77,7 +77,7 @@ export function AlchemyProviderComponent({
           }),
       )
 
-      console.log("PROVIDER: THIS IS SALIEFS CODE", alchemyProvider)
+      console.log('PROVIDER: THIS IS SALIEFS CODE', alchemyProvider)
 
       setAlchemyProvider(alchemyProvider)
 

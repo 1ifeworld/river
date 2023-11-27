@@ -46,17 +46,19 @@ export function AddNew() {
         console.error('Alchemy provider is not initialized')
         return
       }
-  
+
       const smartAccountAddress = await alchemyProvider.getAddress()
-      const userIdResponse = await getUserId({ custodyAddress: smartAccountAddress as Hex })
-  
+      const userIdResponse = await getUserId({
+        custodyAddress: smartAccountAddress as Hex,
+      })
+
       if (userIdResponse && userIdResponse.userId) {
         setUserId(userIdResponse.userId)
       } else {
         console.error('UserId not found')
       }
     }
-  
+
     fetchData()
   }, [alchemyProvider])
 

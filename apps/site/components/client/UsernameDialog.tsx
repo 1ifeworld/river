@@ -27,21 +27,9 @@ import React, { useState, useEffect } from 'react'
 import { useDebounce } from 'usehooks-ts'
 import { addresses } from 'scrypt'
 import * as z from 'zod'
-import {
-  LightSmartContractAccount,
-  getDefaultLightAccountFactory,
-} from '@alchemy/aa-accounts'
 import { AlchemyProvider } from '@alchemy/aa-alchemy'
-import { opGoerliViem } from '@/constants'
-import { type SmartAccountSigner, WalletClientSigner } from '@alchemy/aa-core'
 import { useAlchemyContext } from 'context/AlchemyProviderContext'
-import {
-  createWalletClient,
-  custom,
-  type Hex,
-  type EIP1193Provider,
-  Address,
-} from 'viem'
+import { type Hex } from 'viem'
 
 const FormSchema = z.object({
   username: z.string().min(2, {
@@ -49,9 +37,7 @@ const FormSchema = z.object({
   }),
 })
 
-
 export function UsernameDialog({ open }: { open: boolean }) {
-  const { ready, authenticated, user } = usePrivy()
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -92,12 +78,11 @@ export function UsernameDialog({ open }: { open: boolean }) {
     }
   }, [debouncedUsername])
 
-  const {alchemyProvider} = useAlchemyContext()
+  const { alchemyProvider } = useAlchemyContext()
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-
     const smartAccountAddress = await alchemyProvider?.getAddress()
-    console.log("SMART", smartAccountAddress)
+    console.log('SMART', smartAccountAddress)
 
     alchemyProvider?.withAlchemyGasManager({
       policyId: process.env.NEXT_PUBLIC_ALCHEMY_GAS_MANAGER_POLICY as string,
