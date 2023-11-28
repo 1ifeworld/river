@@ -20,9 +20,7 @@ import {
 } from '@/lib'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { usePrivy, useWallets } from '@privy-io/react-auth'
 import { publicClient } from '@/config/publicClient'
-import { getUserId } from '@/gql'
 import React, { useState, useEffect } from 'react'
 import { useDebounce } from 'usehooks-ts'
 import { addresses } from 'scrypt'
@@ -31,29 +29,37 @@ import { AlchemyProvider } from '@alchemy/aa-alchemy'
 import { useAlchemyContext } from 'context/AlchemyProviderContext'
 import { type Hex } from 'viem'
 
-const FormSchema = z.object({
-  username: z.string().min(2, {
-    message: 'Username must be at least 2 characters.',
-  }),
-})
+interface UsernameDialogProps {
+  open: boolean
+  setOpen: (open: boolean) => void
+}
 
-export function UsernameDialog({ open }: { open: boolean }) {
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
+  const UsernameSchema = z.object({
+    username: z.string().min(2, {
+      message: 'Username must be at least 2 characters.',
+    }),
+  })
+
+  const form = useForm<z.infer<typeof UsernameSchema>>({
+    resolver: zodResolver(UsernameSchema),
     defaultValues: {
       username: '',
     },
   })
 
-  const [usernameExists, setUsernameExists] = useState<boolean | null>(null)
-  const [isCheckingUsername, setIsCheckingUsername] = useState(false)
-  const username = form.watch('username')
-  const debouncedUsername = useDebounce(username, 500)
+  // Unused
+  const [isCheckingUsername, setIsCheckingUsername] = useState<boolean>(false)
+
+  const [usernameExists, setUsernameExists] = useState<boolean | null>()
   const [checkState, setCheckState] = useState({
     isChecking: false,
     debounceFinished: false,
   })
   const [canSubmit, setCanSubmit] = useState(false)
+
+  const username = form.watch('username')
+  const debouncedUsername = useDebounce(username, 500)
 
   useEffect(() => {
     let isMounted = true
@@ -78,12 +84,9 @@ export function UsernameDialog({ open }: { open: boolean }) {
     }
   }, [debouncedUsername])
 
-  const { alchemyProvider } = useAlchemyContext()
+  const { alchemyProvider, smartAccountAddress } = useAlchemyContext()
 
-  async function onSubmit(data: z.infer<typeof FormSchema>) {
-    const smartAccountAddress = await alchemyProvider?.getAddress()
-    console.log('SMART', smartAccountAddress)
-
+  async function onSubmit(data: z.infer<typeof UsernameSchema>) {
     alchemyProvider?.withAlchemyGasManager({
       policyId: process.env.NEXT_PUBLIC_ALCHEMY_GAS_MANAGER_POLICY as string,
       entryPoint: addresses.entryPoint.opGoerli,
@@ -110,6 +113,8 @@ export function UsernameDialog({ open }: { open: boolean }) {
         owner: String(smartAccountAddress),
       },
     })
+
+    setOpen(false)
   }
 
   return (

@@ -17,16 +17,15 @@ import { WalletClientSigner, type SmartAccountSigner } from '@alchemy/aa-core'
 import {
   createWalletClient,
   custom,
-  type Hex,
   type EIP1193Provider,
-  Address,
+  type Address,
 } from 'viem'
 import { optimismGoerli } from 'viem/chains'
 import { addresses } from 'scrypt'
 
 const AlchemyContext = createContext<{
   alchemyProvider?: AlchemyProvider
-  smartAccountAddress?: Hex
+  smartAccountAddress?: Address
 }>({})
 
 export function AlchemyProviderComponent({
@@ -51,7 +50,7 @@ export function AlchemyProviderComponent({
       const eip1193provider = await embeddedWallet?.getEthereumProvider()
 
       const privyClient = createWalletClient({
-        account: embeddedWallet?.address as Hex,
+        account: embeddedWallet?.address as Address,
         chain: optimismGoerli,
         transport: custom(eip1193provider as EIP1193Provider),
       })
@@ -77,13 +76,9 @@ export function AlchemyProviderComponent({
           }),
       )
 
-      console.log('PROVIDER: THIS IS SALIEFS CODE', alchemyProvider)
-
       setAlchemyProvider(alchemyProvider)
 
-      const smartAccountAddress = await alchemyProvider?.getAddress()
-
-      console.log(smartAccountAddress)
+      const smartAccountAddress = await alchemyProvider.getAddress()
 
       setSmartAccountAddress(smartAccountAddress as Address)
     }

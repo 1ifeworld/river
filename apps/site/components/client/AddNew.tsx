@@ -12,11 +12,9 @@ import {
   DropdownMenuItem,
   DropdownMenuGroup,
 } from '@/design-system'
-import { useAlchemyContext } from '@/context'
 import { ChannelDialog } from '@/client'
 import { UploadDialog } from '@/server'
-import { getUserId } from '@/gql'
-import { type Hex } from 'viem'
+import { useConnectedUser } from '@/hooks'
 
 export function AddNew() {
   const [dropdownOpen, setDropdownOpen] = React.useState(false)
@@ -36,31 +34,7 @@ export function AddNew() {
     }
   }
 
-  const [userId, setUserId] = React.useState<bigint | undefined>(undefined)
-
-  const { alchemyProvider, smartAccountAddress } = useAlchemyContext()
-
-  React.useEffect(() => {
-    const fetchData = async () => {
-      if (!alchemyProvider) {
-        console.error('Alchemy provider is not initialized')
-        return
-      }
-
-      const smartAccountAddress = await alchemyProvider.getAddress()
-      const userIdResponse = await getUserId({
-        custodyAddress: smartAccountAddress as Hex,
-      })
-
-      if (userIdResponse && userIdResponse.userId) {
-        setUserId(userIdResponse.userId)
-      } else {
-        console.error('UserId not found')
-      }
-    }
-
-    fetchData()
-  }, [alchemyProvider])
+  const { userId } = useConnectedUser()
 
   return (
     <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>

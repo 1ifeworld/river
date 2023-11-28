@@ -124,7 +124,7 @@ export const ChannelDialog = React.forwardRef<
                     </FormItem>
                   )}
                 />
-                <Button type="submit" variant="link">
+                <Button type="submit" variant="link" disabled={!userId}>
                   Create
                 </Button>
               </form>
