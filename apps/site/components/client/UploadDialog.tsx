@@ -134,7 +134,7 @@ export const UploadDialog = React.forwardRef<HTMLDivElement, UploadDialogProps>(
                     <Stack className="gap-4">
                       <ChannelList channels={allChannels as Channel[]} />
                       <FileList filesToUpload={filesToUpload} />
-                      <Button type="submit" variant="link">
+                      <Button type="submit" variant="link" disabled={!userId}>
                         Next
                       </Button>
                     </Stack>

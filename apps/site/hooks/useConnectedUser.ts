@@ -21,8 +21,6 @@ export function useConnectedUser() {
         custodyAddress: smartAccountAddress as Address,
       })
 
-      console.log('User id from hook', userId)
-
       setUserId(userId as bigint)
 
       const username = await getUsername({

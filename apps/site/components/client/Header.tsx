@@ -1,4 +1,4 @@
-import { Button, Flex, Typography } from '@/design-system'
+import { Button, Flex } from '@/design-system'
 import { useLogin, usePrivy } from '@privy-io/react-auth'
 import { useState } from 'react'
 import { User, UsernameDialog, AddNew } from '@/client'
@@ -10,40 +10,38 @@ export function Header() {
   const [open, setOpen] = useState<boolean>(false)
 
   const { login } = useLogin({
-    onComplete: (user, isNewUser, wasAlreadyAuthenticated) => {
-      // Check to see if the user has a username
-      // In this case this will just fire if the user is new
+    onComplete: (user, isNewUser) => {
+      // Open the `UsernameDialog` if the user is new
       if (isNewUser) {
         setOpen(true)
       }
     },
     onError: (error) => {
-      console.log(error)
-      // Any logic you'd like to execute after a user exits the login flow or there is an error
+      console.log('Error with Privy login:', error)
     },
   })
 
-  // Show nothing if user is not authenticated or data is still loading
-  // if (!(ready && authenticated) || !user) {
-  //   return null
-  // }
+  // If the `PrivyProvider` is loading, just display the River logo
+  if (!ready) {
+    return <RiverLogo />
+  }
 
   return (
     <>
       <Flex className="items-center justify-between">
         <RiverLogo />
-        {authenticated ? (
-          <Flex className="gap-4">
-            <AddNew />
+        <Flex className="gap-4">
+          <AddNew />
+          {authenticated ? (
             <User />
-          </Flex>
-        ) : (
-          <Button variant="link" onClick={login}>
-            Login
-          </Button>
-        )}
+          ) : (
+            <Button variant="link" onClick={login}>
+              Login
+            </Button>
+          )}
+        </Flex>
       </Flex>
-      <UsernameDialog open={open} />
+      <UsernameDialog open={open} setOpen={setOpen} />
     </>
   )
 }
