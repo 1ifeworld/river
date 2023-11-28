@@ -12,11 +12,9 @@ import {
   DropdownMenuItem,
   DropdownMenuGroup,
 } from '@/design-system'
-import { useAlchemyContext } from '@/context'
 import { ChannelDialog } from '@/client'
 import { UploadDialog } from '@/server'
-import { getUserId } from '@/lib'
-import { type Hex } from 'viem'
+import { useConnectedUser } from '@/hooks'
 
 export function AddNew() {
   const [dropdownOpen, setDropdownOpen] = React.useState(false)
@@ -36,18 +34,7 @@ export function AddNew() {
     }
   }
 
-  const [userId, setUserId] = React.useState<bigint>()
-
-  const { alchemyProvider, smartAccountAddress } = useAlchemyContext()
-
-  React.useEffect(() => {
-    // biome-ignore format:
-    (async () => {
-      setUserId(await getUserId({
-        smartAccountAddress: smartAccountAddress as Hex
-      }))
-    })()
-  }, [])
+  const { userId } = useConnectedUser()
 
   return (
     <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>

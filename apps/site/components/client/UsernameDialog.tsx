@@ -20,53 +20,46 @@ import {
 } from '@/lib'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import {  usePrivy, useWallets } from '@privy-io/react-auth'
 import { publicClient } from '@/config/publicClient'
-import { getUserId } from '@/gql'
 import React, { useState, useEffect } from 'react'
 import { useDebounce } from 'usehooks-ts'
 import { addresses } from 'scrypt'
 import * as z from 'zod'
-import {
-  LightSmartContractAccount,
-  getDefaultLightAccountFactory,
-} from '@alchemy/aa-accounts'
 import { AlchemyProvider } from '@alchemy/aa-alchemy'
-import { opGoerliViem } from '@/constants'
-import { type SmartAccountSigner, WalletClientSigner } from '@alchemy/aa-core'
-import {
-  createWalletClient,
-  custom,
-  type Hex,
-  type EIP1193Provider,
-  Address,
-} from 'viem'
+import { useAlchemyContext } from 'context/AlchemyProviderContext'
+import { type Hex } from 'viem'
 
+interface UsernameDialogProps {
+  open: boolean
+  setOpen: (open: boolean) => void
+}
 
-const FormSchema = z.object({
-  username: z.string().min(2, {
-    message: 'Username must be at least 2 characters.',
-  }),
-})
+export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
+  const UsernameSchema = z.object({
+    username: z.string().min(2, {
+      message: 'Username must be at least 2 characters.',
+    }),
+  })
 
-export function UsernameDialog({ open }: { open: boolean }) {
-  const { ready, authenticated, user } = usePrivy()
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<z.infer<typeof UsernameSchema>>({
+    resolver: zodResolver(UsernameSchema),
     defaultValues: {
       username: '',
     },
   })
 
-  const [usernameExists, setUsernameExists] = useState<boolean | null>(null)
-  const [isCheckingUsername, setIsCheckingUsername] = useState(false)
-  const username = form.watch('username')
-  const debouncedUsername = useDebounce(username, 500)
+  // Unused
+  const [isCheckingUsername, setIsCheckingUsername] = useState<boolean>(false)
+
+  const [usernameExists, setUsernameExists] = useState<boolean | null>()
   const [checkState, setCheckState] = useState({
     isChecking: false,
     debounceFinished: false,
   })
   const [canSubmit, setCanSubmit] = useState(false)
+
+  const username = form.watch('username')
+  const debouncedUsername = useDebounce(username, 500)
 
   useEffect(() => {
     let isMounted = true
@@ -91,53 +84,17 @@ export function UsernameDialog({ open }: { open: boolean }) {
     }
   }, [debouncedUsername])
 
-  const { wallets } = useWallets()
+  const { alchemyProvider, smartAccountAddress } = useAlchemyContext()
 
-  const embeddedWallet = wallets.find(
-    (wallet) => wallet.walletClientType === 'privy',
-  )
-
-  async function onSubmit(data: z.infer<typeof FormSchema>) {
-
-    const eip1193provider = await embeddedWallet?.getEthereumProvider()
-
-    const privyClient = createWalletClient({
-      account: embeddedWallet?.address as Address,
-      chain: opGoerliViem,
-      transport: custom(eip1193provider as EIP1193Provider),
-    })
-
-    // Initialize the account's signer from the embedded wallet's viem client
-    const privySigner: SmartAccountSigner = new WalletClientSigner(
-      privyClient,
-      'json-rpc', 
-    )
-
-    const alchemyProvider = new AlchemyProvider({
-      apiKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY as string,
-      chain: opGoerliViem,
-      entryPointAddress: addresses.entryPoint.opGoerli,
-    }).connect(
-      (rpcClient) =>
-        new LightSmartContractAccount({
-          entryPointAddress: addresses.entryPoint.opGoerli,
-          chain: rpcClient.chain,
-          owner: privySigner,
-          factoryAddress: getDefaultLightAccountFactory(rpcClient.chain),
-          rpcClient,
-        }),
-    )
-
-    const smartAccountAddress = await alchemyProvider.getAddress()
-
+  async function onSubmit(data: z.infer<typeof UsernameSchema>) {
     alchemyProvider?.withAlchemyGasManager({
       policyId: process.env.NEXT_PUBLIC_ALCHEMY_GAS_MANAGER_POLICY as string,
       entryPoint: addresses.entryPoint.opGoerli,
     })
 
     const transactionHash = await registerAndDelegate({
-      from: smartAccountAddress,
-      provider: alchemyProvider,
+      from: smartAccountAddress as Hex,
+      provider: alchemyProvider as AlchemyProvider,
     })
 
     const transaction = await publicClient.waitForTransactionReceipt({
@@ -156,6 +113,8 @@ export function UsernameDialog({ open }: { open: boolean }) {
         owner: String(smartAccountAddress),
       },
     })
+
+    setOpen(false)
   }
 
   return (
@@ -193,7 +152,7 @@ export function UsernameDialog({ open }: { open: boolean }) {
                 onClick={form.handleSubmit(onSubmit)}
                 type="submit"
                 variant="link"
-                disabled={!embeddedWallet || !canSubmit}
+                disabled={!canSubmit}
               >
                 Complete
               </Button>
