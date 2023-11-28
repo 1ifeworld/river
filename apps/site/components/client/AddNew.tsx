@@ -40,27 +40,27 @@ export function AddNew() {
 
   const { alchemyProvider, smartAccountAddress } = useAlchemyContext()
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      if (!alchemyProvider) {
-        console.error('Alchemy provider is not initialized')
-        return
-      }
+  // React.useEffect(() => {
+  //   const fetchData = async () => {
+  //     if (!alchemyProvider) {
+  //       console.error('Alchemy provider is not initialized')
+  //       return
+  //     }
 
-      const smartAccountAddress = await alchemyProvider.getAddress()
-      const userIdResponse = await getUserId({
-        custodyAddress: smartAccountAddress as Hex,
-      })
+  //     const smartAccountAddress = await alchemyProvider.getAddress()
+  //     const userIdResponse = await getUserId({
+  //       custodyAddress: smartAccountAddress as Hex,
+  //     })
 
-      if (userIdResponse && userIdResponse.userId) {
-        setUserId(userIdResponse.userId)
-      } else {
-        console.error('UserId not found')
-      }
-    }
+  //     if (userIdResponse && userIdResponse.userId) {
+  //       setUserId(userIdResponse.userId)
+  //     } else {
+  //       console.error('UserId not found')
+  //     }
+  //   }
 
-    fetchData()
-  }, [alchemyProvider])
+  //   fetchData()
+  // }, [alchemyProvider])
 
   return (
     <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>

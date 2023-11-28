@@ -45,15 +45,18 @@ export function UsernameDialog({ open }: { open: boolean }) {
     },
   })
 
-  const [usernameExists, setUsernameExists] = useState<boolean | null>(null)
+  // Unused
   const [isCheckingUsername, setIsCheckingUsername] = useState(false)
-  const username = form.watch('username')
-  const debouncedUsername = useDebounce(username, 500)
+
+  const [usernameExists, setUsernameExists] = useState<boolean | null>(null)
   const [checkState, setCheckState] = useState({
     isChecking: false,
     debounceFinished: false,
   })
   const [canSubmit, setCanSubmit] = useState(false)
+
+  const username = form.watch('username')
+  const debouncedUsername = useDebounce(username, 500)
 
   useEffect(() => {
     let isMounted = true
@@ -78,12 +81,9 @@ export function UsernameDialog({ open }: { open: boolean }) {
     }
   }, [debouncedUsername])
 
-  const { alchemyProvider } = useAlchemyContext()
+  const { alchemyProvider, smartAccountAddress } = useAlchemyContext()
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    const smartAccountAddress = await alchemyProvider?.getAddress()
-    console.log('SMART', smartAccountAddress)
-
     alchemyProvider?.withAlchemyGasManager({
       policyId: process.env.NEXT_PUBLIC_ALCHEMY_GAS_MANAGER_POLICY as string,
       entryPoint: addresses.entryPoint.opGoerli,
