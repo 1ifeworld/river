@@ -1,0 +1,11 @@
+[profile.default]
+src = 'src'
+out = 'out'
+libs = ['lib']
+solc_version = '0.8.23'
+optimizer = true
+optimizer_runs = 50000
+# via_ir = false
+fs_permissions = [{ access = "read", path = "./out"}, { access = "read", path = "./broadcast"}, { access = "read", path = "./"}]
+
+# See more config options https://github.com/foundry-rs/foundry/tree/master/config
