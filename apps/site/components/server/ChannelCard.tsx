@@ -5,7 +5,12 @@ import { pluralize } from '@/utils'
 import Link from 'next/link'
 
 export async function ChannelCard({ channel }: { channel: Channel }) {
+
+    console.log("channel: ", channel)
+
   const username = await getUsername({ id: channel.creatorId })
+
+  console.log("username: ", username)
 
   // const { name, description, image  } = await getChannelUriContents({
   //   uri: channel.uri
@@ -29,7 +34,7 @@ export async function ChannelCard({ channel }: { channel: Channel }) {
         <Flex>
           {/* Channel Owner */}
           <Typography className="text-secondary-foreground">
-            {username?.username ?? ''}
+            {username ?? ''}
           </Typography>
           <span className="text-secondary-foreground">{'·'}</span>
           {/* Number of Items */}

@@ -1,6 +1,8 @@
 import { Stack } from '@/design-system'
 import { ActivityBanner, ActivityChannels, ActivityItems } from '@/server'
 
+export const dynamic = 'force-dynamic'
+
 export default async function User({
   params,
 }: {
