@@ -178,7 +178,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
             });
           }
           break;
-        case BigInt(2): // createChannel
+        case BigInt(210): // createChannel
           console.log("running case 2");
           // decode msgBody into channel uri
           const decodeChannelUriAndAccess = decodeUriAndAccess({

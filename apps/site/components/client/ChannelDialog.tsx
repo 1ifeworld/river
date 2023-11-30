@@ -22,12 +22,16 @@ import {
   Toast,
 } from '@/design-system'
 import { uploadBlob } from '@/lib'
-// import { createChannel } from '@/actions'
+import { relayPost } from '@/actions'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useAlchemyContext } from 'context/AlchemyProviderContext'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { toast } from 'sonner'
+import { usePrivy } from '@privy-io/react-auth'
+import { useConnectedUser } from 'hooks/useConnectedUser'
+import { encodePost, encodeMessage, encodeUriAndAccess } from 'scrypt'
+import { Hash, keccak256, hashMessage, encodeAbiParameters } from 'viem'
 
 interface ChannelDialogProps {
   triggerChildren: React.ReactNode
@@ -47,6 +51,8 @@ export const ChannelDialog = React.forwardRef<
   ChannelDialogProps
 >(({ triggerChildren, onSelect, onOpenChange, userId }, forwardedRef) => {
   const { alchemyProvider } = useAlchemyContext()
+  const { signMessage } = usePrivy()
+  const { userId: targetUserId } = useConnectedUser()
 
   const form = useForm<z.infer<typeof ChannelNameSchema>>({
     resolver: zodResolver(ChannelNameSchema),
@@ -81,25 +87,78 @@ export const ChannelDialog = React.forwardRef<
             <Form {...form}>
               <form
                 action={async () => {
+                  // add this in to prevent non authd in user from signing msg
+                  if (!targetUserId) return  
+
                   // Create an IPFS pointer containing the name of the channel
                   const channelUri = await uploadBlob({
                     dataToUpload: {
                       name: form.getValues().channelName,
-                      description: 'Everything is everything',
+                      description: 'This time its happening',
                       image:
-                        'ipfs://bafkreiamfxbkndyuwkw4kutjcfcitozbtzrvqneryab2njltiopsfjwt6a',
+                        // harcoded cover image uri
+                        'ipfs://bafkreiamfxbkndyuwkw4kutjcfcitozbtzrvqneryab2njltiopsfjwt6a', 
                     },
+                  })                  
+
+                  // Declare constants/params
+                  const sigType = 1
+                  const version = 1;
+                  const expiration: bigint = BigInt(Math.floor(Date.now() / 1000) + 600);
+                  const msgType = 210 // createChannel
+                  const admins = [targetUserId]
+                  const members = [BigInt(29)]
+                  // generate encoded msgBody
+                  const msgBody = encodeUriAndAccess({
+                    uri: channelUri,
+                    adminIds: admins,
+                    memberIds: members
+                  })                
+                  // add this in to prevent msgBody from being null
+                  if (!msgBody) return 
+                  console.log("encoded msgBody correctly")
+                  // generate encodedMessage by packing msgType + msgBody together
+                  const encodedMessage = encodeMessage({
+                    msgType: msgType,
+                    msgBody: msgBody.msgBody
                   })
-
-                  // await createChannel({
-                  //   userId: userId as bigint,
-                  //   adminIds: [userId as bigint],
-                  //   memberIds: [BigInt(2), BigInt(3)],
-                  //   channelUri,
-                  // })
-
+                  // add this in to prevent encodedMessage being null
+                  if (!encodedMessage) return               
+                  console.log("encoded message correctly")   
+                  // generate the bytes[] messageArray
+                  const messageArray: Hash[] = [encodedMessage?.encodedMessage]
+                  // NOTE: this encoding step should be a scrypt export as well
+                  // bytes32 messageToBeSigned = keccak256(abi.encode(version, expiration, msgArray)).toEthSignedMessageHash();                  
+                  const messageToBeSigned: Hash = hashMessage(keccak256(
+                    encodeAbiParameters(
+                      [
+                        { name: "version", type: "uint16" },
+                        { name: "expiration", type: "uint64" },
+                        { name: "messageArray", type: "bytes[]" },
+                      ],
+                      [version, expiration, messageArray]
+                    ),
+                  ))
+                  console.log("messageToBe signed hash genereated correctly") 
+                  // Get signature from user over signed hash of encodePacked version + expiration + messages                  
+                  const sig = await signMessage(messageToBeSigned);
+                  console.log("sig generated correctly") 
+                  // Generate encodedPost bytes data -- this is the input to the `post` function`
+                  const postInput = encodePost({
+                    userId: targetUserId,
+                    sigType: sigType,                    
+                    sig: sig as Hash,
+                    version: version,
+                    expiration: expiration,
+                    messageArray: messageArray                  
+                  })
+                  // add this in to prevent postInputs being null
+                  if (!postInput) return       
+                  console.log("postInput encoded correctly")   
+                  // pass postInputs into the createPost server action
+                  await relayPost({postInput: postInput})
+                  // close the modal post success
                   onOpenChange(false)
-
                   // Render a toast with the name of the channel
                   toast.custom((t) => (
                     <Toast>

@@ -1,4 +1,5 @@
 import { Stack, Typography } from '@/design-system'
+import { getDataForUsername } from 'lib/getDataForUsername'
 
 export async function ActivityBanner({
   user,
@@ -6,9 +7,12 @@ export async function ActivityBanner({
   /* biome-ignore lint: */
   user: any
 }) {
+
+  const userData = await getDataForUsername({username: `${user.name}.sbvrsv.eth`})
+
   return (
     <Stack>
-      <Typography variant="h1">{user.name}</Typography>
+      <Typography variant="h1">{userData.name}</Typography>
       <Typography variant="h1" className="text-secondary-foreground">
         {user.desc}
       </Typography>

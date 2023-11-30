@@ -1,6 +1,7 @@
 export * from './checkUsernameAvailability'
 export * from './createLightAccount'
 export * from './getUsername'
+export * from './getDataForUsername'
 export * from './ipfsToHttps'
 export * from './registerAndDelegate'
 export * from './setUsername'

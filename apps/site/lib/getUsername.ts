@@ -18,7 +18,7 @@ export async function getUsername({ id }: { id: bigint }) {
 
     const data = await response.json()
 
-    if (data.success) {
+    if (data) {
       // console.log('Username returned successfully')
       return data.username
     } else {

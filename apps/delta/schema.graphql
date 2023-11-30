@@ -51,7 +51,7 @@ type Channel @entity {
   timestamp: BigInt
   creatorId: BigInt  
   uri: String
-  admins: [BigInt],
+  admins: [BigInt!]!,
   members: [BigInt],
   items: [Item!]! @derivedFrom(field: "channel")
 }
