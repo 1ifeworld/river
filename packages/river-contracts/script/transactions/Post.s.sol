@@ -10,7 +10,7 @@ contract PostScript is Script {
     PostGateway postGateway = PostGateway(0x5FbDB2315678afecb367f032d93F642f64180aa3);
 
     uint256 constant userId = 1;
-    uint16 constant sigType = 1;
+    uint8 constant sigType = 1;
     uint16 constant version = 1;
     bytes public sig = hex"a3f20717a250c2b0b729b07ff9e6d8c0c1556334506f6c1f6f85c37b3a771fc45fb12f9e3c2322701ac7916c8b0b726f27dbeee6ab09cb3d7d44db6e8a3a3e331b";
     string public ipfsUri = "ipfs://bafkreiai2xekku6zoiwkchzgpsrjsd3z3nuotk3lzsoyo27rqymp6d3cni";
@@ -25,18 +25,17 @@ contract PostScript is Script {
         vm.startBroadcast(deployerPrivateKey);
 
         // create Post with one createPublication message
-        createPublication();
+        // createPublication();
 
         // create Channel with one createChannel message
         // createChannel();        
 
         // add item with one addItem message
-        // addItem();                
+        addItem();                
 
         vm.stopBroadcast();
         /* End function transmission */
     }
-
 
     function createPublication() public {
         // Prep message for post        

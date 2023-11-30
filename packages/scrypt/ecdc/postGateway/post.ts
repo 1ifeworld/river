@@ -69,11 +69,11 @@ import {
         encodedMessageArray: Hash;
       } = {
         userId: slice(postInput, 0, 32, { strict: true }),
-        sigType: slice(postInput, 32, 34, { strict: true }),
-        sig: slice(postInput, 34, 99, { strict: true }),
-        version: slice(postInput, 99, 107, { strict: true }),
-        expiration: slice(postInput, 107, 119, { strict: true }),
-        encodedMessageArray: slice(postInput, 119),
+        sigType: slice(postInput, 32, 33, { strict: true }),
+        sig: slice(postInput, 33, 98, { strict: true }),
+        version: slice(postInput, 98, 100, { strict: true }),
+        expiration: slice(postInput, 100, 108, { strict: true }),
+        encodedMessageArray: slice(postInput, 108),
       };
   
       const [decodedMessageArray] = decodeAbiParameters(

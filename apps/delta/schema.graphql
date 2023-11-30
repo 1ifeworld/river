@@ -1,4 +1,79 @@
 # ================================
+# ========= POST GATEWAY =========
+# ================================
+
+type PostCounter @entity {
+  id: String!
+  timestamp: BigInt
+  counter: BigInt
+}
+
+type Post @entity {
+  id: String!
+  timestamp: BigInt
+  relayer: String
+  post: Bytes
+  userId: BigInt
+  sigType: BigInt
+  sig: Bytes
+  version: BigInt
+  expiration: BigInt
+  messageArray: [Bytes]
+}
+
+type Message @entity {
+  id: String!
+  msgType: BigInt
+  msgBody: Bytes
+}
+
+type PublicationCounter @entity {
+  id: String!
+  timestamp: BigInt
+  counter: BigInt
+}
+
+type Publication @entity {
+  id: String!
+  timestamp: BigInt
+  creatorId: BigInt  
+  uri: String
+}
+
+type ChannelCounter @entity {
+  id: String!
+  timestamp: BigInt
+  counter: BigInt
+}
+
+type Channel @entity {
+  id: String!
+  timestamp: BigInt
+  creatorId: BigInt  
+  uri: String
+  admins: [BigInt],
+  members: [BigInt],
+  items: [Item!]! @derivedFrom(field: "channel")
+}
+
+type ItemCounter @entity {
+  id: String!
+  timestamp: BigInt
+  counter: BigInt
+}
+
+type Item @entity {
+  id: String!
+  timestamp: BigInt
+  creatorId: BigInt  
+  chainId: BigInt
+  target: String
+  hasId: Boolean  
+  targetId: BigInt
+  channel: Channel!
+}
+
+# ================================
 # ====== DELEGATE REGISTRY =======
 # ================================
 
@@ -16,40 +91,40 @@
 # ======== ID REGISTRY ===========
 # ================================
 
-type IdRegistry @entity {
-  id: String!
-  to: String
-  from: String
-  backup: Bytes
-  data: String
-  userId: BigInt
-  # user: User!
-}
+# type IdRegistry @entity {
+#   id: String!
+#   to: String
+#   from: String
+#   backup: Bytes
+#   data: String
+#   userId: BigInt
+#   # user: User!
+# }
 
 # ================================
 # ======== NODE REGISTRY =========
 # ================================
 
-type Node @entity {
-  id: String!
-  sender: String!
-  userId: BigInt!
-  nodeId: BigInt!
-  schema: String!
-  messages: [Message!]! @derivedFrom(field: "node")
-  nodeAdmin: [BigInt]
-  nodeMembers: [BigInt]
-}
+# type Node @entity {
+#   id: String!
+#   sender: String!
+#   userId: BigInt!
+#   nodeId: BigInt!
+#   schema: String!
+#   messages: [Message!]! @derivedFrom(field: "node")
+#   nodeAdmin: [BigInt]
+#   nodeMembers: [BigInt]
+# }
 
-type Message @entity {
-  id: String!
-  nodeId: BigInt
-  node: Node
-  sender: String
-  msgType: BigInt
-  msgBody: Bytes
-  userId: BigInt
-}
+# type Message @entity {
+#   id: String!
+#   nodeId: BigInt
+#   node: Node
+#   sender: String
+#   msgType: BigInt
+#   msgBody: Bytes
+#   userId: BigInt
+# }
 
 
 # type AccessControl @entity {
@@ -59,48 +134,43 @@ type Message @entity {
 #   nodeMembers: [BigInt]
 # }
 
+# type Publication @entity {
+#   id: String!
+#   createdByID: BigInt
+#   uri: Metadata
+#   nodeId: BigInt
+#   createdAt: BigInt
+# }
 
-type Publication @entity {
-  id: String!
-  createdByID: BigInt
-  uri: Metadata
-  nodeId: BigInt
-  createdAt: BigInt
-}
+# type Channel @entity {
+  # id: String!
+  # hashId: String!
+  # uri: Metadata 
+  # items: [Item!]! @derivedFrom(field: "channel")
+  # createdAt: BigInt
+  # createdByID: BigInt
+  # nodeId: BigInt
+# }
 
+# type Metadata @entity {
+#   id: String! # this would be based off the ipfs cid, so updating the metadata for something requires updating the cid, ID is uri
+#   name: String,
+#   description: String,
+#   imageUri: String,
 
-type Channel @entity {
-  id: String!
-  hashId: String!
-  uri: Metadata 
-  items: [Item!]! @derivedFrom(field: "channel")
-  createdAt: BigInt
-  createdByID: BigInt
-  nodeId: BigInt
-}
+# }
 
-
-type Metadata @entity {
-  id: String! # this would be based off the ipfs cid, so updating the metadata for something requires updating the cid, ID is uri
-  name: String,
-  description: String,
-  imageUri: String,
-
-}
-
-
-type Item @entity {
-  id: String!
-  userId: BigInt
-  chainId: BigInt!
-  targetId: BigInt!
-  createdAt: BigInt
-  target: String!
-  hasId: Boolean!
-  targetMetadata: Metadata
-  channel: Channel!
-}
-
+# type Item @entity {
+#   id: String!
+#   userId: BigInt
+#   chainId: BigInt!
+#   targetId: BigInt!
+#   createdAt: BigInt
+#   target: String!
+#   hasId: Boolean!
+#   targetMetadata: Metadata
+#   channel: Channel!
+# }
 
 # type Register @entity {
 #   id: String!

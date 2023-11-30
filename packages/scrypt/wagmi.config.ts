@@ -6,6 +6,7 @@ export default defineConfig({
     foundry({
       project: '../river-contracts',
       include: [
+        'RiverValidatorV1.json',
         'Post.json',
         'Message.json',
         'Item.json'
@@ -17,7 +18,7 @@ export default defineConfig({
         'IdRegistry.json',
         'AttestationRegistry.json',
         'DelegateRegistry.json',
-        'PostGateway.json'
+        'PostGateway.json',
       ],
     }),
     foundry({

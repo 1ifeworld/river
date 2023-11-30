@@ -23,9 +23,9 @@ contract ImpSetupScript is Script {
 
         vm.startBroadcast(deployerPrivateKey);
         
-        idRegistry = new IdRegistry();
-        delegateRegistry = new DelegateRegistry(address(idRegistry));
-        attestationRegistry = new AttestationRegistry();
+        // idRegistry = new IdRegistry();
+        // delegateRegistry = new DelegateRegistry(address(idRegistry));
+        // attestationRegistry = new AttestationRegistry();
         postGateway = new PostGateway();
 
         vm.stopBroadcast();
