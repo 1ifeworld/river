@@ -91,15 +91,15 @@ type Item @entity {
 # ======== ID REGISTRY ===========
 # ================================
 
-# type IdRegistry @entity {
-#   id: String!
-#   to: String
-#   from: String
-#   backup: Bytes
-#   data: String
-#   userId: BigInt
-#   # user: User!
-# }
+type IdRegistry @entity {
+  id: String!
+  to: String
+  from: String
+  backup: Bytes
+  data: String
+  userId: BigInt
+  # user: User!
+}
 
 # ================================
 # ======== NODE REGISTRY =========

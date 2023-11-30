@@ -1,9 +1,0 @@
-query items {
-  items {
-    hasId
-    id
-    targetId
-    userId
-    target
-  }
-}

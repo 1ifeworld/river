@@ -1,0 +1,28 @@
+query userActivity($creatorId: BigInt) {
+  channels(orderBy: "id", orderDirection: "desc", where: {creatorId: $creatorId}) {
+    creatorId
+    admins
+    id
+    members
+    timestamp
+    uri
+    items {
+      chainId
+      creatorId
+      hasId
+      id
+      target
+      targetId
+      timestamp
+    }
+  }
+  items(orderBy: "id", orderDirection: "desc", where: {creatorId: $creatorId}) {
+    chainId
+    creatorId
+    hasId
+    id
+    target
+    targetId
+    timestamp
+  }
+}

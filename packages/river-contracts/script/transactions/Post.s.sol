@@ -25,10 +25,10 @@ contract PostScript is Script {
         vm.startBroadcast(deployerPrivateKey);
 
         // create Post with one createPublication message
-        // createPublication();
+        createPublication();
 
         // create Channel with one createChannel message
-        // createChannel();        
+        createChannel();        
 
         // add item with one addItem message
         addItem();                

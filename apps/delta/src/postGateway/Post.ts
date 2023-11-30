@@ -1,5 +1,5 @@
 import { ponder } from "@/generated";
-import { nodeRegistryChain } from "../constants";
+import { postGatewayChain } from "../constants";
 import {
   decodePost,
   decodeMessage,
@@ -32,8 +32,8 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
 
   await PostCounter.upsert({
     // chain // messageGateway address
-    // update nodeRegistryChain -> event.transaction.chainId after bumping to next version ponder
-    id: `${nodeRegistryChain}/${event.transaction.to}`,
+    // update postGatewayChain -> event.transaction.chainId after bumping to next version ponder
+    id: `${postGatewayChain}/${event.transaction.to}`,
     create: {
         timestamp: event.block.timestamp,
         counter: BigInt(1)    
@@ -45,7 +45,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
   });
 
   postCounter = await PostCounter.findUnique({
-    id: `${nodeRegistryChain}/${event.transaction.to}`,
+    id: `${postGatewayChain}/${event.transaction.to}`,
   });
 
   const cleanedTxnData = slice(event.transaction.input, 68);
@@ -59,8 +59,8 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
   // posts only saved if they were valid.
 
   await Post.create({
-    // update nodeRegistryChain -> event.transaction.chainId after bumping to next version ponder
-    id: `${nodeRegistryChain}/${event.transaction.to}/${postCounter?.counter}`,
+    // update postGatewayChain -> event.transaction.chainId after bumping to next version ponder
+    id: `${postGatewayChain}/${event.transaction.to}/${postCounter?.counter}`,
     data: {
       timestamp: event.block.timestamp,
       relayer: event.transaction.from,
@@ -114,8 +114,8 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
         // chain // messageGateway address // count of post being stored // index of message within Post
         // NOTE: do we potentially want a message counter as well thats separate from Post?
         //      I think not since feels helpful to have messages always live as sub unit of Posts
-        // NOTE: update nodeRegistryChain -> event.transaction.chainId after bumping to next version ponder
-        id: `${nodeRegistryChain}/${event.transaction.to}/${postCounter?.counter}/${i}`,
+        // NOTE: update postGatewayChain -> event.transaction.chainId after bumping to next version ponder
+        id: `${postGatewayChain}/${event.transaction.to}/${postCounter?.counter}/${i}`,
         data: {
           msgType: messageQueue[i]?.msgType,
           msgBody: messageQueue[i]?.msgBody,
@@ -149,8 +149,8 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
           if (decodedPubUri) {
             await PublicationCounter.upsert({
               // chain // messageGateway address
-              // update nodeRegistryChain -> event.transaction.chainId after bumping to next version ponder
-              id: `${nodeRegistryChain}/${event.transaction.to}`,
+              // update postGatewayChain -> event.transaction.chainId after bumping to next version ponder
+              id: `${postGatewayChain}/${event.transaction.to}`,
               create: {
                 timestamp: event.block.timestamp,
                 counter: BigInt(1)                
@@ -162,8 +162,8 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
             });
 
             publicationCounter = await PublicationCounter.findUnique({
-              // update nodeRegistryChain -> event.transaction.chainId after bumping to next version ponder
-              id: `${nodeRegistryChain}/${event.transaction.to}`,
+              // update postGatewayChain -> event.transaction.chainId after bumping to next version ponder
+              id: `${postGatewayChain}/${event.transaction.to}`,
             });
 
             pubIdsCreated.push(publicationCounter?.counter as bigint);
@@ -187,8 +187,8 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
           if (decodeChannelUriAndAccess) {
             await ChannelCounter.upsert({
               // chain // messageGateway address
-              // update nodeRegistryChain -> event.transaction.chainId after bumping to next version ponder
-              id: `${nodeRegistryChain}/${event.transaction.to}`,
+              // update postGatewayChain -> event.transaction.chainId after bumping to next version ponder
+              id: `${postGatewayChain}/${event.transaction.to}`,
               create: {
                 timestamp: event.block.timestamp,
                 counter: BigInt(1)
@@ -200,8 +200,8 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
             });
 
             channelCounter = await ChannelCounter.findUnique({
-              // update nodeRegistryChain -> event.transaction.chainId after bumping to next version ponder
-              id: `${nodeRegistryChain}/${event.transaction.to}`,
+              // update postGatewayChain -> event.transaction.chainId after bumping to next version ponder
+              id: `${postGatewayChain}/${event.transaction.to}`,
             });
 
             channelIdsCreated.push(channelCounter?.counter as bigint);
@@ -225,8 +225,8 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
           if (decodedItem) {
             await ItemCounter.upsert({
               // chain // messageGateway address
-              // update nodeRegistryChain -> event.transaction.chainId after bumping to next version ponder
-              id: `${nodeRegistryChain}/${event.transaction.to}`,
+              // update postGatewayChain -> event.transaction.chainId after bumping to next version ponder
+              id: `${postGatewayChain}/${event.transaction.to}`,
               create: {
                 timestamp: event.block.timestamp,
                 counter: BigInt(1),
@@ -238,8 +238,8 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
             });
 
             itemCounter = await ItemCounter.findUnique({
-              // update nodeRegistryChain -> event.transaction.chainId after bumping to next version ponder
-              id: `${nodeRegistryChain}/${event.transaction.to}`,
+              // update postGatewayChain -> event.transaction.chainId after bumping to next version ponder
+              id: `${postGatewayChain}/${event.transaction.to}`,
             });
 
             let channelIdRef: bigint | null = null;

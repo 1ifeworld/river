@@ -1,5 +1,5 @@
-query allChannels {
-  channels(orderBy: "id", orderDirection: "desc") {
+query allChannelsForId($creatorId: BigInt) {
+  channels(orderBy: "id", orderDirection: "desc", where: {creatorId: $creatorId}) {
     creatorId
     admins
     id
