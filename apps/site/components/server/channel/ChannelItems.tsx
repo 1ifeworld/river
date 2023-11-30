@@ -12,10 +12,7 @@ import { Channel, Item } from '@/gql'
 import { unixTimeConverter, ipfsToHttps } from '@/utils'
 import { Username } from '@/server'
 import Image from 'next/image'
-
-  // const { name, description, image  } = await getChannelUriContents({
-  //   uri: channel.uri
-  // })
+import { ThumbnailNameCreator } from '@/server'
 
   const mockUriContentsObject: {
     name: string,
@@ -30,7 +27,6 @@ import Image from 'next/image'
 export async function ChannelItems({ channel }: { channel: Channel }) {
 
   console.log("what are the channel items: ", channel)
-
 
   return (
     <Table className="w-full">
@@ -65,25 +61,7 @@ export async function ChannelItems({ channel }: { channel: Channel }) {
               <Typography>{index + 1}</Typography>
             </TableCell>
             <TableCell className="flex gap-4 items-center text-primary-foreground">
-              <Image
-                className="object-cover aspect-square "
-                // src={ipfsToHttps(item.targetMetadata?.imageUri as string)}
-                // alt={item.targetMetadata?.name as string}
-                src={ipfsToHttps(mockUriContentsObject.image)}
-                alt={mockUriContentsObject.name}                
-                width={40}
-                height={40}
-              />
-              <Stack className="">
-                <Typography className="text-primary-foreground">
-                  {/* {item.targetMetadata?.name} */}
-                  {mockUriContentsObject.name}
-                </Typography>
-                <Username id={item.creatorId} />
-                {/* <Typography className="text-secondary-foreground">
-                {`user id: ` + item.userId}
-              </Typography> */}
-              </Stack>
+              <ThumbnailNameCreator item={item} />
             </TableCell>
             <TableCell className="text-right text-primary-foreground">
               <Typography>{'** type **'}</Typography>

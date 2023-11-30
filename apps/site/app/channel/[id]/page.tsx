@@ -19,9 +19,6 @@ export default async function Channel({
     )
   }
 
-  // channel banner
-  // name, desc, imageUri, createdAt, items, nodeAdmins, nodeMembers,
-
   return (
     <Stack className="pt-[72px] gap-14 h-full">
       <ChannelBanner channel={channel} />

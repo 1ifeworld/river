@@ -146,9 +146,8 @@ export const ChannelDialog = React.forwardRef<
                   // Generate encodedPost bytes data -- this is the input to the `post` function`
                   const postInput = encodePost({
                     userId: targetUserId,
-                    sigType: sigType,
-                    // @ts-ignore
-                    sig: sig,
+                    sigType: sigType,                    
+                    sig: sig as Hash,
                     version: version,
                     expiration: expiration,
                     messageArray: messageArray                  
