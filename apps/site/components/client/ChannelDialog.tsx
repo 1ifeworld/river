@@ -22,7 +22,7 @@ import {
   Toast,
 } from '@/design-system'
 import { uploadBlob } from '@/lib'
-import { createChannel } from '@/actions'
+// import { createChannel } from '@/actions'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useAlchemyContext } from 'context/AlchemyProviderContext'
 import { useForm } from 'react-hook-form'
@@ -91,12 +91,12 @@ export const ChannelDialog = React.forwardRef<
                     },
                   })
 
-                  await createChannel({
-                    userId: userId as bigint,
-                    adminIds: [userId as bigint],
-                    memberIds: [BigInt(2), BigInt(3)],
-                    channelUri,
-                  })
+                  // await createChannel({
+                  //   userId: userId as bigint,
+                  //   adminIds: [userId as bigint],
+                  //   memberIds: [BigInt(2), BigInt(3)],
+                  //   channelUri,
+                  // })
 
                   onOpenChange(false)
 

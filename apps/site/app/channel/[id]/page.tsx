@@ -1,4 +1,4 @@
-import { getChannel } from '@/gql'
+import { getChannelWithId } from '@/gql'
 import { Stack } from '@/design-system'
 import { ChannelBanner, ChannelItems } from '@/server'
 
@@ -7,10 +7,10 @@ export const dynamic = 'force-dynamic'
 export default async function Channel({
   params,
 }: {
-  params: { channelHash: string }
+  params: { id: string }
 }) {
-  const { channel } = await getChannel({
-    hashId: params.channelHash,
+  const { channel } = await getChannelWithId({
+    id: params.id,
   })
 
   if (!channel) {

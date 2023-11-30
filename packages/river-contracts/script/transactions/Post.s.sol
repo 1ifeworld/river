@@ -7,7 +7,7 @@ import {PostGateway} from "imp/PostGateway.sol";
 
 contract PostScript is Script {
 
-    PostGateway postGateway = PostGateway(0x5FbDB2315678afecb367f032d93F642f64180aa3);
+    PostGateway postGateway = PostGateway(0x339513226Afd92B309837Bad402c6D3ADDE9Ad24);
 
     uint256 constant userId = 1;
     uint8 constant sigType = 1;
@@ -114,4 +114,5 @@ contract PostScript is Script {
 // ======= DEPLOY SCRIPTS =====
 
 // source .env
+// forge script script/transactions/Post.s.sol:PostScript -vvvv --rpc-url $RPC_URL --broadcast --verify --verifier-url https://api-goerli-optimistic.etherscan.io/api
 // forge script script/transactions/Post.s.sol:PostScript -vvvv --fork-url http://localhost:8545 --broadcast

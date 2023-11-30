@@ -5,14 +5,30 @@ import { Add } from '@/client'
 import { ipfsToHttps } from '@/lib'
 
 export async function ChannelBanner({ channel }: { channel: Channel }) {
+
+  // const { name, description, image  } = await getChannelUriContents({
+  //   uri: channel.uri
+  // })
+
+  const mockUriContentsObject: {
+    name: string,
+    description: string,
+    image: string
+  } = {
+    name: "YesandNo",
+    description: "Imeannnnnnn",
+    image: "ipfs://bafkreiamfxbkndyuwkw4kutjcfcitozbtzrvqneryab2njltiopsfjwt6a"
+  }
+
+
   return (
     <Flex className="items-end w-full h-full gap-x-[22px]">
       {/* column 1 */}
       <Card className="relative w-[218px] h-[218px] outline-none border-none">
         <Image
           className="object-cover aspect-square"
-          src={ipfsToHttps(channel.uri?.imageUri as string)}
-          alt={channel.uri?.name as string}
+          src={ipfsToHttps(mockUriContentsObject.image)}
+          alt={mockUriContentsObject.name}
           fill
         />
       </Card>
@@ -20,16 +36,17 @@ export async function ChannelBanner({ channel }: { channel: Channel }) {
       <Stack className="w-full gap-y-[20px]">
         <Stack>
           <Typography variant="h2" className="text-black">
-            {channel.uri?.name}
+            {mockUriContentsObject.name}
           </Typography>
           <Typography variant="h2" className="text-secondary-foreground">
-            {'** channel members **' /* channel.admins */}
+            {channel.admins}
           </Typography>
         </Stack>
         <Typography className="text-primary-foreground">
-          {channel.uri?.description
+          {mockUriContentsObject.description}
+          {/* {channel.uri?.description
             ? channel.uri?.description
-            : 'example description'}
+            : 'example description'} */}
         </Typography>
         <Add />
       </Stack>
