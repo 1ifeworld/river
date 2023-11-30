@@ -20,24 +20,27 @@ import {
     messageArray,
   }: {
     userId: bigint;
-    sigType: bigint;
+    sigType: number;
     sig: Hash;
-    version: bigint;
+    version: number;
     expiration: bigint;
     messageArray: Hash[];
   }): Hash | null {
     try {
-      const encodedPostInput = encodePacked(postABI[0].outputs, [
-        userId,
-        sigType,
-        sig,
-        version,
-        expiration,
-        encodeAbiParameters(
-          [{ name: "messageArray", type: "bytes[]" }],
-          [messageArray]
-        ),
-      ]);
+      const encodedPostInput = encodePacked(
+        ["uint256", "uint8", "bytes", "uint16", "uint64", "bytes"],
+        [
+          userId,
+          sigType,
+          sig,
+          version,
+          expiration,
+          encodeAbiParameters(
+            [{ name: "messageArray", type: "bytes[]" }],
+            [messageArray]
+          ),
+        ]
+      );
   
       return encodedPostInput;
     } catch (error) {

@@ -1,8 +1,34 @@
-import { Hash, slice } from "viem";
+import { Hash, slice, encodePacked } from "viem";
+import { messageABI } from "../../abi";
 
 //////////////////////////////////////////////////
 // ENCODING
 //////////////////////////////////////////////////
+
+export function encodeMessage({
+  msgType,
+  msgBody
+}: {
+  msgType: number;
+  msgBody: Hash;
+}): {
+  encodedMessage: Hash;
+} | null {
+  try {
+
+    const encodedMessage = encodePacked(
+      ["uint32", "bytes"],
+      [msgType, msgBody]
+    )
+
+    return {
+      encodedMessage: encodedMessage,
+    };
+  } catch (error) {
+    console.error("Failed to encode Message", error);
+    return null;
+  }
+}
 
 //////////////////////////////////////////////////
 // DECODING

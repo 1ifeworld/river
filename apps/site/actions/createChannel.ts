@@ -2,10 +2,9 @@
 
 import { type Hash, encodeFunctionData } from 'viem'
 import {
-  addresses,
-  // encodeAccess101,
-  // encodeChannel301,
-  // nodeRegistryABI,
+  addresses,  
+  postABI,
+  encodePost,
 } from 'scrypt'
 import { nonceManager } from '@/config/ethersClient'
 
