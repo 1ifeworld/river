@@ -4,6 +4,7 @@ import { Channel } from "@/gql";
 import { Add } from "@/client";
 import { ipfsToHttps } from "@/lib";
 import { fetchIpfsData } from "utils/fetchIpfsData";
+import { Username } from '../Username'
 
 export async function ChannelBanner({ channel }: { channel: Channel }) {
   
@@ -58,7 +59,11 @@ export async function ChannelBanner({ channel }: { channel: Channel }) {
             {channelUriIpfsResponse.name}
           </Typography>
           <Typography variant="h2" className="text-secondary-foreground">
-            {channel.admins}
+            {
+              channel?.admins?.[0] 
+                ? <Username id={channel?.admins?.[0]} /> 
+                : "no admins"
+            }
           </Typography>
         </Stack>
         <Typography className="text-primary-foreground">
