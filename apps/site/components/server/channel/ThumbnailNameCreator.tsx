@@ -12,9 +12,20 @@ export async function ThumbnailNameCreator({ item }: { item: Item }) {
 
     if (!itemIpfsResponse) {
         return (
-            <div>
-                its over
-            </div>
+            <>
+            <Image
+            className="object-cover aspect-square "
+            src={""}
+            alt={""}                
+            width={40}
+            height={40}
+            />
+            <Stack className="">
+                <Typography className="text-primary-foreground">
+                {""}
+                </Typography>
+            </Stack>
+        </>
         )
     }
 

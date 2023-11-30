@@ -6,27 +6,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-  Stack,
 } from '@/design-system'
 import { Channel, Item } from '@/gql'
-import { unixTimeConverter, ipfsToHttps } from '@/utils'
-import { Username } from '@/server'
-import Image from 'next/image'
+import { unixTimeConverter } from '@/utils'
 import { ThumbnailNameCreator } from '@/server'
 
-  const mockUriContentsObject: {
-    name: string,
-    description: string,
-    image: string
-  } = {
-    name: "YesandNo",
-    description: "Imeannnnnnn",
-    image: "ipfs://bafkreiamfxbkndyuwkw4kutjcfcitozbtzrvqneryab2njltiopsfjwt6a"
-  }
-
 export async function ChannelItems({ channel }: { channel: Channel }) {
-
-  console.log("what are the channel items: ", channel)
 
   return (
     <Table className="w-full">
