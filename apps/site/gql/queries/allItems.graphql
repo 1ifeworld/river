@@ -1,0 +1,11 @@
+query allItems {
+  items(orderBy: "id", orderDirection: "desc") {
+    id
+    target
+    targetId
+    timestamp
+    chainId
+    creatorId
+    hasId
+  }
+}

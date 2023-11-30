@@ -4,7 +4,8 @@ import {
   addresses,
   idRegistryABI,
   delegateRegistryABI,
-  nodeRegistryABI,
+  attestationRegistryABI,
+  postGatewayABI,
   riverValidatorV1ABI,
   lightAccountFactoryABI,
 } from 'scrypt'
@@ -14,8 +15,7 @@ export const config: Config = {
     {
       name: 'optimism-goerli',
       chainId: 420,
-
-      transport: http(process.env.PONDER_RPC_URL_420),
+      transport: http(process.env.PONDER_RPC_URL_420)
     },
     // {
     //   name: 'arbitrum-goerli',
@@ -30,39 +30,17 @@ export const config: Config = {
   ],
   contracts: [
     {
-      name: 'NodeRegistry',
-      abi: nodeRegistryABI,
+      name: 'PostGateway',
+      abi: postGatewayABI,
       network: 'optimism-goerli',
-      address: addresses.nodeRegistry.opGoerli,
+      address: addresses.postGateway.opGoerli,
       startBlock: 16774340,
     },
     // {
-    //   name: 'NodeRegistry',
-    //   abi: nodeRegistryABI,
-    //   network: 'arbitrum-goerli',
-    //   address: addresses.nodeRegistry.arbGoerli,
-    //   startBlock: 54683831,
-    // },
-    // {
-    //   name: 'NodeRegistry',
-    //   abi: nodeRegistryABI,
+    //   name: 'PostGateway',
+    //   abi: postGatewayABI,
     //   network: 'anvil',
-    //   address: addresses.nodeRegistry.anvil,
-    //   startBlock: 0,
-    // },
-
-    // {
-    //   name: 'NodeRegistry',
-    //   abi: nodeRegistryABI,
-    //   network: 'arbitrum-goerli',
-    //   address: addresses.nodeRegistry.arbGoerli,
-    //   startBlock: 54683831,
-    // },
-    // {
-    //   name: 'NodeRegistry',
-    //   abi: nodeRegistryABI,
-    //   network: 'anvil',
-    //   address: addresses.nodeRegistry.anvil,
+    //   address: '0x5fbdb2315678afecb367f032d93f642f64180aa3',
     //   startBlock: 0,
     // },
     {

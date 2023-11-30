@@ -6,31 +6,25 @@ export default defineConfig({
     foundry({
       project: '../river-contracts',
       include: [
-        'Access_100_Types.json',
-        'Publication_200_Types.json',
-        'Channel_300_Types.json',
-        'Message_Type.json',
         'RiverValidatorV1.json',
+        'Post.json',
+        'Message.json',
+        'Item.json'
       ],
     }),
     foundry({
       project: '../river-contracts/lib/imp',
-      forge: {
-        build: true,
-      },
-      include: [
-        'NodeRegistry.json',
+      include: [        
         'IdRegistry.json',
+        'AttestationRegistry.json',
         'DelegateRegistry.json',
+        'PostGateway.json',
       ],
     }),
     foundry({
       project: '../river-contracts/lib/light-account',
-      forge: {
-        build: true,
-      },
-      include: ['LightAccountFactory.json'],
+      include: ['LightAccountFactory.json']
     }),
   ],
-  out: './abi/generated.ts',
+  out: './abi/generated.ts'
 })

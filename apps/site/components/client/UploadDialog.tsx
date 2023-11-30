@@ -15,7 +15,7 @@ import {
   Toast,
 } from '@/design-system'
 import { uploadFile, uploadBlob } from '@/lib'
-import { getChannels, type Channel } from '@/gql'
+// import { getChannels, type Channel } from '@/gql'
 import { createPublication } from '@/actions'
 import { useDropzone } from 'react-dropzone'
 import { toast } from 'sonner'
@@ -37,14 +37,14 @@ export const UploadDialog = React.forwardRef<HTMLDivElement, UploadDialogProps>(
       setFilesToUpload(filesToUpload)
     }, [])
 
-    const [allChannels, setAllChannels] = React.useState<Channel[]>()
+    // const [allChannels, setAllChannels] = React.useState<Channel[]>()
 
     const [uriSet, setUriSet] = React.useState<boolean>(false)
 
     React.useEffect(() => {
       const fetchChannels = async () => {
-        const channelData = await getChannels()
-        setAllChannels(channelData.channels)
+        // const channelData = await getChannels()
+        // setAllChannels(channelData.channels)
       }
 
       fetchChannels()
@@ -93,15 +93,15 @@ export const UploadDialog = React.forwardRef<HTMLDivElement, UploadDialogProps>(
 
                     const nodeId = BigInt(1)
 
-                    console.log('nodeId', allChannels?.[0].nodeId)
+                    // console.log('nodeId', allChannels?.[0].nodeId)
 
-                    await createPublication({
-                      userId: userId as bigint,
-                      adminIds: [userId as bigint],
-                      memberIds: [BigInt(2), BigInt(3)],
-                      pubUri,
-                      nodeId: allChannels?.[0].nodeId,
-                    })
+                    // await createPublication({
+                    //   userId: userId as bigint,
+                    //   adminIds: [userId as bigint],
+                    //   memberIds: [BigInt(2), BigInt(3)],
+                    //   pubUri,
+                    //   nodeId: allChannels?.[0].nodeId,
+                    // })
 
                     onOpenChange(false)
 
@@ -132,7 +132,7 @@ export const UploadDialog = React.forwardRef<HTMLDivElement, UploadDialogProps>(
                     </>
                   ) : (
                     <Stack className="gap-4">
-                      <ChannelList channels={allChannels as Channel[]} />
+                      {/* <ChannelList channels={allChannels as Channel[]} /> */}
                       <FileList filesToUpload={filesToUpload} />
                       <Button type="submit" variant="link" disabled={!userId}>
                         Next
@@ -149,22 +149,22 @@ export const UploadDialog = React.forwardRef<HTMLDivElement, UploadDialogProps>(
   },
 )
 
-const ChannelList = ({ channels }: { channels: Channel[] }) => {
-  return (
-    <>
-      <ul>
-        {channels &&
-          channels.slice(0, 5).map((channel: Channel) => (
-            <li key={channel.id}>
-              <Typography>
-                {`${channel.uri?.name} - ${channel.items.length} items`}
-              </Typography>
-            </li>
-          ))}
-      </ul>
-    </>
-  )
-}
+// const ChannelList = ({ channels }: { channels: Channel[] }) => {
+//   return (
+//     <>
+//       <ul>
+//         {channels &&
+//           channels.slice(0, 5).map((channel: Channel) => (
+//             <li key={channel.id}>
+//               <Typography>
+//                 {`${channel.uri?.name} - ${channel.items.length} items`}
+//               </Typography>
+//             </li>
+//           ))}
+//       </ul>
+//     </>
+//   )
+// }
 
 const FileList = ({ filesToUpload }: { filesToUpload: File[] }) => {
   return (

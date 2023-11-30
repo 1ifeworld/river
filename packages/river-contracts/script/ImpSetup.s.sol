@@ -4,16 +4,16 @@ pragma solidity ^0.8.13;
 import "forge-std/Script.sol";
 
 import {IdRegistry} from "imp/IdRegistry.sol";
-import {NodeRegistry} from "imp/NodeRegistry.sol";
 import {DelegateRegistry} from "imp/DelegateRegistry.sol";
 import {AttestationRegistry} from "imp/AttestationRegistry.sol";
+import {PostGateway} from "imp/PostGateway.sol";
 
 contract ImpSetupScript is Script {
 
-    IdRegistry public idRegistry;
-    NodeRegistry public nodeRegistry;
+    IdRegistry public idRegistry;    
     DelegateRegistry public delegateRegistry;    
     AttestationRegistry public attestationRegistry;    
+    PostGateway public postGateway;
     
     function setUp() public {}
 
@@ -22,11 +22,11 @@ contract ImpSetupScript is Script {
         uint256 deployerPrivateKey = uint256(privateKeyBytes);
 
         vm.startBroadcast(deployerPrivateKey);
-
-        nodeRegistry = new NodeRegistry();
-        idRegistry = new IdRegistry();
-        delegateRegistry = new DelegateRegistry(address(idRegistry));
-        attestationRegistry = new AttestationRegistry();
+        
+        // idRegistry = new IdRegistry();
+        // delegateRegistry = new DelegateRegistry(address(idRegistry));
+        // attestationRegistry = new AttestationRegistry();
+        postGateway = new PostGateway();
 
         vm.stopBroadcast();
     }

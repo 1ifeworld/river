@@ -1,4 +1,3 @@
-import { getChannels, type Node } from '@/gql'
 import { Stack } from '@/design-system'
 import { ActivityBanner, ActivityChannels, ActivityItems } from '@/server'
 
@@ -7,7 +6,6 @@ export default async function User({
 }: {
   params: { username: string }
 }) {
-  // const { user } = await getUser()
 
   const mockUserObject: {
     name: string

@@ -1,11 +1,11 @@
 import { Grid } from '@/design-system'
-import { getChannels, type Channel } from '@/gql'
+import { getAllChannels, type Channel } from '@/gql'
 import { ChannelCard } from '@/server'
 
 export const dynamic = 'force-dynamic'
 
 export default async function Home() {
-  const { channels } = await getChannels()
+  const { channels } = await getAllChannels()
 
   return (
     <div>
