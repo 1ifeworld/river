@@ -11,7 +11,7 @@ contract PostScript is Script {
 
     uint256 constant userId = 1;
     uint16 constant sigType = 1;
-    uint96 constant version = 1;
+    uint16 constant version = 1;
     bytes public sig = hex"a3f20717a250c2b0b729b07ff9e6d8c0c1556334506f6c1f6f85c37b3a771fc45fb12f9e3c2322701ac7916c8b0b726f27dbeee6ab09cb3d7d44db6e8a3a3e331b";
     string public ipfsUri = "ipfs://bafkreiai2xekku6zoiwkchzgpsrjsd3z3nuotk3lzsoyo27rqymp6d3cni";
     
@@ -27,11 +27,11 @@ contract PostScript is Script {
         // create Post with one createPublication message
         createPublication();
 
-        // create Post with one createChannel message
-        createChannel();        
+        // create Channel with one createChannel message
+        // createChannel();        
 
-        // // create Post with one createChannel message
-        addToChannel();                
+        // add item with one addItem message
+        // addItem();                
 
         vm.stopBroadcast();
         /* End function transmission */
@@ -40,7 +40,7 @@ contract PostScript is Script {
 
     function createPublication() public {
         // Prep message for post        
-        uint96 msgType = 1;
+        uint32 msgType = 1;
         bytes memory msgBody = abi.encode(ipfsUri);        
         bytes[] memory messageArray = new bytes[](1);
         messageArray[0] = abi.encodePacked(msgType, msgBody);
@@ -50,7 +50,7 @@ contract PostScript is Script {
             sigType,                            // sigType
             sig,                                // signature
             version,                            // version
-            uint96(block.timestamp) + 600,      // expiration
+            uint64(block.timestamp) + 600,      // expiration
             abi.encode(messageArray)            // message array
         );                 
         // call post
@@ -59,8 +59,13 @@ contract PostScript is Script {
 
     function createChannel() public {
         // Prep message for post        
-        uint96 msgType = 2;
-        bytes memory msgBody = abi.encode(ipfsUri);        
+        uint32 msgType = 2;
+        uint256[] memory adminIds = new uint256[](1);
+        adminIds[0] = 1;
+        uint256[] memory memberIds = new uint256[](2);
+        memberIds[0] = 2;
+        memberIds[1] = 3;
+        bytes memory msgBody = abi.encode(ipfsUri, adminIds, memberIds);        
         bytes[] memory messageArray = new bytes[](1);
         messageArray[0] = abi.encodePacked(msgType, msgBody);
         // encode post inputs
@@ -69,27 +74,27 @@ contract PostScript is Script {
             sigType,                            // sigType
             sig,                                // signature
             version,                            // version
-            uint96(block.timestamp) + 600,      // expiration
+            uint64(block.timestamp) + 600,      // expiration
             abi.encode(messageArray)            // message array
         );                 
         // call post
         postGateway.post(postInputs);
     }
 
-    function addToChannel() public {
+    function addItem() public {
         // Prep message for post        
-        uint96 msgType = 3;
-        int256 channelId = 1;
+        uint32 msgType = 3;
         uint256 chainId = 420;
-        int256 id = 1;
-        address pointer = address(postGateway);
+        address target = address(postGateway);
         bool hasId = true;
+        int256 id = 1;
+        int256 channelId = 1;
         bytes memory msgBody = abi.encode(
-            channelId,
             chainId,
+            target,
+            hasId,
             id,
-            pointer,
-            hasId
+            channelId    
         );        
         bytes[] memory messageArray = new bytes[](1);
         messageArray[0] = abi.encodePacked(msgType, msgBody);
@@ -99,7 +104,7 @@ contract PostScript is Script {
             sigType,                            // sigType
             sig,                                // signature
             version,                            // version
-            uint96(block.timestamp) + 600,      // expiration
+            uint64(block.timestamp) + 600,      // expiration
             abi.encode(messageArray)            // message array
         );                 
         // call post

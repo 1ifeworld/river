@@ -18,8 +18,8 @@ export const addresses: AddressBook = {
   attestationRegistry: {
     opGoerli: '0x6d8313bBac1C0596Ff115DE28c8E0E4d3328DbE3',
   },
-  nodeRegistry: {
-    opGoerli: '0xF26F07040922992DF06091235A50872e31C85Ab8',
+  postGateway: {
+    opGoerli: '0x339513226Afd92B309837Bad402c6D3ADDE9Ad24',
     //   arbGoerli: "0x",
     //   anvil: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
     // ... add more chains as needed
