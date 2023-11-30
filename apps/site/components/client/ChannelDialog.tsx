@@ -116,7 +116,6 @@ export const ChannelDialog = React.forwardRef<
                   })                
                   // add this in to prevent msgBody from being null
                   if (!msgBody) return 
-                  console.log("msgBody: ", msgBody)
                   console.log("encoded msgBody correctly")
                   // generate encodedMessage by packing msgType + msgBody together
                   const encodedMessage = encodeMessage({
@@ -126,7 +125,6 @@ export const ChannelDialog = React.forwardRef<
                   // add this in to prevent encodedMessage being null
                   if (!encodedMessage) return               
                   console.log("encoded message correctly")   
-                  console.log("encodedMessage: ", encodedMessage)
                   // generate the bytes[] messageArray
                   const messageArray: Hash[] = [encodedMessage?.encodedMessage]
                   // NOTE: this encoding step should be a scrypt export as well
@@ -145,7 +143,6 @@ export const ChannelDialog = React.forwardRef<
                   // Get signature from user over signed hash of encodePacked version + expiration + messages                  
                   const sig = await signMessage(messageToBeSigned);
                   console.log("sig generated correctly") 
-                  console.log("signature: ", sig) 
                   // Generate encodedPost bytes data -- this is the input to the `post` function`
                   const postInput = encodePost({
                     userId: targetUserId,
@@ -159,7 +156,6 @@ export const ChannelDialog = React.forwardRef<
                   // add this in to prevent postInputs being null
                   if (!postInput) return       
                   console.log("postInput encoded correctly")   
-                  console.log("postInput: ", postInput)   
                   // pass postInputs into the createPost server action
                   await relayPost({postInput: postInput})
                   // close the modal post success
