@@ -83,15 +83,25 @@ export const UploadDialog = React.forwardRef<HTMLDivElement, UploadDialogProps>(
                     // Create an IPFS pointer for the uploaded item
                     const pubUri = await uploadBlob({
                       dataToUpload: {
-                        name: filesToUpload[0]?.name || '',
+                        name: filesToUpload[0]?.name || 'unnamed',
                         description: 'What did you think this was going to be?',
                         image: await uploadFile({ filesToUpload }),
                       },
                     })
 
                     setUriSet(true)
-
                     const nodeId = BigInt(1)
+
+
+                    // 
+
+
+
+
+
+
+
+
 
                     // console.log('nodeId', allChannels?.[0].nodeId)
 

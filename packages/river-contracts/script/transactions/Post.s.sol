@@ -7,7 +7,7 @@ import {PostGateway} from "imp/PostGateway.sol";
 
 contract PostScript is Script {
 
-    PostGateway postGateway = PostGateway(0x339513226Afd92B309837Bad402c6D3ADDE9Ad24);
+    PostGateway postGateway = PostGateway(0x5FbDB2315678afecb367f032d93F642f64180aa3);
 
     uint256 constant userId = 1;
     uint8 constant sigType = 1;
@@ -31,7 +31,8 @@ contract PostScript is Script {
         createChannel();        
 
         // add item with one addItem message
-        addItem();                
+        addItemPub();                
+        addItemNFT();
 
         vm.stopBroadcast();
         /* End function transmission */
@@ -58,7 +59,7 @@ contract PostScript is Script {
 
     function createChannel() public {
         // Prep message for post        
-        uint32 msgType = 2;
+        uint32 msgType = 210;
         uint256[] memory adminIds = new uint256[](1);
         adminIds[0] = 1;
         uint256[] memory memberIds = new uint256[](2);
@@ -80,21 +81,45 @@ contract PostScript is Script {
         postGateway.post(postInputs);
     }
 
-    function addItem() public {
+    function addItemPub() public {   
+        // prep message for post
+        uint32 msgType = 211;
+        uint32 itemType = 1; // 1 = PUB
+        uint256 channelIdToTarget = 1;
+        uint256 pubIdToAdd = 1;
+        bytes memory itemBody = abi.encode(channelIdToTarget, pubIdToAdd);
+        bytes memory msgBody = abi.encode(itemType, itemBody);
+        bytes[] memory messageArray = new bytes[](1);
+        messageArray[0] = abi.encodePacked(msgType, msgBody);        
+        // encode post inputs
+        bytes memory postInputs = abi.encodePacked(
+            userId,                             // userId
+            sigType,                            // sigType
+            sig,                                // signature
+            version,                            // version
+            uint64(block.timestamp) + 600,      // expiration
+            abi.encode(messageArray)            // message array
+        );     
+        // call post
+        postGateway.post(postInputs);
+    }
+
+    function addItemNFT() public {
         // Prep message for post        
-        uint32 msgType = 3;
+        uint32 msgType = 211;
+        uint32 itemType = 2; // 2 = NFT
+        uint256 channelIdToTarget = 1;        
         uint256 chainId = 420;
         address target = address(postGateway);
         bool hasId = true;
-        int256 id = 1;
-        int256 channelId = 1;
-        bytes memory msgBody = abi.encode(
+        uint256 tokenId = 1;
+        bytes memory itemBody = abi.encode(channelIdToTarget, 
             chainId,
             target,
             hasId,
-            id,
-            channelId    
-        );        
+            tokenId
+        );
+        bytes memory msgBody = abi.encode(itemType, itemBody);        
         bytes[] memory messageArray = new bytes[](1);
         messageArray[0] = abi.encodePacked(msgType, msgBody);
         // encode post inputs
