@@ -3,12 +3,16 @@ import { postGatewayChain } from "../constants";
 import {
   decodePost,
   decodeMessage,
-  decodeItem,
   decodeUri,
   decodeAccess,
   decodeUriAndAccess,
+  decodeItem,
+  decodePubItem,
+  decodeNFTItem,
+  TargetType,
+  messageTypes
 } from "scrypt";
-import { Hash, slice } from "viem";
+import { Hash, Hex, slice } from "viem";
 
 ponder.on("PostGateway:Post", async ({ event, context }) => {
   const {
@@ -21,8 +25,10 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
     Channel,
     ItemCounter,
     Item,
+    Target,
+    Nft,
   } = context.entities;
-  
+
   let postCounter: { id: string; counter?: bigint | undefined } | null = null;
   let publicationCounter: { id: string; counter?: bigint | undefined } | null =
     null;
@@ -35,12 +41,12 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
     // update postGatewayChain -> event.transaction.chainId after bumping to next version ponder
     id: `${postGatewayChain}/${event.transaction.to}`,
     create: {
-        timestamp: event.block.timestamp,
-        counter: BigInt(1)    
+      timestamp: event.block.timestamp,
+      counter: BigInt(1),
     },
     update: ({ current }) => ({
-        timestamp: event.block.timestamp,
-        counter: (current.counter as bigint) + BigInt(1)      
+      timestamp: event.block.timestamp,
+      counter: (current.counter as bigint) + BigInt(1),
     }),
   });
 
@@ -84,9 +90,13 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
     const messageQueue: MessageToProcess[] = [];
 
     for (let i = 0; i < length; ++i) {
+      console.log("message: ", decodedPost?.messageArray[i]);
+
       const decodedMessage = decodeMessage({
         encodedMessage: decodedPost?.messageArray[i],
       });
+
+      console.log("message type: ", decodedMessage?.msgType);
 
       if (decodedMessage) {
         // Check if the messageQueue is not empty and
@@ -106,8 +116,12 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
 
     // NOTE at this point, we now know that the messageQueue is ordered correctly
 
+    // initialize empty pubIdsCreated + channelIdsCreated for relative referencing
     console.log("messageQueue length ", messageQueue.length);
     console.log("completed messageQueue ", messageQueue);
+
+    let pubIdsCreated: bigint[] = []; // can be referenced with negative int256s starting with 1. ex: -10, -11, -12
+    let channelIdsCreated: bigint[] = []; // can be referenced with negative int256s starting with 2. ex: -20, -21, -22    
 
     for (let i = 0; i < messageQueue.length; ++i) {
       await Message.create({
@@ -130,11 +144,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
             *** IF trying to add an item that is being curated in the same Post (earlier on in message queue),
             *** then the id in use must be a referential id created with negative number representing the index
             *** it was created by (ex: id = -1 instead of 1)
-      */
-
-      // initialize empty pubIdsCreated + channelIdsCreated for relative referencing
-      let pubIdsCreated: bigint[] = []; // can be referenced with negative int256s starting with 1. ex: -10, -11, -12
-      let channelIdsCreated: bigint[] = []; // can be referenced with negative int256s starting with 2. ex: -20, -21, -22
+      */      
 
       console.log(
         "msg type heading into switch case: ",
@@ -142,7 +152,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
       );
 
       switch (messageQueue[i]?.msgType) {
-        case BigInt(1): // createPublication
+        case BigInt(messageTypes.createPublication): // 110
           console.log("running case 1");
           // decode msgBody into pub uri
           const decodedPubUri = decodeUri({ msgBody: messageQueue[i].msgBody });
@@ -153,11 +163,11 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
               id: `${postGatewayChain}/${event.transaction.to}`,
               create: {
                 timestamp: event.block.timestamp,
-                counter: BigInt(1)                
+                counter: BigInt(1),
               },
               update: ({ current }) => ({
                 timestamp: event.block.timestamp,
-                counter: (current.counter as bigint) + BigInt(1)
+                counter: (current.counter as bigint) + BigInt(1),
               }),
             });
 
@@ -167,6 +177,8 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
             });
 
             pubIdsCreated.push(publicationCounter?.counter as bigint);
+
+            console.log("pub ids created right after push ", pubIdsCreated)
 
             await Publication.create({
               id: `${publicationCounter?.counter as bigint}`,
@@ -178,7 +190,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
             });
           }
           break;
-        case BigInt(210): // createChannel
+        case BigInt(messageTypes.createChannel): // 210
           console.log("running case 2");
           // decode msgBody into channel uri
           const decodeChannelUriAndAccess = decodeUriAndAccess({
@@ -191,11 +203,11 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
               id: `${postGatewayChain}/${event.transaction.to}`,
               create: {
                 timestamp: event.block.timestamp,
-                counter: BigInt(1)
+                counter: BigInt(1),
               },
               update: ({ current }) => ({
                 timestamp: event.block.timestamp,
-                counter: (current.counter as bigint) + BigInt(1),                
+                counter: (current.counter as bigint) + BigInt(1),
               }),
             });
 
@@ -218,10 +230,13 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
             });
           }
           break;
-        case BigInt(3): // addItem
+        case BigInt(messageTypes.addItem): // 213
           console.log("running case 3");
           // decode msgBody into item
-          const decodedItem = decodeItem({ msgBody: messageQueue[i].msgBody });
+          const decodedItem = decodeItem({
+            msgBody: messageQueue[i].msgBody,
+          });
+
           if (decodedItem) {
             await ItemCounter.upsert({
               // chain // messageGateway address
@@ -243,15 +258,27 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
             });
 
             let channelIdRef: bigint | null = null;
-            let targetIdRef: bigint | null = null;
+            let pubIdRef: bigint | null = null;
 
-            // only enter channelIdRef assignment flow if item.id < 0
-            if (decodedItem.channelId < 0) {
+            // NOTE: this should be moved into scrypt
+            const deconstructedItemBody: {
+              channel: Hash;
+              data: Hash;
+            } = {
+              channel: slice(decodedItem.itemBody, 0, 32, { strict: true }),
+              data: slice(decodedItem.itemBody, 32),
+            };
+
+            // NOTE this chunk of code allows for targeting of channel being created in same post
+            //   only enter channelIdRef assignment flow if item.id < 0
+            if (BigInt(deconstructedItemBody.channel) < 0) {
               // Convert the ID to a string for easier manipulation
-              const idString = decodedItem.id.toString();
-              if (idString.startsWith("-2")) {
+              const channelIdString = BigInt(
+                deconstructedItemBody.channel
+              ).toString();
+              if (channelIdString.startsWith("-2")) {
                 // Slice to remove '-2' and parse the remaining string as an integer
-                const index = parseInt(idString.slice(2));
+                const index = parseInt(channelIdString.slice(2));
                 channelIdRef = channelIdsCreated[index];
               } else {
                 // dont process relative refs that start with something other than -1 or -2
@@ -259,45 +286,86 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
               }
             }
 
-            // only enter targetIdRef assignment flow if item.id < 0
-            if (decodedItem.id < 0) {
-              // Convert the ID to a string for easier manipulation
-              const idString = decodedItem.id.toString();
-              if (idString.startsWith("-1")) {
-                // Slice to remove '-1' and parse the remaining string as an integer
-                const index = parseInt(idString.slice(2));
-                targetIdRef = pubIdsCreated[index];
-              } else if (idString.startsWith("-2")) {
-                // Slice to remove '-1' and parse the remaining string as an integer
-                const index = parseInt(idString.slice(2));
-                targetIdRef = channelIdsCreated[index];
-              } else {
-                // dont process relative refs that start with something other than -1 or -2
-                break;
-              }
-            }
-
+            // create item that will point to target to oneof pub/nft/url
             await Item.create({
-              // NOTE prob need to keep an item counter so these ids can be unique
               id: `${itemCounter?.counter as bigint}`,
-              data: {                                          
-                // context
+              data: {
                 timestamp: event.block.timestamp,
                 creatorId: decodedPost.userId,
-                // NOTE might need to add relative referencing to channel field as well?
-                //   would also mean need to update the item schema so that channelId can be negative
-                // item
-                chainId: decodedItem.chainId,
-                target: decodedItem.target,
-                hasId: decodedItem.hasId,
-                targetId: targetIdRef ? targetIdRef : decodedItem.id,
                 channel: channelIdRef
                   ? `${channelIdRef}`
-                  : `${decodedItem.channelId}`,
+                  : BigInt(deconstructedItemBody.channel).toString(),
+                target: `${itemCounter?.counter as bigint}`,
+                type: decodedItem.itemType,
               },
             });
+
+            console.log("decodedItem.itemType: ", decodedItem.itemType)
+            switch (decodedItem.itemType) {              
+              case TargetType.PUB:
+                console.log("it was type PUB")
+                const pub = decodePubItem({
+                  itemBody: deconstructedItemBody.data,
+                });
+                console.log("decoded pub value: ", pub)
+                console.log("decoded pub id value: ", pub?.pubId)
+                if (pub) {
+                  // NOTE this chunk of code allows for targeting of channel being created in same post
+                  //   only enter pubIdRef assignment flow if item.id < 0
+                  if (pub.pubId < 0) {
+                    // Convert the ID to a string for easier manipulation
+                    const pubIdString = pub.pubId.toString();
+                    if (pubIdString.startsWith("-1")) {
+                      // Slice to remove '-1' and parse the remaining string as an integer
+                      const index = parseInt(pubIdString.slice(2));
+                      console.log("pubRefIndex", 0)
+                      pubIdRef = pubIdsCreated[index];
+                      console.log("pubIdsCreated array", pubIdsCreated)
+                      console.log("confirmed pubIdRef", pubIdRef)
+                    } else {
+                      // dont process relative refs that start with something other than -1 or -2
+                      break;
+                    }
+                  }
+
+                  await Target.create({
+                    id: `${itemCounter?.counter as bigint}`,
+                    data: {
+                      type: decodedItem.itemType,
+                      publication: pubIdRef
+                        ? `${pubIdRef}`
+                        : pub.pubId.toString(),
+                    },
+                  });
+                }
+                break;
+              case TargetType.NFT:
+                // decode nft because is itemType
+                const nft = decodeNFTItem({ itemBody: deconstructedItemBody.data });
+                // if decoded incorrectly dont create target or NFT
+                if (nft) {
+                  await Nft.create({
+                    id: `${itemCounter?.counter as bigint}`,
+                    data: {
+                      chainId: nft?.chainId as bigint,
+                      targetContract: nft?.target as Hex,
+                      hasId: nft?.hasId as boolean,
+                      tokenId: nft?.id,
+                    },
+                  });
+
+                  await Target.create({
+                    id: `${itemCounter?.counter as bigint}`,
+                    data: {
+                      type: decodedItem.itemType,
+                      nft: `${itemCounter?.counter as bigint}`,
+                    },
+                  });
+                }
+              case TargetType.URL:
+                break;
+            }
           }
-          break;
       }
     }
   }

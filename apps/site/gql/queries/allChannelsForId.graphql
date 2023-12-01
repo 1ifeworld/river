@@ -6,14 +6,21 @@ query allChannelsForId($creatorId: BigInt) {
     members
     timestamp
     uri
-    items {
-      chainId
+    items(orderBy: "timestamp", orderDirection: "desc") {
       creatorId
-      hasId
       id
-      target
-      targetId
+      type
       timestamp
+      target {
+        id
+        type
+        publication {
+          creatorId
+          id
+          timestamp
+          uri
+        }
+      }      
     }
   }
 }

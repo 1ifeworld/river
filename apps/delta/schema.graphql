@@ -62,16 +62,78 @@ type ItemCounter @entity {
   counter: BigInt
 }
 
+# type Item @entity {
+#   id: String!
+#   timestamp: BigInt
+#   creatorId: BigInt  
+#   chainId: BigInt
+#   target: String
+#   hasId: Boolean  
+#   targetId: BigInt
+#   channel: Channel!
+# }
+
+enum TargetType {
+  PUB
+  NFT
+  URL
+}
+
 type Item @entity {
   id: String!
   timestamp: BigInt
   creatorId: BigInt  
-  chainId: BigInt
-  target: String
-  hasId: Boolean  
-  targetId: BigInt
   channel: Channel!
+  target: Target
+  type: TargetType
 }
+
+# id of target should be id of item which itslef is unique 
+type Target @entity {
+  id: String!
+  type: TargetType!
+  publication: Publication
+  nft: Nft
+  url: Url
+}
+
+# id of NFT should match that of Target
+type Nft @entity {
+  id: String!
+  chainId: BigInt!
+  targetContract: String!
+  hasId: Boolean!
+  tokenId: BigInt!
+}
+
+# id of Url should match that of Target
+type Url @entity {
+  id: String!
+  url: String
+}
+
+# type Item @entity {
+#   id: String!
+#   timestamp: BigInt
+#   creatorId: BigInt  
+#   channel: Channel!
+#   target: Target
+# }
+
+# type Target @entity {
+#   id: String!
+#   type: BigInt
+#   item: Item! 
+# }
+
+
+# type NFTPointer implements Pointer {
+#   id: String!
+#   chainId: BigInt
+#   targetContract: String
+#   hasId: Boolean
+#   tokenId: BigInt
+# }
 
 # ================================
 # ====== DELEGATE REGISTRY =======

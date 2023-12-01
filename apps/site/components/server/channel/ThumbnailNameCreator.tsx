@@ -7,8 +7,10 @@ import { ipfsToHttps } from 'lib/ipfsToHttps'
 
 export async function ThumbnailNameCreator({ item }: { item: Item }) {
 
-    const hardcodedItemUri = "ipfs://bafkreidigo5zwthrfpvcsvogvb6oga5idbsupzan2pwphp7eb63cgwxjnq"
-    const itemIpfsResponse = await fetchIpfsData(hardcodedItemUri)
+    let itemIpfsResponse;
+    if (item.target?.publication?.uri) {
+        itemIpfsResponse = await fetchIpfsData(item.target?.publication?.uri)
+    }
 
     if (!itemIpfsResponse) {
         return (

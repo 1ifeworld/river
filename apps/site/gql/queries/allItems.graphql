@@ -1,11 +1,18 @@
 query allItems {
-  items(orderBy: "id", orderDirection: "desc") {
-    id
-    target
-    targetId
-    timestamp
-    chainId
+  items(orderBy: "timestamp", orderDirection: "desc") {
     creatorId
-    hasId
+    id
+    type
+    timestamp
+    target {
+      id
+      type
+      publication {
+        creatorId
+        id
+        timestamp
+        uri
+      }
+    }
   }
 }

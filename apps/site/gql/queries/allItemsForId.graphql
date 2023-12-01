@@ -1,11 +1,18 @@
 query allItemsForId($creatorId: BigInt) {
-  items(orderBy: "id", orderDirection: "desc", where: {creatorId: $creatorId}) {
-    id
-    target
-    targetId
-    timestamp
-    chainId
+  items(orderBy: "timestamp", orderDirection: "desc", where: {creatorId: $creatorId}) {
     creatorId
-    hasId
+    id
+    type
+    timestamp
+    target {
+      id
+      type
+      publication {
+        creatorId
+        id
+        timestamp
+        uri
+      }
+    }
   }
 }

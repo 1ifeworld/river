@@ -1,4 +1,4 @@
-export const messageTypes = new Set<bigint>([
+export const messageTypesSet = new Set<bigint>([
 // Publications
   BigInt(110),  // createPub (body = abi.encoode(string uri))
   BigInt(111),  // editPubUri  (body = abi.encoode(string uri))
@@ -10,3 +10,14 @@ export const messageTypes = new Set<bigint>([
   BigInt(214),  // removeItems (body = abi.encode(uint256[]))
   BigInt(215),  // sortItems (body = abi.encode(uint256[], int128[]))
 ])
+
+export const messageTypes = {
+  createPublication: 110,
+  editPublication: 111,
+  createChannel: 210,
+  editChannelUri: 211,
+  editChannelAccess: 212,
+  addItem: 213,
+  removeItems: 214,
+  sortItems: 215
+}
