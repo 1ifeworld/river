@@ -10,6 +10,7 @@ import {
   decodePublication,
   decodeNFT,
   TargetType,
+  messageTypes
 } from "scrypt";
 import { Hash, Hex, slice } from "viem";
 
@@ -115,8 +116,12 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
 
     // NOTE at this point, we now know that the messageQueue is ordered correctly
 
+    // initialize empty pubIdsCreated + channelIdsCreated for relative referencing
     console.log("messageQueue length ", messageQueue.length);
     console.log("completed messageQueue ", messageQueue);
+
+    let pubIdsCreated: bigint[] = []; // can be referenced with negative int256s starting with 1. ex: -10, -11, -12
+    let channelIdsCreated: bigint[] = []; // can be referenced with negative int256s starting with 2. ex: -20, -21, -22    
 
     for (let i = 0; i < messageQueue.length; ++i) {
       await Message.create({
@@ -139,11 +144,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
             *** IF trying to add an item that is being curated in the same Post (earlier on in message queue),
             *** then the id in use must be a referential id created with negative number representing the index
             *** it was created by (ex: id = -1 instead of 1)
-      */
-
-      // initialize empty pubIdsCreated + channelIdsCreated for relative referencing
-      let pubIdsCreated: bigint[] = []; // can be referenced with negative int256s starting with 1. ex: -10, -11, -12
-      let channelIdsCreated: bigint[] = []; // can be referenced with negative int256s starting with 2. ex: -20, -21, -22
+      */      
 
       console.log(
         "msg type heading into switch case: ",
@@ -151,7 +152,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
       );
 
       switch (messageQueue[i]?.msgType) {
-        case BigInt(1): // createPublication
+        case messageTypes.createPublication: // 110
           console.log("running case 1");
           // decode msgBody into pub uri
           const decodedPubUri = decodeUri({ msgBody: messageQueue[i].msgBody });
@@ -177,6 +178,8 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
 
             pubIdsCreated.push(publicationCounter?.counter as bigint);
 
+            console.log("pub ids created right after push ", pubIdsCreated)
+
             await Publication.create({
               id: `${publicationCounter?.counter as bigint}`,
               data: {
@@ -187,7 +190,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
             });
           }
           break;
-        case BigInt(210): // createChannel
+        case messageTypes.createChannel: // 210
           console.log("running case 2");
           // decode msgBody into channel uri
           const decodeChannelUriAndAccess = decodeUriAndAccess({
@@ -227,7 +230,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
             });
           }
           break;
-        case BigInt(211): // addItem
+        case messageTypes.addItem: // 213
           console.log("running case 3");
           // decode msgBody into item
           const decodedItem = decodeItem({
@@ -297,11 +300,15 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
               },
             });
 
-            switch (decodedItem.itemType) {
+            console.log("decodedItem.itemType: ", decodedItem.itemType)
+            switch (decodedItem.itemType) {              
               case TargetType.PUB:
+                console.log("it was type PUB")
                 const pub = decodePublication({
                   itemBody: deconstructedItemBody.data,
                 });
+                console.log("decoded pub value: ", pub)
+                console.log("decoded pub id value: ", pub?.pubId)
                 if (pub) {
                   // NOTE this chunk of code allows for targeting of channel being created in same post
                   //   only enter pubIdRef assignment flow if item.id < 0
@@ -311,7 +318,10 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
                     if (pubIdString.startsWith("-1")) {
                       // Slice to remove '-1' and parse the remaining string as an integer
                       const index = parseInt(pubIdString.slice(2));
+                      console.log("pubRefIndex", 0)
                       pubIdRef = pubIdsCreated[index];
+                      console.log("pubIdsCreated array", pubIdsCreated)
+                      console.log("confirmed pubIdRef", pubIdRef)
                     } else {
                       // dont process relative refs that start with something other than -1 or -2
                       break;
