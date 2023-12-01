@@ -11,38 +11,6 @@ import { itemABI } from "../../abi";
 //////////////////////////////////////////////////
 
 export function decodeItem({ msgBody }: { msgBody: Hash }): {
-  chainId: bigint;
-  target: Address;
-  hasId: boolean;
-  id: bigint;
-  channelId: bigint;
-} | null {
-  try {
-    const [chainId, target, hasId, id, channelId] = decodeAbiParameters(
-      [
-        { type: "uint256" }, // chainId
-        { type: "address" }, // pointer
-        { type: "bool" }, // hasId
-        { type: "int256" }, // id -- negative values for relative referencing
-        { type: "int256" }, // channelId -- negative values for relative referencing
-      ],
-      msgBody
-    );
-
-    return {
-      chainId: chainId,
-      target: target,
-      hasId: hasId,
-      id: id,
-      channelId: channelId,
-    };
-  } catch (error) {
-    console.error("Failed to decode Item", error);
-    return null;
-  }
-}
-
-export function decodeItemNew({ msgBody }: { msgBody: Hash }): {
   itemType: TargetType;
   itemBody: Hash;
 } | null {
@@ -86,7 +54,7 @@ export function decodePublication({ itemBody }: { itemBody: Hash }): {
   try {
     const [pubId] = decodeAbiParameters(
       [
-        { type: "uint256" },    // pubId
+        { type: "int256" },    // pubId -- negative value possible for releative referencing
       ],
       itemBody
     );

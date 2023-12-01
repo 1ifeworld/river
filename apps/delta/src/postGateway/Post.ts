@@ -3,11 +3,10 @@ import { postGatewayChain } from "../constants";
 import {
   decodePost,
   decodeMessage,
-  decodeItem,
   decodeUri,
   decodeAccess,
   decodeUriAndAccess,
-  decodeItemNew,
+  decodeItem,
   decodePublication,
   decodeNFT,
   TargetType,
@@ -90,14 +89,13 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
     const messageQueue: MessageToProcess[] = [];
 
     for (let i = 0; i < length; ++i) {
-
-      console.log("message: ", decodedPost?.messageArray[i])
+      console.log("message: ", decodedPost?.messageArray[i]);
 
       const decodedMessage = decodeMessage({
         encodedMessage: decodedPost?.messageArray[i],
       });
 
-      console.log("message type: ", decodedMessage?.msgType)
+      console.log("message type: ", decodedMessage?.msgType);
 
       if (decodedMessage) {
         // Check if the messageQueue is not empty and
@@ -232,14 +230,9 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
         case BigInt(211): // addItem
           console.log("running case 3");
           // decode msgBody into item
-          // const decodedItem = decodeItem({ msgBody: messageQueue[i].msgBody });
-          const decodedItem = decodeItemNew({
+          const decodedItem = decodeItem({
             msgBody: messageQueue[i].msgBody,
           });
-
-          // const decodeChannelUriAndAccess = decodeUriAndAccess({
-          //   msgBody: messageQueue[i].msgBody,
-          // });
 
           if (decodedItem) {
             await ItemCounter.upsert({
@@ -262,8 +255,9 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
             });
 
             let channelIdRef: bigint | null = null;
-            let targetIdRef: bigint | null = null;
+            let pubIdRef: bigint | null = null;
 
+            // NOTE: this should be moved into scrypt
             const deconstructedItemBody: {
               channel: Hash;
               data: Hash;
@@ -271,28 +265,66 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
               channel: slice(decodedItem.itemBody, 0, 32, { strict: true }),
               data: slice(decodedItem.itemBody, 32),
             };
+
+            // NOTE this chunk of code allows for targeting of channel being created in same post
+            //   only enter channelIdRef assignment flow if item.id < 0
+            if (BigInt(deconstructedItemBody.channel) < 0) {
+              // Convert the ID to a string for easier manipulation
+              const channelIdString = BigInt(
+                deconstructedItemBody.channel
+              ).toString();
+              if (channelIdString.startsWith("-2")) {
+                // Slice to remove '-2' and parse the remaining string as an integer
+                const index = parseInt(channelIdString.slice(2));
+                channelIdRef = channelIdsCreated[index];
+              } else {
+                // dont process relative refs that start with something other than -1 or -2
+                break;
+              }
+            }
+
             // create item that will point to target to oneof pub/nft/url
             await Item.create({
               id: `${itemCounter?.counter as bigint}`,
               data: {
                 timestamp: event.block.timestamp,
                 creatorId: decodedPost.userId,
-                channel: BigInt(deconstructedItemBody.channel).toString(),
+                channel: channelIdRef
+                  ? `${channelIdRef}`
+                  : BigInt(deconstructedItemBody.channel).toString(),
                 target: `${itemCounter?.counter as bigint}`,
                 type: decodedItem.itemType,
               },
-            });            
+            });
 
             switch (decodedItem.itemType) {
-
               case TargetType.PUB:
-                const pub = decodePublication({ itemBody: deconstructedItemBody.data })
+                const pub = decodePublication({
+                  itemBody: deconstructedItemBody.data,
+                });
                 if (pub) {
+                  // NOTE this chunk of code allows for targeting of channel being created in same post
+                  //   only enter pubIdRef assignment flow if item.id < 0
+                  if (pub.pubId < 0) {
+                    // Convert the ID to a string for easier manipulation
+                    const pubIdString = pub.pubId.toString();
+                    if (pubIdString.startsWith("-1")) {
+                      // Slice to remove '-1' and parse the remaining string as an integer
+                      const index = parseInt(pubIdString.slice(2));
+                      pubIdRef = pubIdsCreated[index];
+                    } else {
+                      // dont process relative refs that start with something other than -1 or -2
+                      break;
+                    }
+                  }
+
                   await Target.create({
                     id: `${itemCounter?.counter as bigint}`,
                     data: {
                       type: decodedItem.itemType,
-                      publication: `${itemCounter?.counter as bigint}`,
+                      publication: pubIdRef
+                        ? `${pubIdRef}`
+                        : pub.pubId.toString(),
                     },
                   });
                 }
@@ -302,13 +334,6 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
                 const nft = decodeNFT({ itemBody: deconstructedItemBody.data });
                 // if decoded incorrectly dont create target or NFT
                 if (nft) {
-                  await Target.create({
-                    id: `${itemCounter?.counter as bigint}`,
-                    data: {
-                      type: decodedItem.itemType,
-                      nft: `${itemCounter?.counter as bigint}`,
-                    },
-                  });
                   await Nft.create({
                     id: `${itemCounter?.counter as bigint}`,
                     data: {
@@ -318,121 +343,17 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
                       tokenId: nft?.id,
                     },
                   });
+
+                  await Target.create({
+                    id: `${itemCounter?.counter as bigint}`,
+                    data: {
+                      type: decodedItem.itemType,
+                      nft: `${itemCounter?.counter as bigint}`,
+                    },
+                  });
                 }
-
-                // //   only enter channelIdRef assignment flow if item.id < 0
-                // if (decodedItem.channelId < 0) {
-                //   // Convert the ID to a string for easier manipulation
-                //   const idString = decodedItem.id.toString();
-                //   if (idString.startsWith("-2")) {
-                //     // Slice to remove '-2' and parse the remaining string as an integer
-                //     const index = parseInt(idString.slice(2));
-                //     channelIdRef = channelIdsCreated[index];
-                //   } else {
-                //     // dont process relative refs that start with something other than -1 or -2
-                //     break;
-                //   }
-                // }
-
-                // // only enter targetIdRef assignment flow if item.id < 0
-                // if (decodedItem.id < 0) {
-                //   // Convert the ID to a string for easier manipulation
-                //   const idString = decodedItem.id.toString();
-                //   if (idString.startsWith("-1")) {
-                //     // Slice to remove '-1' and parse the remaining string as an integer
-                //     const index = parseInt(idString.slice(2));
-                //     targetIdRef = pubIdsCreated[index];
-                //   } else if (idString.startsWith("-2")) {
-                //     // Slice to remove '-1' and parse the remaining string as an integer
-                //     const index = parseInt(idString.slice(2));
-                //     targetIdRef = channelIdsCreated[index];
-                //   } else {
-                //     // dont process relative refs that start with something other than -1 or -2
-                //     break;
-                //   }
-                // }
               case TargetType.URL:
                 break;
-
-              // await Item.create({
-              //   // NOTE prob need to keep an item counter so these ids can be unique
-              //   id: `${itemCounter?.counter as bigint}`,
-              //   data: {
-              //     // context
-              //     timestamp: event.block.timestamp,
-              //     creatorId: decodedPost.userId,
-              //     // NOTE might need to add relative referencing to channel field as well?
-              //     //   would also mean need to update the item schema so that channelId can be negative
-              //     // item
-              //     chainId: decodedItem.chainId,
-              //     target: decodedItem.target,
-              //     hasId: decodedItem.hasId,
-              //     targetId: targetIdRef ? targetIdRef : decodedItem.id,
-              //     channel: channelIdRef
-              //       ? `${channelIdRef}`
-              //       : `${decodedItem.channelId}`,
-              //   },
-              // });
-
-              // // only enter channelIdRef assignment flow if item.id < 0
-              // if (decodedItem.channelId < 0) {
-              //   // Convert the ID to a string for easier manipulation
-              //   const idString = decodedItem.id.toString();
-              //   if (idString.startsWith("-2")) {
-              //     // Slice to remove '-2' and parse the remaining string as an integer
-              //     const index = parseInt(idString.slice(2));
-              //     channelIdRef = channelIdsCreated[index];
-              //   } else {
-              //     // dont process relative refs that start with something other than -1 or -2
-              //     break;
-              //   }
-              // }
-
-              // // only enter targetIdRef assignment flow if item.id < 0
-              // if (decodedItem.id < 0) {
-              //   // Convert the ID to a string for easier manipulation
-              //   const idString = decodedItem.id.toString();
-              //   if (idString.startsWith("-1")) {
-              //     // Slice to remove '-1' and parse the remaining string as an integer
-              //     const index = parseInt(idString.slice(2));
-              //     targetIdRef = pubIdsCreated[index];
-              //   } else if (idString.startsWith("-2")) {
-              //     // Slice to remove '-1' and parse the remaining string as an integer
-              //     const index = parseInt(idString.slice(2));
-              //     targetIdRef = channelIdsCreated[index];
-              //   } else {
-              //     // dont process relative refs that start with something other than -1 or -2
-              //     break;
-              //   }
-              // }
-
-              // await Target.create({
-              //   id: "1",
-              //   data: {
-              //     type: BigInt(1),
-              //     pointer: BigInt(1)
-              //   }
-              // })
-
-              // await Item.create({
-              //   // NOTE prob need to keep an item counter so these ids can be unique
-              //   id: `${itemCounter?.counter as bigint}`,
-              //   data: {
-              //     // context
-              //     timestamp: event.block.timestamp,
-              //     creatorId: decodedPost.userId,
-              //     // NOTE might need to add relative referencing to channel field as well?
-              //     //   would also mean need to update the item schema so that channelId can be negative
-              //     // item
-              //     chainId: decodedItem.chainId,
-              //     target: decodedItem.target,
-              //     hasId: decodedItem.hasId,
-              //     targetId: targetIdRef ? targetIdRef : decodedItem.id,
-              //     channel: channelIdRef
-              //       ? `${channelIdRef}`
-              //       : `${decodedItem.channelId}`,
-              //   },
-              // });
             }
           }
       }

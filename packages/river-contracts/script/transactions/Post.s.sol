@@ -85,8 +85,8 @@ contract PostScript is Script {
         // prep message for post
         uint32 msgType = 211;
         uint32 itemType = 1; // 1 = PUB
-        uint256 channelIdToTarget = 1;
-        uint256 pubIdToAdd = 1;
+        int256 channelIdToTarget = 1;
+        int256 pubIdToAdd = 1;
         bytes memory itemBody = abi.encode(channelIdToTarget, pubIdToAdd);
         bytes memory msgBody = abi.encode(itemType, itemBody);
         bytes[] memory messageArray = new bytes[](1);
@@ -108,7 +108,7 @@ contract PostScript is Script {
         // Prep message for post        
         uint32 msgType = 211;
         uint32 itemType = 2; // 2 = NFT
-        uint256 channelIdToTarget = 1;        
+        int256 channelIdToTarget = 1; 
         uint256 chainId = 420;
         address target = address(postGateway);
         bool hasId = true;
