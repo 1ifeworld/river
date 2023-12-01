@@ -24,7 +24,7 @@ import {
 import { uploadBlob } from '@/lib'
 import { relayPost } from '@/actions'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useAlchemyContext } from 'context/AlchemyProviderContext'
+import { useUserContext } from 'context/UserContext'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { toast } from 'sonner'
@@ -50,7 +50,7 @@ export const ChannelDialog = React.forwardRef<
   HTMLDivElement,
   ChannelDialogProps
 >(({ triggerChildren, onSelect, onOpenChange, userId }, forwardedRef) => {
-  const { alchemyProvider } = useAlchemyContext()
+  const { alchemyProvider } = useUserContext()
   const { signMessage } = usePrivy()
   const { userId: targetUserId } = useConnectedUser()
 

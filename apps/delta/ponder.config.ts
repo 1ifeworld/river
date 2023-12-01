@@ -10,6 +10,7 @@ import {
   lightAccountFactoryABI,
 } from 'scrypt'
 
+
 export const config: Config = {
   networks: [
     {

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useAlchemyContext } from '@/context'
+import { useUserContext } from 'context/UserContext'
 import { getUserId } from '@/gql'
 import { getUsername } from '@/lib'
 import { type Address } from 'viem'
@@ -8,7 +8,7 @@ export function useConnectedUser() {
   const [userId, setUserId] = React.useState<bigint>()
   const [username, setUsername] = React.useState<string>()
 
-  const { smartAccountAddress } = useAlchemyContext()
+  const { smartAccountAddress } = useUserContext()
 
   React.useEffect(() => {
     /* biome-ignore format: */
