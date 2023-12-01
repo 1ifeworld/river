@@ -2,22 +2,27 @@ import { relayPost } from "@/actions";
 import {
   encodePost,
   encodeMessage,
-  encodeUriAndAccess,
+  encodePub,
+  encodeAddPubItemBody,
+  encodeItem,
   postTypes,
   messageTypes,
   getExpiration,
   generateHashForPostSig,
+  TargetType,
 } from "scrypt";
 import { Hash } from "viem";
 
 import { SignMessageModalUIOptions } from "@privy-io/react-auth";
 
-export async function processCreateChannelPost({
-  channelUri,
+export async function processCreatePubAndAddItemPost({
+  pubUri,
+  targetChannelId,
   targetUserId,
   privySignMessage,
 }: {
-  channelUri: string;
+  pubUri: string;
+  targetChannelId: bigint;
   targetUserId: bigint;
   privySignMessage: (
     message: string,
@@ -29,24 +34,45 @@ export async function processCreateChannelPost({
   const postVersion = postTypes.v1;
   const postExpiration: bigint = getExpiration();
   // generate encoded msgBody for createChannelMsg
-  const createChannelMsg = encodeUriAndAccess({
-    uri: channelUri,
-    adminIds: [targetUserId],
-    memberIds: [],
+
+  /*  createPublication */
+  const createPubMsgBody = encodePub({
+    uri: pubUri,
+  });
+
+  /*  addPubItem */
+  const addPubItemBody = encodeAddPubItemBody({
+    targetChannelId: targetChannelId,
+    targetPubId: BigInt(-10), // -10 refers to, target pubId of first created pubId in post
+  });
+  if (!addPubItemBody) return;
+  console.log("addPubItemBody encoded successffuly");
+  const addPubItemMsgBody = encodeItem({
+    itemType: TargetType.PUB,
+    itemBody: addPubItemBody.itemBody,
   });
   // add this in to prevent msgBody from being null
-  if (!createChannelMsg) return;
-  console.log("encoded msgBody correctly");
-  // generate encodedMessage by packing msgType + msgBody together
-  const encodedMessage = encodeMessage({
-    msgType: messageTypes.createChannel,
-    msgBody: createChannelMsg.msgBody,
+  if (!createPubMsgBody || !addPubItemMsgBody) return;
+  console.log("encoded pub and addPubItem msgBody correctly");
+
+  const encodedPubMsg = encodeMessage({
+    msgType: messageTypes.createPublication,
+    msgBody: createPubMsgBody.msgBody,
   });
-  // add this in to prevent encodedMessage being null
-  if (!encodedMessage) return;
-  console.log("encoded message correctly");
+
+  const encodedAddPubItemMsg = encodeMessage({
+    msgType: messageTypes.addItem,
+    msgBody: addPubItemMsgBody.msgBody,
+  });
+
+  // add this in to prevent either encoded messages from being null
+  if (!encodedPubMsg || !encodedAddPubItemMsg) return;
+  console.log("encoded pub and addPubItem messages correctly");
   // generate the bytes[] messageArray
-  const messageArray: Hash[] = [encodedMessage?.encodedMessage];
+  const messageArray: Hash[] = [
+    encodedPubMsg?.encodedMessage,
+    encodedAddPubItemMsg.encodedMessage,
+  ];
   // NOTE: this encoding step should be a scrypt export as well
   // bytes32 messageToBeSigned = keccak256(abi.encode(version, expiration, msgArray)).toEthSignedMessageHash();
   const hashToSign = generateHashForPostSig({

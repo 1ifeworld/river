@@ -7,8 +7,8 @@ import {
   decodeAccess,
   decodeUriAndAccess,
   decodeItem,
-  decodePublication,
-  decodeNFT,
+  decodePubItem,
+  decodeNFTItem,
   TargetType,
   messageTypes
 } from "scrypt";
@@ -304,7 +304,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
             switch (decodedItem.itemType) {              
               case TargetType.PUB:
                 console.log("it was type PUB")
-                const pub = decodePublication({
+                const pub = decodePubItem({
                   itemBody: deconstructedItemBody.data,
                 });
                 console.log("decoded pub value: ", pub)
@@ -341,7 +341,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
                 break;
               case TargetType.NFT:
                 // decode nft because is itemType
-                const nft = decodeNFT({ itemBody: deconstructedItemBody.data });
+                const nft = decodeNFTItem({ itemBody: deconstructedItemBody.data });
                 // if decoded incorrectly dont create target or NFT
                 if (nft) {
                   await Nft.create({
