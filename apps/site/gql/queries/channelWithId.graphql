@@ -7,13 +7,20 @@ query channelWithId($id: String!) {
     admins
     creatorId
     items(orderBy: "timestamp", orderDirection: "desc") {
-      timestamp
-      targetId
-      target
-      id
-      hasId
       creatorId
-      chainId
-    }    
+      id
+      type
+      timestamp
+      target {
+        id
+        type
+        publication {
+          creatorId
+          id
+          timestamp
+          uri
+        }
+      }      
+    } 
   }
 }

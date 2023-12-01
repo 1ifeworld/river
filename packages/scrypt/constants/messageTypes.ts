@@ -12,12 +12,12 @@ export const messageTypesSet = new Set<bigint>([
 ])
 
 export const messageTypes = {
-  createPublication: BigInt(110),
-  editPublication: BigInt(111),
-  createChannel: BigInt(210),
-  editChannelUri: BigInt(211),
-  editChannelAccess: BigInt(212),
-  addItem: BigInt(213),
-  removeItems: BigInt(214),
-  sortItems: BigInt(215)
+  createPublication: 110,
+  editPublication: 111,
+  createChannel: 210,
+  editChannelUri: 211,
+  editChannelAccess: 212,
+  addItem: 213,
+  removeItems: 214,
+  sortItems: 215
 }

@@ -1,5 +1,5 @@
-import { messageTypes } from '../constants'
+import { messageTypesSet } from '../constants'
 
 export function isValidMessageType(messageId: bigint): boolean {
-  return messageTypes.has(messageId)
+  return messageTypesSet.has(messageId)
 }

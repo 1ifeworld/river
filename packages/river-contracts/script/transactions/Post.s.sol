@@ -9,12 +9,12 @@ import {ECDSA} from "openzeppelin-contracts/utils/cryptography/ECDSA.sol";
 contract PostScript is Script {
     using ECDSA for bytes32;
 
-    PostGateway postGateway = PostGateway(0x5FbDB2315678afecb367f032d93F642f64180aa3);
+    // PostGateway postGateway = PostGateway(0x5FbDB2315678afecb367f032d93F642f64180aa3); // anvil
+    PostGateway postGateway = PostGateway(0x339513226Afd92B309837Bad402c6D3ADDE9Ad24); // opGoerli
 
     uint256 constant userId = 1;
     uint8 constant sigType = 1;
     uint16 constant version = 1;
-    bytes public sig = hex"a3f20717a250c2b0b729b07ff9e6d8c0c1556334506f6c1f6f85c37b3a771fc45fb12f9e3c2322701ac7916c8b0b726f27dbeee6ab09cb3d7d44db6e8a3a3e331b";
     string public ipfsUri = "ipfs://bafkreiai2xekku6zoiwkchzgpsrjsd3z3nuotk3lzsoyo27rqymp6d3cni";
 
     uint256 public deployerPrivateKey;
@@ -32,15 +32,14 @@ contract PostScript is Script {
         // createPublication();
 
         // create Channel with one createChannel message
-        createChannel();        
+        // createChannel();        
 
         // add item with one addItem message
         // addItemPub();                
         // addItemNFT();
 
         // createPub and addItemPub
-        // createPubAndAddItem();
-        createPublicationAndAddItem();
+        createPubAndAddItem();
 
         vm.stopBroadcast();
         /* End function transmission */
@@ -86,9 +85,9 @@ contract PostScript is Script {
         bytes memory postInputs = abi.encodePacked(
             userId,                             // userId
             sigType,                            // sigType
-            signedPost,                                // signature
+            signedPost,                         // signature
             version,                            // version
-            expiration,      // expiration
+            expiration,                         // expiration
             abi.encode(messageArray)            // message array
         );                 
         // call post
@@ -157,7 +156,7 @@ contract PostScript is Script {
 
 
 
-    function createPublicationAndAddItem() public {
+    function createPubAndAddItem() public {
         // Prep message for post        
         uint64 expiration = uint64(block.timestamp) + 600;
         /* createPub */
@@ -215,5 +214,5 @@ contract PostScript is Script {
 // ======= DEPLOY SCRIPTS =====
 
 // source .env
-// forge script script/transactions/Post.s.sol:PostScript -vvvv --rpc-url $RPC_URL --broadcast --verify --verifier-url https://api-goerli-optimistic.etherscan.io/api
+// forge script script/transactions/Post.s.sol:PostScript -vvvv --rpc-url $RPC_URL --broadcast
 // forge script script/transactions/Post.s.sol:PostScript -vvvv --fork-url http://localhost:8545 --broadcast

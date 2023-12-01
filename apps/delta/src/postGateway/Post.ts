@@ -152,7 +152,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
       );
 
       switch (messageQueue[i]?.msgType) {
-        case messageTypes.createPublication: // 110
+        case BigInt(messageTypes.createPublication): // 110
           console.log("running case 1");
           // decode msgBody into pub uri
           const decodedPubUri = decodeUri({ msgBody: messageQueue[i].msgBody });
@@ -190,7 +190,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
             });
           }
           break;
-        case messageTypes.createChannel: // 210
+        case BigInt(messageTypes.createChannel): // 210
           console.log("running case 2");
           // decode msgBody into channel uri
           const decodeChannelUriAndAccess = decodeUriAndAccess({
@@ -230,7 +230,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
             });
           }
           break;
-        case messageTypes.addItem: // 213
+        case BigInt(messageTypes.addItem): // 213
           console.log("running case 3");
           // decode msgBody into item
           const decodedItem = decodeItem({
