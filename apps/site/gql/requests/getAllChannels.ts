@@ -4,6 +4,6 @@ export async function getAllChannels() {
   const response = await sdk.allChannels()
 
   return {
-    channels: response.channels
+    channels: response.channels,
   }
 }

@@ -29,11 +29,8 @@ export async function createPublication({
   /**
    * Encode necessary function data to register a node
    */
-
   // const accessControlMessage = encodeAccess101({ adminIds, memberIds })
-
   // const publicationUriMessage = encodePublication201({ pubUri })
-
   // const registerEncodedData = encodeFunctionData({
   //   abi: nodeRegistryABI,
   //   functionName: 'register',
@@ -46,10 +43,8 @@ export async function createPublication({
   //     ],
   //   ],
   // })
-
   // // Initialize a variable to hold the nodeId after successful registration
   // let pubNodeIdCreated
-
   // /**
   //  * Process the registration call
   //  */
@@ -59,14 +54,11 @@ export async function createPublication({
   //     data: registerEncodedData,
   //   })
   //   const regTxnReceipt = await regTxn.wait()
-
   //   pubNodeIdCreated = parseInt(regTxnReceipt?.logs[0].topics[3] as string, 16)
-
   //   console.log('pubNodeIdCreated: ', pubNodeIdCreated)
   // } catch (error) {
   //   console.error('Register transaction failed: ', error)
   // }
-
   // /**
   //  * If the registration transaction was successful, prepare and execute the update transaction
   //  */
@@ -77,13 +69,11 @@ export async function createPublication({
   //     pointer: addresses.nodeRegistry.opGoerli,
   //     hasId: true,
   //   })
-
   //   const updateEncodedData = encodeFunctionData({
   //     abi: nodeRegistryABI,
   //     functionName: 'update',
   //     args: [userId, nodeId, [addItemMessage?.message as Hash]],
   //   })
-
   //   /**
   //    * Process the update call
   //    */
@@ -93,7 +83,6 @@ export async function createPublication({
   //       data: updateEncodedData,
   //     })
   //     const updTxnReceipt = await updTxn.wait()
-
   //     console.log('updTxnReceipt: ', updTxnReceipt)
   //   } catch (error) {
   //     console.error('Update transaction failed: ', error)

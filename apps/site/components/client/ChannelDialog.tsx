@@ -10,32 +10,21 @@ import {
   DialogContent,
   DialogTitle,
   DialogHeader,
-  DropdownMenuItem,
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   Input,
-  FormLabel,
   FormMessage,
   Toast,
 } from '@/design-system'
 import { uploadBlob, processCreateChannelPost } from '@/lib'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useAlchemyContext } from 'context/AlchemyProviderContext'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { toast } from 'sonner'
 import { usePrivy } from '@privy-io/react-auth'
-import { useConnectedUser } from 'hooks/useConnectedUser'
-
-interface ChannelDialogProps {
-  triggerChildren: React.ReactNode
-  onSelect: () => void
-  onOpenChange: (open: boolean) => void
-  userId: bigint
-}
+import { useConnectedUser } from '@/hooks'
 
 const ChannelNameSchema = z.object({
   channelName: z.string().min(2, {
@@ -43,13 +32,9 @@ const ChannelNameSchema = z.object({
   }),
 })
 
-export const ChannelDialog = React.forwardRef<
-  HTMLDivElement,
-  ChannelDialogProps
->(({ triggerChildren, onSelect, onOpenChange, userId }, forwardedRef) => {
+export function ChannelDialog() {
+  const [dialogOpen, setDialogOpen] = React.useState(false)
 
-
-  const { alchemyProvider } = useAlchemyContext()
   const { signMessage } = usePrivy()
   const { userId: targetUserId } = useConnectedUser()
 
@@ -61,24 +46,16 @@ export const ChannelDialog = React.forwardRef<
   })
 
   return (
-    <Dialog onOpenChange={onOpenChange}>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <DropdownMenuItem
-          ref={forwardedRef}
-          onSelect={(event) => {
-            event.preventDefault()
-            onSelect && onSelect()
-          }}
-        >
-          {triggerChildren}
-        </DropdownMenuItem>
+        <Button variant="link">New channel</Button>
       </DialogTrigger>
       <DialogPortal>
         <DialogContent className="sm:max-w-[425px] focus:outline-none">
           <Stack className="items-center gap-4">
             <DialogHeader>
               <DialogTitle>
-                <Typography>Add New Item</Typography>
+                <Typography>Add New Channel</Typography>
               </DialogTitle>
             </DialogHeader>
             <Separator />
@@ -86,8 +63,8 @@ export const ChannelDialog = React.forwardRef<
             <Form {...form}>
               <form
                 action={async () => {
-                  // add this in to prevent non authd in user from signing msg
-                  if (!targetUserId) return  
+                  // Prevent non-authenticated users from proceeding
+                  if (!targetUserId) return
                   // Create an IPFS pointer containing the name of the channel
                   const channelUri = await uploadBlob({
                     dataToUpload: {
@@ -95,17 +72,16 @@ export const ChannelDialog = React.forwardRef<
                       description: 'This time its happening',
                       image:
                         // harcoded cover image uri
-                        'ipfs://bafkreiamfxbkndyuwkw4kutjcfcitozbtzrvqneryab2njltiopsfjwt6a', 
+                        'ipfs://bafkreiamfxbkndyuwkw4kutjcfcitozbtzrvqneryab2njltiopsfjwt6a',
                     },
-                  })                              
+                  })
                   // Generate create channel post for user and post transaction
                   await processCreateChannelPost({
                     channelUri: channelUri,
                     targetUserId: targetUserId,
-                    privySignMessage: signMessage
+                    privySignMessage: signMessage,
                   })
-                  // close the modal post success
-                  onOpenChange(false)
+                  setDialogOpen(false)
                   // Render a toast with the name of the channel
                   toast.custom((t) => (
                     <Toast>
@@ -130,7 +106,8 @@ export const ChannelDialog = React.forwardRef<
                     </FormItem>
                   )}
                 />
-                <Button type="submit" variant="link" disabled={!userId}>
+
+                <Button type="submit" variant="link" disabled={!targetUserId}>
                   Create
                 </Button>
               </form>
@@ -140,4 +117,4 @@ export const ChannelDialog = React.forwardRef<
       </DialogPortal>
     </Dialog>
   )
-})
+}

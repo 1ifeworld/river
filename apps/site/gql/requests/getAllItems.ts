@@ -4,6 +4,6 @@ export async function getAllItems() {
   const response = await sdk.allItems()
 
   return {
-    items: response.items
+    items: response.items,
   }
 }

@@ -7,7 +7,6 @@ export interface IpfsData {
 export async function fetchIpfsData(
   ipfsLink: string,
 ): Promise<IpfsData | undefined> {
-
   const cid = ipfsLink.replace('ipfs://', '')
 
   const httpLink = `https://aqua-wrong-bat-309.mypinata.cloud/ipfs/${cid}?pinataGatewayToken=${process.env.GATEWAY_KEY}`
@@ -24,7 +23,9 @@ export async function fetchIpfsData(
     if (typeof data === 'object' && data !== null && 'name' in data) {
       return data
     } else {
-      console.log('Non-JSON response received or data does not contain "name" property')
+      console.log(
+        'Non-JSON response received or data does not contain "name" property',
+      )
     }
 
     return undefined
