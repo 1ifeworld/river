@@ -6,7 +6,7 @@ query userActivity($creatorId: BigInt) {
     members
     timestamp
     uri
-    items(orderBy: "timestamp", orderDirection: "desc") {
+    items(orderBy: "id", orderDirection: "desc") {
       creatorId
       id
       type
@@ -23,7 +23,7 @@ query userActivity($creatorId: BigInt) {
       }      
     }
   }
-  items(orderBy: "timestamp", orderDirection: "desc", where: {creatorId: $creatorId}) {
+  items(orderBy: "id", orderDirection: "desc", where: {creatorId: $creatorId}) {
     creatorId
     id
     type

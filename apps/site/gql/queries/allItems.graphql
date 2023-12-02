@@ -1,5 +1,5 @@
 query allItems {
-  items(orderBy: "timestamp", orderDirection: "desc") {
+  items(orderBy: "id", orderDirection: "desc") {
     creatorId
     id
     type

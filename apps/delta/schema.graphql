@@ -47,7 +47,7 @@ type ChannelCounter @entity {
 }
 
 type Channel @entity {
-  id: String!
+  id: BigInt!
   timestamp: BigInt
   creatorId: BigInt  
   uri: String
@@ -62,17 +62,6 @@ type ItemCounter @entity {
   counter: BigInt
 }
 
-# type Item @entity {
-#   id: String!
-#   timestamp: BigInt
-#   creatorId: BigInt  
-#   chainId: BigInt
-#   target: String
-#   hasId: Boolean  
-#   targetId: BigInt
-#   channel: Channel!
-# }
-
 enum TargetType {
   PUB
   NFT
@@ -80,7 +69,7 @@ enum TargetType {
 }
 
 type Item @entity {
-  id: String!
+  id: BigInt!
   timestamp: BigInt
   creatorId: BigInt  
   channel: Channel!
@@ -90,7 +79,7 @@ type Item @entity {
 
 # id of target should be id of item which itslef is unique 
 type Target @entity {
-  id: String!
+  id: BigInt!
   type: TargetType!
   publication: Publication
   nft: Nft

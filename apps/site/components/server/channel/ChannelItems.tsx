@@ -13,6 +13,9 @@ import { ThumbnailNameCreator } from '@/server'
 
 export async function ChannelItems({ channel }: { channel: Channel }) {
 
+
+  console.log("waht is channel items receiving", channel)
+
   return (
     <Table className="w-full">
       <TableHeader>

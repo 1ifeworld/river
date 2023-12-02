@@ -1,4 +1,4 @@
-query channelWithId($id: String!) {
+query channelWithId($id: BigInt!) {
   channel(id: $id) {
     id
     members
@@ -6,7 +6,7 @@ query channelWithId($id: String!) {
     uri
     admins
     creatorId
-    items(orderBy: "timestamp", orderDirection: "desc") {
+    items(orderBy: "id", orderDirection: "desc") {
       creatorId
       id
       type
