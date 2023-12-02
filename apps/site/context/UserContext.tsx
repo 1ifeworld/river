@@ -12,7 +12,8 @@ import {
   getDefaultLightAccountFactory,
 } from '@alchemy/aa-accounts'
 import { AlchemyProvider } from '@alchemy/aa-alchemy'
-import { useWallets, type ConnectedWallet } from '@privy-io/react-auth'
+import { useWallets, type ConnectedWallet, User } from '@privy-io/react-auth'
+import { usePrivy } from '@privy-io/react-auth'
 import { WalletClientSigner, type SmartAccountSigner } from '@alchemy/aa-core'
 import {
   createWalletClient,
@@ -23,9 +24,11 @@ import {
 import { optimismGoerli } from 'viem/chains'
 import { addresses } from 'scrypt'
 
-const AlchemyContext = createContext<{
+const UserContext = createContext<{
   alchemyProvider?: AlchemyProvider
   smartAccountAddress?: Address
+  signMessage?: (message: string) => Promise<string>
+  user?: User | null
 }>({})
 
 export function AlchemyProviderComponent({
@@ -34,7 +37,10 @@ export function AlchemyProviderComponent({
   const [alchemyProvider, setAlchemyProvider] = useState<AlchemyProvider>()
   const [smartAccountAddress, setSmartAccountAddress] = useState<Address>()
 
+  const { user, signMessage } = usePrivy()
   const { wallets } = useWallets()
+
+
 
   const embeddedWallet = wallets.find(
     (wallet) => wallet.walletClientType === 'privy',
@@ -87,17 +93,17 @@ export function AlchemyProviderComponent({
   }, [embeddedWallet?.address])
 
   return (
-    <AlchemyContext.Provider value={{ alchemyProvider, smartAccountAddress }}>
+    <UserContext.Provider value={{ alchemyProvider, smartAccountAddress, signMessage, user }}>
       {children}
-    </AlchemyContext.Provider>
+    </UserContext.Provider>
   )
 }
 
 // Access the context value of the ProviderContext
-export const useAlchemyContext = () => {
-  const context = useContext(AlchemyContext)
+export const useUserContext = () => {
+  const context = useContext(UserContext)
   if (!context) {
-    throw Error('useAlchemyContext hook must be used within AlchemyContext')
+    throw Error('useUserContext hook must be used within userContext')
   }
   return context
 }
