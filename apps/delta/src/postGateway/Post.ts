@@ -181,7 +181,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
             console.log("pub ids created right after push ", pubIdsCreated)
 
             await Publication.create({
-              id: `${publicationCounter?.counter as bigint}`,
+              id: publicationCounter?.counter as bigint,
               data: {
                 timestamp: event.block.timestamp,
                 creatorId: decodedPost?.userId,
@@ -333,8 +333,8 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
                     data: {
                       type: decodedItem.itemType,
                       publication: pubIdRef
-                        ? `${pubIdRef}`
-                        : pub.pubId.toString(),
+                        ? pubIdRef
+                        : pub.pubId,
                     },
                   });
                 }

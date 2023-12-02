@@ -34,7 +34,7 @@ type PublicationCounter @entity {
 }
 
 type Publication @entity {
-  id: String!
+  id: BigInt!
   timestamp: BigInt
   creatorId: BigInt  
   uri: String
