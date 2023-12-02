@@ -23,7 +23,7 @@ export type Channel = {
   __typename?: 'Channel';
   admins: Array<Scalars['BigInt']['output']>;
   creatorId?: Maybe<Scalars['BigInt']['output']>;
-  id: Scalars['String']['output'];
+  id: Scalars['BigInt']['output'];
   items: Array<Item>;
   members?: Maybe<Array<Maybe<Scalars['BigInt']['output']>>>;
   timestamp?: Maybe<Scalars['BigInt']['output']>;
@@ -88,16 +88,14 @@ export type ChannelFilter = {
   creatorId_lte?: InputMaybe<Scalars['BigInt']['input']>;
   creatorId_not?: InputMaybe<Scalars['BigInt']['input']>;
   creatorId_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  id?: InputMaybe<Scalars['String']['input']>;
-  id_contains?: InputMaybe<Scalars['String']['input']>;
-  id_ends_with?: InputMaybe<Scalars['String']['input']>;
-  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  id_not?: InputMaybe<Scalars['String']['input']>;
-  id_not_contains?: InputMaybe<Scalars['String']['input']>;
-  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
-  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
-  id_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['BigInt']['input']>;
+  id_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  id_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  id_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  id_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  id_not?: InputMaybe<Scalars['BigInt']['input']>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
   members?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
   members_has?: InputMaybe<Scalars['BigInt']['input']>;
   members_not?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
@@ -197,7 +195,7 @@ export type Item = {
   __typename?: 'Item';
   channel?: Maybe<Channel>;
   creatorId?: Maybe<Scalars['BigInt']['output']>;
-  id: Scalars['String']['output'];
+  id: Scalars['BigInt']['output'];
   target?: Maybe<Target>;
   timestamp?: Maybe<Scalars['BigInt']['output']>;
   type?: Maybe<TargetType>;
@@ -240,16 +238,14 @@ export type ItemCounterFilter = {
 };
 
 export type ItemFilter = {
-  channel?: InputMaybe<Scalars['String']['input']>;
-  channel_contains?: InputMaybe<Scalars['String']['input']>;
-  channel_ends_with?: InputMaybe<Scalars['String']['input']>;
-  channel_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  channel_not?: InputMaybe<Scalars['String']['input']>;
-  channel_not_contains?: InputMaybe<Scalars['String']['input']>;
-  channel_not_ends_with?: InputMaybe<Scalars['String']['input']>;
-  channel_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  channel_not_starts_with?: InputMaybe<Scalars['String']['input']>;
-  channel_starts_with?: InputMaybe<Scalars['String']['input']>;
+  channel?: InputMaybe<Scalars['BigInt']['input']>;
+  channel_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  channel_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  channel_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  channel_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  channel_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  channel_not?: InputMaybe<Scalars['BigInt']['input']>;
+  channel_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
   creatorId?: InputMaybe<Scalars['BigInt']['input']>;
   creatorId_gt?: InputMaybe<Scalars['BigInt']['input']>;
   creatorId_gte?: InputMaybe<Scalars['BigInt']['input']>;
@@ -258,26 +254,22 @@ export type ItemFilter = {
   creatorId_lte?: InputMaybe<Scalars['BigInt']['input']>;
   creatorId_not?: InputMaybe<Scalars['BigInt']['input']>;
   creatorId_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  id?: InputMaybe<Scalars['String']['input']>;
-  id_contains?: InputMaybe<Scalars['String']['input']>;
-  id_ends_with?: InputMaybe<Scalars['String']['input']>;
-  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  id_not?: InputMaybe<Scalars['String']['input']>;
-  id_not_contains?: InputMaybe<Scalars['String']['input']>;
-  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
-  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
-  id_starts_with?: InputMaybe<Scalars['String']['input']>;
-  target?: InputMaybe<Scalars['String']['input']>;
-  target_contains?: InputMaybe<Scalars['String']['input']>;
-  target_ends_with?: InputMaybe<Scalars['String']['input']>;
-  target_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  target_not?: InputMaybe<Scalars['String']['input']>;
-  target_not_contains?: InputMaybe<Scalars['String']['input']>;
-  target_not_ends_with?: InputMaybe<Scalars['String']['input']>;
-  target_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  target_not_starts_with?: InputMaybe<Scalars['String']['input']>;
-  target_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['BigInt']['input']>;
+  id_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  id_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  id_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  id_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  id_not?: InputMaybe<Scalars['BigInt']['input']>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  target?: InputMaybe<Scalars['BigInt']['input']>;
+  target_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  target_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  target_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  target_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  target_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  target_not?: InputMaybe<Scalars['BigInt']['input']>;
+  target_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
   timestamp?: InputMaybe<Scalars['BigInt']['input']>;
   timestamp_gt?: InputMaybe<Scalars['BigInt']['input']>;
   timestamp_gte?: InputMaybe<Scalars['BigInt']['input']>;
@@ -522,7 +514,7 @@ export type PostFilter = {
 export type Publication = {
   __typename?: 'Publication';
   creatorId?: Maybe<Scalars['BigInt']['output']>;
-  id: Scalars['String']['output'];
+  id: Scalars['BigInt']['output'];
   timestamp?: Maybe<Scalars['BigInt']['output']>;
   uri?: Maybe<Scalars['String']['output']>;
 };
@@ -572,16 +564,14 @@ export type PublicationFilter = {
   creatorId_lte?: InputMaybe<Scalars['BigInt']['input']>;
   creatorId_not?: InputMaybe<Scalars['BigInt']['input']>;
   creatorId_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  id?: InputMaybe<Scalars['String']['input']>;
-  id_contains?: InputMaybe<Scalars['String']['input']>;
-  id_ends_with?: InputMaybe<Scalars['String']['input']>;
-  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  id_not?: InputMaybe<Scalars['String']['input']>;
-  id_not_contains?: InputMaybe<Scalars['String']['input']>;
-  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
-  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
-  id_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['BigInt']['input']>;
+  id_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  id_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  id_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  id_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  id_not?: InputMaybe<Scalars['BigInt']['input']>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
   timestamp?: InputMaybe<Scalars['BigInt']['input']>;
   timestamp_gt?: InputMaybe<Scalars['BigInt']['input']>;
   timestamp_gte?: InputMaybe<Scalars['BigInt']['input']>;
@@ -636,7 +626,7 @@ export type Query = {
 
 /** Autogenerated file. Do not edit manually. */
 export type QueryChannelArgs = {
-  id: Scalars['String']['input'];
+  id: Scalars['BigInt']['input'];
   timestamp?: InputMaybe<Scalars['Int']['input']>;
 };
 
@@ -690,7 +680,7 @@ export type QueryIdRegistrysArgs = {
 
 /** Autogenerated file. Do not edit manually. */
 export type QueryItemArgs = {
-  id: Scalars['String']['input'];
+  id: Scalars['BigInt']['input'];
   timestamp?: InputMaybe<Scalars['Int']['input']>;
 };
 
@@ -798,7 +788,7 @@ export type QueryPostsArgs = {
 
 /** Autogenerated file. Do not edit manually. */
 export type QueryPublicationArgs = {
-  id: Scalars['String']['input'];
+  id: Scalars['BigInt']['input'];
   timestamp?: InputMaybe<Scalars['Int']['input']>;
 };
 
@@ -834,7 +824,7 @@ export type QueryPublicationsArgs = {
 
 /** Autogenerated file. Do not edit manually. */
 export type QueryTargetArgs = {
-  id: Scalars['String']['input'];
+  id: Scalars['BigInt']['input'];
   timestamp?: InputMaybe<Scalars['Int']['input']>;
 };
 
@@ -869,7 +859,7 @@ export type QueryUrlsArgs = {
 
 export type Target = {
   __typename?: 'Target';
-  id: Scalars['String']['output'];
+  id: Scalars['BigInt']['output'];
   nft?: Maybe<Nft>;
   publication?: Maybe<Publication>;
   type: TargetType;
@@ -877,16 +867,14 @@ export type Target = {
 };
 
 export type TargetFilter = {
-  id?: InputMaybe<Scalars['String']['input']>;
-  id_contains?: InputMaybe<Scalars['String']['input']>;
-  id_ends_with?: InputMaybe<Scalars['String']['input']>;
-  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  id_not?: InputMaybe<Scalars['String']['input']>;
-  id_not_contains?: InputMaybe<Scalars['String']['input']>;
-  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
-  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
-  id_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['BigInt']['input']>;
+  id_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  id_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  id_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  id_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  id_not?: InputMaybe<Scalars['BigInt']['input']>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
   nft?: InputMaybe<Scalars['String']['input']>;
   nft_contains?: InputMaybe<Scalars['String']['input']>;
   nft_ends_with?: InputMaybe<Scalars['String']['input']>;
@@ -897,16 +885,14 @@ export type TargetFilter = {
   nft_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   nft_not_starts_with?: InputMaybe<Scalars['String']['input']>;
   nft_starts_with?: InputMaybe<Scalars['String']['input']>;
-  publication?: InputMaybe<Scalars['String']['input']>;
-  publication_contains?: InputMaybe<Scalars['String']['input']>;
-  publication_ends_with?: InputMaybe<Scalars['String']['input']>;
-  publication_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  publication_not?: InputMaybe<Scalars['String']['input']>;
-  publication_not_contains?: InputMaybe<Scalars['String']['input']>;
-  publication_not_ends_with?: InputMaybe<Scalars['String']['input']>;
-  publication_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  publication_not_starts_with?: InputMaybe<Scalars['String']['input']>;
-  publication_starts_with?: InputMaybe<Scalars['String']['input']>;
+  publication?: InputMaybe<Scalars['BigInt']['input']>;
+  publication_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  publication_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  publication_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  publication_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  publication_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  publication_not?: InputMaybe<Scalars['BigInt']['input']>;
+  publication_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
   type?: InputMaybe<TargetType>;
   type_in?: InputMaybe<Array<InputMaybe<TargetType>>>;
   type_not?: InputMaybe<TargetType>;
@@ -961,40 +947,40 @@ export type UrlFilter = {
 export type AllChannelsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllChannelsQuery = { __typename?: 'Query', channels: Array<{ __typename?: 'Channel', creatorId?: any | null, admins: Array<any>, id: string, members?: Array<any | null> | null, timestamp?: any | null, uri?: string | null, items: Array<{ __typename?: 'Item', creatorId?: any | null, id: string, type?: TargetType | null, timestamp?: any | null, target?: { __typename?: 'Target', id: string, type: TargetType, publication?: { __typename?: 'Publication', creatorId?: any | null, id: string, timestamp?: any | null, uri?: string | null } | null } | null }> }> };
+export type AllChannelsQuery = { __typename?: 'Query', channels: Array<{ __typename?: 'Channel', creatorId?: any | null, admins: Array<any>, id: any, members?: Array<any | null> | null, timestamp?: any | null, uri?: string | null, items: Array<{ __typename?: 'Item', creatorId?: any | null, id: any, type?: TargetType | null, timestamp?: any | null, target?: { __typename?: 'Target', id: any, type: TargetType, publication?: { __typename?: 'Publication', creatorId?: any | null, id: any, timestamp?: any | null, uri?: string | null } | null } | null }> }> };
 
 export type AllChannelsForIdQueryVariables = Exact<{
   creatorId?: InputMaybe<Scalars['BigInt']['input']>;
 }>;
 
 
-export type AllChannelsForIdQuery = { __typename?: 'Query', channels: Array<{ __typename?: 'Channel', creatorId?: any | null, admins: Array<any>, id: string, members?: Array<any | null> | null, timestamp?: any | null, uri?: string | null, items: Array<{ __typename?: 'Item', creatorId?: any | null, id: string, type?: TargetType | null, timestamp?: any | null, target?: { __typename?: 'Target', id: string, type: TargetType, publication?: { __typename?: 'Publication', creatorId?: any | null, id: string, timestamp?: any | null, uri?: string | null } | null } | null }> }> };
+export type AllChannelsForIdQuery = { __typename?: 'Query', channels: Array<{ __typename?: 'Channel', creatorId?: any | null, admins: Array<any>, id: any, members?: Array<any | null> | null, timestamp?: any | null, uri?: string | null, items: Array<{ __typename?: 'Item', creatorId?: any | null, id: any, type?: TargetType | null, timestamp?: any | null, target?: { __typename?: 'Target', id: any, type: TargetType, publication?: { __typename?: 'Publication', creatorId?: any | null, id: any, timestamp?: any | null, uri?: string | null } | null } | null }> }> };
 
 export type AllItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllItemsQuery = { __typename?: 'Query', items: Array<{ __typename?: 'Item', creatorId?: any | null, id: string, type?: TargetType | null, timestamp?: any | null, target?: { __typename?: 'Target', id: string, type: TargetType, publication?: { __typename?: 'Publication', creatorId?: any | null, id: string, timestamp?: any | null, uri?: string | null } | null } | null }> };
+export type AllItemsQuery = { __typename?: 'Query', items: Array<{ __typename?: 'Item', creatorId?: any | null, id: any, type?: TargetType | null, timestamp?: any | null, target?: { __typename?: 'Target', id: any, type: TargetType, publication?: { __typename?: 'Publication', creatorId?: any | null, id: any, timestamp?: any | null, uri?: string | null } | null } | null }> };
 
 export type AllItemsForIdQueryVariables = Exact<{
   creatorId?: InputMaybe<Scalars['BigInt']['input']>;
 }>;
 
 
-export type AllItemsForIdQuery = { __typename?: 'Query', items: Array<{ __typename?: 'Item', creatorId?: any | null, id: string, type?: TargetType | null, timestamp?: any | null, target?: { __typename?: 'Target', id: string, type: TargetType, publication?: { __typename?: 'Publication', creatorId?: any | null, id: string, timestamp?: any | null, uri?: string | null } | null } | null }> };
+export type AllItemsForIdQuery = { __typename?: 'Query', items: Array<{ __typename?: 'Item', creatorId?: any | null, id: any, type?: TargetType | null, timestamp?: any | null, target?: { __typename?: 'Target', id: any, type: TargetType, publication?: { __typename?: 'Publication', creatorId?: any | null, id: any, timestamp?: any | null, uri?: string | null } | null } | null }> };
 
 export type ChannelWithIdQueryVariables = Exact<{
-  id: Scalars['String']['input'];
+  id: Scalars['BigInt']['input'];
 }>;
 
 
-export type ChannelWithIdQuery = { __typename?: 'Query', channel?: { __typename?: 'Channel', id: string, members?: Array<any | null> | null, timestamp?: any | null, uri?: string | null, admins: Array<any>, creatorId?: any | null, items: Array<{ __typename?: 'Item', creatorId?: any | null, id: string, type?: TargetType | null, timestamp?: any | null, target?: { __typename?: 'Target', id: string, type: TargetType, publication?: { __typename?: 'Publication', creatorId?: any | null, id: string, timestamp?: any | null, uri?: string | null } | null } | null }> } | null };
+export type ChannelWithIdQuery = { __typename?: 'Query', channel?: { __typename?: 'Channel', id: any, members?: Array<any | null> | null, timestamp?: any | null, uri?: string | null, admins: Array<any>, creatorId?: any | null, items: Array<{ __typename?: 'Item', creatorId?: any | null, id: any, type?: TargetType | null, timestamp?: any | null, target?: { __typename?: 'Target', id: any, type: TargetType, publication?: { __typename?: 'Publication', creatorId?: any | null, id: any, timestamp?: any | null, uri?: string | null } | null } | null }> } | null };
 
 export type UserActivityQueryVariables = Exact<{
   creatorId?: InputMaybe<Scalars['BigInt']['input']>;
 }>;
 
 
-export type UserActivityQuery = { __typename?: 'Query', channels: Array<{ __typename?: 'Channel', creatorId?: any | null, admins: Array<any>, id: string, members?: Array<any | null> | null, timestamp?: any | null, uri?: string | null, items: Array<{ __typename?: 'Item', creatorId?: any | null, id: string, type?: TargetType | null, timestamp?: any | null, target?: { __typename?: 'Target', id: string, type: TargetType, publication?: { __typename?: 'Publication', creatorId?: any | null, id: string, timestamp?: any | null, uri?: string | null } | null } | null }> }>, items: Array<{ __typename?: 'Item', creatorId?: any | null, id: string, type?: TargetType | null, timestamp?: any | null, target?: { __typename?: 'Target', id: string, type: TargetType, publication?: { __typename?: 'Publication', creatorId?: any | null, id: string, timestamp?: any | null, uri?: string | null } | null } | null }> };
+export type UserActivityQuery = { __typename?: 'Query', channels: Array<{ __typename?: 'Channel', creatorId?: any | null, admins: Array<any>, id: any, members?: Array<any | null> | null, timestamp?: any | null, uri?: string | null, items: Array<{ __typename?: 'Item', creatorId?: any | null, id: any, type?: TargetType | null, timestamp?: any | null, target?: { __typename?: 'Target', id: any, type: TargetType, publication?: { __typename?: 'Publication', creatorId?: any | null, id: any, timestamp?: any | null, uri?: string | null } | null } | null }> }>, items: Array<{ __typename?: 'Item', creatorId?: any | null, id: any, type?: TargetType | null, timestamp?: any | null, target?: { __typename?: 'Target', id: any, type: TargetType, publication?: { __typename?: 'Publication', creatorId?: any | null, id: any, timestamp?: any | null, uri?: string | null } | null } | null }> };
 
 export type UserIdQueryVariables = Exact<{
   custodyAddress: Scalars['String']['input'];
@@ -1062,7 +1048,7 @@ export const AllChannelsForIdDocument = gql`
     `;
 export const AllItemsDocument = gql`
     query allItems {
-  items(orderBy: "timestamp", orderDirection: "desc") {
+  items(orderBy: "id", orderDirection: "desc") {
     creatorId
     id
     type
@@ -1105,7 +1091,7 @@ export const AllItemsForIdDocument = gql`
 }
     `;
 export const ChannelWithIdDocument = gql`
-    query channelWithId($id: String!) {
+    query channelWithId($id: BigInt!) {
   channel(id: $id) {
     id
     members
@@ -1113,7 +1099,7 @@ export const ChannelWithIdDocument = gql`
     uri
     admins
     creatorId
-    items(orderBy: "timestamp", orderDirection: "desc") {
+    items(orderBy: "id", orderDirection: "desc") {
       creatorId
       id
       type
@@ -1141,7 +1127,7 @@ export const UserActivityDocument = gql`
     members
     timestamp
     uri
-    items(orderBy: "timestamp", orderDirection: "desc") {
+    items(orderBy: "id", orderDirection: "desc") {
       creatorId
       id
       type
@@ -1158,11 +1144,7 @@ export const UserActivityDocument = gql`
       }
     }
   }
-  items(
-    orderBy: "timestamp"
-    orderDirection: "desc"
-    where: {creatorId: $creatorId}
-  ) {
+  items(orderBy: "id", orderDirection: "desc", where: {creatorId: $creatorId}) {
     creatorId
     id
     type

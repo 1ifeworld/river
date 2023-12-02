@@ -181,7 +181,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
             console.log("pub ids created right after push ", pubIdsCreated)
 
             await Publication.create({
-              id: `${publicationCounter?.counter as bigint}`,
+              id: publicationCounter?.counter as bigint,
               data: {
                 timestamp: event.block.timestamp,
                 creatorId: decodedPost?.userId,
@@ -219,7 +219,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
             channelIdsCreated.push(channelCounter?.counter as bigint);
 
             await Channel.create({
-              id: `${channelCounter?.counter as bigint}`,
+              id: channelCounter?.counter as bigint,
               data: {
                 timestamp: event.block.timestamp,
                 creatorId: decodedPost?.userId,
@@ -288,14 +288,14 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
 
             // create item that will point to target to oneof pub/nft/url
             await Item.create({
-              id: `${itemCounter?.counter as bigint}`,
+              id: itemCounter?.counter as bigint,
               data: {
                 timestamp: event.block.timestamp,
                 creatorId: decodedPost.userId,
                 channel: channelIdRef
-                  ? `${channelIdRef}`
-                  : BigInt(deconstructedItemBody.channel).toString(),
-                target: `${itemCounter?.counter as bigint}`,
+                  ? channelIdRef
+                  : BigInt(deconstructedItemBody.channel),
+                target: itemCounter?.counter as bigint,
                 type: decodedItem.itemType,
               },
             });
@@ -329,12 +329,12 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
                   }
 
                   await Target.create({
-                    id: `${itemCounter?.counter as bigint}`,
+                    id: itemCounter?.counter as bigint,
                     data: {
                       type: decodedItem.itemType,
                       publication: pubIdRef
-                        ? `${pubIdRef}`
-                        : pub.pubId.toString(),
+                        ? pubIdRef
+                        : pub.pubId,
                     },
                   });
                 }
@@ -355,7 +355,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
                   });
 
                   await Target.create({
-                    id: `${itemCounter?.counter as bigint}`,
+                    id: itemCounter?.counter as bigint,
                     data: {
                       type: decodedItem.itemType,
                       nft: `${itemCounter?.counter as bigint}`,
