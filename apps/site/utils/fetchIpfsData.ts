@@ -1,41 +1,35 @@
-export interface IPFSData {
-    name: string
-    description: string
-    image: string
-  }
-  
-  export async function fetchIpfsData(
-    ipfsLink: string,
-  ): Promise<IPFSData | undefined> {
-    const httpLink = ipfsLink.replace('ipfs://', 'https:/dweb.link/ipfs/')
-    const timeout = 5000; // 5 seconds
+export interface IpfsData {
+  name: string
+  description: string
+  image: string
+}
 
-    try {
-      const timeoutSignal = new AbortController();
-      const timeoutId = setTimeout(() => timeoutSignal.abort(), timeout);
+export async function fetchIpfsData(
+  ipfsLink: string,
+): Promise<IpfsData | undefined> {
 
-      const response = await fetch(httpLink, { signal: timeoutSignal.signal })
+  const cid = ipfsLink.replace('ipfs://', '')
 
-      clearTimeout(timeoutId); // Clear the timeout if fetch is successful
-  
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-  
-      if (response.headers.get('Content-Type')?.includes('application/json')) {
-        const data = await response.json()
-        if ('name' in data) {
-          // console.log('DATA', data.name)
-          return data
-        }
-      } else {
-        console.log('Non-JSON response received')
-      }
-  
-      return undefined
-    } catch (error) {
-      console.error('Error fetching IPFS data:', error)
-      return undefined
+  const httpLink = `https://aqua-wrong-bat-309.mypinata.cloud/ipfs/${cid}?pinataGatewayToken=${process.env.GATEWAY_KEY}`
+
+  try {
+    const response = await fetch(httpLink)
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
     }
+
+    const data = await response.json()
+
+    if (typeof data === 'object' && data !== null && 'name' in data) {
+      return data
+    } else {
+      console.log('Non-JSON response received or data does not contain "name" property')
+    }
+
+    return undefined
+  } catch (error) {
+    console.error('Error fetching ipfs data:', error)
+    return undefined
   }
-  
+}
