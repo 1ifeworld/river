@@ -57,7 +57,7 @@ export function UploadDialog() {
           <Stack className="items-center gap-4">
             <DialogHeader>
               <DialogTitle>
-                <Typography>New item</Typography>
+                <Typography>Add item</Typography>
               </DialogTitle>
             </DialogHeader>
             <Separator />

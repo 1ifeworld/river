@@ -52,7 +52,7 @@ export function ChannelDialog() {
           <Stack className="items-center gap-4">
             <DialogHeader>
               <DialogTitle>
-                <Typography>Add New Channel</Typography>
+                <Typography>New channel</Typography>
               </DialogTitle>
             </DialogHeader>
             <Separator />
