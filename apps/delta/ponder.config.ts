@@ -15,7 +15,7 @@ export const config: Config = {
     {
       name: 'optimism-goerli',
       chainId: 420,
-      transport: http(process.env.PONDER_RPC_URL_420)
+      transport: http(process.env.PONDER_RPC_URL_420),
     },
     // {
     //   name: 'arbitrum-goerli',

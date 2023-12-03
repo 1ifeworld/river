@@ -9,12 +9,12 @@ export default defineConfig({
         'RiverValidatorV1.json',
         'Post.json',
         'Message.json',
-        'Item.json'
+        'Item.json',
       ],
     }),
     foundry({
       project: '../river-contracts/lib/imp',
-      include: [        
+      include: [
         'IdRegistry.json',
         'AttestationRegistry.json',
         'DelegateRegistry.json',
@@ -23,8 +23,8 @@ export default defineConfig({
     }),
     foundry({
       project: '../river-contracts/lib/light-account',
-      include: ['LightAccountFactory.json']
+      include: ['LightAccountFactory.json'],
     }),
   ],
-  out: './abi/generated.ts'
+  out: './abi/generated.ts',
 })

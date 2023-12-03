@@ -1,5 +1,5 @@
-import { ponder } from "@/generated";
-import { postGatewayChain } from "../constants";
+import { ponder } from '@/generated'
+import { postGatewayChain } from '../constants'
 import {
   decodePost,
   decodeMessage,
@@ -10,11 +10,11 @@ import {
   decodePubItem,
   decodeNFTItem,
   TargetType,
-  messageTypes
-} from "scrypt";
-import { Hash, Hex, slice } from "viem";
+  messageTypes,
+} from 'scrypt'
+import { Hash, Hex, slice } from 'viem'
 
-ponder.on("PostGateway:Post", async ({ event, context }) => {
+ponder.on('PostGateway:Post', async ({ event, context }) => {
   const {
     PostCounter,
     Post,
@@ -27,14 +27,13 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
     Item,
     Target,
     Nft,
-  } = context.entities;
+  } = context.entities
 
-  let postCounter: { id: string; counter?: bigint | undefined } | null = null;
+  let postCounter: { id: string; counter?: bigint | undefined } | null = null
   let publicationCounter: { id: string; counter?: bigint | undefined } | null =
-    null;
-  let channelCounter: { id: string; counter?: bigint | undefined } | null =
-    null;
-  let itemCounter: { id: string; counter?: bigint | undefined } | null = null;
+    null
+  let channelCounter: { id: string; counter?: bigint | undefined } | null = null
+  let itemCounter: { id: string; counter?: bigint | undefined } | null = null
 
   await PostCounter.upsert({
     // chain // messageGateway address
@@ -48,18 +47,18 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
       timestamp: event.block.timestamp,
       counter: (current.counter as bigint) + BigInt(1),
     }),
-  });
+  })
 
   postCounter = await PostCounter.findUnique({
     id: `${postGatewayChain}/${event.transaction.to}`,
-  });
+  })
 
-  const cleanedTxnData = slice(event.transaction.input, 68);
+  const cleanedTxnData = slice(event.transaction.input, 68)
 
   // skips first 68 bytes which contain 4 byte function selector + 32 byte data offset + 32 byte data length
   const decodedPost = decodePost({
     postInput: cleanedTxnData,
-  });
+  })
 
   // do the userId -> signature recovery + expiration check stuff here?
   // posts only saved if they were valid.
@@ -78,25 +77,25 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
       expiration: decodedPost?.expiration,
       messageArray: decodedPost?.messageArray as Hash[],
     },
-  });
+  })
 
-  const length = decodedPost?.messageArray.length;
+  const length = decodedPost?.messageArray.length
   if (length && length != 0) {
     type MessageToProcess = {
-      msgType: bigint;
-      msgBody: Hash;
-    };
+      msgType: bigint
+      msgBody: Hash
+    }
 
-    const messageQueue: MessageToProcess[] = [];
+    const messageQueue: MessageToProcess[] = []
 
     for (let i = 0; i < length; ++i) {
-      console.log("message: ", decodedPost?.messageArray[i]);
+      console.log('message: ', decodedPost?.messageArray[i])
 
       const decodedMessage = decodeMessage({
         encodedMessage: decodedPost?.messageArray[i],
-      });
+      })
 
-      console.log("message type: ", decodedMessage?.msgType);
+      console.log('message type: ', decodedMessage?.msgType)
 
       if (decodedMessage) {
         // Check if the messageQueue is not empty and
@@ -108,20 +107,20 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
           // this will only happen if messageQueue is NOT empty AND
           // the target decoded message type has a value smaller than the previous decoded message added to the queue
           // meaning it is out of order
-          return;
+          return
         }
-        messageQueue[i] = decodedMessage;
+        messageQueue[i] = decodedMessage
       }
     }
 
     // NOTE at this point, we now know that the messageQueue is ordered correctly
 
     // initialize empty pubIdsCreated + channelIdsCreated for relative referencing
-    console.log("messageQueue length ", messageQueue.length);
-    console.log("completed messageQueue ", messageQueue);
+    console.log('messageQueue length ', messageQueue.length)
+    console.log('completed messageQueue ', messageQueue)
 
-    let pubIdsCreated: bigint[] = []; // can be referenced with negative int256s starting with 1. ex: -10, -11, -12
-    let channelIdsCreated: bigint[] = []; // can be referenced with negative int256s starting with 2. ex: -20, -21, -22    
+    let pubIdsCreated: bigint[] = [] // can be referenced with negative int256s starting with 1. ex: -10, -11, -12
+    let channelIdsCreated: bigint[] = [] // can be referenced with negative int256s starting with 2. ex: -20, -21, -22
 
     for (let i = 0; i < messageQueue.length; ++i) {
       await Message.create({
@@ -134,7 +133,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
           msgType: messageQueue[i]?.msgType,
           msgBody: messageQueue[i]?.msgBody,
         },
-      });
+      })
 
       /* 
         do data specific checks
@@ -144,18 +143,18 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
             *** IF trying to add an item that is being curated in the same Post (earlier on in message queue),
             *** then the id in use must be a referential id created with negative number representing the index
             *** it was created by (ex: id = -1 instead of 1)
-      */      
+      */
 
       console.log(
-        "msg type heading into switch case: ",
-        messageQueue[i]?.msgType
-      );
+        'msg type heading into switch case: ',
+        messageQueue[i]?.msgType,
+      )
 
       switch (messageQueue[i]?.msgType) {
         case BigInt(messageTypes.createPublication): // 110
-          console.log("running case 1");
+          console.log('running case 1')
           // decode msgBody into pub uri
-          const decodedPubUri = decodeUri({ msgBody: messageQueue[i].msgBody });
+          const decodedPubUri = decodeUri({ msgBody: messageQueue[i].msgBody })
           if (decodedPubUri) {
             await PublicationCounter.upsert({
               // chain // messageGateway address
@@ -169,16 +168,16 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
                 timestamp: event.block.timestamp,
                 counter: (current.counter as bigint) + BigInt(1),
               }),
-            });
+            })
 
             publicationCounter = await PublicationCounter.findUnique({
               // update postGatewayChain -> event.transaction.chainId after bumping to next version ponder
               id: `${postGatewayChain}/${event.transaction.to}`,
-            });
+            })
 
-            pubIdsCreated.push(publicationCounter?.counter as bigint);
+            pubIdsCreated.push(publicationCounter?.counter as bigint)
 
-            console.log("pub ids created right after push ", pubIdsCreated)
+            console.log('pub ids created right after push ', pubIdsCreated)
 
             await Publication.create({
               id: publicationCounter?.counter as bigint,
@@ -187,15 +186,15 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
                 creatorId: decodedPost?.userId,
                 uri: decodedPubUri.uri,
               },
-            });
+            })
           }
-          break;
+          break
         case BigInt(messageTypes.createChannel): // 210
-          console.log("running case 2");
+          console.log('running case 2')
           // decode msgBody into channel uri
           const decodeChannelUriAndAccess = decodeUriAndAccess({
             msgBody: messageQueue[i].msgBody,
-          });
+          })
           if (decodeChannelUriAndAccess) {
             await ChannelCounter.upsert({
               // chain // messageGateway address
@@ -209,14 +208,14 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
                 timestamp: event.block.timestamp,
                 counter: (current.counter as bigint) + BigInt(1),
               }),
-            });
+            })
 
             channelCounter = await ChannelCounter.findUnique({
               // update postGatewayChain -> event.transaction.chainId after bumping to next version ponder
               id: `${postGatewayChain}/${event.transaction.to}`,
-            });
+            })
 
-            channelIdsCreated.push(channelCounter?.counter as bigint);
+            channelIdsCreated.push(channelCounter?.counter as bigint)
 
             await Channel.create({
               id: channelCounter?.counter as bigint,
@@ -227,15 +226,15 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
                 admins: decodeChannelUriAndAccess.adminIds as bigint[],
                 members: decodeChannelUriAndAccess.memberIds as bigint[],
               },
-            });
+            })
           }
-          break;
+          break
         case BigInt(messageTypes.addItem): // 213
-          console.log("running case 3");
+          console.log('running case 3')
           // decode msgBody into item
           const decodedItem = decodeItem({
             msgBody: messageQueue[i].msgBody,
-          });
+          })
 
           if (decodedItem) {
             await ItemCounter.upsert({
@@ -250,39 +249,39 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
                 timestamp: event.block.timestamp,
                 counter: (current.counter as bigint) + BigInt(1),
               }),
-            });
+            })
 
             itemCounter = await ItemCounter.findUnique({
               // update postGatewayChain -> event.transaction.chainId after bumping to next version ponder
               id: `${postGatewayChain}/${event.transaction.to}`,
-            });
+            })
 
-            let channelIdRef: bigint | null = null;
-            let pubIdRef: bigint | null = null;
+            let channelIdRef: bigint | null = null
+            let pubIdRef: bigint | null = null
 
             // NOTE: this should be moved into scrypt
             const deconstructedItemBody: {
-              channel: Hash;
-              data: Hash;
+              channel: Hash
+              data: Hash
             } = {
               channel: slice(decodedItem.itemBody, 0, 32, { strict: true }),
               data: slice(decodedItem.itemBody, 32),
-            };
+            }
 
             // NOTE this chunk of code allows for targeting of channel being created in same post
             //   only enter channelIdRef assignment flow if item.id < 0
             if (BigInt(deconstructedItemBody.channel) < 0) {
               // Convert the ID to a string for easier manipulation
               const channelIdString = BigInt(
-                deconstructedItemBody.channel
-              ).toString();
-              if (channelIdString.startsWith("-2")) {
+                deconstructedItemBody.channel,
+              ).toString()
+              if (channelIdString.startsWith('-2')) {
                 // Slice to remove '-2' and parse the remaining string as an integer
-                const index = parseInt(channelIdString.slice(2));
-                channelIdRef = channelIdsCreated[index];
+                const index = parseInt(channelIdString.slice(2))
+                channelIdRef = channelIdsCreated[index]
               } else {
                 // dont process relative refs that start with something other than -1 or -2
-                break;
+                break
               }
             }
 
@@ -298,33 +297,33 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
                 target: itemCounter?.counter as bigint,
                 type: decodedItem.itemType,
               },
-            });
+            })
 
-            console.log("decodedItem.itemType: ", decodedItem.itemType)
-            switch (decodedItem.itemType) {              
+            console.log('decodedItem.itemType: ', decodedItem.itemType)
+            switch (decodedItem.itemType) {
               case TargetType.PUB:
-                console.log("it was type PUB")
+                console.log('it was type PUB')
                 const pub = decodePubItem({
                   itemBody: deconstructedItemBody.data,
-                });
-                console.log("decoded pub value: ", pub)
-                console.log("decoded pub id value: ", pub?.pubId)
+                })
+                console.log('decoded pub value: ', pub)
+                console.log('decoded pub id value: ', pub?.pubId)
                 if (pub) {
                   // NOTE this chunk of code allows for targeting of channel being created in same post
                   //   only enter pubIdRef assignment flow if item.id < 0
                   if (pub.pubId < 0) {
                     // Convert the ID to a string for easier manipulation
-                    const pubIdString = pub.pubId.toString();
-                    if (pubIdString.startsWith("-1")) {
+                    const pubIdString = pub.pubId.toString()
+                    if (pubIdString.startsWith('-1')) {
                       // Slice to remove '-1' and parse the remaining string as an integer
-                      const index = parseInt(pubIdString.slice(2));
-                      console.log("pubRefIndex", 0)
-                      pubIdRef = pubIdsCreated[index];
-                      console.log("pubIdsCreated array", pubIdsCreated)
-                      console.log("confirmed pubIdRef", pubIdRef)
+                      const index = parseInt(pubIdString.slice(2))
+                      console.log('pubRefIndex', 0)
+                      pubIdRef = pubIdsCreated[index]
+                      console.log('pubIdsCreated array', pubIdsCreated)
+                      console.log('confirmed pubIdRef', pubIdRef)
                     } else {
                       // dont process relative refs that start with something other than -1 or -2
-                      break;
+                      break
                     }
                   }
 
@@ -332,16 +331,16 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
                     id: itemCounter?.counter as bigint,
                     data: {
                       type: decodedItem.itemType,
-                      publication: pubIdRef
-                        ? pubIdRef
-                        : pub.pubId,
+                      publication: pubIdRef ? pubIdRef : pub.pubId,
                     },
-                  });
+                  })
                 }
-                break;
+                break
               case TargetType.NFT:
                 // decode nft because is itemType
-                const nft = decodeNFTItem({ itemBody: deconstructedItemBody.data });
+                const nft = decodeNFTItem({
+                  itemBody: deconstructedItemBody.data,
+                })
                 // if decoded incorrectly dont create target or NFT
                 if (nft) {
                   await Nft.create({
@@ -352,7 +351,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
                       hasId: nft?.hasId as boolean,
                       tokenId: nft?.id,
                     },
-                  });
+                  })
 
                   await Target.create({
                     id: itemCounter?.counter as bigint,
@@ -360,13 +359,13 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
                       type: decodedItem.itemType,
                       nft: `${itemCounter?.counter as bigint}`,
                     },
-                  });
+                  })
                 }
               case TargetType.URL:
-                break;
+                break
             }
           }
       }
     }
   }
-});
+})

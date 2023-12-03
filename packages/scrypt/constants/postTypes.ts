@@ -1,6 +1,4 @@
 export const postTypes = {
-    sigTypeECDSA: 1,
-    v1: 1,
-
+  sigTypeECDSA: 1,
+  v1: 1,
 }
-  
