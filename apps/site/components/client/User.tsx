@@ -11,8 +11,7 @@ import { useLogout } from '@privy-io/react-auth'
 
 export function User() {
   const { logout } = useLogout()
-  const { username} = useUserContext()
-
+  const { username } = useUserContext()
 
   return (
     <DropdownMenu>

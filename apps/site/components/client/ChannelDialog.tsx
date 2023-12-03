@@ -10,6 +10,8 @@ import {
   DialogContent,
   DialogTitle,
   DialogHeader,
+  DialogClose,
+  DialogFooter,
   Form,
   FormControl,
   FormField,
@@ -52,13 +54,20 @@ export function ChannelDialog() {
           <Stack className="items-center gap-4">
             <DialogHeader>
               <DialogTitle>
-                <Typography>Add New Channel</Typography>
+                <Typography>New channel</Typography>
               </DialogTitle>
             </DialogHeader>
+            <DialogClose asChild className="absolute right-4 top-8">
+              <Button variant="link">
+                <Typography>close</Typography>
+              </Button>
+            </DialogClose>
             <Separator />
             {/* Channel form */}
             <Form {...form}>
               <form
+                id="newChannel"
+                className="flex flex-col justify-center w-5/6 py-4"
                 action={async () => {
                   // Prevent non-authenticated users from proceeding
                   if (!targetUserId) return
@@ -91,7 +100,6 @@ export function ChannelDialog() {
                     </Toast>
                   ))
                 }}
-                className="w-2/3 space-y-6"
               >
                 <FormField
                   control={form.control}
@@ -105,12 +113,19 @@ export function ChannelDialog() {
                     </FormItem>
                   )}
                 />
-
-                <Button type="submit" variant="link" disabled={!targetUserId}>
-                  Create
-                </Button>
               </form>
             </Form>
+            <Separator />
+            <DialogFooter className="flex justify-center py-2">
+              <Button
+                form="newChannel"
+                type="submit"
+                variant="link"
+                disabled={!targetUserId}
+              >
+                <Typography>Create</Typography>
+              </Button>
+            </DialogFooter>
           </Stack>
         </DialogContent>
       </DialogPortal>
