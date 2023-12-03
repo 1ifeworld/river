@@ -15,10 +15,9 @@ import {
 import { uploadFile, uploadBlob } from '@/lib'
 import { useDropzone } from 'react-dropzone'
 import { toast } from 'sonner'
-import { usePrivy } from '@privy-io/react-auth'
-import { useConnectedUser } from 'hooks/useConnectedUser'
 import { processCreatePubAndAddItemPost } from '@/lib'
 import { useParams } from 'next/navigation'
+import { useUserContext } from 'context/UserContext'
 
 export function UploadDialog() {
   const [dialogOpen, setDialogOpen] = React.useState(false)
@@ -39,8 +38,11 @@ export function UploadDialog() {
 
   const params = useParams()
 
-  const { signMessage } = usePrivy()
-  const { userId: targetUserId } = useConnectedUser()
+
+  const { signMessage, userId: targetUserId } = useUserContext()
+
+
+
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -74,12 +76,14 @@ export function UploadDialog() {
                     },
                   })
                   // Generate create channel post for user and post transaction
+                  if (signMessage) {
                   await processCreatePubAndAddItemPost({
                     pubUri: pubUri,
                     targetChannelId: BigInt(params.id as string),
                     targetUserId: targetUserId,
                     privySignMessage: signMessage,
                   })
+                }
                   setDialogOpen(false)
                   // Render a toast with the name of the uploaded item(s)
                   for (const [index, file] of filesToUpload.entries()) {

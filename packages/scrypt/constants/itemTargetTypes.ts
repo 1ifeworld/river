@@ -1,6 +1,5 @@
 export enum TargetType {
-    PUB = "PUB",
-    NFT = "NFT",
-    URL = "URL"
-  }
-  
+  PUB = 'PUB',
+  NFT = 'NFT',
+  URL = 'URL',
+}

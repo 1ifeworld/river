@@ -26,7 +26,7 @@ import { useDebounce } from 'usehooks-ts'
 import { addresses } from 'scrypt'
 import * as z from 'zod'
 import { AlchemyProvider } from '@alchemy/aa-alchemy'
-import { useUserContext } from 'context/UserContext'
+import { useUserContext } from '@/context'
 import { type Hex } from 'viem'
 
 interface UsernameDialogProps {

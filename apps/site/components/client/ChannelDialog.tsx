@@ -19,12 +19,11 @@ import {
   Toast,
 } from '@/design-system'
 import { uploadBlob, processCreateChannelPost } from '@/lib'
-import { useUserContext } from 'context/UserContext'
+import { useUserContext } from '@/context'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { toast } from 'sonner'
-import { useConnectedUser } from '@/hooks'
 
 const ChannelNameSchema = z.object({
   channelName: z.string().min(2, {
@@ -34,8 +33,7 @@ const ChannelNameSchema = z.object({
 
 export function ChannelDialog() {
   const [dialogOpen, setDialogOpen] = React.useState(false)
-  const { signMessage, alchemyProvider } = useUserContext()
-  const { userId: targetUserId } = useConnectedUser()
+  const { signMessage, userId: targetUserId } = useUserContext()
 
   const form = useForm<z.infer<typeof ChannelNameSchema>>({
     resolver: zodResolver(ChannelNameSchema),
@@ -76,12 +74,12 @@ export function ChannelDialog() {
                   })
                   // Generate create channel post for user and post transaction
                   if (signMessage) {
-                  await processCreateChannelPost({
-                    channelUri: channelUri,
-                    targetUserId: targetUserId,
-                    privySignMessage: signMessage,
-                  })
-                 }
+                    await processCreateChannelPost({
+                      channelUri: channelUri,
+                      targetUserId: targetUserId,
+                      privySignMessage: signMessage,
+                    })
+                  }
                   setDialogOpen(false)
                   // Render a toast with the name of the channel
                   toast.custom((t) => (

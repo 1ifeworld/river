@@ -13,6 +13,6 @@ export async function getUserId({
   })
 
   return {
-    userId: response.idRegistrys[0].userId,
+    userId: response.idRegistrys[0].userId as bigint,
   }
 }

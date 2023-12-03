@@ -1,4 +1,4 @@
-import { Hash, decodeAbiParameters } from "viem";
+import { Hash, decodeAbiParameters } from 'viem'
 
 //////////////////////////////////////////////////
 // ENCODING
@@ -9,19 +9,19 @@ import { Hash, decodeAbiParameters } from "viem";
 //////////////////////////////////////////////////
 
 export function decodeUri({ msgBody }: { msgBody: Hash }): {
-  uri: string;
+  uri: string
 } | null {
   try {
     const [uri] = decodeAbiParameters(
-      [{ name: "uri", type: "string" }],
-      msgBody
-    );
+      [{ name: 'uri', type: 'string' }],
+      msgBody,
+    )
 
     return {
       uri: uri,
-    };
+    }
   } catch (error) {
-    console.error("Failed to decode URI", error);
-    return null;
+    console.error('Failed to decode URI', error)
+    return null
   }
 }
