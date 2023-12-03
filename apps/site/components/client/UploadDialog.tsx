@@ -67,6 +67,7 @@ export function UploadDialog() {
             {/* Upload form */}
             <Stack className="justify-center h-full">
               <form
+                id="newUpload"
                 action={async () => {
                   // Prevent non-authenticated users from proceeding
                   if (!targetUserId) return
@@ -126,7 +127,12 @@ export function UploadDialog() {
               <>
                 <Separator />
                 <DialogFooter>
-                  <Button type="submit" variant="link" disabled={!targetUserId}>
+                  <Button
+                    form="newUpload"
+                    type="submit"
+                    variant="link"
+                    disabled={!targetUserId}
+                  >
                     <Typography>Confirm</Typography>
                   </Button>
                 </DialogFooter>
