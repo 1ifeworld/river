@@ -11,6 +11,7 @@ import {
   DialogTitle,
   DialogHeader,
   DialogClose,
+  DialogFooter,
   Form,
   FormControl,
   FormField,
@@ -43,10 +44,6 @@ export function ChannelDialog() {
     },
   })
 
-  //   <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm ring-offset-background transition-opacity hover:underline focus:outline-none disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
-  //   <Typography>close</Typography>
-  // </DialogPrimitive.Close>
-
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
@@ -69,6 +66,8 @@ export function ChannelDialog() {
             {/* Channel form */}
             <Form {...form}>
               <form
+                id="newChannel"
+                className="flex flex-col justify-center w-5/6 py-4"
                 action={async () => {
                   // Prevent non-authenticated users from proceeding
                   if (!targetUserId) return
@@ -101,7 +100,6 @@ export function ChannelDialog() {
                     </Toast>
                   ))
                 }}
-                className="w-2/3 space-y-6"
               >
                 <FormField
                   control={form.control}
@@ -115,12 +113,19 @@ export function ChannelDialog() {
                     </FormItem>
                   )}
                 />
-
-                <Button type="submit" variant="link" disabled={!targetUserId}>
-                  Create
-                </Button>
               </form>
             </Form>
+            <Separator />
+            <DialogFooter className="flex justify-center py-2">
+              <Button
+                form="newChannel"
+                type="submit"
+                variant="link"
+                disabled={!targetUserId}
+              >
+                <Typography>Create</Typography>
+              </Button>
+            </DialogFooter>
           </Stack>
         </DialogContent>
       </DialogPortal>

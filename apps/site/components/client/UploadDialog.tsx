@@ -10,6 +10,7 @@ import {
   DialogContent,
   DialogTitle,
   DialogHeader,
+  DialogFooter,
   DialogClose,
   Toast,
 } from '@/design-system'
@@ -50,7 +51,7 @@ export function UploadDialog() {
         </DialogTrigger>
       </div>
       <DialogPortal>
-        <DialogContent className="sm:max-w-[425px] focus:outline-none">
+        <DialogContent className="sm:max-w-[425px] aspect-square focus:outline-none">
           <Stack className="items-center gap-4">
             <DialogHeader>
               <DialogTitle>
@@ -64,7 +65,7 @@ export function UploadDialog() {
             </DialogClose>
             <Separator />
             {/* Upload form */}
-            <Stack className="py-[8rem]">
+            <Stack className="justify-center h-full">
               <form
                 action={async () => {
                   // Prevent non-authenticated users from proceeding
@@ -104,28 +105,33 @@ export function UploadDialog() {
                   <>
                     <input {...getInputProps()} />
                     {isDragActive ? (
-                      <p>Drop the files here...</p>
+                      <Typography className="text-secondary-foreground">
+                        Drop your files here
+                      </Typography>
                     ) : (
-                      <Typography className="hover:cursor-pointer">
-                        Drag and drop your files here or click here to{' '}
+                      <Typography className="hover:cursor-pointer text-secondary-foreground leading-1">
+                        Drag and drop your files here <br /> or click here to{' '}
                         <span className="underline">browse</span>
                       </Typography>
                     )}
                   </>
                 ) : (
-                  <Stack className="gap-4">
+                  <div className="h-full">
                     <FileList filesToUpload={filesToUpload} />
-                    <Button
-                      type="submit"
-                      variant="link"
-                      disabled={!targetUserId}
-                    >
-                      Next
-                    </Button>
-                  </Stack>
+                  </div>
                 )}
               </form>
             </Stack>
+            {showFilesToUpload && (
+              <>
+                <Separator />
+                <DialogFooter className="py-3">
+                  <Button type="submit" variant="link" disabled={!targetUserId}>
+                    <Typography>Confirm</Typography>
+                  </Button>
+                </DialogFooter>
+              </>
+            )}
           </Stack>
         </DialogContent>
       </DialogPortal>
@@ -138,7 +144,9 @@ const FileList = ({ filesToUpload }: { filesToUpload: File[] }) => {
     <ul>
       {filesToUpload.map((file: File) => (
         <li key={file.size}>
-          {file.name} - {file.size} bytes
+          <Typography className="text-secondary-foreground">
+            {file.name}
+          </Typography>
         </li>
       ))}
     </ul>
