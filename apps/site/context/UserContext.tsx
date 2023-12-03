@@ -39,9 +39,7 @@ const UserContext = createContext<{
   username?: string
 }>({})
 
-export function UserContextComponent({
-  children,
-}: { children: ReactNode }) {
+export function UserContextComponent({ children }: { children: ReactNode }) {
   const [alchemyProvider, setAlchemyProvider] = useState<AlchemyProvider>()
   const [smartAccountAddress, setSmartAccountAddress] = useState<Address>()
   const [userId, setUserId] = useState<bigint>()

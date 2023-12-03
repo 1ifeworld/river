@@ -87,8 +87,8 @@ export default {
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
       boxShadow: {
-        overlay: '0px 2px 3px 0px rgba(0, 0, 0, 0.08);'
-      }
+        overlay: '0px 2px 3px 0px rgba(0, 0, 0, 0.08);',
+      },
     },
   },
   plugins: [require('tailwindcss-animate')],

@@ -10,6 +10,7 @@ import {
   DialogContent,
   DialogTitle,
   DialogHeader,
+  DialogClose,
   Form,
   FormControl,
   FormField,
@@ -42,6 +43,10 @@ export function ChannelDialog() {
     },
   })
 
+  //   <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm ring-offset-background transition-opacity hover:underline focus:outline-none disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+  //   <Typography>close</Typography>
+  // </DialogPrimitive.Close>
+
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
@@ -55,6 +60,11 @@ export function ChannelDialog() {
                 <Typography>New channel</Typography>
               </DialogTitle>
             </DialogHeader>
+            <DialogClose asChild className="absolute right-4 top-8">
+              <Button variant="link">
+                <Typography>close</Typography>
+              </Button>
+            </DialogClose>
             <Separator />
             {/* Channel form */}
             <Form {...form}>
