@@ -26,7 +26,7 @@ import { useDebounce } from 'usehooks-ts'
 import { addresses } from 'scrypt'
 import * as z from 'zod'
 import { AlchemyProvider } from '@alchemy/aa-alchemy'
-import { useAlchemyContext } from 'context/AlchemyProviderContext'
+import { useUserContext } from 'context/UserContext'
 import { type Hex } from 'viem'
 
 interface UsernameDialogProps {
@@ -84,7 +84,7 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
     }
   }, [debouncedUsername])
 
-  const { alchemyProvider, smartAccountAddress } = useAlchemyContext()
+  const { alchemyProvider, smartAccountAddress } = useUserContext()
 
   async function onSubmit(data: z.infer<typeof UsernameSchema>) {
     alchemyProvider?.withAlchemyGasManager({

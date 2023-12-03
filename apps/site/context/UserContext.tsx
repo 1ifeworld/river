@@ -23,11 +23,12 @@ import {
 } from 'viem'
 import { optimismGoerli } from 'viem/chains'
 import { addresses } from 'scrypt'
+import { SignMessageModalUIOptions } from '@privy-io/react-auth'
 
 const UserContext = createContext<{
   alchemyProvider?: AlchemyProvider
   smartAccountAddress?: Address
-  signMessage?: (message: string) => Promise<string>
+  signMessage?: (message: string, uiOptions?: SignMessageModalUIOptions | undefined) => Promise<string>;
   user?: User | null
 }>({})
 
