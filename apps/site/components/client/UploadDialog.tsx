@@ -125,7 +125,7 @@ export function UploadDialog() {
             {showFilesToUpload && (
               <>
                 <Separator />
-                <DialogFooter className="py-3">
+                <DialogFooter>
                   <Button type="submit" variant="link" disabled={!targetUserId}>
                     <Typography>Confirm</Typography>
                   </Button>
