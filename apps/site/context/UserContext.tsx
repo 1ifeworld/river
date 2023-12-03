@@ -14,8 +14,8 @@ import {
 import { AlchemyProvider } from '@alchemy/aa-alchemy'
 import { useWallets, type ConnectedWallet, User } from '@privy-io/react-auth'
 import { usePrivy } from '@privy-io/react-auth'
-import { getUserId } from 'gql/requests' // Ensure correct path
-import { getUsername } from 'lib/getUsername' // Ensure correct path
+import { getUserId } from '@/gql'
+import { getUsername } from '@/lib'
 import { WalletClientSigner, type SmartAccountSigner } from '@alchemy/aa-core'
 import {
   createWalletClient,
@@ -24,7 +24,7 @@ import {
   type Address,
 } from 'viem'
 import { optimismGoerli } from 'viem/chains'
-import { addresses } from 'scrypt' // Ensure correct path
+import { addresses } from 'scrypt'
 import { SignMessageModalUIOptions } from '@privy-io/react-auth'
 
 const UserContext = createContext<{
@@ -32,9 +32,8 @@ const UserContext = createContext<{
   smartAccountAddress?: Address
   signMessage?: (
     message: string,
-    uiOptions?: SignMessageModalUIOptions | undefined,
+    uiOptions?: SignMessageModalUIOptions,
   ) => Promise<string>
-  user?: User | null
   userId?: bigint
   username?: string
 }>({})
@@ -45,7 +44,7 @@ export function UserContextComponent({ children }: { children: ReactNode }) {
   const [userId, setUserId] = useState<bigint>()
   const [username, setUsername] = useState<string>()
 
-  const { user, signMessage } = usePrivy()
+  const { signMessage } = usePrivy()
   const { wallets } = useWallets()
 
   const embeddedWallet = wallets.find(
@@ -104,14 +103,14 @@ export function UserContextComponent({ children }: { children: ReactNode }) {
         return
       }
 
-      const fetchedUserId = await getUserId({
+      const { userId } = await getUserId({
         custodyAddress: smartAccountAddress as Address,
       })
 
-      setUserId(fetchedUserId as unknown as bigint)
+      setUserId(userId)
 
       const fetchedUsername = await getUsername({
-        id: BigInt(fetchedUserId as unknown as bigint),
+        id: BigInt(userId),
       })
 
       setUsername(fetchedUsername.slice(0, -11))
@@ -126,7 +125,6 @@ export function UserContextComponent({ children }: { children: ReactNode }) {
         alchemyProvider,
         smartAccountAddress,
         signMessage,
-        user,
         userId,
         username,
       }}
@@ -136,7 +134,7 @@ export function UserContextComponent({ children }: { children: ReactNode }) {
   )
 }
 
-// Access the context value of the ProviderContext
+// Access the value of `UserContext`
 export const useUserContext = () => {
   const context = useContext(UserContext)
   if (!context) {
