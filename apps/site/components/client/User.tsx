@@ -6,7 +6,7 @@ import {
   DropdownMenuContent,
   Button,
 } from '@/design-system'
-import { useUserContext } from 'context/UserContext'
+import { useUserContext } from '@/context'
 import { useLogout } from '@privy-io/react-auth'
 
 export function User() {

@@ -17,7 +17,7 @@ import { useDropzone } from 'react-dropzone'
 import { toast } from 'sonner'
 import { processCreatePubAndAddItemPost } from '@/lib'
 import { useParams } from 'next/navigation'
-import { useUserContext } from 'context/UserContext'
+import { useUserContext } from '@/context'
 
 export function UploadDialog() {
   const [dialogOpen, setDialogOpen] = React.useState(false)
