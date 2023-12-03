@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic'
 export default async function Home() {
   const { channels } = await getAllChannels()
 
-  console.log("all channels: ", channels)
+  console.log('all channels: ', channels)
 
   return (
     <div>

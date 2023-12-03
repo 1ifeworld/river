@@ -8,7 +8,6 @@ export default async function User({
 }: {
   params: { username: string }
 }) {
-
   const mockUserObject: {
     name: string
     desc: string

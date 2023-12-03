@@ -1,7 +1,7 @@
 import { Button, Flex } from '@/design-system'
 import { useLogin, usePrivy } from '@privy-io/react-auth'
 import { useState } from 'react'
-import { User, UsernameDialog, AddNew } from '@/client'
+import { User, UsernameDialog, ChannelDialog } from '@/client'
 import { RiverLogo } from '@/server'
 
 export function Header() {
@@ -31,7 +31,7 @@ export function Header() {
       <Flex className="items-center justify-between">
         <RiverLogo />
         <Flex className="gap-4">
-          <AddNew />
+          <ChannelDialog />
           {authenticated ? (
             <User />
           ) : (

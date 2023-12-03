@@ -5,6 +5,6 @@ export async function getUserActivity() {
 
   return {
     channels: response.channels,
-    items: response.items
+    items: response.items,
   }
 }

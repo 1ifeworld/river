@@ -7,8 +7,9 @@ export async function ActivityBanner({
   /* biome-ignore lint: */
   user: any
 }) {
-
-  const userData = await getDataForUsername({username: `${user.name}.sbvrsv.eth`})
+  const userData = await getDataForUsername({
+    username: `${user.name}.sbvrsv.eth`,
+  })
 
   return (
     <Stack>
