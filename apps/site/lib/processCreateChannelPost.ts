@@ -71,5 +71,5 @@ export async function processCreateChannelPost({
   if (!postInput) return
   console.log('postInput encoded correctly')
   // pass postInputs into the createPost server action
-  await relayPost({ postInput: postInput })
+  await relayPost({ postInput: postInput, pathToRevalidate: '/' })
 }
