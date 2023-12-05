@@ -1,0 +1,5 @@
+query txnHash($hash: String!) {
+  txn(id: $hash) {
+    id
+  }
+}
