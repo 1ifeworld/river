@@ -372,11 +372,13 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
   }
   // record every transaction that has entered the crud cycle
   const txnHashProcessedCheck = await Txn.findUnique({
-    id: event.block.hash
+    // id: event.block.hash
+    id: event.transaction.hash
   });
   if (!txnHashProcessedCheck) {
     await Txn.create({
-      id: event.block.hash
+      id: event.transaction.hash
     })
+    console.log("stored txn hash: ", event.transaction.hash)
   }
 });

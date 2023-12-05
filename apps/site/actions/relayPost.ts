@@ -34,8 +34,6 @@ export async function relayPost({
     } else {
       console.log(`txn ${postTxn.hash} NOT found by ponder`)
     }
-    // const postTxnReceipt = await postTxn.wait()
-    // console.log('Post transaction receipt: ', postTxnReceipt)
   } catch (error) {
     console.error('Post transaction failed: ', error)
   }
@@ -53,11 +51,16 @@ async function getTxnInclusion(txnHash: Hash) {
         break; // Exit the loop once a valid txn is found
       }
     } catch (error) {
-      console.error('Error fetching txn hash:', error);
-      // Optionally, add a delay here to prevent rapid re-requests
+      console.error(`Error fetching txn hash: ${txnHash}`, error);
+    }
+
+    attemptCount++; // Increment the counter after each attempt
+    console.log(`Attempt count for txn hash :${txnHash}`, attemptCount); // Log the attempt count
+
+    // Add a delay only if another attempt will follow
+    if (!txn && attemptCount < 10) {
       await new Promise(resolve => setTimeout(resolve, 1000)); // Waits for 1 second
     }
-    attemptCount++; // Increment the counter after each attempt
   }
 
   return txn; // Will return null if the txn isn't found within 10 attempts
