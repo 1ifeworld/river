@@ -2,6 +2,11 @@
 # ========= POST GATEWAY =========
 # ================================
 
+# txn hash tracker
+type Txn @entity {
+  id: Bytes!
+}
+
 type PostCounter @entity {
   id: String!
   timestamp: BigInt
