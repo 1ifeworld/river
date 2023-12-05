@@ -304,7 +304,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
             console.log("decodedItem.itemType: ", decodedItem.itemType);
             switch (decodedItem.itemType) {
               case TargetType.PUB:
-                console.log("it was type PUB");
+                console.log("type PUB");
                 const pub = decodePubItem({
                   itemBody: deconstructedItemBody.data,
                 });
