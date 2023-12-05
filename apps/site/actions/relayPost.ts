@@ -1,11 +1,19 @@
 'use server'
 
-import { addresses } from 'scrypt'
+import { addresses, postGatewayABI } from 'scrypt'
 import { nonceManager } from '@/config/ethersClient'
 import { Hash, encodeFunctionData } from 'viem'
-import { postGatewayABI } from 'scrypt'
+import { revalidatePath } from 'next/cache'
 
-export async function relayPost({ postInput }: { postInput: Hash }) {
+interface RelayPostProps {
+  postInput: Hash
+  pathToRevalidate: string
+}
+
+export async function relayPost({
+  postInput,
+  pathToRevalidate,
+}: RelayPostProps) {
   const encodePostCall = encodeFunctionData({
     abi: postGatewayABI,
     functionName: 'post',
@@ -18,6 +26,9 @@ export async function relayPost({ postInput }: { postInput: Hash }) {
       data: encodePostCall,
     })
     const postTxnReceipt = await postTxn.wait()
+
+    revalidatePath(pathToRevalidate)
+
     console.log('Post transaction receipt: ', postTxnReceipt)
   } catch (error) {
     console.error('Post transaction failed: ', error)
