@@ -99,6 +99,6 @@ export async function processCreatePubAndAddItemPost({
   // pass postInputs into the createPost server action
   await relayPost({
     postInput: postInput,
-    pathToRevalidate: '/channel/[id]/page',
+    pathToRevalidate: `/channel/${targetChannelId}`,
   })
 }
