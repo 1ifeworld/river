@@ -1,9 +1,12 @@
-import { Router } from "express";
+import { Router, Request, Response } from "express";
 import { redisClient } from "redisClient";
+import { CidData } from "types";
 
 export const getRouter = Router();
 
-getRouter.post("/", async (req, res) => {
+// NOTE: expects cids to be prepended with leading `ipfs://`
+
+getRouter.post("/", async (req: Request, res: Response) => {
   if (req.body == null || !req.body.cid) {
     res
       .status(400)
@@ -12,18 +15,19 @@ getRouter.post("/", async (req, res) => {
   }
 
   try {
-    const nameForCid = await redisClient.get(req.body.cid);
-    console.log("name found for cid!");
-    console.log("name for cid: ", nameForCid);
-    res
-      .status(200)
-      .json({
+    const dataForCid = await redisClient.get(req.body.cid);
+
+    if (dataForCid) {
+      console.log("GET worked correctly")
+      res.status(200).json({
         message: "Post request processed successfully",
-        name: nameForCid,
+        data: dataForCid,
       });
+    } else {
+      res.status(404).json({ error: "Data for CID not found" });
+    }
   } catch (error) {
-    console.log("error occured when fetching name for cid");
-    console.log(error);
-    res.status(500).json({ error: "Error fetching name for CID" });
+    console.error("Error occurred when fetching data for CID", error);
+    res.status(500).json({ error: "Error fetching data for CID" });
   }
 });
