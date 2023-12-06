@@ -1,19 +1,35 @@
-import { Router } from 'express'
-import { kv } from '@vercel/kv'
-import { redisClient } from 'redisClient'
+import { Router, Request, Response } from "express";
+import { redisClient } from "redisClient";
+import { CidData } from "types";
 
-export const getRouter = Router()
+export const getRouter = Router();
 
-getRouter.get('/', async (req, res) => { 
+// NOTE: expects cids to be prepended with leading `ipfs://`
 
-    try {
-        const getExample = await redisClient.get('bafybeih3dpotmeewpv543kzbwhxykm6pqtcw46i6lymcjhvblg6sv455se');
-        console.log(getExample);
-      } catch (error) {
-        // Handle errors
-      }
+getRouter.post("/", async (req: Request, res: Response) => {
+  const cids = req.body.cids;
 
-      res.status(200).json({ message: 'Request processed successfully' })
+  // Check if 'cids' is an array and it's not empty
+  if (!Array.isArray(cids) || cids.length === 0) {
+    res.status(400).json({ error: "No CIDs provided or invalid format" });
+    return;
+  }
 
+  try {
+    // Fetch all values at once using MGET
+    const dataValues = await redisClient.mget(...cids);
+    
+    const results: Record<string, any> = {};
+    cids.forEach((cid, index) => {
+      results[cid] = dataValues[index]
+    });
 
-})
+    res.status(200).json({
+      message: "CIDs processed successfully",
+      data: results,
+    });
+  } catch (error) {
+    console.error("Error occurred when fetching data for CIDs", error);
+    res.status(500).json({ error: "Error fetching data for CIDs" });
+  }
+});
