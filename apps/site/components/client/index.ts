@@ -4,6 +4,7 @@
 
 // Individual components
 export * from './ChannelDialog'
+export * from './EditOrRemove'
 export * from './Header'
 export * from './PrivyProviderWrapper'
 export * from './UploadDialog'
