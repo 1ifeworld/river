@@ -3,7 +3,6 @@
       "target": "ESNext",
       "module": "CommonJS",
       "strict": true,
-      "resolveJsonModule": true,
       "isolatedModules": true,
       "esModuleInterop": true,
       "noEmit": true,
@@ -12,6 +11,8 @@
       "baseUrl": ".",
       "paths": {
         "@/services": ["services/index.ts"],
+        "@/lib": ["lib/index.ts"],
+        "@/types": ["types/index.ts"],
       }
     },
     "exclude": ["node_modules"],

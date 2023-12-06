@@ -1,1 +1,2 @@
-export * from './processCid'
+export * from './get'
+export * from './set'
