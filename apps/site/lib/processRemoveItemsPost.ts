@@ -12,13 +12,13 @@ import { Hash, encodeAbiParameters } from 'viem'
 import { SignMessageModalUIOptions } from '@privy-io/react-auth'
 
 interface ProcessRemoveItemsProps {
-    targetChannelId: bigint
-    targetUserId: bigint
-    privySignMessage: (
-      message: string,
-      uiOptions?: SignMessageModalUIOptions | undefined,
-    ) => Promise<string>
-    itemsToRemove: bigint[]
+  targetChannelId: bigint
+  targetUserId: bigint
+  privySignMessage: (
+    message: string,
+    uiOptions?: SignMessageModalUIOptions | undefined,
+  ) => Promise<string>
+  itemsToRemove: bigint[]
 }
 
 export async function processRemoveItemsPost({
@@ -26,19 +26,15 @@ export async function processRemoveItemsPost({
   targetUserId,
   privySignMessage,
   itemsToRemove,
-}: ProcessRemoveItemsProps
-  
-) {
+}: ProcessRemoveItemsProps) {
   // Declare constants/params
   const postVersion = postTypes.v1
   const postExpiration = getExpiration()
 
   // Generate encoded `msgBody` for `removeItemMsg`
   const encodedData = encodeAbiParameters(
-    [
-      { name: 'itemsToRemove', type: 'uint256[]' }
-    ],
-    [itemsToRemove]
+    [{ name: 'itemsToRemove', type: 'uint256[]' }],
+    [itemsToRemove],
   )
 
   const encodedRemoveItemMsg = encodeMessage({
@@ -47,9 +43,7 @@ export async function processRemoveItemsPost({
   })
 
   // Generate the message array
-  const messageArray = [
-    encodedRemoveItemMsg?.encodedMessage as Hash,
-  ]
+  const messageArray = [encodedRemoveItemMsg?.encodedMessage as Hash]
 
   // bytes32 messageToBeSigned = keccak256(abi.encode(version, expiration, msgArray)).toEthSignedMessageHash()
   const hashToSign = generateHashForPostSig({
@@ -60,7 +54,7 @@ export async function processRemoveItemsPost({
 
   // Get signature from user over signed hash of encodePacked version + expiration + messages
   const sig = await privySignMessage(hashToSign)
-  
+
   // Generate encodedPost bytes data -- this is the input to the `post` function`
   const postInput = encodePost({
     userId: targetUserId,
@@ -70,9 +64,9 @@ export async function processRemoveItemsPost({
     expiration: postExpiration,
     messageArray: messageArray,
   })
-  
+
   if (!postInput) return // prevent postInput(s) from being null
-  
+
   await relayPost({
     postInput: postInput,
     pathToRevalidate: `/channel/${targetChannelId}`,

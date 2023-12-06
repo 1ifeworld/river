@@ -6,8 +6,20 @@ import {
   Button,
   Typography,
 } from '@/design-system'
+import { processRemoveItemsPost } from '@/lib'
+import { useUserContext } from '@/context'
 
-export function EditOrRemove() {
+interface EditOrRemoveProps {
+  targetChannelId: bigint
+  itemsToRemove: bigint[]
+}
+
+export function EditOrRemove({
+  targetChannelId,
+  itemsToRemove,
+}: EditOrRemoveProps) {
+  const { signMessage, userId: targetUserId } = useUserContext()
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="focus:outline-none">
@@ -21,9 +33,23 @@ export function EditOrRemove() {
           </Button>
         </DropdownMenuItem>
         <DropdownMenuItem className="py-1">
-          <Button variant="link">
-            <Typography>Remove item</Typography>
-          </Button>
+          <form
+            action={async () => {
+              if (signMessage) {
+                await processRemoveItemsPost({
+                  targetChannelId: targetChannelId,
+                  targetUserId: targetUserId as bigint,
+                  privySignMessage: signMessage,
+                  itemsToRemove,
+                })
+              }
+              // TODO: Add a confirmation toast with the name of the item being removed
+            }}
+          >
+            <Button variant="link" type="submit" disabled={!targetUserId}>
+              <Typography>Remove item</Typography>
+            </Button>
+          </form>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

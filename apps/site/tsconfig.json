@@ -38,7 +38,8 @@
       "@/server": ["components/server/index.ts"],
       "@/services": ["services/index.ts"],
       "@/utils": ["utils/index.ts"],
-    }
+    },
+    "types": ["react/experimental"],
   },
   "include": [
     "next-env.d.ts",

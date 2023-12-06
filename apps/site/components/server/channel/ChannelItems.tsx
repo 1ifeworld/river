@@ -55,7 +55,10 @@ export async function ChannelItems({ channel }: { channel: Channel }) {
               <Typography>{unixTimeConverter(item.timestamp)}</Typography>
             </TableCell>
             <TableCell className="text-right w-[100px] text-primary-foreground">
-              <EditOrRemove />
+              <EditOrRemove
+                targetChannelId={channel.id}
+                itemsToRemove={item.id}
+              />
             </TableCell>
           </TableRow>
         ))}

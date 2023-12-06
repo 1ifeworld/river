@@ -9,4 +9,3 @@ export * from './processRemoveItemsPost'
 export * from './registerAndDelegate'
 export * from './setUsername'
 export * from './uploadBlob'
-
