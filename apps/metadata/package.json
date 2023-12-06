@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "tsx api/index.ts",
+    "start": "tsx src/index.ts",
     "vercel-build": "echo hello"
   },
   "keywords": [],

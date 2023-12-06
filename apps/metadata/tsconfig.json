@@ -8,11 +8,11 @@
       "noEmit": true,
       "noImplicitReturns": true,
       "skipLibCheck": true,
-      "baseUrl": ".",
+      "baseUrl": "./src",
       "paths": {
-        "@/services": ["services/index.ts"],
-        "@/lib": ["lib/index.ts"],
-        "@/types": ["types/index.ts"],
+        "@/services": ["src/services/index.ts"],
+        "@/lib": ["src/lib/index.ts"],
+        "@/types": ["src/types/index.ts"],
       }
     },
     "exclude": ["node_modules"],
