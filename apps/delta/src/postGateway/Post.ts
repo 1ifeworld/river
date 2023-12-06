@@ -160,7 +160,9 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
           const decodedPubUri = decodeUri({ msgBody: messageQueue[i].msgBody });
           if (decodedPubUri) {
             // trigger metadata processing immediately
-            sendMetadataRequest(decodedPubUri.uri)
+            const response = await sendMetadataRequest(decodedPubUri.uri)
+            console.log("pub uri response: ", response)
+            // sendMetadataRequest(decodedPubUri.uri)
             // 
             await PublicationCounter.upsert({
               // chain // messageGateway address
