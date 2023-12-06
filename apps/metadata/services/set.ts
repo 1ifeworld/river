@@ -31,7 +31,6 @@ setRouter.post("/", async (req: Request, res: Response) => {
 
   if (cidFetchResponse && isValidCidData(cidFetchResponse)) {
     try {
-      console.log("fetch response", JSON.stringify(cidFetchResponse))
       await redisClient.set(fullCid, JSON.stringify(cidFetchResponse));
       console.log("SET worked correctly for cid: ", fullCid);
       res.status(200).json({ message: "Request processed successfully" });

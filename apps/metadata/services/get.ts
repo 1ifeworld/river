@@ -7,27 +7,29 @@ export const getRouter = Router();
 // NOTE: expects cids to be prepended with leading `ipfs://`
 
 getRouter.post("/", async (req: Request, res: Response) => {
-  if (req.body == null || !req.body.cid) {
-    res
-      .status(400)
-      .json({ error: "Request body is missing or CID is not provided" });
+  const cids = req.body.cids;
+
+  // Check if 'cids' is an array and it's not empty
+  if (!Array.isArray(cids) || cids.length === 0) {
+    res.status(400).json({ error: "No CIDs provided or invalid format" });
     return;
   }
 
   try {
-    const dataForCid = await redisClient.get(req.body.cid);
+    // Fetch all values at once using MGET
+    const dataValues = await redisClient.mget(...cids);
+    
+    const results: Record<string, any> = {};
+    cids.forEach((cid, index) => {
+      results[cid] = dataValues[index]
+    });
 
-    if (dataForCid) {
-      console.log("GET worked correctly")
-      res.status(200).json({
-        message: "Post request processed successfully",
-        data: dataForCid,
-      });
-    } else {
-      res.status(404).json({ error: "Data for CID not found" });
-    }
+    res.status(200).json({
+      message: "CIDs processed successfully",
+      data: results,
+    });
   } catch (error) {
-    console.error("Error occurred when fetching data for CID", error);
-    res.status(500).json({ error: "Error fetching data for CID" });
+    console.error("Error occurred when fetching data for CIDs", error);
+    res.status(500).json({ error: "Error fetching data for CIDs" });
   }
 });
