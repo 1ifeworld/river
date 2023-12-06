@@ -1,19 +1,11 @@
-// BigInt(214)
-
-// removeItems (body = abi.encode(uint256[]))
-
 import { relayPost } from '@/actions'
 import {
   encodePost,
   encodeMessage,
-  encodePub,
-  encodeAddPubItemBody,
-  encodeItem,
   postTypes,
   messageTypes,
   getExpiration,
   generateHashForPostSig,
-  TargetType,
 } from 'scrypt'
 import { Hash, encodeAbiParameters } from 'viem'
 
@@ -26,10 +18,8 @@ interface ProcessRemoveItemsProps {
       message: string,
       uiOptions?: SignMessageModalUIOptions | undefined,
     ) => Promise<string>
-    itemsToRemove: bigint
+    itemsToRemove: bigint[]
 }
-
-// For remove item, the message body need only be the id of the items to remove
 
 export async function processRemoveItemsPost({
   targetChannelId,
@@ -43,22 +33,22 @@ export async function processRemoveItemsPost({
   const postVersion = postTypes.v1
   const postExpiration = getExpiration()
 
-  // How do we know the target type of an item?
-
   // Generate encoded `msgBody` for `removeItemMsg`
-  const removeItemMsg = encodeItem({
-    itemType: TargetType.PUB,
-    itemBody: // No idea what this is supposed to be
-  })
+  const encodedData = encodeAbiParameters(
+    [
+      { name: 'itemsToRemove', type: 'uint256[]' }
+    ],
+    [itemsToRemove]
+  )
 
   const encodedRemoveItemMsg = encodeMessage({
     msgType: messageTypes.removeItems,
-    msgBody: removeItemMsg.msgBody, // abi.encode(uint256[])
+    msgBody: encodedData, // abi.encode(uint256[])
   })
 
   // Generate the message array
-  const messageArray: Hash[] = [
-    encodedRemoveItemMsg?.encodedMessage,
+  const messageArray = [
+    encodedRemoveItemMsg?.encodedMessage as Hash,
   ]
 
   // bytes32 messageToBeSigned = keccak256(abi.encode(version, expiration, msgArray)).toEthSignedMessageHash()
