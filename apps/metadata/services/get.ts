@@ -1,19 +1,29 @@
-import { Router } from 'express'
-import { kv } from '@vercel/kv'
-import { redisClient } from 'redisClient'
+import { Router } from "express";
+import { redisClient } from "redisClient";
 
-export const getRouter = Router()
+export const getRouter = Router();
 
-getRouter.get('/', async (req, res) => { 
+getRouter.post("/", async (req, res) => {
+  if (req.body == null || !req.body.cid) {
+    res
+      .status(400)
+      .json({ error: "Request body is missing or CID is not provided" });
+    return;
+  }
 
-    try {
-        const getExample = await redisClient.get('bafybeih3dpotmeewpv543kzbwhxykm6pqtcw46i6lymcjhvblg6sv455se');
-        console.log(getExample);
-      } catch (error) {
-        // Handle errors
-      }
-
-      res.status(200).json({ message: 'Request processed successfully' })
-
-
-})
+  try {
+    const nameForCid = await redisClient.get(req.body.cid);
+    console.log("name found for cid!");
+    console.log("name for cid: ", nameForCid);
+    res
+      .status(200)
+      .json({
+        message: "Post request processed successfully",
+        name: nameForCid,
+      });
+  } catch (error) {
+    console.log("error occured when fetching name for cid");
+    console.log(error);
+    res.status(500).json({ error: "Error fetching name for CID" });
+  }
+});
