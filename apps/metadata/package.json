@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "start": "tsx index.ts"
+    "start": "tsx api/index.ts"
   },
   "keywords": [],
   "author": "",
