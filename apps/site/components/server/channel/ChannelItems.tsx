@@ -10,9 +10,9 @@ import {
 import { Channel, Item } from '@/gql'
 import { unixTimeConverter } from '@/utils'
 import { ThumbnailNameCreator } from '@/server'
+import { EditOrRemove } from '@/client'
 
 export async function ChannelItems({ channel }: { channel: Channel }) {
-
   return (
     <Table className="w-full">
       <TableHeader>
@@ -55,7 +55,7 @@ export async function ChannelItems({ channel }: { channel: Channel }) {
               <Typography>{unixTimeConverter(item.timestamp)}</Typography>
             </TableCell>
             <TableCell className="text-right w-[100px] text-primary-foreground">
-              <Typography>{'...'}</Typography>
+              <EditOrRemove />
             </TableCell>
           </TableRow>
         ))}

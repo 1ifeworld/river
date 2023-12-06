@@ -40,7 +40,7 @@ export async function processCreateChannelPost({
   // generate encodedMessage by packing msgType + msgBody together
   const encodedMessage = encodeMessage({
     msgType: messageTypes.createChannel,
-    msgBody: createChannelMsg.msgBody,
+    msgBody: createChannelMsg.msgBody, // abi.encode(string uri, uint256[] admins, uint256[] members)
   })
   // add this in to prevent encodedMessage being null
   if (!encodedMessage) return
