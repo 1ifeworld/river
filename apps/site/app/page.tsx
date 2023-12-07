@@ -20,15 +20,13 @@ export default async function Home() {
 async function getChannelMetadata(channels: any) {
   // Extract URIs from the channels array
   const uris = channels.map((channel: { uri: any }) => channel.uri);
-  
-  // URL of your metadata server
-  const url = 'https://river-site-e8bs.vercel.app/get';
-
+  // setup endpoint
+  const getMetadataEndpoint = `${process.env.NEXT_PUBLIC_METADATA_SERVER_URL}/get`
   // Prepare the request body
   const body = JSON.stringify({ cids: uris });
 
   try {
-    const response = await fetch(url, {
+    const response = await fetch(getMetadataEndpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -41,7 +39,6 @@ async function getChannelMetadata(channels: any) {
     }
 
     const metadata = await response.json();
-    console.log(metadata);
     return {
       metadata: metadata
     }

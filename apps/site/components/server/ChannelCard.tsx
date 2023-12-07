@@ -1,7 +1,7 @@
 import { Stack, Typography, Flex } from "@/design-system";
 import { type Channel } from "@/gql";
 import { getUsername } from "@/lib";
-import { pluralize, fetchIpfsData } from "@/utils";
+import { pluralize } from "@/utils";
 import Link from "next/link";
 
 export async function ChannelCard({

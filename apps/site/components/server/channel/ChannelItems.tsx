@@ -11,8 +11,7 @@ import { Channel, Item } from '@/gql'
 import { unixTimeConverter } from '@/utils'
 import { ThumbnailNameCreator } from '@/server'
 
-export async function ChannelItems({ channel }: { channel: Channel }) {
-  console.log('waht is channel items receiving', channel)
+export async function ChannelItems({ channel, metadata }: { channel: Channel, metadata: any }) {
 
   return (
     <Table className="w-full">
@@ -47,7 +46,7 @@ export async function ChannelItems({ channel }: { channel: Channel }) {
               <Typography>{index + 1}</Typography>
             </TableCell>
             <TableCell className="flex gap-4 items-center text-primary-foreground">
-              <ThumbnailNameCreator item={item} />
+              <ThumbnailNameCreator item={item} metadata={metadata} />
             </TableCell>
             <TableCell className="text-right text-primary-foreground">
               <Typography>{'** type **'}</Typography>
