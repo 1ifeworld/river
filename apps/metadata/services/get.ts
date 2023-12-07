@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express";
-import { redisClient } from "../../redisClient";
+import { redisClient } from "../redisClient";
 import { CidData } from "../types";
 
 export const getRouter = Router();

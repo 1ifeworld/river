@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express";
-import { redisClient } from "../../redisClient";
+import { redisClient } from "../redisClient";
 import { fetchIpfsData, isCid } from "..//lib";
 import { CidData } from "../types";
 
