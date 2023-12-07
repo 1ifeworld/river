@@ -3,13 +3,13 @@ import { Stack, Typography, Card, Flex } from '@/design-system'
 import { Channel } from '@/gql'
 import { UploadDialog } from '@/client'
 import { ipfsToHttps } from '@/lib'
-import { fetchIpfsData } from '@/utils'
 import { Username } from '@/server'
 
-export async function ChannelBanner({ channel }: { channel: Channel }) {
-  const channelUriIpfsResponse = await fetchIpfsData(channel.uri as string)
+export async function ChannelBanner({ channel, metadata }: { channel: Channel, metadata: any }) {
 
-  if (!channelUriIpfsResponse) {
+  const channelMetadata = metadata.data[channel.uri as string]
+
+  if (!channelMetadata) {
     return (
       <Stack className="pt-[72px] gap-14">This is not a valid channel :/</Stack>
     )
@@ -21,8 +21,8 @@ export async function ChannelBanner({ channel }: { channel: Channel }) {
       <Card className="relative w-[218px] h-[218px] outline-none border-none">
         <Image
           className="object-cover aspect-square"
-          src={ipfsToHttps(channelUriIpfsResponse.image)}
-          alt={channelUriIpfsResponse.name}
+          src={ipfsToHttps(channelMetadata.image)}
+          alt={channelMetadata.name}
           fill
         />
       </Card>
@@ -30,7 +30,7 @@ export async function ChannelBanner({ channel }: { channel: Channel }) {
       <Stack className="gap-5">
         <Stack>
           <Typography variant="h2" className="text-black">
-            {channelUriIpfsResponse.name}
+            {channelMetadata.name}
           </Typography>
           <Typography variant="h2" className="text-secondary-foreground">
             {channel?.admins?.[0] ? (
@@ -41,7 +41,7 @@ export async function ChannelBanner({ channel }: { channel: Channel }) {
           </Typography>
         </Stack>
         <Typography className="text-primary-foreground">
-          {channelUriIpfsResponse.description}
+          {channelMetadata.description}
         </Typography>
         <UploadDialog />
       </Stack>
