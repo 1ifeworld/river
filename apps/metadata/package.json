@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
-    "start": "tsx index.ts"
+    "start": "tsx index.ts",
+    "vercel-build": "echo hello"
   },
   "keywords": [],
   "author": "",
