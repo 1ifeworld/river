@@ -4,27 +4,24 @@ import { CidData } from "../types";
 
 export const getRouter = Router();
 
-// Route changed to GET
-getRouter.get("/", async (req: Request, res: Response) => {
-  // Retrieve cids from query parameters
-  const cids = req.query.cids;
+// NOTE: expects cids to be prepended with leading `ipfs://`
 
-  // Check if 'cids' exists and is a string
-  if (!cids || typeof cids !== 'string') {
+getRouter.post("/", async (req: Request, res: Response) => {
+  const cids = req.body.cids;
+
+  // Check if 'cids' is an array and it's not empty
+  if (!Array.isArray(cids) || cids.length === 0) {
     res.status(400).json({ error: "No CIDs provided or invalid format" });
     return;
   }
 
-  // Split the cids string into an array
-  const cidsArray = cids.split(',');
-
   try {
     // Fetch all values at once using MGET
-    const dataValues = await redisClient.mget(...cidsArray);
+    const dataValues = await redisClient.mget(...cids);
     
     const results: Record<string, any> = {};
-    cidsArray.forEach((cid, index) => {
-      results[cid] = dataValues[index];
+    cids.forEach((cid, index) => {
+      results[cid] = dataValues[index]
     });
 
     res.status(200).json({
