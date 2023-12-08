@@ -2,6 +2,8 @@ import { getChannelWithId } from '@/gql'
 import { Stack } from '@/design-system'
 import { ChannelBanner, ChannelItems } from '@/server'
 
+export const dynamic = 'force-dynamic'
+
 export default async function Channel({
   params,
 }: {
@@ -12,6 +14,9 @@ export default async function Channel({
   })
   const { channelMetadata } = await getChannelMetadata(channel)
   const { metadata } = await getItemsMetadata(channel?.items)
+
+
+  console.log("channel metadata: ", channelMetadata)
 
   if (!channel) {
     return (
@@ -63,6 +68,7 @@ async function getItemsMetadata(items: any) {
 async function getChannelMetadata(channel: any) {
   // Extract URIs from the channels array
   const uri = [channel.uri]
+  console.log("what uri are we using for channel: ", uri)
   // setup endpoint
   const getMetadataEndpoint = `${process.env.NEXT_PUBLIC_METADATA_SERVER_URL}/get`
   // Prepare the request body

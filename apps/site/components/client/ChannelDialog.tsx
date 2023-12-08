@@ -26,6 +26,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { toast } from 'sonner'
+import { DataObject, sendToDb } from '@/lib'
 
 const ChannelNameSchema = z.object({
   channelName: z.string().min(2, {
@@ -72,6 +73,18 @@ export function ChannelDialog() {
                   // Prevent non-authenticated users from proceeding
                   if (!targetUserId) return
                   // Create an IPFS pointer containing the name of the channel
+                  // const imageCid = 'ipfs://bafkreiamfxbkndyuwkw4kutjcfcitozbtzrvqneryab2njltiopsfjwt6a';
+                  // const channelName = form.getValues().channelName;
+                  // const description = 'This time its time'
+                  // const channelUri = await uploadBlob({
+                  //   dataToUpload: {
+                  //     name: channelName,
+                  //     description: description,
+                  //     coverImageUri: imageCid
+                  //   },
+                  // })
+
+                  // Create an IPFS pointer containing the name of the channel
                   const channelUri = await uploadBlob({
                     dataToUpload: {
                       name: form.getValues().channelName,
@@ -80,7 +93,20 @@ export function ChannelDialog() {
                         // harcoded cover image uri
                         'ipfs://bafkreiamfxbkndyuwkw4kutjcfcitozbtzrvqneryab2njltiopsfjwt6a',
                     },
-                  })
+                  })                  
+
+                  // await sendToDb({
+                  //   key: channelUri,
+                  //   value: {
+                  //     name: form.getValues().channelName,
+                  //     description: 'This time its happening',
+                  //     image: 'ipfs://bafkreiamfxbkndyuwkw4kutjcfcitozbtzrvqneryab2njltiopsfjwt6a',
+                  //     animationUri: '',
+                  //     contentType: 'image/jpeg',
+                  //   },
+                  // } as DataObject)                  
+
+
                   // Generate create channel post for user and post transaction
                   if (signMessage) {
                     await processCreateChannelPost({

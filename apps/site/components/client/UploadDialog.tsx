@@ -78,16 +78,26 @@ export function UploadDialog() {
                   // Prevent non-authenticated users from proceeding
                   if (!targetUserId) return
                   // Create an IPFS pointer for the uploaded item
-                  const imageCid = await uploadFile({ filesToUpload })
+                  // const imageCid = await uploadFile({ filesToUpload })
                   const pubUri = await uploadBlob({
                     dataToUpload: {
                       name: filesToUpload[0]?.name || 'unnamed',
                       description: 'What did you think this was going to be?',
-                      image: imageCid,
+                      image: await uploadFile({ filesToUpload }),
                       // content_type: filesToUpload[0].type,
                       // animation_url: ""
-                    },
+                    }
                   })
+
+
+                  // const pubUri = await uploadBlob({
+                  //   dataToUpload: {
+                  //     name: filesToUpload[0]?.name || 'unnamed',
+                  //     description: 'What did you think this was going to be?',
+                  //     image: await uploadFile({ filesToUpload }),
+                  //   },
+                  // })
+
 
                   // const imageUploadUrl = await uploadFile({ filesToUpload: [filesToUpload[0]] })
                   // let animationUploadUrl = null
@@ -109,7 +119,7 @@ export function UploadDialog() {
                     value: {
                       name: fileName,
                       description: '',
-                      image: imageCid,
+                      image: 'ipfs://bafkreiamfxbkndyuwkw4kutjcfcitozbtzrvqneryab2njltiopsfjwt6a',
                       animationUri: '',
                       contentType: fileMime,
                     },
