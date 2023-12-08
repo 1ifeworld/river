@@ -113,7 +113,7 @@ export function UserContextComponent({ children }: { children: ReactNode }) {
         id: BigInt(userId),
       })
 
-      setUsername(fetchedUsername.slice(0, -11))
+      setUsername(fetchedUsername)
     }
 
     fetchUserData()
