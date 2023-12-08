@@ -11,8 +11,10 @@ import { Channel, Item } from '@/gql'
 import { unixTimeConverter } from '@/utils'
 import { ThumbnailNameCreator } from '@/server'
 
-export async function ChannelItems({ channel, metadata }: { channel: Channel, metadata: any }) {
-
+export async function ChannelItems({
+  channel,
+  metadata,
+}: { channel: Channel; metadata: any }) {
   return (
     <Table className="w-full">
       <TableHeader>

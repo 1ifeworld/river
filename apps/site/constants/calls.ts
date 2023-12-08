@@ -1,4 +1,4 @@
-import { type Hex, type Hash, encodeFunctionData } from 'viem'
+import { type Hash, encodeFunctionData } from 'viem'
 import { addresses } from 'scrypt'
 import { idRegistryABI, delegateRegistryABI } from 'scrypt'
 

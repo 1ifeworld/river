@@ -2,12 +2,14 @@ import Image from 'next/image'
 import { Item } from '@/gql'
 import { Stack, Typography } from '@/design-system'
 import { Username } from '../Username'
-import { ipfsToHttps } from 'lib/ipfsToHttps'
+import { ipfsUrlToCid, pinataUrlFromCid } from '@/lib'
 
-export async function ThumbnailNameCreator({ item, metadata }: { item: Item, metadata: any }) {
-  
+export async function ThumbnailNameCreator({
+  item,
+  metadata,
+}: { item: Item; metadata: any }) {
   const itemMetadata = metadata.data[item.target?.publication?.uri as string]
-  
+
   if (!itemMetadata) {
     return (
       <>
@@ -25,11 +27,13 @@ export async function ThumbnailNameCreator({ item, metadata }: { item: Item, met
     )
   }
 
+  const cid = ipfsUrlToCid({ ipfsUrl: itemMetadata.image })
+
   return (
     <>
       <Image
         className="object-cover aspect-square "
-        src={ipfsToHttps(itemMetadata.image)}
+        src={pinataUrlFromCid({ cid })}
         alt={itemMetadata.name}
         width={40}
         height={40}
