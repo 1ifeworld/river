@@ -1,6 +1,6 @@
 export async function getUsername({ id }: { id: bigint }) {
   if (!id) {
-    throw new Error('id is required')
+    throw new Error('Error: id is required')
   }
 
   try {
@@ -12,15 +12,14 @@ export async function getUsername({ id }: { id: bigint }) {
     )
 
     if (!response.ok) {
-      // console.error('Network response was not ok')
       return
     }
 
     const data = await response.json()
 
     if (data) {
-      // console.log('Username returned successfully')
-      return data.username
+      const username = data.username.replace('.sbvrsv.eth', '')
+      return username
     } else {
       console.error('Error:', data.error)
     }
