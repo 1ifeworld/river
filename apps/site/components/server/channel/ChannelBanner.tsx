@@ -5,8 +5,10 @@ import { UploadDialog } from '@/client'
 import { ipfsToHttps } from '@/lib'
 import { Username } from '@/server'
 
-export async function ChannelBanner({ channel, metadata }: { channel: Channel, metadata: any }) {
-
+export async function ChannelBanner({
+  channel,
+  metadata,
+}: { channel: Channel; metadata: any }) {
   const channelMetadata = metadata?.data[channel.uri as string]
 
   if (!channelMetadata) {

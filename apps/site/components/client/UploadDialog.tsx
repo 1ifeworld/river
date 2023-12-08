@@ -21,6 +21,8 @@ import { processCreatePubAndAddItemPost } from '@/lib'
 import { useParams } from 'next/navigation'
 import { useUserContext } from '@/context'
 import { isVideo, sendToDb } from '@/lib'
+import { DataObject } from '@/lib'
+
 export function UploadDialog() {
   const [dialogOpen, setDialogOpen] = React.useState(false)
 
@@ -33,9 +35,9 @@ export function UploadDialog() {
   const onDrop = React.useCallback((filesToUpload: File[]) => {
     setShowFilesToUpload(true)
     setFilesToUpload(filesToUpload)
-    filesToUpload.forEach(file => {
+    filesToUpload.forEach((file) => {
       console.log(`File Name: ${file.name} MIME type: ${file.type}`)
-    });
+    })
   }, [])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -76,26 +78,42 @@ export function UploadDialog() {
                   // Prevent non-authenticated users from proceeding
                   if (!targetUserId) return
                   // Create an IPFS pointer for the uploaded item
+                  const imageCid = await uploadFile({ filesToUpload })
                   const pubUri = await uploadBlob({
                     dataToUpload: {
                       name: filesToUpload[0]?.name || 'unnamed',
                       description: 'What did you think this was going to be?',
-                      image: await uploadFile({ filesToUpload }),
-                      content_type: filesToUpload[0].type
+                      image: imageCid,
+                      // content_type: filesToUpload[0].type,
+                      // animation_url: ""
                     },
                   })
 
-                  const imageUploadUrl = await uploadFile({ filesToUpload: [filesToUpload[0]] })
-                  let animationUploadUrl = null
+                  // const imageUploadUrl = await uploadFile({ filesToUpload: [filesToUpload[0]] })
+                  // let animationUploadUrl = null
 
-                  console.log("imageUploadUrl", imageUploadUrl)
-                  
-                  if (isVideo(filesToUpload[0].type)) {
-                    animationUploadUrl = await uploadFile({ filesToUpload: [filesToUpload[0]] })
-                    console.log("imageUploadUrl", animationUploadUrl)
-                  }
-                  
-                  await sendToDb(filesToUpload[0], pubUri, imageUploadUrl, animationUploadUrl)
+                  // console.log("imageUploadUrl", imageUploadUrl)
+
+                  // if (isVideo(filesToUpload[0].type)) {
+                  //   animationUploadUrl = await uploadFile({ filesToUpload: [filesToUpload[0]] })
+                  //   console.log("imageUploadUrl", animationUploadUrl)
+                  // }
+
+                  const fileMime = filesToUpload[0].type
+                  const fileName = filesToUpload[0].name
+
+                  // await sendToDb(pubUri, fileName, fileMime, imageCid)
+                  // Update the sendToDb call to match the DataObject interface
+                  await sendToDb({
+                    key: pubUri,
+                    value: {
+                      name: fileName,
+                      description: '',
+                      image: imageCid,
+                      animationUri: '',
+                      contentType: fileMime,
+                    },
+                  } as DataObject)
 
                   // Generate create channel post for user and post transaction
                   if (signMessage) {

@@ -11,7 +11,6 @@ import { Channel, Item } from '@/gql'
 import { unixTimeConverter } from '@/utils'
 import { ThumbnailNameCreator, ItemContentType } from '@/server'
 
-
 // async function loadChannelItems(channel: Channel) {
 
 //   const publicationUris = channel.items
@@ -23,8 +22,10 @@ import { ThumbnailNameCreator, ItemContentType } from '@/server'
 //   return <ChannelItems channel={channel} metadata={metadata} />
 // }
 
-export async function ChannelItems({ channel, metadata }: { channel: Channel, metadata: any }) {
-
+export async function ChannelItems({
+  channel,
+  metadata,
+}: { channel: Channel; metadata: any }) {
   return (
     <Table className="w-full">
       <TableHeader>
@@ -52,8 +53,8 @@ export async function ChannelItems({ channel, metadata }: { channel: Channel, me
         </TableRow>
       </TableHeader>
       <TableBody>
-        {channel.items.map((item: Item, index: number) => (    
-            <TableRow key={index}>
+        {channel.items.map((item: Item, index: number) => (
+          <TableRow key={index}>
             <TableCell className="text-right text-primary-foreground">
               <Typography>{index + 1}</Typography>
             </TableCell>
@@ -61,7 +62,7 @@ export async function ChannelItems({ channel, metadata }: { channel: Channel, me
               <ThumbnailNameCreator item={item} metadata={metadata} />
             </TableCell>
             <TableCell className="text-right text-primary-foreground">
-            <ItemContentType item={item} />
+              <ItemContentType item={item} />
             </TableCell>
             <TableCell className="text-right text-primary-foreground">
               <Typography>{unixTimeConverter(item.timestamp)}</Typography>

@@ -26,10 +26,10 @@ export async function relayPost({
       to: addresses.postGateway.opGoerli,
       data: encodePostCall,
     })
-    
+
     const resp = await getTxnInclusion(postTxn.hash as Hash)
     if (resp) {
-      console.log(`txn ${postTxn.hash } was processed by ponder`)
+      console.log(`txn ${postTxn.hash} was processed by ponder`)
       revalidatePath(pathToRevalidate)
     } else {
       console.log(`txn ${postTxn.hash} NOT found by ponder`)
@@ -40,28 +40,29 @@ export async function relayPost({
 }
 
 async function getTxnInclusion(txnHash: Hash) {
-  let txn;
-  let attemptCount = 0; // Initialize counter
+  let txn
+  let attemptCount = 0 // Initialize counter
 
-  while (!txn && attemptCount < 10) { // Check counter in loop condition
+  while (!txn && attemptCount < 10) {
+    // Check counter in loop condition
     try {
-      const response = await getTxnWithHash({ hash: txnHash });
+      const response = await getTxnWithHash({ hash: txnHash })
       if (response && response.txn) {
-        txn = response.txn;
-        break; // Exit the loop once a valid txn is found
+        txn = response.txn
+        break // Exit the loop once a valid txn is found
       }
     } catch (error) {
-      console.error(`Error fetching txn hash: ${txnHash}`, error);
+      console.error(`Error fetching txn hash: ${txnHash}`, error)
     }
 
-    attemptCount++; // Increment the counter after each attempt
-    console.log(`Attempt count for txn hash :${txnHash}`, attemptCount); // Log the attempt count
+    attemptCount++ // Increment the counter after each attempt
+    console.log(`Attempt count for txn hash :${txnHash}`, attemptCount) // Log the attempt count
 
     // Add a delay only if another attempt will follow
     if (!txn && attemptCount < 10) {
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Waits for 1 second
+      await new Promise((resolve) => setTimeout(resolve, 1000)) // Waits for 1 second
     }
   }
 
-  return txn; // Will return null if the txn isn't found within 10 attempts
+  return txn // Will return null if the txn isn't found within 10 attempts
 }

@@ -10,8 +10,8 @@ interface PublicationUri {
   name: string
   description: string
   image: string
-  animation_url: string
-  content_type:string
+  // animation_url: string
+  // content_type:string
 }
 
 const client = new Web3Storage({
