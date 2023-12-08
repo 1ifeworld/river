@@ -113,7 +113,7 @@ export function UserContextComponent({ children }: { children: ReactNode }) {
         id: BigInt(userId),
       })
 
-      setUsername(username.replace('.sbvrsv.eth', ''))
+      setUsername(username)
     }
 
     fetchUserData()
