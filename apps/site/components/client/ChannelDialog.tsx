@@ -33,7 +33,12 @@ const ChannelNameSchema = z.object({
   }),
 })
 
-export function ChannelDialog() {
+interface ChannelDialogProps {
+  authenticated: boolean
+  login: () => void
+}
+
+export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
   const [dialogOpen, setDialogOpen] = React.useState(false)
   const { signMessage, userId: targetUserId } = useUserContext()
 
@@ -46,9 +51,15 @@ export function ChannelDialog() {
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      <DialogTrigger asChild>
-        <Button variant="link">New channel</Button>
-      </DialogTrigger>
+      {!authenticated ? (
+        <Button variant="link" onClick={login}>
+          New channel
+        </Button>
+      ) : (
+        <DialogTrigger asChild>
+          <Button variant="link">New channel</Button>
+        </DialogTrigger>
+      )}
       <DialogPortal>
         <DialogContent className="sm:max-w-[425px] focus:outline-none">
           <Stack className="items-center gap-4">

@@ -14,15 +14,17 @@ import {
   DialogClose,
   Toast,
 } from '@/design-system'
-import { uploadFile, uploadBlob } from '@/lib'
+import { uploadFile, uploadBlob, processCreatePubAndAddItemPost } from '@/lib'
 import { useDropzone } from 'react-dropzone'
 import { toast } from 'sonner'
-import { processCreatePubAndAddItemPost } from '@/lib'
 import { useParams } from 'next/navigation'
 import { useUserContext } from '@/context'
+import { usePrivy } from '@privy-io/react-auth'
 
 export function UploadDialog() {
   const [dialogOpen, setDialogOpen] = React.useState(false)
+
+  const { authenticated, login } = usePrivy()
 
   /**
    * Dropzone hooks
@@ -45,11 +47,19 @@ export function UploadDialog() {
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       {/* TODO: Determine if this is the best way to uncenter this `Button` instance */}
-      <div>
-        <DialogTrigger asChild>
-          <Button variant="link">Add item</Button>
-        </DialogTrigger>
-      </div>
+      {!authenticated ? (
+        <div>
+          <Button variant="link" onClick={login}>
+            Add item
+          </Button>
+        </div>
+      ) : (
+        <div>
+          <DialogTrigger asChild>
+            <Button variant="link">Add item</Button>
+          </DialogTrigger>
+        </div>
+      )}
       <DialogPortal>
         <DialogContent className="sm:max-w-[425px] aspect-square focus:outline-none">
           <Stack className="items-center gap-4">

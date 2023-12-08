@@ -5,9 +5,9 @@ import { User, UsernameDialog, ChannelDialog } from '@/client'
 import { RiverLogo } from '@/server'
 
 export function Header() {
-  const { ready, authenticated } = usePrivy()
-
   const [open, setOpen] = useState<boolean>(false)
+
+  const { ready, authenticated } = usePrivy()
 
   const { login } = useLogin({
     onComplete: (user, isNewUser) => {
@@ -31,7 +31,7 @@ export function Header() {
       <Flex className="items-center justify-between">
         <RiverLogo />
         <Flex className="gap-4">
-          <ChannelDialog />
+          <ChannelDialog authenticated={authenticated} login={login} />
           {authenticated ? (
             <User />
           ) : (
