@@ -3,13 +3,15 @@ import { Web3Storage } from 'web3.storage'
 interface ChannelUri {
   name: string
   description: string
-  coverImageUri: string
+  image: string,
+  animationUri: string
 }
 
 interface PublicationUri {
   name: string
   description: string
   image: string
+  animationUri: string
 }
 
 const client = new Web3Storage({

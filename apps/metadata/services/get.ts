@@ -1,11 +1,9 @@
 import { Router, Request, Response } from "express";
 import { redisClient } from "../redisClient";
-import { CidData } from "../types";
 
 export const getRouter = Router();
 
 // NOTE: expects cids to be prepended with leading `ipfs://`
-
 getRouter.post("/", async (req: Request, res: Response) => {
   const cids = req.body.cids;
 
@@ -18,10 +16,10 @@ getRouter.post("/", async (req: Request, res: Response) => {
   try {
     // Fetch all values at once using MGET
     const dataValues = await redisClient.mget(...cids);
-    
+
     const results: Record<string, any> = {};
     cids.forEach((cid, index) => {
-      results[cid] = dataValues[index]
+      results[cid] = dataValues[index];
     });
 
     res.status(200).json({

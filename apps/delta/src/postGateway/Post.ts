@@ -1,6 +1,5 @@
 import { ponder } from "@/generated";
 import { postGatewayChain } from "../constants";
-import { sendMetadataRequest } from "../utils";
 import {
   decodePost,
   decodeMessage,
@@ -159,9 +158,6 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
           // decode msgBody into pub uri
           const decodedPubUri = decodeUri({ msgBody: messageQueue[i].msgBody });
           if (decodedPubUri) {
-            // trigger metadata processing immediately
-            sendMetadataRequest(decodedPubUri.uri)
-            // 
             await PublicationCounter.upsert({
               // chain // messageGateway address
               // update postGatewayChain -> event.transaction.chainId after bumping to next version ponder
@@ -202,9 +198,6 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
             msgBody: messageQueue[i].msgBody,
           });
           if (decodeChannelUriAndAccess) {
-            // trigger metadata processing immediately
-            sendMetadataRequest(decodeChannelUriAndAccess.uri)
-            //             
             await ChannelCounter.upsert({
               // chain // messageGateway address
               // update postGatewayChain -> event.transaction.chainId after bumping to next version ponder

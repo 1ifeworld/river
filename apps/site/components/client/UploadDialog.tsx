@@ -20,6 +20,11 @@ import { toast } from 'sonner'
 import { useParams } from 'next/navigation'
 import { useUserContext } from '@/context'
 import { usePrivy } from '@privy-io/react-auth'
+import { DataObject, sendToDb } from '@/lib'
+
+function isImage({mimeType}: {mimeType: string}) {
+  return ['image/jpeg', 'image/png'].includes(mimeType)
+}
 
 export function UploadDialog() {
   const [dialogOpen, setDialogOpen] = React.useState(false)
@@ -82,13 +87,54 @@ export function UploadDialog() {
                   // Prevent non-authenticated users from proceeding
                   if (!targetUserId) return
                   // Create an IPFS pointer for the uploaded item
-                  const pubUri = await uploadBlob({
-                    dataToUpload: {
-                      name: filesToUpload[0]?.name || 'unnamed',
-                      description: 'What did you think this was going to be?',
-                      image: await uploadFile({ filesToUpload }),
-                    },
-                  })
+                  const uploadedFileCid = await uploadFile({ filesToUpload })
+                  const uploadedFileName = filesToUpload[0]?.name || 'unnamed'
+                  const uploadedFileType = filesToUpload[0].type
+                  const hardcodedDescription = 'What did you think this was going to be?'
+
+                  // if image set image field, and leave animation blank
+                  // if not image, do opposite
+                  let pubUri;
+                  if (isImage({mimeType: uploadedFileType})) {
+                    pubUri = await uploadBlob({
+                      dataToUpload: {
+                        name: uploadedFileName,
+                        description: hardcodedDescription,
+                        image: uploadedFileCid,
+                        animationUri: ""
+                      },
+                    })
+                    await sendToDb({
+                      key: pubUri,
+                      value: {
+                        name: uploadedFileName,
+                        description: hardcodedDescription,
+                        image: uploadedFileCid,
+                        animationUri: "",
+                        contentType: uploadedFileType,
+                      },
+                    } as DataObject)
+                  } else {
+                    pubUri = await uploadBlob({
+                      dataToUpload: {
+                        name: uploadedFileName,
+                        description: hardcodedDescription,
+                        image: "",
+                        animationUri: uploadedFileCid
+                      },
+                    })
+                    await sendToDb({
+                      key: pubUri,
+                      value: {
+                        name: uploadedFileName,
+                        description: hardcodedDescription,
+                        image: "",
+                        animationUri: uploadedFileCid,
+                        contentType: uploadedFileType,
+                      },
+                    } as DataObject)                    
+                  }  
+
                   // Generate create channel post for user and post transaction
                   if (signMessage) {
                     await processCreatePubAndAddItemPost({
