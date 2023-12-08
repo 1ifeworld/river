@@ -2,6 +2,8 @@ export interface IpfsData {
     name: string
     description: string
     image: string
+    animation_url: string
+    content_type: string
   }
   
   export async function fetchIpfsData(

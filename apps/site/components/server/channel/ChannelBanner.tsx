@@ -7,7 +7,7 @@ import { Username } from '@/server'
 
 export async function ChannelBanner({ channel, metadata }: { channel: Channel, metadata: any }) {
 
-  const channelMetadata = metadata.data[channel.uri as string]
+  const channelMetadata = metadata?.data[channel.uri as string]
 
   if (!channelMetadata) {
     return (

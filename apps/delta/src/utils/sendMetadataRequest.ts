@@ -20,3 +20,4 @@ export function sendMetadataRequest(cid: string) {
     });
   // Note: No 'await' used here. The request is sent, and the function completes immediately.
 }
+

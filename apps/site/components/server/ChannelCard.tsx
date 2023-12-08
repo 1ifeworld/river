@@ -12,7 +12,7 @@ export async function ChannelCard({
   metadata: any;
 }) {
   const username = await getUsername({ id: channel.creatorId });
-  const channelMetadata = metadata.data[channel.uri as string]
+  const channelMetadata = metadata?.data[channel.uri as string]
 
   return (
     <Link href={`/channel/${channel.id}`}>

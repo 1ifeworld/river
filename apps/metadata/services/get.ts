@@ -15,7 +15,7 @@ getRouter.post("/", async (req: Request, res: Response) => {
     return;
   }
 
-  try {
+  try { 
     // Fetch all values at once using MGET
     const dataValues = await redisClient.mget(...cids);
     
