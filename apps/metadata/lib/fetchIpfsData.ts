@@ -9,7 +9,6 @@ export interface IpfsData {
   ): Promise<IpfsData | undefined> {
     const cid = ipfsLink.replace('ipfs://', '')
   
-    // const httpLink = `https://aqua-wrong-bat-309.mypinata.cloud/ipfs/${cid}?pinataGatewayToken=${process.env.GATEWAY_KEY}`
     const httpLink = `https://${process.env.PINATA_GATEWAY}/ipfs/${cid}?pinataGatewayToken=${process.env.PINATA_GATEWAY_KEY}`
   
     try {

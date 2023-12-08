@@ -2,11 +2,13 @@ import Image from 'next/image'
 import { Stack, Typography, Card, Flex } from '@/design-system'
 import { Channel } from '@/gql'
 import { UploadDialog } from '@/client'
-import { ipfsToHttps } from '@/lib'
+import { ipfsUrlToCid, pinataUrlFromCid } from '@/lib'
 import { Username } from '@/server'
 
-export async function ChannelBanner({ channel, metadata }: { channel: Channel, metadata: any }) {
-
+export async function ChannelBanner({
+  channel,
+  metadata,
+}: { channel: Channel; metadata: any }) {
   const channelMetadata = metadata.data[channel.uri as string]
 
   if (!channelMetadata) {
@@ -15,13 +17,15 @@ export async function ChannelBanner({ channel, metadata }: { channel: Channel, m
     )
   }
 
+  const cid = ipfsUrlToCid({ ipfsUrl: channelMetadata.image })
+
   return (
     <Flex className="items-end h-full gap-6">
       {/* Column 1 */}
       <Card className="relative w-[218px] h-[218px] outline-none border-none">
         <Image
           className="object-cover aspect-square"
-          src={ipfsToHttps(channelMetadata.image)}
+          src={pinataUrlFromCid({ cid })}
           alt={channelMetadata.name}
           fill
         />
