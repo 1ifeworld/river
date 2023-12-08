@@ -5,9 +5,10 @@ import { CidData } from "../types";
 export const getRouter = Router();
 
 // NOTE: expects cids to be prepended with leading `ipfs://`
-
 getRouter.post("/", async (req: Request, res: Response) => {
+
   const cids = req.body.cids;
+  console.log("get cids: ", cids)
 
   // Check if 'cids' is an array and it's not empty
   if (!Array.isArray(cids) || cids.length === 0) {
