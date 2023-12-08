@@ -2,8 +2,6 @@ import { Grid } from '@/design-system'
 import { getAllChannels, type Channel } from '@/gql'
 import { ChannelCard } from '@/server'
 
-export const dynamic = 'force-dynamic'
-
 export default async function Home() {
   const { channels } = await getAllChannels()
   const { metadata } = await getChannelMetadata(channels)
