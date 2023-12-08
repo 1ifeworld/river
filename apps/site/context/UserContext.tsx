@@ -109,11 +109,11 @@ export function UserContextComponent({ children }: { children: ReactNode }) {
 
       setUserId(userId)
 
-      const username = await getUsername({
+      const fetchedUsername = await getUsername({
         id: BigInt(userId),
       })
 
-      setUsername(username)
+      setUsername(fetchedUsername)
     }
 
     fetchUserData()
