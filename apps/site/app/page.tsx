@@ -22,6 +22,8 @@ async function getChannelMetadata(channels: any) {
   const uris = channels.map((channel: { uri: any }) => channel.uri)
   // setup endpoint
   const getMetadataEndpoint = `${process.env.NEXT_PUBLIC_METADATA_SERVER_URL}/get`
+
+  console.log("whats the endoint: ", process.env.NEXT_PUBLIC_METADATA_SERVER_URL)
   // Prepare the request body
   const body = JSON.stringify({ cids: uris })
 

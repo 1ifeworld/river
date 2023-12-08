@@ -26,6 +26,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { toast } from 'sonner'
+import { DataObject, sendToDb } from '@/lib'
 
 const ChannelNameSchema = z.object({
   channelName: z.string().min(2, {
@@ -90,8 +91,20 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                       image:
                         // harcoded cover image uri
                         'ipfs://bafkreiamfxbkndyuwkw4kutjcfcitozbtzrvqneryab2njltiopsfjwt6a',
+                      animationUri: ""
                     },
                   })
+                  await sendToDb({
+                    key: channelUri,
+                    value: {
+                      name: form.getValues().channelName,
+                      description: 'This time its happening',
+                      image: 'ipfs://bafkreiamfxbkndyuwkw4kutjcfcitozbtzrvqneryab2njltiopsfjwt6a',
+                      animationUri: '',
+                      contentType: 'image/jpeg',
+                    },
+                  } as DataObject)      
+
                   // Generate create channel post for user and post transaction
                   if (signMessage) {
                     await processCreateChannelPost({

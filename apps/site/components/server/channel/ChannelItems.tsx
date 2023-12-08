@@ -11,6 +11,11 @@ import { Channel, Item } from '@/gql'
 import { unixTimeConverter } from '@/utils'
 import { ThumbnailNameCreator } from '@/server'
 
+function extractContentType({item, metadata}: {item: any, metadata: any}) {
+  const itemMetadata = metadata.data[item.target?.publication?.uri as string]
+  return itemMetadata.contentType
+}
+
 export async function ChannelItems({
   channel,
   metadata,
@@ -51,7 +56,7 @@ export async function ChannelItems({
               <ThumbnailNameCreator item={item} metadata={metadata} />
             </TableCell>
             <TableCell className="text-right text-primary-foreground">
-              <Typography>{'** type **'}</Typography>
+              <Typography>{`${extractContentType({item: item, metadata: metadata})}`}</Typography>
             </TableCell>
             <TableCell className="text-right text-primary-foreground">
               <Typography>{unixTimeConverter(item.timestamp)}</Typography>

@@ -1,5 +1,4 @@
 import { createClient } from "@vercel/kv";
-import type { VercelRequest, VercelResponse } from "@vercel/node";
 
 import dotenv from "dotenv";
 
