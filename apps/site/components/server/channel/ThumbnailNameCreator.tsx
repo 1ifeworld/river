@@ -1,13 +1,21 @@
 import Image from 'next/image'
-import { Item } from '@/gql'
+import { type Item, type Channel } from '@/gql'
 import { Stack, Typography } from '@/design-system'
 import { Username } from '../Username'
 import { ipfsUrlToCid, pinataUrlFromCid } from '@/lib'
+import Link from 'next/link'
+
+interface ThumbnailNameCreatorProps {
+  channel: Channel
+  item: Item
+  metadata: any
+}
 
 export async function ThumbnailNameCreator({
+  channel,
   item,
   metadata,
-}: { item: Item; metadata: any }) {
+}: ThumbnailNameCreatorProps) {
   const itemMetadata = metadata.data[item.target?.publication?.uri as string]
 
   if (!itemMetadata) {
@@ -39,9 +47,11 @@ export async function ThumbnailNameCreator({
         height={40}
       />
       <Stack className="">
-        <Typography className="text-primary-foreground">
-          {itemMetadata.name}
-        </Typography>
+        <Link href={`/channel/${channel.id}/${item.id}`}>
+          <Typography className="text-primary-foreground">
+            {itemMetadata.name}
+          </Typography>
+        </Link>
         <Username id={item.creatorId} />
       </Stack>
     </>

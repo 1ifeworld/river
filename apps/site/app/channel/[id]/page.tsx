@@ -1,4 +1,4 @@
-import { getChannelWithId } from '@/gql'
+import { getChannelWithId, type Item } from '@/gql'
 import { Stack } from '@/design-system'
 import { ChannelBanner, ChannelItems } from '@/server'
 
@@ -27,7 +27,7 @@ export default async function Channel({
   )
 }
 
-async function getItemsMetadata(items: any) {
+export async function getItemsMetadata(items: any) {
   // Extract URIs from the channels array
   const uris = items
     .map((item: { target: any }) => item.target?.publication?.uri)
@@ -60,7 +60,7 @@ async function getItemsMetadata(items: any) {
   }
 }
 
-async function getChannelMetadata(channel: any) {
+export async function getChannelMetadata(channel: any) {
   // Extract URIs from the channels array
   const uri = [channel.uri]
   // setup endpoint

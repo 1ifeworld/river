@@ -91,7 +91,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                       image:
                         // harcoded cover image uri
                         'ipfs://bafkreiamfxbkndyuwkw4kutjcfcitozbtzrvqneryab2njltiopsfjwt6a',
-                      animationUri: ""
+                      animationUri: '',
                     },
                   })
                   await sendToDb({
@@ -99,11 +99,12 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                     value: {
                       name: form.getValues().channelName,
                       description: 'This time its happening',
-                      image: 'ipfs://bafkreiamfxbkndyuwkw4kutjcfcitozbtzrvqneryab2njltiopsfjwt6a',
+                      image:
+                        'ipfs://bafkreiamfxbkndyuwkw4kutjcfcitozbtzrvqneryab2njltiopsfjwt6a',
                       animationUri: '',
                       contentType: 'image/jpeg',
                     },
-                  } as DataObject)      
+                  } as DataObject)
 
                   // Generate create channel post for user and post transaction
                   if (signMessage) {
