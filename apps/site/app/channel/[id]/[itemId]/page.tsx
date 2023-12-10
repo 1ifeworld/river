@@ -1,4 +1,4 @@
-import { Stack, Debug } from 'design-system/elements'
+import { Stack } from 'design-system/elements'
 import { getChannelWithId, type Item } from '@/gql'
 import { ipfsUrlToCid, pinataUrlFromCid } from '@/lib'
 import Image from 'next/image'
@@ -35,7 +35,7 @@ export default async function View({
   )
 }
 
-export async function getItemMetadata(item: Item) {
+async function getItemMetadata(item: Item) {
   // Extract URI from the item
   const uri = item.target?.publication?.uri
   if (!uri) {
