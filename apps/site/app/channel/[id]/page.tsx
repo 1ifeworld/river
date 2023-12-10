@@ -27,7 +27,7 @@ export default async function Channel({
   )
 }
 
-export async function getItemsMetadata(items: any) {
+async function getItemsMetadata(items: any) {
   // Extract URIs from the channels array
   const uris = items
     .map((item: { target: any }) => item.target?.publication?.uri)
@@ -60,7 +60,7 @@ export async function getItemsMetadata(items: any) {
   }
 }
 
-export async function getChannelMetadata(channel: any) {
+async function getChannelMetadata(channel: any) {
   // Extract URIs from the channels array
   const uri = [channel.uri]
   // setup endpoint
