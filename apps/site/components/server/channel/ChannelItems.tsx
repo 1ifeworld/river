@@ -48,7 +48,7 @@ export async function ChannelItems({
       </TableHeader>
       <TableBody>
         {channel.items.map((item: Item, index: number) => (
-          <TableRow key={item.timestamp}>
+          <TableRow key={index}>
             <TableCell className="text-right text-primary-foreground">
               <Typography>{index + 1}</Typography>
             </TableCell>
