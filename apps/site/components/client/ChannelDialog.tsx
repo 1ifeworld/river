@@ -19,7 +19,6 @@ import {
   Input,
   FormMessage,
   Toast,
-  Debug,
 } from '@/design-system'
 import { uploadBlob, processCreateChannelPost } from '@/lib'
 import { useUserContext } from '@/context'
@@ -52,8 +51,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
   })
 
   return (
-    // dialogOpen
-    <Dialog open={true} onOpenChange={setDialogOpen}>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       {!authenticated ? (
         <Button variant="link" onClick={login}>
           New channel
@@ -76,12 +74,10 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                 <Typography>close</Typography>
               </Button>
             </DialogClose>
-
             {/* Channel form */}
             <Form {...form}>
               <form
                 id="newChannel"
-                // className="flex flex-col justify-center w-5/6 py-4"
                 className="flex flex-col justify-center w-full gap-6"
                 action={async () => {
                   // Prevent non-authenticated users from proceeding
@@ -134,18 +130,15 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                   control={form.control}
                   name="channelName"
                   render={({ field }) => (
-                    // <Debug>
                     <FormItem className="mx-5">
                       <FormControl>
                         <Input placeholder="Enter channel name..." {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
-                    // </Debug>
                   )}
                 />
                 <Separator />
-
                 <DialogFooter className="flex flex-col py-2">
                   <Button
                     form="newChannel"
@@ -158,17 +151,6 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                 </DialogFooter>
               </form>
             </Form>
-            {/* <Separator />
-            <DialogFooter className="flex justify-center py-2">
-              <Button
-                form="newChannel"
-                type="submit"
-                variant="link"
-                disabled={!targetUserId}
-              >
-                <Typography>Create</Typography>
-              </Button>
-            </DialogFooter> */}
           </Stack>
         </DialogContent>
       </DialogPortal>

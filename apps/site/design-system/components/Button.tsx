@@ -3,7 +3,7 @@
 import { Slot } from '@radix-ui/react-slot'
 import { type VariantProps, cva } from 'class-variance-authority'
 import * as React from 'react'
-import
+import { Loading } from './Loading'
 
 // @ts-expect-error
 import { useFormStatus } from 'react-dom'
@@ -54,18 +54,22 @@ export interface ButtonProps
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
-
-    const { pending, data, method, action } = useFormStatus();
-
-    console.log('Pending:', pending)
+    const { pending } = useFormStatus()
 
     const Comp = asChild ? Slot : 'button'
+
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
+        className={cn(
+          buttonVariants({ variant, size, className }),
+          pending ? 'pointer-events-none' : '',
+        )}
         ref={ref}
+        disabled={pending}
         {...props}
-      />
+      >
+        {pending ? <Loading /> : props.children}
+      </Comp>
     )
   },
 )
