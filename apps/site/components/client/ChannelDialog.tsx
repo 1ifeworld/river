@@ -74,12 +74,11 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                 <Typography>close</Typography>
               </Button>
             </DialogClose>
-            <Separator />
             {/* Channel form */}
             <Form {...form}>
               <form
                 id="newChannel"
-                className="flex flex-col justify-center w-5/6 py-4"
+                className="flex flex-col justify-center w-full gap-6"
                 action={async () => {
                   // Prevent non-authenticated users from proceeding
                   if (!targetUserId) return
@@ -126,11 +125,12 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                   ))
                 }}
               >
+                <Separator />
                 <FormField
                   control={form.control}
                   name="channelName"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="mx-5">
                       <FormControl>
                         <Input placeholder="Enter channel name..." {...field} />
                       </FormControl>
@@ -138,19 +138,19 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                     </FormItem>
                   )}
                 />
+                <Separator />
+                <DialogFooter className="flex flex-col py-2">
+                  <Button
+                    form="newChannel"
+                    type="submit"
+                    variant="link"
+                    disabled={!targetUserId}
+                  >
+                    <Typography>Create</Typography>
+                  </Button>
+                </DialogFooter>
               </form>
             </Form>
-            <Separator />
-            <DialogFooter className="flex justify-center py-2">
-              <Button
-                form="newChannel"
-                type="submit"
-                variant="link"
-                disabled={!targetUserId}
-              >
-                <Typography>Create</Typography>
-              </Button>
-            </DialogFooter>
           </Stack>
         </DialogContent>
       </DialogPortal>

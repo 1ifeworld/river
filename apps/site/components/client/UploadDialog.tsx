@@ -13,6 +13,7 @@ import {
   DialogFooter,
   DialogClose,
   Toast,
+  Debug,
 } from '@/design-system'
 import { uploadFile, uploadBlob, processCreatePubAndAddItemPost } from '@/lib'
 import { useDropzone } from 'react-dropzone'
@@ -34,15 +35,15 @@ export function UploadDialog() {
   /**
    * Dropzone hooks
    */
-  const [showFilesToUpload, setShowFilesToUpload] =
-    React.useState<boolean>(false)
+  const [showFileList, setShowFileList] = React.useState<boolean>(false)
   const [filesToUpload, setFilesToUpload] = React.useState<File[]>([])
   const onDrop = React.useCallback((filesToUpload: File[]) => {
-    setShowFilesToUpload(true)
+    setShowFileList(true)
     setFilesToUpload(filesToUpload)
   }, [])
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
+    disabled: showFileList,
   })
 
   const params = useParams()
@@ -78,92 +79,90 @@ export function UploadDialog() {
                 <Typography>close</Typography>
               </Button>
             </DialogClose>
-            <Separator />
             {/* Upload form */}
-            <Stack className="justify-center h-full">
-              <form
-                id="newUpload"
-                action={async () => {
-                  // Prevent non-authenticated users from proceeding
-                  if (!targetUserId) return
-                  // Create an IPFS pointer for the uploaded item
-                  const uploadedFileCid = await uploadFile({ filesToUpload })
-                  const uploadedFileName = filesToUpload[0]?.name || 'unnamed'
-                  const uploadedFileType = filesToUpload[0].type
-                  const hardcodedDescription =
-                    'What did you think this was going to be?'
-
-                  // if image set image field, and leave animation blank
-                  // if not image, do opposite
-                  let pubUri
-                  if (isImage({ mimeType: uploadedFileType })) {
-                    pubUri = await uploadBlob({
-                      dataToUpload: {
-                        name: uploadedFileName,
-                        description: hardcodedDescription,
-                        image: uploadedFileCid,
-                        animationUri: '',
-                      },
-                    })
-                    await sendToDb({
-                      key: pubUri,
-                      value: {
-                        name: uploadedFileName,
-                        description: hardcodedDescription,
-                        image: uploadedFileCid,
-                        animationUri: '',
-                        contentType: uploadedFileType,
-                      },
-                    } as DataObject)
-                  } else {
-                    pubUri = await uploadBlob({
-                      dataToUpload: {
-                        name: uploadedFileName,
-                        description: hardcodedDescription,
-                        image: '',
-                        animationUri: uploadedFileCid,
-                      },
-                    })
-                    await sendToDb({
-                      key: pubUri,
-                      value: {
-                        name: uploadedFileName,
-                        description: hardcodedDescription,
-                        image: '',
-                        animationUri: uploadedFileCid,
-                        contentType: uploadedFileType,
-                      },
-                    } as DataObject)
-                  }
-
-                  // Generate create channel post for user and post transaction
-                  if (signMessage) {
-                    await processCreatePubAndAddItemPost({
-                      pubUri: pubUri,
-                      targetChannelId: BigInt(params.id as string),
-                      targetUserId: targetUserId,
-                      privySignMessage: signMessage,
-                    })
-                  }
-                  setDialogOpen(false)
-                  // Render a toast with the name of the uploaded item(s)
-                  for (const [index, file] of filesToUpload.entries()) {
-                    toast.custom((t) => (
-                      <Toast key={index}>
-                        {'Successfully uploaded '}
-                        <span className="font-bold">{file.name}</span>
-                      </Toast>
-                    ))
-                  }
-                }}
-                {...getRootProps()}
-                className="focus:outline-none text-center"
-              >
-                {!showFilesToUpload ? (
+            <form
+              id="newUpload"
+              className="focus:outline-none text-center h-full w-full"
+              action={async () => {
+                // Prevent non-authenticated users from proceeding
+                if (!targetUserId) return
+                // Create an IPFS pointer for the uploaded item
+                const uploadedFileCid = await uploadFile({ filesToUpload })
+                const uploadedFileName = filesToUpload[0]?.name || 'unnamed'
+                const uploadedFileType = filesToUpload[0].type
+                const hardcodedDescription =
+                  'What did you think this was going to be?'
+                // if image set image field, and leave animation blank
+                // if not image, do opposite
+                let pubUri
+                if (isImage({ mimeType: uploadedFileType })) {
+                  pubUri = await uploadBlob({
+                    dataToUpload: {
+                      name: uploadedFileName,
+                      description: hardcodedDescription,
+                      image: uploadedFileCid,
+                      animationUri: '',
+                    },
+                  })
+                  await sendToDb({
+                    key: pubUri,
+                    value: {
+                      name: uploadedFileName,
+                      description: hardcodedDescription,
+                      image: uploadedFileCid,
+                      animationUri: '',
+                      contentType: uploadedFileType,
+                    },
+                  } as DataObject)
+                } else {
+                  pubUri = await uploadBlob({
+                    dataToUpload: {
+                      name: uploadedFileName,
+                      description: hardcodedDescription,
+                      image: '',
+                      animationUri: uploadedFileCid,
+                    },
+                  })
+                  await sendToDb({
+                    key: pubUri,
+                    value: {
+                      name: uploadedFileName,
+                      description: hardcodedDescription,
+                      image: '',
+                      animationUri: uploadedFileCid,
+                      contentType: uploadedFileType,
+                    },
+                  } as DataObject)
+                }
+                // Generate create channel post for user and post transaction
+                if (signMessage) {
+                  await processCreatePubAndAddItemPost({
+                    pubUri: pubUri,
+                    targetChannelId: BigInt(params.id as string),
+                    targetUserId: targetUserId,
+                    privySignMessage: signMessage,
+                  })
+                }
+                setDialogOpen(false)
+                // Render a toast with the name of the uploaded item(s)
+                for (const [index, file] of filesToUpload.entries()) {
+                  toast.custom((t) => (
+                    <Toast key={index}>
+                      {'Successfully uploaded '}
+                      <span className="font-bold">{file.name}</span>
+                    </Toast>
+                  ))
+                }
+              }}
+              {...getRootProps()}
+            >
+              <Stack className="gap-[132px]">
+                <Separator />
+                {!showFileList ? (
                   <>
                     <input {...getInputProps()} />
                     {isDragActive ? (
-                      <Typography className="text-secondary-foreground">
+                      <Typography className="text-secondary-foreground min-h-[35px]'">
                         Drop your files here
                       </Typography>
                     ) : (
@@ -174,27 +173,21 @@ export function UploadDialog() {
                     )}
                   </>
                 ) : (
-                  <div className="h-full">
-                    <FileList filesToUpload={filesToUpload} />
-                  </div>
+                  <FileList filesToUpload={filesToUpload} />
                 )}
-              </form>
-            </Stack>
-            {showFilesToUpload && (
-              <>
                 <Separator />
-                <DialogFooter>
-                  <Button
-                    form="newUpload"
-                    type="submit"
-                    variant="link"
-                    disabled={!targetUserId}
-                  >
-                    <Typography>Confirm</Typography>
-                  </Button>
-                </DialogFooter>
-              </>
-            )}
+              </Stack>
+              <DialogFooter className="pt-4">
+                <Button
+                  form="newUpload"
+                  type="submit"
+                  variant="link"
+                  disabled={!targetUserId || !showFileList}
+                >
+                  <Typography>Confirm</Typography>
+                </Button>
+              </DialogFooter>
+            </form>
           </Stack>
         </DialogContent>
       </DialogPortal>
@@ -204,7 +197,7 @@ export function UploadDialog() {
 
 const FileList = ({ filesToUpload }: { filesToUpload: File[] }) => {
   return (
-    <ul>
+    <ul className="min-h-[35px]">
       {filesToUpload.map((file: File) => (
         <li key={file.size}>
           <Typography className="text-secondary-foreground">
