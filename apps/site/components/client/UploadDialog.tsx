@@ -22,7 +22,7 @@ import { useUserContext } from '@/context'
 import { usePrivy } from '@privy-io/react-auth'
 import { DataObject, sendToDb } from '@/lib'
 
-function isImage({mimeType}: {mimeType: string}) {
+function isImage({ mimeType }: { mimeType: string }) {
   return ['image/jpeg', 'image/png'].includes(mimeType)
 }
 
@@ -90,18 +90,19 @@ export function UploadDialog() {
                   const uploadedFileCid = await uploadFile({ filesToUpload })
                   const uploadedFileName = filesToUpload[0]?.name || 'unnamed'
                   const uploadedFileType = filesToUpload[0].type
-                  const hardcodedDescription = 'What did you think this was going to be?'
+                  const hardcodedDescription =
+                    'What did you think this was going to be?'
 
                   // if image set image field, and leave animation blank
                   // if not image, do opposite
-                  let pubUri;
-                  if (isImage({mimeType: uploadedFileType})) {
+                  let pubUri
+                  if (isImage({ mimeType: uploadedFileType })) {
                     pubUri = await uploadBlob({
                       dataToUpload: {
                         name: uploadedFileName,
                         description: hardcodedDescription,
                         image: uploadedFileCid,
-                        animationUri: ""
+                        animationUri: '',
                       },
                     })
                     await sendToDb({
@@ -110,7 +111,7 @@ export function UploadDialog() {
                         name: uploadedFileName,
                         description: hardcodedDescription,
                         image: uploadedFileCid,
-                        animationUri: "",
+                        animationUri: '',
                         contentType: uploadedFileType,
                       },
                     } as DataObject)
@@ -119,8 +120,8 @@ export function UploadDialog() {
                       dataToUpload: {
                         name: uploadedFileName,
                         description: hardcodedDescription,
-                        image: "",
-                        animationUri: uploadedFileCid
+                        image: '',
+                        animationUri: uploadedFileCid,
                       },
                     })
                     await sendToDb({
@@ -128,12 +129,12 @@ export function UploadDialog() {
                       value: {
                         name: uploadedFileName,
                         description: hardcodedDescription,
-                        image: "",
+                        image: '',
                         animationUri: uploadedFileCid,
                         contentType: uploadedFileType,
                       },
-                    } as DataObject)                    
-                  }  
+                    } as DataObject)
+                  }
 
                   // Generate create channel post for user and post transaction
                   if (signMessage) {

@@ -3,7 +3,7 @@ import { Web3Storage } from 'web3.storage'
 interface ChannelUri {
   name: string
   description: string
-  image: string,
+  image: string
   animationUri: string
 }
 
