@@ -2,6 +2,8 @@ import { Stack } from 'design-system/elements'
 import { getChannelWithId, type Item } from '@/gql'
 import { ipfsUrlToCid, pinataUrlFromCid } from '@/lib'
 import Image from 'next/image'
+import { isVideo } from '@/lib'
+import { VideoPlayer } from '@/client'
 
 export default async function View({
   params,
@@ -15,25 +17,36 @@ export default async function View({
   const item = channel?.items.find((item) => item.id === params.itemId)
 
   const { metadata } = await getItemMetadata(item as Item)
-
+  
   const itemMetadata = metadata.data[item?.target?.publication?.uri as string]
-
   const cid = ipfsUrlToCid({ ipfsUrl: itemMetadata.image })
+  const contentUrl = pinataUrlFromCid({ cid })
 
-  return (
-    <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center overflow-hidden relative">
-      <Image
-        className="object-contain"
-        src={pinataUrlFromCid({ cid })}
-        alt={metadata.name}
-        fill
-        quality={100}
-        priority={true}
-        // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-      />
-    </Stack>
-  )
-}
+  const contentType = itemMetadata.contentType
+
+  if (isVideo(contentType)) {
+    return (    
+      <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center ">
+        <Stack className='w-[75%] sm:w-[50%]'>
+        <VideoPlayer  playbackId={itemMetadata.muxPlaybackId} />
+        </Stack>
+      </Stack>
+    );    
+  } else  {
+    return (
+      <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center overflow-hidden relative">
+        <Image
+          className="object-contain"
+          src={contentUrl}
+          alt={metadata.name}
+          fill
+          quality={100}
+          priority={true}
+        />
+      </Stack>
+    )
+  } 
+}  
 
 async function getItemMetadata(item: Item) {
   // Extract URI from the item

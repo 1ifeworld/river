@@ -22,6 +22,8 @@ import { useParams } from 'next/navigation'
 import { useUserContext } from '@/context'
 import { usePrivy } from '@privy-io/react-auth'
 import { DataObject, sendToDb } from '@/lib'
+import Mux from '@mux/mux-node';
+import { ipfsUrlToCid, pinataUrlFromCid } from '@/lib'
 
 function isImage({ mimeType }: { mimeType: string }) {
   return ['image/jpeg', 'image/png'].includes(mimeType)
@@ -87,7 +89,7 @@ export function UploadDialog() {
                 // Prevent non-authenticated users from proceeding
                 if (!targetUserId) return
                 // Create an IPFS pointer for the uploaded item
-                const uploadedFileCid = await uploadFile({ filesToUpload })
+                
                 const uploadedFileName = filesToUpload[0]?.name || 'unnamed'
                 const uploadedFileType = filesToUpload[0].type
                 const hardcodedDescription =
@@ -95,7 +97,9 @@ export function UploadDialog() {
                 // if image set image field, and leave animation blank
                 // if not image, do opposite
                 let pubUri
+                console.log("what file type is it: ", uploadedFileType)
                 if (isImage({ mimeType: uploadedFileType })) {
+                  const uploadedFileCid = await uploadFile({ filesToUpload })
                   pubUri = await uploadBlob({
                     dataToUpload: {
                       name: uploadedFileName,
@@ -115,6 +119,26 @@ export function UploadDialog() {
                     },
                   } as DataObject)
                 } else {
+                  console.log("are we entering the else statement")
+                  // initialize mux api 
+                  const { Video } = new Mux(
+                    process.env.NEXT_PUBLIC_MUX_TOKEN_ID as string, 
+                    process.env.NEXT_PUBLIC_MUX_TOKEN_SECRET as string
+                  );
+
+                  console.log("video upload api initialkzed: ", Video)
+                  //
+                  const uploadedFileCid = await uploadFile({ filesToUpload })
+                  // upload asset
+                  const assetEndpointForMux = pinataUrlFromCid({ cid: ipfsUrlToCid({ ipfsUrl: uploadedFileCid })})
+                  console.log("pinata endpoint for mux: ", assetEndpointForMux)
+                  const asset = await Video.Assets.create({
+                    input: assetEndpointForMux,
+                    playback_policy: "public",
+                    encoding_tier: "baseline"
+                  });       
+                  console.log("uploaded mux asset info", asset)
+
                   pubUri = await uploadBlob({
                     dataToUpload: {
                       name: uploadedFileName,
@@ -122,7 +146,10 @@ export function UploadDialog() {
                       image: '',
                       animationUri: uploadedFileCid,
                     },
-                  })
+                  })          
+                  
+                  console.log("are we generating pub uri?")
+
                   await sendToDb({
                     key: pubUri,
                     value: {
@@ -131,8 +158,13 @@ export function UploadDialog() {
                       image: '',
                       animationUri: uploadedFileCid,
                       contentType: uploadedFileType,
+                      muxAssetId: asset.source_asset_id,
+                      muxPlaybackId: asset.playback_ids?.[0]?.id ?? ""
                     },
                   } as DataObject)
+
+                           
+
                 }
                 // Generate create channel post for user and post transaction
                 if (signMessage) {
