@@ -1,8 +1,7 @@
 import { Stack } from 'design-system/elements'
 import { getChannelWithId, type Item } from '@/gql'
-import { ipfsUrlToCid, pinataUrlFromCid } from '@/lib'
+import { ipfsUrlToCid, pinataUrlFromCid, isVideo } from '@/lib'
 import Image from 'next/image'
-import { isVideo } from '@/lib'
 import { VideoPlayer } from '@/client'
 
 export default async function View({
@@ -24,7 +23,7 @@ export default async function View({
 
   const contentType = itemMetadata.contentType
 
-  if (isVideo(contentType)) {
+  if (isVideo({mimeType: contentType})) {
     return (    
       <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center ">
         <Stack className='w-[75%] sm:w-[50%]'>
