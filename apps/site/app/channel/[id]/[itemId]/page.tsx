@@ -1,6 +1,7 @@
 import { Stack } from 'design-system/elements'
 import { getChannelWithId, type Item } from '@/gql'
 import { ipfsUrlToCid, pinataUrlFromCid } from '@/lib'
+import { isVideo } from '@/lib'
 import Image from 'next/image'
 
 export default async function View({
@@ -16,23 +17,31 @@ export default async function View({
 
   const { metadata } = await getItemMetadata(item as Item)
 
+
   const itemMetadata = metadata.data[item?.target?.publication?.uri as string]
 
   const cid = ipfsUrlToCid({ ipfsUrl: itemMetadata.image })
 
-  return (
-    <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center overflow-hidden relative">
-      <Image
-        className="object-contain"
-        src={pinataUrlFromCid({ cid })}
-        alt={metadata.name}
-        fill
-        quality={100}
-        priority={true}
-        // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-      />
-    </Stack>
-  )
+  const contentType = itemMetadata.contentType
+  const contentUrl = pinataUrlFromCid({ cid })
+
+
+  if (isVideo(contentType)) {
+    // return <VideoPlayer src={contentUrl} />
+  } else  {
+    return (
+      <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center overflow-hidden relative">
+        <Image
+          className="object-contain"
+          src={contentUrl}
+          alt={metadata.name}
+          fill
+          quality={100}
+          priority={true}
+        />
+      </Stack>
+    )
+  } 
 }
 
 async function getItemMetadata(item: Item) {
@@ -55,11 +64,14 @@ async function getItemMetadata(item: Item) {
       body: body,
     })
 
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
 
     const metadata = await response.json()
+    console.log("meta,", metadata)
+
     return {
       metadata: metadata,
     }
@@ -68,3 +80,4 @@ async function getItemMetadata(item: Item) {
     return { metadata: null, error }
   }
 }
+
