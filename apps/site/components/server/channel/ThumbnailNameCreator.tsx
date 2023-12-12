@@ -39,13 +39,15 @@ export async function ThumbnailNameCreator({
 
   return (
     <>
-      <Image
-        className="object-cover aspect-square "
-        src={pinataUrlFromCid({ cid })}
-        alt={itemMetadata.name}
-        width={40}
-        height={40}
-      />
+      <Link href={`/channel/${channel.id}/${item.id}`}>
+        <Image
+          className="object-cover aspect-square "
+          src={pinataUrlFromCid({ cid })}
+          alt={itemMetadata.name}
+          width={40}
+          height={40}
+        />
+      </Link>
       <Stack className="">
         <Link href={`/channel/${channel.id}/${item.id}`}>
           <Button variant="link">
