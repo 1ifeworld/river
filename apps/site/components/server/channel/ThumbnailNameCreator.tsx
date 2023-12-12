@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { type Item, type Channel } from '@/gql'
-import { Stack, Typography } from '@/design-system'
+import { Stack, Typography, Button } from '@/design-system'
 import { Username } from '../Username'
 import { ipfsUrlToCid, pinataUrlFromCid } from '@/lib'
 import Link from 'next/link'
@@ -39,18 +39,22 @@ export async function ThumbnailNameCreator({
 
   return (
     <>
-      <Image
-        className="object-cover aspect-square "
-        src={pinataUrlFromCid({ cid })}
-        alt={itemMetadata.name}
-        width={40}
-        height={40}
-      />
+      <Link href={`/channel/${channel.id}/${item.id}`}>
+        <Image
+          className="object-cover aspect-square "
+          src={pinataUrlFromCid({ cid })}
+          alt={itemMetadata.name}
+          width={40}
+          height={40}
+        />
+      </Link>
       <Stack className="">
         <Link href={`/channel/${channel.id}/${item.id}`}>
-          <Typography className="text-primary-foreground">
-            {itemMetadata.name}
-          </Typography>
+          <Button variant="link">
+            <Typography className="text-primary-foreground">
+              {itemMetadata.name}
+            </Typography>
+          </Button>
         </Link>
         <Username id={item.creatorId} />
       </Stack>
