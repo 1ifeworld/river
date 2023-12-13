@@ -1,7 +1,3 @@
-export const isVideo = (mimeType: string) => {
-  return ['video/mp4', 'video/webm', 'video/ogg'].includes(mimeType)
-}
-
 export interface DataObject {
   key: string
   value: {
