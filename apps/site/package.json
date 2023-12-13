@@ -18,7 +18,7 @@
     "@mux/mux-node": "^7.3.3",
     "@mux/mux-player-react": "^2.3.0",
     "@parcel/watcher": "^2.3.0",
-    "@privy-io/react-auth": "^1.45.0",
+    "@privy-io/react-auth": "^1.51.1",
     "@privy-io/wagmi-connector": "^0.1.5",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
