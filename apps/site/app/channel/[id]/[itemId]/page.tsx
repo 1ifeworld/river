@@ -45,10 +45,8 @@ export default async function View({
       </Stack>
     )
   } else if (contentType === 'model/gltf-binary') {
-    console.log('GLTF', glbContentUrl)
     return (
       <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center">
-        <h1>{glbContentUrl}</h1>
         <GLTFViewer src={glbContentUrl} />
       </Stack>
     )
