@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react'
 import {
   Button,
   Typography,
@@ -13,8 +13,7 @@ import {
   DialogFooter,
   DialogClose,
   Toast,
-  Debug,
-} from "@/design-system";
+} from '@/design-system'
 import {
   uploadFile,
   uploadBlob,
@@ -32,29 +31,30 @@ import { toast } from "sonner";
 import { useParams } from "next/navigation";
 import { usePrivy } from "@privy-io/react-auth";
 import { muxClient } from "@/config/muxClient";
+import { FileList } from '@/server';
 
 export function UploadDialog() {
-  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [dialogOpen, setDialogOpen] = React.useState(false)
 
-  const { authenticated, login } = usePrivy();
+  const { authenticated, login } = usePrivy()
 
   /**
    * Dropzone hooks
    */
-  const [showFileList, setShowFileList] = React.useState<boolean>(false);
-  const [filesToUpload, setFilesToUpload] = React.useState<File[]>([]);
+  const [showFileList, setShowFileList] = React.useState<boolean>(false)
+  const [filesToUpload, setFilesToUpload] = React.useState<File[]>([])
   const onDrop = React.useCallback((filesToUpload: File[]) => {
-    setShowFileList(true);
-    setFilesToUpload(filesToUpload);
-  }, []);
+    setShowFileList(true)
+    setFilesToUpload(filesToUpload)
+  }, [])
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     disabled: showFileList,
-  });
+  })
 
-  const params = useParams();
+  const params = useParams()
 
-  const { signMessage, userId: targetUserId } = useUserContext();
+  const { signMessage, userId: targetUserId } = useUserContext()
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -91,19 +91,21 @@ export function UploadDialog() {
               className="focus:outline-none text-center h-full w-full"
               action={async () => {
                 // Prevent non-authenticated users from proceeding
-                if (!targetUserId) return;
+                if (!targetUserId) return
                 // Set file name, type, and description values
-                const uploadedFileName = filesToUpload[0]?.name || "unnamed";
-                const uploadedFileType = filesToUpload[0].type;
+                const uploadedFileName = filesToUpload[0]?.name || 'unnamed'
+                const uploadedFileType = filesToUpload[0].type
                 const hardcodedDescription =
-                  "What did you think this was going to be?";
+                  'What did you think this was going to be?'
                 // Determine if file is image or video or other
-                const fileIsImage = isImage({mimeType: uploadedFileType})
-                const fileIsVideo = fileIsImage ? false : isVideo({mimeType: uploadedFileType})
+                const fileIsImage = isImage({ mimeType: uploadedFileType })
+                const fileIsVideo = fileIsImage
+                  ? false
+                  : isVideo({ mimeType: uploadedFileType })
                 // Upload file to ipfs
-                const uploadedFileCid = await uploadFile({ filesToUpload });
-                // set dynamic variable to be updated 
-                let pubUri;
+                const uploadedFileCid = await uploadFile({ filesToUpload })
+                // set dynamic variable to be updated
+                let pubUri
                 // process metadata json upload, redis update, and (if applicable) mux
                 if (fileIsImage) {
                   pubUri = await uploadBlob({
@@ -111,68 +113,68 @@ export function UploadDialog() {
                       name: uploadedFileName,
                       description: hardcodedDescription,
                       image: uploadedFileCid,
-                      animationUri: "",
+                      animationUri: '',
                     },
-                  });
+                  })
                   await sendToDb({
                     key: pubUri,
                     value: {
                       name: uploadedFileName,
                       description: hardcodedDescription,
                       image: uploadedFileCid,
-                      animationUri: "",
+                      animationUri: '',
                       contentType: uploadedFileType,
                     },
-                  } as DataObject);                  
+                  } as DataObject)
                 } else if (fileIsVideo) {
                   const assetEndpointForMux = pinataUrlFromCid({
                     cid: ipfsUrlToCid({ ipfsUrl: uploadedFileCid }),
                   });
                   const asset = await muxClient.Video.Assets.create({
                     input: assetEndpointForMux,
-                    playback_policy: "public",
-                    encoding_tier: "baseline",
-                  });
+                    playback_policy: 'public',
+                    encoding_tier: 'baseline',
+                  })
                   pubUri = await uploadBlob({
                     dataToUpload: {
                       name: uploadedFileName,
                       description: hardcodedDescription,
-                      image: "",
+                      image: '',
                       animationUri: uploadedFileCid,
                     },
-                  });
+                  })
                   await sendToDb({
                     key: pubUri,
                     value: {
                       name: uploadedFileName,
                       description: hardcodedDescription,
-                      image: "",
+                      image: '',
                       animationUri: uploadedFileCid,
                       contentType: uploadedFileType,
                       muxAssetId: asset.source_asset_id,
-                      muxPlaybackId: asset.playback_ids?.[0]?.id
+                      muxPlaybackId: asset.playback_ids?.[0]?.id,
                     },
-                  } as DataObject);
+                  } as DataObject)
                 } else {
                   // processOther
                   pubUri = await uploadBlob({
                     dataToUpload: {
                       name: uploadedFileName,
                       description: hardcodedDescription,
-                      image: "",
+                      image: '',
                       animationUri: uploadedFileCid,
                     },
-                  });
+                  })
                   await sendToDb({
                     key: pubUri,
                     value: {
                       name: uploadedFileName,
                       description: hardcodedDescription,
-                      image: "",
+                      image: '',
                       animationUri: uploadedFileCid,
                       contentType: uploadedFileType,
                     },
-                  } as DataObject);
+                  } as DataObject)
                 }
                 // Generate create channel post for user and post transaction
                 if (signMessage) {
@@ -181,17 +183,17 @@ export function UploadDialog() {
                     targetChannelId: BigInt(params.id as string),
                     targetUserId: targetUserId,
                     privySignMessage: signMessage,
-                  });
+                  })
                 }
-                setDialogOpen(false);
+                setDialogOpen(false)
                 // Render a toast with the name of the uploaded item(s)
                 for (const [index, file] of filesToUpload.entries()) {
                   toast.custom((t) => (
                     <Toast key={index}>
-                      {"Successfully uploaded "}
+                      {'Successfully uploaded '}
                       <span className="font-bold">{file.name}</span>
                     </Toast>
-                  ));
+                  ))
                 }
               }}
               {...getRootProps()}
@@ -207,7 +209,7 @@ export function UploadDialog() {
                       </Typography>
                     ) : (
                       <Typography className="hover:cursor-pointer text-secondary-foreground leading-1">
-                        Drag and drop your files here <br /> or click here to{" "}
+                        Drag and drop your files here <br /> or click here to{' '}
                         <span className="underline">browse</span>
                       </Typography>
                     )}
@@ -232,19 +234,5 @@ export function UploadDialog() {
         </DialogContent>
       </DialogPortal>
     </Dialog>
-  );
+  )
 }
-
-const FileList = ({ filesToUpload }: { filesToUpload: File[] }) => {
-  return (
-    <ul className="min-h-[35px]">
-      {filesToUpload.map((file: File) => (
-        <li key={file.size}>
-          <Typography className="text-secondary-foreground">
-            {file.name}
-          </Typography>
-        </li>
-      ))}
-    </ul>
-  );
-};

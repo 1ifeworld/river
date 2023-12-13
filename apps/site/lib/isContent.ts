@@ -5,5 +5,5 @@ export function isVideo({ mimeType }: { mimeType: string }) {
 }
 
 export function isImage({ mimeType }: { mimeType: string }) {
-  return ["image/jpeg", "image/png"].includes(mimeType);
+  return ['image/jpeg', 'image/png'].includes(mimeType)
 }

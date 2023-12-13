@@ -16,22 +16,22 @@ export default async function View({
   const item = channel?.items.find((item) => item.id === params.itemId)
 
   const { metadata } = await getItemMetadata(item as Item)
-  
+
   const itemMetadata = metadata.data[item?.target?.publication?.uri as string]
   const cid = ipfsUrlToCid({ ipfsUrl: itemMetadata.image })
   const contentUrl = pinataUrlFromCid({ cid })
 
   const contentType = itemMetadata.contentType
 
-  if (isVideo({mimeType: contentType})) {
-    return (    
+  if (isVideo({ mimeType: contentType })) {
+    return (
       <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center ">
-        <Stack className='w-[75%] sm:w-[50%]'>
-        <VideoPlayer  playbackId={itemMetadata.muxPlaybackId} />
+        <Stack className="w-[75%] sm:w-[50%]">
+          <VideoPlayer playbackId={itemMetadata.muxPlaybackId} />
         </Stack>
       </Stack>
-    );    
-  } else  {
+    )
+  } else {
     return (
       <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center overflow-hidden relative">
         <Image
@@ -44,8 +44,8 @@ export default async function View({
         />
       </Stack>
     )
-  } 
-}  
+  }
+}
 
 async function getItemMetadata(item: Item) {
   // Extract URI from the item
