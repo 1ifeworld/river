@@ -1,5 +1,5 @@
 export function isVideo({ mimeType }: { mimeType: string }) {
-  return ["video/mp4", "video/webm", "video/ogg", "video/avi"].includes(
+  return ["video/mp4", "video/webm", "video/ogg", "video/avi, video/quicktime"].includes(
     mimeType
   );
 }
