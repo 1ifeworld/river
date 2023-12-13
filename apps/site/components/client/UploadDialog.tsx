@@ -12,7 +12,7 @@ import {
   DialogHeader,
   DialogFooter,
   DialogClose,
-  Toast
+  Toast,
 } from '@/design-system'
 
 import {
@@ -25,16 +25,15 @@ import {
   sendToDb,
   isImage,
   isGLB,
-  isVideo
-} from "@/lib";
-import { useUserContext } from "@/context";
-import { useDropzone } from "react-dropzone";
-import { toast } from "sonner";
-import { useParams } from "next/navigation";
-import { usePrivy } from "@privy-io/react-auth";
-import { muxClient } from "@/config/muxClient";
-import { FileList } from '@/server';
-
+  isVideo,
+} from '@/lib'
+import { useUserContext } from '@/context'
+import { useDropzone } from 'react-dropzone'
+import { toast } from 'sonner'
+import { useParams } from 'next/navigation'
+import { usePrivy } from '@privy-io/react-auth'
+import { muxClient } from '@/config/muxClient'
+import { FileList } from '@/server'
 
 export function UploadDialog() {
   const [dialogOpen, setDialogOpen] = React.useState(false)
@@ -139,7 +138,7 @@ export function UploadDialog() {
                 } else if (fileIsVideo) {
                   const assetEndpointForMux = pinataUrlFromCid({
                     cid: ipfsUrlToCid({ ipfsUrl: uploadedFileCid }),
-                  });
+                  })
                   const asset = await muxClient.Video.Assets.create({
                     input: assetEndpointForMux,
                     playback_policy: 'public',

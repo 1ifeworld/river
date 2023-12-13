@@ -28,18 +28,18 @@
 
 // export default GLTFViewer;
 'use client'
-import React from "react";
-import { useGLTF, OrbitControls} from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
-import { GLTF as GLTFThree } from "three/examples/jsm/loaders/GLTFLoader";
+import React from 'react'
+import { useGLTF, OrbitControls } from '@react-three/drei'
+import { Canvas } from '@react-three/fiber'
+import { GLTF as GLTFThree } from 'three/examples/jsm/loaders/GLTFLoader'
 
 interface ModelProps {
   src: string
 }
 
 const Model: React.FC<ModelProps> = ({ src }) => {
-  const gltf = useGLTF(src, true) as GLTFThree 
-  gltf.scene.scale.set(1, 1, 1); // Adjust the scale as needed.
+  const gltf = useGLTF(src, true) as GLTFThree
+  gltf.scene.scale.set(1, 1, 1) // Adjust the scale as needed.
 
   return (
     <Canvas>
@@ -49,9 +49,8 @@ const Model: React.FC<ModelProps> = ({ src }) => {
 
       <primitive object={gltf.scene} dispose={null} />
       <OrbitControls />
-
     </Canvas>
-  );
-};
+  )
+}
 
 export default Model

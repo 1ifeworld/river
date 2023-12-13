@@ -6,12 +6,9 @@ import { VideoPlayer } from '@/client'
 import React, { useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 
-const Model = dynamic(
-  () => import('../../../../components/client/Model'),
-  {
-    ssr: false,
-  },
-) 
+const Model = dynamic(() => import('../../../../components/client/Model'), {
+  ssr: false,
+})
 
 export default async function View({
   params,
@@ -27,7 +24,7 @@ export default async function View({
   const { metadata } = await getItemMetadata(item as Item)
 
   const itemMetadata = metadata.data[item?.target?.publication?.uri as string]
-  let contentUrl;
+  let contentUrl
   if (itemMetadata.contentType === 'model/gltf-binary') {
     const cid = ipfsUrlToCid({ ipfsUrl: itemMetadata.animationUri })
     contentUrl = pinataUrlFromCid({ cid })
@@ -35,7 +32,6 @@ export default async function View({
     const cid = ipfsUrlToCid({ ipfsUrl: itemMetadata.image })
     contentUrl = pinataUrlFromCid({ cid })
   }
-
 
   const contentType = itemMetadata.contentType
 
@@ -50,9 +46,7 @@ export default async function View({
   } else if (contentType === 'model/gltf-binary') {
     return (
       <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center">
-
-    <Model src={contentUrl} />
-
+        <Model src={contentUrl} />
       </Stack>
     )
   } else {

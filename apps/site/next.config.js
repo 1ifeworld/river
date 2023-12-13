@@ -20,12 +20,12 @@ module.exports = {
       test: /\.(gltf)$/,
       use: [
         {
-          loader: "gltf-webpack-loader"
-        }
-      ]
+          loader: 'gltf-webpack-loader',
+        },
+      ],
     })
     return config
-  },  
+  },
   experimental: {
     webpackBuildWorker: true,
   },

@@ -1,8 +1,11 @@
 export function isVideo({ mimeType }: { mimeType: string }) {
-
-  return ["video/mp4", "video/webm", "video/ogg", "video/avi", "video/quicktime"].includes(
-    mimeType
-  );
+  return [
+    'video/mp4',
+    'video/webm',
+    'video/ogg',
+    'video/avi',
+    'video/quicktime',
+  ].includes(mimeType)
 }
 
 export function isImage({ mimeType }: { mimeType: string }) {
@@ -12,5 +15,4 @@ export function isImage({ mimeType }: { mimeType: string }) {
 export function isGLB(file: File) {
   const extension = file.name.split('.').pop()?.toLowerCase()
   return extension === 'glb' || extension === 'gltf'
-
 }

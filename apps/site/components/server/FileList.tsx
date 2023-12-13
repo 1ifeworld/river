@@ -14,5 +14,3 @@ export const FileList = ({ filesToUpload }: { filesToUpload: File[] }) => {
     </ul>
   )
 }
-
-
