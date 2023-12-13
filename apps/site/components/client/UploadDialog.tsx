@@ -31,6 +31,7 @@ import { toast } from "sonner";
 import { useParams } from "next/navigation";
 import { usePrivy } from "@privy-io/react-auth";
 import { muxClient } from "@/config/muxClient";
+import { FileList } from '@/server';
 
 export function UploadDialog() {
   const [dialogOpen, setDialogOpen] = React.useState(false)
