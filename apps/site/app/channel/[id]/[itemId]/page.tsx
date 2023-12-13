@@ -27,13 +27,16 @@ export default async function View({
   const { metadata } = await getItemMetadata(item as Item)
 
   const itemMetadata = metadata.data[item?.target?.publication?.uri as string]
-  // const cid = ipfsUrlToCid({ ipfsUrl: itemMetadata.image })
-  // const contentUrl = pinataUrlFromCid({ cid })
+  let contentUrl;
+  if (itemMetadata.contentType === 'model/gltf-binary') {
+    const cid = ipfsUrlToCid({ ipfsUrl: itemMetadata.animationUri })
+    contentUrl = pinataUrlFromCid({ cid })
+  } else {
+    const cid = ipfsUrlToCid({ ipfsUrl: itemMetadata.image })
+    contentUrl = pinataUrlFromCid({ cid })
+  }
 
-  const cid = ipfsUrlToCid({ ipfsUrl: itemMetadata.animationUri })
-  const glbContentUrl = pinataUrlFromCid({ cid })
 
-  console.log('CONTENT', glbContentUrl)
   const contentType = itemMetadata.contentType
 
   if (isVideo({ mimeType: contentType })) {
@@ -47,7 +50,7 @@ export default async function View({
   } else if (contentType === 'model/gltf-binary') {
     return (
       <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center">
-        <GLTFViewer src={glbContentUrl} />
+        <GLTFViewer src={contentUrl} />
       </Stack>
     )
   } else {
@@ -55,7 +58,7 @@ export default async function View({
       <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center overflow-hidden relative">
         <Image
           className="object-contain"
-          src={glbContentUrl}
+          src={contentUrl}
           alt={itemMetadata.name}
           fill
           quality={100}
