@@ -16,23 +16,28 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   Input,
   FormMessage,
   Toast,
+  Textarea,
 } from '@/design-system'
-import { uploadBlob, processCreateChannelPost } from '@/lib'
+import {
+  uploadBlob,
+  processCreateChannelPost,
+  type DataObject,
+  sendToDb,
+  newChannelSchema,
+  uploadFile,
+} from '@/lib'
 import { useUserContext } from '@/context'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import * as z from 'zod'
 import { toast } from 'sonner'
-import { DataObject, sendToDb } from '@/lib'
-
-const ChannelNameSchema = z.object({
-  channelName: z.string().min(2, {
-    message: 'Channel name must be at least 2 characters.',
-  }),
-})
+import {} from '@/lib'
+import Dropzone from 'react-dropzone'
+import { FileList } from '@/server'
+import * as z from 'zod'
 
 interface ChannelDialogProps {
   authenticated: boolean
@@ -43,10 +48,24 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
   const [dialogOpen, setDialogOpen] = React.useState(false)
   const { signMessage, userId: targetUserId } = useUserContext()
 
-  const form = useForm<z.infer<typeof ChannelNameSchema>>({
-    resolver: zodResolver(ChannelNameSchema),
+  const [showOptionalDetails, setShowOptionalDetails] = React.useState(false)
+
+  /**
+   * Dropzone hooks
+   */
+  const [showFileList, setShowFileList] = React.useState<boolean>(false)
+  const [filesToUpload, setFilesToUpload] = React.useState<File[]>([])
+  const onDrop = React.useCallback((filesToUpload: File[]) => {
+    setShowFileList(true)
+    setFilesToUpload(filesToUpload)
+  }, [])
+
+  const form = useForm<z.infer<typeof newChannelSchema>>({
+    resolver: zodResolver(newChannelSchema),
     defaultValues: {
-      channelName: '',
+      name: '',
+      description: '',
+      cover: undefined,
     },
   })
 
@@ -82,29 +101,30 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                 action={async () => {
                   // Prevent non-authenticated users from proceeding
                   if (!targetUserId) return
+                  // Upload cover image to IPFS if it one was provided
+                  let uploadedFileCid
+                  if (filesToUpload) {
+                    uploadedFileCid = await uploadFile({ filesToUpload })
+                  }
                   // Create an IPFS pointer containing the name of the channel
                   const channelUri = await uploadBlob({
                     dataToUpload: {
-                      name: form.getValues().channelName,
-                      description: 'This time its happening',
-                      image:
-                        // harcoded cover image uri
-                        'ipfs://bafkreiamfxbkndyuwkw4kutjcfcitozbtzrvqneryab2njltiopsfjwt6a',
+                      name: form.getValues().name,
+                      description: form.getValues().description || '',
+                      image: uploadedFileCid || '',
                       animationUri: '',
                     },
                   })
                   await sendToDb({
                     key: channelUri,
                     value: {
-                      name: form.getValues().channelName,
-                      description: 'This time its happening',
-                      image:
-                        'ipfs://bafkreiamfxbkndyuwkw4kutjcfcitozbtzrvqneryab2njltiopsfjwt6a',
+                      name: form.getValues().name,
+                      description: form.getValues().description || '',
+                      image: uploadedFileCid || '',
                       animationUri: '',
                       contentType: 'image/jpeg',
                     },
                   } as DataObject)
-
                   // Generate create channel post for user and post transaction
                   if (signMessage) {
                     await processCreateChannelPost({
@@ -118,9 +138,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                   toast.custom((t) => (
                     <Toast>
                       {'Successfully created '}
-                      <span className="font-bold">
-                        {form.getValues().channelName}
-                      </span>
+                      <span className="font-bold">{form.getValues().name}</span>
                     </Toast>
                   ))
                 }}
@@ -128,16 +146,110 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                 <Separator />
                 <FormField
                   control={form.control}
-                  name="channelName"
+                  name="name"
                   render={({ field }) => (
                     <FormItem className="mx-5">
+                      {showOptionalDetails && (
+                        <FormLabel htmlFor="name">
+                          <Typography variant="small">Name</Typography>
+                        </FormLabel>
+                      )}
                       <FormControl>
-                        <Input placeholder="Enter channel name..." {...field} />
+                        <Input
+                          placeholder="Enter channel name..."
+                          id="name"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+                {showOptionalDetails ? (
+                  <>
+                    <FormField
+                      control={form.control}
+                      name="description"
+                      render={({ field }) => (
+                        <FormItem className="mx-5">
+                          <FormLabel htmlFor="description">
+                            <Typography variant="small">Description</Typography>
+                          </FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder="Write a description..."
+                              id="description"
+                              className="resize-none"
+                              rows={12}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="cover"
+                      render={({ field }) => (
+                        <FormItem className="mx-5">
+                          <FormLabel htmlFor="cover">
+                            <Typography variant="small">Cover</Typography>
+                          </FormLabel>
+                          <FormControl>
+                            {!showFileList ? (
+                              <Dropzone onDrop={onDrop} disabled={showFileList}>
+                                {({
+                                  getRootProps,
+                                  getInputProps,
+                                  isDragActive,
+                                }) => (
+                                  <div
+                                    className="border border-input bg-transparent text-center px-3 py-2"
+                                    {...getRootProps()}
+                                  >
+                                    <input
+                                      id="cover"
+                                      {...getInputProps()}
+                                      {...field}
+                                    />
+                                    {isDragActive ? (
+                                      <Typography className="text-muted-foreground min-h-[35px]'">
+                                        Drop your files here
+                                      </Typography>
+                                    ) : (
+                                      <Typography className="hover:cursor-pointer text-muted-foreground leading-1">
+                                        Drag and drop a cover image here or
+                                        {'\u00A0'}
+                                        <span className="underline">
+                                          browse
+                                        </span>
+                                        {'\u00A0'}your local file system
+                                      </Typography>
+                                    )}
+                                  </div>
+                                )}
+                              </Dropzone>
+                            ) : (
+                              <Stack className="border border-input bg-transparent items-center text-center px-3 py-2">
+                                <FileList filesToUpload={filesToUpload} />
+                              </Stack>
+                            )}
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </>
+                ) : (
+                  <Button
+                    type="button"
+                    variant="link"
+                    onClick={() => setShowOptionalDetails(true)}
+                  >
+                    <Typography>Add a cover image or description</Typography>
+                  </Button>
+                )}
                 <Separator />
                 <DialogFooter className="flex flex-col py-2">
                   <Button

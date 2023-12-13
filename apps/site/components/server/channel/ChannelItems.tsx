@@ -13,7 +13,7 @@ import { ThumbnailNameCreator } from '@/server'
 
 function extractContentType({ item, metadata }: { item: any; metadata: any }) {
   const itemMetadata = metadata.data[item.target?.publication?.uri as string]
-  return itemMetadata?.contentType ? itemMetadata.contentType : "undefined"
+  return itemMetadata?.contentType ? itemMetadata.contentType : 'undefined'
 }
 
 export async function ChannelItems({

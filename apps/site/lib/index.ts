@@ -1,3 +1,7 @@
+// Subdirectories
+export * from './schemas'
+
+// Individual components
 export * from './checkUsernameAvailability'
 export * from './createLightAccount'
 export * from './getUsername'
