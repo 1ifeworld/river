@@ -2,8 +2,16 @@ import { Stack } from 'design-system/elements'
 import { getChannelWithId, type Item } from '@/gql'
 import { ipfsUrlToCid, pinataUrlFromCid, isVideo } from '@/lib'
 import Image from 'next/image'
-import { VideoPlayer, GLTFViewer } from '@/client'
+import { VideoPlayer } from '@/client'
 import React, { useRef, useState } from 'react'
+import dynamic from 'next/dynamic'
+
+const Model = dynamic(
+  () => import('../../../../components/client/Model'),
+  {
+    ssr: false,
+  },
+) 
 
 export default async function View({
   params,
@@ -42,7 +50,9 @@ export default async function View({
   } else if (contentType === 'model/gltf-binary') {
     return (
       <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center">
-        <GLTFViewer src={contentUrl} />
+
+    <Model src={contentUrl} />
+
       </Stack>
     )
   } else {
