@@ -2,16 +2,8 @@ import { Stack } from 'design-system/elements'
 import { getChannelWithId, type Item } from '@/gql'
 import { ipfsUrlToCid, pinataUrlFromCid, isVideo } from '@/lib'
 import Image from 'next/image'
-import { VideoPlayer } from '@/client'
+import { VideoPlayer, GLTFViewer } from '@/client'
 import React, { useRef, useState } from 'react'
-import dynamic from 'next/dynamic'
-
-const GLTFViewer = dynamic(
-  () => import('../../../../components/client/GLTFViewer'),
-  {
-    ssr: false,
-  },
-)
 
 export default async function View({
   params,
