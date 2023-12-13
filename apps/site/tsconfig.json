@@ -44,7 +44,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "./apps/site/components/client/modelViewer.d.ts",
+    "**/*.d.ts",
     ".next/types/**/*.ts"
   ],
   "exclude": [
