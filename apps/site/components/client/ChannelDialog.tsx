@@ -103,8 +103,10 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                   if (!targetUserId) return
                   // Upload cover image to IPFS if it one was provided
                   let uploadedFileCid
+                  let uploadedFileType
                   if (filesToUpload) {
                     uploadedFileCid = await uploadFile({ filesToUpload })
+                    uploadedFileType = filesToUpload[0].type
                   }
                   // Create an IPFS pointer containing the name of the channel
                   const channelUri = await uploadBlob({
@@ -122,7 +124,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                       description: form.getValues().description || '',
                       image: uploadedFileCid || '',
                       animationUri: '',
-                      contentType: 'image/jpeg',
+                      contentType: uploadedFileType,
                     },
                   } as DataObject)
                   // Generate create channel post for user and post transaction
