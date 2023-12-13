@@ -12,8 +12,9 @@ import {
   DialogHeader,
   DialogFooter,
   DialogClose,
-  Toast,
-} from "@/design-system";
+  Toast
+} from '@/design-system'
+
 import {
   uploadFile,
   uploadBlob,
@@ -32,6 +33,8 @@ import { toast } from "sonner";
 import { useParams } from "next/navigation";
 import { usePrivy } from "@privy-io/react-auth";
 import { muxClient } from "@/config/muxClient";
+import { FileList } from '@/server';
+
 
 export function UploadDialog() {
   const [dialogOpen, setDialogOpen] = React.useState(false)
@@ -92,7 +95,6 @@ export function UploadDialog() {
               action={async () => {
                 // Prevent non-authenticated users from proceeding
                 if (!targetUserId) return
-                if (!targetUserId) return
                 // Set file name, type, and description values
                 const uploadedFileName = filesToUpload[0]?.name || 'unnamed'
                 const uploadedFileType = filesToUpload[0].type
@@ -101,6 +103,7 @@ export function UploadDialog() {
                 if (isGLB(filesToUpload[0])) {
                   GLBFileContentType = 'model/gltf-binary' // If it's a GLB file, set the content type accordingly
                 }
+
                 const hardcodedDescription =
                   'What did you think this was going to be?'
                 // Determine if file is image or video or other
@@ -161,7 +164,7 @@ export function UploadDialog() {
                       muxAssetId: asset.source_asset_id,
                       muxPlaybackId: asset.playback_ids?.[0]?.id,
                     },
-                  } as DataObject);
+                  } as DataObject)
                 } else {
                   // processOther
                   pubUri = await uploadBlob({
@@ -243,17 +246,3 @@ export function UploadDialog() {
     </Dialog>
   )
 }
-
-const FileList = ({ filesToUpload }: { filesToUpload: File[] }) => {
-  return (
-    <ul className="min-h-[35px]">
-      {filesToUpload.map((file: File) => (
-        <li key={file.size}>
-          <Typography className="text-secondary-foreground">
-            {file.name}
-          </Typography>
-        </li>
-      ))}
-    </ul>
-  );
-};

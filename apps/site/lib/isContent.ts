@@ -13,4 +13,3 @@ export function isGLB(file: File) {
   const extension = file.name.split('.').pop()?.toLowerCase()
   return extension === 'glb' || extension === 'gltf'
 
-}
