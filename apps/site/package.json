@@ -14,6 +14,7 @@
     "@alchemy/aa-alchemy": "^0.1.1",
     "@alchemy/aa-core": "^0.1.1",
     "@basementdev/sdk": "^1.0.9",
+    "@google/model-viewer": "^3.3.0",
     "@hookform/resolvers": "^3.3.2",
     "@mux/mux-node": "^7.3.3",
     "@mux/mux-player-react": "^2.3.0",

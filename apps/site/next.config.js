@@ -18,5 +18,5 @@ module.exports = {
     config.externals.push('pino-pretty', 'lokijs', 'encoding')
     return config
   },
-  transpilePackages: ['scrypt'],
+  transpilePackages: ['scrypt', 'three'],
 }

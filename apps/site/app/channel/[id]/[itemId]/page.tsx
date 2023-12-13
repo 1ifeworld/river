@@ -3,6 +3,15 @@ import { getChannelWithId, type Item } from '@/gql'
 import { ipfsUrlToCid, pinataUrlFromCid, isVideo } from '@/lib'
 import Image from 'next/image'
 import { VideoPlayer } from '@/client'
+import React, { useRef, useState } from 'react'
+import dynamic from 'next/dynamic'
+
+const GLTFViewer = dynamic(
+  () => import('../../../../components/client/GLTFViewer'),
+  {
+    ssr: false,
+  },
+)
 
 export default async function View({
   params,
@@ -16,36 +25,48 @@ export default async function View({
   const item = channel?.items.find((item) => item.id === params.itemId)
 
   const { metadata } = await getItemMetadata(item as Item)
-  
-  const itemMetadata = metadata.data[item?.target?.publication?.uri as string]
-  const cid = ipfsUrlToCid({ ipfsUrl: itemMetadata.image })
-  const contentUrl = pinataUrlFromCid({ cid })
 
+  const itemMetadata = metadata.data[item?.target?.publication?.uri as string]
+  // const cid = ipfsUrlToCid({ ipfsUrl: itemMetadata.image })
+  // const contentUrl = pinataUrlFromCid({ cid })
+
+  const cid = ipfsUrlToCid({ ipfsUrl: itemMetadata.animationUri })
+  const glbContentUrl = pinataUrlFromCid({ cid })
+
+  console.log('CONTENT', glbContentUrl)
   const contentType = itemMetadata.contentType
 
-  if (isVideo({mimeType: contentType})) {
-    return (    
+  if (isVideo({ mimeType: contentType })) {
+    return (
       <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center ">
-        <Stack className='w-[75%] sm:w-[50%]'>
-        <VideoPlayer  playbackId={itemMetadata.muxPlaybackId} />
+        <Stack className="w-[75%] sm:w-[50%]">
+          <VideoPlayer playbackId={itemMetadata.muxPlaybackId} />
         </Stack>
       </Stack>
-    );    
-  } else  {
+    )
+  } else if (contentType === 'model/gltf-binary') {
+    console.log('GLTF', glbContentUrl)
+    return (
+      <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center">
+        <h1>{glbContentUrl}</h1>
+        <GLTFViewer src={glbContentUrl} />
+      </Stack>
+    )
+  } else {
     return (
       <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center overflow-hidden relative">
         <Image
           className="object-contain"
-          src={contentUrl}
-          alt={metadata.name}
+          src={glbContentUrl}
+          alt={itemMetadata.name}
           fill
           quality={100}
           priority={true}
         />
       </Stack>
     )
-  } 
-}  
+  }
+}
 
 async function getItemMetadata(item: Item) {
   // Extract URI from the item
