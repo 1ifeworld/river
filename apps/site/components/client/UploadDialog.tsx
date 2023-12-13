@@ -13,8 +13,7 @@ import {
   DialogFooter,
   DialogClose,
   Toast,
-  Debug,
-} from '@/design-system'
+} from "@/design-system";
 import {
   uploadFile,
   uploadBlob,
@@ -24,15 +23,15 @@ import {
   DataObject,
   sendToDb,
   isImage,
-  isVideo,
   isGLB,
-} from '@/lib'
-import { useUserContext } from '@/context'
-import { useDropzone } from 'react-dropzone'
-import { toast } from 'sonner'
-import { useParams } from 'next/navigation'
-import { usePrivy } from '@privy-io/react-auth'
-import { muxConfig } from '@/config/muxConfig'
+  isVideo
+} from "@/lib";
+import { useUserContext } from "@/context";
+import { useDropzone } from "react-dropzone";
+import { toast } from "sonner";
+import { useParams } from "next/navigation";
+import { usePrivy } from "@privy-io/react-auth";
+import { muxClient } from "@/config/muxClient";
 
 export function UploadDialog() {
   const [dialogOpen, setDialogOpen] = React.useState(false)
@@ -93,6 +92,7 @@ export function UploadDialog() {
               action={async () => {
                 // Prevent non-authenticated users from proceeding
                 if (!targetUserId) return
+                if (!targetUserId) return
                 // Set file name, type, and description values
                 const uploadedFileName = filesToUpload[0]?.name || 'unnamed'
                 const uploadedFileType = filesToUpload[0].type
@@ -136,8 +136,8 @@ export function UploadDialog() {
                 } else if (fileIsVideo) {
                   const assetEndpointForMux = pinataUrlFromCid({
                     cid: ipfsUrlToCid({ ipfsUrl: uploadedFileCid }),
-                  })
-                  const asset = await muxConfig.Video.Assets.create({
+                  });
+                  const asset = await muxClient.Video.Assets.create({
                     input: assetEndpointForMux,
                     playback_policy: 'public',
                     encoding_tier: 'baseline',
@@ -161,29 +161,7 @@ export function UploadDialog() {
                       muxAssetId: asset.source_asset_id,
                       muxPlaybackId: asset.playback_ids?.[0]?.id,
                     },
-                  } as DataObject)
-                } else if (
-                  filesToUpload[0]?.name.endsWith('.glb') ||
-                  filesToUpload[0]?.name.endsWith('.gltf')
-                ) {
-                  pubUri = await uploadBlob({
-                    dataToUpload: {
-                      name: uploadedFileName,
-                      description: hardcodedDescription,
-                      image: '',
-                      animationUri: uploadedFileCid,
-                    },
-                  })
-                  await sendToDb({
-                    key: pubUri,
-                    value: {
-                      name: uploadedFileName,
-                      description: hardcodedDescription,
-                      image: '',
-                      animationUri: uploadedFileCid,
-                      contentType: GLBFileContentType,
-                    },
-                  } as DataObject)
+                  } as DataObject);
                 } else {
                   // processOther
                   pubUri = await uploadBlob({
@@ -277,5 +255,5 @@ const FileList = ({ filesToUpload }: { filesToUpload: File[] }) => {
         </li>
       ))}
     </ul>
-  )
-}
+  );
+};
