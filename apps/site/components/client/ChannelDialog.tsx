@@ -152,10 +152,10 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                 }}
               >
                 <Separator />
-                {/* <FormField
+                <FormField
                   control={form.control}
                   name="name"
-                  render={({ field }) => ( */}
+                  render={({ field }) => (
                     <FormItem className="mx-5">
                       {showOptionalDetails && (
                         <FormLabel htmlFor="name">
@@ -166,13 +166,13 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                         <Input
                           placeholder="Enter channel name..."
                           id="name"
-                          // {...field}
+                          {...field}
                         />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
-                  {/* )}
-                /> */}
+                  )}
+                />
                 {showOptionalDetails ? (
                   <>
                     <FormField
@@ -196,10 +196,10 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                         </FormItem>
                       )}
                     />
-                    <FormField
+                    {/* <FormField
                       control={form.control}
                       name="cover"
-                      render={({ field }) => (
+                      render={({ field }) => ( */}
                         <FormItem className="mx-5">
                           <FormLabel htmlFor="cover">
                             <Typography variant="small">Cover</Typography>
@@ -214,7 +214,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                                 <input
                                   id="cover"
                                   {...getInputProps()}
-                                  {...field}
+                                  // {...field}
                                 />
                                 {isDragActive ? (
                                   <Typography className="text-muted-foreground min-h-[35px]'">
@@ -237,8 +237,8 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                           </FormControl>
                           <FormMessage />
                         </FormItem>
-                      )}
-                    />
+                      {/* )}
+                    /> */}
                   </>
                 ) : (
                   <Button
