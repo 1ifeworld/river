@@ -6,7 +6,7 @@ import { VideoPlayer } from '@/client'
 import React, { useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 
-const Model = dynamic(() => import('../../../../components/client/Model'), {
+const Model = dynamic(() => import('../../../../components/client/renderer/glb/Model'), {
   ssr: false,
 })
 

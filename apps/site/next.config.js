@@ -16,14 +16,6 @@ module.exports = {
   webpack: (config) => {
     config.resolve.fallback = { fs: false, net: false, tls: false }
     config.externals.push('pino-pretty', 'lokijs', 'encoding')
-    config.module.rules.push({
-      test: /\.(gltf)$/,
-      use: [
-        {
-          loader: 'gltf-webpack-loader',
-        },
-      ],
-    })
     return config
   },
   experimental: {
