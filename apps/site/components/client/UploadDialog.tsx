@@ -26,6 +26,7 @@ import {
   isImage,
   isGLB,
   isVideo,
+  isAudio
 } from '@/lib'
 import { useUserContext } from '@/context'
 import { useDropzone } from 'react-dropzone'
@@ -109,7 +110,7 @@ export function UploadDialog() {
                 const fileIsImage = isImage({ mimeType: uploadedFileType })
                 const fileIsVideo = fileIsImage
                   ? false
-                  : isVideo({ mimeType: uploadedFileType })
+                  : isVideo({ mimeType: uploadedFileType }) || isAudio({ mimeType: uploadedFileType })
 
                 // Upload file to ipfs
                 const uploadedFileCid = await uploadFile({ filesToUpload })

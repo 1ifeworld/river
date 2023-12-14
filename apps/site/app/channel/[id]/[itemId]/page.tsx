@@ -36,8 +36,9 @@ export default async function View({
   let contentUrl
   if (
     itemMetadata.contentType === 'model/gltf-binary' ||
-    itemMetadata.contentType === 'application/pdf'
-  ) {
+    itemMetadata.contentType === 'application/pdf' ||
+    isAudio({ mimeType: itemMetadata.contentType })
+    ) {
     const cid = ipfsUrlToCid({ ipfsUrl: itemMetadata.animationUri })
     contentUrl = pinataUrlFromCid({ cid })
   } else {
@@ -60,14 +61,13 @@ export default async function View({
     // You can add your audio rendering code or components
     return (
       <Stack className="w-full h-[calc(100vh-_56px)] justify-center items-center ">
-        {/* Add your audio player or rendering components */}
-        <p>This is an audio file</p>
+     <audio controls src={contentUrl}>
+      </audio>      
       </Stack>
     )
   } else if (isPDF({ mimeType: contentType })) {
     return (
       <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center ">
-        <h1>{contentUrl}</h1>
         <PDFViewer file={contentUrl} />
       </Stack>
     )
