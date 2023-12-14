@@ -61,7 +61,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
   }, [])
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    disabled: showFileList,
+    disabled: Boolean(filesToUpload),
   })
 
   const form = useForm<z.infer<typeof newChannelSchema>>({
