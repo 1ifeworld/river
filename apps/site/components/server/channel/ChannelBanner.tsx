@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { Stack, Typography, Card, Flex } from '@/design-system'
+import { Stack, Typography, Card, Flex, Debug } from '@/design-system'
 import { Channel } from '@/gql'
 import { UploadDialog } from '@/client'
 import { ipfsUrlToCid, pinataUrlFromCid } from '@/lib'
@@ -20,16 +20,18 @@ export async function ChannelBanner({
   const cid = ipfsUrlToCid({ ipfsUrl: channelMetadata.image })
 
   return (
-    <Flex className="items-end h-full gap-6">
+    <Stack className="gap-6 md:flex-row md:h-full md:items-end">
       {/* Column 1 */}
-      <Card className="relative w-[218px] h-[218px] outline-none border-none">
+      <div className="relative">
         <Image
-          className="object-cover aspect-square"
+          className="object-cover w-full h-auto"
           src={pinataUrlFromCid({ cid })}
           alt={channelMetadata.name}
-          fill
+          width={0}
+          height={0}
+          sizes="(min-width: 768px) 50vw, 100vw"
         />
-      </Card>
+      </div>
       {/* Column 2 */}
       <Stack className="gap-5">
         <Stack>
@@ -49,6 +51,6 @@ export async function ChannelBanner({
         </Typography>
         <UploadDialog />
       </Stack>
-    </Flex>
+    </Stack>
   )
 }
