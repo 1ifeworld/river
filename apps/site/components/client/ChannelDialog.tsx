@@ -201,7 +201,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                           </FormLabel>
                           <FormControl>
                             {!showFileList ? (
-                              <Dropzone onDrop={onDrop} disabled={showFileList} noClick>
+                              <Dropzone onDrop={onDrop} disabled={showFileList}>
                                 {({
                                   getRootProps,
                                   getInputProps,
