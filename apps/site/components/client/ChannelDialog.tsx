@@ -201,14 +201,14 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                           </FormLabel>
                           <FormControl>
                             {!showFileList ? (
-                              <Dropzone onDrop={onDrop} disabled={showFileList}>
+                              <Dropzone onDrop={onDrop} disabled={showFileList} noClick>
                                 {({
                                   getRootProps,
                                   getInputProps,
                                   isDragActive,
                                 }) => (
                                   <div
-                                    className="border border-input bg-transparent text-center px-3 py-6"
+                                    className="border border-input bg-transparent text-center px-3 py-2"
                                     {...getRootProps()}
                                   >
                                     <input
