@@ -206,10 +206,12 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                                   getRootProps,
                                   getInputProps,
                                   isDragActive,
+                                  open
                                 }) => (
                                   <div
                                     className="border border-input bg-transparent text-center px-3 py-2"
                                     {...getRootProps()}
+                                    onClick={open}
                                   >
                                     <input
                                       id="cover"
