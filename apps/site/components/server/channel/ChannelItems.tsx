@@ -29,7 +29,7 @@ export async function ChannelItems({
     <Table className="w-full">
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[10px]">
+          <TableHead className="hidden md:table-cell w-[10px]">
             <Typography variant="small" className="text-secondary-foreground">
               #
             </Typography>
@@ -54,7 +54,7 @@ export async function ChannelItems({
       <TableBody>
         {channel.references.map((reference: Reference, index: number) => (
           <TableRow key={index}>
-            <TableCell className="text-right text-primary-foreground">
+            <TableCell className="hidden md:table-cell text-right text-primary-foreground">
               <Typography>{index + 1}</Typography>
             </TableCell>
             <TableCell className="flex gap-4 items-center text-primary-foreground">
