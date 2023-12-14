@@ -1,23 +1,15 @@
-export const messageTypesSet = new Set<bigint>([
-  // Publications
-  BigInt(110), // createPub (body = abi.encoode(string uri))
-  BigInt(111), // editPubUri  (body = abi.encoode(string uri))
-  // Channels
-  BigInt(210), // createChannel (body = abi.encoode(string uri, uint256[] admins, uint256[] members)
-  BigInt(211), // editChannelUri (body = abi.encoode(string uri)
-  BigInt(212), // editChannelAccess (body = abi.encoode(uint256[] admins, uint256[] members)
-  BigInt(213), // addItem (body = abi.encode(uint256 chainId, address target, bool hasId, int256 id, int256 channelId))
-  BigInt(214), // removeItems (body = abi.encode(uint256[]))
-  BigInt(215), // sortItems (body = abi.encode(uint256[], int128[]))
-])
-
 export const messageTypes = {
-  createPublication: 110,
-  editPublication: 111,
-  createChannel: 210,
-  editChannelUri: 211,
-  editChannelAccess: 212,
-  addItem: 213,
-  removeItems: 214,
-  sortItems: 215,
+  createChannel: BigInt(100),
+  referenceChannel: BigInt(101),
+  editChannelUri: BigInt(102),
+  editChannelAccess: BigInt(103),
+  createPublication: BigInt(200),
+  referencePublication: BigInt(201),
+  editPublicationUri: BigInt(202),
+  createNft: BigInt(300),
+  referenceNft: BigInt(301),
+  createUrl: BigInt(400),
+  referenceUrl: BigInt(401),
+  editUrl: BigInt(402),
+  removeReference: BigInt(500)
 }

@@ -1,12 +1,12 @@
 import { Stack } from 'design-system/elements'
-import { getChannelWithId, type Item } from '@/gql'
+import { getReferenceWithId, type Reference } from '@/gql'
 import { ipfsUrlToCid, pinataUrlFromCid, isVideo } from '@/lib'
 import Image from 'next/image'
 import { VideoPlayer } from '@/client'
 import React, { useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 
-const Model = dynamic(() => import('../../../../components/client/renderer/glb/Model'), {
+const Model = dynamic(() => import('../../../components/client/renderer/glb/Model'), {
   ssr: false,
 })
 
@@ -15,31 +15,29 @@ export default async function View({
 }: {
   params: { itemId: string; id: string }
 }) {
-  const { channel } = await getChannelWithId({
+  const { reference } = await getReferenceWithId({
     id: params.id,
   })
 
-  const item = channel?.items.find((item) => item.id === params.itemId)
+  const { metadata } = await getReferenceMetadata(reference as Reference)
 
-  const { metadata } = await getItemMetadata(item as Item)
-
-  const itemMetadata = metadata.data[item?.target?.publication?.uri as string]
+  const referenceMetadata = metadata.data[reference?.pubRef?.uri as string]
   let contentUrl
-  if (itemMetadata.contentType === 'model/gltf-binary') {
-    const cid = ipfsUrlToCid({ ipfsUrl: itemMetadata.animationUri })
+  if (referenceMetadata.contentType === 'model/gltf-binary') {
+    const cid = ipfsUrlToCid({ ipfsUrl: referenceMetadata.animationUri })
     contentUrl = pinataUrlFromCid({ cid })
   } else {
-    const cid = ipfsUrlToCid({ ipfsUrl: itemMetadata.image })
+    const cid = ipfsUrlToCid({ ipfsUrl: referenceMetadata.image })
     contentUrl = pinataUrlFromCid({ cid })
   }
 
-  const contentType = itemMetadata.contentType
+  const contentType = referenceMetadata.contentType
 
   if (isVideo({ mimeType: contentType })) {
     return (
       <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center ">
         <Stack className="w-[75%] sm:w-[50%]">
-          <VideoPlayer playbackId={itemMetadata.muxPlaybackId} />
+          <VideoPlayer playbackId={referenceMetadata.muxPlaybackId} />
         </Stack>
       </Stack>
     )
@@ -55,7 +53,7 @@ export default async function View({
         <Image
           className="object-contain"
           src={contentUrl}
-          alt={itemMetadata.name}
+          alt={referenceMetadata.name}
           fill
           quality={100}
           priority={true}
@@ -65,11 +63,11 @@ export default async function View({
   }
 }
 
-async function getItemMetadata(item: Item) {
-  // Extract URI from the item
-  const uri = item.target?.publication?.uri
+async function getReferenceMetadata(reference: Reference) {
+  // Extract URI from the reference
+  const uri = reference.pubRef?.uri
   if (!uri) {
-    return { metadata: null, error: 'No URI found in item' }
+    return { metadata: null, error: 'No URI found in reference' }
   }
   // setup endpoint
   const getMetadataEndpoint = `${process.env.NEXT_PUBLIC_METADATA_SERVER_URL}/get`

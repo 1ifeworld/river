@@ -9,8 +9,8 @@ export default async function Home() {
   return (
     <div>
       <Grid className="grid-cols-1 md:grid-cols-[repeat(auto-fill,_minmax(272px,_1fr))] gap-2 pt-6">
-        {channels.map((channel: Channel) => (
-          <ChannelCard key={channel.id} channel={channel} metadata={metadata} />
+        {channels.map((channel: Channel, index: number) => (
+          <ChannelCard key={index} channel={channel} metadata={metadata} />
         ))}
       </Grid>
     </div>

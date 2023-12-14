@@ -2,7 +2,8 @@ import { relayPost } from '@/actions'
 import {
   encodePost,
   encodeMessage,
-  encodeUriAndAccess,
+  // encodeUriAndAccess,
+  encodeCreateChannel,
   postTypes,
   messageTypes,
   getExpiration,
@@ -24,22 +25,22 @@ export async function processCreateChannelPost({
     uiOptions?: SignMessageModalUIOptions | undefined,
   ) => Promise<string>
 }) {
-  console.log('wooo were running inside the big helper thing')
   // Declare constants/params
   const postVersion = postTypes.v1
   const postExpiration: bigint = getExpiration()
   // generate encoded msgBody for createChannelMsg
-  const createChannelMsg = encodeUriAndAccess({
+  const createChannelMsg = encodeCreateChannel({
     uri: channelUri,
     adminIds: [targetUserId],
     memberIds: [],
+    channelTags: []
   })
   // add this in to prevent msgBody from being null
   if (!createChannelMsg) return
   console.log('encoded msgBody correctly')
   // generate encodedMessage by packing msgType + msgBody together
   const encodedMessage = encodeMessage({
-    msgType: messageTypes.createChannel,
+    msgType: Number(messageTypes.createChannel),
     msgBody: createChannelMsg.msgBody,
   })
   // add this in to prevent encodedMessage being null

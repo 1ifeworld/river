@@ -1,0 +1,21 @@
+query referenceWithId($id: BigInt!) {
+  reference(id: $id) {
+    id
+    timestamp
+    userId
+    pubRef {
+      id
+      timestamp
+      creatorId
+      uri
+    }
+    channel {
+      id
+      timestamp
+      creatorId
+      admins
+      members
+      uri
+    }
+  }
+}

@@ -13,9 +13,9 @@ export async function ActivityBanner({
 
   return (
     <Stack>
-      <Typography variant="h1">{userData.name}</Typography>
+      <Typography variant="h1">{userData?.name}</Typography>
       <Typography variant="h1" className="text-secondary-foreground">
-        {user.desc}
+        {user?.desc}
       </Typography>
     </Stack>
   )
