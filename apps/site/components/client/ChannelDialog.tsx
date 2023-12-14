@@ -183,7 +183,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                               placeholder="Write a description..."
                               id="description"
                               className="resize-none"
-                              rows={12}
+                              rows={5}
                               {...field}
                             />
                           </FormControl>
@@ -208,7 +208,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                                   isDragActive,
                                 }) => (
                                   <div
-                                    className="border border-input bg-transparent text-center px-3 py-2"
+                                    className="border border-input bg-transparent text-center px-3 py-6"
                                     {...getRootProps()}
                                   >
                                     <input
