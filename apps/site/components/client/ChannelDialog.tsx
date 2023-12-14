@@ -152,10 +152,10 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                 }}
               >
                 <Separator />
-                <FormField
+                {/* <FormField
                   control={form.control}
                   name="name"
-                  render={({ field }) => (
+                  render={({ field }) => ( */}
                     <FormItem className="mx-5">
                       {showOptionalDetails && (
                         <FormLabel htmlFor="name">
@@ -166,13 +166,13 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                         <Input
                           placeholder="Enter channel name..."
                           id="name"
-                          {...field}
+                          // {...field}
                         />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
-                  )}
-                />
+                  {/* )}
+                /> */}
                 {showOptionalDetails ? (
                   <>
                     <FormField
