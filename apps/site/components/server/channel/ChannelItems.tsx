@@ -7,13 +7,18 @@ import {
   TableHeader,
   TableRow,
 } from '@/design-system'
-import { Channel, Item } from '@/gql'
+import { Channel, Reference } from '@/gql'
 import { unixTimeConverter } from '@/utils'
 import { ThumbnailNameCreator } from '@/server'
 
-function extractContentType({ item, metadata }: { item: any; metadata: any }) {
-  const itemMetadata = metadata.data[item.target?.publication?.uri as string]
-  return itemMetadata?.contentType ? itemMetadata.contentType : 'undefined'
+function extractContentType({
+  reference,
+  metadata,
+}: { reference: any; metadata: any }) {
+  const referenceMetadata = metadata.data[reference.pubRef?.uri as string]
+  return referenceMetadata?.contentType
+    ? referenceMetadata.contentType
+    : 'undefined'
 }
 
 export async function ChannelItems({
@@ -24,7 +29,7 @@ export async function ChannelItems({
     <Table className="w-full">
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[10px]">
+          <TableHead className="hidden md:table-cell w-[10px]">
             <Typography variant="small" className="text-secondary-foreground">
               #
             </Typography>
@@ -34,12 +39,12 @@ export async function ChannelItems({
               Item
             </Typography>
           </TableHead>
-          <TableHead className="text-right">
+          <TableHead className="hidden md:table-cell text-right">
             <Typography variant="small" className="text-secondary-foreground">
               Type
             </Typography>
           </TableHead>
-          <TableHead className="text-right">
+          <TableHead className="hidden md:table-cell text-right">
             <Typography variant="small" className="text-secondary-foreground">
               Date added
             </Typography>
@@ -47,26 +52,26 @@ export async function ChannelItems({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {channel.items.map((item: Item, index: number) => (
+        {channel.references.map((reference: Reference, index: number) => (
           <TableRow key={index}>
-            <TableCell className="text-right text-primary-foreground">
+            <TableCell className="hidden md:table-cell text-right text-primary-foreground">
               <Typography>{index + 1}</Typography>
             </TableCell>
             <TableCell className="flex gap-4 items-center text-primary-foreground">
               <ThumbnailNameCreator
                 channel={channel}
-                item={item}
+                reference={reference}
                 metadata={metadata}
               />
             </TableCell>
-            <TableCell className="text-right text-primary-foreground">
+            <TableCell className="hidden md:table-cell text-right text-primary-foreground">
               <Typography>{`${extractContentType({
-                item: item,
+                reference: reference,
                 metadata: metadata,
               })}`}</Typography>
             </TableCell>
-            <TableCell className="text-right text-primary-foreground">
-              <Typography>{unixTimeConverter(item.timestamp)}</Typography>
+            <TableCell className="hidden md:table-cell text-right text-primary-foreground">
+              <Typography>{unixTimeConverter(reference.timestamp)}</Typography>
             </TableCell>
             <TableCell className="text-right w-[100px] text-primary-foreground">
               <Typography>{'...'}</Typography>

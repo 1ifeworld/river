@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { type Item, type Channel } from '@/gql'
+import { type Reference, type Channel } from '@/gql'
 import { Stack, Typography, Button } from '@/design-system'
 import { Username } from '../Username'
 import { ipfsUrlToCid, pinataUrlFromCid } from '@/lib'
@@ -7,18 +7,18 @@ import Link from 'next/link'
 
 interface ThumbnailNameCreatorProps {
   channel: Channel
-  item: Item
+  reference: Reference
   metadata: any
 }
 
 export async function ThumbnailNameCreator({
   channel,
-  item,
+  reference,
   metadata,
 }: ThumbnailNameCreatorProps) {
-  const itemMetadata = metadata.data[item.target?.publication?.uri as string]
+  const referenceMetadata = metadata.data[reference.pubRef?.uri as string]
 
-  if (!itemMetadata) {
+  if (!referenceMetadata) {
     return (
       <>
         <Image
@@ -35,28 +35,28 @@ export async function ThumbnailNameCreator({
     )
   }
 
-  const cid = ipfsUrlToCid({ ipfsUrl: itemMetadata.image })
+  const cid = ipfsUrlToCid({ ipfsUrl: referenceMetadata.image })
 
   return (
     <>
-      <Link href={`/channel/${channel.id}/${item.id}`}>
+      <Link href={`/item/${reference.id}`}>
         <Image
           className="object-cover aspect-square "
           src={pinataUrlFromCid({ cid })}
-          alt={itemMetadata.name}
+          alt={referenceMetadata.name}
           width={40}
           height={40}
         />
       </Link>
       <Stack className="">
-        <Link href={`/channel/${channel.id}/${item.id}`}>
+        <Link href={`/item/${reference.id}`}>
           <Button variant="link">
             <Typography className="text-primary-foreground">
-              {itemMetadata.name}
+              {referenceMetadata.name}
             </Typography>
           </Button>
         </Link>
-        <Username id={item.creatorId} />
+        <Username id={reference.userId} />
       </Stack>
     </>
   )

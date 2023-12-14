@@ -14,11 +14,10 @@ import {
   DialogClose,
   Toast,
 } from '@/design-system'
-
 import {
   uploadFile,
   uploadBlob,
-  processCreatePubAndAddItemPost,
+  processCreatePubPost,
   ipfsUrlToCid,
   pinataUrlFromCid,
   DataObject,
@@ -188,7 +187,7 @@ export function UploadDialog() {
                 }
                 // Generate create channel post for user and post transaction
                 if (signMessage) {
-                  await processCreatePubAndAddItemPost({
+                  await processCreatePubPost({
                     pubUri: pubUri,
                     targetChannelId: BigInt(params.id as string),
                     targetUserId: targetUserId,

@@ -1,7 +1,6 @@
-import { getChannelWithId, type Item } from '@/gql'
+import { getChannelWithId, type Reference } from '@/gql'
 import { Stack } from '@/design-system'
 import { ChannelBanner, ChannelItems } from '@/server'
-// @react-server
 
 export default async function Channel({
   params,
@@ -11,8 +10,11 @@ export default async function Channel({
   const { channel } = await getChannelWithId({
     id: params.id,
   })
+
   const { channelMetadata } = await getChannelMetadata(channel)
-  const { metadata } = await getItemsMetadata(channel?.items)
+  const { metadata } = await getReferencesMetadata(channel?.references)
+
+  console.log("metadata: ", metadata)
 
   if (!channel) {
     return (
@@ -28,10 +30,10 @@ export default async function Channel({
   )
 }
 
-async function getItemsMetadata(items: any) {
+async function getReferencesMetadata(references: any) {
   // Extract URIs from the channels array
-  const uris = items
-    .map((item: { target: any }) => item.target?.publication?.uri)
+  const uris = references
+    .map((reference: { pubRef: any }) => reference.pubRef.uri)
     .filter((uri: string | undefined) => uri != null)
   // setup endpoint
   const getMetadataEndpoint = `${process.env.NEXT_PUBLIC_METADATA_SERVER_URL}/get`

@@ -1,6 +1,6 @@
 export * from './getAllChannels'
 export * from './getChannelWithId'
-export * from './getAllItems'
-export * from './getUserActivity'
+export * from './getReferenceWithId'
 export * from './getUserId'
 export * from './getTxnHash'
+
