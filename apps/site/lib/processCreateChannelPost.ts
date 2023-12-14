@@ -62,6 +62,8 @@ export async function processCreateChannelPost({
   // Generate encodedPost bytes data -- this is the input to the `post` function`
   const postInput = encodePost({
     userId: targetUserId,
+    hashType: postTypes.hashScheme1,
+    hash: hashToSign,
     sigType: postTypes.sigTypeECDSA,
     sig: sig as Hash,
     version: postVersion,

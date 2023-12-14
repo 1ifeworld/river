@@ -56,6 +56,17 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
   const cleanedTxnData = slice(event.transaction.input, 68);
   // decodes post into its separate components
   const decodedPost = decodePost({ postInput: cleanedTxnData });
+
+  /*
+  *   
+  * PERFORM SIGNATURE CHECK HERE
+  * 
+  * NOTE: posts with invalid signatures will not be saved, regardless of message type
+  * 
+  */
+
+  
+
   // identify number of messages sent in post
   const length = decodedPost?.messageArray.length;
   // outer level if statement. if 0 then no messages will be processed
@@ -68,8 +79,20 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
       const decodedMessage = decodeMessage({ encodedMessage: decodedPost?.messageArray[i] });
       // if decode failed, move to next i in for loop
       if (!decodedMessage) continue
+      /* 
+      *
+      * PERFORM MESSAGE TYPE VALIDATION HERE
+      * 
+      * INVALID MESSAGE TYPES will not be saved
+      */
       // if decode successful, set decoded message inm message que
       messageQueue[i] = decodedMessage;
+      //
+
+
+
+
+
     }
 
     /* ************************************************

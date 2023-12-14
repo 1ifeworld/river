@@ -59,6 +59,8 @@ export async function processCreatePubPost({
   // Generate encodedPost bytes data -- this is the input to the `post` function`
   const postInput = encodePost({
     userId: targetUserId,
+    hashType: postTypes.hashScheme1,
+    hash: hashToSign,
     sigType: postTypes.sigTypeECDSA,
     sig: sig as Hash,
     version: postVersion,
@@ -67,7 +69,7 @@ export async function processCreatePubPost({
   })
   // add this in to prevent postInputs being null
   if (!postInput) return
-  console.log('postInput encoded correctly')
+  console.log('postInput encoded correctly', postInput)
   // pass postInputs into the createPost server action
   await relayPost({
     postInput: postInput,
