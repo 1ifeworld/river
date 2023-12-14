@@ -1,14 +1,22 @@
 import { Stack } from 'design-system/elements'
 import { getChannelWithId, type Item } from '@/gql'
-import { ipfsUrlToCid, pinataUrlFromCid, isVideo } from '@/lib'
+import { ipfsUrlToCid, pinataUrlFromCid, isVideo, isPDF, isAudio } from '@/lib'
 import Image from 'next/image'
 import { VideoPlayer } from '@/client'
 import React, { useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 
-const Model = dynamic(() => import('../../../../components/client/renderer/glb/Model'), {
-  ssr: false,
-})
+const Model = dynamic(
+  () => import('../../../../components/client/renderer/glb/Model'),
+  {
+    ssr: false,
+  },
+)
+
+const PDFViewer = dynamic(
+  () => import('../../../../components/client/renderer/PDF/PDFViewer'),
+  { ssr: false },
+)
 
 export default async function View({
   params,
@@ -24,8 +32,12 @@ export default async function View({
   const { metadata } = await getItemMetadata(item as Item)
 
   const itemMetadata = metadata.data[item?.target?.publication?.uri as string]
+
   let contentUrl
-  if (itemMetadata.contentType === 'model/gltf-binary') {
+  if (
+    itemMetadata.contentType === 'model/gltf-binary' ||
+    itemMetadata.contentType === 'application/pdf'
+  ) {
     const cid = ipfsUrlToCid({ ipfsUrl: itemMetadata.animationUri })
     contentUrl = pinataUrlFromCid({ cid })
   } else {
@@ -41,6 +53,22 @@ export default async function View({
         <Stack className="w-[75%] sm:w-[50%]">
           <VideoPlayer playbackId={itemMetadata.muxPlaybackId} />
         </Stack>
+      </Stack>
+    )
+  } else if (isAudio({ mimeType: contentType })) {
+    // Handle audio content here
+    // You can add your audio rendering code or components
+    return (
+      <Stack className="w-full h-[calc(100vh-_56px)] justify-center items-center ">
+        {/* Add your audio player or rendering components */}
+        <p>This is an audio file</p>
+      </Stack>
+    )
+  } else if (isPDF({ mimeType: contentType })) {
+    return (
+      <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center ">
+        <h1>{contentUrl}</h1>
+        <PDFViewer file={contentUrl} />
       </Stack>
     )
   } else if (contentType === 'model/gltf-binary') {
