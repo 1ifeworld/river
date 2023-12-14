@@ -59,9 +59,10 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
     setShowFileList(true)
     setFilesToUpload(filesToUpload)
   }, [])
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
     onDrop,
-    // disabled: filesToUpload.length === 0,
+    disabled: filesToUpload.length === 0,
+    noClick: true
   })
 
   const form = useForm<z.infer<typeof newChannelSchema>>({
@@ -206,6 +207,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                           <FormControl>
                             {!showFileList ? (
                               <div
+                                onClick={open}
                                 className="border border-input bg-transparent text-center px-3 py-2"
                                 {...getRootProps()}
                               >
