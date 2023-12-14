@@ -34,7 +34,7 @@ export const config: Config = {
       abi: postGatewayABI,
       network: 'optimism-goerli',
       address: addresses.postGateway.opGoerli,
-      startBlock: 18321255,
+      startBlock: 18549604,
     },
     // {
     //   name: 'PostGateway',

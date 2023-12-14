@@ -1,26 +1,29 @@
 query allChannels {
   channels(orderBy: "id", orderDirection: "desc") {
-    creatorId
-    admins
     id
-    members
     timestamp
+    creatorId
     uri
-    items(orderBy: "timestamp", orderDirection: "desc") {
-      creatorId
+    admins
+    members
+    references(orderBy: "id", orderDirection: "desc") {
       id
-      type
       timestamp
-      target {
+      userId
+      pubRef {
         id
-        type
-        publication {
-          creatorId
+        creatorId
+        uri
+        timestamp
+        mentions {
+          userId
           id
-          timestamp
-          uri
         }
-      }      
+      }
     }
+    mentions {
+      id
+      userId
+    }  
   }
 }

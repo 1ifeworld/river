@@ -104,7 +104,8 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                   // Upload cover image to IPFS if it one was provided
                   let uploadedFileCid
                   let uploadedFileType
-                  if (filesToUpload) {
+                  console.log("files to upload", filesToUpload)
+                  if (filesToUpload.length != 0) {
                     uploadedFileCid = await uploadFile({ filesToUpload })
                     uploadedFileType = filesToUpload[0].type
                   }

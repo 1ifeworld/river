@@ -27,7 +27,7 @@ export async function ChannelCard({
           <span className="text-secondary-foreground">{'·'}</span>
           {/* Number of Items */}
           <Typography className="text-secondary-foreground">
-            {pluralize(channel.items.length, 'item', 'items')}
+            {pluralize(channel.references.length, 'item', 'items')}
           </Typography>
         </Flex>
       </Stack>
