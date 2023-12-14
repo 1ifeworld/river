@@ -29,7 +29,7 @@ export async function ChannelBanner({
           alt={channelMetadata.name}
           width={0}
           height={0}
-          sizes="(min-width: 768px) 50vw, 100vw"
+          sizes="(min-width: 768px) 25vw, 100vw"
         />
       </div>
       {/* Column 2 */}
