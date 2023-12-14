@@ -1,6 +1,7 @@
 import { getChannelWithId, type Item } from '@/gql'
 import { Stack } from '@/design-system'
 import { ChannelBanner, ChannelItems } from '@/server'
+// @react-server
 
 export default async function Channel({
   params,

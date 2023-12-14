@@ -1,1 +1,1 @@
-export * from "./sendMetadataRequest"
+export * from './sendMetadataRequest'

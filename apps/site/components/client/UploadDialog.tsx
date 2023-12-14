@@ -14,6 +14,7 @@ import {
   DialogClose,
   Toast,
 } from '@/design-system'
+
 import {
   uploadFile,
   uploadBlob,
@@ -23,15 +24,16 @@ import {
   DataObject,
   sendToDb,
   isImage,
-  isVideo
-} from "@/lib";
-import { useUserContext } from "@/context";
-import { useDropzone } from "react-dropzone";
-import { toast } from "sonner";
-import { useParams } from "next/navigation";
-import { usePrivy } from "@privy-io/react-auth";
-import { muxClient } from "@/config/muxClient";
-import { FileList } from '@/server';
+  isGLB,
+  isVideo,
+} from '@/lib'
+import { useUserContext } from '@/context'
+import { useDropzone } from 'react-dropzone'
+import { toast } from 'sonner'
+import { useParams } from 'next/navigation'
+import { usePrivy } from '@privy-io/react-auth'
+import { muxClient } from '@/config/muxClient'
+import { FileList } from '@/server'
 
 export function UploadDialog() {
   const [dialogOpen, setDialogOpen] = React.useState(false)
@@ -95,6 +97,12 @@ export function UploadDialog() {
                 // Set file name, type, and description values
                 const uploadedFileName = filesToUpload[0]?.name || 'unnamed'
                 const uploadedFileType = filesToUpload[0].type
+                let GLBFileContentType = uploadedFileType // Default to the uploaded file's type
+
+                if (isGLB(filesToUpload[0])) {
+                  GLBFileContentType = 'model/gltf-binary' // If it's a GLB file, set the content type accordingly
+                }
+
                 const hardcodedDescription =
                   'What did you think this was going to be?'
                 // Determine if file is image or video or other
@@ -102,6 +110,7 @@ export function UploadDialog() {
                 const fileIsVideo = fileIsImage
                   ? false
                   : isVideo({ mimeType: uploadedFileType })
+
                 // Upload file to ipfs
                 const uploadedFileCid = await uploadFile({ filesToUpload })
                 // set dynamic variable to be updated
@@ -129,7 +138,7 @@ export function UploadDialog() {
                 } else if (fileIsVideo) {
                   const assetEndpointForMux = pinataUrlFromCid({
                     cid: ipfsUrlToCid({ ipfsUrl: uploadedFileCid }),
-                  });
+                  })
                   const asset = await muxClient.Video.Assets.create({
                     input: assetEndpointForMux,
                     playback_policy: 'public',
