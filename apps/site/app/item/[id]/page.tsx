@@ -14,7 +14,7 @@ const Model = dynamic(
 )
 
 const PdfViewer = dynamic(
-  () => import('../../../components/client/renderer/Pdf/PdfViewer'),
+  () => import('../../../components/client/renderer/pdf/PdfViewer'),
   { ssr: false },
 )
 
