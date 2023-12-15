@@ -21,10 +21,7 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
 
   return (
     <div className="flex flex-col items-center my-4">
-      <div
-        className="pdf-container overflow-auto mb-4"
-        style={{ height: '70vh' }}
-      >
+      <div className="pdf-container overflow-auto mb-4 h-[70vh]">
         <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
           <Page pageNumber={pageNumber} scale={1.4} />
         </Document>

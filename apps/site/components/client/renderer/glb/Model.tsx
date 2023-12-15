@@ -34,7 +34,7 @@ const ModelViewer: React.FC<ModelProps> = ({ src }) => {
   return (
     // we can create a fall back loading component if we wish
     <Canvas>
-      <Suspense fallback={null}>
+      <Suspense>
         <PerspectiveCamera makeDefault position={[0, 1, 2]} />
         <ambientLight position={[0, 0, 5]} intensity={1} />
         <ambientLight position={[5, 5, 5]} intensity={1} />
