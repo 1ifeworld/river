@@ -6,7 +6,6 @@ import { VideoPlayer } from '@/client'
 import React, { useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 
-
 const Model = dynamic(
   () => import('../../../components/client/renderer/glb/Model'),
   {
@@ -37,7 +36,7 @@ export default async function View({
     referenceMetadata.contentType === 'model/gltf-binary' ||
     referenceMetadata.contentType === 'application/pdf' ||
     isAudio({ mimeType: referenceMetadata.contentType })
-    ) {
+  ) {
     const cid = ipfsUrlToCid({ ipfsUrl: referenceMetadata.animationUri })
     contentUrl = pinataUrlFromCid({ cid })
   } else {
@@ -56,10 +55,9 @@ export default async function View({
       </Stack>
     )
   } else if (isAudio({ mimeType: contentType })) {
-
     return (
       <Stack className="w-full h-[calc(100vh-_56px)] justify-center items-center ">
-     <audio controls src={contentUrl}/>   
+        <audio controls src={contentUrl} />
       </Stack>
     )
   } else if (isPDF({ mimeType: contentType })) {

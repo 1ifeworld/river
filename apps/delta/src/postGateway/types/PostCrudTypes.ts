@@ -1,6 +1,6 @@
-import { Hash } from "viem";
+import { Hash } from 'viem'
 
 export type MessageToProcess = {
-    msgType: bigint;
-    msgBody: Hash;
-  };
+  msgType: bigint
+  msgBody: Hash
+}
