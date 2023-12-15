@@ -84,12 +84,12 @@ export default createSchema((p) => ({
     id: p.bigint(),
     createdTimestamp: p.bigint(),
     createdBy: p.bigint().references("User.id"),
-    channelId: p.bigint().references("Channel.id"),
-    // channel: p.one("channelId"),
-    pubRefId: p.bigint().references("Publication.id"),
+    channelId: p.bigint().references("Channel.id").optional(),
+    channel: p.one("channelId"),
+    pubRefId: p.bigint().references("Publication.id").optional(),
     pubRef: p.one("pubRefId"),
-    // chanRefId: p.bigint().references("Channel.id").optional(),
-    // chanRef: p.one("chanRefId")
+    chanRefId: p.bigint().references("Channel.id").optional(),
+    chanRef: p.one("chanRefId")
   })
 }));
 

@@ -10,9 +10,10 @@ import {
   decodeRemoveReference,
   messageTypes,
   isSupportedMessageType,
-  lightAccountABI
+  lightAccountABI,
+  remove0xPrefix
 } from "scrypt";
-import { Address, slice, Hash, verifyMessage } from "viem";
+import { Address, slice, Hash, verifyMessage, recoverPublicKey, recoverMessageAddress } from "viem";
 
 ponder.on("PostGateway:Post", async ({ event, context }) => {
   /* ************************************************
@@ -70,11 +71,11 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
 
   /* ************************************************
 
-                    PRE PROCESSING
+                      INTAKE
 
   ************************************************ */
 
-  console.log("txn input: ", event.transaction.input)
+  // console.log("txn input: ", event.transaction.input)
 
   // skips first 68 bytes which contain 4 byte function selector + 32 byte data offset + 32 byte data length
   const cleanedTxnData = slice(event.transaction.input, 68);
@@ -92,60 +93,60 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
     return;
   }
 
-  // console.log("post was decoded yay", decodedPost)
-  // *** start of user id sig check
-  // // get custody address from user id
-  // userLookup = await User.findUnique({ id: decodedPost?.userId });
-  // console.log("user lookup: ", userLookup);
-  // // exit crud if not a registered user id
-  // if (!userLookup) {
-  //   txnReceipt = await Txn.findUnique({ id: event.transaction.hash });
-  //   if (!txnReceipt) {
-  //     await Txn.create({ id: event.transaction.hash });
-  //     console.log(
-  //       "invalid post -- invalid user id. processed txn hash: ",
-  //       event.transaction.hash
-  //     );
-  //   }
-  //   return;
-  // }
-  // console.log("verifying sig for user: ", userLookup.userId);
-  // console.log("verifying sig for custody address : ", userLookup.to);
-  // // recover signer address from hash
-  // // NOTE: update to context.client.verifyMessage after bumping ponder version
-  // //    this will unlock cleaner support for EOAs + Smart accounts
-  // // NOTE: in future, validity check can be done for one of 1) custody add 2) delegate add
-  // // exit crud if validity check returns valse
-  // const lightAccountSigCheck = await context.client.readContract({
-  //   abi: lightAccountABI,
-  //   address: userLookup.to,
-  //   functionName: "isValidSignature",
-  //   args: [
-  //     decodedPost.hash,
-  //     decodedPost.sig
-  //   ]
-  // })
+  /* ************************************************
 
-  // console.log("light account sig check: ", lightAccountSigCheck)
-  // // REVERT back to this approach once ponder exposes client.verifyMessage
-  // // const sigCheck = await verifyMessage({
-  // //   address: userLookup.to as Address,
-  // //   message: decodedPost.hash,
-  // //   signature: decodedPost.sig,
-  // // }) == false
-  // if (lightAccountSigCheck) {
-  //   txnReceipt = await Txn.findUnique({ id: event.transaction.hash });
-  //   if (!txnReceipt) {
-  //     await Txn.create({ id: event.transaction.hash });
-  //     console.log(
-  //       "invalid post -- invalid sig for user. processed txn hash: ",
-  //       event.transaction.hash
-  //     );
-  //   }
-  //   return;
-  // }
-  // console.log("post verified successfuly :)");
-  // *** end of user id sig check
+                    SIGNATURE CHECK
+
+  ************************************************ */  
+
+  // get custody address from user id
+  userLookup = await User.findUnique({ id: decodedPost?.userId });
+  console.log("user lookup: ", userLookup);
+  // exit crud if not a registered user id
+  if (!userLookup) {
+    txnReceipt = await Txn.findUnique({ id: event.transaction.hash });
+    if (!txnReceipt) {
+      await Txn.create({ id: event.transaction.hash });
+      console.log(
+        "invalid post -- invalid user id. processed txn hash: ",
+        event.transaction.hash
+      );
+    }
+    return;
+  }
+  // NOTE: update to context.client.verifyMessage after bumping ponder version
+  //    this will unlock cleaner support for EOAs + Smart accounts
+  // NOTE: in future, validity check can be done for one of 1) custody add 2) delegate add
+  // exit crud if validity check returns valse
+  const ownerForLightAccount = await context.client.readContract({
+    abi: lightAccountABI,
+    address: userLookup.to,
+    functionName: "owner"
+  })
+  const recoverAddressFromPostSignature = await recoverMessageAddress({
+    message: remove0xPrefix({bytes32Hash: decodedPost.hash}),
+    signature: decodedPost.sig
+  })
+  const signerIsValid = ownerForLightAccount === recoverAddressFromPostSignature
+  console.log("signature is valid for user: ", signerIsValid)
+  
+  if (!signerIsValid) {
+    txnReceipt = await Txn.findUnique({ id: event.transaction.hash });
+    if (!txnReceipt) {
+      await Txn.create({ id: event.transaction.hash });
+      console.log(
+        "invalid post -- invalid sig for user. processed txn hash: ",
+        event.transaction.hash
+      );
+    }
+    return;
+  }
+
+  /* ************************************************
+
+                    PRE PROCESSING
+
+  ************************************************ */  
 
   const postCounter = await PostCounter.upsert({
     id: `${context.network.chainId}/${event.transaction.to}`,
@@ -159,7 +160,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
     }),
   });
 
-  console.log("should the post counter be going up", postCounter.counter)
+  // console.log("should the post counter be going up", postCounter.counter)
 
   const post = await Post.create({
     id: `${context.network.chainId}/${event.transaction.to}/${postCounter?.counter}`,
@@ -178,7 +179,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
     },
   });
 
-  console.log("am i creating the post", post)
+  // console.log("am i creating the post", post)
 
   // identify number of messages sent in post
   const length = post.messageArray.length
@@ -195,10 +196,10 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
       
       // if decode failed, proceed to next i in for loop
       if (!decodedMessage) continue;
-      console.log("decoded message", decodedMessage)
+      // console.log("decoded message", decodedMessage)
       // if msgType not supported, proceed to next i in for loop
       if (!isSupportedMessageType(decodedMessage.msgType)) continue;
-      console.log("decoded message", decodedMessage)
+      // console.log("decoded message", decodedMessage)
       // if decode successful, + msgType is supported, store message
       // store message
       // NOTE: message body may still be invalid, but further decoding + checks will happen in type specific logic
@@ -310,8 +311,8 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
                 createdTimestamp: event.block.timestamp,
                 createdBy: decodedPost.userId,
                 channelId: decodedCreateChannel.channelTags[i], // these are the channels to add the newly created refererence to to
-                pubRefId: BigInt(0), // purposely left undefined
-                // chanRefId: channelCounter?.counter, // this is the channel that was just created
+                pubRefId: undefined, // purposely left undefined
+                chanRefId: channelCounter?.counter, // this is the channel that was just created
               },
             });
           }
@@ -364,8 +365,8 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
                 createdTimestamp: event.block.timestamp,
                 createdBy: decodedPost.userId,
                 channelId: decodedReferenceChannels.channelTags[i],
-                pubRefId: BigInt(0), // purposely left undefined
-                // chanRefId: decodedReferenceChannels.channelTarget,
+                pubRefId: undefined, // purposely left undefined
+                chanRefId: decodedReferenceChannels.channelTarget,
               },
             });
           }
@@ -444,7 +445,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
                 createdBy: decodedPost.userId,
                 channelId: decodedCreatePublication.channelTags[i],
                 pubRefId: publicationCounter?.counter as bigint,
-                // chanRefId: BigInt(0), // purposely left undefined
+                chanRefId: undefined, // purposely left undefined
               },
             });
           }
@@ -497,7 +498,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
                 createdBy: decodedPost.userId,
                 channelId: decodedReferencePublication.channelTags[i],
                 pubRefId: decodedReferencePublication.targetPublication,
-                // chanRefId: BigInt(0), // purposely left undefined
+                chanRefId: undefined, // purposely left undefined
               },
             });
           }

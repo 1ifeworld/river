@@ -32,8 +32,8 @@ contract PostScript is Script {
         createChannel();        
         // referenceChannel();
 
-        createPublication();        
-        referencePublication();
+        // createPublication();        
+        // referencePublication();
 
         // removeReference();
 
@@ -88,8 +88,8 @@ contract PostScript is Script {
         // encode post inputs
         bytes memory postInputs = abi.encodePacked(
             userId,                             // userId
-            hashType,                           // userId
-            hash,                             // userId
+            hashType,                           // hashType
+            hash,                               // hash
             sigType,                            // sigType
             signedPost,                         // signature
             version,                            // version

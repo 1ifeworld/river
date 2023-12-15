@@ -46,7 +46,7 @@ interface ChannelDialogProps {
 
 export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
   const [dialogOpen, setDialogOpen] = React.useState(false)
-  const { signMessage, userId: targetUserId } = useUserContext()
+  const { signMessage, userId: targetUserId, embeddedWallet } = useUserContext()
 
   const [showOptionalDetails, setShowOptionalDetails] = React.useState(false)
 
@@ -133,6 +133,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                     await processCreateChannelPost({
                       channelUri: channelUri,
                       targetUserId: targetUserId,
+                      privySignerAddress: embeddedWallet?.address as string,
                       privySignMessage: signMessage,
                     })
                   }

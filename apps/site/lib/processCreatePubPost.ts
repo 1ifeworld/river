@@ -7,6 +7,7 @@ import {
   messageTypes,
   getExpiration,
   generateHashForPostSig,
+  remove0xPrefix
 } from 'scrypt'
 import { Hash } from 'viem'
 import { SignMessageModalUIOptions } from '@privy-io/react-auth'
@@ -47,22 +48,22 @@ export async function processCreatePubPost({
   const messageArray: Hash[] = [encodedMessage?.encodedMessage]
   // NOTE: this encoding step should be a scrypt export as well
   // bytes32 messageToBeSigned = keccak256(abi.encode(version, expiration, msgArray)).toEthSignedMessageHash();
-  const hashToSign = generateHashForPostSig({
+  const postHash = generateHashForPostSig({
     version: postVersion,
     expiration: postExpiration,
     messageArray: messageArray,
   })
-  console.log('hashToSign signed hash genereated correctly')
+  const postHashForSig = remove0xPrefix({bytes32Hash: postHash})
   // Get signature from user over signed hash of encodePacked version + expiration + messages
-  const sig = await privySignMessage(hashToSign)
-  console.log('sig generated correctly')
-  // Generate encodedPost bytes data -- this is the input to the `post` function`
+  // const sig = await privySignMessage(remove0xPrefix({bytes32Hash: postHash}))
+  const sig = await privySignMessage(postHashForSig) as Hash
+  // Encode data to post through Gateway
   const postInput = encodePost({
     userId: targetUserId,
     hashType: postTypes.hashScheme1,
-    hash: hashToSign,
+    hash: postHash,
     sigType: postTypes.sigTypeECDSA,
-    sig: sig as Hash,
+    sig: sig,
     version: postVersion,
     expiration: postExpiration,
     messageArray: messageArray,
@@ -76,3 +77,4 @@ export async function processCreatePubPost({
     pathToRevalidate: `/channel/${targetChannelId}`,
   })
 }
+

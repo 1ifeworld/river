@@ -600,12 +600,15 @@ export type QueryUsersArgs = {
 
 export type Reference = {
   __typename?: 'Reference';
-  channelId: Scalars['BigInt']['output'];
+  chanRef?: Maybe<Channel>;
+  chanRefId?: Maybe<Scalars['BigInt']['output']>;
+  channel?: Maybe<Channel>;
+  channelId?: Maybe<Scalars['BigInt']['output']>;
   createdBy: Scalars['BigInt']['output'];
   createdTimestamp: Scalars['BigInt']['output'];
   id: Scalars['BigInt']['output'];
-  pubRef: Publication;
-  pubRefId: Scalars['BigInt']['output'];
+  pubRef?: Maybe<Publication>;
+  pubRefId?: Maybe<Scalars['BigInt']['output']>;
 };
 
 export type ReferenceCounter = {
@@ -645,6 +648,14 @@ export type ReferenceCounterFilter = {
 };
 
 export type ReferenceFilter = {
+  chanRefId?: InputMaybe<Scalars['BigInt']['input']>;
+  chanRefId_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  chanRefId_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  chanRefId_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  chanRefId_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  chanRefId_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  chanRefId_not?: InputMaybe<Scalars['BigInt']['input']>;
+  chanRefId_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
   channelId?: InputMaybe<Scalars['BigInt']['input']>;
   channelId_gt?: InputMaybe<Scalars['BigInt']['input']>;
   channelId_gte?: InputMaybe<Scalars['BigInt']['input']>;
@@ -766,21 +777,21 @@ export type UserFilter = {
 export type AllChannelsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllChannelsQuery = { __typename?: 'Query', channels: Array<{ __typename?: 'Channel', id: any, createdTimestamp: any, createdBy: any, uri: string, admins: Array<any>, members: Array<any>, references: Array<{ __typename?: 'Reference', id: any, createdTimestamp: any, createdBy: any, channelId: any, pubRefId: any, pubRef: { __typename?: 'Publication', id: any, createdTimestamp: any, createdBy: any, uri: string } }> }> };
+export type AllChannelsQuery = { __typename?: 'Query', channels: Array<{ __typename?: 'Channel', id: any, createdTimestamp: any, createdBy: any, uri: string, admins: Array<any>, members: Array<any>, references: Array<{ __typename?: 'Reference', id: any, createdTimestamp: any, createdBy: any, channelId?: any | null, pubRefId?: any | null, pubRef?: { __typename?: 'Publication', id: any, createdTimestamp: any, createdBy: any, uri: string } | null }> }> };
 
 export type ChannelWithIdQueryVariables = Exact<{
   id: Scalars['BigInt']['input'];
 }>;
 
 
-export type ChannelWithIdQuery = { __typename?: 'Query', channel?: { __typename?: 'Channel', id: any, createdTimestamp: any, createdBy: any, uri: string, admins: Array<any>, members: Array<any>, references: Array<{ __typename?: 'Reference', id: any, createdTimestamp: any, createdBy: any, pubRef: { __typename?: 'Publication', id: any, createdTimestamp: any, createdBy: any, uri: string } }> } | null };
+export type ChannelWithIdQuery = { __typename?: 'Query', channel?: { __typename?: 'Channel', id: any, createdTimestamp: any, createdBy: any, uri: string, admins: Array<any>, members: Array<any>, references: Array<{ __typename?: 'Reference', id: any, createdTimestamp: any, createdBy: any, pubRef?: { __typename?: 'Publication', id: any, createdTimestamp: any, createdBy: any, uri: string } | null }> } | null };
 
 export type ReferenceWithIdQueryVariables = Exact<{
   id: Scalars['BigInt']['input'];
 }>;
 
 
-export type ReferenceWithIdQuery = { __typename?: 'Query', reference?: { __typename?: 'Reference', id: any, createdTimestamp: any, createdBy: any, channelId: any, pubRef: { __typename?: 'Publication', id: any, createdTimestamp: any, createdBy: any, uri: string } } | null };
+export type ReferenceWithIdQuery = { __typename?: 'Query', reference?: { __typename?: 'Reference', id: any, createdTimestamp: any, createdBy: any, channelId?: any | null, pubRef?: { __typename?: 'Publication', id: any, createdTimestamp: any, createdBy: any, uri: string } | null } | null };
 
 export type TxnHashQueryVariables = Exact<{
   hash: Scalars['String']['input'];

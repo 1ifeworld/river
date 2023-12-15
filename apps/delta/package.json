@@ -9,7 +9,7 @@
     "format": "biome format . --write"
   },
   "dependencies": {
-    "@ponder/core": "^0.1.0",
+    "@ponder/core": "^0.1.1",
     "scrypt": "workspace:*"
   },
   "devDependencies": {

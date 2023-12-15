@@ -60,8 +60,7 @@ contract PostGatewayTest is Test {
         bytes[] memory msgArray = new bytes[](1);
         msgArray[0] = abi.encodePacked(msgType, msgBody);
         // Create signature -- signed hash of encodePacked expiration + messages
-        bytes32 hash = keccak256(abi.encode(version, expiration, msgArray)).toEthSignedMessageHash();
-        bytes memory sig = _sign(user.key, hash);
+        (bytes32 hash, bytes memory sig) = signPost(user.key, version, expiration, msgArray);
         // Generate inputs for post call
         bytes memory postInputs = abi.encodePacked(
             userId,
@@ -109,5 +108,15 @@ contract PostGatewayTest is Test {
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(privateKey, digest);
         return abi.encodePacked(r, s, v);
     }                       
+
+    function signPost(
+        uint256 privateKey, 
+        uint96 vers, 
+        uint96 exp, 
+        bytes[] memory msgArray
+    ) public pure returns (bytes32 hash, bytes memory signedPost) {
+        hash = keccak256(abi.encode(vers, exp, msgArray)).toEthSignedMessageHash();
+        signedPost = _sign(privateKey, hash);
+    }    
 }
 
