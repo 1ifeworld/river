@@ -29,11 +29,8 @@ export default async function View({
 
   const { metadata } = await getReferenceMetadata(reference as Reference)
 
-
-
   const referenceMetadata = metadata.data[reference?.pubRef?.uri as string]
-  console.log('Reference Metadata:', referenceMetadata);
-
+  console.log('Reference Metadata:', referenceMetadata)
 
   let contentUrl
 
@@ -51,7 +48,7 @@ export default async function View({
 
   const contentType = referenceMetadata.contentType
 
-  if (isVideo({ mimeType: contentType }) ) {
+  if (isVideo({ mimeType: contentType })) {
     return (
       <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center ">
         <Stack className="w-[75%] sm:w-[50%]">
@@ -71,8 +68,7 @@ export default async function View({
           {referenceMetadata && referenceMetadata.muxPlaybackId}
         </h1>
 
-        <AudioPlayer playbackId={referenceMetadata.muxPlaybackId}
-    />
+        <AudioPlayer playbackId={referenceMetadata.muxPlaybackId} />
       </Stack>
     )
   } else if (isPDF({ mimeType: contentType })) {

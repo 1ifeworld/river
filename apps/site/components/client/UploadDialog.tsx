@@ -27,6 +27,7 @@ import {
   isVideo,
   isAudio,
   IPFSDataObject,
+  determineContentType,
 } from '@/lib'
 import { useUserContext } from '@/context'
 import { useDropzone } from 'react-dropzone'
@@ -54,28 +55,13 @@ export function UploadDialog() {
     disabled: showFileList,
   })
 
-  const determineContentType = (file: File): string => {
-    if (isGLB(file)) {
-      return 'model/gltf-binary'
-    }
-    const mimeType = file.type
-    if (
-      isVideo({ mimeType }) ||
-      isAudio({ mimeType }) ||
-      isImage({ mimeType })
-    ) {
-      return mimeType
-    }
-    return mimeType
-  }
-
   const uploadAndProcessFile = async (file: File) => {
     const uploadedFileName = file.name || 'unnamed'
     const contentType = determineContentType(file)
     const uploadedFileCid = await uploadFile({ filesToUpload: [file] })
 
     let pubUri: string
-    let dataForDB: DataObject 
+    let dataForDB: DataObject
 
     // Set the correct animationUri based on file type
     const reqAnimationUri =
@@ -121,9 +107,9 @@ export function UploadDialog() {
           contentType: contentType,
           muxAssetId: muxAssetId,
           muxPlaybackId: muxPlaybackId,
+        },
       }
-    } 
-  } else {
+    } else {
       dataForDB = {
         key: pubUri,
         value: {
@@ -133,7 +119,6 @@ export function UploadDialog() {
           muxPlaybackId: '',
         },
       }
-
     }
 
     await sendToDb(dataForDB)

@@ -7,6 +7,7 @@ export function AudioPlayer({ playbackId }: { playbackId: string }) {
       streamType="on-demand"
       audio
       primary-color="#111111"
-      secondary-color="#ffffff" />
+      secondary-color="#ffffff"
+    />
   )
 }
