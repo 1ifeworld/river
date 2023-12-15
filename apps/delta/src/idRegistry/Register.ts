@@ -2,9 +2,9 @@ import { ponder } from '@/generated'
 
 // should we assume backup is always us? should folks be able to update this
 ponder.on('IdRegistry:Register', async ({ event, context }) => {
-  const { 
-    // IdRegistry, 
-    User 
+  const {
+    // IdRegistry,
+    User,
   } = context.db
   const { to, id, backup, data } = event.args
 
@@ -19,8 +19,8 @@ ponder.on('IdRegistry:Register', async ({ event, context }) => {
       userId: id,
       to: to,
       backup: backup,
-      from: event.transaction.from
-    }
+      from: event.transaction.from,
+    },
   })
 
   // await IdRegistry.create({

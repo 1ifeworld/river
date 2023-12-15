@@ -11,9 +11,14 @@ import { Channel, Reference } from '@/gql'
 import { unixTimeConverter } from '@/utils'
 import { ThumbnailNameCreator } from '@/server'
 
-function extractContentType({ reference, metadata }: { reference: any; metadata: any }) {
+function extractContentType({
+  reference,
+  metadata,
+}: { reference: any; metadata: any }) {
   const referenceMetadata = metadata.data[reference.pubRef?.uri as string]
-  return referenceMetadata?.contentType ? referenceMetadata.contentType : 'undefined'
+  return referenceMetadata?.contentType
+    ? referenceMetadata.contentType
+    : 'undefined'
 }
 
 export async function ChannelItems({
@@ -66,7 +71,9 @@ export async function ChannelItems({
               })}`}</Typography>
             </TableCell>
             <TableCell className="text-right text-primary-foreground">
-              <Typography>{unixTimeConverter(reference.createdTimestamp)}</Typography>
+              <Typography>
+                {unixTimeConverter(reference.createdTimestamp)}
+              </Typography>
             </TableCell>
             <TableCell className="text-right w-[100px] text-primary-foreground">
               <Typography>{'...'}</Typography>

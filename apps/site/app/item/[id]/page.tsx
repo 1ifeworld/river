@@ -36,7 +36,7 @@ export default async function View({
 
   if (
     referenceMetadata.contentType === 'model/gltf-binary' ||
-    referenceMetadata.contentType === 'application/Pdf' ||
+    referenceMetadata.contentType === 'application/pdf' ||
     isAudio({ mimeType: referenceMetadata.contentType })
   ) {
     const cid = ipfsUrlToCid({ ipfsUrl: referenceMetadata.animationUri })
@@ -52,10 +52,6 @@ export default async function View({
     return (
       <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center ">
         <Stack className="w-[75%] sm:w-[50%]">
-          <h1>
-            {referenceMetadata && referenceMetadata.name} &&{' '}
-            {referenceMetadata && referenceMetadata.muxPlaybackId}
-          </h1>
           <VideoPlayer playbackId={referenceMetadata.muxPlaybackId} />
         </Stack>
       </Stack>
@@ -63,11 +59,6 @@ export default async function View({
   } else if (isAudio({ mimeType: contentType })) {
     return (
       <Stack className="w-full h-[calc(100vh-_56px)] justify-center items-center ">
-        <h1>
-          {referenceMetadata && referenceMetadata.name} &&{' '}
-          {referenceMetadata && referenceMetadata.muxPlaybackId}
-        </h1>
-
         <AudioPlayer playbackId={referenceMetadata.muxPlaybackId} />
       </Stack>
     )

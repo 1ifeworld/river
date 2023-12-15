@@ -24,6 +24,7 @@ import {
   sendToDb,
   isImage,
   isGLB,
+  isPdf,
   isVideo,
   isAudio,
   IPFSDataObject,
@@ -67,6 +68,7 @@ export function UploadDialog() {
     const reqAnimationUri =
       isVideo({ mimeType: contentType }) ||
       isAudio({ mimeType: contentType }) ||
+      isPdf({ mimeType: contentType }) ||
       isGLB(file)
     const animationUri = reqAnimationUri ? uploadedFileCid : ''
 
