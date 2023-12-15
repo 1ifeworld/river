@@ -73,7 +73,7 @@ export default createSchema((p) => ({
     createdTimestamp: p.bigint(),
     createdBy: p.bigint().references("User.id"),
     uri: p.string(),
-    mentions: p.many("Reference.pubRefId")
+    // mentions: p.many("Reference.pubRefId")
   }),
   ReferenceCounter: p.createTable({
     id: p.string(),
@@ -85,7 +85,7 @@ export default createSchema((p) => ({
     createdTimestamp: p.bigint(),
     createdBy: p.bigint().references("User.id"),
     channelId: p.bigint().references("Channel.id"),
-    channel: p.one("channelId"),
+    // channel: p.one("channelId"),
     pubRefId: p.bigint().references("Publication.id"),
     pubRef: p.one("pubRefId"),
     // chanRefId: p.bigint().references("Channel.id").optional(),

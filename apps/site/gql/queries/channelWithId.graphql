@@ -15,15 +15,7 @@ query channelWithId($id: BigInt!) {
         createdTimestamp
         createdBy
         uri
-        mentions {
-          id
-          createdBy
-        }
       }
-    }
-    mentions {
-      id
-      createdBy
     }
   }
 }

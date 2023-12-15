@@ -66,7 +66,7 @@ export async function ChannelItems({
               })}`}</Typography>
             </TableCell>
             <TableCell className="text-right text-primary-foreground">
-              <Typography>{unixTimeConverter(reference.timestamp)}</Typography>
+              <Typography>{unixTimeConverter(reference.createdTimestamp)}</Typography>
             </TableCell>
             <TableCell className="text-right w-[100px] text-primary-foreground">
               <Typography>{'...'}</Typography>

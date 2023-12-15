@@ -10,20 +10,15 @@ query allChannels {
       id
       createdTimestamp
       createdBy
+      channelId
+      pubRefId
       pubRef {
         id
         createdTimestamp
         createdBy
         uri
-        mentions {
-          id
-          createdBy          
-        }
       }
     }
-    mentions {
-      id
-      createdBy
-    }  
   }
 }
+
