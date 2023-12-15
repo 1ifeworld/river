@@ -61,9 +61,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
   }, [])
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
     onDrop,
-    disabled: filesToUpload.length === 0,
-    noClick: true,
-    noKeyboard: true,
+    disabled: filesToUpload.length !== 0,
   })
 
   const form = useForm<z.infer<typeof newChannelSchema>>({
@@ -111,7 +109,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                   let uploadedFileCid
                   let uploadedFileType
                   console.log('files to upload', filesToUpload)
-                  if (filesToUpload.length != 0) {
+                  if (filesToUpload.length !== 0) {
                     uploadedFileCid = await uploadFile({ filesToUpload })
                     uploadedFileType = filesToUpload[0].type
                   }
@@ -197,48 +195,34 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                         </FormItem>
                       )}
                     />
-                    <FormField
-                      control={form.control}
-                      name="cover"
-                      render={({ field }) => (
-                        <FormItem className="mx-5">
-                          <FormLabel htmlFor="cover">
-                            <Typography variant="small">Cover</Typography>
-                          </FormLabel>
-                          <FormControl>
-                            {!showFileList ? (
-                              <div
-                                className="border border-input bg-transparent text-center px-3 py-2"
-                                {...getRootProps()}
-                              >
-                                <input
-                                  id="cover"
-                                  {...getInputProps()}
-                                  {...field}
-                                />
-                                {isDragActive ? (
-                                  <Typography className="text-muted-foreground min-h-[35px]'">
-                                    Drop your files here
-                                  </Typography>
-                                ) : (
-                                  <Typography className="hover:cursor-pointer text-muted-foreground leading-1">
-                                    Drag and drop a cover image here or
-                                    {'\u00A0'}
-                                    <span className="underline">browse</span>
-                                    {'\u00A0'}your local file system
-                                  </Typography>
-                                )}
-                              </div>
-                            ) : (
-                              <Stack className="border border-input bg-transparent items-center text-center px-3 py-2">
-                                <FileList filesToUpload={filesToUpload} />
-                              </Stack>
-                            )}
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
+                    {/* Dropzone */}
+                    <div className="mx-5" {...getRootProps()}>
+                      <FormLabel htmlFor="cover">
+                        <Typography variant="small">Cover</Typography>
+                      </FormLabel>
+                      {!showFileList ? (
+                        <div className="border border-input bg-transparent text-center px-3 py-2">
+                          <input id="cover" {...getInputProps()} />
+
+                          {isDragActive ? (
+                            <Typography className="text-muted-foreground min-h-[35px]'">
+                              Drop your files here
+                            </Typography>
+                          ) : (
+                            <Typography className="hover:cursor-pointer text-muted-foreground leading-1">
+                              Drag and drop a cover image here or
+                              {'\u00A0'}
+                              <span className="underline">browse</span>
+                              {'\u00A0'}your local file system
+                            </Typography>
+                          )}
+                        </div>
+                      ) : (
+                        <Stack className="border border-input bg-transparent items-center text-center px-3 py-2">
+                          <FileList filesToUpload={filesToUpload} />
+                        </Stack>
                       )}
-                    />
+                    </div>
                   </>
                 ) : (
                   <Button
