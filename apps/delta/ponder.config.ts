@@ -18,13 +18,13 @@ export default createConfig({
       network: 'opGoerli',
       abi: idRegistryABI,
       address: addresses.idRegistry.opGoerli,
-      startBlock: 18272706,
+      startBlock: 18623300,
     },
     PostGateway: {
       network: 'opGoerli',
       abi: postGatewayABI,
       address: addresses.postGateway.opGoerli,
-      startBlock: 18620031,
+      startBlock: 18623300,
     },
     // IdRegistry: {
     //   network: "anvil", hii
