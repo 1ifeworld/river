@@ -1,1 +1,1 @@
-export * from "./PostCrudTypes"
+export * from './PostCrudTypes'

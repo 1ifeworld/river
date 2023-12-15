@@ -14,7 +14,7 @@ export default async function Channel({
   const { channelMetadata } = await getChannelMetadata(channel)
   const { metadata } = await getReferencesMetadata(channel?.references)
 
-  console.log("metadata: ", metadata)
+  console.log('metadata: ', metadata)
 
   if (!channel) {
     return (

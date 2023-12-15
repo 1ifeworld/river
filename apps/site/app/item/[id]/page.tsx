@@ -1,14 +1,22 @@
 import { Stack } from 'design-system/elements'
 import { getReferenceWithId, type Reference } from '@/gql'
-import { ipfsUrlToCid, pinataUrlFromCid, isVideo } from '@/lib'
+import { ipfsUrlToCid, pinataUrlFromCid, isVideo, isPdf, isAudio } from '@/lib'
 import Image from 'next/image'
-import { VideoPlayer } from '@/client'
+import { VideoPlayer, AudioPlayer } from '@/client'
 import React, { useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 
-const Model = dynamic(() => import('../../../components/client/renderer/glb/Model'), {
-  ssr: false,
-})
+const Model = dynamic(
+  () => import('../../../components/client/renderer/glb/Model'),
+  {
+    ssr: false,
+  },
+)
+
+const PdfViewer = dynamic(
+  () => import('../../../components/client/renderer/PDF/PDFViewer'),
+  { ssr: false },
+)
 
 export default async function View({
   params,
@@ -22,8 +30,15 @@ export default async function View({
   const { metadata } = await getReferenceMetadata(reference as Reference)
 
   const referenceMetadata = metadata.data[reference?.pubRef?.uri as string]
+  console.log('Reference Metadata:', referenceMetadata)
+
   let contentUrl
-  if (referenceMetadata.contentType === 'model/gltf-binary') {
+
+  if (
+    referenceMetadata.contentType === 'model/gltf-binary' ||
+    referenceMetadata.contentType === 'application/Pdf' ||
+    isAudio({ mimeType: referenceMetadata.contentType })
+  ) {
     const cid = ipfsUrlToCid({ ipfsUrl: referenceMetadata.animationUri })
     contentUrl = pinataUrlFromCid({ cid })
   } else {
@@ -37,8 +52,29 @@ export default async function View({
     return (
       <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center ">
         <Stack className="w-[75%] sm:w-[50%]">
+          <h1>
+            {referenceMetadata && referenceMetadata.name} &&{' '}
+            {referenceMetadata && referenceMetadata.muxPlaybackId}
+          </h1>
           <VideoPlayer playbackId={referenceMetadata.muxPlaybackId} />
         </Stack>
+      </Stack>
+    )
+  } else if (isAudio({ mimeType: contentType })) {
+    return (
+      <Stack className="w-full h-[calc(100vh-_56px)] justify-center items-center ">
+        <h1>
+          {referenceMetadata && referenceMetadata.name} &&{' '}
+          {referenceMetadata && referenceMetadata.muxPlaybackId}
+        </h1>
+
+        <AudioPlayer playbackId={referenceMetadata.muxPlaybackId} />
+      </Stack>
+    )
+  } else if (isPdf({ mimeType: contentType })) {
+    return (
+      <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center ">
+        <PdfViewer file={contentUrl} />
       </Stack>
     )
   } else if (contentType === 'model/gltf-binary') {

@@ -4,14 +4,17 @@ import { Hash, decodeAbiParameters, encodeAbiParameters } from 'viem'
 // ENCODING
 //////////////////////////////////////////////////
 
-export function encodeCreatePublication({ uri, channelTags }: { uri: string, channelTags: bigint[] }): {
+export function encodeCreatePublication({
+  uri,
+  channelTags,
+}: { uri: string; channelTags: bigint[] }): {
   msgBody: Hash
 } | null {
   try {
     const msgBody = encodeAbiParameters(
       [
         { name: 'uri', type: 'string' },
-        { name: 'channelTags', type: 'uint256[]' }
+        { name: 'channelTags', type: 'uint256[]' },
       ],
       [uri, channelTags],
     )
@@ -25,15 +28,17 @@ export function encodeCreatePublication({ uri, channelTags }: { uri: string, cha
   }
 }
 
-export function encodeReferencePublication({ targetPublication, channelTags }: { targetPublication: bigint, channelTags: bigint[] }): {
+export function encodeReferencePublication({
+  targetPublication,
+  channelTags,
+}: { targetPublication: bigint; channelTags: bigint[] }): {
   msgBody: Hash
 } | null {
   try {
-
     const msgBody = encodeAbiParameters(
       [
         { name: 'targetPublication', type: 'uint256' },
-        { name: 'channelTags', type: 'uint256[]' }
+        { name: 'channelTags', type: 'uint256[]' },
       ],
       [targetPublication, channelTags],
     )

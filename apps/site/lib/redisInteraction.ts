@@ -1,3 +1,9 @@
+export interface IPFSDataObject {
+  name: string
+  description: string
+  image: string
+  animationUri: string
+}
 export interface DataObject {
   key: string
   value: {
@@ -6,6 +12,8 @@ export interface DataObject {
     image: string
     animationUri: string
     contentType: string
+    muxAssetId?: string
+    muxPlaybackId?: string
   }
 }
 

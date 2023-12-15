@@ -8,7 +8,7 @@ export function encodeCreateChannel({
   uri,
   adminIds,
   memberIds,
-  channelTags
+  channelTags,
 }: {
   uri: string
   adminIds: bigint[]
@@ -37,11 +37,13 @@ export function encodeCreateChannel({
   }
 }
 
-export function encodeeferenceChannel({ channelTarget, channelTags }: { channelTarget: bigint, channelTags: readonly bigint[] }): {
+export function encodeeferenceChannel({
+  channelTarget,
+  channelTags,
+}: { channelTarget: bigint; channelTags: readonly bigint[] }): {
   msgBody: Hash
 } | null {
   try {
-
     const msgBody = encodeAbiParameters(
       [
         { name: 'channelTarget', type: 'uint256' },
@@ -58,7 +60,6 @@ export function encodeeferenceChannel({ channelTarget, channelTags }: { channelT
     return null
   }
 }
-
 
 //////////////////////////////////////////////////
 // DECODING
@@ -94,24 +95,24 @@ export function decodeCreateChannel({ msgBody }: { msgBody: Hash }): {
 }
 
 export function decodeReferenceChannel({ msgBody }: { msgBody: Hash }): {
-    channelTarget: bigint
-    channelTags: readonly bigint[]
-  } | null {
-    try {
-      const [channelTarget, channelTags] = decodeAbiParameters(
-        [
-          { name: 'channelTarget', type: 'uint256' },
-          { name: 'channelTags', type: 'uint256[]' },
-        ],
-        msgBody,
-      )
-  
-      return {
-        channelTarget: channelTarget,
-        channelTags: channelTags
-      }
-    } catch (error) {
-      console.error('Failed to decode Reference Channels', error)
-      return null
+  channelTarget: bigint
+  channelTags: readonly bigint[]
+} | null {
+  try {
+    const [channelTarget, channelTags] = decodeAbiParameters(
+      [
+        { name: 'channelTarget', type: 'uint256' },
+        { name: 'channelTags', type: 'uint256[]' },
+      ],
+      msgBody,
+    )
+
+    return {
+      channelTarget: channelTarget,
+      channelTags: channelTags,
     }
+  } catch (error) {
+    console.error('Failed to decode Reference Channels', error)
+    return null
   }
+}
