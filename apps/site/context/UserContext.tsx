@@ -28,6 +28,7 @@ import { addresses } from 'scrypt'
 import { SignMessageModalUIOptions } from '@privy-io/react-auth'
 
 const UserContext = createContext<{
+  embeddedWallet?: ConnectedWallet
   alchemyProvider?: AlchemyProvider
   smartAccountAddress?: Address
   signMessage?: (
@@ -103,6 +104,8 @@ export function UserContextComponent({ children }: { children: ReactNode }) {
         return
       }
 
+      // if (!embeddedWallet)
+
       const { userId } = await getUserId({
         custodyAddress: smartAccountAddress as Address,
       })
@@ -123,6 +126,7 @@ export function UserContextComponent({ children }: { children: ReactNode }) {
     <UserContext.Provider
       value={{
         alchemyProvider,
+        embeddedWallet,
         smartAccountAddress,
         signMessage,
         userId,

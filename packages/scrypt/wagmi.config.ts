@@ -23,7 +23,10 @@ export default defineConfig({
     }),
     foundry({
       project: '../river-contracts/lib/light-account',
-      include: ['LightAccountFactory.json'],
+      include: [
+        'LightAccountFactory.json',
+        'LightAccount.json'
+      ],
     }),
   ],
   out: './abi/generated.ts',

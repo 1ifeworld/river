@@ -56,7 +56,7 @@ export async function ThumbnailNameCreator({
             </Typography>
           </Button>
         </Link>
-        <Username id={reference.userId} />
+        <Username id={reference.createdBy} />
       </Stack>
     </>
   )

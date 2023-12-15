@@ -11,7 +11,7 @@ export async function ChannelCard({
   channel: Channel
   metadata: any
 }) {
-  const username = await getUsername({ id: channel.creatorId })
+  const username = await getUsername({ id: channel.createdBy })
   const channelMetadata = metadata.data[channel.uri as string]
 
   return (
