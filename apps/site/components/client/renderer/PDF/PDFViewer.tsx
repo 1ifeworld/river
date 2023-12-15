@@ -1,9 +1,9 @@
 'use client'
 import React, { useState } from 'react'
-import { Document, Page, pdfjs } from 'react-Pdf'
+import { Document, Page, pdfjs } from 'react-pdf'
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  'Pdfjs-dist/build/Pdf.worker.min.js',
+  'pdfjs-dist/build/pdf.worker.min.js',
   import.meta.url,
 ).toString()
 
