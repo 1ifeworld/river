@@ -35,7 +35,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import {} from '@/lib'
-import Dropzone from 'react-dropzone'
+import { useDropzone } from 'react-dropzone'
 import { FileList } from '@/server'
 import * as z from 'zod'
 
@@ -59,6 +59,10 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
     setShowFileList(true)
     setFilesToUpload(filesToUpload)
   }, [])
+  const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
+    onDrop,
+    disabled: filesToUpload.length !== 0,
+  })
 
   const form = useForm<z.infer<typeof newChannelSchema>>({
     resolver: zodResolver(newChannelSchema),
@@ -104,8 +108,8 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                   // Upload cover image to IPFS if it one was provided
                   let uploadedFileCid
                   let uploadedFileType
-                  console.log("files to upload", filesToUpload)
-                  if (filesToUpload.length != 0) {
+                  console.log('files to upload', filesToUpload)
+                  if (filesToUpload.length !== 0) {
                     uploadedFileCid = await uploadFile({ filesToUpload })
                     uploadedFileType = filesToUpload[0].type
                   }
@@ -184,7 +188,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                               placeholder="Write a description..."
                               id="description"
                               className="resize-none"
-                              rows={12}
+                              rows={5}
                               {...field}
                             />
                           </FormControl>
@@ -192,58 +196,34 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                         </FormItem>
                       )}
                     />
-                    <FormField
-                      control={form.control}
-                      name="cover"
-                      render={({ field }) => (
-                        <FormItem className="mx-5">
-                          <FormLabel htmlFor="cover">
-                            <Typography variant="small">Cover</Typography>
-                          </FormLabel>
-                          <FormControl>
-                            {!showFileList ? (
-                              <Dropzone onDrop={onDrop} disabled={showFileList}>
-                                {({
-                                  getRootProps,
-                                  getInputProps,
-                                  isDragActive,
-                                }) => (
-                                  <div
-                                    className="border border-input bg-transparent text-center px-3 py-2"
-                                    {...getRootProps()}
-                                  >
-                                    <input
-                                      id="cover"
-                                      {...getInputProps()}
-                                      {...field}
-                                    />
-                                    {isDragActive ? (
-                                      <Typography className="text-muted-foreground min-h-[35px]'">
-                                        Drop your files here
-                                      </Typography>
-                                    ) : (
-                                      <Typography className="hover:cursor-pointer text-muted-foreground leading-1">
-                                        Drag and drop a cover image here or
-                                        {'\u00A0'}
-                                        <span className="underline">
-                                          browse
-                                        </span>
-                                        {'\u00A0'}your local file system
-                                      </Typography>
-                                    )}
-                                  </div>
-                                )}
-                              </Dropzone>
-                            ) : (
-                              <Stack className="border border-input bg-transparent items-center text-center px-3 py-2">
-                                <FileList filesToUpload={filesToUpload} />
-                              </Stack>
-                            )}
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
+                    {/* Dropzone */}
+                    <div className="mx-5" {...getRootProps()}>
+                      <FormLabel htmlFor="cover">
+                        <Typography variant="small">Cover</Typography>
+                      </FormLabel>
+                      {!showFileList ? (
+                        <div className="border border-input bg-transparent text-center px-3 py-2">
+                          <input id="cover" {...getInputProps()} />
+
+                          {isDragActive ? (
+                            <Typography className="text-muted-foreground min-h-[35px]'">
+                              Drop your files here
+                            </Typography>
+                          ) : (
+                            <Typography className="hover:cursor-pointer text-muted-foreground leading-1">
+                              Drag and drop a cover image here or
+                              {'\u00A0'}
+                              <span className="underline">browse</span>
+                              {'\u00A0'}your local file system
+                            </Typography>
+                          )}
+                        </div>
+                      ) : (
+                        <Stack className="border border-input bg-transparent items-center text-center px-3 py-2">
+                          <FileList filesToUpload={filesToUpload} />
+                        </Stack>
                       )}
-                    />
+                    </div>
                   </>
                 ) : (
                   <Button

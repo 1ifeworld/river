@@ -32,7 +32,7 @@ export async function processCreatePubPost({
   // generate encoded msgBody for createChannelMsg
   const createPubMsg = encodeCreatePublication({
     uri: pubUri,
-    channelTags: [targetChannelId]
+    channelTags: [targetChannelId],
   })
   // add this in to prevent msgBody from being null
   if (!createPubMsg) return
@@ -42,7 +42,7 @@ export async function processCreatePubPost({
     msgBody: createPubMsg.msgBody,
   })
   // add this in to prevent either encoded messages from being null
-  if (!encodedMessage ) return
+  if (!encodedMessage) return
   console.log('encoded create pub message correctly')
   // generate the bytes[] messageArray
   const messageArray: Hash[] = [encodedMessage?.encodedMessage]
