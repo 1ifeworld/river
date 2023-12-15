@@ -1,8 +1,14 @@
 'use client'
-import React from 'react'
-import { useGLTF, OrbitControls } from '@react-three/drei'
-import { Canvas } from '@react-three/fiber'
+import React, { Suspense, useRef, useEffect } from 'react'
+import {
+  useGLTF,
+  Environment,
+  OrbitControls,
+  PerspectiveCamera,
+} from '@react-three/drei'
+import { Canvas, useThree } from '@react-three/fiber'
 import { GLTF as GLTFThree } from 'three/examples/jsm/loaders/GLTFLoader'
+import * as THREE from 'three'
 
 interface ModelProps {
   src: string
@@ -10,48 +16,35 @@ interface ModelProps {
 
 const Model: React.FC<ModelProps> = ({ src }) => {
   const gltf = useGLTF(src, true) as GLTFThree
-  gltf.scene.scale.set(1, 1, 1) // Adjust the scale as needed.
+  const modelRef = useRef<THREE.Object3D>(null)
 
+  useEffect(() => {
+    if (modelRef.current) {
+      const box = new THREE.Box3().setFromObject(modelRef.current)
+      const size = box.getSize(new THREE.Vector3())
+      const maxDimension = Math.max(size.x, size.y, size.z)
+      modelRef.current.scale.setScalar(0.8 / maxDimension)
+    }
+  }, [src])
+
+  return <primitive object={gltf.scene} ref={modelRef} dispose={null} />
+}
+
+const ModelViewer: React.FC<ModelProps> = ({ src }) => {
   return (
+    // we can create a fall back loading component if we wish
     <Canvas>
-      <ambientLight intensity={1} />
-      <directionalLight position={[0, 5, 5]} intensity={2} />
-      <directionalLight position={[5, 5, 5]} intensity={3} />
-
-      <primitive object={gltf.scene} dispose={null} />
-      <OrbitControls />
+      <Suspense>
+        <PerspectiveCamera makeDefault position={[0, 1, 2]} />
+        <ambientLight position={[0, 0, 5]} intensity={1} />
+        <ambientLight position={[5, 5, 5]} intensity={1} />
+        <directionalLight position={[10, 10, 5]} intensity={2} />
+        <directionalLight position={[-10, -10, -5]} intensity={2} />
+        <Model src={src} />
+        <OrbitControls />
+      </Suspense>
     </Canvas>
   )
 }
 
-export default Model
-
-// 'use client'
-// import React, { useEffect, useState } from 'react';
-// import '@google/model-viewer';
-// import { ModelViewerElement } from "@google/model-viewer";
-
-// interface GLTFViewerProps {
-//   src: string;
-// }
-
-// const GLTFViewer: React.FC<GLTFViewerProps> = ({ src }) => {
-
-//   return (
-//  <model-viewer
-//     src={src}
-//     camera-controls
-//     auto-rotate
-//     ar
-//   ></model-viewer>    // React.createElement('model-viewer', {
-//     //   src,
-//     //   'auto-rotate': true,
-//     //   'camera-controls': true,
-//     //   ar: true,
-//     //   'ar-modes': "webxr scene-viewer quick-look",
-//     //   'environment-image': "neutral"
-//     // } as Partial<ModelViewerElement>)
-//   );
-// }
-
-// export default GLTFViewer;
+export default ModelViewer

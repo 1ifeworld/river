@@ -47,6 +47,7 @@
     "react-dom": "18.2.0",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.47.0",
+    "react-pdf": "^7.6.0",
     "scrypt": "workspace:*",
     "server-only": "^0.0.1",
     "sonner": "^1.2.0",
