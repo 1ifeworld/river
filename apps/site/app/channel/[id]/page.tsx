@@ -11,16 +11,14 @@ export default async function Channel({
     id: params.id,
   })
 
-  const { channelMetadata } = await getChannelMetadata(channel)
-  const { metadata } = await getReferencesMetadata(channel?.references)
-
-  console.log('metadata: ', metadata)
-
   if (!channel) {
     return (
       <Stack className="pt-[72px] gap-14">This is not a valid channel :/</Stack>
     )
   }
+
+  const { channelMetadata } = await getChannelMetadata(channel)
+  const { metadata } = await getReferencesMetadata(channel?.references)
 
   return (
     <Stack className="pt-[72px] gap-14 h-full">
