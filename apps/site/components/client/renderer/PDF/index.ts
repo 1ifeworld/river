@@ -3,4 +3,4 @@
 // Subdirectories
 
 // Individual components
-export * from './PDFViewer'
+export * from './PdfViewer'

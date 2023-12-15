@@ -33,7 +33,7 @@ export function isGLB(file: File) {
   return extension === 'glb' || extension === 'gltf'
 }
 
-export function isPDF({ mimeType }: { mimeType: string }) {
+export function isPdf({ mimeType }: { mimeType: string }) {
   return ['application/pdf'].includes(mimeType)
 }
 
