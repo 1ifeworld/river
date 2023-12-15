@@ -7,7 +7,7 @@ import {
   messageTypes,
   getExpiration,
   generateHashForPostSig,
-  remove0xPrefix
+  remove0xPrefix,
 } from 'scrypt'
 import { Hash } from 'viem'
 import { SignMessageModalUIOptions } from '@privy-io/react-auth'
@@ -53,10 +53,10 @@ export async function processCreatePubPost({
     expiration: postExpiration,
     messageArray: messageArray,
   })
-  const postHashForSig = remove0xPrefix({bytes32Hash: postHash})
+  const postHashForSig = remove0xPrefix({ bytes32Hash: postHash })
   // Get signature from user over signed hash of encodePacked version + expiration + messages
   // const sig = await privySignMessage(remove0xPrefix({bytes32Hash: postHash}))
-  const sig = await privySignMessage(postHashForSig) as Hash
+  const sig = (await privySignMessage(postHashForSig)) as Hash
   // Encode data to post through Gateway
   const postInput = encodePost({
     userId: targetUserId,
@@ -77,4 +77,3 @@ export async function processCreatePubPost({
     pathToRevalidate: `/channel/${targetChannelId}`,
   })
 }
-

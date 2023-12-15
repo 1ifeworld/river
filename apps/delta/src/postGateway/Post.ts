@@ -1,5 +1,5 @@
-import { ponder } from "@/generated";
-import { MessageToProcess } from "./types";
+import { ponder } from '@/generated'
+import { MessageToProcess } from './types'
 import {
   decodePost,
   decodeMessage,
@@ -11,11 +11,18 @@ import {
   messageTypes,
   isSupportedMessageType,
   lightAccountABI,
-  remove0xPrefix
-} from "scrypt";
-import { Address, slice, Hash, verifyMessage, recoverPublicKey, recoverMessageAddress } from "viem";
+  remove0xPrefix,
+} from 'scrypt'
+import {
+  Address,
+  slice,
+  Hash,
+  verifyMessage,
+  recoverPublicKey,
+  recoverMessageAddress,
+} from 'viem'
 
-ponder.on("PostGateway:Post", async ({ event, context }) => {
+ponder.on('PostGateway:Post', async ({ event, context }) => {
   /* ************************************************
 
                     DATA STRUCTURES
@@ -36,7 +43,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
     ReferenceCounter,
     Reference,
     Txn,
-  } = context.db;
+  } = context.db
 
   /* ************************************************
 
@@ -44,30 +51,30 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
 
   ************************************************ */
 
-  let txnReceipt: { id: `0x${string}` } | null = null;
+  let txnReceipt: { id: `0x${string}` } | null = null
 
   let userLookup: {
-    id: bigint;
-    from: `0x${string}`;
-    to: `0x${string}`;
-    backup: `0x${string}`;
-    userId: bigint;
-  } | null = null;
+    id: bigint
+    from: `0x${string}`
+    to: `0x${string}`
+    backup: `0x${string}`
+    userId: bigint
+  } | null = null
 
   let channelLookup: {
-    id: bigint;
-    createdTimestamp: bigint;
-    createdBy: bigint;
-    uri: string;
-    admins: bigint[];
-    members: bigint[];
-  } | null = null;
+    id: bigint
+    createdTimestamp: bigint
+    createdBy: bigint
+    uri: string
+    admins: bigint[]
+    members: bigint[]
+  } | null = null
 
   let referenceCounter: {
-    id: string;
-    counter: bigint;
-    lastUpdated: bigint;
-  } | null = null;
+    id: string
+    counter: bigint
+    lastUpdated: bigint
+  } | null = null
 
   /* ************************************************
 
@@ -78,41 +85,41 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
   // console.log("txn input: ", event.transaction.input)
 
   // skips first 68 bytes which contain 4 byte function selector + 32 byte data offset + 32 byte data length
-  const cleanedTxnData = slice(event.transaction.input, 68);
+  const cleanedTxnData = slice(event.transaction.input, 68)
   // decodes post into its separate components. if decode failed, store txn hash and exit crud
-  const decodedPost = decodePost({ postInput: cleanedTxnData });
+  const decodedPost = decodePost({ postInput: cleanedTxnData })
   if (!decodedPost) {
-    txnReceipt = await Txn.findUnique({ id: event.transaction.hash });
+    txnReceipt = await Txn.findUnique({ id: event.transaction.hash })
     if (!txnReceipt) {
-      await Txn.create({ id: event.transaction.hash });
+      await Txn.create({ id: event.transaction.hash })
       console.log(
-        "invalid post -- decode post failure. processed txn hash: ",
-        event.transaction.hash
-      );
+        'invalid post -- decode post failure. processed txn hash: ',
+        event.transaction.hash,
+      )
     }
-    return;
+    return
   }
 
   /* ************************************************
 
                     SIGNATURE CHECK
 
-  ************************************************ */  
+  ************************************************ */
 
   // get custody address from user id
-  userLookup = await User.findUnique({ id: decodedPost?.userId });
-  console.log("user lookup: ", userLookup);
+  userLookup = await User.findUnique({ id: decodedPost?.userId })
+  console.log('user lookup: ', userLookup)
   // exit crud if not a registered user id
   if (!userLookup) {
-    txnReceipt = await Txn.findUnique({ id: event.transaction.hash });
+    txnReceipt = await Txn.findUnique({ id: event.transaction.hash })
     if (!txnReceipt) {
-      await Txn.create({ id: event.transaction.hash });
+      await Txn.create({ id: event.transaction.hash })
       console.log(
-        "invalid post -- invalid user id. processed txn hash: ",
-        event.transaction.hash
-      );
+        'invalid post -- invalid user id. processed txn hash: ',
+        event.transaction.hash,
+      )
     }
-    return;
+    return
   }
   // NOTE: update to context.client.verifyMessage after bumping ponder version
   //    this will unlock cleaner support for EOAs + Smart accounts
@@ -121,44 +128,44 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
   const ownerForLightAccount = await context.client.readContract({
     abi: lightAccountABI,
     address: userLookup.to,
-    functionName: "owner"
+    functionName: 'owner',
   })
   const recoverAddressFromPostSignature = await recoverMessageAddress({
-    message: remove0xPrefix({bytes32Hash: decodedPost.hash}),
-    signature: decodedPost.sig
+    message: remove0xPrefix({ bytes32Hash: decodedPost.hash }),
+    signature: decodedPost.sig,
   })
   const signerIsValid = ownerForLightAccount === recoverAddressFromPostSignature
-  console.log("signature is valid for user: ", signerIsValid)
-  
+  console.log('signature is valid for user: ', signerIsValid)
+
   if (!signerIsValid) {
-    txnReceipt = await Txn.findUnique({ id: event.transaction.hash });
+    txnReceipt = await Txn.findUnique({ id: event.transaction.hash })
     if (!txnReceipt) {
-      await Txn.create({ id: event.transaction.hash });
+      await Txn.create({ id: event.transaction.hash })
       console.log(
-        "invalid post -- invalid sig for user. processed txn hash: ",
-        event.transaction.hash
-      );
+        'invalid post -- invalid sig for user. processed txn hash: ',
+        event.transaction.hash,
+      )
     }
-    return;
+    return
   }
 
   /* ************************************************
 
                     PRE PROCESSING
 
-  ************************************************ */  
+  ************************************************ */
 
   const postCounter = await PostCounter.upsert({
     id: `${context.network.chainId}/${event.transaction.to}`,
-    create: {      
+    create: {
       counter: BigInt(1),
       lastUpdated: event.block.timestamp,
     },
-    update: ({ current }) => ({      
+    update: ({ current }) => ({
       counter: (current.counter as bigint) + BigInt(1),
       lastUpdated: event.block.timestamp,
     }),
-  });
+  })
 
   // console.log("should the post counter be going up", postCounter.counter)
 
@@ -177,7 +184,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
       expiration: decodedPost?.expiration,
       messageArray: decodedPost?.messageArray as Hash[],
     },
-  });
+  })
 
   // console.log("am i creating the post", post)
 
@@ -186,24 +193,24 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
   // outer level if statement. if 0 then no messages will be processed
   if (length && length != 0) {
     // initialize messageQueue
-    const messageQueue: MessageToProcess[] = [];
+    const messageQueue: MessageToProcess[] = []
     // attempt to decode messages
     for (let i = 0; i < length; ++i) {
       // decode message into type + body
       const decodedMessage = decodeMessage({
         encodedMessage: decodedPost?.messageArray[i],
-      });
-      
+      })
+
       // if decode failed, proceed to next i in for loop
-      if (!decodedMessage) continue;
+      if (!decodedMessage) continue
       // console.log("decoded message", decodedMessage)
       // if msgType not supported, proceed to next i in for loop
-      if (!isSupportedMessageType(decodedMessage.msgType)) continue;
+      if (!isSupportedMessageType(decodedMessage.msgType)) continue
       // console.log("decoded message", decodedMessage)
       // if decode successful, + msgType is supported, store message
       // store message
       // NOTE: message body may still be invalid, but further decoding + checks will happen in type specific logic
-      messageQueue[i] = decodedMessage;      
+      messageQueue[i] = decodedMessage
       // store message
       await Message.create({
         // chain // messageGateway address // count of post being stored // index of message within Post
@@ -215,7 +222,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
           msgType: messageQueue[i]?.msgType,
           msgBody: messageQueue[i]?.msgBody,
         },
-      });
+      })
     }
 
     /* ************************************************
@@ -243,19 +250,19 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
 
     // processs messages in queue. only validly formatted messages will make it here
     for (let i = 0; i < messageQueue.length; ++i) {
-      console.log("what message type: ", messageQueue[i]?.msgType);
+      console.log('what message type: ', messageQueue[i]?.msgType)
       switch (messageQueue[i]?.msgType) {
         /*
          * CREATE CHANNEL
          */
         case messageTypes.createChannel:
-          console.log("running 100 create chan case");
+          console.log('running 100 create chan case')
           // decode msgBody into channel uri
           const decodedCreateChannel = decodeCreateChannel({
             msgBody: messageQueue[i].msgBody,
-          });
+          })
           // if decode uncessful exist case
-          if (!decodedCreateChannel) break;
+          if (!decodedCreateChannel) break
           // increment channel counter
           const channelCounter = await ChannelCounter.upsert({
             id: `${context.network.chainId}/${event.transaction.to}`,
@@ -265,9 +272,9 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
             },
             update: ({ current }) => ({
               counter: (current.counter as bigint) + BigInt(1),
-              lastUpdated: event.block.timestamp
+              lastUpdated: event.block.timestamp,
             }),
-          });
+          })
           // create channel
           await Channel.create({
             id: channelCounter?.counter as bigint,
@@ -278,23 +285,23 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
               admins: decodedCreateChannel.adminIds as bigint[],
               members: decodedCreateChannel.memberIds as bigint[],
             },
-          });
+          })
           // process channel tags
           for (let i = 0; i < decodedCreateChannel.channelTags.length; ++i) {
             // check if channel exists
             const channelLookup = await Channel.findUnique({
               id: decodedCreateChannel.channelTags[i],
-            });
-            if (!channelLookup) continue;
+            })
+            if (!channelLookup) continue
             // can only add references if admin/memmber of channel
             if (
               !channelLookup.admins.includes(decodedPost.userId) &&
               !channelLookup.members?.includes(decodedPost.userId)
             )
-              continue;
+              continue
             // increment reference counter
             const referenceCounter = await ReferenceCounter.upsert({
-              id: "ReferenceCounter",
+              id: 'ReferenceCounter',
               create: {
                 counter: BigInt(1),
                 lastUpdated: event.block.timestamp,
@@ -303,7 +310,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
                 counter: (current.counter as bigint) + BigInt(1),
                 lastUpdated: event.block.timestamp,
               }),
-            });
+            })
             // create reference
             await Reference.create({
               id: referenceCounter?.counter as bigint,
@@ -314,21 +321,21 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
                 pubRefId: undefined, // purposely left undefined
                 chanRefId: channelCounter?.counter, // this is the channel that was just created
               },
-            });
+            })
           }
-          break;
+          break
 
         /*
          * REFERENCE CHANNEL
          */
         case messageTypes.referenceChannel:
-          console.log("running 101 ref chan case");
+          console.log('running 101 ref chan case')
           // decode msgBody into channel target + channel tags
           const decodedReferenceChannels = decodeReferenceChannel({
             msgBody: messageQueue[i].msgBody,
-          });
+          })
           // if decode uncessful exist case
-          if (!decodedReferenceChannels) break;
+          if (!decodedReferenceChannels) break
           // process tags
           for (
             let i = 0;
@@ -338,26 +345,26 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
             // check if channel exists
             channelLookup = await Channel.findUnique({
               id: decodedReferenceChannels.channelTags[i],
-            });
-            if (!channelLookup) continue;
+            })
+            if (!channelLookup) continue
             // can only add reference if admin/memmber of channel
             if (
               !channelLookup.admins.includes(decodedPost.userId) &&
               !channelLookup.members?.includes(decodedPost.userId)
             )
-              continue;
+              continue
             // increment reference counter
             referenceCounter = await ReferenceCounter.upsert({
-              id: "ReferenceCounter",
-              create: { 
+              id: 'ReferenceCounter',
+              create: {
                 counter: BigInt(1),
-                lastUpdated: event.block.timestamp
+                lastUpdated: event.block.timestamp,
               },
               update: ({ current }) => ({
                 counter: (current.counter as bigint) + BigInt(1),
-                lastUpdated: event.block.timestamp
+                lastUpdated: event.block.timestamp,
               }),
-            });
+            })
             // create reference
             await Reference.create({
               id: referenceCounter?.counter as bigint,
@@ -368,9 +375,9 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
                 pubRefId: undefined, // purposely left undefined
                 chanRefId: decodedReferenceChannels.channelTarget,
               },
-            });
+            })
           }
-          break;
+          break
 
         /* ************************************************
 
@@ -382,27 +389,30 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
          * CREATE PUBLICATION
          */
         case messageTypes.createPublication:
-          console.log("running 200 create pub case");
+          console.log('running 200 create pub case')
           // decode msgBody into pub uri + channel tags
           const decodedCreatePublication = decodeCreatePublication({
             msgBody: messageQueue[i].msgBody,
-          });
-          console.log("decoded create pub before break: ", decodedCreatePublication)
+          })
+          console.log(
+            'decoded create pub before break: ',
+            decodedCreatePublication,
+          )
           // if decode unsuccessful, exist case
-          if (!decodedCreatePublication) break;
-          console.log("decoded the pub: ", decodedCreatePublication)
+          if (!decodedCreatePublication) break
+          console.log('decoded the pub: ', decodedCreatePublication)
           // increment publication counter
           const publicationCounter = await PublicationCounter.upsert({
             id: `${context.network.chainId}/${event.transaction.to}`,
             create: {
               counter: BigInt(1),
-              lastUpdated: event.block.timestamp
+              lastUpdated: event.block.timestamp,
             },
-            update: ({ current }) => ({              
+            update: ({ current }) => ({
               counter: (current.counter as bigint) + BigInt(1),
               lastUpdated: event.block.timestamp,
             }),
-          });
+          })
           // create publication
           await Publication.create({
             id: publicationCounter.counter as bigint,
@@ -411,32 +421,36 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
               createdBy: decodedPost.userId,
               uri: decodedCreatePublication.uri,
             },
-          });
+          })
           // process channel tags
-          for (let i = 0; i < decodedCreatePublication.channelTags.length; ++i ) {
+          for (
+            let i = 0;
+            i < decodedCreatePublication.channelTags.length;
+            ++i
+          ) {
             // check if channel exists
             channelLookup = await Channel.findUnique({
               id: decodedCreatePublication.channelTags[i],
-            });
-            if (!channelLookup) continue;
+            })
+            if (!channelLookup) continue
             // can only add references if admin/memmber of channel
             if (
               !channelLookup.admins.includes(decodedPost.userId) &&
               !channelLookup.members?.includes(decodedPost.userId)
             )
-              continue;
+              continue
             // increment reference counter
             referenceCounter = await ReferenceCounter.upsert({
-              id: "ReferenceCounter",
-              create: { 
+              id: 'ReferenceCounter',
+              create: {
                 counter: BigInt(1),
-                lastUpdated: event.block.timestamp
+                lastUpdated: event.block.timestamp,
               },
               update: ({ current }) => ({
                 counter: (current.counter as bigint) + BigInt(1),
-                lastUpdated: event.block.timestamp
+                lastUpdated: event.block.timestamp,
               }),
-            });
+            })
             // create reference
             await Reference.create({
               id: referenceCounter?.counter as bigint,
@@ -447,20 +461,20 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
                 pubRefId: publicationCounter?.counter as bigint,
                 chanRefId: undefined, // purposely left undefined
               },
-            });
+            })
           }
-          break;
+          break
 
         /*
          * REFERENCE PUBLICATION
          */
         case messageTypes.referencePublication:
-          console.log("running 201 reference pub case");
+          console.log('running 201 reference pub case')
           const decodedReferencePublication = decodeReferencePublication({
             msgBody: messageQueue[i].msgBody,
-          });
+          })
           // if decode uncessful exist case
-          if (!decodedReferencePublication) break;
+          if (!decodedReferencePublication) break
           // process tags
           for (
             let i = 0;
@@ -470,26 +484,26 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
             // check if channel exists
             channelLookup = await Channel.findUnique({
               id: decodedReferencePublication.channelTags[i],
-            });
-            if (!channelLookup) continue;
+            })
+            if (!channelLookup) continue
             // can only add reference if admin/memmber of channel
             if (
               !channelLookup.admins.includes(decodedPost.userId) &&
               !channelLookup.members?.includes(decodedPost.userId)
             )
-              continue;
+              continue
             // increment reference counter
             referenceCounter = await ReferenceCounter.upsert({
-              id: "ReferenceCounter",
-              create: { 
+              id: 'ReferenceCounter',
+              create: {
                 counter: BigInt(1),
-                lastUpdated: event.block.timestamp
+                lastUpdated: event.block.timestamp,
               },
               update: ({ current }) => ({
                 counter: (current.counter as bigint) + BigInt(1),
-                lastUpdated: event.block.timestamp
+                lastUpdated: event.block.timestamp,
               }),
-            });
+            })
             // create reference
             await Reference.create({
               id: referenceCounter?.counter as bigint,
@@ -500,9 +514,9 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
                 pubRefId: decodedReferencePublication.targetPublication,
                 chanRefId: undefined, // purposely left undefined
               },
-            });
+            })
           }
-          break;
+          break
 
         /* ************************************************
 
@@ -514,36 +528,36 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
          * REMOVE REFERENCE
          */
         case messageTypes.removeReference:
-          console.log("running 500 remove reference case");
+          console.log('running 500 remove reference case')
           const decodedRemoveReference = decodeRemoveReference({
             msgBody: messageQueue[i].msgBody,
-          });
+          })
           // if decode uncessful exist case
-          if (!decodedRemoveReference) break;
+          if (!decodedRemoveReference) break
           // check if channel exists
           channelLookup = await Channel.findUnique({
             id: decodedRemoveReference.channelId,
-          });
-          if (!channelLookup) break;
+          })
+          if (!channelLookup) break
           // check if reference exists and is in channel
           const referenceLookup = await Reference.findUnique({
             id: decodedRemoveReference.referenceId,
-          });
+          })
           if (referenceLookup?.channelId != decodedRemoveReference.channelId)
-            break;
+            break
           // can only remove references if you are channel admin or reference creator
           if (
             !channelLookup.admins.includes(decodedPost.userId) &&
             referenceLookup.createdBy != decodedPost.userId
           )
-            break;
+            break
           // update reference so that it no longer has a target channel
           // NOTE: this was updated to delete the entire reference
           //    as opposed to just clearing the value of the channel it was anchored to
           await Reference.delete({
-            id: decodedRemoveReference.referenceId
-          });
-          break;
+            id: decodedRemoveReference.referenceId,
+          })
+          break
       }
     }
   }
@@ -555,9 +569,12 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
   ************************************************ */
 
   // record every transaction that has entered the crud cycle
-  txnReceipt = await Txn.findUnique({ id: event.transaction.hash });
+  txnReceipt = await Txn.findUnique({ id: event.transaction.hash })
   if (!txnReceipt) {
-    await Txn.create({ id: event.transaction.hash });
-    console.log("processing complete. processed txn hash: ", event.transaction.hash);
+    await Txn.create({ id: event.transaction.hash })
+    console.log(
+      'processing complete. processed txn hash: ',
+      event.transaction.hash,
+    )
   }
-});
+})

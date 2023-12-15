@@ -1,10 +1,6 @@
-import { createConfig } from "@ponder/core";
+import { createConfig } from '@ponder/core'
 import { http } from 'viem'
-import {
-  addresses,
-  idRegistryABI,
-  postGatewayABI,
-} from 'scrypt'
+import { addresses, idRegistryABI, postGatewayABI } from 'scrypt'
 
 export default createConfig({
   networks: {
@@ -19,16 +15,16 @@ export default createConfig({
   },
   contracts: {
     IdRegistry: {
-      network: "opGoerli",
+      network: 'opGoerli',
       abi: idRegistryABI,
       address: addresses.idRegistry.opGoerli,
-      startBlock: 18272706
+      startBlock: 18623300,
     },
     PostGateway: {
-      network: "opGoerli",
+      network: 'opGoerli',
       abi: postGatewayABI,
       address: addresses.postGateway.opGoerli,
-      startBlock: 18620031
+      startBlock: 18623300,
     },
     // IdRegistry: {
     //   network: "anvil", hii
@@ -41,6 +37,6 @@ export default createConfig({
     //   abi: postGatewayABI,
     //   address: "0x5fbdb2315678afecb367f032d93f642f64180aa3",
     //   startBlock: 0
-    // }          
+    // }
   },
-});
+})

@@ -15,16 +15,16 @@ export const messageTypes = {
 }
 
 export const messageTypeSet = new Set<bigint>([
-    // Channels
-    BigInt(100),  // createChannel (abi.encode(string uri, uint256[] admins, uint256[] members, uint256[] channelTags))
-    BigInt(101),  // referenceChannel (abi.encode(uint256 channelId, uint256[] channelTags))
-    BigInt(102),  // editChannelUri (abi.encode(uint256 channelId, string uri))
-    BigInt(103),  // editChannelAccess (abi.encode(uint256 channelId, uint256[] admins, uint256[] members))
-    // Publications
-    BigInt(200),  // createPublication (abi.encode(string uri, uint256[] channelTags))
-    BigInt(201),  // referencePublication (abi.encode(uint256 publicationId, uint256[] channelTags))
-    BigInt(202),  // editPublicationUri (abi.encode(uint256 channelId, string uri))
-    // NFT + URL messages not enabled yet
-    // Removal
-    BigInt(500)   // removeReference (uint256)
-  ])
+  // Channels
+  BigInt(100), // createChannel (abi.encode(string uri, uint256[] admins, uint256[] members, uint256[] channelTags))
+  BigInt(101), // referenceChannel (abi.encode(uint256 channelId, uint256[] channelTags))
+  BigInt(102), // editChannelUri (abi.encode(uint256 channelId, string uri))
+  BigInt(103), // editChannelAccess (abi.encode(uint256 channelId, uint256[] admins, uint256[] members))
+  // Publications
+  BigInt(200), // createPublication (abi.encode(string uri, uint256[] channelTags))
+  BigInt(201), // referencePublication (abi.encode(uint256 publicationId, uint256[] channelTags))
+  BigInt(202), // editPublicationUri (abi.encode(uint256 channelId, string uri))
+  // NFT + URL messages not enabled yet
+  // Removal
+  BigInt(500), // removeReference (uint256)
+])

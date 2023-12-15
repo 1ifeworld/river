@@ -9,16 +9,16 @@ export function validatePostSig({
   expiration: bigint
   messageArray: Hash[]
 }) {
-//   return hashMessage(
-//     keccak256(
-//       encodeAbiParameters(
-//         [
-//           { name: 'version', type: 'uint16' },
-//           { name: 'expiration', type: 'uint64' },
-//           { name: 'messageArray', type: 'bytes[]' },
-//         ],
-//         [version, expiration, messageArray],
-//       ),
-//     ),
-//   )
+  //   return hashMessage(
+  //     keccak256(
+  //       encodeAbiParameters(
+  //         [
+  //           { name: 'version', type: 'uint16' },
+  //           { name: 'expiration', type: 'uint64' },
+  //           { name: 'messageArray', type: 'bytes[]' },
+  //         ],
+  //         [version, expiration, messageArray],
+  //       ),
+  //     ),
+  //   )
 }
