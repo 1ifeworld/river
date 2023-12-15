@@ -12,12 +12,9 @@ export interface DataObject {
     image: string
     animationUri: string
     contentType: string
+    muxAssetId?: string
+    muxPlaybackId?: string
   }
-}
-
-export interface MuxDataObject extends DataObject {
-  muxAssetId: string
-  muxPlaybackId: string
 }
 
 export const sendToDb = async (data: DataObject) => {

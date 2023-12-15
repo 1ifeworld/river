@@ -26,7 +26,6 @@ import {
   isGLB,
   isVideo,
   isAudio,
-  MuxDataObject,
   IPFSDataObject,
 } from '@/lib'
 import { useUserContext } from '@/context'
@@ -69,13 +68,14 @@ export function UploadDialog() {
     }
     return mimeType
   }
+
   const uploadAndProcessFile = async (file: File) => {
     const uploadedFileName = file.name || 'unnamed'
     const contentType = determineContentType(file)
     const uploadedFileCid = await uploadFile({ filesToUpload: [file] })
 
     let pubUri: string
-    let dataForDB: DataObject | MuxDataObject
+    let dataForDB: DataObject 
 
     // Set the correct animationUri based on file type
     const reqAnimationUri =
@@ -107,7 +107,6 @@ export function UploadDialog() {
           encoding_tier: 'baseline',
         }),
       })
-      console.log('MUXASSET', muxAsset)
 
       const muxAssetId = muxAsset.id || ''
       const muxPlaybackId =
@@ -115,26 +114,26 @@ export function UploadDialog() {
           ? muxAsset.playback_ids[0].id
           : ''
 
-      console.log('ASSETID', muxAssetId)
-      console.log('playbackid', muxPlaybackId)
+      dataForDB = {
+        key: pubUri,
+        value: {
+          ...ipfsDataObject,
+          contentType: contentType,
+          muxAssetId: muxAssetId,
+          muxPlaybackId: muxPlaybackId,
+      }
+    } 
+  } else {
+      dataForDB = {
+        key: pubUri,
+        value: {
+          ...ipfsDataObject,
+          contentType: contentType,
+          muxAssetId: '',
+          muxPlaybackId: '',
+        },
+      }
 
-      dataForDB = {
-        key: pubUri,
-        value: {
-          ...ipfsDataObject,
-          contentType: contentType,
-        },
-        muxAssetId: muxAssetId,
-        muxPlaybackId: muxPlaybackId,
-      }
-    } else {
-      dataForDB = {
-        key: pubUri,
-        value: {
-          ...ipfsDataObject,
-          contentType: contentType,
-        },
-      }
     }
 
     await sendToDb(dataForDB)

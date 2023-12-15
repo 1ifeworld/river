@@ -29,9 +29,14 @@ export default async function View({
 
   const { metadata } = await getReferenceMetadata(reference as Reference)
 
+
+
   const referenceMetadata = metadata.data[reference?.pubRef?.uri as string]
+  console.log('Reference Metadata:', referenceMetadata);
+
 
   let contentUrl
+
   if (
     referenceMetadata.contentType === 'model/gltf-binary' ||
     referenceMetadata.contentType === 'application/pdf' ||
@@ -46,10 +51,14 @@ export default async function View({
 
   const contentType = referenceMetadata.contentType
 
-  if (isVideo({ mimeType: contentType })) {
+  if (isVideo({ mimeType: contentType }) ) {
     return (
       <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center ">
         <Stack className="w-[75%] sm:w-[50%]">
+          <h1>
+            {referenceMetadata && referenceMetadata.name} &&{' '}
+            {referenceMetadata && referenceMetadata.muxPlaybackId}
+          </h1>
           <VideoPlayer playbackId={referenceMetadata.muxPlaybackId} />
         </Stack>
       </Stack>
@@ -57,7 +66,13 @@ export default async function View({
   } else if (isAudio({ mimeType: contentType })) {
     return (
       <Stack className="w-full h-[calc(100vh-_56px)] justify-center items-center ">
-        <AudioPlayer playbackId={referenceMetadata.muxPlaybackId} />
+        <h1>
+          {referenceMetadata && referenceMetadata.name} &&{' '}
+          {referenceMetadata && referenceMetadata.muxPlaybackId}
+        </h1>
+
+        <AudioPlayer playbackId={referenceMetadata.muxPlaybackId}
+    />
       </Stack>
     )
   } else if (isPDF({ mimeType: contentType })) {
