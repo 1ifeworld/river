@@ -1,18 +1,18 @@
 query referenceWithId($id: BigInt!) {
   reference(id: $id) {
     id
-    timestamp
-    userId
+    createdTimestamp
+    createdBy
     pubRef {
       id
-      timestamp
-      creatorId
+      createdTimestamp
+      createdBy
       uri
     }
     channel {
       id
-      timestamp
-      creatorId
+      createdTimestamp
+      createdBy
       admins
       members
       uri

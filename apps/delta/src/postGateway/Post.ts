@@ -1,28 +1,28 @@
 import { ponder } from "@/generated";
-import { postGatewayChain } from "../constants";
 import { MessageToProcess } from "./types";
 import {
   decodePost,
   decodeMessage,
-  messageTypes,
   decodeCreateChannel,
   decodeReferenceChannel,
   decodeCreatePublication,
   decodeReferencePublication,
-  decodeRemoveReference
+  decodeRemoveReference,
+  messageTypes,
+  isSupportedMessageType,
+  lightAccountABI
 } from "scrypt";
-import { slice } from "viem";
-import { Channel, ReferenceCounter } from "@/generated";
+import { Address, slice, Hash, verifyMessage } from "viem";
 
 ponder.on("PostGateway:Post", async ({ event, context }) => {
-
   /* ************************************************
 
                     DATA STRUCTURES
 
-  ************************************************ */   
+  ************************************************ */
 
   const {
+    User,
     PostCounter,
     Post,
     Message,
@@ -34,41 +34,154 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
     // Url, -- not in protocol yet
     ReferenceCounter,
     Reference,
-    Txn
-  } = context.entities;
+    Txn,
+  } = context.db;
 
   /* ************************************************
 
                   DYNAMIC VARIABLES
 
-  ************************************************ */  
+  ************************************************ */
 
-  let referenceCounter: ReferenceCounter | null = null
-  let channelLookup: Channel | null = null
+  let txnReceipt: { id: `0x${string}` } | null = null;
+
+  let userLookup: {
+    id: bigint;
+    from: `0x${string}`;
+    to: `0x${string}`;
+    backup: `0x${string}`;
+    userId: bigint;
+  } | null = null;
+
+  let channelLookup: {
+    id: bigint;
+    createdTimestamp: bigint;
+    createdBy: bigint;
+    uri: string;
+    admins: bigint[];
+    members: bigint[];
+  } | null = null;
+
+  let referenceCounter: {
+    id: string;
+    counter: bigint;
+    lastUpdated: bigint;
+  } | null = null;
 
   /* ************************************************
 
                     PRE PROCESSING
 
-  ************************************************ */       
+  ************************************************ */
+
+  console.log("txn input: ", event.transaction.input)
 
   // skips first 68 bytes which contain 4 byte function selector + 32 byte data offset + 32 byte data length
   const cleanedTxnData = slice(event.transaction.input, 68);
-  // decodes post into its separate components
+  // decodes post into its separate components. if decode failed, store txn hash and exit crud
   const decodedPost = decodePost({ postInput: cleanedTxnData });
+  if (!decodedPost) {
+    txnReceipt = await Txn.findUnique({ id: event.transaction.hash });
+    if (!txnReceipt) {
+      await Txn.create({ id: event.transaction.hash });
+      console.log(
+        "invalid post -- decode post failure. processed txn hash: ",
+        event.transaction.hash
+      );
+    }
+    return;
+  }
 
-  /*
-  *   
-  * PERFORM SIGNATURE CHECK HERE
-  * 
-  * NOTE: posts with invalid signatures will not be saved, regardless of message type
-  * 
-  */
+  // console.log("post was decoded yay", decodedPost)
+  // *** start of user id sig check
+  // // get custody address from user id
+  // userLookup = await User.findUnique({ id: decodedPost?.userId });
+  // console.log("user lookup: ", userLookup);
+  // // exit crud if not a registered user id
+  // if (!userLookup) {
+  //   txnReceipt = await Txn.findUnique({ id: event.transaction.hash });
+  //   if (!txnReceipt) {
+  //     await Txn.create({ id: event.transaction.hash });
+  //     console.log(
+  //       "invalid post -- invalid user id. processed txn hash: ",
+  //       event.transaction.hash
+  //     );
+  //   }
+  //   return;
+  // }
+  // console.log("verifying sig for user: ", userLookup.userId);
+  // console.log("verifying sig for custody address : ", userLookup.to);
+  // // recover signer address from hash
+  // // NOTE: update to context.client.verifyMessage after bumping ponder version
+  // //    this will unlock cleaner support for EOAs + Smart accounts
+  // // NOTE: in future, validity check can be done for one of 1) custody add 2) delegate add
+  // // exit crud if validity check returns valse
+  // const lightAccountSigCheck = await context.client.readContract({
+  //   abi: lightAccountABI,
+  //   address: userLookup.to,
+  //   functionName: "isValidSignature",
+  //   args: [
+  //     decodedPost.hash,
+  //     decodedPost.sig
+  //   ]
+  // })
 
-  
+  // console.log("light account sig check: ", lightAccountSigCheck)
+  // // REVERT back to this approach once ponder exposes client.verifyMessage
+  // // const sigCheck = await verifyMessage({
+  // //   address: userLookup.to as Address,
+  // //   message: decodedPost.hash,
+  // //   signature: decodedPost.sig,
+  // // }) == false
+  // if (lightAccountSigCheck) {
+  //   txnReceipt = await Txn.findUnique({ id: event.transaction.hash });
+  //   if (!txnReceipt) {
+  //     await Txn.create({ id: event.transaction.hash });
+  //     console.log(
+  //       "invalid post -- invalid sig for user. processed txn hash: ",
+  //       event.transaction.hash
+  //     );
+  //   }
+  //   return;
+  // }
+  // console.log("post verified successfuly :)");
+  // *** end of user id sig check
+
+  const postCounter = await PostCounter.upsert({
+    id: `${context.network.chainId}/${event.transaction.to}`,
+    create: {      
+      counter: BigInt(1),
+      lastUpdated: event.block.timestamp,
+    },
+    update: ({ current }) => ({      
+      counter: (current.counter as bigint) + BigInt(1),
+      lastUpdated: event.block.timestamp,
+    }),
+  });
+
+  console.log("should the post counter be going up", postCounter.counter)
+
+  const post = await Post.create({
+    id: `${context.network.chainId}/${event.transaction.to}/${postCounter?.counter}`,
+    data: {
+      timestamp: event.block.timestamp,
+      relayer: event.transaction.from,
+      data: cleanedTxnData,
+      userId: decodedPost?.userId,
+      hashType: decodedPost.hashType,
+      hash: decodedPost.hash,
+      sigType: decodedPost?.sigType,
+      sig: decodedPost?.sig,
+      version: decodedPost?.version,
+      expiration: decodedPost?.expiration,
+      messageArray: decodedPost?.messageArray as Hash[],
+    },
+  });
+
+  console.log("am i creating the post", post)
 
   // identify number of messages sent in post
-  const length = decodedPost?.messageArray.length;
+  const length = post.messageArray.length
   // outer level if statement. if 0 then no messages will be processed
   if (length && length != 0) {
     // initialize messageQueue
@@ -76,23 +189,32 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
     // attempt to decode messages
     for (let i = 0; i < length; ++i) {
       // decode message into type + body
-      const decodedMessage = decodeMessage({ encodedMessage: decodedPost?.messageArray[i] });
-      // if decode failed, move to next i in for loop
-      if (!decodedMessage) continue
-      /* 
-      *
-      * PERFORM MESSAGE TYPE VALIDATION HERE
-      * 
-      * INVALID MESSAGE TYPES will not be saved
-      */
-      // if decode successful, set decoded message inm message que
-      messageQueue[i] = decodedMessage;
-      //
-
-
-
-
-
+      const decodedMessage = decodeMessage({
+        encodedMessage: decodedPost?.messageArray[i],
+      });
+      
+      // if decode failed, proceed to next i in for loop
+      if (!decodedMessage) continue;
+      console.log("decoded message", decodedMessage)
+      // if msgType not supported, proceed to next i in for loop
+      if (!isSupportedMessageType(decodedMessage.msgType)) continue;
+      console.log("decoded message", decodedMessage)
+      // if decode successful, + msgType is supported, store message
+      // store message
+      // NOTE: message body may still be invalid, but further decoding + checks will happen in type specific logic
+      messageQueue[i] = decodedMessage;      
+      // store message
+      await Message.create({
+        // chain // messageGateway address // count of post being stored // index of message within Post
+        // NOTE: do we potentially want a message counter as well thats separate from Post?
+        //      I think not since feels helpful to have messages always live as sub unit of Posts
+        // NOTE: update postGatewayChain -> event.transaction.chainId after bumping to next version ponder
+        id: `${context.network.chainId}/${event.transaction.to}/${postCounter?.counter}/${i}`,
+        data: {
+          msgType: messageQueue[i]?.msgType,
+          msgBody: messageQueue[i]?.msgBody,
+        },
+      });
     }
 
     /* ************************************************
@@ -102,277 +224,327 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
     ************************************************ */
 
     /*
-    * MESSAGE TYPES (✅ = implemented)
-    * 100 create Chan - ✅
-    * 101 reference existing Chan - ✅
-    * 102 edit Chan uri - []
-    * 103 edit Chan admins/members - []
-    * 200 create Pub - ✅
-    * 201 reference existing Pub - ✅
-    * 202 edit Pub uri - []
-    * 300 create Nft - []
-    * 301 reference existing Nft - []
-    * 400 create Url - []
-    * 401 reference existing Url - []
-    * 402 edit Url - []
-    * 500 remove reference - ✅ (only one type of remove since refs treated the same)
-    */             
-       
-    // processs messages in queue. only validly formatted messages will make it here
-    for (let i = 0; i < messageQueue.length; ++i) {       
-      console.log("what message type: ", messageQueue[i]?.msgType)
-      switch (messageQueue[i]?.msgType) {
+     * MESSAGE TYPES (✅ = implemented)
+     * 100 create Chan - ✅
+     * 101 reference existing Chan - ✅
+     * 102 edit Chan uri - []
+     * 103 edit Chan admins/members - []
+     * 200 create Pub - ✅
+     * 201 reference existing Pub - ✅
+     * 202 edit Pub uri - []
+     * 300 create Nft - []
+     * 301 reference existing Nft - []
+     * 400 create Url - []
+     * 401 reference existing Url - []
+     * 402 edit Url - []
+     * 500 remove reference - ✅ (only one type of remove since refs treated the same)
+     */
 
+    // processs messages in queue. only validly formatted messages will make it here
+    for (let i = 0; i < messageQueue.length; ++i) {
+      console.log("what message type: ", messageQueue[i]?.msgType);
+      switch (messageQueue[i]?.msgType) {
         /*
-        * CREATE CHANNEL
-        */
+         * CREATE CHANNEL
+         */
         case messageTypes.createChannel:
-          console.log("running 100 create chan case")   
+          console.log("running 100 create chan case");
           // decode msgBody into channel uri
-          const decodedCreateChannel = decodeCreateChannel({ msgBody: messageQueue[i].msgBody });
+          const decodedCreateChannel = decodeCreateChannel({
+            msgBody: messageQueue[i].msgBody,
+          });
           // if decode uncessful exist case
-          if (!decodedCreateChannel) break
+          if (!decodedCreateChannel) break;
           // increment channel counter
           const channelCounter = await ChannelCounter.upsert({
-            id: `${postGatewayChain}/${event.transaction.to}`,
+            id: `${context.network.chainId}/${event.transaction.to}`,
             create: {
-              timestamp: event.block.timestamp,
               counter: BigInt(1),
+              lastUpdated: event.block.timestamp,
             },
             update: ({ current }) => ({
-              timestamp: event.block.timestamp,
               counter: (current.counter as bigint) + BigInt(1),
+              lastUpdated: event.block.timestamp
             }),
           });
           // create channel
           await Channel.create({
             id: channelCounter?.counter as bigint,
             data: {
-              timestamp: event.block.timestamp,
-              creatorId: decodedPost?.userId,
+              createdTimestamp: event.block.timestamp,
+              createdBy: decodedPost?.userId,
               uri: decodedCreateChannel.uri,
               admins: decodedCreateChannel.adminIds as bigint[],
               members: decodedCreateChannel.memberIds as bigint[],
             },
-          }); 
+          });
           // process channel tags
           for (let i = 0; i < decodedCreateChannel.channelTags.length; ++i) {
             // check if channel exists
-            const channelLookup = await Channel.findUnique({ id: decodedCreateChannel.channelTags[i] });
-            if (!channelLookup) continue
+            const channelLookup = await Channel.findUnique({
+              id: decodedCreateChannel.channelTags[i],
+            });
+            if (!channelLookup) continue;
             // can only add references if admin/memmber of channel
-            if (            
-                !channelLookup.admins.includes(decodedPost.userId)
-                && !channelLookup.members?.includes(decodedPost.userId)
-            ) continue
+            if (
+              !channelLookup.admins.includes(decodedPost.userId) &&
+              !channelLookup.members?.includes(decodedPost.userId)
+            )
+              continue;
             // increment reference counter
             const referenceCounter = await ReferenceCounter.upsert({
               id: "ReferenceCounter",
-              create: { counter: BigInt(1)},
+              create: {
+                counter: BigInt(1),
+                lastUpdated: event.block.timestamp,
+              },
               update: ({ current }) => ({
                 counter: (current.counter as bigint) + BigInt(1),
+                lastUpdated: event.block.timestamp,
               }),
-            })
+            });
             // create reference
             await Reference.create({
               id: referenceCounter?.counter as bigint,
-              data: {                 
-                timestamp: event.block.timestamp,
-                userId: decodedPost.userId,
-                channel: decodedCreateChannel.channelTags[i], // these are the channels to add the newly created channel to                 
-                pubRef: undefined, // purposely left undefined  
-                nftRef: undefined, // purposely left undefined
-                urlRef: undefined, // purposely left undefined        
-                chanRef: channelCounter?.counter // this is the channel that was just created               
-              }
-            })
-          } break   
+              data: {
+                createdTimestamp: event.block.timestamp,
+                createdBy: decodedPost.userId,
+                channel: decodedCreateChannel.channelTags[i], // these are the channels to add the newly created refererence to to
+                pubRef: undefined, // purposely left undefined
+                chanRef: channelCounter?.counter, // this is the channel that was just created
+              },
+            });
+          }
+          break;
 
         /*
-        * REFERENCE CHANNEL
-        */                              
+         * REFERENCE CHANNEL
+         */
         case messageTypes.referenceChannel:
-          console.log("running 101 ref chan case")   
+          console.log("running 101 ref chan case");
           // decode msgBody into channel target + channel tags
-          const decodedReferenceChannels = decodeReferenceChannel({ msgBody: messageQueue[i].msgBody });
+          const decodedReferenceChannels = decodeReferenceChannel({
+            msgBody: messageQueue[i].msgBody,
+          });
           // if decode uncessful exist case
-          if (!decodedReferenceChannels) break       
+          if (!decodedReferenceChannels) break;
           // process tags
-          for (let i = 0; i < decodedReferenceChannels.channelTags.length; ++i) {
+          for (
+            let i = 0;
+            i < decodedReferenceChannels.channelTags.length;
+            ++i
+          ) {
             // check if channel exists
-            channelLookup = await Channel.findUnique({ id: decodedReferenceChannels.channelTags[i] });
-            if (!channelLookup) continue
-              // can only add reference if admin/memmber of channel
-              if (            
-                !channelLookup.admins.includes(decodedPost.userId)
-                && !channelLookup.members?.includes(decodedPost.userId)
-            ) continue                 
+            channelLookup = await Channel.findUnique({
+              id: decodedReferenceChannels.channelTags[i],
+            });
+            if (!channelLookup) continue;
+            // can only add reference if admin/memmber of channel
+            if (
+              !channelLookup.admins.includes(decodedPost.userId) &&
+              !channelLookup.members?.includes(decodedPost.userId)
+            )
+              continue;
             // increment reference counter
             referenceCounter = await ReferenceCounter.upsert({
               id: "ReferenceCounter",
-              create: { counter: BigInt(1)},
+              create: { 
+                counter: BigInt(1),
+                lastUpdated: event.block.timestamp
+              },
               update: ({ current }) => ({
                 counter: (current.counter as bigint) + BigInt(1),
+                lastUpdated: event.block.timestamp
               }),
-            })
+            });
             // create reference
             await Reference.create({
               id: referenceCounter?.counter as bigint,
-              data: { 
-                timestamp: event.block.timestamp,
-                userId: decodedPost.userId,
-                channel: decodedReferenceChannels.channelTags[i],                 
+              data: {
+                createdTimestamp: event.block.timestamp,
+                createdBy: decodedPost.userId,
+                channel: decodedReferenceChannels.channelTags[i],
                 pubRef: undefined, // purposely left undefined
-                nftRef: undefined, // purposely left undefined
-                urlRef: undefined, // purposely left undefined
-                chanRef: decodedReferenceChannels.channelTarget
-              }
+                chanRef: decodedReferenceChannels.channelTarget,
+              },
             });
-          } break
+          }
+          break;
 
         /* ************************************************
 
                           PUBLICATION CASES
 
-        ************************************************ */           
+        ************************************************ */
 
         /*
-        * CREATE PUBLICATION
-        */                                
-        case messageTypes.createPublication:  
-          console.log("running 200 create pub case")   
+         * CREATE PUBLICATION
+         */
+        case messageTypes.createPublication:
+          console.log("running 200 create pub case");
           // decode msgBody into pub uri + channel tags
-          const decodedCreatePublication = decodeCreatePublication({ msgBody: messageQueue[i].msgBody });
+          const decodedCreatePublication = decodeCreatePublication({
+            msgBody: messageQueue[i].msgBody,
+          });
+          console.log("decoded create pub before break: ", decodedCreatePublication)
           // if decode unsuccessful, exist case
-          if (!decodedCreatePublication) break
+          if (!decodedCreatePublication) break;
+          console.log("decoded the pub: ", decodedCreatePublication)
           // increment publication counter
           const publicationCounter = await PublicationCounter.upsert({
-            id: `${postGatewayChain}/${event.transaction.to}`,
+            id: `${context.network.chainId}/${event.transaction.to}`,
             create: {
-              timestamp: event.block.timestamp,
               counter: BigInt(1),
+              lastUpdated: event.block.timestamp
             },
-            update: ({ current }) => ({
-              timestamp: event.block.timestamp,
+            update: ({ current }) => ({              
               counter: (current.counter as bigint) + BigInt(1),
+              lastUpdated: event.block.timestamp,
             }),
           });
           // create publication
           await Publication.create({
             id: publicationCounter.counter as bigint,
             data: {
-              timestamp: event.block.timestamp,
-              creatorId: decodedPost?.userId,
+              createdTimestamp: event.block.timestamp,
+              createdBy: decodedPost.userId,
               uri: decodedCreatePublication.uri,
             },
-          });        
+          });
           // process channel tags
-          for (let i = 0; i < decodedCreatePublication.channelTags.length; ++i) {
+          for (let i = 0; i < decodedCreatePublication.channelTags.length; ++i ) {
             // check if channel exists
-            channelLookup = await Channel.findUnique({ id: decodedCreatePublication.channelTags[i] });
-            if (!channelLookup) continue
-            // can only add references if admin/memmber of channel
-            if (            
-                !channelLookup.admins.includes(decodedPost.userId)
-                && !channelLookup.members?.includes(decodedPost.userId)
-            ) continue
-            // increment reference counter
-            referenceCounter = await ReferenceCounter.upsert({
-              id: "ReferenceCounter",
-              create: { counter: BigInt(1)},
-              update: ({ current }) => ({
-                counter: (current.counter as bigint) + BigInt(1),
-              }),
-            })
-            // create reference
-            await Reference.create({
-              id: referenceCounter?.counter as bigint,
-              data: { 
-                timestamp: event.block.timestamp,
-                userId: decodedPost.userId,
-                channel: decodedCreatePublication.channelTags[i],                
-                pubRef: publicationCounter?.counter as bigint,
-                nftRef: undefined, // purposely left undefined
-                urlRef: undefined, // purposely left undefined
-                chanRef: undefined // purposely left undefined                
-              }
-            })
-          } break
-          
-        /*
-        * REFERENCE PUBLICATION
-        */               
-        case messageTypes.referencePublication:
-          console.log("running 201 reference pub case")          
-          const decodedReferencePublication = decodeReferencePublication({ msgBody: messageQueue[i].msgBody })
-          // if decode uncessful exist case
-          if (!decodedReferencePublication) break      
-          // process tags
-          for (let i = 0; i < decodedReferencePublication.channelTags.length; ++i) {            
-            // check if channel exists
-            channelLookup = await Channel.findUnique({ id: decodedReferencePublication.channelTags[i] });
-            if (!channelLookup) continue
-            // can only add reference if admin/memmber of channel
-            if (            
-                !channelLookup.admins.includes(decodedPost.userId)
-                && !channelLookup.members?.includes(decodedPost.userId)
-            ) continue
-            // increment reference counter
-            referenceCounter = await ReferenceCounter.upsert({
-              id: "ReferenceCounter",
-              create: { counter: BigInt(1)},
-              update: ({ current }) => ({
-                counter: (current.counter as bigint) + BigInt(1),
-              }),
-            })
-            // create reference
-            await Reference.create({
-              id: referenceCounter?.counter as bigint,
-              data: { 
-                timestamp: event.block.timestamp,
-                userId: decodedPost.userId,
-                channel: decodedReferencePublication.channelTags[i],               
-                pubRef: decodedReferencePublication.targetPublication,
-                nftRef: undefined, // purposely left undefined
-                urlRef: undefined, // purposely left undefined
-                chanRef: undefined // purposely left undefined
-              }
+            channelLookup = await Channel.findUnique({
+              id: decodedCreatePublication.channelTags[i],
             });
-          } break          
+            if (!channelLookup) continue;
+            // can only add references if admin/memmber of channel
+            if (
+              !channelLookup.admins.includes(decodedPost.userId) &&
+              !channelLookup.members?.includes(decodedPost.userId)
+            )
+              continue;
+            // increment reference counter
+            referenceCounter = await ReferenceCounter.upsert({
+              id: "ReferenceCounter",
+              create: { 
+                counter: BigInt(1),
+                lastUpdated: event.block.timestamp
+              },
+              update: ({ current }) => ({
+                counter: (current.counter as bigint) + BigInt(1),
+                lastUpdated: event.block.timestamp
+              }),
+            });
+            // create reference
+            await Reference.create({
+              id: referenceCounter?.counter as bigint,
+              data: {
+                createdTimestamp: event.block.timestamp,
+                createdBy: decodedPost.userId,
+                channel: decodedCreatePublication.channelTags[i],
+                pubRef: publicationCounter?.counter as bigint,
+                chanRef: undefined, // purposely left undefined
+              },
+            });
+          }
+          break;
+
+        /*
+         * REFERENCE PUBLICATION
+         */
+        case messageTypes.referencePublication:
+          console.log("running 201 reference pub case");
+          const decodedReferencePublication = decodeReferencePublication({
+            msgBody: messageQueue[i].msgBody,
+          });
+          // if decode uncessful exist case
+          if (!decodedReferencePublication) break;
+          // process tags
+          for (
+            let i = 0;
+            i < decodedReferencePublication.channelTags.length;
+            ++i
+          ) {
+            // check if channel exists
+            channelLookup = await Channel.findUnique({
+              id: decodedReferencePublication.channelTags[i],
+            });
+            if (!channelLookup) continue;
+            // can only add reference if admin/memmber of channel
+            if (
+              !channelLookup.admins.includes(decodedPost.userId) &&
+              !channelLookup.members?.includes(decodedPost.userId)
+            )
+              continue;
+            // increment reference counter
+            referenceCounter = await ReferenceCounter.upsert({
+              id: "ReferenceCounter",
+              create: { 
+                counter: BigInt(1),
+                lastUpdated: event.block.timestamp
+              },
+              update: ({ current }) => ({
+                counter: (current.counter as bigint) + BigInt(1),
+                lastUpdated: event.block.timestamp
+              }),
+            });
+            // create reference
+            await Reference.create({
+              id: referenceCounter?.counter as bigint,
+              data: {
+                createdTimestamp: event.block.timestamp,
+                createdBy: decodedPost.userId,
+                channel: decodedReferencePublication.channelTags[i],
+                pubRef: decodedReferencePublication.targetPublication,
+                chanRef: undefined, // purposely left undefined
+              },
+            });
+          }
+          break;
 
         /* ************************************************
 
                             REMOVE CASE
 
-        ************************************************ */           
+        ************************************************ */
 
         /*
-        * REMOVE REFERENCE
-        */                                 
+         * REMOVE REFERENCE
+         */
         case messageTypes.removeReference:
-          console.log("running 500 remove reference case")
-          const decodedRemoveReference = decodeRemoveReference({msgBody: messageQueue[i].msgBody})
+          console.log("running 500 remove reference case");
+          const decodedRemoveReference = decodeRemoveReference({
+            msgBody: messageQueue[i].msgBody,
+          });
           // if decode uncessful exist case
-          if (!decodedRemoveReference) break    
+          if (!decodedRemoveReference) break;
           // check if channel exists
-          channelLookup = await Channel.findUnique({ id: decodedRemoveReference.channelId });
-          if (!channelLookup) break       
+          channelLookup = await Channel.findUnique({
+            id: decodedRemoveReference.channelId,
+          });
+          if (!channelLookup) break;
           // check if reference exists and is in channel
-          const referenceLookup = await Reference.findUnique({ id: decodedRemoveReference.referenceId });
-          if (referenceLookup?.channel != decodedRemoveReference.channelId) break             
+          const referenceLookup = await Reference.findUnique({
+            id: decodedRemoveReference.referenceId,
+          });
+          if (referenceLookup?.channel != decodedRemoveReference.channelId)
+            break;
           // can only remove references if you are channel admin or reference creator
-          if (            
-            !channelLookup.admins.includes(decodedPost.userId)
-            && referenceLookup.userId != decodedPost.userId
-          ) break  
+          if (
+            !channelLookup.admins.includes(decodedPost.userId) &&
+            referenceLookup.createdBy != decodedPost.userId
+          )
+            break;
           // update reference so that it no longer has a target channel
           // NOTE: might want to decide to delete the entire reference. not sure yet
           await Reference.update({
             id: decodedRemoveReference.referenceId,
             data: {
-              channel: undefined
-            }
-          }); break              
+              channel: undefined,
+            },
+          });
+          break;
       }
     }
   }
@@ -381,17 +553,12 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
 
                 POST PROCESSING RECEIPT
 
-  ************************************************ */       
+  ************************************************ */
 
   // record every transaction that has entered the crud cycle
-  const txnHashProcessedCheck = await Txn.findUnique({
-    // id: event.block.hash
-    id: event.transaction.hash,
-  });
-  if (!txnHashProcessedCheck) {
-    await Txn.create({
-      id: event.transaction.hash,
-    });
-    console.log("processed txn hash: ", event.transaction.hash);
+  txnReceipt = await Txn.findUnique({ id: event.transaction.hash });
+  if (!txnReceipt) {
+    await Txn.create({ id: event.transaction.hash });
+    console.log("processing complete. processed txn hash: ", event.transaction.hash);
   }
 });

@@ -1,29 +1,29 @@
 query channelWithId($id: BigInt!) {
   channel(id: $id) {
     id
-    timestamp
-    creatorId
+    createdTimestamp
+    createdBy
     uri
     admins
     members
     references(orderBy: "id", orderDirection: "desc") {
       id
-      timestamp
-      userId
+      createdTimestamp
+      createdBy
       pubRef {
         id
-        creatorId
+        createdTimestamp
+        createdBy
         uri
-        timestamp
         mentions {
-          userId
           id
+          createdBy
         }
       }
     }
     mentions {
       id
-      userId
+      createdBy
     }
   }
 }

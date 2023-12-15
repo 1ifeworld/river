@@ -13,6 +13,7 @@ contract PostScript is Script {
     // PostGateway postGateway = PostGateway(0x339513226Afd92B309837Bad402c6D3ADDE9Ad24); // opGoerli
 
     uint256 constant userId = 1;
+    uint8 constant hashType = 1;
     uint8 constant sigType = 1;
     uint16 constant version = 1;
     string public ipfsUri = "ipfs://bafkreiai2xekku6zoiwkchzgpsrjsd3z3nuotk3lzsoyo27rqymp6d3cni";
@@ -28,15 +29,15 @@ contract PostScript is Script {
         /* Start function transmission */
         vm.startBroadcast(deployerPrivateKey);
 
-        createChannel();        
-        referenceChannel();
+        // createChannel();        
+        // referenceChannel();
 
         createPublication();        
-        referencePublication();
+        // referencePublication();
 
-        removeReference();
+        // removeReference();
 
-        vm.stopBroadcast();
+        // vm.stopBroadcast();
         /* End function transmission */
     }
 
@@ -55,16 +56,18 @@ contract PostScript is Script {
         bytes[] memory messageArray = new bytes[](1);
         messageArray[0] = abi.encodePacked(msgType, msgBody);
         // generate post signature
-        bytes memory signedPost = signPost(deployerPrivateKey, version, expiration, messageArray);         
+        (bytes32 hash, bytes memory signedPost) = signPost(deployerPrivateKey, version, expiration, messageArray);         
         // encode post inputs
         bytes memory postInputs = abi.encodePacked(
             userId,                             // userId
+            hashType,                           // userId
+            hash,                               // userId
             sigType,                            // sigType
             signedPost,                         // signature
             version,                            // version
             expiration,                         // expiration
             abi.encode(messageArray)            // message array
-        );                 
+        );                             
         // call post
         postGateway.post(postInputs);
     }
@@ -80,16 +83,18 @@ contract PostScript is Script {
         bytes[] memory messageArray = new bytes[](1);
         messageArray[0] = abi.encodePacked(msgType, msgBody);
         // generate post signature
-        bytes memory signedPost = signPost(deployerPrivateKey, version, expiration, messageArray);         
+        (bytes32 hash, bytes memory signedPost) = signPost(deployerPrivateKey, version, expiration, messageArray);         
         // encode post inputs
         bytes memory postInputs = abi.encodePacked(
             userId,                             // userId
+            hashType,                           // userId
+            hash,                             // userId
             sigType,                            // sigType
             signedPost,                         // signature
             version,                            // version
             expiration,                         // expiration
             abi.encode(messageArray)            // message array
-        );                 
+        );                             
         // call post
         postGateway.post(postInputs);        
     }
@@ -104,16 +109,18 @@ contract PostScript is Script {
         bytes[] memory messageArray = new bytes[](1);
         messageArray[0] = abi.encodePacked(msgType, msgBody);
         // generate post signature
-        bytes memory signedPost = signPost(deployerPrivateKey, version, expiration, messageArray);         
+        (bytes32 hash, bytes memory signedPost) = signPost(deployerPrivateKey, version, expiration, messageArray);         
         // encode post inputs
         bytes memory postInputs = abi.encodePacked(
             userId,                             // userId
+            hashType,                           // userId
+            hash,                             // userId
             sigType,                            // sigType
             signedPost,                         // signature
             version,                            // version
             expiration,                         // expiration
             abi.encode(messageArray)            // message array
-        );                 
+        );                             
         // call post
         postGateway.post(postInputs);
     }
@@ -129,16 +136,18 @@ contract PostScript is Script {
         bytes[] memory messageArray = new bytes[](1);
         messageArray[0] = abi.encodePacked(msgType, msgBody);
         // generate post signature
-        bytes memory signedPost = signPost(deployerPrivateKey, version, expiration, messageArray);         
+        (bytes32 hash, bytes memory signedPost) = signPost(deployerPrivateKey, version, expiration, messageArray);         
         // encode post inputs
         bytes memory postInputs = abi.encodePacked(
             userId,                             // userId
+            hashType,                           // userId
+            hash,                             // userId
             sigType,                            // sigType
             signedPost,                         // signature
             version,                            // version
             expiration,                         // expiration
             abi.encode(messageArray)            // message array
-        );                 
+        );                             
         // call post
         postGateway.post(postInputs);
     }    
@@ -153,10 +162,12 @@ contract PostScript is Script {
         bytes[] memory messageArray = new bytes[](1);
         messageArray[0] = abi.encodePacked(msgType, msgBody);
         // generate post signature
-        bytes memory signedPost = signPost(deployerPrivateKey, version, expiration, messageArray);         
+        (bytes32 hash, bytes memory signedPost) = signPost(deployerPrivateKey, version, expiration, messageArray);         
         // encode post inputs
         bytes memory postInputs = abi.encodePacked(
             userId,                             // userId
+            hashType,                           // userId
+            hash,                             // userId
             sigType,                            // sigType
             signedPost,                         // signature
             version,                            // version
@@ -182,8 +193,8 @@ contract PostScript is Script {
         uint16 vers, 
         uint64 exp, 
         bytes[] memory msgArray
-    ) public pure returns (bytes memory signedPost) {
-        bytes32 hash = keccak256(abi.encode(vers, exp, msgArray)).toEthSignedMessageHash();
+    ) public pure returns (bytes32 hash, bytes memory signedPost) {
+        hash = keccak256(abi.encode(vers, exp, msgArray)).toEthSignedMessageHash();
         signedPost = _sign(privateKey, hash);
     }
 }
