@@ -28,7 +28,7 @@ export default createConfig({
       network: "opGoerli",
       abi: postGatewayABI,
       address: addresses.postGateway.opGoerli,
-      startBlock: 18549604
+      startBlock: 18620031
     },
     // IdRegistry: {
     //   network: "anvil",
