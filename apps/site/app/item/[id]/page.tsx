@@ -2,7 +2,7 @@ import { Stack } from 'design-system/elements'
 import { getReferenceWithId, type Reference } from '@/gql'
 import { ipfsUrlToCid, pinataUrlFromCid, isVideo, isPDF, isAudio } from '@/lib'
 import Image from 'next/image'
-import { VideoPlayer } from '@/client'
+import { VideoPlayer, AudioPlayer } from '@/client'
 import React, { useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 
@@ -57,7 +57,7 @@ export default async function View({
   } else if (isAudio({ mimeType: contentType })) {
     return (
       <Stack className="w-full h-[calc(100vh-_56px)] justify-center items-center ">
-        <audio controls src={contentUrl} />
+        <AudioPlayer playbackId={referenceMetadata.muxPlaybackId} />
       </Stack>
     )
   } else if (isPDF({ mimeType: contentType })) {

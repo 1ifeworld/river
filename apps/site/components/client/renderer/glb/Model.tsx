@@ -23,10 +23,9 @@ const Model: React.FC<ModelProps> = ({ src }) => {
       const box = new THREE.Box3().setFromObject(modelRef.current)
       const size = box.getSize(new THREE.Vector3())
       const maxDimension = Math.max(size.x, size.y, size.z)
-      modelRef.current.scale.setScalar(.8 / maxDimension)
+      modelRef.current.scale.setScalar(0.8 / maxDimension)
     }
   }, [src])
-
 
   return <primitive object={gltf.scene} ref={modelRef} dispose={null} />
 }
@@ -35,7 +34,7 @@ const ModelViewer: React.FC<ModelProps> = ({ src }) => {
   return (
     // we can create a fall back loading component if we wish
     <Canvas>
-      <Suspense  fallback={null}>
+      <Suspense fallback={null}>
         <PerspectiveCamera makeDefault position={[0, 1, 2]} />
         <ambientLight position={[0, 0, 5]} intensity={1} />
         <ambientLight position={[5, 5, 5]} intensity={1} />

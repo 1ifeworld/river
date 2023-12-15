@@ -26,6 +26,8 @@ import {
   isGLB,
   isVideo,
   isAudio,
+  MuxDataObject,
+  IPFSDataObject,
 } from '@/lib'
 import { useUserContext } from '@/context'
 import { useDropzone } from 'react-dropzone'
@@ -65,49 +67,79 @@ export function UploadDialog() {
     ) {
       return mimeType
     }
-    return mimeType 
+    return mimeType
   }
   const uploadAndProcessFile = async (file: File) => {
     const uploadedFileName = file.name || 'unnamed'
     const contentType = determineContentType(file)
     const uploadedFileCid = await uploadFile({ filesToUpload: [file] })
-    let pubUri
 
-    if (
+    let pubUri: string
+    let dataForDB: DataObject | MuxDataObject
+
+    // Set the correct animationUri based on file type
+    const reqAnimationUri =
       isVideo({ mimeType: contentType }) ||
       isAudio({ mimeType: contentType }) ||
       isGLB(file)
-    ) {
-      pubUri = await uploadBlob({
-        dataToUpload: {
-          name: uploadedFileName,
-          description: 'What did you think this was going to be?',
-          image: '',
-          animationUri: uploadedFileCid,
-        },
-      })
-    } else {
-      pubUri = await uploadBlob({
-        dataToUpload: {
-          name: uploadedFileName,
-          description: 'What did you think this was going to be?',
-          image: uploadedFileCid,
-          animationUri: '',
-        },
-      })
-    }
-    await sendToDb({
-      key: pubUri,
-      value: {
-        name: uploadedFileName,
-        description: 'What did you think this was going to be?',
-        image: isImage({ mimeType: contentType }) ? uploadedFileCid : '',
-        animationUri: isImage({ mimeType: contentType }) ? '' : uploadedFileCid,
-        contentType: contentType,
-      },
-    } as DataObject)
+    const animationUri = reqAnimationUri ? uploadedFileCid : ''
 
-    if (signMessage && targetUserId !== undefined) {
+    const ipfsDataObject: IPFSDataObject = {
+      name: uploadedFileName,
+      description: 'What did you think this was going to be?',
+      image: isImage({ mimeType: contentType }) ? uploadedFileCid : '',
+      animationUri: animationUri,
+    }
+
+    pubUri = await uploadBlob({ dataToUpload: ipfsDataObject })
+
+    if (
+      isVideo({ mimeType: contentType }) ||
+      isAudio({ mimeType: contentType })
+    ) {
+      const assetEndpointForMux = pinataUrlFromCid({
+        cid: ipfsUrlToCid({ ipfsUrl: uploadedFileCid }),
+      })
+      const muxAsset = await muxClient.Video.Assets.create({
+        input: assetEndpointForMux,
+        playback_policy: 'public',
+        ...(isVideo({ mimeType: contentType }) && {
+          encoding_tier: 'baseline',
+        }),
+      })
+      console.log('MUXASSET', muxAsset)
+
+      const muxAssetId = muxAsset.id || ''
+      const muxPlaybackId =
+        muxAsset.playback_ids && muxAsset.playback_ids[0]
+          ? muxAsset.playback_ids[0].id
+          : ''
+
+      console.log('ASSETID', muxAssetId)
+      console.log('playbackid', muxPlaybackId)
+
+      dataForDB = {
+        key: pubUri,
+        value: {
+          ...ipfsDataObject,
+          contentType: contentType,
+        },
+        muxAssetId: muxAssetId,
+        muxPlaybackId: muxPlaybackId,
+      }
+    } else {
+      dataForDB = {
+        key: pubUri,
+        value: {
+          ...ipfsDataObject,
+          contentType: contentType,
+        },
+      }
+    }
+
+    await sendToDb(dataForDB)
+
+    if (signMessage && targetUserId) {
       await processCreatePubPost({
         pubUri: pubUri,
         targetChannelId: BigInt(params.id as string),

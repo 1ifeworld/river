@@ -1,3 +1,9 @@
+export interface IPFSDataObject {
+  name: string
+  description: string
+  image: string
+  animationUri: string
+}
 export interface DataObject {
   key: string
   value: {
@@ -7,6 +13,11 @@ export interface DataObject {
     animationUri: string
     contentType: string
   }
+}
+
+export interface MuxDataObject extends DataObject {
+  muxAssetId: string
+  muxPlaybackId: string
 }
 
 export const sendToDb = async (data: DataObject) => {
