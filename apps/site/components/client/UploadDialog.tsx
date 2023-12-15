@@ -25,6 +25,9 @@ import {
   isImage,
   isGLB,
   isVideo,
+  isAudio,
+  IPFSDataObject,
+  determineContentType,
 } from '@/lib'
 import { useUserContext } from '@/context'
 import { useDropzone } from 'react-dropzone'
@@ -36,30 +39,102 @@ import { FileList } from '@/server'
 
 export function UploadDialog() {
   const [dialogOpen, setDialogOpen] = React.useState(false)
-
   const { authenticated, login } = usePrivy()
-
-  /**
-   * Dropzone hooks
-   */
   const [showFileList, setShowFileList] = React.useState<boolean>(false)
   const [filesToUpload, setFilesToUpload] = React.useState<File[]>([])
+  const { signMessage, userId: targetUserId } = useUserContext()
+  const params = useParams()
+
   const onDrop = React.useCallback((filesToUpload: File[]) => {
     setShowFileList(true)
     setFilesToUpload(filesToUpload)
   }, [])
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     disabled: showFileList,
   })
 
-  const params = useParams()
+  const uploadAndProcessFile = async (file: File) => {
+    const uploadedFileName = file.name || 'unnamed'
+    const contentType = determineContentType(file)
+    const uploadedFileCid = await uploadFile({ filesToUpload: [file] })
 
-  const { signMessage, userId: targetUserId } = useUserContext()
+    let pubUri: string
+    let dataForDB: DataObject
+
+    // Set the correct animationUri based on file type
+    const reqAnimationUri =
+      isVideo({ mimeType: contentType }) ||
+      isAudio({ mimeType: contentType }) ||
+      isGLB(file)
+    const animationUri = reqAnimationUri ? uploadedFileCid : ''
+
+    const ipfsDataObject: IPFSDataObject = {
+      name: uploadedFileName,
+      description: 'What did you think this was going to be?',
+      image: isImage({ mimeType: contentType }) ? uploadedFileCid : '',
+      animationUri: animationUri,
+    }
+
+    pubUri = await uploadBlob({ dataToUpload: ipfsDataObject })
+
+    if (
+      isVideo({ mimeType: contentType }) ||
+      isAudio({ mimeType: contentType })
+    ) {
+      const assetEndpointForMux = pinataUrlFromCid({
+        cid: ipfsUrlToCid({ ipfsUrl: uploadedFileCid }),
+      })
+      const muxAsset = await muxClient.Video.Assets.create({
+        input: assetEndpointForMux,
+        playback_policy: 'public',
+        ...(isVideo({ mimeType: contentType }) && {
+          encoding_tier: 'baseline',
+        }),
+      })
+
+      const muxAssetId = muxAsset.id || ''
+      const muxPlaybackId =
+        muxAsset.playback_ids && muxAsset.playback_ids[0]
+          ? muxAsset.playback_ids[0].id
+          : ''
+
+      dataForDB = {
+        key: pubUri,
+        value: {
+          ...ipfsDataObject,
+          contentType: contentType,
+          muxAssetId: muxAssetId,
+          muxPlaybackId: muxPlaybackId,
+        },
+      }
+    } else {
+      dataForDB = {
+        key: pubUri,
+        value: {
+          ...ipfsDataObject,
+          contentType: contentType,
+          muxAssetId: '',
+          muxPlaybackId: '',
+        },
+      }
+    }
+
+    await sendToDb(dataForDB)
+
+    if (signMessage && targetUserId) {
+      await processCreatePubPost({
+        pubUri: pubUri,
+        targetChannelId: BigInt(params.id as string),
+        targetUserId: BigInt(targetUserId),
+        privySignMessage: signMessage,
+      })
+    }
+  }
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      {/* TODO: Determine if this is the best way to uncenter this `Button` instance */}
       {!authenticated ? (
         <div>
           <Button variant="link" onClick={login}>
@@ -86,123 +161,21 @@ export function UploadDialog() {
                 <Typography>close</Typography>
               </Button>
             </DialogClose>
-            {/* Upload form */}
             <form
               id="newUpload"
               className="focus:outline-none text-center h-full w-full"
               action={async () => {
-                // Prevent non-authenticated users from proceeding
-                if (!targetUserId) return
-                // Set file name, type, and description values
-                const uploadedFileName = filesToUpload[0]?.name || 'unnamed'
-                const uploadedFileType = filesToUpload[0].type
-                let GLBFileContentType = uploadedFileType // Default to the uploaded file's type
-
-                if (isGLB(filesToUpload[0])) {
-                  GLBFileContentType = 'model/gltf-binary' // If it's a GLB file, set the content type accordingly
-                }
-
-                const hardcodedDescription =
-                  'What did you think this was going to be?'
-                // Determine if file is image or video or other
-                const fileIsImage = isImage({ mimeType: uploadedFileType })
-                const fileIsVideo = fileIsImage
-                  ? false
-                  : isVideo({ mimeType: uploadedFileType })
-
-                // Upload file to ipfs
-                const uploadedFileCid = await uploadFile({ filesToUpload })
-                // set dynamic variable to be updated
-                let pubUri
-                // process metadata json upload, redis update, and (if applicable) mux
-                if (fileIsImage) {
-                  pubUri = await uploadBlob({
-                    dataToUpload: {
-                      name: uploadedFileName,
-                      description: hardcodedDescription,
-                      image: uploadedFileCid,
-                      animationUri: '',
-                    },
-                  })
-                  await sendToDb({
-                    key: pubUri,
-                    value: {
-                      name: uploadedFileName,
-                      description: hardcodedDescription,
-                      image: uploadedFileCid,
-                      animationUri: '',
-                      contentType: uploadedFileType,
-                    },
-                  } as DataObject)
-                } else if (fileIsVideo) {
-                  const assetEndpointForMux = pinataUrlFromCid({
-                    cid: ipfsUrlToCid({ ipfsUrl: uploadedFileCid }),
-                  })
-                  const asset = await muxClient.Video.Assets.create({
-                    input: assetEndpointForMux,
-                    playback_policy: 'public',
-                    encoding_tier: 'baseline',
-                  })
-                  pubUri = await uploadBlob({
-                    dataToUpload: {
-                      name: uploadedFileName,
-                      description: hardcodedDescription,
-                      image: '',
-                      animationUri: uploadedFileCid,
-                    },
-                  })
-                  await sendToDb({
-                    key: pubUri,
-                    value: {
-                      name: uploadedFileName,
-                      description: hardcodedDescription,
-                      image: '',
-                      animationUri: uploadedFileCid,
-                      contentType: uploadedFileType,
-                      muxAssetId: asset.source_asset_id,
-                      muxPlaybackId: asset.playback_ids?.[0]?.id,
-                    },
-                  } as DataObject)
-                } else {
-                  // processOther
-                  pubUri = await uploadBlob({
-                    dataToUpload: {
-                      name: uploadedFileName,
-                      description: hardcodedDescription,
-                      image: '',
-                      animationUri: uploadedFileCid,
-                    },
-                  })
-                  await sendToDb({
-                    key: pubUri,
-                    value: {
-                      name: uploadedFileName,
-                      description: hardcodedDescription,
-                      image: '',
-                      animationUri: uploadedFileCid,
-                      contentType: uploadedFileType,
-                    },
-                  } as DataObject)
-                }
-                // Generate create channel post for user and post transaction
-                if (signMessage) {
-                  await processCreatePubPost({
-                    pubUri: pubUri,
-                    targetChannelId: BigInt(params.id as string),
-                    targetUserId: targetUserId,
-                    privySignMessage: signMessage,
-                  })
-                }
+                if (!targetUserId || filesToUpload.length === 0) return
+                await Promise.all(filesToUpload.map(uploadAndProcessFile))
                 setDialogOpen(false)
-                // Render a toast with the name of the uploaded item(s)
-                for (const [index, file] of filesToUpload.entries()) {
+                filesToUpload.forEach((file, index) => {
                   toast.custom((t) => (
                     <Toast key={index}>
                       {'Successfully uploaded '}
                       <span className="font-bold">{file.name}</span>
                     </Toast>
                   ))
-                }
+                })
               }}
               {...getRootProps()}
             >

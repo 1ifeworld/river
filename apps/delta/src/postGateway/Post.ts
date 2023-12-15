@@ -16,6 +16,7 @@ import {
 import { Address, slice, Hash, verifyMessage, recoverPublicKey, recoverMessageAddress } from "viem";
 
 ponder.on("PostGateway:Post", async ({ event, context }) => {
+  
   /* ************************************************
 
                     DATA STRUCTURES
@@ -75,8 +76,6 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
 
   ************************************************ */
 
-  // console.log("txn input: ", event.transaction.input)
-
   // skips first 68 bytes which contain 4 byte function selector + 32 byte data offset + 32 byte data length
   const cleanedTxnData = slice(event.transaction.input, 68);
   // decodes post into its separate components. if decode failed, store txn hash and exit crud
@@ -101,7 +100,6 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
 
   // get custody address from user id
   userLookup = await User.findUnique({ id: decodedPost?.userId });
-  console.log("user lookup: ", userLookup);
   // exit crud if not a registered user id
   if (!userLookup) {
     txnReceipt = await Txn.findUnique({ id: event.transaction.hash });
@@ -179,14 +177,12 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
     },
   });
 
-  // console.log("am i creating the post", post)
-
   // identify number of messages sent in post
   const length = post.messageArray.length
   // outer level if statement. if 0 then no messages will be processed
   if (length && length != 0) {
     // initialize messageQueue
-    const messageQueue: MessageToProcess[] = [];
+    const messageQueue: MessageToProcess[] = []
     // attempt to decode messages
     for (let i = 0; i < length; ++i) {
       // decode message into type + body
@@ -243,7 +239,6 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
 
     // processs messages in queue. only validly formatted messages will make it here
     for (let i = 0; i < messageQueue.length; ++i) {
-      console.log("what message type: ", messageQueue[i]?.msgType);
       switch (messageQueue[i]?.msgType) {
         /*
          * CREATE CHANNEL
@@ -267,7 +262,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
               counter: (current.counter as bigint) + BigInt(1),
               lastUpdated: event.block.timestamp
             }),
-          });
+          })
           // create channel
           await Channel.create({
             id: channelCounter?.counter as bigint,
@@ -284,7 +279,6 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
             // check if channel exists
             const channelLookup = await Channel.findUnique({
               id: decodedCreateChannel.channelTags[i],
-            });
             if (!channelLookup) continue;
             // can only add references if admin/memmber of channel
             if (
@@ -402,7 +396,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
               counter: (current.counter as bigint) + BigInt(1),
               lastUpdated: event.block.timestamp,
             }),
-          });
+          })
           // create publication
           await Publication.create({
             id: publicationCounter.counter as bigint,
@@ -418,7 +412,6 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
             channelLookup = await Channel.findUnique({
               id: decodedCreatePublication.channelTags[i],
             });
-            if (!channelLookup) continue;
             // can only add references if admin/memmber of channel
             if (
               !channelLookup.admins.includes(decodedPost.userId) &&
@@ -560,4 +553,4 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
     await Txn.create({ id: event.transaction.hash });
     console.log("processing complete. processed txn hash: ", event.transaction.hash);
   }
-});
+})

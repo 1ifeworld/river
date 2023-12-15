@@ -11,7 +11,7 @@ export const messageTypes = {
   createUrl: BigInt(400),
   referenceUrl: BigInt(401),
   editUrl: BigInt(402),
-  removeReference: BigInt(500)
+  removeReference: BigInt(500),
 }
 
 export const messageTypeSet = new Set<bigint>([

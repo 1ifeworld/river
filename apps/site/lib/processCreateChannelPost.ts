@@ -34,7 +34,7 @@ export async function processCreateChannelPost({
     uri: channelUri,
     adminIds: [targetUserId],
     memberIds: [],
-    channelTags: []
+    channelTags: [],
   })
   // add this in to prevent msgBody from being null
   if (!createChannelMsg) return
