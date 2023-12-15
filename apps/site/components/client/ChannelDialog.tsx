@@ -149,7 +149,6 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                     </Toast>
                   ))
                 }}
-                {...getRootProps()}
               >
                 <Separator />
                 <FormField
@@ -197,7 +196,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                       )}
                     />
                     {/* Dropzone */}
-                    <div className="mx-5">
+                    <div className="mx-5" {...getRootProps()}>
                       <FormLabel htmlFor="cover">
                         <Typography variant="small">Cover</Typography>
                       </FormLabel>
