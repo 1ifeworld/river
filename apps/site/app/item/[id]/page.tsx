@@ -38,7 +38,6 @@ export default async function View({
     isAudio({ mimeType: referenceMetadata.contentType })
     ) {
     const cid = ipfsUrlToCid({ ipfsUrl: referenceMetadata.animationUri })
-
     contentUrl = pinataUrlFromCid({ cid })
   } else {
     const cid = ipfsUrlToCid({ ipfsUrl: referenceMetadata.image })
@@ -56,8 +55,7 @@ export default async function View({
       </Stack>
     )
   } else if (isAudio({ mimeType: contentType })) {
-    // Handle audio content here
-    // You can add your audio rendering code or components
+
     return (
       <Stack className="w-full h-[calc(100vh-_56px)] justify-center items-center ">
      <audio controls src={contentUrl}>
