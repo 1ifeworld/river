@@ -29,11 +29,11 @@ contract PostScript is Script {
         /* Start function transmission */
         vm.startBroadcast(deployerPrivateKey);
 
-        // createChannel();        
+        createChannel();        
         // referenceChannel();
 
         createPublication();        
-        // referencePublication();
+        referencePublication();
 
         // removeReference();
 
@@ -50,8 +50,9 @@ contract PostScript is Script {
         uint256[] memory memberIds = new uint256[](2);
         memberIds[0] = 2;
         memberIds[1] = 3;
-        uint256[] memory channelTags = new uint256[](1);
-        channelTags[0] = 1;
+        uint256[] memory channelTags = new uint256[](0);
+        // uint256[] memory channelTags = new uint256[](1);
+        // channelTags[0] = 1;
         bytes memory msgBody = abi.encode(ipfsUri, adminIds, memberIds, channelTags);        
         bytes[] memory messageArray = new bytes[](1);
         messageArray[0] = abi.encodePacked(msgType, msgBody);

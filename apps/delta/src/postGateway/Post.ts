@@ -309,9 +309,9 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
               data: {
                 createdTimestamp: event.block.timestamp,
                 createdBy: decodedPost.userId,
-                channel: decodedCreateChannel.channelTags[i], // these are the channels to add the newly created refererence to to
-                pubRef: undefined, // purposely left undefined
-                chanRef: channelCounter?.counter, // this is the channel that was just created
+                channelId: decodedCreateChannel.channelTags[i], // these are the channels to add the newly created refererence to to
+                pubRefId: BigInt(0), // purposely left undefined
+                // chanRefId: channelCounter?.counter, // this is the channel that was just created
               },
             });
           }
@@ -363,9 +363,9 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
               data: {
                 createdTimestamp: event.block.timestamp,
                 createdBy: decodedPost.userId,
-                channel: decodedReferenceChannels.channelTags[i],
-                pubRef: undefined, // purposely left undefined
-                chanRef: decodedReferenceChannels.channelTarget,
+                channelId: decodedReferenceChannels.channelTags[i],
+                pubRefId: BigInt(0), // purposely left undefined
+                // chanRefId: decodedReferenceChannels.channelTarget,
               },
             });
           }
@@ -442,9 +442,9 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
               data: {
                 createdTimestamp: event.block.timestamp,
                 createdBy: decodedPost.userId,
-                channel: decodedCreatePublication.channelTags[i],
-                pubRef: publicationCounter?.counter as bigint,
-                chanRef: undefined, // purposely left undefined
+                channelId: decodedCreatePublication.channelTags[i],
+                pubRefId: publicationCounter?.counter as bigint,
+                // chanRefId: BigInt(0), // purposely left undefined
               },
             });
           }
@@ -495,9 +495,9 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
               data: {
                 createdTimestamp: event.block.timestamp,
                 createdBy: decodedPost.userId,
-                channel: decodedReferencePublication.channelTags[i],
-                pubRef: decodedReferencePublication.targetPublication,
-                chanRef: undefined, // purposely left undefined
+                channelId: decodedReferencePublication.channelTags[i],
+                pubRefId: decodedReferencePublication.targetPublication,
+                // chanRefId: BigInt(0), // purposely left undefined
               },
             });
           }
@@ -528,7 +528,7 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
           const referenceLookup = await Reference.findUnique({
             id: decodedRemoveReference.referenceId,
           });
-          if (referenceLookup?.channel != decodedRemoveReference.channelId)
+          if (referenceLookup?.channelId != decodedRemoveReference.channelId)
             break;
           // can only remove references if you are channel admin or reference creator
           if (
@@ -537,12 +537,10 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
           )
             break;
           // update reference so that it no longer has a target channel
-          // NOTE: might want to decide to delete the entire reference. not sure yet
-          await Reference.update({
-            id: decodedRemoveReference.referenceId,
-            data: {
-              channel: undefined,
-            },
+          // NOTE: this was updated to delete the entire reference
+          //    as opposed to just clearing the value of the channel it was anchored to
+          await Reference.delete({
+            id: decodedRemoveReference.referenceId
           });
           break;
       }

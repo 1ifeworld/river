@@ -60,8 +60,8 @@ export default createSchema((p) => ({
     uri: p.string(),
     admins: p.bigint().list(),      // UPDATE to reference User
     members: p.bigint().list(),     // UPDATE to reference User
-    references: p.many("Reference.channel"),
-    mentions: p.many("Reference.chanRef")
+    references: p.many("Reference.channelId"),
+    // mentions: p.many("Reference.chanRefId")
   }),
   PublicationCounter: p.createTable({
     id: p.string(),
@@ -73,7 +73,7 @@ export default createSchema((p) => ({
     createdTimestamp: p.bigint(),
     createdBy: p.bigint().references("User.id"),
     uri: p.string(),
-    mentions: p.many("Reference.pubRef")
+    mentions: p.many("Reference.pubRefId")
   }),
   ReferenceCounter: p.createTable({
     id: p.string(),
@@ -84,8 +84,13 @@ export default createSchema((p) => ({
     id: p.bigint(),
     createdTimestamp: p.bigint(),
     createdBy: p.bigint().references("User.id"),
-    channel: p.bigint().references("Channel.id").optional(),
-    pubRef: p.bigint().references("Publication.id").optional(),
-    chanRef: p.bigint().references("Channel.id").optional(),
+    channelId: p.bigint().references("Channel.id"),
+    channel: p.one("channelId"),
+    pubRefId: p.bigint().references("Publication.id"),
+    pubRef: p.one("pubRefId"),
+    // chanRefId: p.bigint().references("Channel.id").optional(),
+    // chanRef: p.one("chanRefId")
   })
 }));
+
+
