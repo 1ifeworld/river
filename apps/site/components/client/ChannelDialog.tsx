@@ -221,14 +221,12 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                                     Drop your files here
                                   </Typography>
                                 ) : (
-                                  <Button onClick={open}>
-                                    <Typography className="hover:cursor-pointer text-muted-foreground leading-1">
-                                      Drag and drop a cover image here or
-                                      {'\u00A0'}
-                                      <span className="underline">browse</span>
-                                      {'\u00A0'}your local file system
-                                    </Typography>
-                                  </Button>
+                                  <Typography className="hover:cursor-pointer text-muted-foreground leading-1">
+                                    Drag and drop a cover image here or
+                                    {'\u00A0'}
+                                    <span className="underline">browse</span>
+                                    {'\u00A0'}your local file system
+                                  </Typography>
                                 )}
                               </div>
                             ) : (
