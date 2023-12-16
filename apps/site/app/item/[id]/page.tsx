@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { VideoPlayer, AudioPlayer } from '@/client'
 import React, { useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
+import { ContentWrapper } from '@/client'
 
 const Model = dynamic(
   () => import('../../../components/client/renderer/glb/Model'),
@@ -23,9 +24,18 @@ export default async function View({
 }: {
   params: { itemId: string; id: string }
 }) {
+
   const { reference } = await getReferenceWithId({
     id: params.id,
   })
+
+  if (!reference) {
+    return (
+      <div>
+        Not a valid item
+      </div>
+    )
+  }
 
   const { metadata } = await getReferenceMetadata(reference as Reference)
 
@@ -76,7 +86,10 @@ export default async function View({
     )
   } else {
     return (
-      <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center overflow-hidden relative">
+      <ContentWrapper 
+        item={reference} 
+        className="w-full h-[calc(100vh_-_56px)] justify-center items-center overflow-hidden relative">
+      {/* <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center overflow-hidden relative"> */}
         <Image
           className="object-contain"
           src={contentUrl}
@@ -85,7 +98,8 @@ export default async function View({
           quality={100}
           priority={true}
         />
-      </Stack>
+      {/* </Stack> */}
+      </ContentWrapper>
     )
   }
 }

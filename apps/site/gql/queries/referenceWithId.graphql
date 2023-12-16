@@ -10,5 +10,18 @@ query referenceWithId($id: BigInt!) {
       createdBy
       uri
     }
+    channel {
+      id
+      createdTimestamp
+      createdBy
+      uri
+      members
+      admins
+      references {
+        id
+        createdTimestamp
+        createdBy
+      }
+    }    
   }
 }
