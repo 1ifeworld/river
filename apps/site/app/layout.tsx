@@ -20,7 +20,7 @@ export default function RootLayout({
     <html lang="en" className={`${fragmentMono.variable}`}>
       <body>
         <Providers>
-          <div className="p-4 px-5">
+          <div className="py-4">
             <Header />
             {children}
             <Toaster position="bottom-center" />

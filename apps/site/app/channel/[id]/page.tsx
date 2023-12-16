@@ -21,7 +21,7 @@ export default async function Channel({
   const { metadata } = await getReferencesMetadata(channel?.references)
 
   return (
-    <Stack className="pt-[72px] gap-14 h-full">
+    <Stack className="pt-[72px] gap-14 h-full px-5">
       <ChannelBanner channel={channel} metadata={channelMetadata} />
       <ChannelItems channel={channel} metadata={metadata} />
     </Stack>
