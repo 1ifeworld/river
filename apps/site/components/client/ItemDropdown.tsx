@@ -12,15 +12,15 @@ import { processRemoveReferencePost } from '@/lib'
 import { useUserContext } from '@/context'
 import { toast } from 'sonner'
 
-interface EditOrRemoveProps {
+interface ItemDropdownProps {
   targetChannelId: bigint
   targetReferenceId: bigint
 }
 
-export function EditOrRemove({
+export function ItemDropdown({
   targetChannelId,
   targetReferenceId,
-}: EditOrRemoveProps) {
+}: ItemDropdownProps) {
   const { signMessage, userId: targetUserId, embeddedWallet } = useUserContext()
 
   return (

@@ -10,7 +10,7 @@ import {
 import { Channel, Reference } from '@/gql'
 import { unixTimeConverter } from '@/utils'
 import { ThumbnailNameCreator } from '@/server'
-import { EditOrRemove } from '@/client'
+import { ItemDropdown } from '@/client'
 
 function extractContentType({
   reference,
@@ -77,7 +77,7 @@ export async function ChannelItems({
               </Typography>
             </TableCell>
             <TableCell className="text-right w-[100px] text-primary-foreground">
-              <EditOrRemove
+              <ItemDropdown
                 targetChannelId={channel.id}
                 targetReferenceId={reference.id}
               />
