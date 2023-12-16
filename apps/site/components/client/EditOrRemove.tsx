@@ -1,31 +1,34 @@
 import {
-    DropdownMenu,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-    DropdownMenuContent,
-    Button,
-    Typography,
-  } from '@/design-system'
-  import { processRemoveReferencePost } from '@/lib'
-  import { useUserContext } from '@/context'
-  
-  interface EditOrRemoveProps {
-    targetChannelId: bigint
-    itemsToRemove: bigint[]
-  }
-  
-  export function EditOrRemove({
-    targetChannelId,
-    itemsToRemove,
-  }: EditOrRemoveProps) {
-    const { signMessage, userId: targetUserId } = useUserContext()
-  
-    return (
-      <DropdownMenu>
-        <DropdownMenuTrigger className="focus:outline-none">
-          {'...'}
-        </DropdownMenuTrigger>
-        {/* mx-8 */}
+  DropdownMenu,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuPortal,
+  Button,
+  Typography,
+  Toast,
+} from '@/design-system'
+import { processRemoveReferencePost } from '@/lib'
+import { useUserContext } from '@/context'
+import { toast } from 'sonner'
+
+interface EditOrRemoveProps {
+  targetChannelId: bigint
+  targetReferenceId: bigint
+}
+
+export function EditOrRemove({
+  targetChannelId,
+  targetReferenceId,
+}: EditOrRemoveProps) {
+  const { signMessage, userId: targetUserId, embeddedWallet } = useUserContext()
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger className="focus:outline-none">
+        {'...'}
+      </DropdownMenuTrigger>
+      <DropdownMenuPortal forceMount>
         <DropdownMenuContent side="top" className="w-32 mx-8">
           <DropdownMenuItem className="py-1">
             <Button variant="link" disabled={true}>
@@ -33,25 +36,31 @@ import {
             </Button>
           </DropdownMenuItem>
           <DropdownMenuItem className="py-1">
-            <form
-              action={async () => {
+            <Button
+              variant="link"
+              type="submit"
+              disabled={!targetUserId}
+              onClick={async () => {
                 if (signMessage) {
-                  await processRemoveItemsPost({
-                    targetChannelId: targetChannelId,
+                  await processRemoveReferencePost({
                     targetUserId: targetUserId as bigint,
+                    targetChannelId: targetChannelId,
+                    targetReferenceId: targetReferenceId,
+                    privySignerAddress: embeddedWallet?.address as string,
                     privySignMessage: signMessage,
-                    itemsToRemove,
                   })
+
+                  toast.custom((t) => (
+                    <Toast>{'Item successfully removed'}</Toast>
+                  ))
                 }
-                // TODO: Add a confirmation toast with the name of the item being removed
               }}
             >
-              <Button variant="link" type="submit" disabled={!targetUserId}>
-                <Typography>Remove item</Typography>
-              </Button>
-            </form>
+              <Typography>Remove item</Typography>
+            </Button>
           </DropdownMenuItem>
         </DropdownMenuContent>
-      </DropdownMenu>
-    )
-  }
+      </DropdownMenuPortal>
+    </DropdownMenu>
+  )
+}
