@@ -21,7 +21,7 @@ export function BannerMobile({
   const cid = ipfsUrlToCid({ ipfsUrl: channelMetadata.image })
 
   return (
-    <Stack className="gap-4 md:flex-row md:h-full md:items-end border-[1px] border-red-500">
+    <Stack className="gap-4 md:flex-row md:h-full md:items-end">
       <div className="relative">
         <Image
           className="object-cover w-full h-[316px]"
