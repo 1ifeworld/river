@@ -3,7 +3,7 @@ import { Stack, Typography, Card, Flex, Debug } from '@/design-system'
 import { Channel } from '@/gql'
 import { UploadDialog } from '@/client'
 import { ipfsUrlToCid, pinataUrlFromCid } from '@/lib'
-import { Username } from '@/client'
+import { Username, GenericThumbnailLarge } from '@/client'
 import { truncateText } from '@/utils'
 
 export function BannerMobile({
@@ -18,19 +18,31 @@ export function BannerMobile({
     )
   }
 
+  console.log("channel metadta", channelMetadata)
+  console.log("channel image: ", channelMetadata.image)
+
   const cid = ipfsUrlToCid({ ipfsUrl: channelMetadata.image })
+
+  console.log("cid :", cid)
 
   return (
     <Stack className="gap-4 md:flex-row md:h-full md:items-end">
       <div className="relative">
-        <Image
-          className="object-cover w-full h-[316px]"
-          src={pinataUrlFromCid({ cid })}
-          alt={channelMetadata.name}
-          width={0}
-          height={0}
-          sizes="(min-width: 768px) 25vw, 100vw"
-        />
+        <>
+          {cid ? (
+              <Image
+              className="object-cover w-full h-[316px]"
+              src={pinataUrlFromCid({ cid })}
+              alt={channelMetadata.name}
+              width={0}
+              height={0}
+              sizes="(min-width: 768px) 25vw, 100vw"        
+              priority={true}
+            />
+          ) : (
+            <GenericThumbnailLarge text={"?"} />
+          )}
+        </>
       </div>
       <Stack className="gap-4 px-[14px]">
         <Stack>
