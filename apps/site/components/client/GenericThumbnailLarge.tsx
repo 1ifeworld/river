@@ -7,7 +7,7 @@ interface GenericThumbnailLargeProps {
 export function GenericThumbnailLarge({ text }: GenericThumbnailLargeProps) {
   return (
     <Stack
-      className={`bg-[#E9E9E9] justify-center items-center w-[316px] h-[316px]`}
+      className={`bg-[#E9E9E9] justify-center items-center min-w-[316px] w-full h-[316px]`}
     >
       <Typography className={`text-secondary-foreground text-[50px]`}>
         {text
