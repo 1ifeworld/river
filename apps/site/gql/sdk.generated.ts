@@ -779,6 +779,11 @@ export type AllChannelsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type AllChannelsQuery = { __typename?: 'Query', channels: Array<{ __typename?: 'Channel', id: any, createdTimestamp: any, createdBy: any, uri: string, admins: Array<any>, members: Array<any>, references: Array<{ __typename?: 'Reference', id: any, createdTimestamp: any, createdBy: any, channelId?: any | null, pubRefId?: any | null, pubRef?: { __typename?: 'Publication', id: any, createdTimestamp: any, createdBy: any, uri: string } | null }> }> };
 
+export type AllUserIdsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllUserIdsQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: any, to: string }> };
+
 export type ChannelWithIdQueryVariables = Exact<{
   id: Scalars['BigInt']['input'];
 }>;
@@ -830,6 +835,14 @@ export const AllChannelsDocument = gql`
         uri
       }
     }
+  }
+}
+    `;
+export const AllUserIdsDocument = gql`
+    query allUserIds {
+  users(orderBy: "id", orderDirection: "desc") {
+    id
+    to
   }
 }
     `;
@@ -909,6 +922,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
   return {
     allChannels(variables?: AllChannelsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<AllChannelsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<AllChannelsQuery>(AllChannelsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'allChannels', 'query');
+    },
+    allUserIds(variables?: AllUserIdsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<AllUserIdsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<AllUserIdsQuery>(AllUserIdsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'allUserIds', 'query');
     },
     channelWithId(variables: ChannelWithIdQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<ChannelWithIdQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<ChannelWithIdQuery>(ChannelWithIdDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'channelWithId', 'query');
