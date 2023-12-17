@@ -18,12 +18,7 @@ export function BannerMobile({
     )
   }
 
-  console.log("channel metadta", channelMetadata)
-  console.log("channel image: ", channelMetadata.image)
-
   const cid = ipfsUrlToCid({ ipfsUrl: channelMetadata.image })
-
-  console.log("cid :", cid)
 
   return (
     <Stack className="gap-4 md:flex-row md:h-full md:items-end">

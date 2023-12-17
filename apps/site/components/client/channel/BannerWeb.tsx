@@ -18,13 +18,7 @@ export function BannerWeb({
     )
   }
 
-  console.log("channel metadta", channelMetadata)
-
   const cid = ipfsUrlToCid({ ipfsUrl: channelMetadata.image })
-
-  console.log("cid: ", cid)
-
-  console.log("pinata url: ", pinataUrlFromCid({ cid }))
 
   return (
     <Stack className="gap-6 md:flex-row md:h-full md:items-end px-5">
