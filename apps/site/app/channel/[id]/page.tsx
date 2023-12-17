@@ -53,6 +53,7 @@ async function getReferencesMetadata(references: any) {
     }
 
     const metadata = await response.json()
+    console.log(metadata)
     return {
       metadata: metadata,
     }

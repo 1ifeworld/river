@@ -88,13 +88,19 @@ export function UploadDialog() {
       const assetEndpointForMux = pinataUrlFromCid({
         cid: ipfsUrlToCid({ ipfsUrl: uploadedFileCid }),
       })
-      const muxAsset = await muxClient.Video.Assets.create({
-        input: assetEndpointForMux,
-        playback_policy: 'public',
-        ...(isVideo({ mimeType: contentType }) && {
-          encoding_tier: 'baseline',
+
+      const response = await fetch('/api/mux', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            assetEndpointForMux,
+            contentType,
         }),
-      })
+    });
+
+    const muxAsset = await response.json()
 
       const muxAssetId = muxAsset.id || ''
       const muxPlaybackId =
@@ -128,7 +134,7 @@ export function UploadDialog() {
     if (signMessage && targetUserId) {
       await processCreatePubPost({
         pubUri: pubUri,
-        targetChannelId: BigInt(params.id as string),
+        targetChannelId: BigInt(params?.id as string),
         targetUserId: BigInt(targetUserId),
         privySignMessage: signMessage,
       })
