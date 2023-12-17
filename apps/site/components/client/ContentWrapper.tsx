@@ -42,12 +42,12 @@ export function ContentWrapper({ item, className, children }: ContentWrapperProp
         const x = e.clientX - bounds.left
         const width = bounds.width    
         // Trigger route change
-        if (x < width * 0.1 && prevReference) {
-            // Left 10% clicked, decrement route
-            router.push(`/item/${prevReference}`)
-        } else if (x > width * 0.9 && nextReference) {
-            // Right 10% clicked, increment route
+        if (x < width * 0.1 && nextReference) {
+            // Left 10% clicked, increment route
             router.push(`/item/${nextReference}`)
+        } else if (x > width * 0.9 && prevReference) {
+            // Right 10% clicked, decrement route
+            router.push(`/item/${prevReference}`)
         }
     }    
 

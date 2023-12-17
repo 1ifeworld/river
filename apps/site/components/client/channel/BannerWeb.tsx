@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { Stack, Typography, Card, Flex, Debug } from '@/design-system'
 import { Channel } from '@/gql'
-import { UploadDialog, Username } from '@/client'
+import { UploadDialog, Username, GenericThumbnailLarge } from '@/client'
 import { ipfsUrlToCid, pinataUrlFromCid } from '@/lib'
 
 export function BannerWeb({
@@ -24,14 +24,21 @@ export function BannerWeb({
     <Stack className="gap-6 md:flex-row md:h-full md:items-end px-5">
       {/* Column 1 */}
       <div className="relative">
-        <Image
-          className="object-cover w-full h-[316px]"
-          src={pinataUrlFromCid({ cid })}
-          alt={channelMetadata.name}
-          width={0}
-          height={0}
-          sizes="(min-width: 768px) 25vw, 100vw"
-        />
+        <>
+          {cid ? (
+              <Image
+              className="object-cover w-full h-[316px]"
+              src={pinataUrlFromCid({ cid })}
+              alt={channelMetadata.name}
+              width={0}
+              height={0}
+              sizes="(min-width: 768px) 25vw, 100vw"              
+              priority={true}
+            />            
+          ) : (
+            <GenericThumbnailLarge text={"?"} />
+          )}
+        </>
       </div>
       {/* Column 2 */}
       <Stack className="gap-5">

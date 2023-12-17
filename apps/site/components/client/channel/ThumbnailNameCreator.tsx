@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { type Reference, type Channel } from '@/gql'
 import { Stack, Typography, Button } from '@/design-system'
-import { Username } from '@/client'
+import { Username, GenericThumbnailSmall } from '@/client'
 import { ipfsUrlToCid, pinataUrlFromCid } from '@/lib'
 import Link from 'next/link'
 import { truncateText } from '@/utils'
@@ -44,13 +44,25 @@ export function ThumbnailNameCreator({
   return (
     <>
       <Link href={`/item/${reference.id}`}>
-        <Image
-          className="object-cover aspect-square "
-          src={pinataUrlFromCid({ cid })}
-          alt={referenceMetadata.name}
-          width={38}
-          height={38}
-        />
+        <>
+          {cid ? (
+              <Image
+              className="object-cover aspect-square "
+              src={pinataUrlFromCid({ cid })}
+              alt={referenceMetadata.name}
+              width={38}
+              height={38}
+            />
+          ) : (
+            <GenericThumbnailSmall 
+              text={
+                referenceMetadata.name 
+                ? referenceMetadata.name 
+                : "?"
+              } 
+            />
+          )}
+        </>
       </Link>
       <Stack className="">
         <Link href={`/item/${reference.id}`}>
