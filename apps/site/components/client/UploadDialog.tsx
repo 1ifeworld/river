@@ -140,13 +140,13 @@ export function UploadDialog() {
       {!authenticated ? (
         <div>
           <Button variant="link" onClick={login}>
-            Add item
+            + Add
           </Button>
         </div>
       ) : (
         <div>
           <DialogTrigger asChild>
-            <Button variant="link">Add item</Button>
+            <Button variant="link">+ Add</Button>
           </DialogTrigger>
         </div>
       )}

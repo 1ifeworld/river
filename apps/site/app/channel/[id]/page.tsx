@@ -1,6 +1,7 @@
 import { getChannelWithId, type Reference } from '@/gql'
 import { Stack } from '@/design-system'
-import { ChannelBanner, ChannelItems } from '@/server'
+import { ChannelBanner } from '@/server'
+import { BannerWrapper, ItemsWrapper } from '@/client'
 
 export default async function Channel({
   params,
@@ -21,9 +22,9 @@ export default async function Channel({
   const { metadata } = await getReferencesMetadata(channel?.references)
 
   return (
-    <Stack className="pt-[72px] gap-14 h-full px-5">
-      <ChannelBanner channel={channel} metadata={channelMetadata} />
-      <ChannelItems channel={channel} metadata={metadata} />
+    <Stack className="pt-4 gap-4 h-full">
+      <BannerWrapper channel={channel} metadata={channelMetadata} />
+      <ItemsWrapper channel={channel} metadata={metadata} />
     </Stack>
   )
 }
