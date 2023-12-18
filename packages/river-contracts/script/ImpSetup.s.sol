@@ -23,7 +23,7 @@ contract ImpSetupScript is Script {
 
         vm.startBroadcast(deployerPrivateKey);
         
-        // idRegistry = new IdRegistry();
+        idRegistry = new IdRegistry();
         // delegateRegistry = new DelegateRegistry(address(idRegistry));
         // attestationRegistry = new AttestationRegistry();
         postGateway = new PostGateway();
@@ -41,3 +41,22 @@ contract ImpSetupScript is Script {
 // forge script script/ImpSetup.s.sol:ImpSetupScript -vvvv --rpc-url $RPC_URL --broadcast --verify --verifier-url https://api-goerli.arbiscan.io/api
 // forge script script/ImpSetup.s.sol:ImpSetupScript -vvvv --rpc-url $RPC_URL --broadcast --gas-estimate-multiplier 200 --verify --verifier-url https://api-nova.arbiscan.io/api
 // forge script script/ImpSetup.s.sol:ImpSetupScript -vvvv --broadcast --fork-url http://localhost:8545
+
+// forge script script/ImpSetup.s.sol:ImpSetupScript -vvvv --rpc-url $RPC_URL --broadcast --verify --verifier blockscout --verifier-url https://explorer-river_j5bpjduqfv.t.conduit.xyz/api\?
+// forge script script/ImpSetup.s.sol:ImpSetupScript -vvvv --rpc-url $RPC_URL --broadcast  
+
+// forge verify-contract 0xF26F07040922992DF06091235A50872e31C85Ab8 IdRegistry --verifier blockscout --verifier-url https://explorer-river_j5bpjduqfv.t.conduit.xyz/api
+
+// forge verify-contract <address> src/MyToken.sol:MyToken--verifier=blockscout --verifier-url=https://explorer-[your_network_id].t.conduit.xyz/api\?
+
+// forge verify-contract <address> <contract> --verifier=blockscout --verifier-url 
+
+// forge verify-contract \
+//     --chain-id 11155111 \
+//     --num-of-optimizations 1000000 \
+//     --watch \
+//     --constructor-args $(cast abi-encode "constructor(string,string,uint256,uint256)" "ForgeUSD" "FUSD" 18 1000000000000000000000) \
+//     --etherscan-api-key <your_etherscan_api_key> \
+//     --compiler-version v0.8.10+commit.fc410830 \
+//     <the_contract_address> \
+//     src/MyToken.sol:MyToken 
