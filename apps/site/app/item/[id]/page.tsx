@@ -1,7 +1,7 @@
-import React, { useRef, useState } from 'react'
+import * as React from 'react'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
-import { Stack, Typography, Debug } from '@/design-system'
+import { Stack, Typography } from '@/design-system'
 import { getReferenceWithId, type Reference } from '@/gql'
 import {
   ipfsUrlToCid,
@@ -13,7 +13,7 @@ import {
 } from '@/lib'
 import { ContentWrapper, VideoPlayer, AudioPlayer } from '@/client'
 import { Username } from '@/server'
-import { unixTimeConverter, pluralize } from '@/utils'
+import { unixTimeConverter } from '@/utils'
 
 const Model = dynamic(
   () => import('../../../components/client/renderers/ModelRenderer'),
@@ -76,9 +76,9 @@ export default async function View({
       break
     case isVideo({ mimeType: contentType }):
       content = (
-        <Stack className="w-[75%] sm:w-[50%]">
+        <div className="w-[75%] sm:w-[50%]">
           <VideoPlayer playbackId={referenceMetadata.muxPlaybackId} />
-        </Stack>
+        </div>
       )
       break
     case isAudio({ mimeType: contentType }):
@@ -97,11 +97,10 @@ export default async function View({
     <Stack className="h-[calc(100vh_-_56px)] justify-center items-center">
       <ContentWrapper
         item={reference}
-        className="w-full h-[calc(100vh/1.5)] relative"
+        className="w-full h-[calc(100vh/1.5)] justify-center items-center relative"
       >
         {content}
       </ContentWrapper>
-
       <Stack className="w-full items-center pt-2">
         <Typography>{referenceMetadata.name}</Typography>
         <Username id={reference.createdBy} />
@@ -111,10 +110,6 @@ export default async function View({
       </Stack>
     </Stack>
   )
-}
-
-{
-  /* <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center "></Stack> */
 }
 
 async function getReferenceMetadata(reference: Reference) {
