@@ -33,6 +33,7 @@ import {
 import { useUserContext } from '@/context'
 import { useDropzone } from 'react-dropzone'
 import { toast } from 'sonner'
+import { SubmitButton } from '@/client'
 import { useParams } from 'next/navigation'
 import { usePrivy } from '@privy-io/react-auth'
 import { muxClient } from '@/config/muxClient'
@@ -203,14 +204,14 @@ export function UploadDialog() {
                 <Separator />
               </Stack>
               <DialogFooter className="pt-4">
-                <Button
+                <SubmitButton
                   form="newUpload"
                   type="submit"
                   variant="link"
                   disabled={!targetUserId || !showFileList}
                 >
-                  <Typography>Confirm</Typography>
-                </Button>
+                  Confirm
+                </SubmitButton>
               </DialogFooter>
             </form>
           </Stack>

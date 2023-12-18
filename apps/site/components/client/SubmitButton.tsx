@@ -1,19 +1,25 @@
 import * as React from 'react'
 import { Button, Typography, Loading } from '@/design-system'
-
+import { ComponentProps } from 'react'
 // @ts-expect-error
 import { useFormStatus } from 'react-dom'
 
-export function SubmitButton({ children }: { children: React.ReactNode }) {
+type ButtonProps = ComponentProps<typeof Button>
+
+interface SubmitButtonProps extends ButtonProps {
+  children: React.ReactNode
+}
+
+export function SubmitButton({ children, ...props }: SubmitButtonProps) {
   const { pending } = useFormStatus()
 
   return (
     <Button
-      variant="link"
       className={pending ? 'pointer-events-none' : ''}
       disabled={pending}
+      {...props}
     >
-      pending ? <Loading /> :<Typography>{children}</Typography>
+      {pending ? <Loading /> : <Typography>{children}</Typography>}
     </Button>
   )
 }
