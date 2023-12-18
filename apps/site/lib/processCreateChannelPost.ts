@@ -1,4 +1,4 @@
-import { relayPost } from '@/actions'
+import { relayPost } from 'lib/actions'
 import {
   encodePost,
   encodeMessage,
