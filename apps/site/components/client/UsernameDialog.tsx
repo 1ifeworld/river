@@ -24,10 +24,11 @@ import { publicClient } from '@/config/publicClient'
 import React, { useState, useEffect } from 'react'
 import { useDebounce } from 'usehooks-ts'
 import { addresses } from 'scrypt'
-import * as z from 'zod'
+
 import { AlchemyProvider } from '@alchemy/aa-alchemy'
 import { useUserContext } from '@/context'
 import { type Hex } from 'viem'
+import * as z from 'zod'
 
 interface UsernameDialogProps {
   open: boolean
@@ -35,11 +36,7 @@ interface UsernameDialogProps {
 }
 
 export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
-  const UsernameSchema = z.object({
-    username: z.string().min(2, {
-      message: 'Username must be at least 2 characters.',
-    }),
-  })
+
 
   const form = useForm<z.infer<typeof UsernameSchema>>({
     resolver: zodResolver(UsernameSchema),
