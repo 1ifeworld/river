@@ -30,6 +30,7 @@ import { useDebounce } from 'usehooks-ts'
 import { addresses } from 'scrypt'
 import { AlchemyProvider } from '@alchemy/aa-alchemy'
 import { useUserContext } from '@/context'
+import { SubmitButton } from '@/client'
 import { type Hex } from 'viem'
 import { toast } from 'sonner'
 import * as z from 'zod'
@@ -155,9 +156,13 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
               />
               <Separator />
               <DialogFooter className="flex flex-col py-2">
-                <Button type="submit" variant="link" disabled={!canSubmit}>
-                  <Typography>Complete</Typography>
-                </Button>
+                <SubmitButton
+                  type="submit"
+                  variant="link"
+                  disabled={!canSubmit}
+                >
+                  Complete
+                </SubmitButton>
               </DialogFooter>
             </form>
           </Form>

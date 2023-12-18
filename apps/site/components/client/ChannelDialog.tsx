@@ -34,6 +34,7 @@ import { useUserContext } from '@/context'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import { SubmitButton } from '@/client'
 import { useDropzone } from 'react-dropzone'
 import { FileList } from '@/server'
 import * as z from 'zod'
@@ -235,14 +236,14 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                 )}
                 <Separator />
                 <DialogFooter className="flex flex-col py-2">
-                  <Button
+                  <SubmitButton
                     form="newChannel"
                     type="submit"
                     variant="link"
                     disabled={!targetUserId}
                   >
-                    <Typography>Create</Typography>
-                  </Button>
+                    Create
+                  </SubmitButton>
                 </DialogFooter>
               </form>
             </Form>
