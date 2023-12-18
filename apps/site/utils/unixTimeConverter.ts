@@ -1,3 +1,5 @@
+import { pluralize } from './pluralize'
+
 export function unixTimeConverter(seconds: number) {
   const now = new Date().getTime() // Get current time in milliseconds
   const timestamp = new Date(seconds * 1000).getTime() // Convert seconds to milliseconds
@@ -11,13 +13,12 @@ export function unixTimeConverter(seconds: number) {
   const hours = Math.floor(diff / (1000 * 60 * 60))
   diff -= hours * (1000 * 60 * 60)
   const minutes = Math.floor(diff / (1000 * 60))
-
-  // Format output
+  // Format output with pluralization
   if (days > 0) {
-    return `${days} days ago`
+    return `${pluralize(days, 'day', 'days')} ago`
   } else if (hours > 0) {
-    return `${hours} hours ago`
+    return `${pluralize(hours, 'hour', 'hours')} ago`
   } else {
-    return `${minutes} minutes ago`
+    return `${pluralize(minutes, 'minute', 'minutes')} ago`
   }
 }

@@ -1,12 +1,19 @@
 import React, { useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
-import { Stack, Typography } from '@/design-system'
+import { Stack, Typography, Debug } from '@/design-system'
 import { getReferenceWithId, type Reference } from '@/gql'
-import { ipfsUrlToCid, pinataUrlFromCid, isVideo, isPdf, isAudio } from '@/lib'
+import {
+  ipfsUrlToCid,
+  pinataUrlFromCid,
+  isVideo,
+  isPdf,
+  isAudio,
+  isImage,
+} from '@/lib'
 import { ContentWrapper, VideoPlayer, AudioPlayer } from '@/client'
 import { Username } from '@/server'
-import { unixTimeConverter } from 'utils/unixTimeConverter'
+import { unixTimeConverter, pluralize } from '@/utils'
 
 const Model = dynamic(
   () => import('../../../components/client/renderers/ModelRenderer'),
@@ -52,59 +59,62 @@ export default async function View({
   }
 
   const contentType = referenceMetadata.contentType
+  let content
 
-  if (isVideo({ mimeType: contentType })) {
-    return (
-      <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center ">
+  switch (true) {
+    case isImage({ mimeType: contentType }):
+      content = (
+        <Image
+          className="object-contain"
+          src={contentUrl}
+          alt={referenceMetadata.name}
+          fill
+          quality={100}
+          priority={true}
+        />
+      )
+      break
+    case isVideo({ mimeType: contentType }):
+      content = (
         <Stack className="w-[75%] sm:w-[50%]">
           <VideoPlayer playbackId={referenceMetadata.muxPlaybackId} />
         </Stack>
-      </Stack>
-    )
-  } else if (isAudio({ mimeType: contentType })) {
-    return (
-      <Stack className="w-full h-[calc(100vh-_56px)] justify-center items-center ">
-        <AudioPlayer playbackId={referenceMetadata.muxPlaybackId} />
-      </Stack>
-    )
-  } else if (isPdf({ mimeType: contentType })) {
-    return (
-      <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center ">
-        <PdfViewer file={contentUrl} />
-      </Stack>
-    )
-  } else if (contentType === 'model/gltf-binary') {
-    return (
-      <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center">
-        <Model src={contentUrl} />
-      </Stack>
-    )
-  } else {
-    return (
-      <Stack>
-        <ContentWrapper
-          item={reference}
-          className="w-full h-[calc(100vh/2)] sm:h-[calc(100vh/1.5)] justify-center items-center relative "
-        >
-          <Image
-            className="object-contain"
-            src={contentUrl}
-            alt={referenceMetadata.name}
-            fill
-            quality={100}
-            priority={true}
-          />
-        </ContentWrapper>
-        <Stack className="w-full items-center">
-          <Typography>{referenceMetadata.name}</Typography>
-          <Username id={reference.createdBy} />
-          <Typography>
-            {unixTimeConverter(reference.createdTimestamp)}
-          </Typography>
-        </Stack>
-      </Stack>
-    )
+      )
+      break
+    case isAudio({ mimeType: contentType }):
+      content = <AudioPlayer playbackId={referenceMetadata.muxPlaybackId} />
+      break
+    case isPdf({ mimeType: contentType }):
+      content = <PdfViewer file={contentUrl} />
+      break
+    case contentType === 'model/gltf-binary':
+      content = <Model src={contentUrl} />
+      break
+    default:
+      content = <div>ji</div>
   }
+  return (
+    <Stack className="h-[calc(100vh_-_56px)] justify-center items-center">
+      <ContentWrapper
+        item={reference}
+        className="w-full h-[calc(100vh/1.5)] relative"
+      >
+        {content}
+      </ContentWrapper>
+
+      <Stack className="w-full items-center pt-2">
+        <Typography>{referenceMetadata.name}</Typography>
+        <Username id={reference.createdBy} />
+        <Typography className="text-secondary-foreground">
+          {unixTimeConverter(reference.createdTimestamp)}
+        </Typography>
+      </Stack>
+    </Stack>
+  )
+}
+
+{
+  /* <Stack className="w-full h-[calc(100vh_-_56px)] justify-center items-center "></Stack> */
 }
 
 async function getReferenceMetadata(reference: Reference) {
