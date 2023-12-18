@@ -3,14 +3,14 @@
 import * as React from 'react'
 
 export function Loading() {
-  const [dotCount, setDotCount] = React.useState<number>(0)
+  const [dotCount, setDotCount] = React.useState(1)
 
   React.useEffect(() => {
     const interval = setInterval(() => {
-      setDotCount((prevCount) => (prevCount === 3 ? 0 : prevCount + 1))
-    }, 450)
-    return () => clearInterval(interval)
-  }, [])
+      setDotCount((prevCount) => (prevCount === 3 ? 1 : prevCount + 1));
+    }, 450);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <>
