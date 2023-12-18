@@ -113,7 +113,7 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
   }
 
   return (
-    <Dialog open={open}>
+    <Dialog open={true}>
       <DialogContent className="sm:max-w-[425px]">
         <Stack className="items-center gap-4">
           <DialogHeader>
@@ -122,21 +122,24 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
             </DialogTitle>
           </DialogHeader>
           <Form {...form}>
-            <form className="w-2/3 space-y-6">
+            <form 
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col justify-center w-full gap-6"
+            >
               <Separator />
               <FormField
                 control={form.control}
                 name="username"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className='mx-5 text-center'>
                     <FormControl>
                       <Input
-                        placeholder="username"
+                        placeholder="Enter username..."
                         {...field}
                       />
                     </FormControl>
                     {usernameExists && checkState.debounceFinished && (
-                      <FormMessage>Username already exists!</FormMessage>
+                      <FormMessage>Username not available, please try another</FormMessage>
                     )}
                     <FormMessage />
                   </FormItem>
@@ -145,7 +148,6 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
               <Separator />
               <DialogFooter className="flex flex-col py-2">
               <Button
-                onClick={form.handleSubmit(onSubmit)}
                 type="submit"
                 variant="link"
                 disabled={!canSubmit}
