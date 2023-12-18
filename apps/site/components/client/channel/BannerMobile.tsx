@@ -13,9 +13,7 @@ export function BannerMobile({
   const channelMetadata = metadata.data[channel.uri as string]
 
   if (!channelMetadata) {
-    return (
-      <Stack className="pt-[72px] gap-14">Channel does not exist</Stack>
-    )
+    return <Stack className="pt-[72px] gap-14">Channel does not exist</Stack>
   }
 
   const cid = ipfsUrlToCid({ ipfsUrl: channelMetadata.image })
@@ -25,17 +23,17 @@ export function BannerMobile({
       <div className="relative">
         <>
           {cid ? (
-              <Image
+            <Image
               className="object-cover w-full h-[316px]"
               src={pinataUrlFromCid({ cid })}
               alt={channelMetadata.name}
               width={0}
               height={0}
-              sizes="(min-width: 768px) 25vw, 100vw"        
+              sizes="(min-width: 768px) 25vw, 100vw"
               priority={true}
             />
           ) : (
-            <GenericThumbnailLarge text={"?"} />
+            <GenericThumbnailLarge text={'?'} />
           )}
         </>
       </div>
@@ -46,7 +44,10 @@ export function BannerMobile({
           </Typography>
           <Typography variant="h2" className="text-secondary-foreground">
             {channel?.admins?.[0] ? (
-              <Username className='text-secondary-foreground' id={channel?.admins?.[0]} />
+              <Username
+                className="text-secondary-foreground"
+                id={channel?.admins?.[0]}
+              />
             ) : (
               'No admins configured for this channel'
             )}

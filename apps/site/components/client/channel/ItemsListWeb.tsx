@@ -1,35 +1,34 @@
 'use client'
 
 import {
-    Typography,
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-  } from '@/design-system'
-  import { Channel, Reference } from '@/gql'
-  import { unixTimeConverter } from '@/utils'
-  import { ItemDropdown, ThumbnailNameCreator } from '@/client'
-  
-  function extractContentType({
-    reference,
-    metadata,
-  }: { reference: any; metadata: any }) {
-    const referenceMetadata = metadata.data[reference.pubRef?.uri as string]
-    return referenceMetadata?.contentType
-      ? referenceMetadata.contentType
-      : 'undefined'
-  }
-  
-  export function ItemsListWeb({
-    channel,
-    metadata,
-  }: { channel: Channel; metadata: any }) {
-  
-    return (
-      <div className='px-5'>
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/design-system'
+import { Channel, Reference } from '@/gql'
+import { unixTimeConverter } from '@/utils'
+import { ItemDropdown, ThumbnailNameCreator } from '@/client'
+
+function extractContentType({
+  reference,
+  metadata,
+}: { reference: any; metadata: any }) {
+  const referenceMetadata = metadata.data[reference.pubRef?.uri as string]
+  return referenceMetadata?.contentType
+    ? referenceMetadata.contentType
+    : 'undefined'
+}
+
+export function ItemsListWeb({
+  channel,
+  metadata,
+}: { channel: Channel; metadata: any }) {
+  return (
+    <div className="px-5">
       <Table className="w-full">
         <TableHeader>
           <TableRow>
@@ -89,7 +88,6 @@ import {
           ))}
         </TableBody>
       </Table>
-      </div>
-    )
-  }
-  
+    </div>
+  )
+}

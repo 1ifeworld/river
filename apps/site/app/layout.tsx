@@ -21,9 +21,9 @@ export default function RootLayout({
       <body>
         <Providers>
           <div className="py-4">
-            <div className='px-5'>
+            <div className="px-5">
               <Header />
-            </div>          
+            </div>
             {children}
             <Toaster position="bottom-center" />
           </div>

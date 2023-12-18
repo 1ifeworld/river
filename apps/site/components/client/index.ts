@@ -1,8 +1,8 @@
 'use client'
 
 // Subdirectories
-export * from "./channel"
-export * from "./renderers"
+export * from './channel'
+export * from './renderers'
 
 // Individual components
 export * from './ChannelDialog'

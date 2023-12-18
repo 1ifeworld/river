@@ -15,16 +15,16 @@ export default createConfig({
   },
   contracts: {
     IdRegistry: {
-      network: "opGoerli",
+      network: 'opGoerli',
       abi: idRegistryABI,
       address: addresses.idRegistry.opGoerli,
-      startBlock: 18272706
+      startBlock: 18272706,
     },
     PostGateway: {
-      network: "opGoerli",
+      network: 'opGoerli',
       abi: postGatewayABI,
       address: addresses.postGateway.opGoerli,
-      startBlock: 18620031
+      startBlock: 18620031,
     },
     // IdRegistry: {
     //   network: "anvil", hii
