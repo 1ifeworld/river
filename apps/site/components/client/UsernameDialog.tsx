@@ -14,12 +14,13 @@ import {
   Stack,
   Typography,
   Separator,
+  Toast
 } from '@/design-system'
 import {
   setUsername,
   registerAndDelegate,
   checkUsernameAvailability,
-  usernameSchema
+  usernameSchema,
 } from '@/lib'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -30,6 +31,7 @@ import { addresses } from 'scrypt'
 import { AlchemyProvider } from '@alchemy/aa-alchemy'
 import { useUserContext } from '@/context'
 import { type Hex } from 'viem'
+import { toast } from 'sonner'
 import * as z from 'zod'
 
 interface UsernameDialogProps {
@@ -38,7 +40,6 @@ interface UsernameDialogProps {
 }
 
 export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
-
   const form = useForm<z.infer<typeof usernameSchema>>({
     resolver: zodResolver(usernameSchema),
     defaultValues: {
@@ -110,10 +111,17 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
     })
 
     setOpen(false)
+
+    toast.custom((t) => (
+      <Toast>
+        {'Welcome to River'}
+        <span className="font-bold">{form.getValues().username}</span>
+      </Toast>
+    ))
   }
 
   return (
-    <Dialog open={true}>
+    <Dialog open={open}>
       <DialogContent className="sm:max-w-[425px]">
         <Stack className="items-center gap-4">
           <DialogHeader>
@@ -122,41 +130,34 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
             </DialogTitle>
           </DialogHeader>
           <Form {...form}>
-            <form 
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col justify-center w-full gap-6"
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="flex flex-col justify-center w-full gap-6"
             >
               <Separator />
               <FormField
                 control={form.control}
                 name="username"
                 render={({ field }) => (
-                  <FormItem className='mx-5 text-center'>
+                  <FormItem className="mx-5 text-center">
                     <FormControl>
-                      <Input
-                        placeholder="Enter username..."
-                        {...field}
-                      />
+                      <Input placeholder="Enter username..." {...field} />
                     </FormControl>
                     {usernameExists && checkState.debounceFinished && (
-                      <FormMessage>Username not available, please try another</FormMessage>
+                      <FormMessage>
+                        Username not available, please try another
+                      </FormMessage>
                     )}
+
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <Separator />
               <DialogFooter className="flex flex-col py-2">
-              <Button
-                type="submit"
-                variant="link"
-                disabled={!canSubmit}
-              >
-                <Typography>
-                Complete
-                </Typography>
-              </Button>
-              
+                <Button type="submit" variant="link" disabled={!canSubmit}>
+                  <Typography>Complete</Typography>
+                </Button>
               </DialogFooter>
             </form>
           </Form>
