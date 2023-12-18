@@ -86,10 +86,6 @@ export default {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
-      boxShadow: {
-        'overlay-sm': '0px 1px 1.5px 0px rgba(0, 0, 0, 0.08);',
-        'overlay-lg': '0px 2px 3px 0px rgba(0, 0, 0, 0.08);',
-      },
     },
   },
   plugins: [require('tailwindcss-animate')],
