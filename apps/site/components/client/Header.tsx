@@ -33,7 +33,7 @@ export function Header() {
         <Flex className="gap-4">
           <ChannelDialog authenticated={authenticated} login={login} />
           {authenticated ? (
-            <User />
+            <User setOpen={setOpen} />
           ) : (
             <Button variant="link" onClick={login}>
               Login

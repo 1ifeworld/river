@@ -13,10 +13,10 @@ export const newChannelSchema = z.object({
   name: z
     .string()
     .min(2, {
-      message: 'Channel name must be at least 2 characters.',
+      message: 'Channel name must be at least 2 characters',
     })
     .max(30, {
-      message: 'Channel name must not be longer than 30 characters.',
+      message: 'Channel name must not be longer than 30 characters',
     }),
   description: z.string().max(160).min(4).optional(),
   cover: z
@@ -26,6 +26,6 @@ export const newChannelSchema = z.object({
     }, 'Max image size is 5MB.')
     .refine(
       (files) => ACCEPTED_IMAGE_MIME_TYPES.includes(files?.[0]?.type),
-      'Please use either .jpg, .jpeg, .png, .webp, or .heic format.',
+      'Please use either .jpg, .jpeg, .png, .webp, or .heic format',
     ),
 })
