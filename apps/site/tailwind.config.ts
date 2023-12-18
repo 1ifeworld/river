@@ -87,7 +87,8 @@ export default {
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
       boxShadow: {
-        overlay: '0px 2px 3px 0px rgba(0, 0, 0, 0.08);',
+        'overlay-sm': '0px 1px 1.5px 0px rgba(0, 0, 0, 0.08);',
+        'overlay-lg': '0px 2px 3px 0px rgba(0, 0, 0, 0.08);',
       },
     },
   },

@@ -4,6 +4,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuPortal,
+  DropdownMenuGroup,
   Button,
   Typography,
   Toast,
@@ -28,37 +29,34 @@ export function ItemDropdown({
       <DropdownMenuTrigger className="focus:outline-none">
         {'...'}
       </DropdownMenuTrigger>
-      <DropdownMenuPortal forceMount>
+      <DropdownMenuPortal>
         <DropdownMenuContent side="top" className="w-32 mx-8">
-          <DropdownMenuItem className="py-1">
-            <Button variant="link" disabled={true}>
-              <Typography>Edit item</Typography>
-            </Button>
-          </DropdownMenuItem>
-          <DropdownMenuItem className="py-1">
-            <Button
-              variant="link"
-              type="submit"
-              disabled={!targetUserId}
-              onClick={async () => {
-                if (signMessage) {
-                  await processRemoveReferencePost({
-                    targetUserId: targetUserId as bigint,
-                    targetChannelId: targetChannelId,
-                    targetReferenceId: targetReferenceId,
-                    privySignerAddress: embeddedWallet?.address as string,
-                    privySignMessage: signMessage,
-                  })
+          <DropdownMenuGroup className="flex flex-col gap-2">
+            <DropdownMenuItem className="py-1">
+              <Button
+                variant="link"
+                type="submit"
+                disabled={!targetUserId}
+                onClick={async () => {
+                  if (signMessage) {
+                    await processRemoveReferencePost({
+                      targetUserId: targetUserId as bigint,
+                      targetChannelId: targetChannelId,
+                      targetReferenceId: targetReferenceId,
+                      privySignerAddress: embeddedWallet?.address as string,
+                      privySignMessage: signMessage,
+                    })
 
-                  toast.custom((t) => (
-                    <Toast>{'Item successfully removed'}</Toast>
-                  ))
-                }
-              }}
-            >
-              <Typography>Remove item</Typography>
-            </Button>
-          </DropdownMenuItem>
+                    toast.custom((t) => (
+                      <Toast>{'Item successfully removed'}</Toast>
+                    ))
+                  }
+                }}
+              >
+                <Typography>Remove item</Typography>
+              </Button>
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenuPortal>
     </DropdownMenu>
