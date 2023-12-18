@@ -1,4 +1,5 @@
 'use client'
+
 import React, { useState, useEffect } from 'react'
 import { Document, Page, pdfjs } from 'react-pdf'
 
@@ -11,7 +12,7 @@ interface PDFViewerProps {
   file: string
 }
 
-const PdfViewer: React.FC<PDFViewerProps> = ({ file }) => {
+const PDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
   const [numPages, setNumPages] = useState(0)
   const [pageWidth, setPageWidth] = useState(0)
 
@@ -66,4 +67,4 @@ const PdfViewer: React.FC<PDFViewerProps> = ({ file }) => {
   )
 }
 
-export default PdfViewer
+export default PDFViewer

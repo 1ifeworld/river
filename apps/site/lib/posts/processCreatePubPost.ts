@@ -1,34 +1,26 @@
-import { relayPost } from '@/actions'
+import { relayPost } from 'lib/actions'
 import {
   encodePost,
   encodeMessage,
-  encodeCreateChannel,
+  encodeCreatePublication,
   postTypes,
   messageTypes,
   getExpiration,
   generateHashForPostSig,
   remove0xPrefix,
 } from 'scrypt'
-import {
-  Address,
-  Hash,
-  recoverMessageAddress,
-  toBytes,
-  keccak256,
-  encodeAbiParameters,
-  verifyMessage,
-} from 'viem'
+import { Hash } from 'viem'
 import { SignMessageModalUIOptions } from '@privy-io/react-auth'
 
-export async function processCreateChannelPost({
-  channelUri,
+export async function processCreatePubPost({
+  pubUri,
+  targetChannelId,
   targetUserId,
-  privySignerAddress,
   privySignMessage,
 }: {
-  channelUri: string
+  pubUri: string
+  targetChannelId: bigint
   targetUserId: bigint
-  privySignerAddress: string
   privySignMessage: (
     message: string,
     uiOptions?: SignMessageModalUIOptions | undefined,
@@ -38,26 +30,24 @@ export async function processCreateChannelPost({
   const postVersion = postTypes.v1
   const postExpiration: bigint = getExpiration()
   // generate encoded msgBody for createChannelMsg
-  const createChannelMsg = encodeCreateChannel({
-    uri: channelUri,
-    adminIds: [targetUserId],
-    memberIds: [],
-    channelTags: [],
+  const createPubMsg = encodeCreatePublication({
+    uri: pubUri,
+    channelTags: [targetChannelId],
   })
   // add this in to prevent msgBody from being null
-  if (!createChannelMsg) return
-  console.log('encoded msgBody correctly')
-  // generate encodedMessage by packing msgType + msgBody together
+  if (!createPubMsg) return
+  console.log('encoded pub and createPub msgBody correctly')
   const encodedMessage = encodeMessage({
-    msgType: Number(messageTypes.createChannel),
-    msgBody: createChannelMsg.msgBody,
+    msgType: Number(messageTypes.createPublication),
+    msgBody: createPubMsg.msgBody,
   })
-  // add this in to prevent encodedMessage being null
+  // add this in to prevent either encoded messages from being null
   if (!encodedMessage) return
-  console.log('encoded message correctly')
+  console.log('encoded create pub message correctly')
   // generate the bytes[] messageArray
   const messageArray: Hash[] = [encodedMessage?.encodedMessage]
-  // generate hash to include in post
+  // NOTE: this encoding step should be a scrypt export as well
+  // bytes32 messageToBeSigned = keccak256(abi.encode(version, expiration, msgArray)).toEthSignedMessageHash();
   const postHash = generateHashForPostSig({
     version: postVersion,
     expiration: postExpiration,
@@ -80,7 +70,10 @@ export async function processCreateChannelPost({
   })
   // add this in to prevent postInputs being null
   if (!postInput) return
-  console.log('postInput encoded correctly')
+  console.log('postInput encoded correctly', postInput)
   // pass postInputs into the createPost server action
-  await relayPost({ postInput: postInput, pathToRevalidate: '/' })
+  await relayPost({
+    postInput: postInput,
+    pathToRevalidate: `/channel/${targetChannelId}`,
+  })
 }

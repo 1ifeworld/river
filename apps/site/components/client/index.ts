@@ -1,20 +1,16 @@
 'use client'
 
 // Subdirectories
-export * from "./channel"
+export * from './channel'
+export * from './renderers'
 
 // Individual components
-export * from './AudioPlayer'
 export * from './ChannelDialog'
+export * from './ContentWrapper'
 export * from './Header'
 export * from './ItemDropdown'
-export * from './PrivyProviderWrapper'
+export * from './Thumbnails'
 export * from './UploadDialog'
 export * from './User'
 export * from './Username'
 export * from './UsernameDialog'
-export * from './VideoPlayer'
-export * from './ContentWrapper'
-export * from './UsernameProvider'
-export * from './GenericThumbnailSmall'
-export * from './GenericThumbnailLarge'

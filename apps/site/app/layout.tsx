@@ -1,10 +1,10 @@
 import { Analytics } from '@vercel/analytics/react'
 import type { Metadata } from 'next'
-import '../styles/globals.css'
 import { fragmentMono } from './fonts/fonts'
-import { Providers } from './providers'
+import { Providers } from './providers/providers'
 import { Header } from '@/client'
 import { Toaster } from 'sonner'
+import '../styles/globals.css'
 
 export const metadata: Metadata = {
   title: 'River',
@@ -21,9 +21,9 @@ export default function RootLayout({
       <body>
         <Providers>
           <div className="py-4">
-            <div className='px-5'>
+            <div className="px-5">
               <Header />
-            </div>          
+            </div>
             {children}
             <Toaster position="bottom-center" />
           </div>

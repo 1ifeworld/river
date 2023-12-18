@@ -19,7 +19,7 @@ export function ThumbnailNameCreator({
   metadata,
 }: ThumbnailNameCreatorProps) {
   const { isMobile } = useMediaQuery()
-  
+
   const referenceMetadata = metadata.data[reference.pubRef?.uri as string]
 
   if (!referenceMetadata) {
@@ -46,7 +46,7 @@ export function ThumbnailNameCreator({
       <Link href={`/item/${reference.id}`}>
         <>
           {cid ? (
-              <Image
+            <Image
               className="object-cover aspect-square "
               src={pinataUrlFromCid({ cid })}
               alt={referenceMetadata.name}
@@ -54,12 +54,8 @@ export function ThumbnailNameCreator({
               height={38}
             />
           ) : (
-            <GenericThumbnailSmall 
-              text={
-                referenceMetadata.name 
-                ? referenceMetadata.name 
-                : "?"
-              } 
+            <GenericThumbnailSmall
+              text={referenceMetadata.name ? referenceMetadata.name : '?'}
             />
           )}
         </>
@@ -68,7 +64,9 @@ export function ThumbnailNameCreator({
         <Link href={`/item/${reference.id}`}>
           <Button variant="link">
             <Typography className="text-primary-foreground">
-              {isMobile ? truncateText(referenceMetadata.name, 35) : referenceMetadata.name}
+              {isMobile
+                ? truncateText(referenceMetadata.name, 35)
+                : referenceMetadata.name}
             </Typography>
           </Button>
         </Link>

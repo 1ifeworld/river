@@ -8,7 +8,6 @@ export function ItemsWrapper({
   channel,
   metadata,
 }: { channel: Channel; metadata: any }) {
-
   const { isMobile } = useMediaQuery()
 
   if (isMobile) return <ItemsListMobile channel={channel} metadata={metadata} />

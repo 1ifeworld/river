@@ -1,5 +1,5 @@
 import { Stack, Typography } from '@/design-system'
-import { getDataForUsername } from 'lib/getDataForUsername'
+import { getDataForUsername } from 'lib/username/getDataForUsername'
 
 export async function ActivityBanner({
   user,

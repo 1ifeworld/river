@@ -1,4 +1,4 @@
-import { relayPost } from '@/actions'
+import { relayPost } from 'lib/actions'
 import {
   encodePost,
   encodeMessage,
@@ -8,7 +8,6 @@ import {
   getExpiration,
   generateHashForPostSig,
   remove0xPrefix,
-  encodeRemoveReference,
 } from 'scrypt'
 import {
   Address,
@@ -21,49 +20,48 @@ import {
 } from 'viem'
 import { SignMessageModalUIOptions } from '@privy-io/react-auth'
 
-export interface ProcessRemoveReferencePostProps {
+export async function processCreateChannelPost({
+  channelUri,
+  targetUserId,
+  privySignerAddress,
+  privySignMessage,
+}: {
+  channelUri: string
   targetUserId: bigint
-  targetChannelId: bigint
-  targetReferenceId: bigint
   privySignerAddress: string
   privySignMessage: (
     message: string,
     uiOptions?: SignMessageModalUIOptions | undefined,
   ) => Promise<string>
-}
-
-export async function processRemoveReferencePost({
-  targetUserId,
-  targetChannelId,
-  targetReferenceId,
-  privySignerAddress,
-  privySignMessage,
-}: ProcessRemoveReferencePostProps) {
+}) {
   // Declare constants/params
   const postVersion = postTypes.v1
-  const postExpiration = getExpiration()
-
-  const removeReferenceMsg = encodeRemoveReference({
-    channelId: targetChannelId,
-    referenceId: targetReferenceId,
+  const postExpiration: bigint = getExpiration()
+  // generate encoded msgBody for createChannelMsg
+  const createChannelMsg = encodeCreateChannel({
+    uri: channelUri,
+    adminIds: [targetUserId],
+    memberIds: [],
+    channelTags: [],
   })
-
-  if (!removeReferenceMsg) return // prevent `msgBody` from being null
-
-  const encodedMsg = encodeMessage({
-    msgType: Number(messageTypes.removeReference),
-    msgBody: removeReferenceMsg.msgBody,
+  // add this in to prevent msgBody from being null
+  if (!createChannelMsg) return
+  console.log('encoded msgBody correctly')
+  // generate encodedMessage by packing msgType + msgBody together
+  const encodedMessage = encodeMessage({
+    msgType: Number(messageTypes.createChannel),
+    msgBody: createChannelMsg.msgBody,
   })
-
-  if (!encodedMsg) return // prevent `encodedMsg` from being null
-
-  const messageArray: Hash[] = [encodedMsg?.encodedMessage] // generate the message array
-
+  // add this in to prevent encodedMessage being null
+  if (!encodedMessage) return
+  console.log('encoded message correctly')
+  // generate the bytes[] messageArray
+  const messageArray: Hash[] = [encodedMessage?.encodedMessage]
   // generate hash to include in post
   const postHash = generateHashForPostSig({
     version: postVersion,
     expiration: postExpiration,
-    messageArray: [encodedMsg?.encodedMessage],
+    messageArray: messageArray,
   })
   const postHashForSig = remove0xPrefix({ bytes32Hash: postHash })
   // Get signature from user over signed hash of encodePacked version + expiration + messages
@@ -80,11 +78,9 @@ export async function processRemoveReferencePost({
     expiration: postExpiration,
     messageArray: messageArray,
   })
-
-  if (!postInput) return // prevent `postInput` from being null
-
-  await relayPost({
-    postInput: postInput,
-    pathToRevalidate: `/channel/${targetChannelId}`,
-  })
+  // add this in to prevent postInputs being null
+  if (!postInput) return
+  console.log('postInput encoded correctly')
+  // pass postInputs into the createPost server action
+  await relayPost({ postInput: postInput, pathToRevalidate: '/' })
 }
