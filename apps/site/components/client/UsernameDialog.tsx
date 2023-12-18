@@ -14,7 +14,7 @@ import {
   Stack,
   Typography,
   Separator,
-  Toast
+  Toast,
 } from '@/design-system'
 import {
   setUsername,
@@ -105,7 +105,7 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
     await setUsername({
       registrationParameters: {
         id: String(userIdRegistered),
-        name: `${data.username}.sbvrsv.eth`,
+        name: `${form.getValues().username}.sbvrsv.eth`,
         owner: String(smartAccountAddress),
       },
     })
