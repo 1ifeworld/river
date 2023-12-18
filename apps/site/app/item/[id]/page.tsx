@@ -9,14 +9,14 @@ import { Username } from "@/server";
 import { unixTimeConverter } from "utils/unixTimeConverter";
 
 const Model = dynamic(
-  () => import("../../../components/client/renderer/glb/Model"),
+  () => import("../../../components/client/renderers/ModelRenderer"),
   {
     ssr: false,
   }
 );
 
 const PdfViewer = dynamic(
-  () => import("../../../components/client/renderer/PDF/PDFViewer"),
+  () => import("../../../components/client/renderers/PDFViewer"),
   { ssr: false }
 );
 

@@ -1,4 +1,5 @@
 'use client'
+
 import React, { Suspense, useRef, useEffect } from 'react'
 import {
   useGLTF,

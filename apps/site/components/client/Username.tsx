@@ -1,7 +1,6 @@
 import React from 'react';
-import { Typography } from '@/design-system';
-import { useUsernames } from '@/client';
-import { cn } from '@/design-system';
+import { Typography, cn } from '@/design-system';
+import { useUsernames } from 'app/providers';
 
 interface UsernameProps {
   id: string

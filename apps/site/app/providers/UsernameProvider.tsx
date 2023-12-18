@@ -74,6 +74,3 @@ export function useUsernames(ids: string[]) {
 
   return usernamesForIds;
 }
-
-// Usage in your application
-// <UsernameProvider>{/* rest of your app */}</UsernameProvider>
