@@ -32,7 +32,7 @@ export function ItemDropdown({
       <DropdownMenuPortal>
         <DropdownMenuContent side="top" className="w-32 mx-8">
           <DropdownMenuGroup className="flex flex-col gap-2">
-            <DropdownMenuItem className="py-1">
+            <DropdownMenuItem>
               <Button
                 variant="link"
                 type="submit"
