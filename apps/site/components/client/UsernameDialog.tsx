@@ -4,6 +4,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogFooter,
   Form,
   FormControl,
   FormField,
@@ -12,11 +13,13 @@ import {
   Input,
   Stack,
   Typography,
+  Separator,
 } from '@/design-system'
 import {
   setUsername,
   registerAndDelegate,
   checkUsernameAvailability,
+  usernameSchema
 } from '@/lib'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -24,7 +27,6 @@ import { publicClient } from '@/config/publicClient'
 import React, { useState, useEffect } from 'react'
 import { useDebounce } from 'usehooks-ts'
 import { addresses } from 'scrypt'
-
 import { AlchemyProvider } from '@alchemy/aa-alchemy'
 import { useUserContext } from '@/context'
 import { type Hex } from 'viem'
@@ -37,16 +39,12 @@ interface UsernameDialogProps {
 
 export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
 
-
-  const form = useForm<z.infer<typeof UsernameSchema>>({
-    resolver: zodResolver(UsernameSchema),
+  const form = useForm<z.infer<typeof usernameSchema>>({
+    resolver: zodResolver(usernameSchema),
     defaultValues: {
       username: '',
     },
   })
-
-  // Unused
-  const [isCheckingUsername, setIsCheckingUsername] = useState<boolean>(false)
 
   const [usernameExists, setUsernameExists] = useState<boolean | null>()
   const [checkState, setCheckState] = useState({
@@ -83,7 +81,7 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
 
   const { alchemyProvider, smartAccountAddress } = useUserContext()
 
-  async function onSubmit(data: z.infer<typeof UsernameSchema>) {
+  async function onSubmit(data: z.infer<typeof usernameSchema>) {
     alchemyProvider?.withAlchemyGasManager({
       policyId: process.env.NEXT_PUBLIC_ALCHEMY_GAS_MANAGER_POLICY as string,
       entryPoint: addresses.entryPoint.opGoerli,
@@ -123,9 +121,9 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
               <Typography>Choose a username</Typography>
             </DialogTitle>
           </DialogHeader>
-          {/* <Separator /> */}
           <Form {...form}>
             <form className="w-2/3 space-y-6">
+              <Separator />
               <FormField
                 control={form.control}
                 name="username"
@@ -135,7 +133,6 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                       <Input
                         placeholder="username"
                         {...field}
-                        disabled={isCheckingUsername}
                       />
                     </FormControl>
                     {usernameExists && checkState.debounceFinished && (
@@ -145,14 +142,20 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                   </FormItem>
                 )}
               />
+              <Separator />
+              <DialogFooter className="flex flex-col py-2">
               <Button
                 onClick={form.handleSubmit(onSubmit)}
                 type="submit"
                 variant="link"
                 disabled={!canSubmit}
               >
+                <Typography>
                 Complete
+                </Typography>
               </Button>
+              
+              </DialogFooter>
             </form>
           </Form>
         </Stack>
