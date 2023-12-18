@@ -7,10 +7,10 @@ export function Loading() {
 
   React.useEffect(() => {
     const interval = setInterval(() => {
-      setDotCount((prevCount) => (prevCount === 3 ? 1 : prevCount + 1));
-    }, 450);
-    return () => clearInterval(interval);
-  }, []);
+      setDotCount((prevCount) => (prevCount === 3 ? 1 : prevCount + 1))
+    }, 450)
+    return () => clearInterval(interval)
+  }, [])
 
   return (
     <>
