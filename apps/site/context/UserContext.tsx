@@ -25,6 +25,7 @@ const UserContext = createContext<{
   userId?: bigint
   username?: string
   fetchUserData?: () => Promise<void> 
+  clearUserData?: () => void
 }>({})
 
 export function UserContextComponent({ children }: { children: ReactNode }) {
@@ -37,7 +38,7 @@ export function UserContextComponent({ children }: { children: ReactNode }) {
     (wallet) => wallet.walletClientType === 'privy',
   )
 
-  const fetchUserData = async () => {
+  async function fetchUserData() {
     if (!embeddedWallet) return
 
     const fetchedUserId = await getUserId({
@@ -55,6 +56,11 @@ export function UserContextComponent({ children }: { children: ReactNode }) {
     setUsername(fetchedUsername)
   }
 
+  function clearUserData() {
+    setUserId(undefined)
+    setUsername(undefined)
+  }
+
   useEffect(() => {
     fetchUserData()
   }, [embeddedWallet])
@@ -66,7 +72,8 @@ export function UserContextComponent({ children }: { children: ReactNode }) {
         signMessage,
         userId,
         username,
-        fetchUserData
+        fetchUserData,
+        clearUserData
       }}
     >
       {children}

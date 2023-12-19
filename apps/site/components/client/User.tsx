@@ -16,7 +16,12 @@ interface UserProps {
 
 export function User({ setOpen }: UserProps) {
   const { logout } = useLogout()
-  const { username } = useUserContext()
+  const { username, clearUserData } = useUserContext()
+
+  function handleLogout() {
+    logout()
+    if (clearUserData) clearUserData()
+  }
 
   return (
     <DropdownMenu>
@@ -34,7 +39,7 @@ export function User({ setOpen }: UserProps) {
             </Button>
           </DropdownMenuItem> */}
           <DropdownMenuItem>
-            <Button variant="link" onClick={logout}>
+            <Button variant="link" onClick={handleLogout}>
               <Typography>Logout</Typography>
             </Button>
           </DropdownMenuItem>

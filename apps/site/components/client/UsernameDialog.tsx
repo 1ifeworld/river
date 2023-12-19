@@ -102,7 +102,7 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
             
     toast.custom((t) => (
       <Toast>
-        {'Welcome to River'}
+        Welcome to River&nbsp;
         <span className="font-bold">{form.getValues().username}</span>
       </Toast>
     ))            
