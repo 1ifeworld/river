@@ -17,7 +17,7 @@
       "./styles/**",
       "./utils/**"
     ],
-    "ignore": ["./.next/**"]
+    "ignore": ["./.next/**", "./tailwind.config.ts"]
   },
   "linter": {
     "enabled": true,
@@ -46,6 +46,6 @@
       "./styles/**",
       "./utils/**"
     ],
-    "ignore": ["./.next/**"]
+    "ignore": ["./.next/**", "./tailwind.config.ts"]
   }
 }
