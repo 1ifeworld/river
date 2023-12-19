@@ -11,9 +11,7 @@ import { useWallets, type ConnectedWallet, User } from '@privy-io/react-auth'
 import { usePrivy } from '@privy-io/react-auth'
 import { getUserId } from '@/gql'
 import { getUsername } from '@/lib'
-import {
-  type Address,
-} from 'viem'
+import { type Address } from 'viem'
 import { SignMessageModalUIOptions } from '@privy-io/react-auth'
 
 const UserContext = createContext<{
@@ -43,7 +41,7 @@ export function UserContextComponent({ children }: { children: ReactNode }) {
       const { userId } = await getUserId({
         custodyAddress: embeddedWallet.address as Address,
       })
-      
+
       if (!userId) return
 
       setUserId(userId)

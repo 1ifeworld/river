@@ -24,7 +24,7 @@ export async function relayPost({
   try {
     const postTxn = await nonceManager.sendTransaction({
       // to: addresses.postGateway.opGoerli,
-      to: "0x1B692589017d4b2276227b52cD3A2a1796cb2b86",
+      to: '0x1B692589017d4b2276227b52cD3A2a1796cb2b86',
       data: encodePostCall,
     })
 

@@ -16,10 +16,7 @@ import {
   Separator,
   Toast,
 } from '@/design-system'
-import {
-  checkUsernameAvailability,
-  processRegisterFor
-} from '@/lib'
+import { checkUsernameAvailability, processRegisterFor } from '@/lib'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { publicClient } from '@/config/publicClient'
@@ -28,8 +25,15 @@ import { useDebounce } from 'usehooks-ts'
 import { addresses } from 'scrypt'
 import { AlchemyProvider } from '@alchemy/aa-alchemy'
 import { useUserContext } from '@/context'
-import { type Hex, createWalletClient, custom, getAddress, encodeFunctionData, Address } from 'viem'
-import { usePrivy, useWallets } from '@privy-io/react-auth';
+import {
+  type Hex,
+  createWalletClient,
+  custom,
+  getAddress,
+  encodeFunctionData,
+  Address,
+} from 'viem'
+import { usePrivy, useWallets } from '@privy-io/react-auth'
 import { river_j5bpjduqfv } from '@/config/customChainConfig'
 import { postGatewayABI, idRegistryABI } from 'scrypt'
 import { SubmitButton } from '@/client'
@@ -42,7 +46,6 @@ interface UsernameDialogProps {
 }
 
 export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
-
   // import user embedded wallet
   // const { user, sendTransaction } = usePrivy();
   // const { wallets } = useWallets();
@@ -50,15 +53,15 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
   // const { eth } = usePrivyWagmi()
   // const active = await yo.setActiveWallet
 
-// Retrieve Account from an EIP-1193 Provider.
-// const [account] = await window.ethereum.request({ 
-//   method: 'eth_requestAccounts' 
-// })
+  // Retrieve Account from an EIP-1193 Provider.
+  // const [account] = await window.ethereum.request({
+  //   method: 'eth_requestAccounts'
+  // })
 
-// export const walletClient = createWalletClient({
-//   account,
-//   transport: custom(window.ethereum)
-// })  
+  // export const walletClient = createWalletClient({
+  //   account,
+  //   transport: custom(window.ethereum)
+  // })
 
   // embeddedWallet?.getEthersProvider()
 
@@ -113,25 +116,24 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
   const { signMessage, embeddedWallet } = useUserContext()
 
   async function onSubmit(data: z.infer<typeof UsernameSchema>) {
-
     if (signMessage && embeddedWallet?.address) {
-      console.log("running processRegisterFor")
+      console.log('running processRegisterFor')
       await processRegisterFor({
         privySignerAddress: embeddedWallet.address,
         privySignMessage: signMessage,
-        username: `${data.username}.sbvrsv.eth`
+        username: `${data.username}.sbvrsv.eth`,
       })
-      console.log("finished processRegisterFor")
+      console.log('finished processRegisterFor')
     }
 
-    setOpen(false)    
-            
+    setOpen(false)
+
     toast.custom((t) => (
       <Toast>
         {'Welcome to River'}
         <span className="font-bold">{form.getValues().username}</span>
       </Toast>
-    ))            
+    ))
   }
 
   return (

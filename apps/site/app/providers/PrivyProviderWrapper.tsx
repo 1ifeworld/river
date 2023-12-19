@@ -22,7 +22,7 @@ export function PrivyProviderWrapper({
           noPromptOnSignature: true,
         },
         defaultChain: river_j5bpjduqfv,
-        supportedChains: [river_j5bpjduqfv]
+        supportedChains: [river_j5bpjduqfv],
       }}
     >
       {children}
