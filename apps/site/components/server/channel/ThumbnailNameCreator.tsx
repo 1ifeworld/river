@@ -1,9 +1,8 @@
 import Image from 'next/image'
 import { type Reference, type Channel } from '@/gql'
-import { Stack, Typography, Button } from '@/design-system'
+import { Stack, Typography } from '@/design-system'
 import { GenericThumbnailSmall, Username } from '@/server'
 import { ipfsUrlToCid, pinataUrlFromCid } from '@/lib'
-import Link from 'next/link'
 import { truncateText } from '@/utils'
 
 interface ThumbnailNameCreatorProps {

@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { Stack, Typography, Card, Flex, Debug } from '@/design-system'
+import { Stack, Typography } from '@/design-system'
 import { Channel } from '@/gql'
 import { UploadDialog } from '@/client'
 import { ipfsUrlToCid, pinataUrlFromCid } from '@/lib'

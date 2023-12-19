@@ -3,9 +3,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
 } from "@/design-system";
 import { Channel, Reference } from "@/gql";
 import { unixTimeConverter } from "@/utils";
