@@ -43,11 +43,19 @@ export function isFont(file: File) {
 }
 
 export function isText(file: File) {
+  const extension = file.name?.split('.').pop()?.toLowerCase()
+  if (typeof extension === 'string') {
+
   return [
-    'text/html',
-    'text/csv',
-    'application/rtf',
-    'text/plain',
-    'text/markdown', // might not be part of IANA
-  ]
+    'html',  
+    'csv',   
+    'rtf',   
+    'plain',  
+    'markdown',  
+    'md',
+    'txt',
+    'docx',  
+  ].includes(extension)
+}
+return false
 }
