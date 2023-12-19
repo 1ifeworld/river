@@ -20,7 +20,3 @@ export function generateHashForPostSig({
     ),
   )
 }
-
-export function remove0xPrefix({ bytes32Hash }: { bytes32Hash: Hash }) {
-  return bytes32Hash.slice(2)
-}

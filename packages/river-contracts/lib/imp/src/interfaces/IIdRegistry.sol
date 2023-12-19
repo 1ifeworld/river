@@ -52,9 +52,24 @@ interface IIdRegistry {
      * @notice Register a new id by incrementing the idCount. Callable by anyone.
      *
      * @param backup      Address to set as backup for id
-     * @param data        Aribtary data to emit in Register event
      */
-    function register(address backup, bytes memory data) external returns (uint256);
+    function register(address backup) external returns (uint256);
+
+
+    /**
+     * @notice Register a new id on behalf of a given address. Callable by anyone
+     *
+     * @param to                 Custody address of newly registered id
+     * @param backupAddress      Backup address to set for id
+     * @param expiration         Signature expiration
+     * @param sig                Signature of designated id recipient
+     */
+    function registerFor(
+        address to, 
+        address backupAddress, 
+        uint256 expiration, 
+        bytes calldata sig
+    ) external returns (uint256);    
 
     //////////////////////////////////////////////////
     // ID TRANSFER

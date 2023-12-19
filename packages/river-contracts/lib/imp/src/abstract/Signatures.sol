@@ -15,11 +15,11 @@ abstract contract Signatures {
     /// @dev Revert if current timestamp is past designated deadline
     error Signature_Expired();
 
-    function _verifySig(bytes memory message, address signer, uint256 deadline, bytes memory sig) internal view {
+    function _verifySig(bytes32 typehash, address signer, uint256 deadline, bytes memory sig) internal view {
         // Check if signature deadline has passed
         if (block.timestamp > deadline) revert Signature_Expired();        
         // Convert message to hash, encoded with deadline
-        bytes32 hash = keccak256(abi.encodePacked(message, deadline));
+        bytes32 hash = keccak256(abi.encodePacked(typehash, deadline));
         // Convert hash to EIP-191 signed message hash
         bytes32 digest = hash.toEthSignedMessageHash();
         // Perform check on signature

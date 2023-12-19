@@ -3,10 +3,10 @@ import { http } from 'viem'
 import { addresses, idRegistryABI, postGatewayABI } from 'scrypt'
 
 export default createConfig({
-  networks: {
-    opGoerli: {
-      chainId: 420,
-      transport: http(process.env.PONDER_RPC_URL_420),
+  networks: {    
+    river_j5bpjduqfv: {
+      chainId: 36912,
+      transport: http(process.env.PONDER_RPC_URL_36912),
     },
     // anvil: {
     //   chainId: 31337,
@@ -15,19 +15,19 @@ export default createConfig({
   },
   contracts: {
     IdRegistry: {
-      network: 'opGoerli',
+      network: 'river_j5bpjduqfv',
       abi: idRegistryABI,
-      address: addresses.idRegistry.opGoerli,
-      startBlock: 18272706,
+      address: addresses.idRegistry.river_j5bpjduqfv,
+      startBlock: 0,
     },
     PostGateway: {
-      network: 'opGoerli',
+      network: 'river_j5bpjduqfv',
       abi: postGatewayABI,
-      address: addresses.postGateway.opGoerli,
-      startBlock: 18620031,
+      address: addresses.postGateway.river_j5bpjduqfv,
+      startBlock: 0,
     },
     // IdRegistry: {
-    //   network: "anvil", hii
+    //   network: "anvil",
     //   abi: idRegistryABI,
     //   address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
     //   startBlock: 0

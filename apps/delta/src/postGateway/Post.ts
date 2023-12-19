@@ -10,7 +10,6 @@ import {
   decodeRemoveReference,
   messageTypes,
   isSupportedMessageType,
-  lightAccountABI,
   remove0xPrefix,
 } from 'scrypt'
 import {
@@ -121,21 +120,13 @@ ponder.on('PostGateway:Post', async ({ event, context }) => {
     }
     return
   }
-  // NOTE: update to context.client.verifyMessage after bumping ponder version
-  //    this will unlock cleaner support for EOAs + Smart accounts
-  // NOTE: in future, validity check can be done for one of 1) custody add 2) delegate add
-  // exit crud if validity check returns valse
-  const ownerForLightAccount = await context.client.readContract({
-    abi: lightAccountABI,
-    address: userLookup.to,
-    functionName: 'owner',
-  })
+  // NOTE: update to context.client.verifyMessage to unlock support
+  //       for smart accounts in addition to EOAs
   const recoverAddressFromPostSignature = await recoverMessageAddress({
     message: remove0xPrefix({ bytes32Hash: decodedPost.hash }),
     signature: decodedPost.sig,
   })
-  const signerIsValid = ownerForLightAccount === recoverAddressFromPostSignature
-  console.log('signature is valid for user: ', signerIsValid)
+  const signerIsValid = userLookup.to === recoverAddressFromPostSignature
 
   if (!signerIsValid) {
     txnReceipt = await Txn.findUnique({ id: event.transaction.hash })

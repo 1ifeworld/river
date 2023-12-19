@@ -2,12 +2,13 @@
 pragma solidity 0.8.23;
 
 import {IIdRegistry} from "./interfaces/IIdRegistry.sol";
+import {Signatures} from "./abstract/Signatures.sol";
 
 /**
  * @title IdRegistry
  * @author Lifeworld
  */
-contract IdRegistry is IIdRegistry {
+contract IdRegistry is IIdRegistry, Signatures {
 
     //////////////////////////////////////////////////
     // ERRORS
@@ -90,8 +91,15 @@ contract IdRegistry is IIdRegistry {
     event ChangeBackupAddress(uint256 indexed id, address indexed backup);    
 
     //////////////////////////////////////////////////
+    // CONSTANTS
+    //////////////////////////////////////////////////          
+    
+    bytes32 public constant REGISTER_TYPEHASH =
+        keccak256("Register(address to,address backup,uint256 deadline)");      
+
+    //////////////////////////////////////////////////
     // STORAGE
-    //////////////////////////////////////////////////        
+    //////////////////////////////////////////////////      
 
     /**
      * @inheritdoc IIdRegistry
@@ -133,7 +141,7 @@ contract IdRegistry is IIdRegistry {
     /**
      * @inheritdoc IIdRegistry
      */
-    function register(address backupAddress, bytes calldata data) external returns (uint256 id) {
+    function register(address backupAddress) external returns (uint256 id) {
         // Cache msg.sender
         address sender = msg.sender;        
         // Revert if the sender already has an id
@@ -144,8 +152,30 @@ contract IdRegistry is IIdRegistry {
         idOwnedBy[sender] = id;
         // Assign backup to id
         backupFor[id] = backupAddress;
-        emit Register(sender, id, backupAddress, data);        
+        emit Register(sender, id, backupAddress, new bytes(0));        
     }
+
+    /*
+        WIP REGISTER FOR FUNCTION
+    */
+    function registerFor(
+        address to, 
+        address backupAddress, 
+        uint256 expiration, 
+        bytes calldata sig
+    ) external returns (uint256 id) {
+        // verify siganture is valid for to address
+        _verifySig(REGISTER_TYPEHASH, to, expiration, sig);
+        // Revert if the to address already has an id
+        if (idOwnedBy[to] != 0) revert Has_Id();    
+        // Increment idCount
+        id = ++idCount;
+        // Assign id to owner
+        idOwnedBy[to] = id;
+        // Assign backup to id
+        backupFor[id] = backupAddress;
+        emit Register(to, id, backupAddress, new bytes(0));        
+    }    
 
     //////////////////////////////////////////////////
     // ID TRANSFER
