@@ -21,7 +21,7 @@ export default async function Channel({
   const { metadata } = await getReferencesMetadata(channel?.references)
 
   return (
-    <div className="flex flex-col md:flex-row md:gap-5 h-full w-full">
+    <div className="pt-4 flex flex-col md:flex-row md:gap-5 h-full w-full">
       <ChannelBanner channel={channel} metadata={channelMetadata} />
       <ChannelItems channel={channel} metadata={metadata} />
     </div>
