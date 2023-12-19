@@ -4,6 +4,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogFooter,
   Form,
   FormControl,
   FormField,
@@ -12,6 +13,8 @@ import {
   Input,
   Stack,
   Typography,
+  Separator,
+  Toast,
 } from '@/design-system'
 import {
   checkUsernameAvailability,
@@ -23,13 +26,16 @@ import { publicClient } from '@/config/publicClient'
 import React, { useState, useEffect } from 'react'
 import { useDebounce } from 'usehooks-ts'
 import { addresses } from 'scrypt'
-import * as z from 'zod'
 import { AlchemyProvider } from '@alchemy/aa-alchemy'
 import { useUserContext } from '@/context'
 import { type Hex, createWalletClient, custom, getAddress, encodeFunctionData, Address } from 'viem'
 import { usePrivy, useWallets } from '@privy-io/react-auth';
 import { river_j5bpjduqfv } from '@/config/customChainConfig'
 import { postGatewayABI, idRegistryABI } from 'scrypt'
+import { SubmitButton } from '@/client'
+import { type Hex } from 'viem'
+import { toast } from 'sonner'
+import * as z from 'zod'
 
 interface UsernameDialogProps {
   open: boolean
@@ -70,11 +76,8 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
     },
   })
 
-
-
   // Unused
   const [isCheckingUsername, setIsCheckingUsername] = useState<boolean>(false)
-
   const [usernameExists, setUsernameExists] = useState<boolean | null>()
   const [checkState, setCheckState] = useState({
     isChecking: false,
@@ -123,6 +126,13 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
     }
 
     setOpen(false)    
+            
+    toast.custom((t) => (
+      <Toast>
+        {'Welcome to River'}
+        <span className="font-bold">{form.getValues().username}</span>
+      </Toast>
+    ))            
   }
 
   return (
@@ -134,36 +144,40 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
               <Typography>Choose a username</Typography>
             </DialogTitle>
           </DialogHeader>
-          {/* <Separator /> */}
           <Form {...form}>
-            <form className="w-2/3 space-y-6">
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="flex flex-col justify-center w-full gap-6"
+            >
+              <Separator />
               <FormField
                 control={form.control}
                 name="username"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="mx-5 text-center">
                     <FormControl>
-                      <Input
-                        placeholder="username"
-                        {...field}
-                        disabled={isCheckingUsername}
-                      />
+                      <Input placeholder="Enter username..." {...field} />
                     </FormControl>
                     {usernameExists && checkState.debounceFinished && (
-                      <FormMessage>Username already exists!</FormMessage>
+                      <FormMessage>
+                        Username not available, please try another
+                      </FormMessage>
                     )}
+
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button
-                onClick={form.handleSubmit(onSubmit)}
-                type="submit"
-                variant="link"
-                disabled={!canSubmit}
-              >
-                Complete
-              </Button>
+              <Separator />
+              <DialogFooter className="flex flex-col py-2">
+                <SubmitButton
+                  type="submit"
+                  variant="link"
+                  disabled={!canSubmit}
+                >
+                  Complete
+                </SubmitButton>
+              </DialogFooter>
             </form>
           </Form>
         </Stack>

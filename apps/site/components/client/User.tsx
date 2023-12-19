@@ -5,11 +5,16 @@ import {
   DropdownMenuItem,
   DropdownMenuContent,
   Button,
+  Typography,
 } from '@/design-system'
 import { useUserContext } from '@/context'
 import { useLogout } from '@privy-io/react-auth'
 
-export function User() {
+interface UserProps {
+  setOpen: (open: boolean) => void
+}
+
+export function User({ setOpen }: UserProps) {
   const { logout } = useLogout()
   const { username } = useUserContext()
 
@@ -19,10 +24,18 @@ export function User() {
         <Button variant="link">{username ? username : "Logout"}</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-32" align="end">
-        <DropdownMenuGroup>
+        <DropdownMenuGroup className="flex flex-col gap-2">
+          {/* Change Username  */}
+          {/* <DropdownMenuItem>
+            <Button variant="link" onClick={() => setOpen(true)}>
+            <Typography>
+              Change Username
+              </Typography>
+            </Button>
+          </DropdownMenuItem> */}
           <DropdownMenuItem>
             <Button variant="link" onClick={logout}>
-              Logout
+              <Typography>Logout</Typography>
             </Button>
           </DropdownMenuItem>
         </DropdownMenuGroup>
