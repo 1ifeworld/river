@@ -33,7 +33,6 @@ import { usePrivy, useWallets } from '@privy-io/react-auth';
 import { river_j5bpjduqfv } from '@/config/customChainConfig'
 import { postGatewayABI, idRegistryABI } from 'scrypt'
 import { SubmitButton } from '@/client'
-import { type Hex } from 'viem'
 import { toast } from 'sonner'
 import * as z from 'zod'
 
