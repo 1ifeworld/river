@@ -23,6 +23,7 @@ import {
   DataObject,
   sendToDb,
   isImage,
+  isText, 
   isGLB,
   isPdf,
   isVideo,
@@ -71,7 +72,7 @@ export function UploadDialog() {
     contentTypeKey = 
       isVideo({ mimeType: contentType }) || isAudio({ mimeType: contentType })
         ? 2
-        : isPdf({ mimeType: contentType }) || isGLB(file)
+        : isPdf({ mimeType: contentType }) || isGLB(file) || isText(file)
         ? 1
         : 0
   
@@ -104,7 +105,7 @@ export function UploadDialog() {
         muxAssetId: muxAssetId,
         muxPlaybackId: muxPlaybackId,
       },
-    };
+    }
   
     await sendToDb(dataForDB)
   

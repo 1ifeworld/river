@@ -10,6 +10,7 @@ import {
   isPdf,
   isAudio,
   isImage,
+  isText
 } from '@/lib'
 import { ContentWrapper, VideoPlayer, AudioPlayer } from '@/client'
 import { Username } from '@/server'
@@ -17,6 +18,13 @@ import { unixTimeConverter } from '@/utils'
 
 const Model = dynamic(
   () => import('../../../components/client/renderers/ModelRenderer'),
+  {
+    ssr: false,
+  },
+)
+
+const MarkdownRenderer = dynamic(
+  () => import('../../../components/client/renderers/MarkdownRenderer'),
   {
     ssr: false,
   },
@@ -49,6 +57,7 @@ export default async function View({
   if (
     referenceMetadata.contentType === 'model/gltf-binary' ||
     referenceMetadata.contentType === 'application/pdf' ||
+    referenceMetadata.contentType === 'text/markdown'  ||
     isAudio({ mimeType: referenceMetadata.contentType })
   ) {
     const cid = ipfsUrlToCid({ ipfsUrl: referenceMetadata.animationUri })
@@ -87,6 +96,9 @@ export default async function View({
     case isPdf({ mimeType: contentType }):
       content = <PdfViewer file={contentUrl} />
       break
+      case contentType === 'text/markdown':
+        content = <MarkdownRenderer contentUrl={contentUrl} />
+        break
     case contentType === 'model/gltf-binary':
       content = <Model src={contentUrl} />
       break
