@@ -1,11 +1,10 @@
 import Image from 'next/image'
 import { type Reference, type Channel } from '@/gql'
 import { Stack, Typography, Button } from '@/design-system'
-import { Username, GenericThumbnailSmall } from '@/client'
+import { GenericThumbnailSmall, Username } from '@/server'
 import { ipfsUrlToCid, pinataUrlFromCid } from '@/lib'
 import Link from 'next/link'
 import { truncateText } from '@/utils'
-import { useMediaQuery } from '@/hooks'
 
 interface ThumbnailNameCreatorProps {
   channel: Channel
@@ -18,7 +17,6 @@ export function ThumbnailNameCreator({
   reference,
   metadata,
 }: ThumbnailNameCreatorProps) {
-  const { isMobile } = useMediaQuery()
 
   const referenceMetadata = metadata.data[reference.pubRef?.uri as string]
 
@@ -43,7 +41,6 @@ export function ThumbnailNameCreator({
 
   return (
     <>
-      <Link href={`/item/${reference.id}`}>
         <>
           {cid ? (
             <Image
@@ -59,17 +56,19 @@ export function ThumbnailNameCreator({
             />
           )}
         </>
-      </Link>
-      <Stack className="">
-        <Link href={`/item/${reference.id}`}>
-          <Button variant="link">
-            <Typography className="text-primary-foreground">
-              {isMobile
-                ? truncateText(referenceMetadata.name, 35)
-                : referenceMetadata.name}
+      <Stack>
+        {/* <Link href={`/item/${reference.id}`}> */}
+          {/* <Button variant="link"> */}
+            {/* */}
+            <Typography className="md:hidden text-primary-foreground">
+              {truncateText(referenceMetadata.name, 35)}
             </Typography>
-          </Button>
-        </Link>
+            <Typography className="hidden md:block text-primary-foreground leading-none">
+              {referenceMetadata.name}
+            </Typography>            
+            {/* */}
+          {/* </Button> */}
+        {/* </Link> */}
         <Username id={reference.createdBy} />
       </Stack>
     </>
