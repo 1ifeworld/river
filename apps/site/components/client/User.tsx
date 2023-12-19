@@ -15,13 +15,19 @@ interface UserProps {
 }
 
 export function User({ setOpen }: UserProps) {
-  const { logout } = useLogout()
-  const { username } = useUserContext()
+  const { logout } = useLogout({
+    onSuccess: () => {
+      if (clearUserData) {
+        clearUserData()
+      }
+    },
+  })
+  const { username, clearUserData } = useUserContext()
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="link">{username ? username : "Logout"}</Button>
+        <Button variant="link">{username ? username : 'Logout'}</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-32" align="end">
         <DropdownMenuGroup className="flex flex-col gap-2">
