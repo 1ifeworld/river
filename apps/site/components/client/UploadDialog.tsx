@@ -61,22 +61,22 @@ import { FileList } from '@/server'
 //     if (isVideo({ mimeType: contentType }) || isAudio({ mimeType: contentType })) {
 //       const assetEndpointForMux = pinataUrlFromCid({
 //         cid: ipfsUrlToCid({ ipfsUrl: uploadedFileCid }),
-//       });
+//       })
 //       const muxAsset = await muxClient.Video.Assets.create({
 //         input: assetEndpointForMux,
 //         playback_policy: 'public',
 //         ...(isVideo({ mimeType: contentType }) && {
 //           encoding_tier: 'baseline',
 //         }),
-//       });
+//       })
 //       return {
 //         muxAssetId: muxAsset.id || '',
 //         muxPlaybackId: muxAsset.playback_ids?.[0]?.id || '',
-//       };
+//       }
 //     } else {
-//       return { muxAssetId: '', muxPlaybackId: '' };
+//       return { muxAssetId: '', muxPlaybackId: '' }
 //     }
-//   };
+//   }
 
 //   const uploadAndProcessFile = async (file: File) => {
 //     const uploadedFileName = file.name || 'unnamed'
@@ -124,7 +124,7 @@ import { FileList } from '@/server'
 //       //     ? muxAsset.playback_ids[0].id
 //       //     : ''
 
-//   const { muxAssetId, muxPlaybackId } = await uploadToMux(contentType, uploadedFileCid);
+//   const { muxAssetId, muxPlaybackId } = await uploadToMux(contentType, uploadedFileCid)
 
 //       dataForDB = {
 //         key: pubUri,
@@ -177,30 +177,76 @@ export function UploadDialog() {
     disabled: showFileList,
   })
 
-  const uploadToMux = async (contentType: string, uploadedFileCid: string) => {
-    if (
-      isVideo({ mimeType: contentType }) ||
-      isAudio({ mimeType: contentType })
-    ) {
-      const assetEndpointForMux = pinataUrlFromCid({
-        cid: ipfsUrlToCid({ ipfsUrl: uploadedFileCid }),
-      })
 
-      const muxAsset = await muxClient.Video.Assets.create({
-        input: assetEndpointForMux,
-        playback_policy: 'public',
-        ...(isVideo({ mimeType: contentType }) && {
-          encoding_tier: 'baseline',
-        }),
-      });
-      return {
-        muxAssetId: muxAsset.id || '',
-        muxPlaybackId: muxAsset.playback_ids?.[0]?.id || '',
-      };
-    } else {
-      return { muxAssetId: '', muxPlaybackId: '' };
+
+  const uploadToMux = async (contentType: string, uploadedFileCid: string) => {
+    const assetEndpointForMux = pinataUrlFromCid({
+      cid: ipfsUrlToCid({ ipfsUrl: uploadedFileCid }),
+    })
+  
+    console.log( "ASSET ENDPOINT", assetEndpointForMux)
+    if (isVideo({ mimeType: contentType }) || isAudio({ mimeType: contentType })) {
+      const directUpload = await muxClient.Video.Uploads.create({
+        cors_origin: '*', 
+        new_asset_settings: {
+          input: assetEndpointForMux,
+          playback_policy: 'public', 
+          ...(isVideo({ mimeType: contentType }) && {
+            encoding_tier: 'baseline', 
+          }),
+        },
+      })
+  
+    const ipfsResponse = await fetch(assetEndpointForMux)
+    if (!ipfsResponse.ok) {
+      throw new Error('Failed to fetch file from IPFS: ' + ipfsResponse.statusText)
     }
-  };
+
+    const fileBlob = await ipfsResponse.blob()
+
+    const response = await fetch(directUpload.url, {
+      method: 'PUT',
+      body: fileBlob, 
+      headers: {
+        'Content-Type': contentType,
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error('Failed to upload to Mux: ' + response.statusText)
+    }
+
+    let muxUpload
+    let attempts = 0
+    const maxAttempts = 20 
+    while ((!muxUpload || !muxUpload.asset_id) && attempts < maxAttempts) {
+      await new Promise(resolve => setTimeout(resolve, 5000)) 
+      try {
+        muxUpload = await muxClient.Video.Uploads.get(directUpload.id)
+        console.log('Polling Mux Upload:', muxUpload) 
+        if (muxUpload.status === 'asset_created') {
+          break
+        }
+        attempts++
+      } catch (error) {
+        console.error("Error fetching Mux Upload:", error)
+        break
+      }
+    }
+
+    if (!muxUpload || !muxUpload.asset_id) {
+      throw new Error('Mux Asset is not available after maximum attempts.')
+    }
+
+    const muxAsset = await muxClient.Video.Assets.get(muxUpload.asset_id)
+    return {
+      muxAssetId: muxAsset.id || '',
+      muxPlaybackId: muxAsset.playback_ids?.[0]?.id || '',
+    }
+  } else {
+    return { muxAssetId: '', muxPlaybackId: '' }
+  }
+}
 
   const uploadAndProcessFile = async (file: File) => {
     const uploadedFileName = file.name || 'unnamed'
@@ -228,13 +274,13 @@ export function UploadDialog() {
 
     if (animationUri) {
 
-      const muxUploadResult = await uploadToMux(contentType, animationUri);
+      const muxUploadResult = await uploadToMux(contentType, animationUri)
 
-      let muxAssetId = '';
-      let muxPlaybackId = '';
+      let muxAssetId = ''
+      let muxPlaybackId = ''
 
       if (muxUploadResult) {
-        ({ muxAssetId, muxPlaybackId } = muxUploadResult);
+        ({ muxAssetId, muxPlaybackId } = muxUploadResult)
       }
 
       dataForDB = {
