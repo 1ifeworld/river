@@ -9,7 +9,6 @@ export const uploadToMux = async (contentType: string, uploadedFileCid: string) 
       cid: ipfsUrlToCid({ ipfsUrl: uploadedFileCid }),
     })
   
-    console.log( "ASSET ENDPOINT", assetEndpointForMux)
     if (isVideo({ mimeType: contentType }) || isAudio({ mimeType: contentType })) {
       const directUpload = await muxClient.Video.Uploads.create({
         cors_origin: "*",
@@ -48,7 +47,6 @@ export const uploadToMux = async (contentType: string, uploadedFileCid: string) 
       await new Promise(resolve => setTimeout(resolve, 5000)) 
       try {
         muxUpload = await muxClient.Video.Uploads.get(directUpload.id)
-        console.log('Polling Mux Upload:', muxUpload) 
         if (muxUpload.status === 'asset_created') {
           break
         }
