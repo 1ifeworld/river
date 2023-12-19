@@ -1,7 +1,7 @@
 'use server'
 import { muxClient } from "@/config/muxClient"
 import { pinataUrlFromCid, ipfsUrlToCid } from "lib/ipfs"
-import { isVideo, isAudio } from "lib/isContent"
+import { isVideo } from "lib/isContent"
 
 
 export const uploadToMux = async (contentType: string, uploadedFileCid: string) => {
@@ -9,7 +9,6 @@ export const uploadToMux = async (contentType: string, uploadedFileCid: string) 
       cid: ipfsUrlToCid({ ipfsUrl: uploadedFileCid }),
     })
   
-    if (isVideo({ mimeType: contentType }) || isAudio({ mimeType: contentType })) {
       const directUpload = await muxClient.Video.Uploads.create({
         cors_origin: "*",
         new_asset_settings: {
@@ -66,7 +65,5 @@ export const uploadToMux = async (contentType: string, uploadedFileCid: string) 
       muxAssetId: muxAsset.id || '',
       muxPlaybackId: muxAsset.playback_ids?.[0]?.id || '',
     }
-  } else {
-    return { muxAssetId: '', muxPlaybackId: '' }
   }
-}
+

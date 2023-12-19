@@ -38,7 +38,7 @@ import { useParams } from 'next/navigation'
 import { usePrivy } from '@privy-io/react-auth'
 import { muxClient } from '@/config/muxClient'
 import { FileList } from '@/server'
-import { uploadToMux } from '@/server'
+import { uploadToMux } from '@/lib'
 
 
 export function UploadDialog() {
@@ -63,60 +63,51 @@ export function UploadDialog() {
     const uploadedFileName = file.name || 'unnamed'
     const contentType = determineContentType(file)
     const uploadedFileCid = await uploadFile({ filesToUpload: [file] })
-
+  
     let pubUri: string
     let dataForDB: DataObject
-
-    const reqAnimationUri =
-      isVideo({ mimeType: contentType }) ||
-      isAudio({ mimeType: contentType }) ||
-      isPdf({ mimeType: contentType }) ||
-      isGLB(file)
-    const animationUri = reqAnimationUri ? uploadedFileCid : ''
-
+    let contentTypeKey: number
+  
+    contentTypeKey = 
+      isVideo({ mimeType: contentType }) || isAudio({ mimeType: contentType })
+        ? 2
+        : isPdf({ mimeType: contentType }) || isGLB(file)
+        ? 1
+        : 0
+  
+    const animationUri = contentTypeKey === 2 || contentTypeKey === 1 ? uploadedFileCid : ''
+    const imageUri = contentTypeKey === 0 ? uploadedFileCid : ''
+  
     const ipfsDataObject: IPFSDataObject = {
       name: uploadedFileName,
-      description: 'What did you think this was going to be?',
-      image: isImage({ mimeType: contentType }) ? uploadedFileCid : '',
+      description: 'Dynamic metadata based on timestamp',
+      image: imageUri,
       animationUri: animationUri,
     }
-
+  
     pubUri = await uploadBlob({ dataToUpload: ipfsDataObject })
-
-    if (animationUri) {
-
+  
+    let muxAssetId = ''
+    let muxPlaybackId = ''
+  
+    if (contentTypeKey === 2) {
       const muxUploadResult = await uploadToMux(contentType, animationUri)
-
-      let muxAssetId = ''
-      let muxPlaybackId = ''
-
-      if (muxUploadResult) {
-        ({ muxAssetId, muxPlaybackId } = muxUploadResult)
-      }
-
-      dataForDB = {
-        key: pubUri,
-        value: {
-          ...ipfsDataObject,
-          contentType: contentType,
-          muxAssetId: muxAssetId,
-          muxPlaybackId: muxPlaybackId,
-        },
-      }
-    } else {
-      dataForDB = {
-        key: pubUri,
-        value: {
-          ...ipfsDataObject,
-          contentType: contentType,
-          muxAssetId: '',
-          muxPlaybackId: '',
-        },
-      }
+      muxAssetId = muxUploadResult.muxAssetId
+      muxPlaybackId = muxUploadResult.muxPlaybackId
     }
-
+  
+    dataForDB = {
+      key: pubUri,
+      value: {
+        ...ipfsDataObject,
+        contentType: contentType,
+        muxAssetId: muxAssetId,
+        muxPlaybackId: muxPlaybackId,
+      },
+    };
+  
     await sendToDb(dataForDB)
-
+  
     if (signMessage && targetUserId) {
       await processCreatePubPost({
         pubUri: pubUri,
@@ -126,7 +117,7 @@ export function UploadDialog() {
       })
     }
   }
-
+  
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       {!authenticated ? (
