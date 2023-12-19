@@ -1,9 +1,10 @@
 import Image from 'next/image'
-import { Stack, Typography, Card, Flex, Debug } from '@/design-system'
+import { Stack, Typography } from '@/design-system'
 import { Channel } from '@/gql'
 import { UploadDialog } from '@/client'
 import { ipfsUrlToCid, pinataUrlFromCid } from '@/lib'
-import { Username } from '@/server'
+import { Username, GenericThumbnailLarge } from '@/server'
+import { truncateText } from '@/utils'
 
 export async function ChannelBanner({
   channel,
@@ -20,20 +21,25 @@ export async function ChannelBanner({
   const cid = ipfsUrlToCid({ ipfsUrl: channelMetadata.image })
 
   return (
-    <Stack className="gap-6 md:flex-row md:h-full md:items-end">
-      {/* Column 1 */}
+    <Stack className="gap-4 md:gap-6 md:h-full ">
       <div className="relative">
-        <Image
-          className="object-cover w-full h-auto"
-          src={pinataUrlFromCid({ cid })}
-          alt={channelMetadata.name}
-          width={0}
-          height={0}
-          sizes="(min-width: 768px) 25vw, 100vw"
-        />
+        <>
+          {cid ? (
+            <Image
+              className="object-cover w-full h-[316px]"
+              src={pinataUrlFromCid({ cid })}
+              alt={channelMetadata.name}
+              width={0}
+              height={0}
+              sizes="(min-width: 768px) 25vw, 100vw"
+              priority={true}
+            />
+          ) : (
+            <GenericThumbnailLarge text={'?'} />
+          )}
+        </>
       </div>
-      {/* Column 2 */}
-      <Stack className="gap-5">
+      <Stack className="gap-4 px-[14px] md:gap-5 md:px-5">
         <Stack>
           <Typography variant="h2" className="text-black">
             {channelMetadata.name}
@@ -46,9 +52,14 @@ export async function ChannelBanner({
             )}
           </Typography>
         </Stack>
-        <Typography className="text-primary-foreground">
+        {/* tailwind based media query conditional renderering */}
+        <Typography className="hidden md:block text-primary-foreground">
           {channelMetadata.description}
         </Typography>
+        <Typography className="md:hidden text-primary-foreground">
+          {truncateText(channelMetadata.description, 90)}
+        </Typography>        
+        {/* tailwind based media query conditional renderering */}
         <UploadDialog />
       </Stack>
     </Stack>

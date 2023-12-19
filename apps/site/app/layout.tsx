@@ -1,20 +1,20 @@
-import { Analytics } from '@vercel/analytics/react'
-import type { Metadata } from 'next'
-import { fragmentMono } from './fonts/fonts'
-import { Providers } from './providers/providers'
-import { Header } from '@/client'
-import { Toaster } from 'sonner'
-import '../styles/globals.css'
+import { Analytics } from "@vercel/analytics/react";
+import type { Metadata } from "next";
+import { fragmentMono } from "./fonts/fonts";
+import { Providers } from "./providers/providers";
+import { Header } from "@/client";
+import { Toaster } from "sonner";
+import "../styles/globals.css";
 
 export const metadata: Metadata = {
-  title: 'River',
-  description: 'Set information free',
-}
+  title: "River",
+  description: "Set information free",
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en" className={`${fragmentMono.variable}`}>
@@ -31,5 +31,5 @@ export default function RootLayout({
         </Providers>
       </body>
     </html>
-  )
+  );
 }
