@@ -187,7 +187,7 @@ export function UploadDialog() {
     console.log( "ASSET ENDPOINT", assetEndpointForMux)
     if (isVideo({ mimeType: contentType }) || isAudio({ mimeType: contentType })) {
       const directUpload = await muxClient.Video.Uploads.create({
-        cors_origin: '*', 
+        cors_origin: 'https://river-site-git-jawn-muxsa-1ifeworld.vercel.app', 
         new_asset_settings: {
           input: assetEndpointForMux,
           playback_policy: 'public', 
