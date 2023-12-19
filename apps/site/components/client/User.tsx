@@ -16,7 +16,7 @@ export function User() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="link">{username}</Button>
+        <Button variant="link">{username ? username : "Logout"}</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-32" align="end">
         <DropdownMenuGroup>

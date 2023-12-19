@@ -16,14 +16,8 @@ export default defineConfig({
       project: '../river-contracts/lib/imp',
       include: [
         'IdRegistry.json',
-        'AttestationRegistry.json',
-        'DelegateRegistry.json',
         'PostGateway.json',
       ],
-    }),
-    foundry({
-      project: '../river-contracts/lib/light-account',
-      include: ['LightAccountFactory.json', 'LightAccount.json'],
     }),
   ],
   out: './abi/generated.ts',

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { PrivyProvider } from '@privy-io/react-auth'
-import { opGoerliViem } from '@/constants'
+import { river_j5bpjduqfv } from '@/config/customChainConfig'
 
 export function PrivyProviderWrapper({
   children,
@@ -21,7 +21,8 @@ export function PrivyProviderWrapper({
           requireUserPasswordOnCreate: false,
           noPromptOnSignature: true,
         },
-        defaultChain: opGoerliViem,
+        defaultChain: river_j5bpjduqfv,
+        supportedChains: [river_j5bpjduqfv]
       }}
     >
       {children}
