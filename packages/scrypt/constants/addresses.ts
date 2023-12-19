@@ -21,7 +21,7 @@ export const addresses: AddressBook = {
   // },
   postGateway: {
     opGoerli: '0x339513226Afd92B309837Bad402c6D3ADDE9Ad24',
-    river_j5bpjduqfv: '0xd35fF289853947472b22773E323D6239C32e1E7A',
+    river_j5bpjduqfv: '0x1B692589017d4b2276227b52cD3A2a1796cb2b86',
     //   arbGoerli: "0x",
     //   anvil: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
     // ... add more chains as needed

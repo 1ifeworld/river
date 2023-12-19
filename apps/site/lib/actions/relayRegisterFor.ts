@@ -53,7 +53,7 @@ export async function relayRegisterFor({
     await setUsername({
       registrationParameters: {
         id: String(userIdRegistered),
-        name: `${username}.sbvrsv.eth`,
+        name: username,
         owner: registerForRecipient,
       },
     });

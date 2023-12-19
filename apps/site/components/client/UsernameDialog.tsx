@@ -112,7 +112,6 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
 
   async function onSubmit(data: z.infer<typeof UsernameSchema>) {
 
-
     if (signMessage && embeddedWallet?.address) {
       console.log("running processRegisterFor")
       await processRegisterFor({
@@ -124,93 +123,6 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
     }
 
     setOpen(false)    
-
-    // alchemyProvider?.withAlchemyGasManager({
-    //   policyId: process.env.NEXT_PUBLIC_ALCHEMY_GAS_MANAGER_POLICY as string,
-    //   entryPoint: addresses.entryPoint.opGoerli,
-    // })
-
-    // const transactionHash = await registerAndDelegate({
-    //   from: smartAccountAddress as Hex,
-    //   provider: alchemyProvider as AlchemyProvider,
-    // })
-
-    // const transaction = await publicClient.waitForTransactionReceipt({
-    //   hash: transactionHash,
-    // })
-    // if (!embeddedWallet) return
-
-    // // if (!account) return
-    // await embeddedWallet.switchChain(36912);
-    // const ethereumProvider = await embeddedWallet.getEthereumProvider();
-    
-    // const walletClient = createWalletClient({      
-    //     account: getAddress(embeddedWallet.address),
-    //     chain: river_j5bpjduqfv,
-    //     transport: custom(ethereumProvider)
-    // });
-
-    // // const postInput = 
-
-
-    // const encodedRegisterCall = encodeFunctionData({
-    //   abi: idRegistryABI,
-    //   functionName: "register",
-    //   args: [
-    //     "0x33F59bfD58c16dEfB93612De65A5123F982F58bA", // backup
-    //     "0x", // message
-    //   ],
-    // });
-  
-    // const [account] = await walletClient.getAddresses()
-    // const idRegistry: Address = "0xF26F07040922992DF06091235A50872e31C85Ab8"
-  
-    // if (!walletClient.account) return
-  
-    // const request = walletClient.prepareTransactionRequest({
-    //   chain: river_j5bpjduqfv,
-    //   account: account,
-    //   to: idRegistry,
-    //   data: encodedRegisterCall
-    // })      
-
-    // await sendTransaction(request)
-
-    
-
-
-    // const account = embeddedWallet.getEthereumProvider()
-
-        // You can now use the ethereum.request({method: ...})
-    // syntax as documented in the EIP.
-  //   const getEthereumProvider = async () => {
-  //     // Initialize your Web3.js client with the provider
-  //     return await wallets[0]?.getEthereumProvider();
-  // }
-
-    // const provider = await embeddedWallet.getEthereumProvider();
-
-    // const request = provider.
-
-    // sendTransaction
-
-    // const request = await walletClient.prepareTransactionRequest({ 
-    //   to: '0x70997970c51812dc3a010c7d01b50e0d17dc79c8',
-    //   value: 1000000000000000000n
-    // })    
-
-    // const userIdRegistered = parseInt(
-    //   transaction.logs[6].topics[2] as string,
-    //   16,
-    // )
-
-    // await setUsername({
-    //   registrationParameters: {
-    //     id: String(userIdRegistered),
-    //     name: `${data.username}.sbvrsv.eth`,
-    //     owner: String(smartAccountAddress),
-    //   },
-    // })
   }
 
   return (

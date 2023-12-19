@@ -23,7 +23,7 @@ export default createConfig({
     PostGateway: {
       network: 'river_j5bpjduqfv',
       abi: postGatewayABI,
-      address: addresses.postGateway.river_j5bpjduqfv,
+      address: "0x1B692589017d4b2276227b52cD3A2a1796cb2b86",
       startBlock: 0,
     },
     // IdRegistry: {
