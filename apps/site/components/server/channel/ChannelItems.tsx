@@ -1,34 +1,29 @@
-import {
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-} from "@/design-system";
-import { Channel, Reference } from "@/gql";
-import { unixTimeConverter } from "@/utils";
-import { ThumbnailNameCreator } from "@/server";
-import { ItemDropdown } from "@/client";
-import Link from "next/link";
+import { Typography, Table, TableBody, TableCell } from '@/design-system'
+import { Channel, Reference } from '@/gql'
+import { unixTimeConverter } from '@/utils'
+import { ThumbnailNameCreator } from '@/server'
+import { ItemDropdown } from '@/client'
+import Link from 'next/link'
 
 function extractContentType({
   reference,
   metadata,
 }: {
-  reference: any;
-  metadata: any;
+  reference: any
+  metadata: any
 }) {
-  const referenceMetadata = metadata.data[reference.pubRef?.uri as string];
+  const referenceMetadata = metadata.data[reference.pubRef?.uri as string]
   return referenceMetadata?.contentType
     ? referenceMetadata.contentType
-    : "undefined";
+    : 'undefined'
 }
 
 export async function ChannelItems({
   channel,
   metadata,
 }: {
-  channel: Channel;
-  metadata: any;
+  channel: Channel
+  metadata: any
 }) {
   return (
     <div className="px-[14px] md:px-0 md:pr-5 pt-5 w-full">
@@ -69,5 +64,5 @@ export async function ChannelItems({
         </TableBody>
       </Table>
     </div>
-  );
+  )
 }

@@ -23,7 +23,7 @@ import {
   DataObject,
   sendToDb,
   isImage,
-  isText, 
+  isText,
   isGLB,
   isPdf,
   isVideo,
@@ -40,7 +40,6 @@ import { usePrivy } from '@privy-io/react-auth'
 import { muxClient } from '@/config/muxClient'
 import { FileList } from '@/server'
 import { uploadToMux } from '@/lib'
-
 
 export function UploadDialog() {
   const [dialogOpen, setDialogOpen] = React.useState(false)
@@ -64,39 +63,40 @@ export function UploadDialog() {
     const uploadedFileName = file.name || 'unnamed'
     const contentType = determineContentType(file)
     const uploadedFileCid = await uploadFile({ filesToUpload: [file] })
-  
+
     let pubUri: string
     let dataForDB: DataObject
     let contentTypeKey: number
-  
-    contentTypeKey = 
+
+    contentTypeKey =
       isVideo({ mimeType: contentType }) || isAudio({ mimeType: contentType })
         ? 2
         : isPdf({ mimeType: contentType }) || isGLB(file) || isText(file)
         ? 1
         : 0
-  
-    const animationUri = contentTypeKey === 2 || contentTypeKey === 1 ? uploadedFileCid : ''
+
+    const animationUri =
+      contentTypeKey === 2 || contentTypeKey === 1 ? uploadedFileCid : ''
     const imageUri = contentTypeKey === 0 ? uploadedFileCid : ''
-  
+
     const ipfsDataObject: IPFSDataObject = {
       name: uploadedFileName,
       description: 'Dynamic metadata based on timestamp',
       image: imageUri,
       animationUri: animationUri,
     }
-  
+
     pubUri = await uploadBlob({ dataToUpload: ipfsDataObject })
-  
+
     let muxAssetId = ''
     let muxPlaybackId = ''
-  
+
     if (contentTypeKey === 2) {
       const muxUploadResult = await uploadToMux(contentType, animationUri)
       muxAssetId = muxUploadResult.muxAssetId
       muxPlaybackId = muxUploadResult.muxPlaybackId
     }
-  
+
     dataForDB = {
       key: pubUri,
       value: {
@@ -106,9 +106,9 @@ export function UploadDialog() {
         muxPlaybackId: muxPlaybackId,
       },
     }
-  
+
     await sendToDb(dataForDB)
-  
+
     if (signMessage && targetUserId) {
       await processCreatePubPost({
         pubUri: pubUri,
@@ -118,7 +118,7 @@ export function UploadDialog() {
       })
     }
   }
-  
+
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       {!authenticated ? (

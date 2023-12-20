@@ -1,1 +1,1 @@
-export * from "./processRegisterFor"
+export * from './processRegisterFor'

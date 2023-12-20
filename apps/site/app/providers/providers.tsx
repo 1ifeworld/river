@@ -6,8 +6,8 @@ import { UserContextComponent } from '@/context'
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-      <PrivyProviderWrapper>
-        <UserContextComponent>{children}</UserContextComponent>
-      </PrivyProviderWrapper>
+    <PrivyProviderWrapper>
+      <UserContextComponent>{children}</UserContextComponent>
+    </PrivyProviderWrapper>
   )
 }
