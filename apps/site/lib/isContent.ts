@@ -15,6 +15,7 @@ export function isAudio({ mimeType }: { mimeType: string }) {
     'audio/aac',
     'audio/midi',
     'audio/x-midi',
+    'audio/x-m4a',
     'audio/mp3',
     'audio/ogg',
     'audio/opus',
