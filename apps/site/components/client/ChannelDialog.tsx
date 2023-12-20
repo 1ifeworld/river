@@ -72,6 +72,12 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
     },
   })
 
+  const resetFormAndFiles = () => {
+    form.reset()
+    setFilesToUpload([])
+    setShowFileList(false)
+  }
+
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       {!authenticated ? (
@@ -95,7 +101,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
               <Button variant="link">
                 <Typography>close</Typography>
               </Button>
-            </DialogClose>
+            </DialogClose>  
             {/* Channel form */}
             <Form {...form}>
               <form
@@ -140,6 +146,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                       privySignMessage: signMessage,
                     })
                   }
+                  resetFormAndFiles()
                   setDialogOpen(false)
                   // Render a toast with the name of the channel
                   toast.custom((t) => (

@@ -59,6 +59,11 @@ export function UploadDialog() {
     disabled: showFileList,
   })
 
+  const resetUploadState = () => {
+    setFilesToUpload([])
+    setShowFileList(false)
+  }
+
   const uploadAndProcessFile = async (file: File) => {
     const uploadedFileName = file.name || 'unnamed'
     const contentType = determineContentType(file)
@@ -153,6 +158,7 @@ export function UploadDialog() {
               action={async () => {
                 if (!targetUserId || filesToUpload.length === 0) return
                 await Promise.all(filesToUpload.map(uploadAndProcessFile))
+                resetUploadState()
                 setDialogOpen(false)
                 for (const [index, file] of filesToUpload.entries()) {
                   toast.custom((t) => (
