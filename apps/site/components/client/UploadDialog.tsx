@@ -124,13 +124,13 @@ export function UploadDialog() {
       {!authenticated ? (
         <div>
           <Button variant="link" onClick={login}>
-            + Add
+            +&nbsp;Item
           </Button>
         </div>
       ) : (
         <div>
           <DialogTrigger asChild>
-            <Button variant="link">+ Add</Button>
+            <Button variant="link">+&nbsp;Item</Button>
           </DialogTrigger>
         </div>
       )}
@@ -154,14 +154,14 @@ export function UploadDialog() {
                 if (!targetUserId || filesToUpload.length === 0) return
                 await Promise.all(filesToUpload.map(uploadAndProcessFile))
                 setDialogOpen(false)
-                filesToUpload.forEach((file, index) => {
+                for (const [index, file] of filesToUpload.entries()) {
                   toast.custom((t) => (
                     <Toast key={index}>
                       {'Successfully uploaded '}
                       <span className="font-bold">{file.name}</span>
                     </Toast>
                   ))
-                })
+                }
               }}
               {...getRootProps()}
             >
@@ -171,13 +171,15 @@ export function UploadDialog() {
                   <>
                     <input {...getInputProps()} />
                     {isDragActive ? (
-                      <Typography className="text-secondary-foreground min-h-[35px]'">
+                      <Typography className="text-muted-foreground min-h-[35px]'">
                         Drop your files here
                       </Typography>
                     ) : (
-                      <Typography className="hover:cursor-pointer text-secondary-foreground leading-1">
+                      <Typography className="hover:cursor-pointer text-muted-foreground leading-1">
                         Drag and drop your files here <br /> or click here to{' '}
-                        <span className="underline">browse</span>
+                        <span className="underline underline-offset-2">
+                          browse
+                        </span>
                       </Typography>
                     )}
                   </>

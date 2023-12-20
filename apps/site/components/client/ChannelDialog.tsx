@@ -21,6 +21,7 @@ import {
   FormMessage,
   Toast,
   Textarea,
+  Debug,
 } from '@/design-system'
 import {
   uploadBlob,
@@ -47,8 +48,6 @@ interface ChannelDialogProps {
 export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
   const [dialogOpen, setDialogOpen] = React.useState(false)
   const { signMessage, userId: targetUserId, embeddedWallet } = useUserContext()
-
-  const [showOptionalDetails, setShowOptionalDetails] = React.useState(false)
 
   /**
    * Dropzone hooks
@@ -77,11 +76,11 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       {!authenticated ? (
         <Button variant="link" onClick={login}>
-          New channel
+          +&nbsp;Channel
         </Button>
       ) : (
         <DialogTrigger asChild>
-          <Button variant="link">New channel</Button>
+          <Button variant="link">+&nbsp;Channel</Button>
         </DialogTrigger>
       )}
       <DialogPortal>
@@ -157,11 +156,9 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                   name="name"
                   render={({ field }) => (
                     <FormItem className="mx-5">
-                      {showOptionalDetails && (
-                        <FormLabel htmlFor="name">
-                          <Typography variant="small">Name</Typography>
-                        </FormLabel>
-                      )}
+                      <FormLabel htmlFor="name">
+                        <Typography variant="small">Name</Typography>
+                      </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Enter channel name..."
@@ -173,67 +170,62 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                     </FormItem>
                   )}
                 />
-                {showOptionalDetails ? (
-                  <>
-                    <FormField
-                      control={form.control}
-                      name="description"
-                      render={({ field }) => (
-                        <FormItem className="mx-5">
-                          <FormLabel htmlFor="description">
-                            <Typography variant="small">Description</Typography>
-                          </FormLabel>
-                          <FormControl>
-                            <Textarea
-                              placeholder="Write a description..."
-                              id="description"
-                              className="resize-none"
-                              rows={5}
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    {/* Dropzone */}
-                    <div className="mx-5" {...getRootProps()}>
-                      <FormLabel htmlFor="cover">
-                        <Typography variant="small">Cover</Typography>
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem className="mx-5">
+                      <FormLabel htmlFor="description">
+                        <Typography variant="small">Description</Typography>
                       </FormLabel>
-                      {!showFileList ? (
-                        <div className="border border-input bg-transparent text-center px-3 py-2">
-                          <input id="cover" {...getInputProps()} />
-
-                          {isDragActive ? (
-                            <Typography className="text-muted-foreground min-h-[35px]'">
-                              Drop your files here
-                            </Typography>
-                          ) : (
-                            <Typography className="hover:cursor-pointer text-muted-foreground leading-1">
-                              Drag and drop a cover image here or
-                              {'\u00A0'}
-                              <span className="underline">browse</span>
-                              {'\u00A0'}your local file system
-                            </Typography>
-                          )}
-                        </div>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Write a description..."
+                          id="description"
+                          className="resize-none"
+                          rows={5}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* Dropzone */}
+                <div className="mx-5" {...getRootProps()}>
+                  <FormLabel htmlFor="cover">
+                    <Typography variant="small">Cover</Typography>
+                  </FormLabel>
+                  {!showFileList ? (
+                    <div className="border border-border bg-transparent text-center px-3 py-1">
+                      <input id="cover" {...getInputProps()} />
+                      {isDragActive ? (
+                        <Typography
+                          variant="small"
+                          className="text-muted-foreground min-h-[35px] tracking-normal"
+                        >
+                          Drop your files here
+                        </Typography>
                       ) : (
-                        <Stack className="border border-input bg-transparent items-center text-center px-3 py-2">
-                          <FileList filesToUpload={filesToUpload} />
-                        </Stack>
+                        <Typography
+                          variant="small"
+                          className="hover:cursor-pointer text-muted-foreground tracking-normal"
+                        >
+                          Drag and drop a cover image here or
+                          {'\u00A0'}
+                          <span className="underline underline-offset-2">
+                            browse
+                          </span>
+                          {'\u00A0'}your local file system
+                        </Typography>
                       )}
                     </div>
-                  </>
-                ) : (
-                  <Button
-                    type="button"
-                    variant="link"
-                    onClick={() => setShowOptionalDetails(true)}
-                  >
-                    <Typography>Add a cover image or description</Typography>
-                  </Button>
-                )}
+                  ) : (
+                    <Stack className="border border-border bg-transparent items-center text-center px-3 py-2">
+                      <FileList filesToUpload={filesToUpload} />
+                    </Stack>
+                  )}
+                </div>
                 <Separator />
                 <DialogFooter className="flex flex-col py-2">
                   <SubmitButton
