@@ -1,13 +1,15 @@
 import MuxPlayer from '@mux/mux-player-react'
+import styles from './Player.module.css'
 
 export function AudioPlayer({ playbackId }: { playbackId: string }) {
   return (
     <MuxPlayer
       playbackId={playbackId}
       streamType="on-demand"
+      autoPlay="false"
       audio
-      primary-color="#111111"
-      secondary-color="#ffffff"
+      className={styles.muxPlayer}
+      accentColor="#5D5E5D"
     />
   )
 }

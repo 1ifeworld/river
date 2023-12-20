@@ -1,5 +1,5 @@
-export * from './AudioPlayer'
+export * from './MuxPlayer/AudioPlayer'
 export * from './ModelRenderer'
 export * from './PDFViewer'
-export * from './VideoPlayer'
+export * from './MuxPlayer/VideoPlayer'
 export * from './MarkdownRenderer'
