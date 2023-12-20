@@ -1,8 +1,8 @@
 import * as React from 'react'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
-import { Stack, Typography } from '@/design-system'
-import { getReferenceWithId, type Reference } from '@/gql'
+import { Stack, Typography, Flex } from '@/design-system'
+import { Channel, getReferenceWithId, type Reference } from '@/gql'
 import {
   ipfsUrlToCid,
   pinataUrlFromCid,
@@ -10,7 +10,8 @@ import {
   isPdf,
   isAudio,
   isImage,
-  isText
+  isText,
+  getChannelMetadata
 } from '@/lib'
 import { ContentWrapper, VideoPlayer, AudioPlayer } from '@/client'
 import { Username } from '@/server'
@@ -44,13 +45,17 @@ export default async function View({
     id: params.id,
   })
 
-  if (!reference) {
+  if (!reference || !reference.channel) {
     return <div>Not a valid item</div>
   }
 
+  const { metadata: channelMetadata } = await getChannelMetadata(reference.channel.uri)
   const { metadata } = await getReferenceMetadata(reference as Reference)
 
   const referenceMetadata = metadata.data[reference?.pubRef?.uri as string]
+  const chanMetadata = channelMetadata.data
+
+  console.log("chan metadata: ", chanMetadata)
 
   let contentUrl
 
@@ -106,21 +111,45 @@ export default async function View({
       content = <div>ji</div>
   }
   return (
-    <Stack className="h-[calc(100vh_-_56px)] justify-center items-center">
+    <Flex className="border-2 border-blue-400 h-[calc(100vh_-_56px)] justify-center items-center">
+      <Stack className="w-[300px] h-full border-2 border-yellow-500">
+        <ItemMetadata name={referenceMetadata.name} createdBy={reference.createdBy} createdTimestamp={reference.createdTimestamp} />
+        <ChannelIndex channel={reference.channel as Channel} metadata={chanMetadata} />
+  
+      </Stack>      
+
+
       <ContentWrapper
         item={reference}
         className="w-full h-[calc(100vh/1.5)] justify-center items-center relative"
       >
         {content}
       </ContentWrapper>
-      <Stack className="w-full items-center pt-2">
-        <Typography>{referenceMetadata.name}</Typography>
-        <Username id={reference.createdBy} />
-        <Typography className="text-secondary-foreground">
-          {unixTimeConverter(reference.createdTimestamp)}
-        </Typography>
-      </Stack>
+    </Flex>
+  )
+}
+
+function ChannelIndex({channel, metadata}: {channel: Channel, metadata: any}) {
+  console.log("data in here: ", metadata)
+  console.log("mname in here: ", metadata.name)
+  return (
+    <Stack>
+      <div>
+        More in {metadata.name}
+      </div>
     </Stack>
+  )
+}
+
+function ItemMetadata({name, createdBy, createdTimestamp}: {name: string, createdBy: bigint, createdTimestamp: number}) {
+  return (
+    <>
+        <Typography className='text-wrap'>{name}</Typography>
+        <Username id={createdBy} />
+        <Typography className="text-secondary-foreground">
+          {unixTimeConverter(createdTimestamp)}
+        </Typography>    
+    </>
   )
 }
 
