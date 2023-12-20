@@ -31,7 +31,7 @@ export async function ChannelItems({
         <TableBody>
           {channel.references.map((reference: Reference, index: number) => (
             <Link
-              className=" table-row hover:bg-divider hover:cursor-pointer"
+              className=" table-row hover:bg-divider hover:cursor-pointer transition-all"
               key={index}
               href={`/item/${reference.id}`}
             >
