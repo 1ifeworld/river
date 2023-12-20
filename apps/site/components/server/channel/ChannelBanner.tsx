@@ -21,7 +21,7 @@ export async function ChannelBanner({
   const cid = ipfsUrlToCid({ ipfsUrl: channelMetadata.image })
 
   return (
-    <Stack className="gap-4 md:gap-6 md:h-full ">
+    <Stack className="gap-4 md:gap-6 md:h-full w-[425px]">
       <div className="relative">
         <>
           {cid ? (
@@ -56,7 +56,7 @@ export async function ChannelBanner({
         <Typography className="hidden md:block text-primary-foreground">
           {channelMetadata.description}
         </Typography>
-        <Typography className="md:hidden text-primary-foreground">
+        <Typography className="md:hidden text-primary-foreground leading-none">
           {truncateText(channelMetadata.description, 90)}
         </Typography>        
         {/* tailwind based media query conditional renderering */}
