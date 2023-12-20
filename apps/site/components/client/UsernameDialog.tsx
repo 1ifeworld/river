@@ -15,10 +15,7 @@ import {
   Separator,
   Toast,
 } from '@/design-system'
-import {
-  checkUsernameAvailability,
-  processRegisterFor
-} from '@/lib'
+import { checkUsernameAvailability, processRegisterFor } from '@/lib'
 import { useUserContext } from '@/context'
 import { SubmitButton } from '@/client'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -34,7 +31,6 @@ interface UsernameDialogProps {
 }
 
 export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
-
   const UsernameSchema = z.object({
     username: z.string().min(2, {
       message: 'Username must be at least 2 characters.',
@@ -86,26 +82,25 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
   const { signMessage, embeddedWallet, fetchUserData } = useUserContext()
 
   async function onSubmit(data: z.infer<typeof UsernameSchema>) {
-
     if (signMessage && embeddedWallet?.address && fetchUserData) {
-      console.log("running processRegisterFor")
+      console.log('running processRegisterFor')
       await processRegisterFor({
         privySignerAddress: embeddedWallet.address,
         privySignMessage: signMessage,
-        username: `${data.username}.sbvrsv.eth`
+        username: `${data.username}.sbvrsv.eth`,
       })
-      console.log("finished processRegisterFor")
+      console.log('finished processRegisterFor')
       await fetchUserData()
     }
 
-    setOpen(false)    
-            
+    setOpen(false)
+
     toast.custom((t) => (
       <Toast>
         Welcome to River&nbsp;
         <span className="font-bold">{form.getValues().username}</span>
       </Toast>
-    ))            
+    ))
   }
 
   return (

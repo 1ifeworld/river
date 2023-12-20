@@ -8,7 +8,6 @@ export const publicClient = createPublicClient({
   transport: transport,
 })
 
-
 // const transport = http(
 //   `https://opt-goerli.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_KEY}`,
 // )
@@ -17,4 +16,3 @@ export const publicClient = createPublicClient({
 //   chain: opGoerliViem,
 //   transport: transport,
 // })
-

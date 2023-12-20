@@ -16,7 +16,6 @@ export function ThumbnailNameCreator({
   reference,
   metadata,
 }: ThumbnailNameCreatorProps) {
-
   const referenceMetadata = metadata.data[reference.pubRef?.uri as string]
 
   if (!referenceMetadata) {
@@ -40,33 +39,33 @@ export function ThumbnailNameCreator({
 
   return (
     <>
-        <>
-          {cid ? (
-            <Image
-              className="object-cover aspect-square "
-              src={pinataUrlFromCid({ cid })}
-              alt={referenceMetadata.name}
-              width={38}
-              height={38}
-            />
-          ) : (
-            <GenericThumbnailSmall
-              text={referenceMetadata.name ? referenceMetadata.name : '?'}
-            />
-          )}
-        </>
+      <>
+        {cid ? (
+          <Image
+            className="object-cover aspect-square "
+            src={pinataUrlFromCid({ cid })}
+            alt={referenceMetadata.name}
+            width={38}
+            height={38}
+          />
+        ) : (
+          <GenericThumbnailSmall
+            text={referenceMetadata.name ? referenceMetadata.name : '?'}
+          />
+        )}
+      </>
       <Stack>
         {/* <Link href={`/item/${reference.id}`}> */}
-          {/* <Button variant="link"> */}
-            {/* */}
-            <Typography className="md:hidden text-primary-foreground">
-              {truncateText(referenceMetadata.name, 35)}
-            </Typography>
-            <Typography className="hidden md:block text-primary-foreground leading-none">
-              {referenceMetadata.name}
-            </Typography>            
-            {/* */}
-          {/* </Button> */}
+        {/* <Button variant="link"> */}
+        {/* */}
+        <Typography className="md:hidden text-primary-foreground">
+          {truncateText(referenceMetadata.name, 35)}
+        </Typography>
+        <Typography className="hidden md:block text-primary-foreground leading-none">
+          {referenceMetadata.name}
+        </Typography>
+        {/* */}
+        {/* </Button> */}
         {/* </Link> */}
         <Username id={reference.createdBy} />
       </Stack>

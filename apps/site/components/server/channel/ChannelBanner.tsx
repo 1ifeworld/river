@@ -58,7 +58,7 @@ export async function ChannelBanner({
         </Typography>
         <Typography className="md:hidden text-primary-foreground leading-none">
           {truncateText(channelMetadata.description, 90)}
-        </Typography>        
+        </Typography>
         {/* tailwind based media query conditional renderering */}
         <UploadDialog />
       </Stack>
