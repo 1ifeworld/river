@@ -1,5 +1,7 @@
-export * from './MuxPlayer/AudioPlayer'
+// Subdirectories
+export * from './MuxPlayer'
+
+// Individual components
 export * from './ModelRenderer'
 export * from './PDFViewer'
-export * from './MuxPlayer/VideoPlayer'
 export * from './MarkdownRenderer'
