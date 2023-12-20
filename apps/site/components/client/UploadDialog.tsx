@@ -154,14 +154,14 @@ export function UploadDialog() {
                 if (!targetUserId || filesToUpload.length === 0) return
                 await Promise.all(filesToUpload.map(uploadAndProcessFile))
                 setDialogOpen(false)
-                filesToUpload.forEach((file, index) => {
+                for (const [index, file] of filesToUpload.entries()) {
                   toast.custom((t) => (
                     <Toast key={index}>
                       {'Successfully uploaded '}
                       <span className="font-bold">{file.name}</span>
                     </Toast>
                   ))
-                })
+                }
               }}
               {...getRootProps()}
             >

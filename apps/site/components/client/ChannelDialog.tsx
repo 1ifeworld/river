@@ -21,6 +21,7 @@ import {
   FormMessage,
   Toast,
   Textarea,
+  Debug,
 } from '@/design-system'
 import {
   uploadBlob,
@@ -202,7 +203,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                         <Typography variant="small">Cover</Typography>
                       </FormLabel>
                       {!showFileList ? (
-                        <div className="border border-input bg-transparent text-center px-3 py-2">
+                        <div className="border border-border bg-transparent text-center px-3 py-2">
                           <input id="cover" {...getInputProps()} />
 
                           {isDragActive ? (
@@ -219,7 +220,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                           )}
                         </div>
                       ) : (
-                        <Stack className="border border-input bg-transparent items-center text-center px-3 py-2">
+                        <Stack className="border border-border bg-transparent items-center text-center px-3 py-2">
                           <FileList filesToUpload={filesToUpload} />
                         </Stack>
                       )}
