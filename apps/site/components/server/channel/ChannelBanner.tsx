@@ -21,7 +21,7 @@ export async function ChannelBanner({
   const cid = ipfsUrlToCid({ ipfsUrl: channelMetadata.image })
 
   return (
-    <Stack className="gap-4 md:gap-6 md:h-full md:w-[425px]">
+    <Stack className="gap-4 md:gap-6 md:h-full md:w-[425px] -mx-5">
       <div className="relative">
         <>
           {cid ? (

@@ -133,11 +133,22 @@ export function UploadDialog() {
           </Button>
         </div>
       ) : (
-        <div>
-          <DialogTrigger asChild>
-            <Button variant="link">+&nbsp;Item</Button>
-          </DialogTrigger>
-        </div>
+        // <div>
+        //   <DialogTrigger asChild>
+        //     <Button variant="link">+&nbsp;Item</Button>
+        //   </DialogTrigger>
+        // </div>
+
+        <Flex className="gap-4 items-center">
+    <Stack className="w-10 h-10 bg-background border border-border justify-center items-center hover:bg-primary/[0.025] transition-all">
+      <Typography variant="h1">
+      +
+      </Typography>
+      </Stack>
+      <Button variant="link">
+        Add an item
+    </Button>
+    </Flex>
       )}
       <DialogPortal>
         <DialogContent className="sm:max-w-[425px] aspect-square focus:outline-none">
