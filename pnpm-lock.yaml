@@ -136,6 +136,9 @@ importers:
       graphql-tag:
         specifier: ^2.12.6
         version: 2.12.6(graphql@16.8.0)
+      lucide-react:
+        specifier: ^0.299.0
+        version: 0.299.0(react@18.2.0)
       next:
         specifier: 14.0.1
         version: 14.0.1(@babel/core@7.23.6)(react-dom@18.2.0)(react@18.2.0)
@@ -9455,6 +9458,14 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       yallist: 4.0.0
+    dev: false
+
+  /lucide-react@0.299.0(react@18.2.0):
+    resolution: {integrity: sha512-59MiDzDzFI/efHhb4n0vGdXelMNwou7JlAFvVS4boA1G/7aYU7garPciYo73CODzkhrhz0JOgdtSTPSe5dMrlQ==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /maath@0.9.0(@types/three@0.159.0)(three@0.159.0):

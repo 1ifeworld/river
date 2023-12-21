@@ -1,9 +1,9 @@
-import { hashMessage, Hash, encodePacked, keccak256, toBytes } from "viem";
+import { hashMessage, Hash, encodePacked, keccak256, toBytes } from 'viem'
 
 export function registerForHash({ expiration }: { expiration: bigint }) {
   const REGISTER_FOR_TYPEHASH = keccak256(
-    toBytes("Register(address to,address backup,uint256 deadline)")
-  );
+    toBytes('Register(address to,address backup,uint256 deadline)'),
+  )
 
   // console.log(
   //   "hash pre eip191: ",
@@ -23,7 +23,7 @@ export function registerForHash({ expiration }: { expiration: bigint }) {
   //   })
   // );
 
-  return  keccak256(
-      encodePacked(["bytes32", "uint256"], [REGISTER_FOR_TYPEHASH, expiration])
-  );
+  return keccak256(
+    encodePacked(['bytes32', 'uint256'], [REGISTER_FOR_TYPEHASH, expiration]),
+  )
 }

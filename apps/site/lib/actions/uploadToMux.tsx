@@ -45,9 +45,9 @@ export const uploadToMux = async (
 
   let muxUpload
   let attempts = 0
-  const maxAttempts = 20
+  const maxAttempts = 40
   while ((!muxUpload || !muxUpload.asset_id) && attempts < maxAttempts) {
-    await new Promise((resolve) => setTimeout(resolve, 5000))
+    await new Promise((resolve) => setTimeout(resolve, 8000))
     try {
       muxUpload = await muxClient.Video.Uploads.get(directUpload.id)
       if (muxUpload.status === 'asset_created') {

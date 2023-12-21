@@ -101,7 +101,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
               <Button variant="link">
                 <Typography>close</Typography>
               </Button>
-            </DialogClose>  
+            </DialogClose>
             {/* Channel form */}
             <Form {...form}>
               <form

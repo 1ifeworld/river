@@ -5,7 +5,7 @@ ponder.on('IdRegistry:Register', async ({ event, context }) => {
   const {
     // IdRegistry,
     User,
-    Txn
+    Txn,
   } = context.db
   const { to, id, backup, data } = event.args
 
@@ -32,7 +32,7 @@ ponder.on('IdRegistry:Register', async ({ event, context }) => {
       'processing complete. processed txn hash: ',
       event.transaction.hash,
     )
-  }  
+  }
 
   // await IdRegistry.create({
   //   id: `420/${to}/${id}`,
