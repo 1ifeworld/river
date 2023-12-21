@@ -36,7 +36,7 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
     <div className="flex justify-center items-center my-4">
       <div
         className="overflow-auto"
-        style={{ height: '70 vh', maxWidth: '100vw' }}
+        style={{ height: '70vh', maxWidth: '100vw' }}
       >
         <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
           {Array.from(new Array(numPages), (el, index) => (
