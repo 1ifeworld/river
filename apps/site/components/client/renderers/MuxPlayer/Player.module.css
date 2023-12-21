@@ -1,9 +1,9 @@
 .muxPlayer {
-  --dialog: none;
-  --seek-backward-button: none;
-  --seek-forward-button: none;
-  --playback-rate-button:none;
-  --rendition-selectmenu: none;
-  --time-display: none;
-  --pip-button: none;
+  --dialog: none
+  --seek-backward-button: none
+  --seek-forward-button: none
+  --playback-rate-button:none
+  --rendition-selectmenu: none
+  --time-display: none
+  --pip-button: none
 }
