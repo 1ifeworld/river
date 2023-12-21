@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { cn } from '@/design-system'
+import Link from 'next/link'
 
 const Table = React.forwardRef<
   HTMLTableElement,
@@ -113,5 +114,5 @@ export {
   TableHead,
   TableRow,
   TableCell,
-  TableCaption,
+  TableCaption
 }
