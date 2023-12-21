@@ -3,13 +3,12 @@
 import React, { Suspense, useRef, useEffect } from 'react'
 import {
   useGLTF,
-  Environment,
   OrbitControls,
   PerspectiveCamera,
   useProgress,
   Html,
 } from '@react-three/drei'
-import { Canvas, useThree } from '@react-three/fiber'
+import { Canvas } from '@react-three/fiber'
 import { GLTF as GLTFThree } from 'three/examples/jsm/loaders/GLTFLoader'
 import * as THREE from 'three'
 
