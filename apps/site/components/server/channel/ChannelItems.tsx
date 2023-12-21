@@ -1,4 +1,4 @@
-import { Typography, Table, TableBody, TableCell } from '@/design-system'
+import { Typography, Table, TableBody, TableCell, TableRow } from '@/design-system'
 import { Channel, Reference } from '@/gql'
 import { unixTimeConverter } from '@/utils'
 import { ThumbnailNameCreator } from '@/server'
@@ -26,15 +26,15 @@ export async function ChannelItems({
   metadata: any
 }) {
   return (
-    <div className="px-[14px] md:px-0 md:pr-5 pt-5 w-full">
       <Table className="w-full">
         <TableBody>
           {channel.references.map((reference: Reference, index: number) => (
-            <Link
-              className=" table-row hover:bg-divider hover:cursor-pointer transition-all"
-              key={index}
-              href={`/item/${reference.id}`}
-            >
+            // <Link
+            //   className=" table-row hover:bg-divider hover:cursor-pointer transition-all"
+            //   key={index}
+            //   href={`/item/${reference.id}`}
+            // >
+            <TableRow key={index}>
               <TableCell className="flex gap-4 items-center text-primary-foreground">
                 <ThumbnailNameCreator
                   channel={channel}
@@ -59,10 +59,10 @@ export async function ChannelItems({
                   targetReferenceId={reference.id}
                 />
               </TableCell>
-            </Link>
+              </TableRow>
+            // </Link>
           ))}
         </TableBody>
       </Table>
-    </div>
   )
 }

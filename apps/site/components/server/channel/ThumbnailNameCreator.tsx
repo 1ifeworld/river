@@ -25,8 +25,8 @@ export function ThumbnailNameCreator({
           className="object-cover aspect-square "
           src={''}
           alt={''}
-          width={38}
-          height={38}
+          width={40}
+          height={40}
         />
         <Stack className="">
           <Typography className="text-primary-foreground">{''}</Typography>
@@ -45,8 +45,8 @@ export function ThumbnailNameCreator({
             className="object-cover aspect-square "
             src={pinataUrlFromCid({ cid })}
             alt={referenceMetadata.name}
-            width={38}
-            height={38}
+            width={40}
+            height={40}
           />
         ) : (
           <GenericThumbnailSmall
