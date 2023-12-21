@@ -1,12 +1,12 @@
-import { Stack, Typography, cn } from "@/design-system";
-import { truncateText, unixTimeConverter } from "@/utils";
-import { Username } from "@/server";
-import { Reference } from "@/gql";
+import { Stack, Typography, cn } from '@/design-system'
+import { truncateText, unixTimeConverter } from '@/utils'
+import { Username } from '@/server'
+import { Reference } from '@/gql'
 
 interface MobileItemStubProps {
-  reference: Reference;
-  referenceMetadata: any;
-  className?: string;
+  reference: Reference
+  referenceMetadata: any
+  className?: string
 }
 
 export function MobileItemStub({
@@ -26,5 +26,5 @@ export function MobileItemStub({
         {unixTimeConverter(reference.pubRef?.createdTimestamp)}
       </Typography>
     </Stack>
-  );
+  )
 }

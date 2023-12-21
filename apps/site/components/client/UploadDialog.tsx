@@ -39,6 +39,7 @@ import { useParams } from 'next/navigation'
 import { usePrivy } from '@privy-io/react-auth'
 import { muxClient } from '@/config/muxClient'
 import { FileList } from '@/server'
+import { X } from 'lucide-react'
 import { uploadToMux } from '@/lib'
 
 export function UploadDialog() {
@@ -49,15 +50,28 @@ export function UploadDialog() {
   const { signMessage, userId: targetUserId } = useUserContext()
   const params = useParams()
 
-  const onDrop = React.useCallback((filesToUpload: File[]) => {
-    setShowFileList(true)
-    setFilesToUpload(filesToUpload)
-  }, [])
+  const onDrop = React.useCallback(
+    (acceptedFiles: File[]) => {
+      // Taking only the first file if no file has been uploaded yet
+      if (filesToUpload.length === 0 && acceptedFiles.length > 0) {
+        setShowFileList(true)
+        setFilesToUpload([acceptedFiles[0]])
+      }
+    },
+    [filesToUpload],
+  )
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    disabled: showFileList,
+    disabled: filesToUpload.length > 0, // Disable dropzone if a file is already uploaded
   })
+
+  const handleRemoveFile = (index: number) => {
+    setFilesToUpload((currentFiles) =>
+      currentFiles.filter((_, i) => i !== index),
+    )
+    setShowFileList(false)
+  }
 
   const resetUploadState = () => {
     setFilesToUpload([])
@@ -173,7 +187,7 @@ export function UploadDialog() {
             >
               <Stack className="gap-[132px]">
                 <Separator />
-                {!showFileList ? (
+                {filesToUpload.length === 0 ? (
                   <>
                     <input {...getInputProps()} />
                     {isDragActive ? (
@@ -182,7 +196,7 @@ export function UploadDialog() {
                       </Typography>
                     ) : (
                       <Typography className="hover:cursor-pointer text-muted-foreground leading-1">
-                        Drag and drop your files here <br /> or click here to{' '}
+                        Drag and drop your file here <br /> or click here to{' '}
                         <span className="underline underline-offset-2">
                           browse
                         </span>
@@ -190,7 +204,23 @@ export function UploadDialog() {
                     )}
                   </>
                 ) : (
-                  <FileList filesToUpload={filesToUpload} />
+                  <div className="flex items-center justify-between p-2 rounded-lg">
+                    <div className="flex-1 truncate pr-4">
+                      <span
+                        className="text-sm font-medium text-gray-700"
+                        title={filesToUpload[0].name}
+                      >
+                        {filesToUpload[0].name}
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => handleRemoveFile(0)}
+                      className="ml-2 flex-shrink-0 text-black-500 hover:bg-red-100 rounded-full p-1"
+                      aria-label="Remove file"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
                 )}
                 <Separator />
               </Stack>
@@ -199,7 +229,7 @@ export function UploadDialog() {
                   form="newUpload"
                   type="submit"
                   variant="link"
-                  disabled={!targetUserId || !showFileList}
+                  disabled={!targetUserId || filesToUpload.length === 0}
                 >
                   Confirm
                 </SubmitButton>

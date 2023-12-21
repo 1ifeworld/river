@@ -8,7 +8,6 @@ export function VideoPlayer({ playbackId }: { playbackId: string }) {
       streamType="on-demand"
       autoPlay="false"
       className={styles.muxPlayer}
-      accentColor="#5D5E5D"
     />
   )
 }

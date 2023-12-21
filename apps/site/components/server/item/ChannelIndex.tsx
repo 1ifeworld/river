@@ -1,17 +1,17 @@
-import Link from "next/link";
-import { Stack, Flex, Typography, cn } from "@/design-system";
-import { Reference, Channel } from "@/gql";
-import { Username } from "@/server";
-import { truncateText } from "@/utils";
+import Link from 'next/link'
+import { Stack, Flex, Typography, cn } from '@/design-system'
+import { Reference, Channel } from '@/gql'
+import { Username } from '@/server'
+import { truncateText } from '@/utils'
 
 interface ChannelIndexProps {
-  reference: Reference  
+  reference: Reference
   channel: Channel
   referenceMetadata: any
   channelMetadata: any
   channelRefsMetadata: any
   showTop: boolean
-  className?: string;
+  className?: string
 }
 
 export function ChannelIndex({
@@ -21,27 +21,27 @@ export function ChannelIndex({
   channelMetadata,
   channelRefsMetadata,
   className,
-  showTop
+  showTop,
 }: ChannelIndexProps) {
   return (
     <Stack className={`${cn(className)} h-full gap-y-8`}>
       {/* pinned to top */}
       {showTop ? (
-      <Stack>
-        <Typography className="text-black leading-0">
-          {truncateText(referenceMetadata.name, 25)}
-        </Typography>
-        <Flex className="items-center">
-          <Username id={reference.pubRef?.createdBy} />
-          <span className="text-secondary-foreground">{"·"}</span>
-          <Link className="hover:underline" href={`/channel/${channel.id}`}>
-            <Typography className="text-secondary-foreground leading-0">
-              {truncateText(channelMetadata.name, 20)}
-            </Typography>
-          </Link>
-        </Flex>
-      </Stack>
-      ):(
+        <Stack>
+          <Typography className="text-black leading-0">
+            {truncateText(referenceMetadata.name, 25)}
+          </Typography>
+          <Flex className="items-center">
+            <Username id={reference.pubRef?.createdBy} />
+            <span className="text-secondary-foreground">{'·'}</span>
+            <Link className="hover:underline" href={`/channel/${channel.id}`}>
+              <Typography className="text-secondary-foreground leading-0">
+                {truncateText(channelMetadata.name, 20)}
+              </Typography>
+            </Link>
+          </Flex>
+        </Stack>
+      ) : (
         <></>
       )}
       {/* scrollable under index */}
@@ -58,17 +58,17 @@ export function ChannelIndex({
         </Stack>
       </Stack>
     </Stack>
-  );
+  )
 }
 
 export function ItemListView({
   reference,
   metadata,
 }: {
-  reference: Reference;
-  metadata: any;
+  reference: Reference
+  metadata: any
 }) {
-  const referenceMetadata = metadata.data[reference.pubRef?.uri as string];
+  const referenceMetadata = metadata.data[reference.pubRef?.uri as string]
   return (
     <Link
       className="flex flex-col hover:bg-divider hover:cursor-pointer"
@@ -79,5 +79,5 @@ export function ItemListView({
       </Typography>
       <Username id={reference.pubRef?.createdBy} />
     </Link>
-  );
+  )
 }

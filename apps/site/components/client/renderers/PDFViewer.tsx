@@ -60,7 +60,7 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
           padding: 0 !important
         }
         .page-container {
-          margin-bottom: 10px /* Minimal margin between pages */
+          margin-bottom: 10px 
         }
       `}</style>
     </div>

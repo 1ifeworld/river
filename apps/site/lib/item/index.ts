@@ -1,1 +1,1 @@
-export * from "./itemPageFetchers"
+export * from './itemPageFetchers'
