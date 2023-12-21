@@ -15,7 +15,11 @@ import {
   Separator,
   Toast,
 } from '@/design-system'
-import { checkUsernameAvailability, processRegisterFor } from '@/lib'
+import {
+  checkUsernameAvailability,
+  processRegisterFor,
+  usernameSchema,
+} from '@/lib'
 import { useUserContext } from '@/context'
 import { SubmitButton } from '@/client'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -31,21 +35,13 @@ interface UsernameDialogProps {
 }
 
 export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
-  const UsernameSchema = z.object({
-    username: z.string().min(2, {
-      message: 'Username must be at least 2 characters.',
-    }),
-  })
-
-  const form = useForm<z.infer<typeof UsernameSchema>>({
-    resolver: zodResolver(UsernameSchema),
+  const form = useForm<z.infer<typeof usernameSchema>>({
+    resolver: zodResolver(usernameSchema),
     defaultValues: {
       username: '',
     },
   })
 
-  // Unused
-  const [isCheckingUsername, setIsCheckingUsername] = useState<boolean>(false)
   const [usernameExists, setUsernameExists] = useState<boolean | null>()
   const [checkState, setCheckState] = useState({
     isChecking: false,
@@ -81,7 +77,7 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
 
   const { signMessage, embeddedWallet, fetchUserData } = useUserContext()
 
-  async function onSubmit(data: z.infer<typeof UsernameSchema>) {
+  async function onSubmit(data: z.infer<typeof usernameSchema>) {
     if (signMessage && embeddedWallet?.address && fetchUserData) {
       console.log('running processRegisterFor')
       await processRegisterFor({
@@ -131,7 +127,6 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                         Username not available, please try another
                       </FormMessage>
                     )}
-
                     <FormMessage />
                   </FormItem>
                 )}
