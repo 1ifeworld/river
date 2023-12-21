@@ -27,9 +27,7 @@ export function ItemDropdown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="focus:outline-none">
-        <Typography variant="h2">
-        {'...'}
-        </Typography>
+        <Typography variant="h2">{'...'}</Typography>
       </DropdownMenuTrigger>
       <DropdownMenuPortal>
         <DropdownMenuContent side="bottom" className="w-32 mx-4 md:mx-6">
