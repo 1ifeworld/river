@@ -27,7 +27,8 @@
     "rules": {
       "recommended": true,
       "suspicious": {
-        "noRedeclare": "off"
+        "noRedeclare": "off",
+        "noArrayIndexKey": "off"
       },
       "complexity": {
         "useOptionalChain": "off",
@@ -35,6 +36,9 @@
       },
       "correctness": {
         "useExhaustiveDependencies": "off"
+      },
+      "a11y": {
+        "noSvgWithoutTitle": "off"
       }
     },
     "ignore": [
