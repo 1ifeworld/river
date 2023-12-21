@@ -1,7 +1,6 @@
 import * as React from 'react'
 
 import { cn } from '@/design-system'
-import Link from 'next/link'
 
 const Table = React.forwardRef<
   HTMLTableElement,
@@ -43,7 +42,7 @@ const TableFooter = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <tfoot
     ref={ref}
-    className={cn(' bg-muted/50 font-medium [&>tr]:last:border-b-0', className)}
+    className={cn('bg-muted/50 font-medium [&>tr]:last:border-b-0', className)}
     {...props}
   />
 ))
@@ -86,7 +85,7 @@ const TableCell = React.forwardRef<
   <td
     ref={ref}
     className={cn(
-      'align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]',
+      'p-0 py-[5px] align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]',
       className,
     )}
     {...props}

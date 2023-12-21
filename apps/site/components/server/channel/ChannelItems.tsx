@@ -1,9 +1,17 @@
-import { Typography, Table, TableBody, TableCell, TableRow } from '@/design-system'
+import {
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  Debug,
+} from '@/design-system'
 import { Channel, Reference } from '@/gql'
 import { unixTimeConverter } from '@/utils'
 import { ThumbnailNameCreator } from '@/server'
 import { ItemDropdown } from '@/client'
 import Link from 'next/link'
+import styles from './ChannelItems.module.css'
 
 function extractContentType({
   reference,
@@ -26,28 +34,26 @@ export async function ChannelItems({
   metadata: any
 }) {
   return (
-      <Table className="w-full">
-        <TableBody>
-          {channel.references.map((reference: Reference, index: number) => (
-            // <Link
-            //   className=" table-row hover:bg-divider hover:cursor-pointer transition-all"
-            //   key={index}
-            //   href={`/item/${reference.id}`}
-            // >
-            <TableRow key={index}>
-              <TableCell className="flex gap-4 items-center text-primary-foreground">
+    <Table className="md:ml-2">
+      <TableBody>
+        {channel.references.map((reference: Reference, index: number) => (
+          <Link key={index} href={`/item/${reference.id}`} legacyBehavior>
+            <TableRow className={`${styles.tableRow} hover:cursor-pointer`}>
+              <TableCell className="flex gap-4 items-center">
                 <ThumbnailNameCreator
                   channel={channel}
                   reference={reference}
                   metadata={metadata}
                 />
               </TableCell>
+              {/* This component is hidden on small screens */}
               <TableCell className="hidden md:table-cell text-right text-primary-foreground">
                 <Typography>{`${extractContentType({
                   reference: reference,
                   metadata: metadata,
                 })}`}</Typography>
               </TableCell>
+              {/* This component is hidden on small screens */}
               <TableCell className="hidden md:table-cell text-right text-primary-foreground">
                 <Typography>
                   {unixTimeConverter(reference.createdTimestamp)}
@@ -59,10 +65,17 @@ export async function ChannelItems({
                   targetReferenceId={reference.id}
                 />
               </TableCell>
-              </TableRow>
-            // </Link>
-          ))}
-        </TableBody>
-      </Table>
+            </TableRow>
+          </Link>
+        ))}
+      </TableBody>
+    </Table>
   )
+}
+
+{
+  /* <Link
+              key={index}
+              href={`/item/${reference.id}`}
+            /> */
 }

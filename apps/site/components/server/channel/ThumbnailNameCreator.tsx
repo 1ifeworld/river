@@ -1,9 +1,10 @@
-import Image from 'next/image'
 import { type Reference, type Channel } from '@/gql'
-import { Stack, Typography } from '@/design-system'
+import { Stack, Typography, Button } from '@/design-system'
 import { GenericThumbnailSmall, Username } from '@/server'
 import { ipfsUrlToCid, pinataUrlFromCid } from '@/lib'
 import { truncateText } from '@/utils'
+import Image from 'next/image'
+import Link from 'next/link'
 
 interface ThumbnailNameCreatorProps {
   channel: Channel
@@ -39,32 +40,30 @@ export function ThumbnailNameCreator({
 
   return (
     <>
-      <>
-        {cid ? (
-          <Image
-            className="object-cover aspect-square "
-            src={pinataUrlFromCid({ cid })}
-            alt={referenceMetadata.name}
-            width={40}
-            height={40}
-          />
-        ) : (
-          <GenericThumbnailSmall
-            text={referenceMetadata.name ? referenceMetadata.name : '?'}
-          />
-        )}
-      </>
+      {cid ? (
+        <Image
+          className="object-cover aspect-square "
+          src={pinataUrlFromCid({ cid })}
+          alt={referenceMetadata.name}
+          width={40}
+          height={40}
+        />
+      ) : (
+        <GenericThumbnailSmall
+          text={referenceMetadata.name ? referenceMetadata.name : '?'}
+        />
+      )}
       <Stack>
         {/* <Link href={`/item/${reference.id}`}> */}
         {/* <Button variant="link"> */}
-        {/* */}
+        {/* This component is hidden on large screens */}
         <Typography className="md:hidden text-primary-foreground">
           {truncateText(referenceMetadata.name, 35)}
         </Typography>
+        {/* This component is hidden on small screens */}
         <Typography className="hidden md:block text-primary-foreground leading-none">
           {referenceMetadata.name}
         </Typography>
-        {/* */}
         {/* </Button> */}
         {/* </Link> */}
         <Username id={reference.createdBy} />
