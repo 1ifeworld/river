@@ -21,7 +21,14 @@ query referenceWithId($id: BigInt!) {
         id
         createdTimestamp
         createdBy
+        channelId
+        pubRef {
+          id
+          createdTimestamp
+          createdBy
+          uri
+        }
       }
-    }    
+    }
   }
 }

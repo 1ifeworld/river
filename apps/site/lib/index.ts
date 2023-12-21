@@ -4,7 +4,7 @@ export * from './posts'
 export * from './register'
 export * from './schemas'
 export * from './username'
-export * from './channels'
+export * from './item'
 
 // Individual components
 export * from './determineContentType'
