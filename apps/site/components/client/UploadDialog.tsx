@@ -172,7 +172,6 @@ export function UploadDialog() {
               action={async () => {
                 if (!targetUserId || filesToUpload.length === 0) return
                 await Promise.all(filesToUpload.map(uploadAndProcessFile))
-                resetUploadState()
                 setDialogOpen(false)
                 for (const [index, file] of filesToUpload.entries()) {
                   toast.custom((t) => (
@@ -181,6 +180,7 @@ export function UploadDialog() {
                       <span className="font-bold">{file.name}</span>
                     </Toast>
                   ))
+                  resetUploadState()
                 }
               }}
               {...getRootProps()}
