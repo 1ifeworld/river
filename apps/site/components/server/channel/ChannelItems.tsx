@@ -1,4 +1,4 @@
-import { Typography, Table, TableBody, TableCell } from '@/design-system'
+import { Typography, Table, TableBody, TableCell, TableRow, Stack, Button, Flex } from '@/design-system'
 import { Channel, Reference } from '@/gql'
 import { unixTimeConverter } from '@/utils'
 import { ThumbnailNameCreator } from '@/server'
@@ -18,6 +18,22 @@ function extractContentType({
     : 'undefined'
 }
 
+function WhiteSquare(){
+  return (
+    <Flex className="gap-4 items-center">
+    <Stack className="w-10 h-10 bg-background border border-border justify-center items-center hover:bg-primary/[0.025] transition-all">
+      <Typography variant="h1">
+      +
+      </Typography>
+      </Stack>
+      <Button variant="link">
+        Add an item
+    </Button>
+    </Flex>
+  )
+}
+
+
 export async function ChannelItems({
   channel,
   metadata,
@@ -26,15 +42,17 @@ export async function ChannelItems({
   metadata: any
 }) {
   return (
-    <div className="px-[14px] md:px-0 md:pr-5 pt-5 w-full">
+    // <div className="px-[14px] md:px-0 md:pr-5 pt-5 w-full">
       <Table className="w-full">
         <TableBody>
+          <WhiteSquare />
           {channel.references.map((reference: Reference, index: number) => (
-            <Link
-              className=" table-row hover:bg-divider hover:cursor-pointer transition-all"
-              key={index}
-              href={`/item/${reference.id}`}
-            >
+            // <Link
+            //   className=" table-row hover:bg-divider hover:cursor-pointer transition-all"
+            //   key={index}
+            //   href={`/item/${reference.id}`}
+            // >
+            <TableRow>
               <TableCell className="flex gap-4 items-center text-primary-foreground">
                 <ThumbnailNameCreator
                   channel={channel}
@@ -59,10 +77,11 @@ export async function ChannelItems({
                   targetReferenceId={reference.id}
                 />
               </TableCell>
-            </Link>
+              </TableRow>
+            // </Link>
           ))}
         </TableBody>
       </Table>
-    </div>
+    // </div>
   )
 }
