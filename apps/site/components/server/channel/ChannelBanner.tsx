@@ -14,7 +14,9 @@ export async function ChannelBanner({
 
   if (!channelMetadata) {
     return (
-      <Stack className="pt-[72px] gap-14">This is not a valid channel :/</Stack>
+      <Stack className="pt-16 gap-14">
+        <Typography>This is not a valid channel</Typography>/
+      </Stack>
     )
   }
 
@@ -22,7 +24,8 @@ export async function ChannelBanner({
 
   return (
     <Stack className="gap-4 md:gap-6 md:h-full md:w-[425px]">
-      <div className="relative">
+      {/* The negative margin allows cover images to reach the edges of the screen */}
+      <div className="relative -mx-5">
         <>
           {cid ? (
             <Image
@@ -39,7 +42,7 @@ export async function ChannelBanner({
           )}
         </>
       </div>
-      <Stack className="gap-4 px-[14px] md:gap-5 md:px-5">
+      <Stack className="gap-4 md:gap-5">
         <Stack>
           <Typography variant="h2" className="text-black">
             {channelMetadata.name}
@@ -52,14 +55,14 @@ export async function ChannelBanner({
             )}
           </Typography>
         </Stack>
-        {/* tailwind based media query conditional renderering */}
+        {/* This component is hidden on small screens */}
         <Typography className="hidden md:block text-primary-foreground">
           {channelMetadata.description}
         </Typography>
+        {/* This component is hidden on large screens */}
         <Typography className="md:hidden text-primary-foreground leading-none">
           {truncateText(channelMetadata.description, 90)}
         </Typography>
-        {/* tailwind based media query conditional renderering */}
         <UploadDialog />
       </Stack>
     </Stack>
