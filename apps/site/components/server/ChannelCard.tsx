@@ -17,15 +17,15 @@ export async function ChannelCard({
   return (
     <Link href={`/channel/${channel.id}`}>
       <Stack className="border px-3 py-5 justify-between aspect-square hover:bg-primary/[0.025] transition-all">
-        {/* Channel Name */}
+        {/* Channel name */}
         <Typography>{channelMetadata?.name ?? 'untitled'}</Typography>
         <Flex>
-          {/* Channel Owner */}
+          {/* Channel owner */}
           <Typography className="text-secondary-foreground">
             {username ?? ''}
           </Typography>
           <span className="text-secondary-foreground">{'·'}</span>
-          {/* Number of Items */}
+          {/* Number of items */}
           <Typography className="text-secondary-foreground">
             {pluralize(channel.references.length, 'item', 'items')}
           </Typography>

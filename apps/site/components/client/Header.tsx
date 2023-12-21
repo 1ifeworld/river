@@ -30,7 +30,7 @@ export function Header() {
     <>
       <Flex className="items-center justify-between">
         <RiverLogo />
-        <Flex className="gap-4">
+        <Flex className="gap-5">
           <ChannelDialog authenticated={authenticated} login={login} />
           {authenticated ? (
             <User setOpen={setOpen} />

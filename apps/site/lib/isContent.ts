@@ -46,17 +46,16 @@ export function isFont(file: File) {
 export function isText(file: File) {
   const extension = file.name?.split('.').pop()?.toLowerCase()
   if (typeof extension === 'string') {
-
-  return [
-    'html',  
-    'csv',   
-    'rtf',   
-    'plain',  
-    'markdown',  
-    'md',
-    'txt',
-    'docx',  
-  ].includes(extension)
-}
-return false
+    return [
+      'html',
+      'csv',
+      'rtf',
+      'plain',
+      'markdown',
+      'md',
+      'txt',
+      'docx',
+    ].includes(extension)
+  }
+  return false
 }

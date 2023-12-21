@@ -23,7 +23,7 @@ import {
   DataObject,
   sendToDb,
   isImage,
-  isText, 
+  isText,
   isGLB,
   isPdf,
   isVideo,
@@ -40,7 +40,6 @@ import { usePrivy } from '@privy-io/react-auth'
 import { muxClient } from '@/config/muxClient'
 import { FileList } from '@/server'
 import { uploadToMux } from '@/lib'
-
 
 export function UploadDialog() {
   const [dialogOpen, setDialogOpen] = React.useState(false)
@@ -60,43 +59,49 @@ export function UploadDialog() {
     disabled: showFileList,
   })
 
+  const resetUploadState = () => {
+    setFilesToUpload([])
+    setShowFileList(false)
+  }
+
   const uploadAndProcessFile = async (file: File) => {
     const uploadedFileName = file.name || 'unnamed'
     const contentType = determineContentType(file)
     const uploadedFileCid = await uploadFile({ filesToUpload: [file] })
-  
+
     let pubUri: string
     let dataForDB: DataObject
     let contentTypeKey: number
-  
-    contentTypeKey = 
+
+    contentTypeKey =
       isVideo({ mimeType: contentType }) || isAudio({ mimeType: contentType })
         ? 2
         : isPdf({ mimeType: contentType }) || isGLB(file) || isText(file)
         ? 1
         : 0
-  
-    const animationUri = contentTypeKey === 2 || contentTypeKey === 1 ? uploadedFileCid : ''
+
+    const animationUri =
+      contentTypeKey === 2 || contentTypeKey === 1 ? uploadedFileCid : ''
     const imageUri = contentTypeKey === 0 ? uploadedFileCid : ''
-  
+
     const ipfsDataObject: IPFSDataObject = {
       name: uploadedFileName,
       description: 'Dynamic metadata based on timestamp',
       image: imageUri,
       animationUri: animationUri,
     }
-  
+
     pubUri = await uploadBlob({ dataToUpload: ipfsDataObject })
-  
+
     let muxAssetId = ''
     let muxPlaybackId = ''
-  
+
     if (contentTypeKey === 2) {
       const muxUploadResult = await uploadToMux(contentType, animationUri)
       muxAssetId = muxUploadResult.muxAssetId
       muxPlaybackId = muxUploadResult.muxPlaybackId
     }
-  
+
     dataForDB = {
       key: pubUri,
       value: {
@@ -106,9 +111,9 @@ export function UploadDialog() {
         muxPlaybackId: muxPlaybackId,
       },
     }
-  
+
     await sendToDb(dataForDB)
-  
+
     if (signMessage && targetUserId) {
       await processCreatePubPost({
         pubUri: pubUri,
@@ -118,19 +123,19 @@ export function UploadDialog() {
       })
     }
   }
-  
+
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       {!authenticated ? (
         <div>
           <Button variant="link" onClick={login}>
-            + Add
+            +&nbsp;Item
           </Button>
         </div>
       ) : (
         <div>
           <DialogTrigger asChild>
-            <Button variant="link">+ Add</Button>
+            <Button variant="link">+&nbsp;Item</Button>
           </DialogTrigger>
         </div>
       )}
@@ -153,15 +158,16 @@ export function UploadDialog() {
               action={async () => {
                 if (!targetUserId || filesToUpload.length === 0) return
                 await Promise.all(filesToUpload.map(uploadAndProcessFile))
+                resetUploadState()
                 setDialogOpen(false)
-                filesToUpload.forEach((file, index) => {
+                for (const [index, file] of filesToUpload.entries()) {
                   toast.custom((t) => (
                     <Toast key={index}>
                       {'Successfully uploaded '}
                       <span className="font-bold">{file.name}</span>
                     </Toast>
                   ))
-                })
+                }
               }}
               {...getRootProps()}
             >
@@ -171,13 +177,15 @@ export function UploadDialog() {
                   <>
                     <input {...getInputProps()} />
                     {isDragActive ? (
-                      <Typography className="text-secondary-foreground min-h-[35px]'">
+                      <Typography className="text-muted-foreground min-h-[35px]'">
                         Drop your files here
                       </Typography>
                     ) : (
-                      <Typography className="hover:cursor-pointer text-secondary-foreground leading-1">
+                      <Typography className="hover:cursor-pointer text-muted-foreground leading-1">
                         Drag and drop your files here <br /> or click here to{' '}
-                        <span className="underline">browse</span>
+                        <span className="underline underline-offset-2">
+                          browse
+                        </span>
                       </Typography>
                     )}
                   </>

@@ -26,5 +26,5 @@ export const determineContentType = (file: File): string => {
   if (isVideo({ mimeType }) || isAudio({ mimeType }) || isImage({ mimeType })) {
     return mimeType
   }
-  return mimeType 
+  return mimeType
 }

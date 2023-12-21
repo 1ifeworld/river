@@ -36,6 +36,7 @@ export async function relayPost({
     }
   } catch (error) {
     console.error('Post transaction failed: ', error)
+    nonceManager.reset()
   }
 }
 

@@ -63,9 +63,9 @@ export default async function View({
   let contentUrl: any;
   // Set contentUrl to appropriate route
   if (
-    referenceMetadata.contentType === "model/gltf-binary" ||
-    referenceMetadata.contentType === "application/pdf" ||
-    referenceMetadata.contentType === "text/markdown" ||
+    referenceMetadata.contentType === 'model/gltf-binary' ||
+    referenceMetadata.contentType === 'application/pdf' ||
+    referenceMetadata.contentType === 'text/markdown' ||
     isAudio({ mimeType: referenceMetadata.contentType })
   ) {
     const cid = ipfsUrlToCid({ ipfsUrl: referenceMetadata.animationUri });
@@ -101,14 +101,14 @@ export default async function View({
       content = <AudioPlayer playbackId={referenceMetadata.muxPlaybackId} />;
       break;
     case isPdf({ mimeType: contentType }):
-      content = <PdfViewer file={contentUrl} />;
-      break;
-    case contentType === "text/markdown":
-      content = <MarkdownRenderer contentUrl={contentUrl} />;
-      break;
-    case contentType === "model/gltf-binary":
-      content = <Model src={contentUrl} />;
-      break;
+      content = <PdfViewer file={contentUrl} />
+      break
+    case contentType === 'text/markdown':
+      content = <MarkdownRenderer contentUrl={contentUrl} />
+      break
+    case contentType === 'model/gltf-binary':
+      content = <Model src={contentUrl} />
+      break
     default:
       content = <div>unsupported content type</div>;
   }
