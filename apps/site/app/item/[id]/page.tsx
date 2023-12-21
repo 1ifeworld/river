@@ -1,8 +1,8 @@
-import * as React from "react";
-import dynamic from "next/dynamic";
-import Image from "next/image";
-import { Stack, Flex, Typography } from "@/design-system";
-import { getReferenceWithId, type Reference } from "@/gql";
+import * as React from 'react'
+import dynamic from 'next/dynamic'
+import Image from 'next/image'
+import { Stack, Flex, Typography } from '@/design-system'
+import { getReferenceWithId, type Reference } from '@/gql'
 import {
   ipfsUrlToCid,
   pinataUrlFromCid,
@@ -14,53 +14,53 @@ import {
   getChannelMetadata,
   getReferenceMetadata,
   getReferencesMetadata,
-} from "@/lib";
-import { ContentWrapper, VideoPlayer, AudioPlayer, User } from "@/client";
-import { ChannelIndex, MobileItemStub, ChannelItems } from "@/server";
+} from '@/lib'
+import { ContentWrapper, VideoPlayer, AudioPlayer, User } from '@/client'
+import { ChannelIndex, MobileItemStub, ChannelItems } from '@/server'
 
 const Model = dynamic(
-  () => import("../../../components/client/renderers/ModelRenderer"),
-  { ssr: false }
-);
+  () => import('../../../components/client/renderers/ModelRenderer'),
+  { ssr: false },
+)
 
 const MarkdownRenderer = dynamic(
-  () => import("../../../components/client/renderers/MarkdownRenderer"),
-  { ssr: false }
-);
+  () => import('../../../components/client/renderers/MarkdownRenderer'),
+  { ssr: false },
+)
 
 const PdfViewer = dynamic(
-  () => import("../../../components/client/renderers/PDFViewer"),
-  { ssr: false }
-);
+  () => import('../../../components/client/renderers/PDFViewer'),
+  { ssr: false },
+)
 
 export default async function View({
   params,
 }: {
-  params: { itemId: string; id: string };
+  params: { itemId: string; id: string }
 }) {
   // Top level getter for reference information
   const { reference } = await getReferenceWithId({
     id: params.id,
-  });
+  })
   // Check if reference is valid
   if (!reference || !reference.channel) {
-    return <div>Not a valid item</div>;
+    return <div>Not a valid item</div>
   }
   // Fetch metadata for various downstream targets
   const { metadata: channelMetadata } = await getChannelMetadata(
-    reference.channel.uri
-  );
+    reference.channel.uri,
+  )
   const { metadata: itemMetadata } = await getReferenceMetadata(
-    reference as Reference
-  );
+    reference as Reference,
+  )
   const { metadata: channelReferencesMetadata } = await getReferencesMetadata(
-    reference.channel.references as Reference[]
-  );
-  const referenceMetadata = itemMetadata.data[reference?.pubRef?.uri as string];
+    reference.channel.references as Reference[],
+  )
+  const referenceMetadata = itemMetadata.data[reference?.pubRef?.uri as string]
   // Extract content type from referenceMetadata
-  const contentType = referenceMetadata.contentType;
+  const contentType = referenceMetadata.contentType
   // Initialize dynamic variable for setting contentUrl
-  let contentUrl: any;
+  let contentUrl: any
   // Set contentUrl to appropriate route
   if (
     referenceMetadata.contentType === 'model/gltf-binary' ||
@@ -68,14 +68,14 @@ export default async function View({
     referenceMetadata.contentType === 'text/markdown' ||
     isAudio({ mimeType: referenceMetadata.contentType })
   ) {
-    const cid = ipfsUrlToCid({ ipfsUrl: referenceMetadata.animationUri });
-    contentUrl = pinataUrlFromCid({ cid });
+    const cid = ipfsUrlToCid({ ipfsUrl: referenceMetadata.animationUri })
+    contentUrl = pinataUrlFromCid({ cid })
   } else {
-    const cid = ipfsUrlToCid({ ipfsUrl: referenceMetadata.image });
-    contentUrl = pinataUrlFromCid({ cid });
+    const cid = ipfsUrlToCid({ ipfsUrl: referenceMetadata.image })
+    contentUrl = pinataUrlFromCid({ cid })
   }
   // Initialize dynamic variable for setting content
-  let content: any;
+  let content: any
   // Set content to appropriate media player
   switch (true) {
     case isImage({ mimeType: contentType }):
@@ -88,18 +88,18 @@ export default async function View({
           quality={100}
           priority={true}
         />
-      );
-      break;
+      )
+      break
     case isVideo({ mimeType: contentType }):
       content = (
         <div className="flex w-full h-full">
           <VideoPlayer playbackId={referenceMetadata.muxPlaybackId} />
         </div>
-      );
-      break;
+      )
+      break
     case isAudio({ mimeType: contentType }):
-      content = <AudioPlayer playbackId={referenceMetadata.muxPlaybackId} />;
-      break;
+      content = <AudioPlayer playbackId={referenceMetadata.muxPlaybackId} />
+      break
     case isPdf({ mimeType: contentType }):
       content = <PdfViewer file={contentUrl} />
       break
@@ -110,7 +110,7 @@ export default async function View({
       content = <Model src={contentUrl} />
       break
     default:
-      content = <div>unsupported content type</div>;
+      content = <div>unsupported content type</div>
   }
   // Render page contents
   return (
@@ -132,10 +132,10 @@ export default async function View({
         >
           {content}
         </ContentWrapper>
-        <MobileItemStub 
+        <MobileItemStub
           className="block md:hidden px-4"
           reference={reference}
-          referenceMetadata={referenceMetadata} 
+          referenceMetadata={referenceMetadata}
         />
         <Stack className="block md:hidden px-4 py-8">
           <ChannelIndex
@@ -144,10 +144,10 @@ export default async function View({
             channel={reference.channel}
             referenceMetadata={referenceMetadata}
             channelMetadata={channelMetadata.data[reference.channel.uri]}
-            channelRefsMetadata={channelReferencesMetadata}            
-          />    
-        </Stack>        
-      </Stack>  
+            channelRefsMetadata={channelReferencesMetadata}
+          />
+        </Stack>
+      </Stack>
     </div>
-  );
+  )
 }

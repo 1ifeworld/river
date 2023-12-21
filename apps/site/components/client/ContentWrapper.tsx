@@ -60,7 +60,10 @@ export function ContentWrapper({
   }
 
   return (
-    <div onClick={isMobile ? handleClick : undefined} className="flex justify-end w-full">
+    <div
+      onClick={isMobile ? handleClick : undefined}
+      className="flex justify-end w-full"
+    >
       <Stack className={cn(className)}>{children}</Stack>
     </div>
   )

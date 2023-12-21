@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react'
 import {
   Button,
   Typography,
@@ -13,7 +13,7 @@ import {
   DialogFooter,
   DialogClose,
   Toast,
-} from "@/design-system";
+} from '@/design-system'
 import {
   uploadFile,
   uploadBlob,
@@ -30,88 +30,88 @@ import {
   isAudio,
   IPFSDataObject,
   determineContentType,
-} from "@/lib";
-import { useUserContext } from "@/context";
-import { useDropzone } from "react-dropzone";
-import { toast } from "sonner";
-import { SubmitButton } from "@/client";
-import { useParams } from "next/navigation";
-import { usePrivy } from "@privy-io/react-auth";
-import { muxClient } from "@/config/muxClient";
-import { FileList } from "@/server";
-import { X } from "lucide-react";
-import { uploadToMux } from "@/lib";
+} from '@/lib'
+import { useUserContext } from '@/context'
+import { useDropzone } from 'react-dropzone'
+import { toast } from 'sonner'
+import { SubmitButton } from '@/client'
+import { useParams } from 'next/navigation'
+import { usePrivy } from '@privy-io/react-auth'
+import { muxClient } from '@/config/muxClient'
+import { FileList } from '@/server'
+import { X } from 'lucide-react'
+import { uploadToMux } from '@/lib'
 
 export function UploadDialog() {
-  const [dialogOpen, setDialogOpen] = React.useState(false);
-  const { authenticated, login } = usePrivy();
-  const [showFileList, setShowFileList] = React.useState<boolean>(false);
-  const [filesToUpload, setFilesToUpload] = React.useState<File[]>([]);
-  const { signMessage, userId: targetUserId } = useUserContext();
-  const params = useParams();
+  const [dialogOpen, setDialogOpen] = React.useState(false)
+  const { authenticated, login } = usePrivy()
+  const [showFileList, setShowFileList] = React.useState<boolean>(false)
+  const [filesToUpload, setFilesToUpload] = React.useState<File[]>([])
+  const { signMessage, userId: targetUserId } = useUserContext()
+  const params = useParams()
 
   const onDrop = React.useCallback(
     (acceptedFiles: File[]) => {
       // Taking only the first file if no file has been uploaded yet
       if (filesToUpload.length === 0 && acceptedFiles.length > 0) {
-        setShowFileList(true);
-        setFilesToUpload([acceptedFiles[0]]);
+        setShowFileList(true)
+        setFilesToUpload([acceptedFiles[0]])
       }
     },
-    [filesToUpload]
-  );
+    [filesToUpload],
+  )
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     disabled: filesToUpload.length > 0, // Disable dropzone if a file is already uploaded
-  });
+  })
 
   const handleRemoveFile = (index: number) => {
     setFilesToUpload((currentFiles) =>
-      currentFiles.filter((_, i) => i !== index)
-    );
-    setShowFileList(false);
-  };
+      currentFiles.filter((_, i) => i !== index),
+    )
+    setShowFileList(false)
+  }
 
   const resetUploadState = () => {
-    setFilesToUpload([]);
-    setShowFileList(false);
-  };
+    setFilesToUpload([])
+    setShowFileList(false)
+  }
 
   const uploadAndProcessFile = async (file: File) => {
-    const uploadedFileName = file.name || "unnamed";
-    const contentType = determineContentType(file);
-    const uploadedFileCid = await uploadFile({ filesToUpload: [file] });
+    const uploadedFileName = file.name || 'unnamed'
+    const contentType = determineContentType(file)
+    const uploadedFileCid = await uploadFile({ filesToUpload: [file] })
 
-    let pubUri: string;
-    let dataForDB: DataObject;
-    let contentTypeKey: number;
+    let pubUri: string
+    let dataForDB: DataObject
+    let contentTypeKey: number
 
     contentTypeKey =
       isVideo({ mimeType: contentType }) || isAudio({ mimeType: contentType })
         ? 2
         : isPdf({ mimeType: contentType }) || isGLB(file) || isText(file)
         ? 1
-        : 0;
+        : 0
 
     const animationUri =
-      contentTypeKey === 2 || contentTypeKey === 1 ? uploadedFileCid : "";
-    const imageUri = contentTypeKey === 0 ? uploadedFileCid : "";
+      contentTypeKey === 2 || contentTypeKey === 1 ? uploadedFileCid : ''
+    const imageUri = contentTypeKey === 0 ? uploadedFileCid : ''
 
     const ipfsDataObject: IPFSDataObject = {
       name: uploadedFileName,
-      description: "Dynamic metadata based on timestamp",
+      description: 'Dynamic metadata based on timestamp',
       image: imageUri,
       animationUri: animationUri,
-    };
+    }
 
-    pubUri = await uploadBlob({ dataToUpload: ipfsDataObject });
+    pubUri = await uploadBlob({ dataToUpload: ipfsDataObject })
 
-    let muxAssetId = "";
-    let muxPlaybackId = "";
+    let muxAssetId = ''
+    let muxPlaybackId = ''
 
     if (contentTypeKey === 2) {
-      const muxUploadResult = await uploadToMux(contentType, animationUri);
+      const muxUploadResult = await uploadToMux(contentType, animationUri)
       muxAssetId = muxUploadResult.muxAssetId
       muxPlaybackId = muxUploadResult.muxPlaybackId
     }
@@ -124,9 +124,9 @@ export function UploadDialog() {
         muxAssetId: muxAssetId,
         muxPlaybackId: muxPlaybackId,
       },
-    };
+    }
 
-    await sendToDb(dataForDB);
+    await sendToDb(dataForDB)
 
     if (signMessage && targetUserId) {
       await processCreatePubPost({
@@ -134,9 +134,9 @@ export function UploadDialog() {
         targetChannelId: BigInt(params.id as string),
         targetUserId: BigInt(targetUserId),
         privySignMessage: signMessage,
-      });
+      })
     }
-  };
+  }
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -170,17 +170,17 @@ export function UploadDialog() {
               id="newUpload"
               className="focus:outline-none text-center h-full w-full"
               action={async () => {
-                if (!targetUserId || filesToUpload.length === 0) return;
-                await Promise.all(filesToUpload.map(uploadAndProcessFile));
-                resetUploadState();
-                setDialogOpen(false);
+                if (!targetUserId || filesToUpload.length === 0) return
+                await Promise.all(filesToUpload.map(uploadAndProcessFile))
+                resetUploadState()
+                setDialogOpen(false)
                 for (const [index, file] of filesToUpload.entries()) {
                   toast.custom((t) => (
                     <Toast key={index}>
-                      {"Successfully uploaded "}
+                      {'Successfully uploaded '}
                       <span className="font-bold">{file.name}</span>
                     </Toast>
-                  ));
+                  ))
                 }
               }}
               {...getRootProps()}
@@ -196,7 +196,7 @@ export function UploadDialog() {
                       </Typography>
                     ) : (
                       <Typography className="hover:cursor-pointer text-muted-foreground leading-1">
-                        Drag and drop your file here <br /> or click here to{" "}
+                        Drag and drop your file here <br /> or click here to{' '}
                         <span className="underline underline-offset-2">
                           browse
                         </span>
@@ -239,5 +239,5 @@ export function UploadDialog() {
         </DialogContent>
       </DialogPortal>
     </Dialog>
-  );
+  )
 }
