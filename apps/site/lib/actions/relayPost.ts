@@ -23,7 +23,7 @@ export async function relayPost({
 
   try {
     const postTxn = await nonceManager.sendTransaction({
-      to: addresses.postGateway.postGateway,
+      to: addresses.postGateway.river_j5bpjduqfv,
       data: encodePostCall,
     })
 
