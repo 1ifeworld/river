@@ -9,6 +9,7 @@ export function AudioPlayer({ playbackId }: { playbackId: string }) {
       autoPlay="false"
       audio
       className={styles.muxPlayer}
+      accent-color="#5D5E5D"
     />
   )
 }

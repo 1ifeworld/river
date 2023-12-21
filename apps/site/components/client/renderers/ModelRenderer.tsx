@@ -6,6 +6,8 @@ import {
   Environment,
   OrbitControls,
   PerspectiveCamera,
+  useProgress,
+  Html,
 } from '@react-three/drei'
 import { Canvas, useThree } from '@react-three/fiber'
 import { GLTF as GLTFThree } from 'three/examples/jsm/loaders/GLTFLoader'
@@ -25,6 +27,14 @@ const Model: React.FC<ModelProps> = ({ src }) => {
       const size = box.getSize(new THREE.Vector3())
       const maxDimension = Math.max(size.x, size.y, size.z)
       modelRef.current.scale.setScalar(0.8 / maxDimension)
+
+      modelRef.current.rotation.set(0, 0, 0)
+
+      modelRef.current.traverse((child) => {
+        if (child instanceof THREE.Mesh) {
+          child.material.roughness = 0.5
+        }
+      })
     }
   }, [src])
 
@@ -32,15 +42,14 @@ const Model: React.FC<ModelProps> = ({ src }) => {
 }
 
 const ModelViewer: React.FC<ModelProps> = ({ src }) => {
+  const { progress } = useProgress()
+
   return (
-    // we can create a fall back loading component if we wish
     <Canvas>
-      <Suspense>
+      <Suspense fallback={<Html center>Loading {Math.round(progress)}%</Html>}>
         <PerspectiveCamera makeDefault position={[0, 1, 2]} />
-        <ambientLight position={[0, 0, 5]} intensity={1} />
-        <ambientLight position={[5, 5, 5]} intensity={1} />
-        <directionalLight position={[10, 10, 5]} intensity={2} />
-        <directionalLight position={[-10, -10, -5]} intensity={2} />
+        <ambientLight intensity={1} />
+        <directionalLight position={[5, 5, 5]} intensity={1.5} />
         <Model src={src} />
         <OrbitControls />
       </Suspense>
