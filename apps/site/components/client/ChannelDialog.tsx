@@ -146,7 +146,6 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                       privySignMessage: signMessage,
                     })
                   }
-                  resetFormAndFiles()
                   setDialogOpen(false)
                   // Render a toast with the name of the channel
                   toast.custom((t) => (
@@ -155,6 +154,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                       <span className="font-bold">{form.getValues().name}</span>
                     </Toast>
                   ))
+                  resetFormAndFiles()
                 }}
               >
                 <Separator />
