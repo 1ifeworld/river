@@ -115,7 +115,7 @@ export default async function View({
   // Render page contents
   return (
     <div className=" flex flex-col md:flex-row md:h-[calc(100vh_-_56px)] md:max-h-[calc(100vh_-_56px)] md:justify-center pt-4">
-      <Stack className="hidden h-full pl-5 md:block md:w-[286px] md:pt-4">
+      <Stack className="hidden h-full  md:block md:w-[286px] md:pt-4">
         <ChannelIndex
           showTop={true}
           reference={reference}
@@ -133,11 +133,11 @@ export default async function View({
           {content}
         </ContentWrapper>
         <MobileItemStub
-          className="block md:hidden px-4"
+          className="block md:hidden "
           reference={reference}
           referenceMetadata={referenceMetadata}
         />
-        <Stack className="block md:hidden px-4 py-8">
+        <Stack className="block md:hidden  py-8">
           <ChannelIndex
             showTop={false}
             reference={reference}
