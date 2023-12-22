@@ -35,7 +35,7 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
     <div className="flex justify-center items-center my-4">
       <div
         className="overflow-auto"
-        style={{ height: '90vh', maxWidth: '50vw' }}
+        style={{ height: '90vh', maxWidth: '55vw' }}
       >
         {isLoading ? (
           <div>Loading...</div>
