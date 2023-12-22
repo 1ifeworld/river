@@ -32,10 +32,10 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
   }, [contentUrl])
 
   return (
-    <div className="flex justify-center py-4">
+    <div className="flex justify-center items-center my-4">
       <div
-        className="w-full max-w-4xl mx-4 overflow-auto bg-white"
-        style={{ maxHeight: '60vh' }}
+        className="overflow-auto"
+        style={{ height: '90vh', maxWidth: '55vw' }}
       >
         {isLoading ? (
           <div>Loading...</div>
@@ -45,7 +45,7 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
             // disableExtensions={['container_notice']}
             value={content}
             readOnly
-            // theme={customTheme}
+            theme={customTheme}
           />
         )}
       </div>
