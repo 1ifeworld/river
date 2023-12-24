@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import Editor from 'rich-markdown-editor'
-import { light as customTheme } from '../../../../styles/editorTheme'
+import { light as customTheme } from '../../../styles/editorTheme'
 
 type Props = {
   contentUrl: string
