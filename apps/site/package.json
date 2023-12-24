@@ -11,9 +11,6 @@
     "codegen": "graphql-codegen --config codegen.ts"
   },
   "dependencies": {
-    "@alchemy/aa-accounts": "^0.1.1",
-    "@alchemy/aa-alchemy": "^0.1.1",
-    "@alchemy/aa-core": "^0.1.1",
     "@hookform/resolvers": "^3.3.2",
     "@mux/mux-node": "^7.3.3",
     "@mux/mux-player-react": "^2.3.0",
@@ -27,7 +24,6 @@
     "@react-three/fiber": "^8.15.12",
     "@types/three": "^0.159.0",
     "@vercel/analytics": "^1.0.2",
-    "alchemy-sdk": "^2.10.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "ethers": "^6.8.1",
