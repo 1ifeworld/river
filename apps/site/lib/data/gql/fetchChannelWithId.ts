@@ -1,9 +1,7 @@
 import { client } from './client'
-import { unstable_noStore } from 'next/cache'
 
 export async function fetchChannelWithId({ id }: { id: number }) {
-  unstable_noStore()
-  try {
+
     const channelWithId = await client.query({
       channel: {
         __args: {
@@ -34,14 +32,7 @@ export async function fetchChannelWithId({ id }: { id: number }) {
     })
 
     return {
-      success: true,
-      data: channelWithId.channel,
+
+      channelWithId: channelWithId.channel,
     }
-  } catch (error) {
-    console.error(error)
-    return {
-      success: false,
-      data: null,
-    }
-  }
 }

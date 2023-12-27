@@ -1,6 +1,6 @@
 import { Stack, Typography, Flex } from '@/design-system'
-import { type Channel } from '@/gql'
-import { getUsername } from '@/lib'
+
+import { getUsername, type AllChannelsResponse } from '@/lib'
 import { pluralize } from '@/utils'
 import Link from 'next/link'
 
@@ -8,7 +8,7 @@ export async function ChannelCard({
   channel,
   metadata,
 }: {
-  channel: Channel
+  channel: any
   metadata: any
 }) {
   const username = await getUsername({ id: channel.createdBy })

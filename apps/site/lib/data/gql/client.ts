@@ -9,6 +9,15 @@ export const client = createClient({
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(operation),
-    }).then((response) => response.json())
+    })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error('There was an error with the fetch operation', error);
+    });
   },
-})
+});
