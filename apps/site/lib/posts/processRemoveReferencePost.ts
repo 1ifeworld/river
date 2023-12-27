@@ -85,6 +85,6 @@ export async function processRemoveReferencePost({
 
   await relayPost({
     postInput: postInput,
-    pathToRevalidate: `/channel/${targetChannelId}`,
+    pathsToRevalidate: [`/channel/${targetChannelId}`, '/']
   })
 }
