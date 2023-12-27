@@ -4,7 +4,7 @@ import { Typography } from '@/design-system'
 
 export function RiverLogo() {
   return (
-    <Link href={'/'}>
+    <Link href={'/'} prefetch={false}>
       <Typography>River</Typography>
     </Link>
   )
