@@ -1,0 +1,559 @@
+type Query {
+  user(id: BigInt!, timestamp: Int): User
+  users(skip: Int = 0, first: Int = 100, orderBy: String = "id", orderDirection: String = "asc", where: UserFilter, timestamp: Int): [User!]!
+  txn(id: String!, timestamp: Int): Txn
+  txns(skip: Int = 0, first: Int = 100, orderBy: String = "id", orderDirection: String = "asc", where: TxnFilter, timestamp: Int): [Txn!]!
+  postCounter(id: String!, timestamp: Int): PostCounter
+  postCounters(skip: Int = 0, first: Int = 100, orderBy: String = "id", orderDirection: String = "asc", where: PostCounterFilter, timestamp: Int): [PostCounter!]!
+  post(id: String!, timestamp: Int): Post
+  posts(skip: Int = 0, first: Int = 100, orderBy: String = "id", orderDirection: String = "asc", where: PostFilter, timestamp: Int): [Post!]!
+  message(id: String!, timestamp: Int): Message
+  messages(skip: Int = 0, first: Int = 100, orderBy: String = "id", orderDirection: String = "asc", where: MessageFilter, timestamp: Int): [Message!]!
+  channelCounter(id: String!, timestamp: Int): ChannelCounter
+  channelCounters(skip: Int = 0, first: Int = 100, orderBy: String = "id", orderDirection: String = "asc", where: ChannelCounterFilter, timestamp: Int): [ChannelCounter!]!
+  channel(id: BigInt!, timestamp: Int): Channel
+  channels(skip: Int = 0, first: Int = 100, orderBy: String = "id", orderDirection: String = "asc", where: ChannelFilter, timestamp: Int): [Channel!]!
+  publicationCounter(id: String!, timestamp: Int): PublicationCounter
+  publicationCounters(skip: Int = 0, first: Int = 100, orderBy: String = "id", orderDirection: String = "asc", where: PublicationCounterFilter, timestamp: Int): [PublicationCounter!]!
+  publication(id: BigInt!, timestamp: Int): Publication
+  publications(skip: Int = 0, first: Int = 100, orderBy: String = "id", orderDirection: String = "asc", where: PublicationFilter, timestamp: Int): [Publication!]!
+  referenceCounter(id: String!, timestamp: Int): ReferenceCounter
+  referenceCounters(skip: Int = 0, first: Int = 100, orderBy: String = "id", orderDirection: String = "asc", where: ReferenceCounterFilter, timestamp: Int): [ReferenceCounter!]!
+  reference(id: BigInt!, timestamp: Int): Reference
+  references(skip: Int = 0, first: Int = 100, orderBy: String = "id", orderDirection: String = "asc", where: ReferenceFilter, timestamp: Int): [Reference!]!
+}
+
+type User {
+  id: BigInt!
+  userId: BigInt!
+  to: String!
+  backup: String!
+  from: String!
+}
+
+scalar BigInt
+
+input UserFilter {
+  id: BigInt
+  id_not: BigInt
+  id_in: [BigInt]
+  id_not_in: [BigInt]
+  id_gt: BigInt
+  id_lt: BigInt
+  id_gte: BigInt
+  id_lte: BigInt
+  userId: BigInt
+  userId_not: BigInt
+  userId_in: [BigInt]
+  userId_not_in: [BigInt]
+  userId_gt: BigInt
+  userId_lt: BigInt
+  userId_gte: BigInt
+  userId_lte: BigInt
+  to: String
+  to_not: String
+  to_in: [String]
+  to_not_in: [String]
+  to_contains: String
+  to_not_contains: String
+  to_starts_with: String
+  to_ends_with: String
+  to_not_starts_with: String
+  to_not_ends_with: String
+  backup: String
+  backup_not: String
+  backup_in: [String]
+  backup_not_in: [String]
+  backup_contains: String
+  backup_not_contains: String
+  backup_starts_with: String
+  backup_ends_with: String
+  backup_not_starts_with: String
+  backup_not_ends_with: String
+  from: String
+  from_not: String
+  from_in: [String]
+  from_not_in: [String]
+  from_contains: String
+  from_not_contains: String
+  from_starts_with: String
+  from_ends_with: String
+  from_not_starts_with: String
+  from_not_ends_with: String
+}
+
+type Txn {
+  id: String!
+}
+
+input TxnFilter {
+  id: String
+  id_not: String
+  id_in: [String]
+  id_not_in: [String]
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_ends_with: String
+  id_not_starts_with: String
+  id_not_ends_with: String
+}
+
+type PostCounter {
+  id: String!
+  counter: BigInt!
+  lastUpdated: BigInt!
+}
+
+input PostCounterFilter {
+  id: String
+  id_not: String
+  id_in: [String]
+  id_not_in: [String]
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_ends_with: String
+  id_not_starts_with: String
+  id_not_ends_with: String
+  counter: BigInt
+  counter_not: BigInt
+  counter_in: [BigInt]
+  counter_not_in: [BigInt]
+  counter_gt: BigInt
+  counter_lt: BigInt
+  counter_gte: BigInt
+  counter_lte: BigInt
+  lastUpdated: BigInt
+  lastUpdated_not: BigInt
+  lastUpdated_in: [BigInt]
+  lastUpdated_not_in: [BigInt]
+  lastUpdated_gt: BigInt
+  lastUpdated_lt: BigInt
+  lastUpdated_gte: BigInt
+  lastUpdated_lte: BigInt
+}
+
+type Post {
+  id: String!
+  timestamp: BigInt!
+  relayer: String!
+  data: String!
+  userId: BigInt!
+  hashType: BigInt!
+  hash: String!
+  sigType: BigInt!
+  sig: String!
+  version: BigInt!
+  expiration: BigInt!
+  messageArray: [String!]!
+}
+
+input PostFilter {
+  id: String
+  id_not: String
+  id_in: [String]
+  id_not_in: [String]
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_ends_with: String
+  id_not_starts_with: String
+  id_not_ends_with: String
+  timestamp: BigInt
+  timestamp_not: BigInt
+  timestamp_in: [BigInt]
+  timestamp_not_in: [BigInt]
+  timestamp_gt: BigInt
+  timestamp_lt: BigInt
+  timestamp_gte: BigInt
+  timestamp_lte: BigInt
+  relayer: String
+  relayer_not: String
+  relayer_in: [String]
+  relayer_not_in: [String]
+  relayer_contains: String
+  relayer_not_contains: String
+  relayer_starts_with: String
+  relayer_ends_with: String
+  relayer_not_starts_with: String
+  relayer_not_ends_with: String
+  data: String
+  data_not: String
+  data_in: [String]
+  data_not_in: [String]
+  data_contains: String
+  data_not_contains: String
+  data_starts_with: String
+  data_ends_with: String
+  data_not_starts_with: String
+  data_not_ends_with: String
+  userId: BigInt
+  userId_not: BigInt
+  userId_in: [BigInt]
+  userId_not_in: [BigInt]
+  userId_gt: BigInt
+  userId_lt: BigInt
+  userId_gte: BigInt
+  userId_lte: BigInt
+  hashType: BigInt
+  hashType_not: BigInt
+  hashType_in: [BigInt]
+  hashType_not_in: [BigInt]
+  hashType_gt: BigInt
+  hashType_lt: BigInt
+  hashType_gte: BigInt
+  hashType_lte: BigInt
+  hash: String
+  hash_not: String
+  hash_in: [String]
+  hash_not_in: [String]
+  hash_contains: String
+  hash_not_contains: String
+  hash_starts_with: String
+  hash_ends_with: String
+  hash_not_starts_with: String
+  hash_not_ends_with: String
+  sigType: BigInt
+  sigType_not: BigInt
+  sigType_in: [BigInt]
+  sigType_not_in: [BigInt]
+  sigType_gt: BigInt
+  sigType_lt: BigInt
+  sigType_gte: BigInt
+  sigType_lte: BigInt
+  sig: String
+  sig_not: String
+  sig_in: [String]
+  sig_not_in: [String]
+  sig_contains: String
+  sig_not_contains: String
+  sig_starts_with: String
+  sig_ends_with: String
+  sig_not_starts_with: String
+  sig_not_ends_with: String
+  version: BigInt
+  version_not: BigInt
+  version_in: [BigInt]
+  version_not_in: [BigInt]
+  version_gt: BigInt
+  version_lt: BigInt
+  version_gte: BigInt
+  version_lte: BigInt
+  expiration: BigInt
+  expiration_not: BigInt
+  expiration_in: [BigInt]
+  expiration_not_in: [BigInt]
+  expiration_gt: BigInt
+  expiration_lt: BigInt
+  expiration_gte: BigInt
+  expiration_lte: BigInt
+  messageArray: [String]
+  messageArray_not: [String]
+  messageArray_has: String
+  messageArray_not_has: String
+}
+
+type Message {
+  id: String!
+  msgType: BigInt!
+  msgBody: String!
+}
+
+input MessageFilter {
+  id: String
+  id_not: String
+  id_in: [String]
+  id_not_in: [String]
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_ends_with: String
+  id_not_starts_with: String
+  id_not_ends_with: String
+  msgType: BigInt
+  msgType_not: BigInt
+  msgType_in: [BigInt]
+  msgType_not_in: [BigInt]
+  msgType_gt: BigInt
+  msgType_lt: BigInt
+  msgType_gte: BigInt
+  msgType_lte: BigInt
+  msgBody: String
+  msgBody_not: String
+  msgBody_in: [String]
+  msgBody_not_in: [String]
+  msgBody_contains: String
+  msgBody_not_contains: String
+  msgBody_starts_with: String
+  msgBody_ends_with: String
+  msgBody_not_starts_with: String
+  msgBody_not_ends_with: String
+}
+
+type ChannelCounter {
+  id: String!
+  counter: BigInt!
+  lastUpdated: BigInt!
+}
+
+input ChannelCounterFilter {
+  id: String
+  id_not: String
+  id_in: [String]
+  id_not_in: [String]
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_ends_with: String
+  id_not_starts_with: String
+  id_not_ends_with: String
+  counter: BigInt
+  counter_not: BigInt
+  counter_in: [BigInt]
+  counter_not_in: [BigInt]
+  counter_gt: BigInt
+  counter_lt: BigInt
+  counter_gte: BigInt
+  counter_lte: BigInt
+  lastUpdated: BigInt
+  lastUpdated_not: BigInt
+  lastUpdated_in: [BigInt]
+  lastUpdated_not_in: [BigInt]
+  lastUpdated_gt: BigInt
+  lastUpdated_lt: BigInt
+  lastUpdated_gte: BigInt
+  lastUpdated_lte: BigInt
+}
+
+type Channel {
+  id: BigInt!
+  createdTimestamp: BigInt!
+  createdBy: BigInt!
+  uri: String!
+  admins: [BigInt!]!
+  members: [BigInt!]!
+  references(skip: Int = 0, first: Int = 100, orderBy: String = "id", orderDirection: String = "asc", timestamp: Int): [Reference!]!
+}
+
+type Reference {
+  id: BigInt!
+  createdTimestamp: BigInt!
+  createdBy: BigInt!
+  channelId: BigInt
+  channel: Channel
+  pubRefId: BigInt
+  pubRef: Publication
+  chanRefId: BigInt
+  chanRef: Channel
+}
+
+type Publication {
+  id: BigInt!
+  createdTimestamp: BigInt!
+  createdBy: BigInt!
+  uri: String!
+}
+
+input ChannelFilter {
+  id: BigInt
+  id_not: BigInt
+  id_in: [BigInt]
+  id_not_in: [BigInt]
+  id_gt: BigInt
+  id_lt: BigInt
+  id_gte: BigInt
+  id_lte: BigInt
+  createdTimestamp: BigInt
+  createdTimestamp_not: BigInt
+  createdTimestamp_in: [BigInt]
+  createdTimestamp_not_in: [BigInt]
+  createdTimestamp_gt: BigInt
+  createdTimestamp_lt: BigInt
+  createdTimestamp_gte: BigInt
+  createdTimestamp_lte: BigInt
+  createdBy: BigInt
+  createdBy_not: BigInt
+  createdBy_in: [BigInt]
+  createdBy_not_in: [BigInt]
+  createdBy_gt: BigInt
+  createdBy_lt: BigInt
+  createdBy_gte: BigInt
+  createdBy_lte: BigInt
+  uri: String
+  uri_not: String
+  uri_in: [String]
+  uri_not_in: [String]
+  uri_contains: String
+  uri_not_contains: String
+  uri_starts_with: String
+  uri_ends_with: String
+  uri_not_starts_with: String
+  uri_not_ends_with: String
+  admins: [BigInt]
+  admins_not: [BigInt]
+  admins_has: BigInt
+  admins_not_has: BigInt
+  members: [BigInt]
+  members_not: [BigInt]
+  members_has: BigInt
+  members_not_has: BigInt
+}
+
+type PublicationCounter {
+  id: String!
+  counter: BigInt!
+  lastUpdated: BigInt!
+}
+
+input PublicationCounterFilter {
+  id: String
+  id_not: String
+  id_in: [String]
+  id_not_in: [String]
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_ends_with: String
+  id_not_starts_with: String
+  id_not_ends_with: String
+  counter: BigInt
+  counter_not: BigInt
+  counter_in: [BigInt]
+  counter_not_in: [BigInt]
+  counter_gt: BigInt
+  counter_lt: BigInt
+  counter_gte: BigInt
+  counter_lte: BigInt
+  lastUpdated: BigInt
+  lastUpdated_not: BigInt
+  lastUpdated_in: [BigInt]
+  lastUpdated_not_in: [BigInt]
+  lastUpdated_gt: BigInt
+  lastUpdated_lt: BigInt
+  lastUpdated_gte: BigInt
+  lastUpdated_lte: BigInt
+}
+
+input PublicationFilter {
+  id: BigInt
+  id_not: BigInt
+  id_in: [BigInt]
+  id_not_in: [BigInt]
+  id_gt: BigInt
+  id_lt: BigInt
+  id_gte: BigInt
+  id_lte: BigInt
+  createdTimestamp: BigInt
+  createdTimestamp_not: BigInt
+  createdTimestamp_in: [BigInt]
+  createdTimestamp_not_in: [BigInt]
+  createdTimestamp_gt: BigInt
+  createdTimestamp_lt: BigInt
+  createdTimestamp_gte: BigInt
+  createdTimestamp_lte: BigInt
+  createdBy: BigInt
+  createdBy_not: BigInt
+  createdBy_in: [BigInt]
+  createdBy_not_in: [BigInt]
+  createdBy_gt: BigInt
+  createdBy_lt: BigInt
+  createdBy_gte: BigInt
+  createdBy_lte: BigInt
+  uri: String
+  uri_not: String
+  uri_in: [String]
+  uri_not_in: [String]
+  uri_contains: String
+  uri_not_contains: String
+  uri_starts_with: String
+  uri_ends_with: String
+  uri_not_starts_with: String
+  uri_not_ends_with: String
+}
+
+type ReferenceCounter {
+  id: String!
+  counter: BigInt!
+  lastUpdated: BigInt!
+}
+
+input ReferenceCounterFilter {
+  id: String
+  id_not: String
+  id_in: [String]
+  id_not_in: [String]
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_ends_with: String
+  id_not_starts_with: String
+  id_not_ends_with: String
+  counter: BigInt
+  counter_not: BigInt
+  counter_in: [BigInt]
+  counter_not_in: [BigInt]
+  counter_gt: BigInt
+  counter_lt: BigInt
+  counter_gte: BigInt
+  counter_lte: BigInt
+  lastUpdated: BigInt
+  lastUpdated_not: BigInt
+  lastUpdated_in: [BigInt]
+  lastUpdated_not_in: [BigInt]
+  lastUpdated_gt: BigInt
+  lastUpdated_lt: BigInt
+  lastUpdated_gte: BigInt
+  lastUpdated_lte: BigInt
+}
+
+input ReferenceFilter {
+  id: BigInt
+  id_not: BigInt
+  id_in: [BigInt]
+  id_not_in: [BigInt]
+  id_gt: BigInt
+  id_lt: BigInt
+  id_gte: BigInt
+  id_lte: BigInt
+  createdTimestamp: BigInt
+  createdTimestamp_not: BigInt
+  createdTimestamp_in: [BigInt]
+  createdTimestamp_not_in: [BigInt]
+  createdTimestamp_gt: BigInt
+  createdTimestamp_lt: BigInt
+  createdTimestamp_gte: BigInt
+  createdTimestamp_lte: BigInt
+  createdBy: BigInt
+  createdBy_not: BigInt
+  createdBy_in: [BigInt]
+  createdBy_not_in: [BigInt]
+  createdBy_gt: BigInt
+  createdBy_lt: BigInt
+  createdBy_gte: BigInt
+  createdBy_lte: BigInt
+  channelId: BigInt
+  channelId_not: BigInt
+  channelId_in: [BigInt]
+  channelId_not_in: [BigInt]
+  channelId_gt: BigInt
+  channelId_lt: BigInt
+  channelId_gte: BigInt
+  channelId_lte: BigInt
+  pubRefId: BigInt
+  pubRefId_not: BigInt
+  pubRefId_in: [BigInt]
+  pubRefId_not_in: [BigInt]
+  pubRefId_gt: BigInt
+  pubRefId_lt: BigInt
+  pubRefId_gte: BigInt
+  pubRefId_lte: BigInt
+  chanRefId: BigInt
+  chanRefId_not: BigInt
+  chanRefId_in: [BigInt]
+  chanRefId_not_in: [BigInt]
+  chanRefId_gt: BigInt
+  chanRefId_lt: BigInt
+  chanRefId_gte: BigInt
+  chanRefId_lte: BigInt
+}
