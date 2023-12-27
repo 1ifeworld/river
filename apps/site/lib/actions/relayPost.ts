@@ -8,12 +8,12 @@ import { getTxnWithHash } from '@/gql'
 
 interface RelayPostProps {
   postInput: Hash
-  pathToRevalidate: string
+  pathsToRevalidate: string[]
 }
 
 export async function relayPost({
   postInput,
-  pathToRevalidate,
+  pathsToRevalidate,
 }: RelayPostProps) {
   const encodePostCall = encodeFunctionData({
     abi: postGatewayABI,
@@ -30,7 +30,9 @@ export async function relayPost({
     const resp = await getTxnInclusion(postTxn.hash as Hash)
     if (resp) {
       console.log(`txn ${postTxn.hash} was processed by ponder`)
-      revalidatePath(pathToRevalidate)
+      for (const path of pathsToRevalidate) {
+        revalidatePath(path)
+      }
     } else {
       console.log(`txn ${postTxn.hash} NOT found by ponder`)
     }
