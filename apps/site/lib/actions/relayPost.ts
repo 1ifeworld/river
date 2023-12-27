@@ -32,6 +32,7 @@ export async function relayPost({
       console.log(`txn ${postTxn.hash} was processed by ponder`)
       for (const path of pathsToRevalidate) {
         revalidatePath(path)
+        console.log('Called revalidate path')
       }
     } else {
       console.log(`txn ${postTxn.hash} NOT found by ponder`)
