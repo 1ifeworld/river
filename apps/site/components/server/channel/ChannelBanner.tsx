@@ -1,10 +1,17 @@
 import Image from 'next/image'
-import { Stack, Flex, Typography } from '@/design-system'
+import {
+  Stack,
+  Flex,
+  Typography,
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from '@/design-system'
 import { Channel } from '@/gql'
 import { UploadDialog } from '@/client'
 import { ipfsUrlToCid, pinataUrlFromCid } from '@/lib'
 import { Username, GenericThumbnailLarge } from '@/server'
-import { truncateText, pluralize } from '@/utils'
+import { truncateText, pluralize, selectPluralForm } from '@/utils'
 
 export async function ChannelBanner({
   channel,
@@ -47,26 +54,72 @@ export async function ChannelBanner({
           <Typography variant="h2" className="text-black">
             {channelMetadata.name}
           </Typography>
-          <Flex>
-            {channel?.admins?.[0] ? (
-              <>
-                <Username id={channel?.admins?.[0]} />
-                {channel?.members?.length > 0 && (
-                  <Typography className="text-secondary-foreground">
-                    {`${'\u00A0'}+ ${pluralize(
-                      channel?.members?.length,
-                      'other',
-                      'others',
-                    )}`}
-                  </Typography>
-                )}
-              </>
-            ) : (
-              <Typography className="text-secondary-foreground">
-                'No admins configured for this channel'
-              </Typography>
-            )}
-          </Flex>
+          {channel?.admins?.[0] ? (
+            <HoverCard>
+              <HoverCardTrigger className="cursor-pointer">
+                <Flex>
+                  <Username className="text-xl" id={channel?.admins?.[0]} />
+                  {channel?.members?.length > 0 && (
+                    <Typography
+                      variant="h2"
+                      className="text-secondary-foreground"
+                    >
+                      {`${'\u00A0'}+ ${pluralize(
+                        channel?.members?.length,
+                        'other',
+                        'others',
+                      )}`}
+                    </Typography>
+                  )}
+                </Flex>
+              </HoverCardTrigger>
+              <HoverCardContent align="start">
+                <Stack className="gap-3">
+                  <span>
+                    <Typography className="leading-0">
+                      {selectPluralForm(
+                        channel?.admins?.length,
+                        'Admin',
+                        'Admins',
+                      )}
+                    </Typography>
+                    <Username className="leading-0" id={channel?.admins?.[0]} />
+                  </span>
+                  {channel?.members?.length > 0 && (
+                    <span>
+                      <Typography className="leading-0">
+                        {selectPluralForm(
+                          channel?.members?.length,
+                          'Member',
+                          'Members',
+                        )}
+                      </Typography>
+                      <Flex className="items-center">
+                        {channel.members.map((member, index) => (
+                          <>
+                            <Username
+                              className="leading-0"
+                              id={member}
+                              key={index}
+                            />
+                            {index < channel.members.length - 1 && (
+                              <Typography className="text-secondary-foreground">
+                                {'·'}
+                              </Typography>
+                            )}
+                          </>
+                        ))}
+                      </Flex>
+                    </span>
+                  )}
+                </Stack>
+              </HoverCardContent>
+            </HoverCard>
+          ) : (
+            <Typography className="text-secondary-foreground">
+              'No admins configured for this channel'
+            </Typography>
+          )}
         </Stack>
         {/* This component is hidden on small screens */}
         <Typography className="hidden md:block text-primary-foreground">
