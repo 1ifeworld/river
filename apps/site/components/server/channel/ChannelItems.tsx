@@ -72,10 +72,3 @@ export async function ChannelItems({
     </Table>
   )
 }
-
-{
-  /* <Link
-              key={index}
-              href={`/item/${reference.id}`}
-            /> */
-}
