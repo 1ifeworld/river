@@ -1,12 +1,15 @@
-import { Stack, Typography } from '@/design-system'
+import { Typography } from '@/design-system'
 import { getUsername } from '@/lib'
 import { cn } from '@/design-system'
 
-export async function Username({ id }: { id: bigint }) {
+export async function Username({
+  id,
+  className,
+}: { id: bigint; className?: string }) {
   const username = await getUsername({ id: id })
 
   return (
-    <Typography className="text-secondary-foreground leading-0">
+    <Typography className={cn('text-secondary-foreground', className)}>
       {username}
     </Typography>
   )

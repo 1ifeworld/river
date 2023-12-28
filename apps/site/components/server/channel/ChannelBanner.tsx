@@ -1,10 +1,10 @@
 import Image from 'next/image'
-import { Stack, Typography } from '@/design-system'
+import { Stack, Flex, Typography } from '@/design-system'
 import { Channel } from '@/gql'
 import { UploadDialog } from '@/client'
 import { ipfsUrlToCid, pinataUrlFromCid } from '@/lib'
 import { Username, GenericThumbnailLarge } from '@/server'
-import { truncateText } from '@/utils'
+import { truncateText, pluralize } from '@/utils'
 
 export async function ChannelBanner({
   channel,
@@ -47,13 +47,26 @@ export async function ChannelBanner({
           <Typography variant="h2" className="text-black">
             {channelMetadata.name}
           </Typography>
-          <Typography variant="h2" className="text-secondary-foreground">
+          <Flex>
             {channel?.admins?.[0] ? (
-              <Username id={channel?.admins?.[0]} />
+              <>
+                <Username id={channel?.admins?.[0]} />
+                {channel?.members?.length > 0 && (
+                  <Typography className="text-secondary-foreground">
+                    {`${'\u00A0'}+ ${pluralize(
+                      channel?.members?.length,
+                      'other',
+                      'others',
+                    )}`}
+                  </Typography>
+                )}
+              </>
             ) : (
-              'No admins configured for this channel'
+              <Typography className="text-secondary-foreground">
+                'No admins configured for this channel'
+              </Typography>
             )}
-          </Typography>
+          </Flex>
         </Stack>
         {/* This component is hidden on small screens */}
         <Typography className="hidden md:block text-primary-foreground">
