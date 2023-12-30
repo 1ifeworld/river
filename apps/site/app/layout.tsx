@@ -1,7 +1,7 @@
 import { Analytics } from '@vercel/analytics/react'
 import type { Metadata } from 'next'
 import { fragmentMono } from './fonts/fonts'
-import { Providers } from './providers/Providers'
+import { Providers } from './providers/providers'
 import { Header, ThemeToggle } from '@/client'
 import { Toaster } from 'sonner'
 import '../styles/globals.css'
