@@ -16,7 +16,7 @@ export async function ChannelCard({
 
   return (
     <Link href={`/channel/${channel.id}`}>
-      <Stack className="border px-3 py-5 justify-between aspect-square hover:bg-primary/[0.025] transition-all">
+      <Stack className="border px-4 py-3 justify-between aspect-square hover:bg-primary/[0.025] transition-all">
         {/* Channel name */}
         <Typography>{channelMetadata?.name ?? 'untitled'}</Typography>
         <Flex>
