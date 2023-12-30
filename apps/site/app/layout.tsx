@@ -2,7 +2,7 @@ import { Analytics } from '@vercel/analytics/react'
 import type { Metadata } from 'next'
 import { fragmentMono } from './fonts/fonts'
 import { Providers } from './providers/providers'
-import { Header } from '@/client'
+import { Header, ThemeToggle } from '@/client'
 import { Toaster } from 'sonner'
 import '../styles/globals.css'
 
@@ -17,13 +17,18 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${fragmentMono.variable}`}>
+    <html
+      lang="en"
+      className={`${fragmentMono.variable}`}
+      suppressHydrationWarning
+    >
       <body>
         <Providers>
           <div className="py-3 px-5">
             <Header />
             {children}
             <Toaster position="bottom-center" />
+            <ThemeToggle />
           </div>
           <Analytics />
         </Providers>

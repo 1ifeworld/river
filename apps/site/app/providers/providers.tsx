@@ -1,13 +1,16 @@
 'use client'
 
 import * as React from 'react'
-import { PrivyProviderWrapper } from './'
+import { PrivyProviderWrapper } from './PrivyProviderWrapper'
 import { UserContextComponent } from '@/context'
+import { ThemeProvider } from 'next-themes'
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <PrivyProviderWrapper>
-      <UserContextComponent>{children}</UserContextComponent>
-    </PrivyProviderWrapper>
+    <ThemeProvider attribute="class" disableTransitionOnChange defaultTheme='light'>
+      <PrivyProviderWrapper>
+        <UserContextComponent>{children}</UserContextComponent>
+      </PrivyProviderWrapper>
+    </ThemeProvider>
   )
 }
