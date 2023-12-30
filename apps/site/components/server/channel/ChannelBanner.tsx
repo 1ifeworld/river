@@ -30,7 +30,7 @@ export async function ChannelBanner({
   const cid = ipfsUrlToCid({ ipfsUrl: channelMetadata.image })
 
   return (
-    <Stack className="gap-4 md:gap-6 md:h-full md:w-[425px]">
+    <Stack className="sticky top-0 gap-4 md:gap-6 md:h-full md:w-[425px]">
       {/* The negative margin allows cover images to reach the edges of the screen */}
       <div className="relative -mx-5">
         <>

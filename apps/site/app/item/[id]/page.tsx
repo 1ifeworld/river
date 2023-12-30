@@ -115,7 +115,7 @@ export default async function View({
   // Render page contents
   return (
     <div className=" flex flex-col md:flex-row md:h-[calc(100vh_-_56px)] md:max-h-[calc(100vh_-_56px)] md:justify-center pt-4">
-      <Stack className="hidden h-full  md:block md:w-[286px] md:pt-4">
+      <Stack className="sticky top-0 hidden h-full  md:block md:w-[286px] md:pt-4">
         <ChannelIndex
           showTop={true}
           reference={reference}
@@ -125,7 +125,7 @@ export default async function View({
           channelRefsMetadata={channelReferencesMetadata}
         />
       </Stack>
-      <Stack className="w-full h-full gap-y-4 md:gap-y-0 md:justify-center">
+      <Stack className="flex-grow md:overflow-auto w-full h-full gap-y-4 md:gap-y-0 md:justify-center">
         <ContentWrapper
           item={reference}
           className="w-full h-[480px] md:h-[calc(100vh/1.1)] md:max-w-[calc(100vw/1.2)] relative"

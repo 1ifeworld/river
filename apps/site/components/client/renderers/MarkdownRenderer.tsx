@@ -32,16 +32,16 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
   }, [contentUrl])
 
   return (
-    <div className="flex justify-center items-center my-4">
+    <div className="flex justify-center items-center py-4">
       <div
-        className="overflow-auto"
-        style={{ height: '90vh', maxWidth: '55vw' }}
+        className="flex h-full w-full justify-center"
+        // style={{ height: '90vh', maxWidth: '55vw' }}
       >
         {isLoading ? (
           <div>Loading...</div>
         ) : (
           <Editor
-            className="editor-body-text w-full px-4 py-2"
+            className=" editor-body-text w-[620px]"
             // disableExtensions={['container_notice']}
             value={content}
             readOnly
