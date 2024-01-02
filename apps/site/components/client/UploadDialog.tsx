@@ -185,8 +185,8 @@ export function UploadDialog() {
                         {'Successfully uploaded '}
                         <span className="font-bold">{file.name}</span>
                       </Toast>
-                    ));
-                  });
+                    ))
+                  })
                 } catch (error) {
                   console.error("Error during file upload:", error)
                   // Error toast
@@ -194,7 +194,7 @@ export function UploadDialog() {
                     <Toast>
                       {'Error uploading files. Please try again.'}
                     </Toast>
-                  ));
+                  ))
                 } finally {
                   resetUploadState()
                   setDialogOpen(false)

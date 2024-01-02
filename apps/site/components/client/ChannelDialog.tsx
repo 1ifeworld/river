@@ -89,11 +89,11 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       {!authenticated ? (
         <Button variant="link" onClick={login}>
-          +&nbspChannel
+          +&nbsp;Channel
         </Button>
       ) : (
         <DialogTrigger asChild>
-          <Button variant="link">+&nbspChannel</Button>
+          <Button variant="link">+&nbsp;Channel</Button>
         </DialogTrigger>
       )}
       <DialogPortal>
