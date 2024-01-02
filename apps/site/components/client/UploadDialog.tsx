@@ -47,6 +47,8 @@ export function UploadDialog() {
   const { authenticated, login } = usePrivy()
   const [showFileList, setShowFileList] = React.useState<boolean>(false)
   const [filesToUpload, setFilesToUpload] = React.useState<File[]>([])
+  const [isSubmitting, setIsSubmitting] = React.useState(false)
+  const [submitError, setSubmitError] = React.useState("")
   const { signMessage, userId: targetUserId } = useUserContext()
   const params = useParams()
 
@@ -171,16 +173,33 @@ export function UploadDialog() {
               className="focus:outline-none text-center h-full w-full"
               action={async () => {
                 if (!targetUserId || filesToUpload.length === 0) return
-                await Promise.all(filesToUpload.map(uploadAndProcessFile))
-                setDialogOpen(false)
-                for (const [index, file] of filesToUpload.entries()) {
+                setIsSubmitting(true)
+                setSubmitError("") 
+                try {
+                  await Promise.all(filesToUpload.map(uploadAndProcessFile))
+                  
+                  // Success toast for each file
+                  filesToUpload.forEach((file, index) => {
+                    toast.custom((t) => (
+                      <Toast key={index}>
+                        {'Successfully uploaded '}
+                        <span className="font-bold">{file.name}</span>
+                      </Toast>
+                    ));
+                  });
+                } catch (error) {
+                  console.error("Error during file upload:", error)
+                  // Error toast
                   toast.custom((t) => (
-                    <Toast key={index}>
-                      {'Successfully uploaded '}
-                      <span className="font-bold">{file.name}</span>
+                    <Toast>
+                      {'Error uploading files. Please try again.'}
                     </Toast>
-                  ))
+                  ));
+                } finally {
                   resetUploadState()
+                  setDialogOpen(false)
+                  setIsSubmitting(false)
+
                 }
               }}
               {...getRootProps()}
@@ -229,9 +248,9 @@ export function UploadDialog() {
                   form="newUpload"
                   type="submit"
                   variant="link"
-                  disabled={!targetUserId || filesToUpload.length === 0}
-                >
-                  Confirm
+                  disabled={!targetUserId || filesToUpload.length === 0 || isSubmitting}
+                  >
+                    {isSubmitting ? "Uploading..." : "Confirm"}
                 </SubmitButton>
               </DialogFooter>
             </form>

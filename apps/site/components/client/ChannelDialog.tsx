@@ -1,4 +1,4 @@
-import * as React from 'react'
+import * as React from "react"
 import {
   Button,
   Typography,
@@ -22,7 +22,7 @@ import {
   Toast,
   Textarea,
   Debug,
-} from '@/design-system'
+} from "@/design-system"
 import {
   uploadBlob,
   processCreateChannelPost,
@@ -30,15 +30,15 @@ import {
   sendToDb,
   newChannelSchema,
   uploadFile,
-} from '@/lib'
-import { useUserContext } from '@/context'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
-import { SubmitButton } from '@/client'
-import { useDropzone } from 'react-dropzone'
-import { FileList } from '@/server'
-import * as z from 'zod'
+} from "@/lib"
+import { useUserContext } from "@/context"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import { SubmitButton } from "@/client"
+import { useDropzone } from "react-dropzone"
+import { FileList } from "@/server"
+import * as z from "zod"
 
 interface ChannelDialogProps {
   authenticated: boolean
@@ -47,7 +47,11 @@ interface ChannelDialogProps {
 
 export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
   const [dialogOpen, setDialogOpen] = React.useState(false)
-  const { signMessage, userId: targetUserId, embeddedWallet } = useUserContext()
+  const {
+    signMessage,
+    userId: targetUserId,
+    embeddedWallet,
+  } = useUserContext()
 
   /**
    * Dropzone hooks
@@ -66,8 +70,8 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
   const form = useForm<z.infer<typeof newChannelSchema>>({
     resolver: zodResolver(newChannelSchema),
     defaultValues: {
-      name: '',
-      description: '',
+      name: "",
+      description: "",
       cover: undefined,
     },
   })
@@ -78,15 +82,18 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
     setShowFileList(false)
   }
 
+  const [isSubmitting, setIsSubmitting] = React.useState(false)
+  const [submitError, setSubmitError] = React.useState("")
+
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       {!authenticated ? (
         <Button variant="link" onClick={login}>
-          +&nbsp;Channel
+          +&nbspChannel
         </Button>
       ) : (
         <DialogTrigger asChild>
-          <Button variant="link">+&nbsp;Channel</Button>
+          <Button variant="link">+&nbspChannel</Button>
         </DialogTrigger>
       )}
       <DialogPortal>
@@ -109,54 +116,79 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                 className="flex flex-col justify-center w-full gap-6"
                 action={async () => {
                   // Prevent non-authenticated users from proceeding
-                  if (!targetUserId) return
+                  if (!targetUserId || isSubmitting) return
+                  setIsSubmitting(true)
+                  setSubmitError("") // clear previous message
+
                   // Upload cover image to IPFS if it one was provided
-                  let uploadedFileCid
-                  let uploadedFileType
-                  console.log('files to upload', filesToUpload)
-                  if (filesToUpload.length !== 0) {
-                    uploadedFileCid = await uploadFile({ filesToUpload })
-                    uploadedFileType = filesToUpload[0].type
-                  }
-                  // Create an IPFS pointer containing the name of the channel
-                  const channelUri = await uploadBlob({
-                    dataToUpload: {
-                      name: form.getValues().name,
-                      description: form.getValues().description || '',
-                      image: uploadedFileCid || '',
-                      animationUri: '',
-                    },
-                  })
-                  await sendToDb({
-                    key: channelUri,
-                    value: {
-                      name: form.getValues().name,
-                      description: form.getValues().description || '',
-                      image: uploadedFileCid || '',
-                      animationUri: '',
-                      contentType: uploadedFileType,
-                    },
-                  } as DataObject)
-                  // Generate create channel post for user and post transaction
-                  if (signMessage) {
-                    await processCreateChannelPost({
-                      channelUri: channelUri,
-                      targetUserId: targetUserId,
-                      privySignerAddress: embeddedWallet?.address as string,
-                      privySignMessage: signMessage,
+                  try {
+                    let uploadedFileCid
+                    let uploadedFileType
+                    console.log("files to upload", filesToUpload)
+                    if (filesToUpload.length !== 0) {
+                      uploadedFileCid = await uploadFile({ filesToUpload })
+                      uploadedFileType = filesToUpload[0].type
+                    }
+                    // Create an IPFS pointer containing the name of the channel
+                    const channelUri = await uploadBlob({
+                      dataToUpload: {
+                        name: form.getValues().name,
+                        description: form.getValues().description || "",
+                        image: uploadedFileCid || "",
+                        animationUri: "",
+                      },
                     })
+                    await sendToDb({
+                      key: channelUri,
+                      value: {
+                        name: form.getValues().name,
+                        description: form.getValues().description || "",
+                        image: uploadedFileCid || "",
+                        animationUri: "",
+                        contentType: uploadedFileType,
+                      },
+                    } as DataObject)
+                    // Generate create channel post for user and post transaction
+                    if (signMessage) {
+                      await processCreateChannelPost({
+                        channelUri: channelUri,
+                        targetUserId: targetUserId,
+                        privySignerAddress: embeddedWallet?.address as string,
+                        privySignMessage: signMessage,
+                      })
+                    }
+                    setDialogOpen(false)
+                    // Render a toast with the name of the channel
+                    toast.custom((t) => (
+                      <Toast>
+                        {"Successfully created "}
+                        <span className="font-bold">
+                          {form.getValues().name}
+                        </span>
+                      </Toast>
+                    ))
+                    resetFormAndFiles()
+                    setDialogOpen(false)
+                  } catch (error) {
+                    console.error("Error creating channel:", error)
+                    toast.custom((t) => (
+                      <Toast>
+                        {"Failed to create channel. Please try again."}
+                      </Toast>
+                    ))
+                    setSubmitError("Failed to create channel. Please try again.")
+                  } finally {
+                    setIsSubmitting(false)
                   }
-                  setDialogOpen(false)
-                  // Render a toast with the name of the channel
-                  toast.custom((t) => (
-                    <Toast>
-                      {'Successfully created '}
-                      <span className="font-bold">{form.getValues().name}</span>
-                    </Toast>
-                  ))
-                  resetFormAndFiles()
-                }}
+                }}                
               >
+                {/* Display submission error, if any */}
+                {submitError && (
+                  <Typography variant="small" color="error">
+                    {submitError}
+                  </Typography>
+                )}
+
                 <Separator />
                 <FormField
                   control={form.control}
@@ -219,11 +251,11 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                           className="hover:cursor-pointer text-muted-foreground tracking-normal"
                         >
                           Drag and drop a cover image here or
-                          {'\u00A0'}
+                          {"\u00A0"}
                           <span className="underline underline-offset-2">
                             browse
                           </span>
-                          {'\u00A0'}your local file system
+                          {"\u00A0"}your local file system
                         </Typography>
                       )}
                     </div>
@@ -239,9 +271,9 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                     form="newChannel"
                     type="submit"
                     variant="link"
-                    disabled={!targetUserId}
+                    disabled={!targetUserId || isSubmitting}
                   >
-                    Create
+                    {isSubmitting ? "Creating..." : "Create"}
                   </SubmitButton>
                 </DialogFooter>
               </form>
