@@ -65,6 +65,7 @@ export function UploadDialog() {
     setUploadStatus(initialStatus)
   }, [])
 
+  
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -84,7 +85,35 @@ export function UploadDialog() {
     setUploadStatus({})
   };
 
-
+  interface UploadedFileListProps {
+    files: File[];
+    uploadStatus: Record<number, 'pending' | 'uploaded'>;
+    onRemove: (index: number) => void;
+  }
+  
+  const UploadedFileList: React.FC<UploadedFileListProps> = ({ files, uploadStatus, onRemove }) => {
+    return (
+      <div className="flex flex-col items-center justify-between p-2 rounded-lg">
+        {files.map((file, index) => (
+          <div key={index} className="flex items-center justify-between w-full">
+            <div className="flex-1 truncate pr-4">
+              <span className="text-sm font-medium text-gray-700" title={file.name}>
+                {file.name}
+              </span>
+            </div>
+            <span className="text-sm font-medium text-gray-700">Status: {uploadStatus[index]}</span>
+            <button
+              onClick={() => onRemove(index)}
+              className="ml-2 flex-shrink-0 text-black-500 hover:bg-red-100 rounded-full p-1"
+              aria-label={`Remove ${file.name}`}
+            >
+              <X className="h-3 w-3" />
+            </button>
+          </div>
+        ))}
+      </div>
+    );
+  };
   const processFiles = async (event: any) => {
   
     if (!targetUserId) {
@@ -183,6 +212,8 @@ export function UploadDialog() {
       setIsSubmitting(false);
     }
   };
+
+  
   
 
   return (
@@ -206,6 +237,7 @@ export function UploadDialog() {
             <DialogHeader>
               <DialogTitle>
                 <Typography>Add item</Typography>
+
               </DialogTitle>
             </DialogHeader>
             <DialogClose asChild className="absolute right-4 top-8">
@@ -232,6 +264,7 @@ export function UploadDialog() {
               }}
               {...getRootProps()}
             >
+
               <Stack className="gap-[132px]">
                 <Separator />
                 {filesToUpload.length === 0 ? (
@@ -251,25 +284,10 @@ export function UploadDialog() {
                     )}
                   </>
                 ) : (
-                  <div className="flex items-center justify-between p-2 rounded-lg">
-                    <div className="flex-1 truncate pr-4">
-                      <span
-                        className="text-sm font-medium text-gray-700"
-                        title={filesToUpload[0].name}
-                      >
-                        {filesToUpload[0].name}
-                      </span>
-                    </div>
-                    <button
-                      onClick={() => handleRemoveFile(0)}
-                      className="ml-2 flex-shrink-0 text-black-500 hover:bg-red-100 rounded-full p-1"
-                      aria-label="Remove file"
-                    >
-                      <X className="h-3 w-3" />
-                    </button>
-                  </div>
-                )}
-                <Separator />
+ 
+                    <UploadedFileList onRemove={handleRemoveFile} files={filesToUpload} uploadStatus={uploadStatus} />
+                  )}
+  <Separator />
               </Stack>
               <DialogFooter className="pt-4">
                 <SubmitButton
