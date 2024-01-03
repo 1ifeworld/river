@@ -15,20 +15,13 @@ import {
   Toast,
 } from '@/design-system'
 import {
-  uploadFile,
-  uploadBlob,
   processCreatePubPost,
-  ipfsUrlToCid,
-  pinataUrlFromCid,
-  DataObject,
   sendToDb,
-  isImage,
   isText,
   isGLB,
   isPdf,
   isVideo,
   isAudio,
-  IPFSDataObject,
   determineContentType,
 } from '@/lib'
 import { useUserContext } from '@/context'
@@ -40,7 +33,8 @@ import { usePrivy } from '@privy-io/react-auth'
 import { muxClient } from '@/config/muxClient'
 import { FileList } from '@/server'
 import { X } from 'lucide-react'
-import { uploadToMux } from '@/lib'
+import { uploadToMux, type MetadataObject } from '@/lib'
+import { useWeb3Storage } from '@/hooks'
 
 export function UploadDialog() {
   const [dialogOpen, setDialogOpen] = React.useState(false)
@@ -66,6 +60,8 @@ export function UploadDialog() {
     disabled: filesToUpload.length > 0, // Disable dropzone if a file is already uploaded
   })
 
+  const { client } = useWeb3Storage()
+
   const handleRemoveFile = (index: number) => {
     setFilesToUpload((currentFiles) =>
       currentFiles.filter((_, i) => i !== index),
@@ -81,13 +77,9 @@ export function UploadDialog() {
   const uploadAndProcessFile = async (file: File) => {
     const uploadedFileName = file.name || 'unnamed'
     const contentType = determineContentType(file)
-    const uploadedFileCid = await uploadFile({ filesToUpload: [file] })
+    const uploadedFileCid = await client?.uploadFile(file)
 
-    let pubUri: string
-    let dataForDB: DataObject
-    let contentTypeKey: number
-
-    contentTypeKey =
+    const contentTypeKey =
       isVideo({ mimeType: contentType }) || isAudio({ mimeType: contentType })
         ? 2
         : isPdf({ mimeType: contentType }) || isGLB(file) || isText(file)
@@ -98,39 +90,44 @@ export function UploadDialog() {
       contentTypeKey === 2 || contentTypeKey === 1 ? uploadedFileCid : ''
     const imageUri = contentTypeKey === 0 ? uploadedFileCid : ''
 
-    const ipfsDataObject: IPFSDataObject = {
+    const metadataObject: MetadataObject = {
       name: uploadedFileName,
       description: 'Dynamic metadata based on timestamp',
-      image: imageUri,
-      animationUri: animationUri,
+      image: imageUri?.toString() as string,
+      animationUri: animationUri?.toString() as string,
     }
 
-    pubUri = await uploadBlob({ dataToUpload: ipfsDataObject })
+    const pubUri = await client?.uploadFile(
+      new Blob(
+        [
+          JSON.stringify(metadataObject),
+        ],
+        { type: 'application/json' },
+      ),
+    )
 
     let muxAssetId = ''
     let muxPlaybackId = ''
 
     if (contentTypeKey === 2) {
-      const muxUploadResult = await uploadToMux(contentType, animationUri)
+      const muxUploadResult = await uploadToMux(contentType, animationUri?.toString() as string)
       muxAssetId = muxUploadResult.muxAssetId
       muxPlaybackId = muxUploadResult.muxPlaybackId
     }
 
-    dataForDB = {
-      key: pubUri,
+    await sendToDb({
+      key: pubUri?.toString() as string,
       value: {
-        ...ipfsDataObject,
+        ...metadataObject,
         contentType: contentType,
         muxAssetId: muxAssetId,
         muxPlaybackId: muxPlaybackId,
       },
-    }
-
-    await sendToDb(dataForDB)
+    })
 
     if (signMessage && targetUserId) {
       await processCreatePubPost({
-        pubUri: pubUri,
+        pubUri: pubUri?.toString() as string,
         targetChannelId: BigInt(params.id as string),
         targetUserId: BigInt(targetUserId),
         privySignMessage: signMessage,
@@ -214,6 +211,7 @@ export function UploadDialog() {
                       </span>
                     </div>
                     <button
+                      type="button"
                       onClick={() => handleRemoveFile(0)}
                       className="ml-2 flex-shrink-0 text-black-500 hover:bg-red-100 rounded-full p-1"
                       aria-label="Remove file"

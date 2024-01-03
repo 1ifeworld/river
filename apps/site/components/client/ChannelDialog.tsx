@@ -21,15 +21,12 @@ import {
   FormMessage,
   Toast,
   Textarea,
-  Debug,
 } from '@/design-system'
 import {
-  uploadBlob,
   processCreateChannelPost,
-  type DataObject,
   sendToDb,
   newChannelSchema,
-  uploadFile,
+  type MetadataObject,
 } from '@/lib'
 import { useUserContext } from '@/context'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -38,6 +35,7 @@ import { toast } from 'sonner'
 import { SubmitButton } from '@/client'
 import { useDropzone } from 'react-dropzone'
 import { FileList } from '@/server'
+import { useWeb3Storage } from '@/hooks'
 import * as z from 'zod'
 
 interface ChannelDialogProps {
@@ -60,8 +58,10 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
   }, [])
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
     onDrop,
-    disabled: filesToUpload.length !== 0,
+    disabled: filesToUpload.length > 0, // Disable dropzone if a file is already uploaded
   })
+
+  const { client } = useWeb3Storage()
 
   const form = useForm<z.infer<typeof newChannelSchema>>({
     resolver: zodResolver(newChannelSchema),
@@ -113,34 +113,40 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                   // Upload cover image to IPFS if it one was provided
                   let uploadedFileCid
                   let uploadedFileType
-                  console.log('files to upload', filesToUpload)
                   if (filesToUpload.length !== 0) {
-                    uploadedFileCid = await uploadFile({ filesToUpload })
+                    uploadedFileCid = await client?.uploadFile(filesToUpload[0])
                     uploadedFileType = filesToUpload[0].type
                   }
-                  // Create an IPFS pointer containing the name of the channel
-                  const channelUri = await uploadBlob({
-                    dataToUpload: {
+                  const metadataObject: MetadataObject = 
+                    {
                       name: form.getValues().name,
                       description: form.getValues().description || '',
-                      image: uploadedFileCid || '',
+                      image: uploadedFileCid?.toString() as string || '',
                       animationUri: '',
-                    },
-                  })
+                    }
+                  
+                  const channelUri = await client?.uploadFile(
+                    new Blob(
+                      [
+                        JSON.stringify(metadataObject),
+                      ],
+                      { type: 'application/json' },
+                    ),
+                  )
                   await sendToDb({
-                    key: channelUri,
+                    key: channelUri?.toString() as string,
                     value: {
                       name: form.getValues().name,
                       description: form.getValues().description || '',
-                      image: uploadedFileCid || '',
+                      image: uploadedFileCid?.toString() as string || '',
                       animationUri: '',
-                      contentType: uploadedFileType,
+                      contentType: uploadedFileType as string,
                     },
-                  } as DataObject)
+                  })
                   // Generate create channel post for user and post transaction
                   if (signMessage) {
                     await processCreateChannelPost({
-                      channelUri: channelUri,
+                      channelUri: channelUri?.toString() as string,
                       targetUserId: targetUserId,
                       privySignerAddress: embeddedWallet?.address as string,
                       privySignMessage: signMessage,

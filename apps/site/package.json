@@ -55,7 +55,6 @@
     "usehooks-ts": "^2.9.1",
     "vaul": "^0.6.7",
     "viem": "^1.19.3",
-    "web3.storage": "^4.5.5",
     "zod": "^3.22.4"
   },
   "devDependencies": {
