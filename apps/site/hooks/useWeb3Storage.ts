@@ -4,7 +4,7 @@ import { extract } from '@ucanto/core/delegation'
 import { configStorageClient } from '@/lib'
 
 export function useWeb3Storage() {
-  const [client, setClient] = React.useState<Client>()
+  const [client, setClient] = React.useState<Client | null>(null)
 
   React.useEffect(() => {
     // biome-ignore format: prevent unnecessary semicolon
