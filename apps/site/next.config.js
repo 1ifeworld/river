@@ -21,7 +21,6 @@ module.exports = {
   },
   experimental: {
     webpackBuildWorker: true,
-    serverComponentsExternalPackages: ['ipfs-utils'],
   },
   transpilePackages: ['scrypt'],
 }
