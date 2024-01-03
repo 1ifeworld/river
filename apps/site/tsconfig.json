@@ -18,7 +18,6 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "resolvePackageJsonExports": false, // Needed to resolve connectkit bug as of 1.5.1
     "plugins": [
       {
         "name": "next"

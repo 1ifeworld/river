@@ -1,10 +1,11 @@
-export interface IPFSDataObject {
+export interface MetadataObject {
   name: string
   description: string
   image: string
   animationUri: string
 }
-export interface DataObject {
+
+export interface MediaAssetObject {
   key: string
   value: {
     name: string
@@ -17,7 +18,7 @@ export interface DataObject {
   }
 }
 
-export const sendToDb = async (data: DataObject) => {
+export const sendToDb = async (data: MediaAssetObject) => {
   try {
     const metadataServerUrl = process.env.NEXT_PUBLIC_METADATA_SERVER_URL
 
