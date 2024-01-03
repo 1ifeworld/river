@@ -229,7 +229,7 @@ ponder.on('PostGateway:Post', async ({ event, context }) => {
      * 100 create Chan - ✅
      * 101 reference existing Chan - ✅
      * 102 edit Chan uri - []
-     * 103 edit Chan admins/members - []
+     * 103 edit Chan admins/members - ✅
      * 200 create Pub - ✅
      * 201 reference existing Pub - ✅
      * 202 edit Pub uri - []
@@ -408,8 +408,11 @@ ponder.on('PostGateway:Post', async ({ event, context }) => {
             if (!userLookup) continue
             // logic branch for add or removal
             if (instructions === 1) {
-              // skip to next i in for loop if admin already present
-              if (channelLookup.admins.includes(decodedEditChannelAccess.admins[i])) continue
+              // skip to next i in for loop if admin already present in admin/member arrays
+              if (
+                channelLookup.admins.includes(decodedEditChannelAccess.admins[i])
+                || channelLookup.members.includes(decodedEditChannelAccess.admins[i])
+              ) continue
               // add user as admin
               await Channel.update({
                 id: decodedEditChannelAccess.channelTarget,
@@ -441,8 +444,11 @@ ponder.on('PostGateway:Post', async ({ event, context }) => {
             console.log("instructions = ", instructions)
             // logic branch for add or removal
             if (instructions === 1) {
-              // skip to next i in for loop if admin already present
-              if (channelLookup.members.includes(decodedEditChannelAccess.members[i])) continue
+              // skip to next i in for loop if admin already present in admin/member arrays
+              if (
+                channelLookup.admins.includes(decodedEditChannelAccess.members[i])
+                || channelLookup.members.includes(decodedEditChannelAccess.members[i])
+              ) continue
               // add user as member
               await Channel.update({
                 id: decodedEditChannelAccess.channelTarget,
