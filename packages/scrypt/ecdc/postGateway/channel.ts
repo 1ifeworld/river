@@ -37,7 +37,7 @@ export function encodeCreateChannel({
   }
 }
 
-export function encodeeferenceChannel({
+export function encodeReferenceChannel({
   channelTarget,
   channelTags,
 }: { channelTarget: bigint; channelTags: readonly bigint[] }): {
@@ -57,6 +57,36 @@ export function encodeeferenceChannel({
     }
   } catch (error) {
     console.error('Failed to encode Reference Channels', error)
+    return null
+  }
+}
+
+export function encodeEditChannelAccess({
+  channelTarget,
+  admins,
+  members
+} : { 
+  channelTarget: bigint; 
+  admins: readonly bigint[]; 
+  members: readonly bigint[] 
+}): {
+  msgBody: Hash
+} | null {
+  try {
+    const msgBody = encodeAbiParameters(
+      [
+        { name: 'channelTarget', type: 'uint256' },
+        { name: 'admins', type: 'int256[]' },
+        { name: 'members', type: 'int256[]' },
+      ],
+      [channelTarget, admins, members],
+    )
+
+    return {
+      msgBody: msgBody,
+    }
+  } catch (error) {
+    console.error('Failed to encode edit channel access', error)
     return null
   }
 }
@@ -113,6 +143,32 @@ export function decodeReferenceChannel({ msgBody }: { msgBody: Hash }): {
     }
   } catch (error) {
     console.error('Failed to decode Reference Channels', error)
+    return null
+  }
+}
+
+export function decodeEditChannelAccess({ msgBody }: { msgBody: Hash }): {
+  channelTarget: bigint
+  admins: readonly bigint[]
+  members: readonly bigint[]
+} | null {
+  try {
+    const [channelTarget, admins, members] = decodeAbiParameters(
+      [
+        { name: 'channelTarget', type: 'uint256' },
+        { name: 'admins', type: 'int256[]' },
+        { name: 'members', type: 'int256[]' },
+      ],
+      msgBody,
+    )
+
+    return {
+      channelTarget: channelTarget,
+      admins: admins,
+      members: members
+    }
+  } catch (error) {
+    console.error('Failed to decode edit channel access', error)
     return null
   }
 }

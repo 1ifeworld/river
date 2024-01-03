@@ -1,10 +1,12 @@
 import { ponder } from '@/generated'
 import { MessageToProcess } from './types'
+import { absBigInt } from '../utils'
 import {
   decodePost,
   decodeMessage,
   decodeCreateChannel,
   decodeReferenceChannel,
+  decodeEditChannelAccess,
   decodeCreatePublication,
   decodeReferencePublication,
   decodeRemoveReference,
@@ -122,23 +124,23 @@ ponder.on('PostGateway:Post', async ({ event, context }) => {
   }
   // NOTE: update to context.client.verifyMessage to unlock support
   //       for smart accounts in addition to EOAs
-  const recoverAddressFromPostSignature = await recoverMessageAddress({
-    message: remove0xPrefix({ bytes32Hash: decodedPost.hash }),
-    signature: decodedPost.sig,
-  })
-  const signerIsValid = userLookup.to === recoverAddressFromPostSignature
+  // const recoverAddressFromPostSignature = await recoverMessageAddress({
+  //   message: remove0xPrefix({ bytes32Hash: decodedPost.hash }),
+  //   signature: decodedPost.sig,
+  // })
+  // const signerIsValid = userLookup.to === recoverAddressFromPostSignature
 
-  if (!signerIsValid) {
-    txnReceipt = await Txn.findUnique({ id: event.transaction.hash })
-    if (!txnReceipt) {
-      await Txn.create({ id: event.transaction.hash })
-      console.log(
-        'invalid post -- invalid sig for user. processed txn hash: ',
-        event.transaction.hash,
-      )
-    }
-    return
-  }
+  // if (!signerIsValid) {
+  //   txnReceipt = await Txn.findUnique({ id: event.transaction.hash })
+  //   if (!txnReceipt) {
+  //     await Txn.create({ id: event.transaction.hash })
+  //     console.log(
+  //       'invalid post -- invalid sig for user. processed txn hash: ',
+  //       event.transaction.hash,
+  //     )
+  //   }
+  //   return
+  // }
 
   /* ************************************************
 
@@ -243,6 +245,13 @@ ponder.on('PostGateway:Post', async ({ event, context }) => {
     for (let i = 0; i < messageQueue.length; ++i) {
       console.log('what message type: ', messageQueue[i]?.msgType)
       switch (messageQueue[i]?.msgType) {
+
+        /**************************************************
+
+                          CHANNEL CASES
+
+        **************************************************/    
+
         /*
          * CREATE CHANNEL
          */
@@ -370,11 +379,96 @@ ponder.on('PostGateway:Post', async ({ event, context }) => {
           }
           break
 
-        /* ************************************************
+        /*
+         * EDIT CHANNEL ACCESS
+         */          
+        case messageTypes.editChannelAccess:
+          console.log('running 103 edit chan access case')
+          // decode editchannelaccess message
+          const decodedEditChannelAccess = decodeEditChannelAccess({
+            msgBody: messageQueue[i].msgBody
+          })
+          // if decode uncessful exist case
+          if (!decodedEditChannelAccess) break
+          // lookup target channel
+          channelLookup = await Channel.findUnique({
+            id: decodedEditChannelAccess.channelTarget,
+          })
+          // if lookup unsuccessful exit case
+          if (!channelLookup) break          
+          // check if user id sender is admin of channel
+          if (!channelLookup.admins.includes(decodedPost.userId)) break
+          // process admin changes in for loop
+          for (let i = 0; i < decodedEditChannelAccess.admins.length; ++i) {
+            console.log("processing admin changes", decodedEditChannelAccess.admins[i])
+            let instructions = decodedEditChannelAccess.admins[i] < 0 ? 0 : 1 // 0 = remove, 1 = add
+            // lookup userid to add/remove. do absolute value check incase of remove which will be negative
+            userLookup = await User.findUnique({ id: absBigInt(decodedEditChannelAccess.admins[i]) })
+            // skip to next i in for loop if doesnt exist
+            if (!userLookup) continue
+            // logic branch for add or removal
+            if (instructions === 1) {
+              // skip to next i in for loop if admin already present
+              if (channelLookup.admins.includes(decodedEditChannelAccess.admins[i])) continue
+              // add user as admin
+              await Channel.update({
+                id: decodedEditChannelAccess.channelTarget,
+                data: ({ current }) => ({
+                  admins: [...current.admins, decodedEditChannelAccess.admins[i]]
+                })
+              })
+            } else {
+              // skip to next i in for loop if admin is not present
+              if (!channelLookup.admins.includes(absBigInt(decodedEditChannelAccess.admins[i]))) continue
+              // remove user as admin
+              await Channel.update({
+                id: decodedEditChannelAccess.channelTarget,
+                data: ({ current }) => ({
+                  admins: current.admins.filter(adminId => adminId !== absBigInt(decodedEditChannelAccess.admins[i]))
+                })
+              })
+            }
+          }
+          // process member changes in for loop
+          for (let i = 0; i < decodedEditChannelAccess.members.length; ++i) {
+            console.log("processing member changes", decodedEditChannelAccess.members[i])
+            let instructions = decodedEditChannelAccess.members[i] < 0 ? 0 : 1 // 0 = remove, 1 = add
+            // lookup userid to add/remove. do absolute value check incase of remove which will be negative
+            userLookup = await User.findUnique({ id: absBigInt(decodedEditChannelAccess.members[i]) })            
+            // skip to next i in for loop if doesnt exist
+            if (!userLookup) continue
+            console.log("user lookup worked")
+            console.log("instructions = ", instructions)
+            // logic branch for add or removal
+            if (instructions === 1) {
+              // skip to next i in for loop if admin already present
+              if (channelLookup.members.includes(decodedEditChannelAccess.members[i])) continue
+              // add user as member
+              await Channel.update({
+                id: decodedEditChannelAccess.channelTarget,
+                data: ({ current }) => ({
+                  members: [...current.members, decodedEditChannelAccess.members[i]]
+                })
+              })
+            } else {
+              // skip to next i in for loop if member is not present
+              if (!channelLookup.members.includes(absBigInt(decodedEditChannelAccess.members[i]))) continue
+              // remove user as admin
+              await Channel.update({
+                id: decodedEditChannelAccess.channelTarget,
+                data: ({ current }) => ({
+                  members: current.members.filter(memberId => memberId !== absBigInt(decodedEditChannelAccess.members[i]))
+                })
+              })
+            }
+          }
+          break
+
+        /**************************************************
 
                           PUBLICATION CASES
 
-        ************************************************ */
+        **************************************************/
 
         /*
          * CREATE PUBLICATION
@@ -509,11 +603,11 @@ ponder.on('PostGateway:Post', async ({ event, context }) => {
           }
           break
 
-        /* ************************************************
+        /**************************************************
 
                             REMOVE CASE
 
-        ************************************************ */
+        **************************************************/
 
         /*
          * REMOVE REFERENCE
