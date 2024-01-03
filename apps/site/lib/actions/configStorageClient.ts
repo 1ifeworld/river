@@ -27,7 +27,7 @@ export async function configStorageClient({
   const audience = parseDid(did)
   const abilities = ['upload/add', 'store/add']
   // @ts-ignore
-  const delegation = await client.createDelegation(audience, abilities)
+  const delegation = await client.createDelegation(audience, abilities, { expiration: 0 })
   /**
    * Serialize the delegation and send it to the client
    */
