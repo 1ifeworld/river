@@ -8,7 +8,7 @@ import {
   HoverCardTrigger,
 } from '@/design-system'
 import { Channel } from '@/gql'
-import { UploadDialog } from '@/client'
+import { UploadDialog, AddMembersForm } from '@/client'
 import { ipfsUrlToCid, pinataUrlFromCid } from '@/lib'
 import { Username, GenericThumbnailLarge } from '@/server'
 import { truncateText, pluralize, selectPluralForm } from '@/utils'
@@ -73,7 +73,7 @@ export async function ChannelBanner({
                   )}
                 </Flex>
               </HoverCardTrigger>
-              <HoverCardContent align="start">
+              <HoverCardContent className="w-full border-2" align="start">
                 <Stack className="gap-3">
                   <span>
                     <Typography className="leading-0">
@@ -112,6 +112,13 @@ export async function ChannelBanner({
                       </Flex>
                     </span>
                   )}
+
+                  {/* <Stack className='border-2 border-red-500'>
+                    hehehehehe
+                  </Stack> */}
+                  
+                  <AddMembersForm targetChannelId={channel.id} />
+
                 </Stack>
               </HoverCardContent>
             </HoverCard>

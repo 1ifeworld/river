@@ -12,7 +12,7 @@ contract PostScript is Script {
     PostGateway postGateway = PostGateway(0x5FbDB2315678afecb367f032d93F642f64180aa3); // anvil
     // PostGateway postGateway = PostGateway(0x339513226Afd92B309837Bad402c6D3ADDE9Ad24); // opGoerli
 
-    uint256 constant userId = 1;
+    uint256 constant userId = 2;
     uint8 constant hashType = 1;
     uint8 constant sigType = 1;
     uint16 constant version = 1;
@@ -29,8 +29,12 @@ contract PostScript is Script {
         /* Start function transmission */
         vm.startBroadcast(deployerPrivateKey);
 
-        createChannel();        
+        // createChannel();        
         // referenceChannel();
+        // editChannelAccess_AddAdmin();
+        // editChannelAccess_RemoveAdmin();
+        // editChannelAccess_AddMember();
+        editChannelAccess_RemoveMember();
 
         // createPublication();        
         // referencePublication();
@@ -46,10 +50,10 @@ contract PostScript is Script {
         uint32 msgType = 100;
         uint64 expiration = uint64(block.timestamp) + 600;
         uint256[] memory adminIds = new uint256[](1);
-        adminIds[0] = 1;
+        adminIds[0] = 2;
         uint256[] memory memberIds = new uint256[](2);
-        memberIds[0] = 2;
-        memberIds[1] = 3;
+        memberIds[0] = 100;
+        memberIds[1] = 101;
         uint256[] memory channelTags = new uint256[](0);
         // uint256[] memory channelTags = new uint256[](1);
         // channelTags[0] = 1;
@@ -99,6 +103,119 @@ contract PostScript is Script {
         // call post
         postGateway.post(postInputs);        
     }
+
+    function editChannelAccess_AddAdmin() public {
+        // Prep message for post        
+        uint32 msgType = 103;
+        uint64 expiration = uint64(block.timestamp) + 600;
+        uint256 targetChannel = 1;
+        int256[] memory admins = new int256[](1);
+        admins[0] = 1;
+        int256[] memory members = new int256[](0);
+        bytes memory msgBody = abi.encode(targetChannel, admins, members);        
+        bytes[] memory messageArray = new bytes[](1);
+        messageArray[0] = abi.encodePacked(msgType, msgBody);
+        // generate post signature
+        (bytes32 hash, bytes memory signedPost) = signPost(deployerPrivateKey, version, expiration, messageArray);         
+        // encode post inputs
+        bytes memory postInputs = abi.encodePacked(
+            userId,                             // userId
+            hashType,                           // hashType
+            hash,                               // hash
+            sigType,                            // sigType
+            signedPost,                         // signature
+            version,                            // version
+            expiration,                         // expiration
+            abi.encode(messageArray)            // message array
+        );                             
+        // call post
+        postGateway.post(postInputs);        
+    }    
+
+    function editChannelAccess_RemoveAdmin() public {
+        // Prep message for post        
+        uint32 msgType = 103;
+        uint64 expiration = uint64(block.timestamp) + 600;
+        uint256 targetChannel = 1;
+        int256[] memory admins = new int256[](1);
+        admins[0] = -1;
+        int256[] memory members = new int256[](0);
+        bytes memory msgBody = abi.encode(targetChannel, admins, members);        
+        bytes[] memory messageArray = new bytes[](1);
+        messageArray[0] = abi.encodePacked(msgType, msgBody);
+        // generate post signature
+        (bytes32 hash, bytes memory signedPost) = signPost(deployerPrivateKey, version, expiration, messageArray);         
+        // encode post inputs
+        bytes memory postInputs = abi.encodePacked(
+            userId,                             // userId
+            hashType,                           // hashType
+            hash,                               // hash
+            sigType,                            // sigType
+            signedPost,                         // signature
+            version,                            // version
+            expiration,                         // expiration
+            abi.encode(messageArray)            // message array
+        );                             
+        // call post
+        postGateway.post(postInputs);        
+    }        
+
+    function editChannelAccess_AddMember() public {
+        // Prep message for post        
+        uint32 msgType = 103;
+        uint64 expiration = uint64(block.timestamp) + 600;
+        uint256 targetChannel = 3;
+        int256[] memory admins = new int256[](0);
+        int256[] memory members = new int256[](1);
+        members[0] = 1;
+        bytes memory msgBody = abi.encode(targetChannel, admins, members);        
+        bytes[] memory messageArray = new bytes[](1);
+        messageArray[0] = abi.encodePacked(msgType, msgBody);
+        // generate post signature
+        (bytes32 hash, bytes memory signedPost) = signPost(deployerPrivateKey, version, expiration, messageArray);         
+        // encode post inputs
+        bytes memory postInputs = abi.encodePacked(
+            userId,                             // userId
+            hashType,                           // hashType
+            hash,                               // hash
+            sigType,                            // sigType
+            signedPost,                         // signature
+            version,                            // version
+            expiration,                         // expiration
+            abi.encode(messageArray)            // message array
+        );                             
+        // call post
+        postGateway.post(postInputs);        
+    }    
+
+    function editChannelAccess_RemoveMember() public {
+        // Prep message for post        
+        uint32 msgType = 103;
+        uint64 expiration = uint64(block.timestamp) + 600;
+        uint256 targetChannel = 3;
+        int256[] memory admins = new int256[](0);
+        int256[] memory members = new int256[](1);
+        members[0] = -1;
+        bytes memory msgBody = abi.encode(targetChannel, admins, members);        
+        bytes[] memory messageArray = new bytes[](1);
+        messageArray[0] = abi.encodePacked(msgType, msgBody);
+        // generate post signature
+        (bytes32 hash, bytes memory signedPost) = signPost(deployerPrivateKey, version, expiration, messageArray);         
+        // encode post inputs
+        bytes memory postInputs = abi.encodePacked(
+            userId,                             // userId
+            hashType,                           // hashType
+            hash,                               // hash
+            sigType,                            // sigType
+            signedPost,                         // signature
+            version,                            // version
+            expiration,                         // expiration
+            abi.encode(messageArray)            // message array
+        );                             
+        // call post
+        postGateway.post(postInputs);        
+    }    
+
 
     function createPublication() public {
         // Prep message for post        
