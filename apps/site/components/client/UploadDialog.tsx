@@ -39,34 +39,34 @@ export function UploadDialog() {
   const [dialogOpen, setDialogOpen] = React.useState(false)
   const { authenticated, login } = usePrivy()
   const [showFileList, setShowFileList] = React.useState<boolean>(false)
-  const [filesToUpload, setFilesToUpload] = React.useState<FileWithStatus[]>([]);
+  const [filesToUpload, setFilesToUpload] = React.useState<FileWithStatus[]>([])
   const { signMessage, userId: targetUserId } = useUserContext()
   const params = useParams()
   
 
   interface FileWithStatus extends File {
-    status: 'QUEUED' | 'UPLOADING' | 'UPLOADED' | 'ERROR';
+    status: 'QUEUED' | 'UPLOADING' | 'UPLOADED' | 'ERROR'
   }
 
 function getStatusProperties(status: FileWithStatus['status']) {
   switch (status) {
     case 'QUEUED':
-      return { label: 'Queued', color: 'gray' };
+      return { label: 'Queued', color: 'gray' }
     case 'UPLOADING':
-      return { label: 'Uploading', color: 'blue' };
+      return { label: 'Uploading', color: 'blue' }
     case 'UPLOADED':
-      return { label: 'Uploaded', color: 'green' };
+      return { label: 'Uploaded', color: 'green' }
     case 'ERROR':
-      return { label: 'Error', color: 'red' };
+      return { label: 'Error', color: 'red' }
     default:
-      return { label: 'Unknown', color: 'black' };
+      return { label: 'Unknown', color: 'black' }
   }
 }
 
   const onDrop = React.useCallback((acceptedFiles: File[]) => {
     setShowFileList(true)
   
-    const filesWithStatus = acceptedFiles.map(file => Object.assign(file, { status: 'QUEUED' as const }));
+    const filesWithStatus = acceptedFiles.map(file => Object.assign(file, { status: 'QUEUED' as const }))
     setFilesToUpload(currentFiles => [...currentFiles, ...filesWithStatus])
   }, [])
   
@@ -81,24 +81,24 @@ function getStatusProperties(status: FileWithStatus['status']) {
 
   const handleRemoveFile = (index: number) => {
     setFilesToUpload(currentFiles => {
-      const newFiles = [...currentFiles];
-      newFiles.splice(index, 1);
-      return newFiles;
-    });
+      const newFiles = [...currentFiles]
+      newFiles.splice(index, 1)
+      return newFiles
+    })
   
     if (filesToUpload.length === 1) {
-      setShowFileList(false);
+      setShowFileList(false)
     }
-  };
+  }
 
   
   const resetUploadState = () => {
-    setFilesToUpload([]);
-    setShowFileList(false);
+    setFilesToUpload([])
+    setShowFileList(false)
   }
 
   const filesDisplay = filesToUpload.map((file, index) => {
-    const statusProps = getStatusProperties(file.status);
+    const statusProps = getStatusProperties(file.status)
     return (
       <div key={file.name} className="flex items-center justify-between p-4 rounded-lg mb-2">
         <div className="flex items-center">
@@ -120,8 +120,8 @@ function getStatusProperties(status: FileWithStatus['status']) {
           <X className="h-5 w-5" />
         </button>
       </div>
-    );
-  });
+    )
+  })
   
   
 
@@ -209,7 +209,7 @@ function getStatusProperties(status: FileWithStatus['status']) {
       })
     }
   } catch (error) {
-  updateFileStatus(file.name, 'ERROR');
+  updateFileStatus(file.name, 'ERROR')
 }
 }
 
@@ -246,15 +246,15 @@ function getStatusProperties(status: FileWithStatus['status']) {
               id="newUpload"
               className="focus:outline-none text-center h-full w-full"
               action={async () => {
-                if (!targetUserId || filesToUpload.length === 0) return;
-                await Promise.all(filesToUpload.map(uploadAndProcessFile));
-                setDialogOpen(false);
+                if (!targetUserId || filesToUpload.length === 0) return
+                await Promise.all(filesToUpload.map(uploadAndProcessFile))
+                setDialogOpen(false)
                 filesToUpload.forEach((file, index) => {
                   toast.custom((t) => (
                     <Toast key={index}>{`Successfully uploaded ${file.name}`}</Toast>
-                  ));
-                });
-                resetUploadState();
+                  ))
+                })
+                resetUploadState()
               }}
               {...getRootProps()}
             >
@@ -291,5 +291,5 @@ function getStatusProperties(status: FileWithStatus['status']) {
         </DialogContent>
       </DialogPortal>
     </Dialog>
-  );
+  )
 }
