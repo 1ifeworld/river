@@ -13,12 +13,12 @@ import { Hash } from 'viem'
 import { SignMessageModalUIOptions } from '@privy-io/react-auth'
 
 export async function processCreatePubPost({
-  pubUri,
+  pubUris,
   targetChannelId,
   targetUserId,
   privySignMessage,
 }: {
-  pubUri: string
+  pubUris: string[]
   targetChannelId: bigint
   targetUserId: bigint
   privySignMessage: (
@@ -26,38 +26,54 @@ export async function processCreatePubPost({
     uiOptions?: SignMessageModalUIOptions | undefined,
   ) => Promise<string>
 }) {
-  // Declare constants/params
+  console.log(`Processing ${pubUris.length} publication(s)`)
+
   const postVersion = postTypes.v1
   const postExpiration: bigint = getExpiration()
-  // generate encoded msgBody for createChannelMsg
-  const createPubMsg = encodeCreatePublication({
-    uri: pubUri,
-    channelTags: [targetChannelId],
-  })
-  // add this in to prevent msgBody from being null
-  if (!createPubMsg) return
-  console.log('encoded pub and createPub msgBody correctly')
-  const encodedMessage = encodeMessage({
-    msgType: Number(messageTypes.createPublication),
-    msgBody: createPubMsg.msgBody,
-  })
-  // add this in to prevent either encoded messages from being null
-  if (!encodedMessage) return
-  console.log('encoded create pub message correctly')
-  // generate the bytes[] messageArray
-  const messageArray: Hash[] = [encodedMessage?.encodedMessage]
-  // NOTE: this encoding step should be a scrypt export as well
-  // bytes32 messageToBeSigned = keccak256(abi.encode(version, expiration, msgArray)).toEthSignedMessageHash();
+  let messageArray: Hash[] = []
+
+  // Process each publication URI
+  for (const pubUri of pubUris) {
+    console.log(`Processing publication URI: ${pubUri}`)
+
+    const createPubMsg = encodeCreatePublication({
+      uri: pubUri,
+      channelTags: [targetChannelId],
+    })
+
+    if (!createPubMsg) {
+      console.log('Failed to encode publication message')
+      continue
+    }
+
+    const encodedMessage = encodeMessage({
+      msgType: Number(messageTypes.createPublication),
+      msgBody: createPubMsg.msgBody,
+    })
+
+    if (!encodedMessage) {
+      console.log('Failed to encode message')
+      continue
+    }
+
+    // Add the encoded message to the message array
+    messageArray.push(encodedMessage.encodedMessage)
+  }
+
+  // Generate hash for the aggregated message array
   const postHash = generateHashForPostSig({
     version: postVersion,
     expiration: postExpiration,
-    messageArray: messageArray,
+    messageArray,
   })
+
+  // Remove 0x prefix for signature
   const postHashForSig = remove0xPrefix({ bytes32Hash: postHash })
-  // Get signature from user over signed hash of encodePacked version + expiration + messages
-  // const sig = await privySignMessage(remove0xPrefix({bytes32Hash: postHash}))
+
+  // Get the signature
   const sig = (await privySignMessage(postHashForSig)) as Hash
-  // Encode data to post through Gateway
+
+  // Encode data for the transaction
   const postInput = encodePost({
     userId: targetUserId,
     hashType: postTypes.hashScheme1,
@@ -66,14 +82,21 @@ export async function processCreatePubPost({
     sig: sig,
     version: postVersion,
     expiration: postExpiration,
-    messageArray: messageArray,
+    messageArray,
   })
-  // add this in to prevent postInputs being null
-  if (!postInput) return
-  console.log('postInput encoded correctly', postInput)
-  // pass postInputs into the createPost server action
+
+  if (!postInput) {
+    console.log('Failed to encode post input')
+    return
+  }
+
+  console.log('Encoded post input successfully')
+
+  // Send the transaction
   await relayPost({
     postInput: postInput,
     pathsToRevalidate: [`/channel/${targetChannelId}`, '/'],
   })
+
+  console.log('Post relayed successfully')
 }
