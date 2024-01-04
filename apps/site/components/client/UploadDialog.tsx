@@ -43,14 +43,11 @@ export function UploadDialog() {
   const { signMessage, userId: targetUserId } = useUserContext()
   const params = useParams()
   
-  const [uploadStatus, setUploadStatus] = React.useState<Record<number, 'pending' | 'uploaded'>>({});
-  type UploadStatus = { [key: number]: 'pending' | 'uploaded' }
 
   interface FileWithStatus extends File {
     status: 'QUEUED' | 'UPLOADING' | 'UPLOADED' | 'ERROR';
   }
 
-  // Define a function to get additional properties based on status
 function getStatusProperties(status: FileWithStatus['status']) {
   switch (status) {
     case 'QUEUED':
@@ -78,12 +75,7 @@ function getStatusProperties(status: FileWithStatus['status']) {
     setShowFileList(true)
   
     const filesWithStatus = acceptedFiles.map(file => Object.assign(file, { status: 'QUEUED' as const }));
-    setFilesToUpload(currentFiles => [...currentFiles, ...filesWithStatus]);
-  let initialStatus: UploadStatus = {}
-    acceptedFiles.forEach((file, index) => {
-      initialStatus[index] = 'pending'
-    })
-    setUploadStatus(initialStatus)
+    setFilesToUpload(currentFiles => [...currentFiles, ...filesWithStatus])
   }, [])
   
 
@@ -111,41 +103,54 @@ function getStatusProperties(status: FileWithStatus['status']) {
   const resetUploadState = () => {
     setFilesToUpload([]);
     setShowFileList(false);
-  };
+  }
+
   const filesDisplay = filesToUpload.map((file, index) => {
-    const statusProps = getStatusProperties(file.status); // Use the helper function here.
-  
+    const statusProps = getStatusProperties(file.status);
     return (
-      <div key={file.name} className="flex items-center justify-between p-2 rounded-lg mb-1">
-        <div className="flex-1 min-w-0">
-          <span className="text-md font-medium text-gray-700 truncate" title={file.name}>
+      <div key={file.name} className="flex items-center justify-between p-4 rounded-lg mb-2">
+        <div className="flex items-center">
+          <span className="text-sm font-semibold text-gray-800 mr-3 truncate" title={file.name}>
             {file.name}
           </span>
-          <div className="flex-1 min-w-0">
-          <span 
-            className={`"text-xs text-gray-700 truncate"`} 
-            style={{ color: statusProps.color }} 
-          >
-            status: {statusProps.label}
-          </span>
+          <div className="flex items-center px-2 py-1">
+            <span className={`text-xs font-small truncate mr-2`} style={{ color: statusProps.color }}>
+          {statusProps.label}
+            </span>
           </div>
         </div>
         <button
           type="button"
           onClick={() => handleRemoveFile(index)}
-          className="ml-2 text-black-500 hover:bg-red-100 rounded-full p-1"
+          className="text-gray-500 hover:text-red-500 hover:bg-gray-100 rounded-full p-2"
           aria-label={`Remove ${file.name}`}
         >
-          <X className="h-3 w-3" />
+          <X className="h-5 w-5" />
         </button>
       </div>
     );
   });
   
   
+
+  const updateFileStatus = (fileName: string, newStatus: FileWithStatus['status']) => {
+    setFilesToUpload(currentFiles => 
+      currentFiles.map(file => {
+        if (file.name === fileName) {
+          return {
+            ...file,
+            status: newStatus,
+          } as FileWithStatus
+        } else {
+          return file
+        }
+      })
+    )
+  }
   
 
   const uploadAndProcessFile = async (file: File) => {
+    try {
     const uploadedFileName = file.name || 'unnamed'
     const contentType = determineContentType(file)
     const uploadedFileCid = await client?.uploadFile(file)
@@ -181,10 +186,15 @@ function getStatusProperties(status: FileWithStatus['status']) {
     let muxPlaybackId = ''
 
     if (contentTypeKey === 2) {
+      updateFileStatus(file.name, 'UPLOADING')
+
       const muxUploadResult = await uploadToMux(contentType, animationUri?.toString() as string)
       muxAssetId = muxUploadResult.muxAssetId
       muxPlaybackId = muxUploadResult.muxPlaybackId
     }
+
+    updateFileStatus(file.name, 'UPLOADING')
+
 
     await sendToDb({
       key: pubUri?.toString() as string,
@@ -196,6 +206,8 @@ function getStatusProperties(status: FileWithStatus['status']) {
       },
     })
 
+    updateFileStatus(file.name, 'UPLOADED')
+
     if (signMessage && targetUserId) {
       await processCreatePubPost({
         pubUris: [pubUri?.toString() as string],
@@ -204,7 +216,10 @@ function getStatusProperties(status: FileWithStatus['status']) {
         privySignMessage: signMessage,
       })
     }
-  }
+  } catch (error) {
+  updateFileStatus(file.name, 'ERROR');
+}
+}
 
 
   return (
