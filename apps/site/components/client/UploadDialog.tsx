@@ -62,14 +62,6 @@ function getStatusProperties(status: FileWithStatus['status']) {
       return { label: 'Unknown', color: 'black' };
   }
 }
-  
-  // const onDrop = React.useCallback((acceptedFiles: File[]) => {
-  //   // Map over acceptedFiles and add the 'status' property
-  //   const filesWithStatus = acceptedFiles.map(file => Object.assign(file, { status: 'QUEUED' as const }));
-  
-  //   setFilesToUpload(currentFiles => [...currentFiles, ...filesWithStatus]);
-  //   setShowFileList(true);
-  // }, [setFilesToUpload]);
 
   const onDrop = React.useCallback((acceptedFiles: File[]) => {
     setShowFileList(true)
