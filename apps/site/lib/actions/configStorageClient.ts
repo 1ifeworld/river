@@ -26,8 +26,9 @@ export async function configStorageClient({
    */
   const audience = parseDid(did)
   const abilities = ['upload/add', 'store/add']
+  const expiration = Math.floor(Date.now() / 1000) + 60 * 60 * 24; // 24 hours from now
   // @ts-ignore
-  const delegation = await client.createDelegation(audience, abilities)
+  const delegation = await client.createDelegation(audience, abilities, { expiration })
   /**
    * Serialize the delegation and send it to the client
    */
