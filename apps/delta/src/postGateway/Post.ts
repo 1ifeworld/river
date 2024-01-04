@@ -122,25 +122,26 @@ ponder.on('PostGateway:Post', async ({ event, context }) => {
     }
     return
   }
+
   // NOTE: update to context.client.verifyMessage to unlock support
   //       for smart accounts in addition to EOAs
-  // const recoverAddressFromPostSignature = await recoverMessageAddress({
-  //   message: remove0xPrefix({ bytes32Hash: decodedPost.hash }),
-  //   signature: decodedPost.sig,
-  // })
-  // const signerIsValid = userLookup.to === recoverAddressFromPostSignature
+  const recoverAddressFromPostSignature = await recoverMessageAddress({
+    message: remove0xPrefix({ bytes32Hash: decodedPost.hash }),
+    signature: decodedPost.sig,
+  })
+  const signerIsValid = userLookup.to === recoverAddressFromPostSignature
 
-  // if (!signerIsValid) {
-  //   txnReceipt = await Txn.findUnique({ id: event.transaction.hash })
-  //   if (!txnReceipt) {
-  //     await Txn.create({ id: event.transaction.hash })
-  //     console.log(
-  //       'invalid post -- invalid sig for user. processed txn hash: ',
-  //       event.transaction.hash,
-  //     )
-  //   }
-  //   return
-  // }
+  if (!signerIsValid) {
+    txnReceipt = await Txn.findUnique({ id: event.transaction.hash })
+    if (!txnReceipt) {
+      await Txn.create({ id: event.transaction.hash })
+      console.log(
+        'invalid post -- invalid sig for user. processed txn hash: ',
+        event.transaction.hash,
+      )
+    }
+    return
+  }
 
   /* ************************************************
 
@@ -400,7 +401,6 @@ ponder.on('PostGateway:Post', async ({ event, context }) => {
           if (!channelLookup.admins.includes(decodedPost.userId)) break
           // process admin changes in for loop
           for (let i = 0; i < decodedEditChannelAccess.admins.length; ++i) {
-            console.log("processing admin changes", decodedEditChannelAccess.admins[i])
             let instructions = decodedEditChannelAccess.admins[i] < 0 ? 0 : 1 // 0 = remove, 1 = add
             // lookup userid to add/remove. do absolute value check incase of remove which will be negative
             userLookup = await User.findUnique({ id: absBigInt(decodedEditChannelAccess.admins[i]) })
@@ -434,14 +434,11 @@ ponder.on('PostGateway:Post', async ({ event, context }) => {
           }
           // process member changes in for loop
           for (let i = 0; i < decodedEditChannelAccess.members.length; ++i) {
-            console.log("processing member changes", decodedEditChannelAccess.members[i])
             let instructions = decodedEditChannelAccess.members[i] < 0 ? 0 : 1 // 0 = remove, 1 = add
             // lookup userid to add/remove. do absolute value check incase of remove which will be negative
             userLookup = await User.findUnique({ id: absBigInt(decodedEditChannelAccess.members[i]) })            
             // skip to next i in for loop if doesnt exist
             if (!userLookup) continue
-            console.log("user lookup worked")
-            console.log("instructions = ", instructions)
             // logic branch for add or removal
             if (instructions === 1) {
               // skip to next i in for loop if admin already present in admin/member arrays
