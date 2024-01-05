@@ -1,3 +1,4 @@
+
 import * as React from 'react'
 import {
   Button,
@@ -38,41 +39,110 @@ export function UploadDialog() {
   const [dialogOpen, setDialogOpen] = React.useState(false)
   const { authenticated, login } = usePrivy()
   const [showFileList, setShowFileList] = React.useState<boolean>(false)
-  const [filesToUpload, setFilesToUpload] = React.useState<File[]>([])
+  const [filesToUpload, setFilesToUpload] = React.useState<FileWithStatus[]>([])
   const { signMessage, userId: targetUserId } = useUserContext()
   const params = useParams()
+  
 
-  const onDrop = React.useCallback(
-    (acceptedFiles: File[]) => {
-      // Taking only the first file if no file has been uploaded yet
-      if (filesToUpload.length === 0 && acceptedFiles.length > 0) {
-        setShowFileList(true)
-        setFilesToUpload([acceptedFiles[0]])
-      }
-    },
-    [filesToUpload],
-  )
+  interface FileWithStatus extends File {
+    status: 'QUEUED' | 'UPLOADING' | 'UPLOADED' | 'ERROR'
+  }
+
+function getStatusProperties(status: FileWithStatus['status']) {
+  switch (status) {
+    case 'QUEUED':
+      return { label: 'Queued', color: 'gray' }
+    case 'UPLOADING':
+      return { label: 'Uploading', color: 'blue' }
+    case 'UPLOADED':
+      return { label: 'Uploaded', color: 'green' }
+    case 'ERROR':
+      return { label: 'Error', color: 'red' }
+    default:
+      return { label: 'Unknown', color: 'black' }
+  }
+}
+
+  const onDrop = React.useCallback((acceptedFiles: File[]) => {
+    setShowFileList(true)
+  
+    const filesWithStatus = acceptedFiles.map(file => Object.assign(file, { status: 'QUEUED' as const }))
+    setFilesToUpload(currentFiles => [...currentFiles, ...filesWithStatus])
+  }, [])
+  
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    disabled: filesToUpload.length > 0, // Disable dropzone if a file is already uploaded
+    noClick: filesToUpload.length > 0, 
+    multiple: true  
   })
 
   const { client } = useWeb3Storage()
 
   const handleRemoveFile = (index: number) => {
-    setFilesToUpload((currentFiles) =>
-      currentFiles.filter((_, i) => i !== index),
-    )
-    setShowFileList(false)
+    setFilesToUpload(currentFiles => {
+      const newFiles = [...currentFiles]
+      newFiles.splice(index, 1)
+      return newFiles
+    })
+  
+    if (filesToUpload.length === 1) {
+      setShowFileList(false)
+    }
   }
 
+  
   const resetUploadState = () => {
     setFilesToUpload([])
     setShowFileList(false)
   }
 
+  const filesDisplay = filesToUpload.map((file, index) => {
+    const statusProps = getStatusProperties(file.status)
+    return (
+      <div key={file.name} className="flex items-center justify-between p-4 rounded-lg mb-2">
+        <div className="flex items-center">
+          <span className="text-sm font-semibold text-gray-800 mr-3 truncate" title={file.name}>
+            {file.name}
+          </span>
+          <div className="flex items-center px-2 py-1">
+            <span className={`text-xs font-small truncate mr-2`} style={{ color: statusProps.color }}>
+          {statusProps.label}
+            </span>
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={() => handleRemoveFile(index)}
+          className="text-gray-500 hover:text-red-500 hover:bg-gray-100 rounded-full p-2"
+          aria-label={`Remove ${file.name}`}
+        >
+          <X className="h-5 w-5" />
+        </button>
+      </div>
+    )
+  })
+  
+  
+
+  const updateFileStatus = (fileName: string, newStatus: FileWithStatus['status']) => {
+    setFilesToUpload(currentFiles => 
+      currentFiles.map(file => {
+        if (file.name === fileName) {
+          return {
+            ...file,
+            status: newStatus,
+          } as FileWithStatus
+        } else {
+          return file
+        }
+      })
+    )
+  }
+  
+
   const uploadAndProcessFile = async (file: File) => {
+    try {
     const uploadedFileName = file.name || 'unnamed'
     const contentType = determineContentType(file)
     const uploadedFileCid = await client?.uploadFile(file)
@@ -108,10 +178,15 @@ export function UploadDialog() {
     let muxPlaybackId = ''
 
     if (contentTypeKey === 2) {
+      updateFileStatus(file.name, 'UPLOADING')
+
       const muxUploadResult = await uploadToMux(contentType, animationUri?.toString() as string)
       muxAssetId = muxUploadResult.muxAssetId
       muxPlaybackId = muxUploadResult.muxPlaybackId
     }
+
+    updateFileStatus(file.name, 'UPLOADING')
+
 
     await sendToDb({
       key: pubUri?.toString() as string,
@@ -123,15 +198,21 @@ export function UploadDialog() {
       },
     })
 
+    updateFileStatus(file.name, 'UPLOADED')
+
     if (signMessage && targetUserId) {
       await processCreatePubPost({
-        pubUri: pubUri?.toString() as string,
+        pubUris: [pubUri?.toString() as string],
         targetChannelId: BigInt(params.id as string),
         targetUserId: BigInt(targetUserId),
         privySignMessage: signMessage,
       })
     }
-  }
+  } catch (error) {
+  updateFileStatus(file.name, 'ERROR')
+}
+}
+
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -168,55 +249,30 @@ export function UploadDialog() {
                 if (!targetUserId || filesToUpload.length === 0) return
                 await Promise.all(filesToUpload.map(uploadAndProcessFile))
                 setDialogOpen(false)
-                for (const [index, file] of filesToUpload.entries()) {
+                filesToUpload.forEach((file, index) => {
                   toast.custom((t) => (
-                    <Toast key={index}>
-                      {'Successfully uploaded '}
-                      <span className="font-bold">{file.name}</span>
-                    </Toast>
+                    <Toast key={index}>{`Successfully uploaded ${file.name}`}</Toast>
                   ))
-                  resetUploadState()
-                }
+                })
+                resetUploadState()
               }}
               {...getRootProps()}
             >
               <Stack className="gap-[132px]">
                 <Separator />
-                {filesToUpload.length === 0 ? (
+                {showFileList ? filesDisplay : (
                   <>
                     <input {...getInputProps()} />
+
                     {isDragActive ? (
-                      <Typography className="text-muted-foreground min-h-[35px]'">
-                        Drop your files here
-                      </Typography>
+                      <Typography className="text-muted-foreground min-h-[35px]">Drop your files here</Typography>
                     ) : (
                       <Typography className="hover:cursor-pointer text-muted-foreground leading-1">
-                        Drag and drop your file here <br /> or click here to{' '}
-                        <span className="underline underline-offset-2">
-                          browse
-                        </span>
+                        Drag and drop your file here <br /> or click to select files
                       </Typography>
                     )}
+
                   </>
-                ) : (
-                  <div className="flex items-center justify-between p-2 rounded-lg">
-                    <div className="flex-1 truncate pr-4">
-                      <span
-                        className="text-sm font-medium text-gray-700"
-                        title={filesToUpload[0].name}
-                      >
-                        {filesToUpload[0].name}
-                      </span>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveFile(0)}
-                      className="ml-2 flex-shrink-0 text-black-500 hover:bg-red-100 rounded-full p-1"
-                      aria-label="Remove file"
-                    >
-                      <X className="h-3 w-3" />
-                    </button>
-                  </div>
                 )}
                 <Separator />
               </Stack>
