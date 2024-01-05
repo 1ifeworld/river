@@ -1,17 +1,20 @@
 import { Grid } from '@/design-system'
 import { getAllChannels, type Channel } from '@/gql'
-import { ChannelCard } from '@/server'
+import { ChannelCard, Footer } from '@/server'
 
 export default async function Home() {
   const { channels } = await getAllChannels()
   const { metadata } = await getChannelMetadata(channels)
 
   return (
-    <Grid className="grid-cols-1 md:grid-cols-[repeat(auto-fill,_minmax(272px,_1fr))] gap-2 pt-3">
-      {channels.map((channel: Channel, index: number) => (
-        <ChannelCard key={index} channel={channel} metadata={metadata} />
-      ))}
-    </Grid>
+    <>
+      <Grid className="grid-cols-1 md:grid-cols-[repeat(auto-fill,_minmax(272px,_1fr))] gap-2 py-3">
+        {channels.map((channel: Channel, index: number) => (
+          <ChannelCard key={index} channel={channel} metadata={metadata} />
+        ))}
+      </Grid>
+      <Footer />
+    </>
   )
 }
 
