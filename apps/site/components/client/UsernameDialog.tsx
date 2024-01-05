@@ -1,7 +1,6 @@
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTitle,
   DialogFooter,
   Form,
@@ -19,15 +18,15 @@ import {
   checkUsernameAvailability,
   processRegisterFor,
   usernameSchema,
+  type UsernameSchemaValues,
 } from '@/lib'
 import { useUserContext } from '@/context'
 import { SubmitButton } from '@/client'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import React, { useState, useEffect } from 'react'
-import { useDebounce } from 'usehooks-ts'
+import debounce from 'debounce'
 import { toast } from 'sonner'
-import * as z from 'zod'
 
 interface UsernameDialogProps {
   open: boolean
@@ -35,108 +34,114 @@ interface UsernameDialogProps {
 }
 
 export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
-  const form = useForm<z.infer<typeof usernameSchema>>({
+  const form = useForm<UsernameSchemaValues>({
     resolver: zodResolver(usernameSchema),
     defaultValues: {
       username: '',
     },
   })
 
-  const [usernameExists, setUsernameExists] = useState<boolean | null>()
-  const [checkState, setCheckState] = useState({
-    isChecking: false,
-    debounceFinished: false,
-  })
-  const [canSubmit, setCanSubmit] = useState(false)
-
-  const username = form.watch('username')
-  const debouncedUsername = useDebounce(username, 500)
-
-  useEffect(() => {
-    let isMounted = true
-    setCheckState({ isChecking: true, debounceFinished: false })
-
-    if (debouncedUsername) {
-      checkUsernameAvailability(debouncedUsername).then((result) => {
-        if (isMounted) {
-          setUsernameExists(result.exists)
-          setCheckState({ isChecking: false, debounceFinished: true })
-          setCanSubmit(!result.exists)
-        }
-      })
-    } else {
-      setUsernameExists(null)
-      setCheckState({ isChecking: false, debounceFinished: true })
-      setCanSubmit(false)
-    }
-
-    return () => {
-      isMounted = false
-    }
-  }, [debouncedUsername])
-
   const { signMessage, embeddedWallet, fetchUserData } = useUserContext()
 
-  async function onSubmit(data: z.infer<typeof usernameSchema>) {
+  const [usernameExists, setUsernameExists] = useState(false)
+  const [validationComplete, setValidationComplete] = useState(false)
+
+  // Subscribe to changes to the username input
+  const watchUsername = debounce(() => form.watch('username'), 500)
+
+  const triggerValidation = React.useMemo(
+    () =>
+      debounce(() => {
+        form.trigger('username')
+        setValidationComplete(true)
+      }, 500),
+    [form],
+  )
+
+  useEffect(() => {
+    if (form.formState.isValid && validationComplete) {
+      checkUsernameAvailability(form.getValues().username).then((result) => {
+        setUsernameExists(result.exists)
+      })
+      return () => {
+        setValidationComplete(false)
+      }
+    }
+  }, [validationComplete, watchUsername])
+
+  async function registerUsername({ username }: { username: string }) {
     if (signMessage && embeddedWallet?.address && fetchUserData) {
-      console.log('running processRegisterFor')
       await processRegisterFor({
         privySignerAddress: embeddedWallet.address,
         privySignMessage: signMessage,
-        username: `${data.username}.sbvrsv.eth`,
+        username: `${username}.sbvrsv.eth`,
       })
-      console.log('finished processRegisterFor')
       await fetchUserData()
     }
-
-    setOpen(false)
-
-    toast.custom((t) => (
-      <Toast>
-        Welcome to River{' '}
-        <span className="font-bold">{form.getValues().username}</span>
-      </Toast>
-    ))
   }
 
   return (
     <Dialog open={open}>
       <DialogContent className="sm:max-w-[425px]">
-        <Stack className="items-center gap-4">
-          <DialogHeader>
-            <DialogTitle>
-              <Typography>Choose a username</Typography>
-            </DialogTitle>
-          </DialogHeader>
+        <Stack className="items-center gap-5">
+          <DialogTitle>
+            <Typography>Choose a username</Typography>
+          </DialogTitle>
           <Form {...form}>
             <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col justify-center w-full gap-6"
+              action={async () => {
+                // Register the supplied username
+                await registerUsername({ username: form.getValues().username })
+                // Close the dialog
+                setOpen(false)
+                // Render a toast
+                toast.custom((t) => (
+                  <Toast>
+                    Welcome to River{' '}
+                    <span className="font-bold">
+                      {form.getValues().username}
+                    </span>
+                  </Toast>
+                ))
+              }}
+              className="w-full"
             >
-              <Separator />
-              <FormField
-                control={form.control}
-                name="username"
-                render={({ field }) => (
-                  <FormItem className="mx-5 text-center">
-                    <FormControl>
-                      <Input placeholder="Enter username..." {...field} />
-                    </FormControl>
-                    {usernameExists && checkState.debounceFinished && (
-                      <FormMessage>
-                        Username not available, please try another
-                      </FormMessage>
-                    )}
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Separator />
-              <DialogFooter className="flex flex-col py-2">
+              <Stack className="gap-8">
+                <Separator />
+                <FormField
+                  control={form.control}
+                  name="username"
+                  render={({ field }) => (
+                    <FormItem className="mx-5 text-center">
+                      <FormControl>
+                        <Input
+                          placeholder="Enter username..."
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e)
+                            triggerValidation()
+                          }}
+                        />
+                      </FormControl>
+                      <div className="h-3">
+                        {usernameExists ? (
+                          <FormMessage className="pt-2 text-red-500">
+                            Username not available, please try another
+                          </FormMessage>
+                        ) : (
+                          <FormMessage className="pt-2 text-red-500" />
+                        )}
+                      </div>
+                    </FormItem>
+                  )}
+                />
+                <Separator className="-mt-3" />
+              </Stack>
+              <DialogFooter className="text-center pt-[18px]">
                 <SubmitButton
                   type="submit"
                   variant="link"
-                  disabled={!canSubmit}
+                  disabled={!form.formState.isValid || usernameExists}
                 >
                   Complete
                 </SubmitButton>
