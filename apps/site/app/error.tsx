@@ -10,11 +10,8 @@ export default function IndexError({
   reset: () => void
 }) {
   return (
-    <Stack className="gap-5 justify-center items-center h-[calc(100dvh-72px)]">
-      <div className="text-center">
-        <Typography variant="h2">Something went wrong</Typography>
-        <Typography className="text-red-500">{error.message}</Typography>
-      </div>
+    <Stack className="gap-4 justify-center items-center h-[calc(100dvh-72px)]">
+      <Typography variant="h1">Something went wrong</Typography>
       <Button
         variant="link"
         onClick={
@@ -22,7 +19,7 @@ export default function IndexError({
           () => reset()
         }
       >
-        Please try again
+        <Typography>Please try again</Typography>
       </Button>
     </Stack>
   )
