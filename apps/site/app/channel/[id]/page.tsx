@@ -2,14 +2,11 @@ import { getChannelWithId, type Reference } from '@/gql'
 import { Flex, Stack } from '@/design-system'
 import { ChannelBanner, ChannelItems } from '@/server'
 
-const session = null
-
 export default async function Channel({
   params,
 }: {
   params: { id: string }
 }) {
-  if (!session) throw new Error('Unhandled')
   const { channel } = await getChannelWithId({
     id: params.id,
   })
