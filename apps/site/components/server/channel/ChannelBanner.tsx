@@ -31,7 +31,7 @@ export async function ChannelBanner({
 
   return (
     <Stack className="justify-between h-[calc(100dvh-64px)]">
-      <Stack className="gap-4 md:gap-6">
+      <Stack className="gap-4 md:gap-6 md:w-[425px]">
         {/* The negative margin allows cover images to reach the edges of the screen */}
         <div className="relative -mx-5">
           <>
