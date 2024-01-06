@@ -9,7 +9,6 @@ export default async function Home() {
   return (
     <Stack className="justify-between h-[100dvh]">
       <Grid className="grid-cols-1 md:grid-cols-[repeat(auto-fill,_minmax(272px,_1fr))] gap-2 py-3">
-        <ChannelCard channel={channels[0]} metadata={metadata} />
         {channels.map((channel: Channel, index: number) => (
           <ChannelCard key={index} channel={channel} metadata={metadata} />
         ))}
