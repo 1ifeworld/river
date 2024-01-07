@@ -1,6 +1,6 @@
 'use server'
 import { muxClient } from '@/config/muxClient'
-import { pinataUrlFromCid, ipfsUrlToCid } from 'lib/ipfs'
+import { ipfsUrlToCid, pinataUrlFromCid } from 'lib/ipfs'
 import { isVideo } from 'lib/isContent'
 
 export const uploadToMux = async (

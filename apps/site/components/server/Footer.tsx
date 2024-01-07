@@ -1,4 +1,4 @@
-import { Typography, Flex } from '@/design-system'
+import { Flex, Typography } from '@/design-system'
 
 export function Footer() {
   return (

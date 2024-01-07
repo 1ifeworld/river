@@ -1,14 +1,14 @@
+import { SignMessageModalUIOptions } from '@privy-io/react-auth'
 import { relayRegisterFor } from 'lib/actions'
-import { getExpiration, remove0xPrefix, registerForHash } from 'scrypt'
+import { getExpiration, registerForHash, remove0xPrefix } from 'scrypt'
 import {
   Hash,
   Hex,
-  recoverMessageAddress,
-  recoverAddress,
   hashMessage,
   keccak256,
+  recoverAddress,
+  recoverMessageAddress,
 } from 'viem'
-import { SignMessageModalUIOptions } from '@privy-io/react-auth'
 
 export async function processRegisterFor({
   privySignerAddress,

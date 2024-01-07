@@ -1,24 +1,24 @@
+import { SignMessageModalUIOptions } from '@privy-io/react-auth'
 import { relayPost } from 'lib/actions'
 import {
-  encodePost,
-  encodeMessage,
   encodeCreateChannel,
-  postTypes,
-  messageTypes,
-  getExpiration,
+  encodeMessage,
+  encodePost,
   generateHashForPostSig,
+  getExpiration,
+  messageTypes,
+  postTypes,
   remove0xPrefix,
 } from 'scrypt'
 import {
   Address,
   Hash,
+  encodeAbiParameters,
+  keccak256,
   recoverMessageAddress,
   toBytes,
-  keccak256,
-  encodeAbiParameters,
   verifyMessage,
 } from 'viem'
-import { SignMessageModalUIOptions } from '@privy-io/react-auth'
 
 export async function processCreateChannelPost({
   channelUri,

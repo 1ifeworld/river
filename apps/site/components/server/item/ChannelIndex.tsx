@@ -1,8 +1,8 @@
-import Link from 'next/link'
-import { Stack, Flex, Typography, cn } from '@/design-system'
-import { Reference, Channel } from '@/gql'
+import { Flex, Stack, Typography, cn } from '@/design-system'
+import { Channel, Reference } from '@/gql'
 import { Username } from '@/server'
 import { truncateText } from '@/utils'
+import Link from 'next/link'
 
 interface ChannelIndexProps {
   reference: Reference

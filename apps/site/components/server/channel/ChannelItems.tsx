@@ -1,15 +1,15 @@
+import { ItemDropdown } from '@/client'
 import {
-  Typography,
+  Debug,
   Table,
   TableBody,
   TableCell,
   TableRow,
-  Debug,
+  Typography,
 } from '@/design-system'
 import { Channel, Reference } from '@/gql'
-import { unixTimeConverter } from '@/utils'
 import { ThumbnailNameCreator } from '@/server'
-import { ItemDropdown } from '@/client'
+import { unixTimeConverter } from '@/utils'
 import Link from 'next/link'
 import styles from './ChannelItems.module.css'
 

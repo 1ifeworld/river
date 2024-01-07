@@ -1,10 +1,10 @@
 'use client'
 
-import { PropsWithChildren, MouseEvent } from 'react'
 import { Stack, cn } from '@/design-system'
-import { useMediaQuery } from '@/hooks'
 import { Reference } from '@/gql'
+import { useMediaQuery } from '@/hooks'
 import { useRouter } from 'next/navigation'
+import { MouseEvent, PropsWithChildren } from 'react'
 
 type ContentWrapperProps = PropsWithChildren<{
   item: Reference

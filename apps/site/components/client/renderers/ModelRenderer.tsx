@@ -1,16 +1,16 @@
 'use client'
 
-import React, { Suspense, useRef, useEffect } from 'react'
 import {
-  useGLTF,
+  Html,
   OrbitControls,
   PerspectiveCamera,
+  useGLTF,
   useProgress,
-  Html,
 } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
-import { GLTF as GLTFThree } from 'three/examples/jsm/loaders/GLTFLoader'
+import React, { Suspense, useEffect, useRef } from 'react'
 import * as THREE from 'three'
+import { GLTF as GLTFThree } from 'three/examples/jsm/loaders/GLTFLoader'
 
 interface ModelProps {
   src: string

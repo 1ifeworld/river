@@ -1,6 +1,6 @@
 'use client'
 
-import { Stack, Button, Typography } from '@/design-system'
+import { Button, Stack, Typography } from '@/design-system'
 
 export default function IndexError({
   error,

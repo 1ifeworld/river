@@ -1,6 +1,6 @@
-import React from 'react'
+import { Button, Typography } from '@/design-system'
 import Link from 'next/link'
-import { Typography, Button } from '@/design-system'
+import React from 'react'
 
 export function RiverLogo() {
   return (

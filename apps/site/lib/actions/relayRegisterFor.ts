@@ -1,12 +1,12 @@
 'use server'
 
-import { addresses, idRegistryABI } from 'scrypt'
 import { nonceManager } from '@/config/ethersClient'
-import { Hash, Hex, encodeFunctionData } from 'viem'
-import { revalidatePath } from 'next/cache'
-import { getTxnWithHash } from '@/gql'
-import { setUsername } from '../username'
 import { publicClient } from '@/config/publicClient'
+import { getTxnWithHash } from '@/gql'
+import { revalidatePath } from 'next/cache'
+import { addresses, idRegistryABI } from 'scrypt'
+import { Hash, Hex, encodeFunctionData } from 'viem'
+import { setUsername } from '../username'
 
 interface RelayRegisterForProps {
   registerForRecipient: Hex

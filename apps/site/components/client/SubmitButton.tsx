@@ -1,5 +1,5 @@
+import { Button, Loading, Typography } from '@/design-system'
 import * as React from 'react'
-import { Button, Typography, Loading } from '@/design-system'
 import { ComponentProps } from 'react'
 // @ts-expect-error
 import { useFormStatus } from 'react-dom'

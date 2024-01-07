@@ -1,5 +1,5 @@
 import { useTheme } from 'next-themes'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export function ThemeToggle() {
   const [mounted, setMounted] = useState(false)

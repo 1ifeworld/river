@@ -1,38 +1,38 @@
-import * as React from 'react'
+import { SubmitButton } from '@/client'
+import { useUserContext } from '@/context'
 import {
   Button,
-  Typography,
-  Stack,
-  Separator,
   Dialog,
-  DialogPortal,
-  DialogTrigger,
-  DialogContent,
-  DialogTitle,
-  DialogHeader,
-  DialogFooter,
   DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogPortal,
+  DialogTitle,
+  DialogTrigger,
+  Separator,
+  Stack,
   Toast,
+  Typography,
 } from '@/design-system'
+import { useWeb3Storage } from '@/hooks'
 import {
-  processCreatePubPost,
-  sendToDb,
-  isText,
+  determineContentType,
+  isAudio,
   isGLB,
   isPdf,
+  isText,
   isVideo,
-  isAudio,
-  determineContentType,
+  processCreatePubPost,
+  sendToDb,
 } from '@/lib'
-import { useUserContext } from '@/context'
-import { useDropzone } from 'react-dropzone'
-import { toast } from 'sonner'
-import { SubmitButton } from '@/client'
-import { useParams } from 'next/navigation'
+import { type MetadataObject, uploadToMux } from '@/lib'
 import { usePrivy } from '@privy-io/react-auth'
 import { X } from 'lucide-react'
-import { uploadToMux, type MetadataObject } from '@/lib'
-import { useWeb3Storage } from '@/hooks'
+import { useParams } from 'next/navigation'
+import * as React from 'react'
+import { useDropzone } from 'react-dropzone'
+import { toast } from 'sonner'
 
 export function UploadDialog() {
   const [dialogOpen, setDialogOpen] = React.useState(false)
@@ -96,19 +96,17 @@ export function UploadDialog() {
     }
 
     const pubUri = await client?.uploadFile(
-      new Blob(
-        [
-          JSON.stringify(metadataObject),
-        ],
-        { type: 'application/json' },
-      ),
+      new Blob([JSON.stringify(metadataObject)], { type: 'application/json' }),
     )
 
     let muxAssetId = ''
     let muxPlaybackId = ''
 
     if (contentTypeKey === 2) {
-      const muxUploadResult = await uploadToMux(contentType, animationUri?.toString() as string)
+      const muxUploadResult = await uploadToMux(
+        contentType,
+        animationUri?.toString() as string,
+      )
       muxAssetId = muxUploadResult.muxAssetId
       muxPlaybackId = muxUploadResult.muxPlaybackId
     }

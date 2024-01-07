@@ -1,7 +1,7 @@
 import { Stack, Typography, cn } from '@/design-system'
-import { truncateText, unixTimeConverter } from '@/utils'
-import { Username } from '@/server'
 import { Reference } from '@/gql'
+import { Username } from '@/server'
+import { truncateText, unixTimeConverter } from '@/utils'
 
 interface MobileItemStubProps {
   reference: Reference
