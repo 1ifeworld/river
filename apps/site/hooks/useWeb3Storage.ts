@@ -1,7 +1,7 @@
-import * as React from 'react'
-import { create, type Client } from '@web3-storage/w3up-client'
-import { extract } from '@ucanto/core/delegation'
 import { configStorageClient } from '@/lib'
+import { extract } from '@ucanto/core/delegation'
+import { type Client, create } from '@web3-storage/w3up-client'
+import * as React from 'react'
 
 export function useWeb3Storage() {
   const [client, setClient] = React.useState<Client | null>(null)

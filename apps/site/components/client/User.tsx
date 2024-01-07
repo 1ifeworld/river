@@ -1,13 +1,13 @@
+import { useUserContext } from '@/context'
 import {
+  Button,
   DropdownMenu,
-  DropdownMenuTrigger,
+  DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuContent,
-  Button,
+  DropdownMenuTrigger,
   Typography,
 } from '@/design-system'
-import { useUserContext } from '@/context'
 import { useLogout } from '@privy-io/react-auth'
 
 interface UserProps {

@@ -1,16 +1,16 @@
+import { SignMessageModalUIOptions } from '@privy-io/react-auth'
 import { relayPost } from 'lib/actions'
 import {
-  encodePost,
-  encodeMessage,
   encodeCreatePublication,
-  postTypes,
-  messageTypes,
-  getExpiration,
+  encodeMessage,
+  encodePost,
   generateHashForPostSig,
+  getExpiration,
+  messageTypes,
+  postTypes,
   remove0xPrefix,
 } from 'scrypt'
 import { Hash } from 'viem'
-import { SignMessageModalUIOptions } from '@privy-io/react-auth'
 
 export async function processCreatePubPost({
   pubUri,

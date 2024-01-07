@@ -1,5 +1,6 @@
 import { Grid, Stack } from '@/design-system'
-import { getAllChannels, type Channel } from '@/gql'
+import { type Channel, getAllChannels } from '@/gql'
+import { getChannelMetadata } from '@/lib'
 import { ChannelCard, Footer } from '@/server'
 
 export default async function Home() {
@@ -16,36 +17,4 @@ export default async function Home() {
       <Footer />
     </Stack>
   )
-}
-
-async function getChannelMetadata(channels: any) {
-  // Extract URIs from the channels array
-  const uris = channels.map((channel: { uri: any }) => channel.uri)
-  // setup endpoint
-  const getMetadataEndpoint = `${process.env.NEXT_PUBLIC_METADATA_SERVER_URL}/get`
-
-  // Prepare the request body
-  const body = JSON.stringify({ cids: uris })
-
-  try {
-    const response = await fetch(getMetadataEndpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: body,
-    })
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-
-    const metadata = await response.json()
-    return {
-      metadata: metadata,
-    }
-  } catch (error) {
-    console.error('Error fetching data:', error)
-    return { metadata: null, error }
-  }
 }

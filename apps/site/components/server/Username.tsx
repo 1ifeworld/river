@@ -1,6 +1,6 @@
 import { Typography } from '@/design-system'
-import { getUsername } from '@/lib'
 import { cn } from '@/design-system'
+import { getUsername } from '@/lib'
 
 export async function Username({
   id,

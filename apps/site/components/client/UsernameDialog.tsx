@@ -1,31 +1,31 @@
+import { SubmitButton } from '@/client'
+import { useUserContext } from '@/context'
 import {
   Dialog,
   DialogContent,
-  DialogTitle,
   DialogFooter,
+  DialogTitle,
   Form,
   FormControl,
   FormField,
   FormItem,
   FormMessage,
   Input,
-  Stack,
-  Typography,
   Separator,
+  Stack,
   Toast,
+  Typography,
 } from '@/design-system'
 import {
+  type UsernameSchemaValues,
   checkUsernameAvailability,
   processRegisterFor,
   usernameSchema,
-  type UsernameSchemaValues,
 } from '@/lib'
-import { useUserContext } from '@/context'
-import { SubmitButton } from '@/client'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import React, { useState, useEffect } from 'react'
 import debounce from 'debounce'
+import React, { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 interface UsernameDialogProps {

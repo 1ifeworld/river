@@ -1,22 +1,20 @@
-import * as React from 'react'
-import dynamic from 'next/dynamic'
-import Image from 'next/image'
-import { Stack, Flex, Typography } from '@/design-system'
-import { getReferenceWithId, type Reference } from '@/gql'
+import { AudioPlayer, ContentWrapper, VideoPlayer } from '@/client'
+import { Stack } from '@/design-system'
+import { getReferenceWithId } from '@/gql'
 import {
-  ipfsUrlToCid,
-  pinataUrlFromCid,
-  isVideo,
-  isPdf,
-  isAudio,
-  isImage,
-  isText,
   getChannelMetadata,
   getReferenceMetadata,
-  getReferencesMetadata,
+  ipfsUrlToCid,
+  isAudio,
+  isImage,
+  isPdf,
+  isVideo,
+  pinataUrlFromCid,
 } from '@/lib'
-import { ContentWrapper, VideoPlayer, AudioPlayer, User } from '@/client'
-import { ChannelIndex, MobileItemStub, ChannelItems } from '@/server'
+import { ChannelIndex, MobileItemStub } from '@/server'
+import dynamic from 'next/dynamic'
+import Image from 'next/image'
+import * as React from 'react'
 
 const Model = dynamic(
   () => import('../../../components/client/renderers/ModelRenderer'),
@@ -47,20 +45,18 @@ export default async function View({
     return <div>Not a valid item</div>
   }
   // Fetch metadata for various downstream targets
-  const { metadata: channelMetadata } = await getChannelMetadata(
-    reference.channel.uri,
-  )
-  const { metadata: itemMetadata } = await getReferenceMetadata(
-    reference as Reference,
-  )
-  const { metadata: channelReferencesMetadata } = await getReferencesMetadata(
-    reference.channel.references as Reference[],
+  const { metadata: channelMetadata } = await getChannelMetadata([
+    reference.channel,
+  ])
+  const { metadata: itemMetadata } = await getReferenceMetadata([reference])
+  const { metadata: channelReferencesMetadata } = await getReferenceMetadata(
+    reference.channel.references,
   )
   const referenceMetadata = itemMetadata.data[reference?.pubRef?.uri as string]
   // Extract content type from referenceMetadata
   const contentType = referenceMetadata.contentType
   // Initialize dynamic variable for setting contentUrl
-  let contentUrl: any
+  let contentUrl
   // Set contentUrl to appropriate route
   if (
     referenceMetadata.contentType === 'model/gltf-binary' ||
@@ -75,7 +71,7 @@ export default async function View({
     contentUrl = pinataUrlFromCid({ cid })
   }
   // Initialize dynamic variable for setting content
-  let content: any
+  let content
   // Set content to appropriate media player
   switch (true) {
     case isImage({ mimeType: contentType }):

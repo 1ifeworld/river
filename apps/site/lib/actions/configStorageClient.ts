@@ -4,8 +4,8 @@ import { CarReader } from '@ipld/car'
 import { parse as parseDid } from '@ipld/dag-ucan/did'
 import { importDAG } from '@ucanto/core/delegation'
 import { parse } from '@ucanto/principal/ed25519' // Agents on Node should use Ed25519 keys
-import { create } from '@web3-storage/w3up-client'
 import { StoreMemory } from '@web3-storage/access'
+import { create } from '@web3-storage/w3up-client'
 
 export async function configStorageClient({
   did,
@@ -26,9 +26,11 @@ export async function configStorageClient({
    */
   const audience = parseDid(did)
   const abilities = ['upload/add', 'store/add']
-  const expiration = Math.floor(Date.now() / 1000) + 60 * 60 * 24; // 24 hours from now
+  const expiration = Math.floor(Date.now() / 1000) + 60 * 60 * 24 // 24 hours from now
   // @ts-ignore
-  const delegation = await client.createDelegation(audience, abilities, { expiration })
+  const delegation = await client.createDelegation(audience, abilities, {
+    expiration,
+  })
   /**
    * Serialize the delegation and send it to the client
    */

@@ -1,8 +1,8 @@
+import { ChannelDialog, User, UsernameDialog } from '@/client'
 import { Button, Flex } from '@/design-system'
+import { RiverLogo } from '@/server'
 import { useLogin, usePrivy } from '@privy-io/react-auth'
 import { useState } from 'react'
-import { User, UsernameDialog, ChannelDialog } from '@/client'
-import { RiverLogo } from '@/server'
 
 export function Header() {
   const [open, setOpen] = useState<boolean>(false)

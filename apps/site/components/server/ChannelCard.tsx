@@ -1,4 +1,4 @@
-import { Stack, Typography, Flex } from '@/design-system'
+import { Flex, Stack, Typography } from '@/design-system'
 import { type Channel } from '@/gql'
 import { getUsername } from '@/lib'
 import { pluralize } from '@/utils'

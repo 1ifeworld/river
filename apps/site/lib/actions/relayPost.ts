@@ -1,10 +1,10 @@
 'use server'
 
-import { addresses, postGatewayABI } from 'scrypt'
 import { nonceManager } from '@/config/ethersClient'
-import { Hash, encodeFunctionData } from 'viem'
-import { revalidatePath } from 'next/cache'
 import { getTxnWithHash } from '@/gql'
+import { revalidatePath } from 'next/cache'
+import { addresses, postGatewayABI } from 'scrypt'
+import { Hash, encodeFunctionData } from 'viem'
 
 interface RelayPostProps {
   postInput: Hash

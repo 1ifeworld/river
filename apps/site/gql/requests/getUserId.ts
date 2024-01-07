@@ -1,5 +1,5 @@
-import sdk from '../client'
 import { type Address } from 'viem'
+import sdk from '../client'
 
 export async function getUserId({
   custodyAddress,

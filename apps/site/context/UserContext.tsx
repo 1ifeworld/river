@@ -1,18 +1,18 @@
 'use client'
 
-import React, {
-  createContext,
-  ReactNode,
-  useContext,
-  useState,
-  useEffect,
-} from 'react'
-import { useWallets, type ConnectedWallet, User } from '@privy-io/react-auth'
-import { usePrivy } from '@privy-io/react-auth'
 import { getUserId } from '@/gql'
 import { getUsername } from '@/lib'
-import { type Address } from 'viem'
+import { type ConnectedWallet, User, useWallets } from '@privy-io/react-auth'
+import { usePrivy } from '@privy-io/react-auth'
 import { SignMessageModalUIOptions } from '@privy-io/react-auth'
+import React, {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
+import { type Address } from 'viem'
 
 const UserContext = createContext<{
   embeddedWallet?: ConnectedWallet

@@ -1,41 +1,41 @@
-import * as React from 'react'
+import { SubmitButton } from '@/client'
+import { useUserContext } from '@/context'
 import {
   Button,
-  Typography,
-  Stack,
-  Separator,
   Dialog,
-  DialogPortal,
-  DialogTrigger,
-  DialogContent,
-  DialogTitle,
-  DialogHeader,
   DialogClose,
+  DialogContent,
   DialogFooter,
+  DialogHeader,
+  DialogPortal,
+  DialogTitle,
+  DialogTrigger,
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  Input,
   FormMessage,
-  Toast,
+  Input,
+  Separator,
+  Stack,
   Textarea,
+  Toast,
+  Typography,
 } from '@/design-system'
+import { useWeb3Storage } from '@/hooks'
 import {
+  type MetadataObject,
+  newChannelSchema,
   processCreateChannelPost,
   sendToDb,
-  newChannelSchema,
-  type MetadataObject,
 } from '@/lib'
-import { useUserContext } from '@/context'
+import { FileList } from '@/server'
 import { zodResolver } from '@hookform/resolvers/zod'
+import * as React from 'react'
+import { useDropzone } from 'react-dropzone'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import { SubmitButton } from '@/client'
-import { useDropzone } from 'react-dropzone'
-import { FileList } from '@/server'
-import { useWeb3Storage } from '@/hooks'
 import * as z from 'zod'
 
 interface ChannelDialogProps {
@@ -117,28 +117,24 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                     uploadedFileCid = await client?.uploadFile(filesToUpload[0])
                     uploadedFileType = filesToUpload[0].type
                   }
-                  const metadataObject: MetadataObject = 
-                    {
-                      name: form.getValues().name,
-                      description: form.getValues().description || '',
-                      image: uploadedFileCid?.toString() as string || '',
-                      animationUri: '',
-                    }
-                  
+                  const metadataObject: MetadataObject = {
+                    name: form.getValues().name,
+                    description: form.getValues().description || '',
+                    image: (uploadedFileCid?.toString() as string) || '',
+                    animationUri: '',
+                  }
+
                   const channelUri = await client?.uploadFile(
-                    new Blob(
-                      [
-                        JSON.stringify(metadataObject),
-                      ],
-                      { type: 'application/json' },
-                    ),
+                    new Blob([JSON.stringify(metadataObject)], {
+                      type: 'application/json',
+                    }),
                   )
                   await sendToDb({
                     key: channelUri?.toString() as string,
                     value: {
                       name: form.getValues().name,
                       description: form.getValues().description || '',
-                      image: uploadedFileCid?.toString() as string || '',
+                      image: (uploadedFileCid?.toString() as string) || '',
                       animationUri: '',
                       contentType: uploadedFileType as string,
                     },

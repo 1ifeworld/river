@@ -1,4 +1,4 @@
-import { isGLB, isAudio, isImage, isVideo, isText } from './isContent'
+import { isAudio, isGLB, isImage, isText, isVideo } from './isContent'
 
 export const determineContentType = (file: File): string => {
   if (isGLB(file)) {

@@ -1,17 +1,17 @@
-import Image from 'next/image'
+import { AddMembersForm, UploadDialog } from '@/client'
 import {
-  Stack,
   Flex,
-  Typography,
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
+  Stack,
+  Typography,
 } from '@/design-system'
 import { Channel } from '@/gql'
-import { UploadDialog, AddMembersForm } from '@/client'
 import { ipfsUrlToCid, pinataUrlFromCid } from '@/lib'
-import { Username, GenericThumbnailLarge } from '@/server'
-import { truncateText, pluralize, selectPluralForm } from '@/utils'
+import { GenericThumbnailLarge, Username } from '@/server'
+import { pluralize, selectPluralForm, truncateText } from '@/utils'
+import Image from 'next/image'
 
 export async function ChannelBanner({
   channel,
@@ -116,9 +116,8 @@ export async function ChannelBanner({
                   {/* <Stack className='border-2 border-red-500'>
                     hehehehehe
                   </Stack> */}
-                  
-                  <AddMembersForm targetChannelId={channel.id} />
 
+                  <AddMembersForm targetChannelId={channel.id} />
                 </Stack>
               </HoverCardContent>
             </HoverCard>

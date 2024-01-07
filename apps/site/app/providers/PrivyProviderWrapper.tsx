@@ -1,6 +1,6 @@
-import * as React from 'react'
-import { PrivyProvider } from '@privy-io/react-auth'
 import { river_j5bpjduqfv } from '@/config/customChainConfig'
+import { PrivyProvider } from '@privy-io/react-auth'
+import * as React from 'react'
 
 export function PrivyProviderWrapper({
   children,
