@@ -29,7 +29,9 @@ export function ChannelIndex({
       {showTop ? (
         <Stack>
           <Typography className="text-black leading-0">
-            {truncateText(referenceMetadata.name, 25)}
+            {referenceMetadata?.name
+              ? truncateText(referenceMetadata.name, 25)
+              : 'untitled'}
           </Typography>
           <Flex className="items-center">
             <Username id={reference.pubRef?.createdBy} />
@@ -75,7 +77,9 @@ export function ItemListView({
       href={`/item/${reference.id}`}
     >
       <Typography className="leading-0">
-        {truncateText(referenceMetadata.name, 25)}
+        {referenceMetadata?.name
+          ? truncateText(referenceMetadata.name, 25)
+          : 'untitled'}
       </Typography>
       <Username id={reference.pubRef?.createdBy} />
     </Link>
