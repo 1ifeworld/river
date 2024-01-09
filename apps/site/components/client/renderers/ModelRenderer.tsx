@@ -54,11 +54,11 @@ const ModelViewer: React.FC<ModelProps> = ({ src }) => {
   return (
     <Canvas>
       <Suspense fallback={<Html center>Loading {Math.round(progress)}%</Html>}>
-        <PerspectiveCamera makeDefault fov={50} /> {/* Field of view adjusted for aesthetic */}
+        <PerspectiveCamera makeDefault fov={50} /> 
         <ambientLight intensity={1} />
         <directionalLight position={[5, 5, 5]} intensity={1.5} />
         <Model src={src} />
-        <OrbitControls /> {/* Add rotation for dynamic UX */}
+        <OrbitControls />
       </Suspense>
     </Canvas>
   )
