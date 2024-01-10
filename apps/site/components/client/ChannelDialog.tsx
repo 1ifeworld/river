@@ -23,12 +23,12 @@ import {
   Toast,
   Typography,
 } from '@/design-system'
-import { useWeb3Storage } from '@/hooks'
 import {
   type MetadataObject,
   newChannelSchema,
   processCreateChannelPost,
   sendToDb,
+  w3sUpload,
 } from '@/lib'
 import { FileList } from '@/server'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -60,8 +60,6 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
     onDrop,
     disabled: filesToUpload.length > 0, // Disable dropzone if a file is already uploaded
   })
-
-  const { client } = useWeb3Storage()
 
   const form = useForm<z.infer<typeof newChannelSchema>>({
     resolver: zodResolver(newChannelSchema),
@@ -114,7 +112,9 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                   let uploadedFileCid
                   let uploadedFileType
                   if (filesToUpload.length !== 0) {
-                    uploadedFileCid = await client?.uploadFile(filesToUpload[0])
+                    const formData = new FormData()
+                    formData.append('file', filesToUpload[0])
+                    uploadedFileCid = await w3sUpload({ formData: formData })
                     uploadedFileType = filesToUpload[0].type
                   }
                   const metadataObject: MetadataObject = {
