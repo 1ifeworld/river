@@ -128,7 +128,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                       type: 'application/json',
                     }),
                   })
-                  
+
                   await sendToDb({
                     key: channelUri,
                     value: {

@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",
-    "@ipld/dag-ucan": "^3.4.0",
+    "@ipld/car": "^5.2.6",
     "@mux/mux-node": "^7.3.3",
     "@mux/mux-player-react": "^2.3.0",
     "@privy-io/react-auth": "^1.51.1",
