@@ -6,10 +6,9 @@ import { importDAG } from '@ucanto/core/delegation'
 import { parse } from '@ucanto/principal/ed25519' // Agents on Node should use Ed25519 keys
 import { StoreMemory } from '@web3-storage/access'
 import { create } from '@web3-storage/w3up-client'
+import { type BlobLike } from '@web3-storage/w3up-client/dist/src/types'
 
-export async function configStorageClient({
-  did,
-}: { did: `did:${string}:${string}` }): Promise<Uint8Array | undefined> {
+export async function w3sUpload({ formData }: { formData: FormData }) {
   /**
    * Initialize the client with your own local agent instead of creating a new agent by default
    */
@@ -22,20 +21,14 @@ export async function configStorageClient({
   const space = await client.addSpace(proof)
   await client.setCurrentSpace(space.did())
   /**
-   * Create a delegation for a specific did
+   * Extract the file from the FormData object
    */
-  const audience = parseDid(did)
-  const abilities = ['upload/add', 'store/add']
-  const expiration = Math.floor(Date.now() / 1000) + 60 * 60 * 24 // 24 hours from now
-  // @ts-ignore
-  const delegation = await client.createDelegation(audience, abilities, {
-    expiration,
-  })
+  const fileOrBlob = formData.get('file') as BlobLike;
   /**
-   * Serialize the delegation and send it to the client
+   * Upload the file and return the cid
    */
-  const archive = await delegation.archive()
-  return archive.ok
+  const cid = await client.uploadFile(fileOrBlob)
+  return { cid: cid.toString()} 
 }
 
 async function parseProof(data: string) {
