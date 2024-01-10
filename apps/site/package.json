@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",
-    "@ipld/car": "^5.2.4",
     "@ipld/dag-ucan": "^3.4.0",
     "@mux/mux-node": "^7.3.3",
     "@mux/mux-player-react": "^2.3.0",

@@ -15,7 +15,6 @@ import {
   Toast,
   Typography,
 } from '@/design-system'
-import { useWeb3Storage } from '@/hooks'
 import {
   determineContentType,
   isAudio,
@@ -25,6 +24,7 @@ import {
   isVideo,
   processCreatePubPost,
   sendToDb,
+  uploadFile,
 } from '@/lib'
 import { type MetadataObject, uploadToMux } from '@/lib'
 import { usePrivy } from '@privy-io/react-auth'
@@ -58,8 +58,6 @@ export function UploadDialog() {
     disabled: filesToUpload.length > 0, // Disable dropzone if a file is already uploaded
   })
 
-  const { client } = useWeb3Storage()
-
   const handleRemoveFile = (index: number) => {
     setFilesToUpload((currentFiles) =>
       currentFiles.filter((_, i) => i !== index),
@@ -75,7 +73,7 @@ export function UploadDialog() {
   const uploadAndProcessFile = async (file: File) => {
     const uploadedFileName = file.name || 'unnamed'
     const contentType = determineContentType(file)
-    const uploadedFileCid = await client?.uploadFile(file)
+    const { uploadedFileCid } = await uploadFile({ fileOrBlob: file })
 
     const contentTypeKey =
       isVideo({ mimeType: contentType }) || isAudio({ mimeType: contentType })
@@ -91,28 +89,27 @@ export function UploadDialog() {
     const metadataObject: MetadataObject = {
       name: uploadedFileName,
       description: 'Dynamic metadata based on timestamp',
-      image: imageUri?.toString() as string,
-      animationUri: animationUri?.toString() as string,
+      image: imageUri,
+      animationUri: animationUri,
     }
 
-    const pubUri = await client?.uploadFile(
-      new Blob([JSON.stringify(metadataObject)], { type: 'application/json' }),
-    )
+    const { uploadedFileCid: pubUri } = await uploadFile({
+      fileOrBlob: new Blob([JSON.stringify(metadataObject)], {
+        type: 'application/json',
+      }),
+    })
 
     let muxAssetId = ''
     let muxPlaybackId = ''
 
     if (contentTypeKey === 2) {
-      const muxUploadResult = await uploadToMux(
-        contentType,
-        animationUri?.toString() as string,
-      )
+      const muxUploadResult = await uploadToMux(contentType, animationUri)
       muxAssetId = muxUploadResult.muxAssetId
       muxPlaybackId = muxUploadResult.muxPlaybackId
     }
 
     await sendToDb({
-      key: pubUri?.toString() as string,
+      key: pubUri,
       value: {
         ...metadataObject,
         contentType: contentType,
@@ -123,7 +120,7 @@ export function UploadDialog() {
 
     if (signMessage && targetUserId) {
       await processCreatePubPost({
-        pubUri: pubUri?.toString() as string,
+        pubUri: pubUri,
         targetChannelId: BigInt(params.id as string),
         targetUserId: BigInt(targetUserId),
         privySignMessage: signMessage,

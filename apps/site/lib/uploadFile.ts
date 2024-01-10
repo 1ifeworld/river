@@ -10,9 +10,8 @@ export async function uploadFile({ fileOrBlob }: { fileOrBlob: File | Blob }) {
    * Pass the form data to the server
    */
   const uploadedFileCid = await w3sUpload({ formData: formData })
-  const uploadedFileType = fileOrBlob.type
   /**
-   * Return the cid and file type
+   * Return the cid
    */
-  return { uploadedFileCid, uploadedFileType }
+  return { uploadedFileCid: uploadedFileCid.toString() }
 }

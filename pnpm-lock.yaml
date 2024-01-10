@@ -70,9 +70,6 @@ importers:
       '@hookform/resolvers':
         specifier: ^3.3.2
         version: 3.3.2(react-hook-form@7.47.0)
-      '@ipld/car':
-        specifier: ^5.2.4
-        version: 5.2.4
       '@ipld/dag-ucan':
         specifier: ^3.4.0
         version: 3.4.0

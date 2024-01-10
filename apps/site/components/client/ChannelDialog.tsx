@@ -28,7 +28,7 @@ import {
   newChannelSchema,
   processCreateChannelPost,
   sendToDb,
-  w3sUpload,
+  uploadFile,
 } from '@/lib'
 import { FileList } from '@/server'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -106,15 +106,14 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                 id="newChannel"
                 className="flex flex-col justify-center w-full gap-6"
                 action={async () => {
-                  // Prevent non-authenticated users from proceeding
+                  // Prevent users without an id from proceeding
                   if (!targetUserId) return
-                  // Upload cover image to IPFS if it one was provided
                   let uploadedFileCid
                   let uploadedFileType
                   if (filesToUpload.length !== 0) {
-                    const formData = new FormData()
-                    formData.append('file', filesToUpload[0])
-                    uploadedFileCid = await w3sUpload({ formData: formData })
+                    ;({ uploadedFileCid } = await uploadFile({
+                      fileOrBlob: filesToUpload[0],
+                    }))
                     uploadedFileType = filesToUpload[0].type
                   }
                   const metadataObject: MetadataObject = {
@@ -124,18 +123,16 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                     animationUri: '',
                   }
 
-                  const channelUri = await client?.uploadFile(
-                    new Blob([JSON.stringify(metadataObject)], {
+                  const { uploadedFileCid: channelUri } = await uploadFile({
+                    fileOrBlob: new Blob([JSON.stringify(metadataObject)], {
                       type: 'application/json',
                     }),
-                  )
+                  })
+                  
                   await sendToDb({
-                    key: channelUri?.toString() as string,
+                    key: channelUri,
                     value: {
-                      name: form.getValues().name,
-                      description: form.getValues().description || '',
-                      image: (uploadedFileCid?.toString() as string) || '',
-                      animationUri: '',
+                      ...metadataObject,
                       contentType: uploadedFileType as string,
                     },
                   })
