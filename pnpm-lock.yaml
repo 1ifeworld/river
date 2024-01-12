@@ -18,8 +18,8 @@ importers:
   apps/delta:
     dependencies:
       '@ponder/core':
-        specifier: ^0.1.1
-        version: 0.1.1(@types/node@18.11.18)(typescript@5.1.6)(viem@1.20.0)
+        specifier: ^0.1.6
+        version: 0.1.6(@types/node@18.11.18)(typescript@5.1.6)(viem@1.20.0)
       scrypt:
         specifier: workspace:*
         version: link:../../packages/scrypt
@@ -3397,13 +3397,16 @@ packages:
     dev: false
     optional: true
 
-  /@ponder/core@0.1.1(@types/node@18.11.18)(typescript@5.1.6)(viem@1.20.0):
-    resolution: {integrity: sha512-KvIeHvC/YTLZh1rtz+SV1I4oBKJbV3iufmeyNcEQIlEu80ODn4DIMgEdD+AGaYAwqhIhuhG34wk0rAhqEPwglg==}
-    engines: {node: '>=18'}
+  /@ponder/core@0.1.6(@types/node@18.11.18)(typescript@5.1.6)(viem@1.20.0):
+    resolution: {integrity: sha512-KZYXnkVuQlE2YXnqd1+ext5sJtvKxMhmjl8bPCb9ONHymimEu5jgjs4ieGdrYbwvDWyYXOhmAPNxz7PCSKmWdw==}
+    engines: {node: '>=18.14'}
     hasBin: true
     peerDependencies:
-      typescript: '>=5'
-      viem: '>=1'
+      typescript: '>=5.0.4'
+      viem: '>=1.16'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
     dependencies:
       '@babel/code-frame': 7.23.5
       abitype: 0.10.3(typescript@5.1.6)
