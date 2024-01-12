@@ -1,7 +1,13 @@
 'use client'
 import React, { Suspense, useEffect, useRef } from 'react'
 import { Canvas, useThree } from '@react-three/fiber'
-import { Html, OrbitControls, PerspectiveCamera, useGLTF, useProgress } from '@react-three/drei'
+import {
+  Html,
+  OrbitControls,
+  PerspectiveCamera,
+  useGLTF,
+  useProgress,
+} from '@react-three/drei'
 import * as THREE from 'three'
 import { GLTF as GLTFThree } from 'three/examples/jsm/loaders/GLTFLoader'
 
@@ -20,7 +26,7 @@ const Model: React.FC<ModelProps> = ({ src }) => {
       const box = new THREE.Box3().setFromObject(modelRef.current)
       const center = box.getCenter(new THREE.Vector3())
       const size = box.getSize(new THREE.Vector3())
-      
+
       // Set the camera's distance from the model based on its size
       const maxDimension = Math.max(size.x, size.y, size.z)
       camera.position.z = maxDimension * 3 // Camera distance from model adjust as necessary
@@ -54,7 +60,7 @@ const ModelViewer: React.FC<ModelProps> = ({ src }) => {
   return (
     <Canvas>
       <Suspense fallback={<Html center>Loading {Math.round(progress)}%</Html>}>
-        <PerspectiveCamera makeDefault fov={50} /> 
+        <PerspectiveCamera makeDefault fov={50} />
         <ambientLight intensity={1} />
         <directionalLight position={[5, 5, 5]} intensity={1.5} />
         <Model src={src} />
