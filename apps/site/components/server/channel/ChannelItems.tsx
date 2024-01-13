@@ -1,6 +1,5 @@
 import { ItemDropdown } from '@/client'
 import {
-  Debug,
   Table,
   TableBody,
   TableCell,
@@ -47,14 +46,14 @@ export async function ChannelItems({
                 />
               </TableCell>
               {/* This component is hidden on small screens */}
-              <TableCell className="hidden md:table-cell text-right text-primary-foreground">
+              <TableCell className="hidden md:table-cell text-right text-primary-foreground text-nowrap truncate pr-12">
                 <Typography>{`${extractContentType({
                   reference: reference,
                   metadata: metadata,
                 })}`}</Typography>
               </TableCell>
               {/* This component is hidden on small screens */}
-              <TableCell className="hidden md:table-cell text-right text-primary-foreground">
+              <TableCell className="hidden md:table-cell text-right text-primary-foreground text-nowrap truncate">
                 <Typography>
                   {unixTimeConverter(reference.createdTimestamp)}
                 </Typography>

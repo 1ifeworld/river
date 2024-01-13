@@ -35,11 +35,11 @@ export async function ChannelBanner({
             <HoverCardTrigger className="cursor-pointer">
               <Flex>
                 <Username
-                  className="text-primary-foreground"
+                  className="text-primary-foreground leading-0"
                   id={channel?.admins?.[0]}
                 />
                 {channel?.members?.length > 0 && (
-                  <Typography>
+                  <Typography className="leading-0">
                     {`${'\u00A0'}+ ${pluralize(
                       channel?.members?.length,
                       'other',
@@ -99,7 +99,7 @@ export async function ChannelBanner({
         )}
       </Stack>
       {/* This component is hidden on small screens */}
-      <Typography className="hidden md:block text-secondary-foreground">
+      <Typography className="hidden md:block text-secondary-foreground max-w-[848px] leading-0 line-clamp-3">
         {channelMetadata.description}
       </Typography>
       {/* This component is hidden on large screens */}
