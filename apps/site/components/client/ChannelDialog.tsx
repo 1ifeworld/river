@@ -97,13 +97,6 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
     },
   })
 
-  const {
-    watch,
-    handleSubmit,
-    formState: { errors },
-  } = form
-  const watchedFields = watch()
-
   const onValidSubmit = async (formData: z.infer<typeof newChannelSchema>) => {
     if (!targetUserId) return // Prevent non-authenticated users from proceeding
 
