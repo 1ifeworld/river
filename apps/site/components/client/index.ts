@@ -6,6 +6,7 @@ export * from './renderers'
 // Individual components
 export * from './ChannelDialog'
 export * from './ContentWrapper'
+export * from './Dropzone'
 export * from './Header'
 export * from './ItemDropdown'
 export * from './SubmitButton'
