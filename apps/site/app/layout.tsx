@@ -22,9 +22,9 @@ export default function RootLayout({
       className={`${fragmentMono.variable}`}
       suppressHydrationWarning
     >
-      <body>
+      <body className='overscroll-none'>
         <Providers>
-          <div className="py-3 px-5">
+          <div className="px-5">
             <Header />
             {children}
             <Toaster position="bottom-center" />
