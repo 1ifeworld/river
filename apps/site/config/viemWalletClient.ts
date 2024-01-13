@@ -4,16 +4,16 @@ import { createWalletClient, http } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 import { river_j5bpjduqfv } from './customChainConfig'
 
-const transport = http(process.env.RPC_URL)
-const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+// const transport = http(process.env.RPC_URL)
+// const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
 
-console.log("account.address: ", account.address)
-console.log("transport: ", transport)
+// console.log("account.address: ", account.address)
+// console.log("transport: ", transport)
 
 export const relayWalletClient = createWalletClient({ 
-  account, 
+  account: privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`),
   chain: river_j5bpjduqfv,
-  transport: transport
+  transport: http()
 })
 
 // const hash = await client.sendTransaction({
