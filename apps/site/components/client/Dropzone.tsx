@@ -2,6 +2,7 @@ import React, { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { w3sUpload } from '@/lib'
 import { Typography, Toast, Flex, Stack, Button } from '@/design-system'
+import { newItemSchema, MAX_FILE_SIZE, ACCEPTED_ITEM_MIME_TYPES } from '@/lib'
 import { toast } from 'sonner'
 
 export function Dropzone({
@@ -19,9 +20,32 @@ export function Dropzone({
       ))
     }
   }, [])
+
+  const [showFileList, setShowFileList] = React.useState<boolean>(false)
+  const [filesToUpload, setFilesToUpload] = React.useState<File[]>([])
+
+  const onDropValidated = React.useCallback((acceptedFiles: File[]) => {
+    setShowFileList(true)
+    setFilesToUpload(acceptedFiles)
+  }, [])
+
+  const onDropRejected = React.useCallback(() => {
+    toast.custom(() => (
+      <Toast>
+     <span className="font-bold">
+        {"Only image files are accepted."}
+        </span>
+      </Toast>
+    ))
+    setShowFileList(false)
+  }, [])
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
+    onDrop: onDropValidated,
+    onDropRejected,
     multiple: acceptMultipleFiles,
+    maxSize: MAX_FILE_SIZE,
+    accept: ACCEPTED_ITEM_MIME_TYPES, 
   })
 
   return (

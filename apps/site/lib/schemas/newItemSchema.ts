@@ -1,8 +1,8 @@
 import * as z from 'zod'
 
-const MAX_FILE_SIZE = 2 * 1024 * 1024 * 1024 // 2GB in bytes
-const ACCEPTED_ITEM_MIME_TYPES = [
-    // Images
+export const MAX_FILE_SIZE = 2 * 1024 * 1024 * 1024 // 2GB in bytes
+export const ACCEPTED_ITEM_MIME_TYPES = {
+  images: [
     'image/jpeg',
     'image/jpg',
     'image/png',
@@ -11,24 +11,27 @@ const ACCEPTED_ITEM_MIME_TYPES = [
     'image/gif',
     'image/bmp',
     'image/tiff',
-    // Videos
+  ],
+  videos: [
     'video/mp4',
     'video/webm',
     'video/ogg',
     'video/mkv',
     'video/avi',
     'video/mov',
-    // Texts
+  ],
+  texts: [
     'text/plain',
     'text/csv',
     'text/html',
     'text/markdown',
-    // 3D Models
+  ],
+  models: [
     'model/gltf-binary',
     'model/gltf+json',
-    // PDF
-    'application/pdf'
-]
+  ],
+  pdfs: ['application/pdf'],
+};
 
 export const newItemSchema = z.object({
   name: z
@@ -45,6 +48,10 @@ export const newItemSchema = z.object({
       return files?.[0]?.size <= MAX_FILE_SIZE
     }, 'Max image size is 2GB.')
     .refine(
-      (files) => ACCEPTED_ITEM_MIME_TYPES.includes(files?.[0]?.type),
-      'Please use one of the following formats: .jpg, .jpeg, .png, .webp, .heic, .gif, .bmp, .tiff, .mp4, .webm, .ogg, .mkv, .avi, .mov, .txt, .csv, .html, .md, .glb, .gltf, or .pdf',    ),
-})
+      (files) => {
+        // Check if the file type matches the accepted types for images
+        const fileType = files?.[0]?.type;
+        return ACCEPTED_ITEM_MIME_TYPES.images.includes(fileType);
+      },
+      'Please use one of the following formats: .jpg, .jpeg, .png, .webp, .heic, .gif, .bmp, .tiff, .mp4, .webm, .ogg, .mkv, .avi, .mov, .txt, .csv, .html, .md, .glb, .gltf, or .pdf',
+    )})

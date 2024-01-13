@@ -29,6 +29,7 @@ import {
   newChannelSchema,
   processCreateChannelPost,
   ACCEPTED_IMAGE_MIME_TYPES,
+  MAX_FILE_SIZE,
   sendToDb,
 } from "@/lib"
 import { FileList } from "@/server"
@@ -58,16 +59,12 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
   const [showFileList, setShowFileList] = React.useState<boolean>(false)
   const [filesToUpload, setFilesToUpload] = React.useState<File[]>([])
 
-  const acceptedMimeTypes = {
-    "image/*": ACCEPTED_IMAGE_MIME_TYPES,
-  }
-
   const onDropValidated = React.useCallback((acceptedFiles: File[]) => {
     setShowFileList(true)
     setFilesToUpload(acceptedFiles)
   }, [])
 
-  const onDropRejected = React.useCallback((fileRejections: FileRejection[], event: DropEvent) => {
+  const onDropRejected = React.useCallback(() => {
     toast.custom(() => (
       <Toast>
      <span className="font-bold">
@@ -82,8 +79,8 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
     onDrop: onDropValidated,
     onDropRejected,
     multiple: false,
-    maxSize: 5 * 1024 * 1024,
-    accept: acceptedMimeTypes,
+    maxSize: MAX_FILE_SIZE,
+    accept: ACCEPTED_IMAGE_MIME_TYPES,
   })
 
   const { client } = useWeb3Storage()
