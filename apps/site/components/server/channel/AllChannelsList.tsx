@@ -3,7 +3,11 @@ import { getAllChannels } from '@/gql'
 import { getChannelMetadata } from '@/lib'
 import Link from 'next/link'
 
-export async function AllChannelsList() {
+export async function AllChannelsList({
+  params,
+}: {
+  params: { id: string }
+}) {
   const { channels } = await getAllChannels()
   const { metadata } = await getChannelMetadata(channels)
 
@@ -22,7 +26,9 @@ export async function AllChannelsList() {
           return (
             <Link href={`/channel/${channel.id}`}>
               <Typography
-                className="leading-1 text-nowrap truncate hover:underline transition-all"
+                className={`leading-1 text-nowrap truncate hover:underline underline-offset-2 transition-all ${
+                  channel?.id === params.id ? 'underline' : ''
+                }`}
                 key={channel.createdTimestamp}
               >
                 {channelMetadata?.name}

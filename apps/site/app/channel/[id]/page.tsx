@@ -23,7 +23,7 @@ export default async function Channel({
 
   return (
     <Flex className="pt-10 gap-28">
-      <AllChannelsList />
+      <AllChannelsList params={params} />
       <Stack className="w-full md:w-3/4">
         <ChannelBanner channel={channel} metadata={channelMetadata} />
         <ChannelItems channel={channel} metadata={metadata} />
