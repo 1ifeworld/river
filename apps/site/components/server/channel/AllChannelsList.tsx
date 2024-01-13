@@ -21,7 +21,7 @@ export async function AllChannelsList({
         All Channels
       </Typography>
       <div>
-        {channels.map((channel) => {
+        {channels.slice(0, 50).map((channel) => {
           const channelMetadata = metadata.data[channel.uri as string]
           return (
             <Link href={`/channel/${channel.id}`}>
