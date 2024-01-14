@@ -38,8 +38,8 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
   }
 
   return (
-    <div className="flex flex-col items-center my-4">
-      <div className="overflow-auto max-h-[80vh] w-full">
+    <div className="flex flex-col items-center my-4 bg-gray-100">
+      <div className="my-2 p-4">
         <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
           {Array.from({ length: numPages }, (_, index) => (
             <div key={`page_${index + 1}`} className="flex justify-center my-2">
@@ -49,7 +49,6 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
                 renderAnnotationLayer={false}
                 renderTextLayer={false}
                 renderMode='canvas'
-                className='shadow-md'
               />
             </div>
           ))}
