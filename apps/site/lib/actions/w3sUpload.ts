@@ -3,6 +3,7 @@
 import { CarReader } from '@ipld/car'
 import { importDAG } from '@ucanto/core/delegation'
 import { parse } from '@ucanto/principal/ed25519'
+import { StoreMemory } from '@web3-storage/access'
 import { create } from '@web3-storage/w3up-client'
 
 export async function w3sUpload(formData: FormData) {
@@ -10,7 +11,7 @@ export async function w3sUpload(formData: FormData) {
    * Initialize the client with your own local agent instead of creating a new agent by default
    */
   const principal = parse(process.env.KEY as string)
-  const client = await create({ principal })
+  const client = await create({ principal, store: new StoreMemory() })
   /**
    * Configure your Space with the client by passing in the generated proof
    */
