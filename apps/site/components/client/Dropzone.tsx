@@ -88,7 +88,7 @@ export function Dropzone({
           </Toast>
         ))
       } else {
-        console.log('no cid')
+        console.log('No cid')
       }
     }
   }
