@@ -29,67 +29,67 @@ export function Dropzone({
       const formData = new FormData()
       formData.append('file', file)
       const { cid } = await w3sUpload(formData)
-      return
-      if (cid) {
-        const uploadedFileName = file.name || 'unnamed'
-        const contentType = determineContentType(file)
-        const contentTypeKey =
-          isVideo({ mimeType: contentType }) ||
-          isAudio({ mimeType: contentType })
-            ? 2
-            : isPdf({ mimeType: contentType }) || isGLB(file) || isText(file)
-            ? 1
-            : 0
+      console.log(cid)
+      // if (cid) {
+      //   const uploadedFileName = file.name || 'unnamed'
+      //   const contentType = determineContentType(file)
+      //   const contentTypeKey =
+      //     isVideo({ mimeType: contentType }) ||
+      //     isAudio({ mimeType: contentType })
+      //       ? 2
+      //       : isPdf({ mimeType: contentType }) || isGLB(file) || isText(file)
+      //       ? 1
+      //       : 0
 
-        const animationUri =
-          contentTypeKey === 2 || contentTypeKey === 1 ? cid : ''
-        const imageUri = contentTypeKey === 0 ? cid : ''
+      //   const animationUri =
+      //     contentTypeKey === 2 || contentTypeKey === 1 ? cid : ''
+      //   const imageUri = contentTypeKey === 0 ? cid : ''
 
-        const metadataObject: MetadataObject = {
-          name: uploadedFileName,
-          description: 'Dynamic metadata based on timestamp',
-          image: imageUri,
-          animationUri: animationUri,
-        }
-        let muxAssetId = ''
-        let muxPlaybackId = ''
+      //   const metadataObject: MetadataObject = {
+      //     name: uploadedFileName,
+      //     description: 'Dynamic metadata based on timestamp',
+      //     image: imageUri,
+      //     animationUri: animationUri,
+      //   }
+      //   let muxAssetId = ''
+      //   let muxPlaybackId = ''
 
-        if (contentTypeKey === 2) {
-          const muxUploadResult = await uploadToMux(contentType, animationUri)
-          muxAssetId = muxUploadResult.muxAssetId
-          muxPlaybackId = muxUploadResult.muxPlaybackId
-        }
+      //   if (contentTypeKey === 2) {
+      //     const muxUploadResult = await uploadToMux(contentType, animationUri)
+      //     muxAssetId = muxUploadResult.muxAssetId
+      //     muxPlaybackId = muxUploadResult.muxPlaybackId
+      //   }
 
-        await sendToDb({
-          key: cid,
-          value: {
-            ...metadataObject,
-            contentType: contentType,
-            muxAssetId: muxAssetId,
-            muxPlaybackId: muxPlaybackId,
-          },
-        })
+      //   await sendToDb({
+      //     key: cid,
+      //     value: {
+      //       ...metadataObject,
+      //       contentType: contentType,
+      //       muxAssetId: muxAssetId,
+      //       muxPlaybackId: muxPlaybackId,
+      //     },
+      //   })
 
-        if (signMessage && targetUserId) {
-          await processCreatePubPost({
-            pubUri: cid,
-            targetChannelId: BigInt(params.id as string),
-            targetUserId: BigInt(targetUserId),
-            privySignMessage: signMessage,
-          })
-        }
+      //   if (signMessage && targetUserId) {
+      //     await processCreatePubPost({
+      //       pubUri: cid,
+      //       targetChannelId: BigInt(params.id as string),
+      //       targetUserId: BigInt(targetUserId),
+      //       privySignMessage: signMessage,
+      //     })
+      //   }
 
-        toast.custom((t) => (
-          <Toast>
-            {'Successfully uploaded '}
-            <Typography>
-              <span className="font-bold">{file.name}</span>
-            </Typography>
-          </Toast>
-        ))
-      } else {
-        console.log('No cid')
-      }
+      //   toast.custom((t) => (
+      //     <Toast>
+      //       {'Successfully uploaded '}
+      //       <Typography>
+      //         <span className="font-bold">{file.name}</span>
+      //       </Typography>
+      //     </Toast>
+      //   ))
+      // } else {
+      //   console.log('No cid')
+      // }
     }
   }
 
