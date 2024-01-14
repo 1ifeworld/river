@@ -23,13 +23,13 @@ import {
   Toast,
   Typography,
 } from "@/design-system"
-import { useWeb3Storage } from "@/hooks"
+import { w3sUpload } from "@/lib"
 import {
   type MetadataObject,
   newChannelSchema,
   processCreateChannelPost,
   ACCEPTED_IMAGE_MIME_TYPES,
-  MAX_FILE_SIZE,
+  CHANNEL_MAX_FILE_SIZE,
   sendToDb,
 } from "@/lib"
 import { FileList } from "@/server"
@@ -60,10 +60,11 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
   const [filesToUpload, setFilesToUpload] = React.useState<File[]>([])
 
   const onDropValidated = React.useCallback((acceptedFiles: File[]) => {
-    setShowFileList(true)
-    setFilesToUpload(acceptedFiles)
+    console.log("Accepted files:", acceptedFiles.map(file => ({ name: file.name, size: file.size })));
+    setShowFileList(true);
+    setFilesToUpload(acceptedFiles);
   }, [])
-
+  
   const onDropRejected = React.useCallback(() => {
     toast.custom(() => (
       <Toast>
@@ -79,11 +80,9 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
     onDrop: onDropValidated,
     onDropRejected,
     multiple: false,
-    maxSize: MAX_FILE_SIZE,
+    maxSize: 5 * 1024 * 1024,
     accept: ACCEPTED_IMAGE_MIME_TYPES,
   })
-
-  const { client } = useWeb3Storage()
 
   const form = useForm<z.infer<typeof newChannelSchema>>({
     resolver: zodResolver(newChannelSchema),
@@ -98,30 +97,33 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
     if (!targetUserId) return // Prevent non-authenticated users from proceeding
 
     // Upload cover image to IPFS if one was provided
-    let uploadedFileCid
-    let uploadedFileType
+    let uploadedFileCid;
+    let uploadedFileType;
     if (filesToUpload.length !== 0) {
-      uploadedFileCid = await client?.uploadFile(filesToUpload[0])
-      uploadedFileType = filesToUpload[0].type
+      const coverFormData = new FormData();
+      coverFormData.append('file', filesToUpload[0]);
+      const {cid} = await w3sUpload(coverFormData);
+      uploadedFileCid = cid;
+      uploadedFileType = filesToUpload[0].type;
     }
 
     // Use formData directly instead of form.getValues()
     const metadataObject: MetadataObject = {
       name: formData.name,
       description: formData.description || "",
-      image: uploadedFileCid?.toString() || "",
+      image: uploadedFileCid || "",
       animationUri: "",
-    }
+    };
 
-    const channelUri = await client?.uploadFile(
-      new Blob([JSON.stringify(metadataObject)], {
-        type: "application/json",
-      })
-    )
+    const metadataFormData = new FormData();
+    const metadataBlob = new Blob([JSON.stringify(metadataObject)], { type: "application/json" });
+    metadataFormData.append('file', metadataBlob);
+  
+    const { cid: channelCid } = await w3sUpload(metadataFormData);
 
     // Save the channel data to the database
     await sendToDb({
-      key: channelUri?.toString() as string,
+      key: channelCid,
       value: {
         name: formData.name,
         description: formData.description || "",
@@ -134,7 +136,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
     // Generate create channel post for user and post transaction
     if (signMessage) {
       await processCreateChannelPost({
-        channelUri: channelUri?.toString() as string,
+        channelUri: channelCid,
         targetUserId: targetUserId,
         privySignerAddress: embeddedWallet?.address as string,
         privySignMessage: signMessage,
@@ -152,16 +154,10 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
     resetFormAndFiles() // Reset the form and file list
   }
 
-  const onInvalidSubmit = (
-    errors: FieldErrors<z.infer<typeof newChannelSchema>>
-  ) => {
-    // Handle form validation errors
-    console.error("Form validation errors:", errors)
-    // Provide feedback to the user, for instance using a toast
+  const onInvalidSubmit = (errors: FieldErrors<z.infer<typeof newChannelSchema>>) => {
+    console.error("Form validation errors:", errors);
     toast.custom((t) => (
-      <span className="font-bold">
-      <Toast>{'Please fix your form errors'}</Toast>
-      </span>
+      <Toast>{"Please fix your form errors"}</Toast>
     ))
   }
 

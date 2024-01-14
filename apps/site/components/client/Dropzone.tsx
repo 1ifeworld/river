@@ -14,7 +14,7 @@ import {
   MetadataObject
 } from '@/lib'
 import { Typography, Toast, Flex, Stack, Button } from '@/design-system'
-import { MAX_FILE_SIZE, ACCEPTED_ITEM_MIME_TYPES } from '@/lib'
+import { ITEM_MAX_FILE_SIZE, ACCEPTED_ITEM_MIME_TYPES } from '@/lib'
 import { toast } from 'sonner'
 import { useUserContext } from '@/context'
 import { useParams } from 'next/navigation'
@@ -26,54 +26,49 @@ export function Dropzone({
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
   const { signMessage, userId: targetUserId } = useUserContext()
   const params = useParams()
-  const { client } = useWeb3Storage()
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
-    if (uploadedFiles.length === 0 && acceptedFiles.length > 0) {
-      setUploadedFiles([acceptedFiles[0]])
-    }
-
+    const newUploadedFiles = [...uploadedFiles]
+  
     for (const file of acceptedFiles) {
-      const uploadedFileName = file.name || 'unnamed'
-      const contentType = determineContentType(file)
-
-      const uploadedFileCid = await client?.uploadFile(file)
-      const contentTypeKey =
-        isVideo({ mimeType: contentType }) || isAudio({ mimeType: contentType })
-          ? 2
-          : isPdf({ mimeType: contentType }) || isGLB(file) || isText(file)
-          ? 1
-          : 0
-
-      const animationUri =
-        contentTypeKey === 2 || contentTypeKey === 1 ? uploadedFileCid : ''
-      const imageUri = contentTypeKey === 0 ? uploadedFileCid : ''
-
-      const metadataObject: MetadataObject = {
-        name: uploadedFileName,
-        description: 'Dynamic metadata based on timestamp',
-        image: imageUri?.toString() as string,
-        animationUri: animationUri?.toString() as string,
-      }
-
-      const pubUri = await client?.uploadFile(
-        new Blob([JSON.stringify(metadataObject)], { type: 'application/json' })
-      )
-
-      let muxAssetId = ''
+      const formData = new FormData()
+      formData.append('file', file)
+      const { cid } = await w3sUpload(formData)
+  
+      if (cid) {
+        console.log(cid)
+        const uploadedFileName = file.name || 'unnamed'
+        const contentType = determineContentType(file)
+        const contentTypeKey =
+          isVideo({ mimeType: contentType }) || isAudio({ mimeType: contentType })
+            ? 2
+            : isPdf({ mimeType: contentType }) || isGLB(file) || isText(file)
+            ? 1
+            : 0
+  
+        const animationUri = contentTypeKey === 2 || contentTypeKey === 1 ? cid : ''
+        const imageUri = contentTypeKey === 0 ? cid : ''
+  
+        const metadataObject: MetadataObject = {
+          name: uploadedFileName,
+          description: 'Dynamic metadata based on timestamp',
+          image: imageUri,
+          animationUri: animationUri,
+        }
+        let muxAssetId = ''
       let muxPlaybackId = ''
 
       if (contentTypeKey === 2) {
         const muxUploadResult = await uploadToMux(
           contentType,
-          animationUri?.toString() as string
+          animationUri
         )
         muxAssetId = muxUploadResult.muxAssetId
         muxPlaybackId = muxUploadResult.muxPlaybackId
       }
 
       await sendToDb({
-        key: pubUri?.toString() as string,
+        key: cid,
         value: {
           ...metadataObject,
           contentType: contentType,
@@ -84,7 +79,7 @@ export function Dropzone({
 
       if (signMessage && targetUserId) {
         await processCreatePubPost({
-          pubUri: pubUri?.toString() as string,
+          pubUri: cid,
           targetChannelId: BigInt(params.id as string),
           targetUserId: BigInt(targetUserId),
           privySignMessage: signMessage,
@@ -99,25 +94,27 @@ export function Dropzone({
           </Typography>
         </Toast>
       ))
+    } else {
+      console.log("no cid")
     }
-  }, [uploadedFiles, client, signMessage, targetUserId, params.id])
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    multiple: acceptMultipleFiles,
-    maxSize: MAX_FILE_SIZE,
-    accept: ACCEPTED_ITEM_MIME_TYPES,
-  })
+    newUploadedFiles.push(file)
+  }
 
-  return (
-    <div {...getRootProps()}>
-      <input {...getInputProps()} />
-      <AddItem isDragActive={isDragActive} />
-      {uploadedFiles.length > 0 && (
-        <FileListToast files={uploadedFiles} uploading={false} />
-      )}
-    </div>
-  )
+  setUploadedFiles(newUploadedFiles)
+}, [signMessage, targetUserId, params.id, uploadedFiles]) 
+
+const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  onDrop,
+  multiple: acceptMultipleFiles,
+})
+
+return (
+  <div {...getRootProps()}>
+    <input {...getInputProps()} />
+    <AddItem isDragActive={isDragActive} />
+  </div>
+)
 }
 
 function AddItem({ isDragActive }: { isDragActive: boolean }) {
@@ -146,5 +143,5 @@ function FileListToast({ files, uploading }: { files: File[], uploading: boolean
       </ul>
     </Toast>
   )
+        
 }
-

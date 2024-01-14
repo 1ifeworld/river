@@ -1,6 +1,6 @@
 import * as z from 'zod'
 
-export const MAX_FILE_SIZE = 2 * 1024 * 1024 * 1024 // 2GB in bytes
+export const ITEM_MAX_FILE_SIZE = 2 * 1024 * 1024 * 1024 // 2GB in bytes
 export const ACCEPTED_ITEM_MIME_TYPES = {
   images: [
     'image/jpeg',
@@ -45,7 +45,7 @@ export const newItemSchema = z.object({
   item: z
     .any()
     .refine((files) => {
-      return files?.[0]?.size <= MAX_FILE_SIZE
+      return files?.[0]?.size <= ITEM_MAX_FILE_SIZE
     }, 'Max image size is 2GB.')
     .refine(
       (files) => {
