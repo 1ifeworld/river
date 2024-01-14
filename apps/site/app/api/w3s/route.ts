@@ -34,17 +34,19 @@ export async function POST(req: NextRequest) {
   /**
    * Convert the data to a buffer
    */
-  //   const buffer = Buffer.from(await fileOrBlob.arrayBuffer())
+  const buffer = Buffer.from(await fileOrBlob.arrayBuffer())
   /**
    * Upload the file and return the cid
    */
-  //   const cid = await client.uploadFile(new Blob([buffer]))
+  const cid = await client.uploadFile(
+    new Blob([buffer], { type: 'application/json' }),
+  )
 
-  //   console.log(`https://${cid?.toString()}.ipfs.w3s.link`)
+  console.log(`https://${cid?.toString()}.ipfs.w3s.link`)
   /**
    *  Return the cid as an API response
    * */
-  //   return NextResponse.json({ cid: cid?.toString() })
+  return NextResponse.json({ cid: cid?.toString() })
 }
 
 async function parseProof(data: string) {
