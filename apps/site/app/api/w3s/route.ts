@@ -21,22 +21,30 @@ export async function POST(req: NextRequest) {
    * Extract the file from the FormData object
    */
   const formData = await req.formData()
-  const fileOrBlob = formData.get('file') as unknown as Blob
+  const fileOrBlob = formData.get('file') as Blob | null
   /**
-   * Convert the data to an array buffer
+   * Respond with a 400 code if no File or Blob is presnt
    */
-  const bytes = await fileOrBlob.arrayBuffer()
-  const buffer = Buffer.from(bytes)
+  if (!fileOrBlob) {
+    return NextResponse.json(
+      { error: 'File blob is required.' },
+      { status: 400 },
+    )
+  }
+  /**
+   * Convert the data to a buffer
+   */
+  //   const buffer = Buffer.from(await fileOrBlob.arrayBuffer())
   /**
    * Upload the file and return the cid
    */
-  const cid = await client.uploadFile(new Blob([buffer]))
+  //   const cid = await client.uploadFile(new Blob([buffer]))
 
-  console.log(`https://${cid?.toString()}.ipfs.w3s.link`)
+  //   console.log(`https://${cid?.toString()}.ipfs.w3s.link`)
   /**
    *  Return the cid as an API response
    * */
-  return NextResponse.json({ cid: cid?.toString() })
+  //   return NextResponse.json({ cid: cid?.toString() })
 }
 
 async function parseProof(data: string) {
