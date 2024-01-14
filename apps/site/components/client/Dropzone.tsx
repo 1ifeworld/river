@@ -24,7 +24,7 @@ export function Dropzone({
   const { signMessage, userId: targetUserId } = useUserContext()
   const params = useParams()
 
-  const onDrop = useCallback(async (acceptedFiles: File[]) => {
+  const onDrop = async (acceptedFiles: File[]) => {
     for (const file of acceptedFiles) {
       const formData = new FormData()
       formData.append('file', file)
@@ -94,7 +94,7 @@ export function Dropzone({
     }
   }
 
-}, [signMessage, targetUserId, params.id]) 
+}
 
 const { getRootProps, getInputProps, isDragActive } = useDropzone({
   onDrop,
