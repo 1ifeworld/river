@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React from 'react'
 import { useDropzone } from 'react-dropzone'
 import {
   w3sUpload,
