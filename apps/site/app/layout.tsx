@@ -22,7 +22,7 @@ export default function RootLayout({
       className={`${fragmentMono.variable}`}
       suppressHydrationWarning
     >
-      <body className='overscroll-none'>
+      <body className="overscroll-none">
         <Providers>
           <div className="px-5">
             <Header />

@@ -1,4 +1,4 @@
-import { AddMembersForm, Dropzone} from '@/client'
+import { AddMembersForm, Dropzone } from '@/client'
 import {
   Flex,
   HoverCard,
