@@ -1,9 +1,3 @@
-import { publicClient } from "@/config/publicClient";
-import { relayWalletClient } from "@/config/viemWalletClient";
-import { addresses, postGatewayABI } from "scrypt";
-import { Hash } from "viem";
-import { createNonceManager } from "./createNonceManager";
-
 import {
   Abi,
   Account,
@@ -19,9 +13,8 @@ import {
   writeContract as viem_writeContract,
 } from "viem/actions";
 import pRetry from "p-retry";
-//   import { debug as parentDebug } from "./debug";
-//   import { getNonceManager } from "./getNonceManager";
 import { parseAccount } from "viem/accounts";
+import { createNonceManager } from "./createNonceManager";
 
 export async function writeContract<
   TChain extends Chain | undefined,
@@ -39,11 +32,20 @@ export async function writeContract<
     TChainOverride
   >
 ): Promise<WriteContractReturnType> {
+
+  const rawAccount = request.account ?? client.account;
+  if (!rawAccount) {
+    // TODO: replace with viem AccountNotFoundError once its exported
+    throw new Error("No account provided");
+  }  
+  const account = parseAccount(rawAccount);
+
   const nonceManager = createNonceManager({
-    client: relayWalletClient,
-    address: relayWalletClient.account.address,
-    blockTag: "pending",
+    client,
+    address: account.address,
+    blockTag: "pending"
   });
+
 
   async function prepareWrite(): Promise<
     WriteContractParameters<
@@ -68,7 +70,7 @@ export async function writeContract<
     >(client, {
       ...request,
       blockTag: "pending",
-      account: relayWalletClient.account.address,
+      account: account,
     } as unknown as SimulateContractParameters<TAbi, TFunctionName, TChain, TChainOverride>);
 
     return result.request as unknown as WriteContractParameters<
@@ -82,8 +84,6 @@ export async function writeContract<
 
   const preparedWrite = await prepareWrite();
 
-
-
   return nonceManager.mempoolQueue.add(
     () =>
       pRetry(
@@ -92,7 +92,7 @@ export async function writeContract<
             await nonceManager.resetNonce();
           }
 
-          const nonce = nonceManager.nextNonce();
+          const nonce = nonceManager.nextNonce();        
         //   debug(
         //     "calling",
         //     preparedWrite.functionName,

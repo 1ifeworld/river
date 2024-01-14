@@ -4,7 +4,7 @@ import { nonceManager } from '@/config/ethersClient'
 import { getTxnWithHash } from '@/gql'
 import { revalidatePath } from 'next/cache'
 import { addresses, postGatewayABI } from 'scrypt'
-import { Hash, encodeFunctionData } from 'viem'
+import { Hash } from 'viem'
 import { writeContract } from 'lib/transactions/writeContract'
 import { relayWalletClient } from '@/config/viemWalletClient'
 
@@ -17,27 +17,8 @@ export async function relayPost({
   postInput,
   pathsToRevalidate,
 }: RelayPostProps) {
-  // const encodePostCall = encodeFunctionData({
-  //   abi: postGatewayABI,
-  //   functionName: 'post',
-  //   args: [postInput],
-  // })
-
-
-  //   const { request } = await publicClient.simulateContract({
-  //     address: addresses.postGateway.river_j5bpjduqfv,
-  //     abi: postGatewayABI,
-  //     functionName: "post",
-  //     args: [inputs],
-  //     nonce: 0
-  //   });
-  //   await relayWalletClient.writeContract(request);
 
   try {
-    // const postTxn = await nonceManager.sendTransaction({
-    //   to: addresses.postGateway.river_j5bpjduqfv,
-    //   data: encodePostCall,
-    // })
 
     const postTxn = await writeContract(relayWalletClient, {
       chain: relayWalletClient.chain ?? null,
@@ -47,25 +28,13 @@ export async function relayPost({
       args: [postInput]
     })
 
-
-    // const tx = await writeContract(client, {
-    //   chain: client.chain ?? null,
-    //   address: worldFactory,
-    //   abi: WorldFactoryAbi,
-    //   functionName: "deployWorld",
-    // });
-
-
-    // const resp = await getTxnInclusion(postTxn.hash as Hash)
     const resp = await getTxnInclusion(postTxn)
     if (resp) {
-      // console.log(`txn ${postTxn.hash} was processed by ponder`)
       console.log(`txn ${postTxn} was processed by ponder`)
       for (const path of pathsToRevalidate) {
         revalidatePath(path)
       }
     } else {
-      // console.log(`txn ${postTxn.hash} NOT found by ponder`)
       console.log(`txn ${postTxn} NOT found by ponder`)
     }
   } catch (error) {
