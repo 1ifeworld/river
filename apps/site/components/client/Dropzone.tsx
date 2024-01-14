@@ -29,7 +29,7 @@ export function Dropzone({
       const formData = new FormData()
       formData.append('file', file)
       const { cid } = await w3sUpload(formData)
-
+      return
       if (cid) {
         const uploadedFileName = file.name || 'unnamed'
         const contentType = determineContentType(file)
