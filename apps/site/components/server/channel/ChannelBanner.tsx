@@ -1,4 +1,4 @@
-import { AddMembersForm, UploadDialog } from '@/client'
+import { AddMembersForm, Dropzone} from '@/client'
 import {
   Flex,
   HoverCard,
@@ -106,7 +106,7 @@ export async function ChannelBanner({
       <Typography className="md:hidden text-secondary-foreground leading-none">
         {truncateText(channelMetadata.description, 90)}
       </Typography>
-      <UploadDialog />
+      <Dropzone acceptMultipleFiles={true} />
     </Stack>
   )
 }
