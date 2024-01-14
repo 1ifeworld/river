@@ -1,12 +1,11 @@
-'use server'
-
 import { CarReader } from '@ipld/car'
 import { importDAG } from '@ucanto/core/delegation'
 import { parse } from '@ucanto/principal/ed25519'
 import { StoreMemory } from '@web3-storage/access'
 import { create } from '@web3-storage/w3up-client'
+import { NextRequest, NextResponse } from 'next/server'
 
-export async function w3sUpload(formData: FormData) {
+export async function POST(req: NextRequest) {
   /**
    * Initialize the client with your own local agent instead of creating a new agent by default
    */
@@ -21,6 +20,7 @@ export async function w3sUpload(formData: FormData) {
   /**
    * Extract the file from the FormData object
    */
+  const formData = await req.formData()
   const fileOrBlob = formData.get('file') as unknown as Blob
   /**
    * Convert the data to an array buffer
@@ -33,8 +33,10 @@ export async function w3sUpload(formData: FormData) {
   const cid = await client.uploadFile(new Blob([buffer]))
 
   console.log(`https://${cid?.toString()}.ipfs.w3s.link`)
-
-  return { cid: cid?.toString() }
+  /**
+   *  Return the cid as an API response
+   * */
+  return NextResponse.json({ cid: cid?.toString() })
 }
 
 async function parseProof(data: string) {

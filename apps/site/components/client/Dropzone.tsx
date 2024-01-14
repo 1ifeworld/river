@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React from 'react'
 import { useDropzone } from 'react-dropzone'
 import {
   w3sUpload,
@@ -11,7 +11,7 @@ import {
   processCreatePubPost,
   sendToDb,
   uploadToMux,
-  MetadataObject
+  MetadataObject,
 } from '@/lib'
 import { Typography, Toast, Flex, Stack, Button } from '@/design-system'
 import { toast } from 'sonner'
@@ -29,21 +29,23 @@ export function Dropzone({
       const formData = new FormData()
       formData.append('file', file)
       const { cid } = await w3sUpload(formData)
-  
+
       if (cid) {
         console.log(cid)
         const uploadedFileName = file.name || 'unnamed'
         const contentType = determineContentType(file)
         const contentTypeKey =
-          isVideo({ mimeType: contentType }) || isAudio({ mimeType: contentType })
+          isVideo({ mimeType: contentType }) ||
+          isAudio({ mimeType: contentType })
             ? 2
             : isPdf({ mimeType: contentType }) || isGLB(file) || isText(file)
             ? 1
             : 0
-  
-        const animationUri = contentTypeKey === 2 || contentTypeKey === 1 ? cid : ''
+
+        const animationUri =
+          contentTypeKey === 2 || contentTypeKey === 1 ? cid : ''
         const imageUri = contentTypeKey === 0 ? cid : ''
-  
+
         const metadataObject: MetadataObject = {
           name: uploadedFileName,
           description: 'Dynamic metadata based on timestamp',
@@ -51,62 +53,58 @@ export function Dropzone({
           animationUri: animationUri,
         }
         let muxAssetId = ''
-      let muxPlaybackId = ''
+        let muxPlaybackId = ''
 
-      if (contentTypeKey === 2) {
-        const muxUploadResult = await uploadToMux(
-          contentType,
-          animationUri
-        )
-        muxAssetId = muxUploadResult.muxAssetId
-        muxPlaybackId = muxUploadResult.muxPlaybackId
-      }
+        if (contentTypeKey === 2) {
+          const muxUploadResult = await uploadToMux(contentType, animationUri)
+          muxAssetId = muxUploadResult.muxAssetId
+          muxPlaybackId = muxUploadResult.muxPlaybackId
+        }
 
-      await sendToDb({
-        key: cid,
-        value: {
-          ...metadataObject,
-          contentType: contentType,
-          muxAssetId: muxAssetId,
-          muxPlaybackId: muxPlaybackId,
-        },
-      })
-
-      if (signMessage && targetUserId) {
-        await processCreatePubPost({
-          pubUri: cid,
-          targetChannelId: BigInt(params.id as string),
-          targetUserId: BigInt(targetUserId),
-          privySignMessage: signMessage,
+        await sendToDb({
+          key: cid,
+          value: {
+            ...metadataObject,
+            contentType: contentType,
+            muxAssetId: muxAssetId,
+            muxPlaybackId: muxPlaybackId,
+          },
         })
-      }
 
-      toast.custom((t) => (
-        <Toast>
-          {'Successfully uploaded '}
-          <Typography>
-            <span className="font-bold">{file.name}</span>
-          </Typography>
-        </Toast>
-      ))
-    } else {
-      console.log("no cid")
+        if (signMessage && targetUserId) {
+          await processCreatePubPost({
+            pubUri: cid,
+            targetChannelId: BigInt(params.id as string),
+            targetUserId: BigInt(targetUserId),
+            privySignMessage: signMessage,
+          })
+        }
+
+        toast.custom((t) => (
+          <Toast>
+            {'Successfully uploaded '}
+            <Typography>
+              <span className="font-bold">{file.name}</span>
+            </Typography>
+          </Toast>
+        ))
+      } else {
+        console.log('no cid')
+      }
     }
   }
 
-}
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    multiple: acceptMultipleFiles,
+  })
 
-const { getRootProps, getInputProps, isDragActive } = useDropzone({
-  onDrop,
-  multiple: acceptMultipleFiles,
-})
-
-return (
-  <div {...getRootProps()}>
-    <input {...getInputProps()} />
-    <AddItem isDragActive={isDragActive} />
-  </div>
-)
+  return (
+    <div {...getRootProps()}>
+      <input {...getInputProps()} />
+      <AddItem isDragActive={isDragActive} />
+    </div>
+  )
 }
 
 function AddItem({ isDragActive }: { isDragActive: boolean }) {
@@ -123,5 +121,3 @@ function AddItem({ isDragActive }: { isDragActive: boolean }) {
     </Flex>
   )
 }
-
-    
