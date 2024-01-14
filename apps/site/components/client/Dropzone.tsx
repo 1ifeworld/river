@@ -14,22 +14,17 @@ import {
   MetadataObject
 } from '@/lib'
 import { Typography, Toast, Flex, Stack, Button } from '@/design-system'
-import { ITEM_MAX_FILE_SIZE, ACCEPTED_ITEM_MIME_TYPES } from '@/lib'
 import { toast } from 'sonner'
 import { useUserContext } from '@/context'
 import { useParams } from 'next/navigation'
-import { useWeb3Storage } from '@/hooks'
 
 export function Dropzone({
   acceptMultipleFiles,
 }: { acceptMultipleFiles: boolean }) {
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
   const { signMessage, userId: targetUserId } = useUserContext()
   const params = useParams()
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
-    const newUploadedFiles = [...uploadedFiles]
-  
     for (const file of acceptedFiles) {
       const formData = new FormData()
       formData.append('file', file)
@@ -97,12 +92,9 @@ export function Dropzone({
     } else {
       console.log("no cid")
     }
-
-    newUploadedFiles.push(file)
   }
 
-  setUploadedFiles(newUploadedFiles)
-}, [signMessage, targetUserId, params.id, uploadedFiles]) 
+}, [signMessage, targetUserId, params.id]) 
 
 const { getRootProps, getInputProps, isDragActive } = useDropzone({
   onDrop,
