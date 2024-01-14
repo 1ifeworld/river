@@ -11,58 +11,50 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 interface PDFViewerProps {
   file: string
 }
-
 const PDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
   const [numPages, setNumPages] = useState(0)
   const [pageWidth, setPageWidth] = useState(0)
 
+  const calculatePageWidth = () => {
+    return Math.min(window.innerWidth * 0.8, 1200) // 800px as max width, adjust as needed
+  }
+
   useEffect(() => {
-    // Adjust the page width based on the window size
     const handleResize = () => {
-      setPageWidth(window.innerWidth * 0.8) // Adjust the width to 80% of the window width
+      setPageWidth(calculatePageWidth()) 
     }
 
     window.addEventListener('resize', handleResize)
-    handleResize() // Initial call
+    handleResize() 
 
-    return () => window.removeEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
   }, [])
 
   const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
     setNumPages(numPages)
+    setPageWidth(calculatePageWidth()) 
   }
 
   return (
-    <div className="flex justify-center items-center my-4">
-      <div
-        className="overflow-auto"
-        style={{ height: '90vh', maxWidth: '100vw' }}
-      >
+    <div className="flex flex-col items-center my-4">
+      <div className="overflow-auto max-h-[80vh] w-full">
         <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
-          {Array.from(new Array(numPages), (el, index) => (
-            <div
-              className="flex justify-center page-container"
-              key={`page_${index + 1}`}
-            >
+          {Array.from({ length: numPages }, (_, index) => (
+            <div key={`page_${index + 1}`} className="flex justify-center my-2">
               <Page
                 pageNumber={index + 1}
                 width={pageWidth}
                 renderAnnotationLayer={false}
                 renderTextLayer={false}
+                renderMode='canvas'
+                className='shadow-md'
               />
             </div>
           ))}
         </Document>
       </div>
-      <style jsx global>{`
-        .react-pdf__Page {
-          margin: 0 !important
-          padding: 0 !important
-        }
-        .page-container {
-          margin-bottom: 10px 
-        }
-      `}</style>
     </div>
   )
 }
