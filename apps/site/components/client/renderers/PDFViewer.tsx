@@ -1,6 +1,5 @@
 'use client'
-
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Document, Page, pdfjs } from 'react-pdf'
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -12,57 +11,59 @@ interface PDFViewerProps {
   file: string
 }
 
+interface DocumentLoadSuccess {
+  numPages: number
+}
+
 const PDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
   const [numPages, setNumPages] = useState(0)
   const [pageWidth, setPageWidth] = useState(0)
+  const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    // Adjust the page width based on the window size
-    const handleResize = () => {
-      setPageWidth(window.innerWidth * 0.8) // Adjust the width to 80% of the window width
+    const observer = new ResizeObserver(entries => {
+      if (entries[0].target) {
+        const newWidth = Math.min(entries[0].contentRect.width * 0.8, 1200)
+        setPageWidth(newWidth)
+      }
+    })
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current)
     }
 
-    window.addEventListener('resize', handleResize)
-    handleResize() // Initial call
-
-    return () => window.removeEventListener('resize', handleResize)
+    return () => {
+      if (containerRef.current) {
+        observer.unobserve(containerRef.current)
+      }
+    }
   }, [])
 
-  const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
+  const onDocumentLoadSuccess = ({ numPages }: DocumentLoadSuccess) => {
     setNumPages(numPages)
+    if (containerRef.current) {
+      const newWidth = Math.min(containerRef.current.clientWidth * 0.8, 1200)
+      setPageWidth(newWidth)
+    }
   }
 
   return (
-    <div className="flex justify-center items-center my-4">
-      <div
-        className="overflow-auto"
-        style={{ height: '90vh', maxWidth: '100vw' }}
-      >
+    <div ref={containerRef} className="flex flex-col items-center my-4 bg-gray-100">
+      <div className="my-2 p-4">
         <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
-          {Array.from(new Array(numPages), (el, index) => (
-            <div
-              className="flex justify-center page-container"
-              key={`page_${index + 1}`}
-            >
+          {Array.from({ length: numPages }, (_, index) => (
+            <div key={`page_${index + 1}`} className="flex justify-center my-2">
               <Page
                 pageNumber={index + 1}
                 width={pageWidth}
                 renderAnnotationLayer={false}
                 renderTextLayer={false}
+                renderMode='canvas'
               />
             </div>
           ))}
         </Document>
       </div>
-      <style jsx global>{`
-        .react-pdf__Page {
-          margin: 0 !important
-          padding: 0 !important
-        }
-        .page-container {
-          margin-bottom: 10px 
-        }
-      `}</style>
     </div>
   )
 }
