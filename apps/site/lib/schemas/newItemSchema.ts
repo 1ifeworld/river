@@ -10,7 +10,6 @@ export const ACCEPTED_ITEM_MIME_TYPES = {
     'image/heic',
     'image/gif',
     'image/bmp',
-    'image/tiff',
   ],
   videos: [
     'video/mp4',
@@ -53,5 +52,5 @@ export const newItemSchema = z.object({
         const fileType = files?.[0]?.type;
         return ACCEPTED_ITEM_MIME_TYPES.images.includes(fileType);
       },
-      'Please use one of the following formats: .jpg, .jpeg, .png, .webp, .heic, .gif, .bmp, .tiff, .mp4, .webm, .ogg, .mkv, .avi, .mov, .txt, .csv, .html, .md, .glb, .gltf, or .pdf',
+      'File type not supported yet',
     )})
