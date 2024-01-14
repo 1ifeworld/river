@@ -132,16 +132,4 @@ function AddItem({ isDragActive }: { isDragActive: boolean }) {
   )
 }
 
-function FileListToast({ files, uploading }: { files: File[], uploading: boolean }) {
-  return (
-    <Toast>
-      <Typography variant="h2">{uploading ? 'Uploading Files...' : 'Uploaded Files:'}</Typography>
-      <ul>
-        {files.map((file, index) => (
-          <li key={index}>{file.name}</li>
-        ))}
-      </ul>
-    </Toast>
-  )
-        
-}
+    
