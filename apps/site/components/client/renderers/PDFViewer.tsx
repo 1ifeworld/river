@@ -1,6 +1,5 @@
 'use client'
-
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Document, Page, pdfjs } from 'react-pdf'
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -11,34 +10,45 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 interface PDFViewerProps {
   file: string
 }
+
+interface DocumentLoadSuccess {
+  numPages: number
+}
+
 const PDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
   const [numPages, setNumPages] = useState(0)
   const [pageWidth, setPageWidth] = useState(0)
-
-  const calculatePageWidth = () => {
-    return Math.min(window.innerWidth * 0.8, 1200) // 800px as max width, adjust as needed
-  }
+  const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const handleResize = () => {
-      setPageWidth(calculatePageWidth()) 
+    const observer = new ResizeObserver(entries => {
+      if (entries[0].target) {
+        const newWidth = Math.min(entries[0].contentRect.width * 0.8, 1200)
+        setPageWidth(newWidth)
+      }
+    })
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current)
     }
 
-    window.addEventListener('resize', handleResize)
-    handleResize() 
-
     return () => {
-      window.removeEventListener('resize', handleResize)
+      if (containerRef.current) {
+        observer.unobserve(containerRef.current)
+      }
     }
   }, [])
 
-  const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
+  const onDocumentLoadSuccess = ({ numPages }: DocumentLoadSuccess) => {
     setNumPages(numPages)
-    setPageWidth(calculatePageWidth()) 
+    if (containerRef.current) {
+      const newWidth = Math.min(containerRef.current.clientWidth * 0.8, 1200)
+      setPageWidth(newWidth)
+    }
   }
 
   return (
-    <div className="flex flex-col items-center my-4 bg-gray-100">
+    <div ref={containerRef} className="flex flex-col items-center my-4 bg-gray-100">
       <div className="my-2 p-4">
         <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
           {Array.from({ length: numPages }, (_, index) => (
