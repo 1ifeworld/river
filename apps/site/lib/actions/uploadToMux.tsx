@@ -9,20 +9,9 @@ export const uploadToMux = async (
 ) => {
   const assetEndpointForMux = pinataUrlFromCid({
     cid: ipfsUrlToCid({ ipfsUrl: uploadedFileCid }),
-  })
+  });
 
-  console.log("ASSET ENDPOINT MUX", assetEndpointForMux)
-
-    // Fetch with retry implementation
-    const fetchWithRetry = async (url: string, options: RequestInit, maxAttempts: number, delay: number) => {
-      for (let i = 0; i < maxAttempts; i++) {
-        const response = await fetch(url, options);
-        if (response.ok) return response;
-        console.log(`Attempt ${i + 1} failed, retrying in ${delay}ms...`);
-        await new Promise(resolve => setTimeout(resolve, delay));
-      }
-      throw new Error('Failed to fetch after maximum attempts');
-    }
+  console.log("ASSET ENDPOINT MUX", assetEndpointForMux);
 
   const directUpload = await muxClient.Video.Uploads.create({
     cors_origin: '*',
@@ -33,55 +22,36 @@ export const uploadToMux = async (
         encoding_tier: 'baseline',
       }),
     },
-  })
-
-  const ipfsResponse = await fetchWithRetry(assetEndpointForMux, {}, 5, 2000);
+  });
 
 
+  const ipfsResponse = await fetch(assetEndpointForMux);
   if (!ipfsResponse.ok) {
-    throw new Error(
-      'Failed to fetch file from IPFS: ' + ipfsResponse.statusText,
-    )
+    throw new Error('Failed to fetch file from IPFS: ' + ipfsResponse.statusText);
   }
 
-  const fileBlob = await ipfsResponse.blob()
-
+  // Upload the file blob to Mux
+  const fileBlob = await ipfsResponse.blob();
   const response = await fetch(directUpload.url, {
     method: 'PUT',
     body: fileBlob,
     headers: {
       'Content-Type': contentType,
     },
-  })
+  });
 
   if (!response.ok) {
-    throw new Error('Failed to upload to Mux: ' + response.statusText)
+    throw new Error('Failed to upload to Mux: ' + response.statusText);
   }
 
-  let muxUpload
-  let attempts = 0
-  const maxAttempts = 40
-  while ((!muxUpload || !muxUpload.asset_id) && attempts < maxAttempts) {
-    await new Promise((resolve) => setTimeout(resolve, 10000))
-    try {
-      muxUpload = await muxClient.Video.Uploads.get(directUpload.id)
-      if (muxUpload.status === 'asset_created') {
-        break
-      }
-      attempts++
-    } catch (error) {
-      console.error('Error fetching Mux Upload:', error)
-      break
-    }
-  }
-
+  let muxUpload = await muxClient.Video.Uploads.get(directUpload.id);
   if (!muxUpload || !muxUpload.asset_id) {
-    throw new Error('Mux Asset is not available after maximum attempts.')
+    throw new Error('Mux Asset is not available.');
   }
 
-  const muxAsset = await muxClient.Video.Assets.get(muxUpload.asset_id)
+  const muxAsset = await muxClient.Video.Assets.get(muxUpload.asset_id);
   return {
     muxAssetId: muxAsset.id || '',
     muxPlaybackId: muxAsset.playback_ids?.[0]?.id || '',
-  }
-}
+  };
+};
