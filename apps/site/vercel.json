@@ -1,8 +1,5 @@
 {
     "functions": {
-      "lib/*.ts": {
-        "maxDuration": 200 
-      },
       "components/client/*.ts": {
         "maxDuration": 200
       }
