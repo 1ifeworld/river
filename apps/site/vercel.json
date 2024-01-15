@@ -1,7 +1,0 @@
-{
-    "functions": {
-      "components/client/*.ts": {
-        "maxDuration": 200
-      }
-    }
-  }

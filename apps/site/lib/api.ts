@@ -1,5 +1,3 @@
-export const maxDuration = 200
-
 export async function w3sUpload(body: FormData) {
   const res = await fetch('https://w3s.up.railway.app/w3s', {
     method: 'POST',
