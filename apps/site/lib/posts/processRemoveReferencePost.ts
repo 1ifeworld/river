@@ -1,7 +1,7 @@
 import { SignMessageModalUIOptions } from '@privy-io/react-auth'
-import { relayPost } from 'lib/actions'
+import { Hash } from 'viem'
+import { relayPost } from '@/lib'
 import {
-  encodeCreateChannel,
   encodeMessage,
   encodePost,
   encodeRemoveReference,
@@ -11,21 +11,11 @@ import {
   postTypes,
   remove0xPrefix,
 } from 'scrypt'
-import {
-  Address,
-  Hash,
-  encodeAbiParameters,
-  keccak256,
-  recoverMessageAddress,
-  toBytes,
-  verifyMessage,
-} from 'viem'
 
 export interface ProcessRemoveReferencePostProps {
   targetUserId: bigint
   targetChannelId: bigint
   targetReferenceId: bigint
-  privySignerAddress: string
   privySignMessage: (
     message: string,
     uiOptions?: SignMessageModalUIOptions | undefined,
@@ -36,9 +26,8 @@ export async function processRemoveReferencePost({
   targetUserId,
   targetChannelId,
   targetReferenceId,
-  privySignerAddress,
-  privySignMessage,
-}: ProcessRemoveReferencePostProps) {
+  privySignMessage
+}: ProcessRemoveReferencePostProps): Promise<boolean> {
   // Declare constants/params
   const postVersion = postTypes.v1
   const postExpiration = getExpiration()
@@ -48,14 +37,14 @@ export async function processRemoveReferencePost({
     referenceId: targetReferenceId,
   })
 
-  if (!removeReferenceMsg) return // prevent `msgBody` from being null
+  if (!removeReferenceMsg) return false // prevent `msgBody` from being null
 
   const encodedMsg = encodeMessage({
     msgType: Number(messageTypes.removeReference),
     msgBody: removeReferenceMsg.msgBody,
   })
 
-  if (!encodedMsg) return // prevent `encodedMsg` from being null
+  if (!encodedMsg) return false // prevent `encodedMsg` from being null
 
   const messageArray: Hash[] = [encodedMsg?.encodedMessage] // generate the message array
 
@@ -80,11 +69,13 @@ export async function processRemoveReferencePost({
     expiration: postExpiration,
     messageArray: messageArray,
   })
-
-  if (!postInput) return // prevent `postInput` from being null
-
-  await relayPost({
+  // add this in to prevent postInputs being null
+  if (!postInput) return false// prevent `postInput` from being null
+  // pass postInputs into the createPost server action
+  const relaySuccess = await relayPost({
     postInput: postInput,
     pathsToRevalidate: [`/channel/${targetChannelId}`, '/'],
   })
+  // return relay success boolean
+  return relaySuccess
 }

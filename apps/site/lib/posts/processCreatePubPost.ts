@@ -1,5 +1,6 @@
 import { SignMessageModalUIOptions } from '@privy-io/react-auth'
-import { relayPost } from 'lib/actions'
+import { Hash } from 'viem'
+import { relayPost } from '@/lib'
 import {
   encodeCreatePublication,
   encodeMessage,
@@ -10,7 +11,6 @@ import {
   postTypes,
   remove0xPrefix,
 } from 'scrypt'
-import { Hash } from 'viem'
 
 export async function processCreatePubPost({
   pubUri,
@@ -25,7 +25,7 @@ export async function processCreatePubPost({
     message: string,
     uiOptions?: SignMessageModalUIOptions | undefined,
   ) => Promise<string>
-}) {
+}): Promise<boolean> {
   // Declare constants/params
   const postVersion = postTypes.v1
   const postExpiration: bigint = getExpiration()
@@ -35,14 +35,14 @@ export async function processCreatePubPost({
     channelTags: [targetChannelId],
   })
   // add this in to prevent msgBody from being null
-  if (!createPubMsg) return
+  if (!createPubMsg) return false
   console.log('encoded pub and createPub msgBody correctly')
   const encodedMessage = encodeMessage({
     msgType: Number(messageTypes.createPublication),
     msgBody: createPubMsg.msgBody,
   })
   // add this in to prevent either encoded messages from being null
-  if (!encodedMessage) return
+  if (!encodedMessage) return false
   console.log('encoded create pub message correctly')
   // generate the bytes[] messageArray
   const messageArray: Hash[] = [encodedMessage?.encodedMessage]
@@ -69,11 +69,13 @@ export async function processCreatePubPost({
     messageArray: messageArray,
   })
   // add this in to prevent postInputs being null
-  if (!postInput) return
+  if (!postInput) return false
   console.log('postInput encoded correctly', postInput)
   // pass postInputs into the createPost server action
-  await relayPost({
+  const relaySuccess = await relayPost({
     postInput: postInput,
     pathsToRevalidate: [`/channel/${targetChannelId}`, '/'],
   })
+  // return relay success boolean value
+  return relaySuccess  
 }

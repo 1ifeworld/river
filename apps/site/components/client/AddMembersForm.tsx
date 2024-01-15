@@ -80,24 +80,31 @@ export function AddMembersForm({ targetChannelId }: AddMembersFormProps) {
   const { signMessage, embeddedWallet, userId } = useUserContext()
 
   async function onSubmit(data: z.infer<typeof usernameSchema>) {
+    // initialize bool for txn success check
+    let txSuccess: boolean = false;    
     if (signMessage && embeddedWallet?.address && usernameId) {
-      console.log('running add members')
-      await processEditChannelAccessPost({
+      txSuccess = await processEditChannelAccessPost({
         targetUserId: userId as bigint,
         targetChannelId: targetChannelId,
         admins: [], // hardcoded as empty
         members: [usernameId], // only supports one at a time for now
         privySignMessage: signMessage,
       })
-      console.log('finished processEditChannelAccessPost')
     }
-
-    toast.custom((t) => (
-      <Toast>
-        You added <span className="font-bold">{form.getValues().username}</span>{' '}
-        to this channel
-      </Toast>
-    ))
+    if (txSuccess) {
+      toast.custom((t) => (
+        <Toast>
+          You added <span className="font-bold">{form.getValues().username}</span>{' '}
+          to this channel
+        </Toast>
+      ))
+    } else {
+      toast.custom((t) => (
+        <Toast>
+          Error adding new member
+        </Toast>
+      ))      
+    }
   }
 
   return (

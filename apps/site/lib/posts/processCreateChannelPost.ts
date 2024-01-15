@@ -1,5 +1,6 @@
 import { SignMessageModalUIOptions } from '@privy-io/react-auth'
-import { relayPost } from 'lib/actions'
+import { Hash } from 'viem'
+import { relayPost } from '@/lib'
 import {
   encodeCreateChannel,
   encodeMessage,
@@ -10,30 +11,19 @@ import {
   postTypes,
   remove0xPrefix,
 } from 'scrypt'
-import {
-  Address,
-  Hash,
-  encodeAbiParameters,
-  keccak256,
-  recoverMessageAddress,
-  toBytes,
-  verifyMessage,
-} from 'viem'
 
 export async function processCreateChannelPost({
   channelUri,
   targetUserId,
-  privySignerAddress,
   privySignMessage,
 }: {
   channelUri: string
   targetUserId: bigint
-  privySignerAddress: string
   privySignMessage: (
     message: string,
     uiOptions?: SignMessageModalUIOptions | undefined,
   ) => Promise<string>
-}) {
+}): Promise<boolean>  {
   // Declare constants/params
   const postVersion = postTypes.v1
   const postExpiration: bigint = getExpiration()
@@ -45,7 +35,7 @@ export async function processCreateChannelPost({
     channelTags: [],
   })
   // add this in to prevent msgBody from being null
-  if (!createChannelMsg) return
+  if (!createChannelMsg) return false
   console.log('encoded msgBody correctly')
   // generate encodedMessage by packing msgType + msgBody together
   const encodedMessage = encodeMessage({
@@ -53,7 +43,7 @@ export async function processCreateChannelPost({
     msgBody: createChannelMsg.msgBody,
   })
   // add this in to prevent encodedMessage being null
-  if (!encodedMessage) return
+  if (!encodedMessage) return false
   console.log('encoded message correctly')
   // generate the bytes[] messageArray
   const messageArray: Hash[] = [encodedMessage?.encodedMessage]
@@ -79,8 +69,10 @@ export async function processCreateChannelPost({
     messageArray: messageArray,
   })
   // add this in to prevent postInputs being null
-  if (!postInput) return
+  if (!postInput) return false
   console.log('postInput encoded correctly')
   // pass postInputs into the createPost server action
-  await relayPost({ postInput: postInput, pathsToRevalidate: ['/'] })
+  const relaySuccess = await relayPost({ postInput: postInput, pathsToRevalidate: ['/'] })
+  // return relay success boolean value
+  return relaySuccess
 }
