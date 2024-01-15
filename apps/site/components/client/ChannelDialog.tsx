@@ -108,6 +108,8 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                 id="newChannel"
                 className="flex flex-col justify-center w-full gap-6"
                 action={async () => {
+                  // initialize bool for txn success check
+                  let txSuccess: boolean = false;
                   // Prevent non-authenticated users from proceeding
                   if (!targetUserId) return
                   // Upload cover image to IPFS if it one was provided
@@ -141,22 +143,31 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                   })
                   // Generate create channel post for user and post transaction
                   if (signMessage) {
-                    await processCreateChannelPost({
+                    txSuccess = await processCreateChannelPost({
                       channelUri: channelUri?.toString() as string,
                       targetUserId: targetUserId,
-                      privySignerAddress: embeddedWallet?.address as string,
                       privySignMessage: signMessage,
                     })
+                    setDialogOpen(false)
+                    if (txSuccess) {
+                      // Render a toast with the name of the channel
+                      toast.custom((t) => (
+                        <Toast>
+                          {'Successfully created '}
+                          <span className="font-bold">{form.getValues().name}</span>
+                        </Toast>
+                      ))
+                      resetFormAndFiles()
+                    } else {
+                      // Render a toast with error message
+                      toast.custom((t) => (
+                        <Toast>
+                          {'Error creating channel'}
+                        </Toast>
+                      ))
+                      resetFormAndFiles()                    
+                    }
                   }
-                  setDialogOpen(false)
-                  // Render a toast with the name of the channel
-                  toast.custom((t) => (
-                    <Toast>
-                      {'Successfully created '}
-                      <span className="font-bold">{form.getValues().name}</span>
-                    </Toast>
-                  ))
-                  resetFormAndFiles()
                 }}
               >
                 <Separator />
