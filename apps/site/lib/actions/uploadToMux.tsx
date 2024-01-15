@@ -3,8 +3,6 @@ import { muxClient } from '@/config/muxClient'
 import { ipfsUrlToCid, pinataUrlFromCid } from 'lib/ipfs'
 import { isVideo } from 'lib/isContent'
 
-export const maxDuration = 200
-
 export const uploadToMux = async (
   contentType: string,
   uploadedFileCid: string,
