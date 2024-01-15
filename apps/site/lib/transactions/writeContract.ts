@@ -14,7 +14,7 @@ import {
 } from "viem/actions";
 import pRetry from "p-retry";
 import { parseAccount } from "viem/accounts";
-import { createNonceManager } from "./createNonceManager";
+import { createNonceManager } from "@/lib";
 
 export async function writeContract<
   TChain extends Chain | undefined,
@@ -46,7 +46,6 @@ export async function writeContract<
     blockTag: "pending"
   });
 
-
   async function prepareWrite(): Promise<
     WriteContractParameters<
       TAbi,
@@ -57,11 +56,10 @@ export async function writeContract<
     >
   > {
     if (request.gas) {
-      // debug("gas provided, skipping simulate", request.functionName, request.address);
+      console.log("gas value provided in txn request, skipping simulation")
       return request;
     }
 
-    //   debug("simulating", request.functionName, "at", request.address);
     const result = await simulateContract<
       TChain,
       TAbi,
@@ -93,14 +91,6 @@ export async function writeContract<
           }
 
           const nonce = nonceManager.nextNonce();        
-        //   debug(
-        //     "calling",
-        //     preparedWrite.functionName,
-        //     "with nonce",
-        //     nonce,
-        //     "at",
-        //     preparedWrite.address
-        //   );
           return await viem_writeContract(client, {
             nonce,
             ...preparedWrite,
@@ -112,6 +102,7 @@ export async function writeContract<
             // On nonce errors, reset the nonce and retry
             if (nonceManager.shouldResetNonce(error)) {
             //   debug("got nonce error, retrying", error.message);
+              console.log("error getting nonce – retrying. error: ", error.message)
               await nonceManager.resetNonce();
               return;
             }

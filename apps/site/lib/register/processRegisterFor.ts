@@ -1,14 +1,7 @@
 import { SignMessageModalUIOptions } from '@privy-io/react-auth'
-import { relayRegisterFor } from 'lib/actions'
+import { Hash, Hex } from 'viem'
+import { relayRegisterFor } from '@/lib'
 import { getExpiration, registerForHash, remove0xPrefix } from 'scrypt'
-import {
-  Hash,
-  Hex,
-  hashMessage,
-  keccak256,
-  recoverAddress,
-  recoverMessageAddress,
-} from 'viem'
 
 export async function processRegisterFor({
   privySignerAddress,
@@ -24,7 +17,6 @@ export async function processRegisterFor({
 }) {
   // Declare constants/params
   const sigExpiration: bigint = getExpiration()
-  // const sigExpriration: bigint = BigInt(1734558342000);
   // Get the hash to be signed
   const hash = registerForHash({ expiration: sigExpiration })
   // Sign hash with privy. hash is first wrapped in eip191 wrapper.

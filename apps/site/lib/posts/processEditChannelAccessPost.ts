@@ -1,5 +1,6 @@
-import { relayPost } from '@/lib'
 import { SignMessageModalUIOptions } from '@privy-io/react-auth'
+import { Hash } from 'viem'
+import { relayPost } from '@/lib'
 import {
   encodeEditChannelAccess,
   encodeMessage,
@@ -10,7 +11,6 @@ import {
   postTypes,
   remove0xPrefix,
 } from 'scrypt'
-import { Hash } from 'viem'
 
 export async function processEditChannelAccessPost({
   targetUserId,
@@ -27,7 +27,7 @@ export async function processEditChannelAccessPost({
     message: string,
     uiOptions?: SignMessageModalUIOptions | undefined,
   ) => Promise<string>
-}) {
+}): Promise<boolean> {
   // Declare constants/params
   const postVersion = postTypes.v1
   const postExpiration: bigint = getExpiration()
@@ -38,14 +38,14 @@ export async function processEditChannelAccessPost({
     members: members,
   })
   // add this in to prevent msgBody from being null
-  if (!createEditChannelAccessMsg) return
+  if (!createEditChannelAccessMsg) return false
   console.log('encoded editChannelAccess msgBody correctly')
   const encodedMessage = encodeMessage({
     msgType: Number(messageTypes.editChannelAccess),
     msgBody: createEditChannelAccessMsg.msgBody,
   })
   // add this in to prevent full encoded message from being null
-  if (!encodedMessage) return
+  if (!encodedMessage) return false
   console.log('encoded full editChannelAccess correctly')
   // generate the bytes[] messageArray
   const messageArray: Hash[] = [encodedMessage?.encodedMessage]
@@ -70,11 +70,13 @@ export async function processEditChannelAccessPost({
     messageArray: messageArray,
   })
   // add this in to prevent postInputs being null
-  if (!postInput) return
+  if (!postInput) return false
   console.log('postInput encoded correctly', postInput)
   // pass postInputs into the createPost server action
-  await relayPost({
+  const relaySuccess = await relayPost({
     postInput: postInput,
     pathsToRevalidate: [`/channel/${targetChannelId}`, '/'],
   })
+  // return relay success boolean
+  return relaySuccess
 }

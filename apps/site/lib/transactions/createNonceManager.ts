@@ -1,16 +1,11 @@
 import { BaseError, BlockTag, Client, Hex, NonceTooHighError, NonceTooLowError } from "viem";
-// import { debug as parentDebug } from "./debug";
-// import { getNonceManagerId } from "./getNonceManagerId";
 import { getTransactionCount } from "viem/actions";
 import PQueue from "p-queue";
-
-// const debug = parentDebug.extend("createNonceManager");
 
 export type CreateNonceManagerOptions = {
   client: Client;
   address: Hex;
   blockTag?: BlockTag;
-//   broadcastChannelName?: string;
 };
 
 export type CreateNonceManagerResult = {
@@ -25,25 +20,18 @@ export function createNonceManager({
   client,
   address, // TODO: rename to account?
   blockTag = "pending",
-//   broadcastChannelName,
 }: CreateNonceManagerOptions): CreateNonceManagerResult {
   const nonceRef = { current: -1 };
   let channel: BroadcastChannel | null = null;
 
   if (typeof BroadcastChannel !== "undefined") {
     const channelName = "relayerBroadcast"
-    //   ? Promise.resolve(broadcastChannelName)
-    //   : getNonceManagerId({ client, address, blockTag });
-    // channelName.then((name) => {
       channel = new BroadcastChannel(channelName);
-      // TODO: emit some sort of "connected" event so other channels can broadcast current nonce
       channel.addEventListener("message", (event) => {
         const nonce = JSON.parse(event.data);
-        // debug("got nonce from broadcast channel", nonce);
         console.log("get nonce from broadcast channel", nonce)
         nonceRef.current = nonce;
       });
-    // });
   }
 
   function hasNonce(): boolean {
@@ -62,7 +50,6 @@ export function createNonceManager({
     nonceRef.current = nonce;
     channel?.postMessage(JSON.stringify(nonceRef.current));
     console.log("reset nonce to", nonceRef.current)
-    // debug("reset nonce to", nonceRef.current);
   }
 
   function shouldResetNonce(error: unknown): boolean {

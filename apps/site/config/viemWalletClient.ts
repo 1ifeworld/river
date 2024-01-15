@@ -1,3 +1,5 @@
+import 'server-only'
+
 import { createWalletClient, http } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 import { river_j5bpjduqfv } from './customChainConfig'
