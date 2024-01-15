@@ -101,7 +101,7 @@ export function Dropzone({
 
   return (
     <div {...getRootProps()}>
-      <input {...getInputProps()} />
+      <input {...getInputProps()} formEncType='multipart/form-data' />
       <AddItem isDragActive={isDragActive} />
     </div>
   )
