@@ -1,6 +1,6 @@
 {
     "functions": {
-      "site/api/*.tsx": {
+      "apps/site/api/uploadToMux.tsx": {
         "maxDuration": 200
       }
     }
