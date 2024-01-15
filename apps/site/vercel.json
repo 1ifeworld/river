@@ -1,6 +1,6 @@
 {
     "functions": {
-      "site/lib/**/*": {
+      "site/lib/actions/*.tsx": {
         "maxDuration": 200
       }
     }
