@@ -1,0 +1,9 @@
+
+
+{
+    "functions": {
+      "/site/lib/actions/uploadToMux.tsx": {
+        "maxDuration": 200 
+      }
+    }
+  }
