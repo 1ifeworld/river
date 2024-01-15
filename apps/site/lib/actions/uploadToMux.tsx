@@ -11,7 +11,6 @@ export const uploadToMux = async (
   const assetEndpointForMux = pinataUrlFromCid({
     cid: ipfsUrlToCid({ ipfsUrl: uploadedFileCid }),
   })
-  
   console.log("ASSET ENDPOINT MUX", assetEndpointForMux);
 
   const directUpload = await muxClient.Video.Uploads.create({
