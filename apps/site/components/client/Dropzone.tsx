@@ -10,9 +10,9 @@ import {
   isVideo,
   processCreatePubPost,
   sendToDb,
-  uploadToMux,
   MetadataObject,
 } from '@/lib'
+import { uploadToMux } from 'api'
 import { Typography, Toast, Flex, Stack, Button } from '@/design-system'
 import { toast } from 'sonner'
 import { useUserContext } from '@/context'
