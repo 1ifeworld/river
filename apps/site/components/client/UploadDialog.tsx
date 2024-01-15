@@ -27,6 +27,7 @@ import {
   sendToDb,
 } from '@/lib'
 import { type MetadataObject } from '@/lib'
+import { uploadToMux } from 'api'
 import { usePrivy } from '@privy-io/react-auth'
 import { X } from 'lucide-react'
 import { useParams } from 'next/navigation'
