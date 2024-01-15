@@ -7,6 +7,7 @@ export * from './username'
 export * from './transactions'
 
 // Individual components
+export * from './api'
 export * from './determineContentType'
 export * from './ipfs'
 export * from './isContent'
