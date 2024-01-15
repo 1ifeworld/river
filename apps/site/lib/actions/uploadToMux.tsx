@@ -11,6 +11,19 @@ export const uploadToMux = async (
     cid: ipfsUrlToCid({ ipfsUrl: uploadedFileCid }),
   })
 
+  console.log("ASSET ENDPOINT MUX", assetEndpointForMux)
+
+    // Fetch with retry implementation
+    const fetchWithRetry = async (url: string, options: RequestInit, maxAttempts: number, delay: number) => {
+      for (let i = 0; i < maxAttempts; i++) {
+        const response = await fetch(url, options);
+        if (response.ok) return response;
+        console.log(`Attempt ${i + 1} failed, retrying in ${delay}ms...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+      throw new Error('Failed to fetch after maximum attempts');
+    }
+
   const directUpload = await muxClient.Video.Uploads.create({
     cors_origin: '*',
     new_asset_settings: {
@@ -22,7 +35,9 @@ export const uploadToMux = async (
     },
   })
 
-  const ipfsResponse = await fetch(assetEndpointForMux)
+  const ipfsResponse = await fetchWithRetry(assetEndpointForMux, {}, 5, 2000);
+
+
   if (!ipfsResponse.ok) {
     throw new Error(
       'Failed to fetch file from IPFS: ' + ipfsResponse.statusText,
