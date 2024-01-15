@@ -1,7 +1,15 @@
 {
     "functions": {
       "api/uploadToMux.tsx": {
-        "maxDuration": 30 
+        "maxDuration": 200
+      }
+    },
+    "preview": {
+      "functions": {
+        "api/uploadToMux.tsx": {
+          "maxDuration": 200
+        }
       }
     }
   }
+  
