@@ -1,5 +1,5 @@
 export async function w3sUpload(body: FormData) {
-  const res = await fetch('https://w3s-service-production.up.railway.app/routes/w3s', {
+  const res = await fetch('https://w3s-service-production.up.railway.app/w3s', {
     method: 'POST',
     body,
     // TODO: Add credentials check
