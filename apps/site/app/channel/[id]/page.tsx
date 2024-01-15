@@ -1,7 +1,12 @@
 import { Stack, Flex } from '@/design-system'
 import { getChannelWithId } from '@/gql'
 import { getChannelMetadata, getReferenceMetadata } from '@/lib'
-import { ChannelBanner, ChannelItems, AllChannelsList } from '@/server'
+import {
+  ChannelBanner,
+  ChannelItems,
+  AllChannelsList,
+  ChannelDetails,
+} from '@/server'
 
 export default async function Channel({
   params,
@@ -27,6 +32,7 @@ export default async function Channel({
       <Stack className="w-full md:w-3/4">
         <ChannelBanner channel={channel} metadata={channelMetadata} />
         <ChannelItems channel={channel} metadata={metadata} />
+        <ChannelDetails channel={channel} />
       </Stack>
     </Flex>
   )
