@@ -1,6 +1,6 @@
 {
     "functions": {
-      "lib/api.ts": {
+      "lib/*.ts": {
         "maxDuration": 200 
       },
       "components/client/*.ts": {
