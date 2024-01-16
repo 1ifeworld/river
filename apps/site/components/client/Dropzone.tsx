@@ -12,7 +12,7 @@ import {
   sendToDb,
   MetadataObject,
 } from '@/lib'
-import { uploadToMux } from 'api'
+import { uploadToMux } from 'lib'
 import { Typography, Toast, Flex, Stack, Button } from '@/design-system'
 import { toast } from 'sonner'
 import { useUserContext } from '@/context'
@@ -58,10 +58,9 @@ export function Dropzone({
         let muxPlaybackId 
 
         if (contentTypeKey === 2 ) {
-          const {id, uploadId} = await uploadToMux(contentType, animationUri)
-          const {playback_ids: playbackId} = await muxClient.Video.Assets.get(uploadId)
-          muxAssetId = id
-          muxPlaybackId = playbackId ? playbackId.join(', ') : undefined
+          const muxUploadResult = await uploadToMux(contentType, animationUri)
+          muxAssetId = muxUploadResult.muxAssetId
+          muxPlaybackId = muxUploadResult.muxPlaybackId
         }
 
         await sendToDb({

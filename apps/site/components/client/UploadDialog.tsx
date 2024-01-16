@@ -27,7 +27,7 @@ import {
   sendToDb,
 } from '@/lib'
 import { type MetadataObject } from '@/lib'
-import { uploadToMux } from 'api'
+import { uploadToMux } from '@/lib'
 import { usePrivy } from '@privy-io/react-auth'
 import { X } from 'lucide-react'
 import { useParams } from 'next/navigation'
@@ -105,13 +105,12 @@ export function UploadDialog() {
     let muxPlaybackId 
 
     if (contentTypeKey === 2) {
-      const {id, uploadId} = await uploadToMux(
+      const muxUpload = await uploadToMux(
         contentType,
         animationUri?.toString() as string,
       )
-      const {playback_ids: playbackId} = await muxClient.Video.Assets.get(uploadId)
-      muxAssetId = id
-      muxPlaybackId = playbackId ? playbackId.join(', ') : undefined
+      muxAssetId = muxUpload.muxAssetId
+      muxPlaybackId = muxUpload.muxPlaybackId
     }
 
     await sendToDb({
