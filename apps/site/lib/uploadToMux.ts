@@ -2,7 +2,9 @@
 import { muxClient } from '@/config/muxClient'
 import { ipfsUrlToCid, pinataUrlFromCid } from 'lib/ipfs'
 import { isVideo } from 'lib/isContent'
+import Mux from '@mux/mux-node'
 
+export const { Video } = new Mux()
 
 const fetchWithRetry = async (url: string, options: RequestInit, maxRetries = 3) => {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
