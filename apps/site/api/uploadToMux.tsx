@@ -2,8 +2,6 @@
 import { muxClient } from '@/config/muxClient'
 import { ipfsUrlToCid, pinataUrlFromCid } from 'lib/ipfs'
 import { isVideo } from 'lib/isContent'
-import * as UpChunk from '@mux/upchunk'
-
 
 const fetchWithRetry = async (url: string, options: RequestInit, maxRetries = 3) => {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
@@ -47,8 +45,6 @@ export const uploadToMux = async (
     },
   })
 
- 
-
   const ipfsResponse = await fetchWithRetry(assetEndpointForMux, {}, 10)
 
   if (!ipfsResponse?.ok) {
@@ -64,7 +60,6 @@ export const uploadToMux = async (
       'Content-Type': contentType,
     },
   })
-
 
   if (!response.ok) {
     throw new Error('Failed to upload to Mux: ' + response.statusText)
