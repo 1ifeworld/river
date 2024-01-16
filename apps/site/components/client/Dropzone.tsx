@@ -53,13 +53,13 @@ export function Dropzone({
           animationUri: animationUri,
         }
 
-        let muxAssetId = ''
-        let muxPlaybackId = ''
+        let muxAssetId
+        let muxPlaybackId 
 
         if (contentTypeKey === 2) {
           const muxUploadResult = await uploadToMux(contentType, animationUri)
-          muxAssetId = muxUploadResult.muxAssetId 
-          muxPlaybackId = muxUploadResult.muxPlaybackId
+          muxAssetId = muxUploadResult.id
+          muxPlaybackId = muxUploadResult.playback_ids?.[0]?.id
         }
 
         await sendToDb({

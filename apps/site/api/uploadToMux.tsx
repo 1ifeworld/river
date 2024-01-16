@@ -37,18 +37,15 @@ export const uploadToMux = async (
 
   console.log("ASSET ENDPOINT", assetEndpointForMux)
 
-  const directUpload = await muxClient.Video.Uploads.create({
-    cors_origin: '*',
-    new_asset_settings: {
-      input: assetEndpointForMux,
-      playback_policy: 'public',
-      ...(isVideo({ mimeType: contentType }) && {
-        encoding_tier: 'baseline',
-      }),
-    },
-  })
+  const asset = await muxClient.Video.Assets.create({
+    input: assetEndpointForMux,
+    playback_policy: [
+      'public'
+    ],
+    encoding_tier: 'baseline',
+  });
 
-console.log("direct upload", directUpload)
+console.log("direct upload", asset)
 
 // const ipfsResponse = await fetchWithRetry(assetEndpointForMux, {}, 10)
 
@@ -73,26 +70,9 @@ console.log("direct upload", directUpload)
 //   }
 
 
-  let muxUpload
-  let retries = 0
-  const maxRetries = 10 
-  const retryInterval = 3000
+    const muxAsset = await muxClient.Video.Assets.get(asset.id)
+    
+    console.log(muxAsset) 
 
-  do {
-    await new Promise(resolve => setTimeout(resolve, retryInterval))
-    muxUpload = await muxClient.Video.Uploads.get(directUpload.id)
-    retries++
-    console.log("retries", retries)
-  } while (muxUpload.status === 'waiting' && retries < maxRetries)
-
-  if (!muxUpload || !muxUpload.asset_id) {
-    throw new Error('Mux Asset is not available.')
+    return asset
   }
-
-  const muxAsset = await muxClient.Video.Assets.get(muxUpload.asset_id)
-  console.log("MUX ASSET", muxAsset)
-  return {
-    muxAssetId: muxAsset.id || '',
-    muxPlaybackId: muxAsset.playback_ids?.[0]?.id || '',
-  }
-}
