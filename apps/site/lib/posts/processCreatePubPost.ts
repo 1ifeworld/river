@@ -77,5 +77,5 @@ export async function processCreatePubPost({
     pathsToRevalidate: [`/channel/${targetChannelId}`, '/'],
   })
   // return relay success boolean value
-  return relaySuccess  
+  return relaySuccess
 }

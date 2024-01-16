@@ -26,9 +26,28 @@ export function Dropzone({
 
   const onDrop = async (acceptedFiles: File[]) => {
     for (const file of acceptedFiles) {
+      // toast.custom((t) => (
+      //   <Toast>
+      //     {'Adding'}
+      //     <Typography>
+      //       <span className="font-bold">{file.name}</span>
+      //     </Typography>
+      //   </Toast>
+      // ))
+
       const formData = new FormData()
       formData.append('file', file)
-      const { cid } = await w3sUpload(formData)
+
+      const uploadPromise = w3sUpload(formData)
+
+      toast.promise(uploadPromise, {
+        loading: 'Uploading...',
+        success: (data) => `File ${file.name} has been uploaded successfully`,
+        error: 'Error during upload',
+      })
+
+      const { cid } = await uploadPromise
+      // const { cid } = await w3sUpload(formData)
 
       if (cid) {
         console.log(cid)
@@ -79,15 +98,6 @@ export function Dropzone({
             privySignMessage: signMessage,
           })
         }
-
-        toast.custom((t) => (
-          <Toast>
-            {'Successfully uploaded '}
-            <Typography>
-              <span className="font-bold">{file.name}</span>
-            </Typography>
-          </Toast>
-        ))
       } else {
         console.log('no cid')
       }
@@ -101,7 +111,7 @@ export function Dropzone({
 
   return (
     <div {...getRootProps()}>
-      <input {...getInputProps()} formEncType='multipart/form-data' />
+      <input {...getInputProps()} formEncType="multipart/form-data" />
       <AddItem isDragActive={isDragActive} />
     </div>
   )

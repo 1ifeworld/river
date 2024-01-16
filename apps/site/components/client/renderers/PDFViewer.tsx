@@ -21,7 +21,7 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const observer = new ResizeObserver(entries => {
+    const observer = new ResizeObserver((entries) => {
       if (entries[0].target) {
         const newWidth = Math.min(entries[0].contentRect.width * 0.8, 1200)
         setPageWidth(newWidth)
@@ -48,7 +48,10 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
   }
 
   return (
-    <div ref={containerRef} className="flex flex-col items-center my-4 bg-gray-100">
+    <div
+      ref={containerRef}
+      className="flex flex-col items-center my-4 bg-gray-100"
+    >
       <div className="my-2 p-4">
         <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
           {Array.from({ length: numPages }, (_, index) => (
@@ -58,7 +61,7 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
                 width={pageWidth}
                 renderAnnotationLayer={false}
                 renderTextLayer={false}
-                renderMode='canvas'
+                renderMode="canvas"
               />
             </div>
           ))}

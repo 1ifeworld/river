@@ -1,9 +1,9 @@
 import { Header, ThemeToggle } from '@/client'
 import { Analytics } from '@vercel/analytics/react'
 import type { Metadata } from 'next'
-import { Toaster } from 'sonner'
+import { Toaster } from '@/design-system'
 import '../styles/globals.css'
-import { fragmentMono } from './fonts/fonts'
+import { fragmentMono } from '@/fonts'
 import { Providers } from './providers/providers'
 
 export const metadata: Metadata = {

@@ -25,6 +25,7 @@
     ],
     "baseUrl": ".",
     "paths": {
+      "@/fonts": ["app/fonts/fonts.ts"],
       "@/client": ["components/client/index.ts"],
       "@/server": ["components/server/index.ts"],
       "@/config/*": ["config/*"],
