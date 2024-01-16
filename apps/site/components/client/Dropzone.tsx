@@ -29,13 +29,11 @@ export function Dropzone({
       const formData = new FormData()
       formData.append('file', file)
       const { cid } = await w3sUpload(formData)
-      console.log("CID", cid)
+
 
       if (cid) {
-        console.log(cid)
         const uploadedFileName = file.name || 'unnamed'
         const contentType = determineContentType(file)
-        console.log("CONTENT TYPE:", contentType)
         const contentTypeKey =
           isVideo({ mimeType: contentType }) ||
           isAudio({ mimeType: contentType })
@@ -48,8 +46,6 @@ export function Dropzone({
           contentTypeKey === 2 || contentTypeKey === 1 ? cid : ''
         const imageUri = contentTypeKey === 0 ? cid : ''
 
-        console.log("ANIMATIONURI", animationUri)
-
         const metadataObject: MetadataObject = {
           name: uploadedFileName,
           description: 'Dynamic metadata based on timestamp',
@@ -61,9 +57,7 @@ export function Dropzone({
         let muxPlaybackId = ''
 
         if (contentTypeKey === 2) {
-          console.log("PREMUX")
           const muxUploadResult = await uploadToMux(contentType, animationUri)
-          console.log("POSTMUX", muxUploadResult)
           muxAssetId = muxUploadResult.muxAssetId
           muxPlaybackId = muxUploadResult.muxPlaybackId
         }

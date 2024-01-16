@@ -35,7 +35,6 @@ export const uploadToMux = async (
   const assetEndpointForMux = pinataUrlFromCid({
     cid: ipfsUrlToCid({ ipfsUrl: uploadedFileCid }),
   })
-  console.log("ASSET ENDPOINT MUX", assetEndpointForMux)
 
   const directUpload = await muxClient.Video.Uploads.create({
     cors_origin: '*',
@@ -48,7 +47,7 @@ export const uploadToMux = async (
     },
   })
 
-  console.log("post upload", directUpload)
+ 
 
   const ipfsResponse = await fetchWithRetry(assetEndpointForMux, {}, 10)
 
@@ -58,7 +57,6 @@ export const uploadToMux = async (
 
   // Upload the file blob to Mux
   const fileBlob = await ipfsResponse.blob()
-  console.log("FILEBLOB", fileBlob)
   const response = await fetch(directUpload.url, {
     method: 'PUT',
     body: fileBlob,
@@ -67,7 +65,6 @@ export const uploadToMux = async (
     },
   })
 
-  console.log("RESPONSE", response)
 
   if (!response.ok) {
     throw new Error('Failed to upload to Mux: ' + response.statusText)
@@ -82,7 +79,6 @@ export const uploadToMux = async (
   do {
     await new Promise(resolve => setTimeout(resolve, retryInterval))
     muxUpload = await muxClient.Video.Uploads.get(directUpload.id)
-    console.log("Retry #" + retries + " - MUXUPLOADGET", muxUpload)
     retries++
   } while (muxUpload.status === 'waiting' && retries < maxRetries)
 
@@ -91,7 +87,6 @@ export const uploadToMux = async (
   }
 
   const muxAsset = await muxClient.Video.Assets.get(muxUpload.asset_id)
-  console.log("MUXASSET", muxAsset)
   return {
     muxAssetId: muxAsset.id || '',
     muxPlaybackId: muxAsset.playback_ids?.[0]?.id || '',
