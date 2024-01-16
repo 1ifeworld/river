@@ -2,6 +2,9 @@
     "functions": {
       "api/uploadToMux.tsx": {
         "maxDuration": 200 
+      },
+      "item/[id]/*.tsx": {
+        "maxDuration": 200 
       }
     }
   }
