@@ -3,17 +3,17 @@
       "api/uploadToMux.tsx": {
         "maxDuration": 200 
       },
-      "app/item/[id].tsx": {
+      "item/[id].tsx": {
         "maxDuration": 200 
       },
-      "app/item/[id].rsc":
+      "item/[id].rsc":
       {
         "maxDuration": 200 
       },
-      "app/channel/[id].tsx": {
+      "channel/[id].tsx": {
         "maxDuration": 200 
       },
-      "app/channel/[id].rsc": {
+      "channel/[id].rsc": {
         "maxDuration": 200
       }
     }
