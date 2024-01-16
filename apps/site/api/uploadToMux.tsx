@@ -35,44 +35,41 @@ export const uploadToMux = async (
     cid: ipfsUrlToCid({ ipfsUrl: uploadedFileCid }),
   })
 
-  console.log("ASSET ENDPOINT", assetEndpointForMux)
+  const directUpload = await muxClient.Video.Uploads.create({
+    cors_origin: '*',
+    new_asset_settings: {
+      input: assetEndpointForMux,
+      playback_policy: 'public',
+      ...(isVideo({ mimeType: contentType }) && {
+        encoding_tier: 'baseline',
+      }),
+    },
+  })
 
-  const asset = await muxClient.Video.Assets.create({
-    input: assetEndpointForMux,
-    playback_policy: [
-      'public'
-    ],
-    encoding_tier: 'baseline',
-  });
+  return { id: directUpload.asset_id, uploadId: directUpload.id}
 
-console.log("direct upload", asset)
+ 
 
-// const ipfsResponse = await fetchWithRetry(assetEndpointForMux, {}, 10)
+  // const ipfsResponse = await fetchWithRetry(assetEndpointForMux, {}, 10)
 
-// console.log("ipfsResponse:", ipfsResponse)
+  // if (!ipfsResponse?.ok) {
+  //   throw new Error('Failed to fetch file from IPFS: ' + ipfsResponse?.statusText)
+  // }
 
-//   if (!ipfsResponse?.ok) {
-//     throw new Error('Failed to fetch file from IPFS: ' + ipfsResponse?.statusText)
-//   }
-
-//   const fileBlob = await ipfsResponse.blob()
-//   const response = await fetch(directUpload.url, {
-//     method: 'PUT',
-//     body: fileBlob,
-//     headers: {
-//       'Content-Type': contentType,
-//     },
-//   })
-
-
-//   if (!response.ok) {
-//     throw new Error('Failed to upload to Mux: ' + response.statusText)
-//   }
+  // // Upload the file blob to Mux
+  // const fileBlob = await ipfsResponse.blob()
+  // const response = await fetch(directUpload.url, {
+  //   method: 'PUT',
+  //   body: fileBlob,
+  //   headers: {
+  //     'Content-Type': contentType,
+  //   },
+  // })
 
 
-    const muxAsset = await muxClient.Video.Assets.get(asset.id)
-    
-    console.log(muxAsset) 
+  // if (!response.ok) {
+  //   throw new Error('Failed to upload to Mux: ' + response.statusText)
+  // }
 
-    return asset
-  }
+
+}

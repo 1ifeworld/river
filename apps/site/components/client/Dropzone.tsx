@@ -17,6 +17,7 @@ import { Typography, Toast, Flex, Stack, Button } from '@/design-system'
 import { toast } from 'sonner'
 import { useUserContext } from '@/context'
 import { useParams } from 'next/navigation'
+import { muxClient } from '@/config/muxClient'
 
 export function Dropzone({
   acceptMultipleFiles,
@@ -56,10 +57,11 @@ export function Dropzone({
         let muxAssetId
         let muxPlaybackId 
 
-        if (contentTypeKey === 2) {
-          const muxUploadResult = await uploadToMux(contentType, animationUri)
-          muxAssetId = muxUploadResult.id
-          muxPlaybackId = muxUploadResult.playback_ids?.[0]?.id
+        if (contentTypeKey === 2 ) {
+          const {id, uploadId} = await uploadToMux(contentType, animationUri)
+          const {playback_ids: playbackId} = await muxClient.Video.Assets.get(uploadId)
+          muxAssetId = id
+          muxPlaybackId = playbackId ? playbackId.join(', ') : undefined
         }
 
         await sendToDb({
