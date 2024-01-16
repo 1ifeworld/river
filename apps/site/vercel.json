@@ -1,13 +1,13 @@
 {
     "functions": {
       "api/uploadToMux.tsx": {
-        "maxDuration": 200 
+        "maxDuration": 250 
       },
       "app/item/[id]/page.tsx": {
-        "maxDuration": 200 
+        "maxDuration": 250 
       },
       "app/channel/[id]/page.tsx": {
-        "maxDuration": 200 
+        "maxDuration": 250 
       }
     }
   }
