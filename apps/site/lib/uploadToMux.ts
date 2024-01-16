@@ -1,5 +1,4 @@
 
-import { muxClient } from '@/config/muxClient'
 import { ipfsUrlToCid, pinataUrlFromCid } from 'lib/ipfs'
 import { isVideo } from 'lib/isContent'
 import Mux from '@mux/mux-node'
@@ -37,7 +36,7 @@ export const uploadToMux = async (
     cid: ipfsUrlToCid({ ipfsUrl: uploadedFileCid }),
   })
 
-  const directUpload = await muxClient.Video.Uploads.create({
+  const directUpload = await Video.Uploads.create({
     cors_origin: '*',
     new_asset_settings: {
       input: assetEndpointForMux,
@@ -78,7 +77,7 @@ export const uploadToMux = async (
 
   do {
     await new Promise(resolve => setTimeout(resolve, retryInterval))
-    muxUpload = await muxClient.Video.Uploads.get(directUpload.id)
+    muxUpload = await Video.Uploads.get(directUpload.id)
     retries++
   } while (muxUpload.status === 'waiting' && retries < maxRetries)
 
@@ -86,7 +85,7 @@ export const uploadToMux = async (
     throw new Error('Mux Asset is not available.')
   }
 
-  const muxAsset = await muxClient.Video.Assets.get(muxUpload.asset_id)
+  const muxAsset = await Video.Assets.get(muxUpload.asset_id)
   return {
     muxAssetId: muxAsset.id || '',
     muxPlaybackId: muxAsset.playback_ids?.[0]?.id || '',
