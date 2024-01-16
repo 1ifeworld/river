@@ -48,7 +48,7 @@ export const uploadToMux = async (
 
   console.log("post upload", directUpload)
 
-  const ipfsResponse = await fetchWithRetry(assetEndpointForMux, {}, 3)
+  const ipfsResponse = await fetchWithRetry(assetEndpointForMux, {}, 10)
 
   if (!ipfsResponse?.ok) {
     throw new Error('Failed to fetch file from IPFS: ' + ipfsResponse?.statusText)
