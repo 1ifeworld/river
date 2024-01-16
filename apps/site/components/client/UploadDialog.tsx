@@ -34,6 +34,7 @@ import { useParams } from 'next/navigation'
 import * as React from 'react'
 import { useDropzone } from 'react-dropzone'
 import { toast } from 'sonner'
+import { muxClient } from '@/config/muxClient'
 
 export function UploadDialog() {
   const [dialogOpen, setDialogOpen] = React.useState(false)
@@ -104,12 +105,13 @@ export function UploadDialog() {
     let muxPlaybackId 
 
     if (contentTypeKey === 2) {
-      const muxUploadResult = await uploadToMux(
+      const {id, uploadId} = await uploadToMux(
         contentType,
         animationUri?.toString() as string,
       )
-      muxAssetId = muxUploadResult.id
-      muxPlaybackId = muxUploadResult.playback_ids?.[0].id
+      const {playback_ids: playbackId} = await muxClient.Video.Assets.get(uploadId)
+      muxAssetId = id
+      muxPlaybackId = playbackId ? playbackId.join(', ') : undefined
     }
 
     await sendToDb({
@@ -118,7 +120,7 @@ export function UploadDialog() {
         ...metadataObject,
         contentType: contentType,
         muxAssetId: muxAssetId,
-        muxPlaybackId: muxPlaybackId,
+        muxPlaybackId: muxPlaybackId
       },
     })
 
