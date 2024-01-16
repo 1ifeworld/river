@@ -99,16 +99,16 @@ export function UploadDialog() {
       new Blob([JSON.stringify(metadataObject)], { type: 'application/json' }),
     )
 
-    let muxAssetId = ''
-    let muxPlaybackId = ''
+    let muxAssetId 
+    let muxPlaybackId 
 
     if (contentTypeKey === 2) {
-      const muxUploadResult = await uploadToMux(
+      const {id, playbackId} = await uploadToMux(
         contentType,
         animationUri?.toString() as string,
       )
-      muxAssetId = muxUploadResult.muxAssetId
-      muxPlaybackId = muxUploadResult.muxPlaybackId
+      muxAssetId = id
+      muxPlaybackId = playbackId
     }
 
     await sendToDb({
