@@ -35,6 +35,8 @@ export const uploadToMux = async (
     cid: ipfsUrlToCid({ ipfsUrl: uploadedFileCid }),
   })
 
+  console.log("ASSET ENDPOINT", assetEndpointForMux)
+
   const directUpload = await muxClient.Video.Uploads.create({
     cors_origin: '*',
     new_asset_settings: {
@@ -46,15 +48,16 @@ export const uploadToMux = async (
     },
   })
 
- 
+console.log("direct upload", directUpload)
 
-  const ipfsResponse = await fetchWithRetry(assetEndpointForMux, {}, 10)
+const ipfsResponse = await fetchWithRetry(assetEndpointForMux, {}, 10)
+
+console.log("ipfsResponse:", ipfsResponse)
 
   if (!ipfsResponse?.ok) {
     throw new Error('Failed to fetch file from IPFS: ' + ipfsResponse?.statusText)
   }
 
-  // Upload the file blob to Mux
   const fileBlob = await ipfsResponse.blob()
   const response = await fetch(directUpload.url, {
     method: 'PUT',
@@ -79,6 +82,7 @@ export const uploadToMux = async (
     await new Promise(resolve => setTimeout(resolve, retryInterval))
     muxUpload = await muxClient.Video.Uploads.get(directUpload.id)
     retries++
+    console.log("retries", retries)
   } while (muxUpload.status === 'waiting' && retries < maxRetries)
 
   if (!muxUpload || !muxUpload.asset_id) {
@@ -86,6 +90,7 @@ export const uploadToMux = async (
   }
 
   const muxAsset = await muxClient.Video.Assets.get(muxUpload.asset_id)
+  console.log("MUX ASSET", muxAsset)
   return {
     muxAssetId: muxAsset.id || '',
     muxPlaybackId: muxAsset.playback_ids?.[0]?.id || '',
