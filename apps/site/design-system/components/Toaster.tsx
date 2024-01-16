@@ -10,7 +10,7 @@ export function Toaster({ ...props }: ToasterProps) {
         // @ts-ignore
         classNames: {
           toast:
-            'bg-background border-[0.5px] px-4 py-2 text-primary-foreground tracking-tight text-base leading-[14px]',
+            'bg-background border-[0.5px] px-4 py-2 text-primary-foreground tracking-tight font-sans text-base leading-[14px]',
         },
       }}
       {...props}

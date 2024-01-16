@@ -7,7 +7,6 @@ import {
   DropdownMenuItem,
   DropdownMenuPortal,
   DropdownMenuTrigger,
-  Toaster,
   Typography,
 } from '@/design-system'
 import { processRemoveReferencePost } from '@/lib'

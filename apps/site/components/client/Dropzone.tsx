@@ -13,7 +13,7 @@ import {
   uploadToMux,
   MetadataObject,
 } from '@/lib'
-import { Typography, Toast, Flex, Stack, Button } from '@/design-system'
+import { Typography, Loading, Flex, Stack, Button } from '@/design-system'
 import { toast } from 'sonner'
 import { useUserContext } from '@/context'
 import { useParams } from 'next/navigation'
@@ -26,81 +26,74 @@ export function Dropzone({
 
   const onDrop = async (acceptedFiles: File[]) => {
     for (const file of acceptedFiles) {
-      // toast.custom((t) => (
-      //   <Toast>
-      //     {'Adding'}
-      //     <Typography>
-      //       <span className="font-bold">{file.name}</span>
-      //     </Typography>
-      //   </Toast>
-      // ))
-
-      const formData = new FormData()
-      formData.append('file', file)
-
-      const uploadPromise = w3sUpload(formData)
-
+      const uploadPromise = handleFileUpload(file)
       toast.promise(uploadPromise, {
-        loading: 'Uploading...',
-        success: (data) => `File ${file.name} has been uploaded successfully`,
+        loading: `Uploading ${file.name} to IPFS`,
+        success: (data) => `${file.name} has been uploaded successfully`,
         error: 'Error during upload',
+        position: 'bottom-right',
+        icon: false,
+      })
+      await uploadPromise
+    }
+  }
+
+  const handleFileUpload = async (file: File) => {
+    const formData = new FormData()
+    formData.append('file', file)
+
+    const { cid } = await w3sUpload(formData)
+
+    if (cid) {
+      console.log(cid)
+      const uploadedFileName = file.name || 'unnamed'
+      const contentType = determineContentType(file)
+      const contentTypeKey =
+        isVideo({ mimeType: contentType }) || isAudio({ mimeType: contentType })
+          ? 2
+          : isPdf({ mimeType: contentType }) || isGLB(file) || isText(file)
+          ? 1
+          : 0
+
+      const animationUri =
+        contentTypeKey === 2 || contentTypeKey === 1 ? cid : ''
+      const imageUri = contentTypeKey === 0 ? cid : ''
+
+      const metadataObject: MetadataObject = {
+        name: uploadedFileName,
+        description: 'Dynamic metadata based on timestamp',
+        image: imageUri,
+        animationUri: animationUri,
+      }
+      let muxAssetId = ''
+      let muxPlaybackId = ''
+
+      if (contentTypeKey === 2) {
+        const muxUploadResult = await uploadToMux(contentType, animationUri)
+        muxAssetId = muxUploadResult.muxAssetId
+        muxPlaybackId = muxUploadResult.muxPlaybackId
+      }
+
+      await sendToDb({
+        key: cid,
+        value: {
+          ...metadataObject,
+          contentType: contentType,
+          muxAssetId: muxAssetId,
+          muxPlaybackId: muxPlaybackId,
+        },
       })
 
-      const { cid } = await uploadPromise
-      // const { cid } = await w3sUpload(formData)
-
-      if (cid) {
-        console.log(cid)
-        const uploadedFileName = file.name || 'unnamed'
-        const contentType = determineContentType(file)
-        const contentTypeKey =
-          isVideo({ mimeType: contentType }) ||
-          isAudio({ mimeType: contentType })
-            ? 2
-            : isPdf({ mimeType: contentType }) || isGLB(file) || isText(file)
-            ? 1
-            : 0
-
-        const animationUri =
-          contentTypeKey === 2 || contentTypeKey === 1 ? cid : ''
-        const imageUri = contentTypeKey === 0 ? cid : ''
-
-        const metadataObject: MetadataObject = {
-          name: uploadedFileName,
-          description: 'Dynamic metadata based on timestamp',
-          image: imageUri,
-          animationUri: animationUri,
-        }
-        let muxAssetId = ''
-        let muxPlaybackId = ''
-
-        if (contentTypeKey === 2) {
-          const muxUploadResult = await uploadToMux(contentType, animationUri)
-          muxAssetId = muxUploadResult.muxAssetId
-          muxPlaybackId = muxUploadResult.muxPlaybackId
-        }
-
-        await sendToDb({
-          key: cid,
-          value: {
-            ...metadataObject,
-            contentType: contentType,
-            muxAssetId: muxAssetId,
-            muxPlaybackId: muxPlaybackId,
-          },
+      if (signMessage && targetUserId) {
+        await processCreatePubPost({
+          pubUri: cid,
+          targetChannelId: BigInt(params.id as string),
+          targetUserId: BigInt(targetUserId),
+          privySignMessage: signMessage,
         })
-
-        if (signMessage && targetUserId) {
-          await processCreatePubPost({
-            pubUri: cid,
-            targetChannelId: BigInt(params.id as string),
-            targetUserId: BigInt(targetUserId),
-            privySignMessage: signMessage,
-          })
-        }
-      } else {
-        console.log('no cid')
       }
+    } else {
+      console.log('no cid')
     }
   }
 
