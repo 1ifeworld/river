@@ -50,27 +50,27 @@ export const uploadToMux = async (
 
 console.log("direct upload", directUpload)
 
-const ipfsResponse = await fetchWithRetry(assetEndpointForMux, {}, 10)
+// const ipfsResponse = await fetchWithRetry(assetEndpointForMux, {}, 10)
 
-console.log("ipfsResponse:", ipfsResponse)
+// console.log("ipfsResponse:", ipfsResponse)
 
-  if (!ipfsResponse?.ok) {
-    throw new Error('Failed to fetch file from IPFS: ' + ipfsResponse?.statusText)
-  }
+//   if (!ipfsResponse?.ok) {
+//     throw new Error('Failed to fetch file from IPFS: ' + ipfsResponse?.statusText)
+//   }
 
-  const fileBlob = await ipfsResponse.blob()
-  const response = await fetch(directUpload.url, {
-    method: 'PUT',
-    body: fileBlob,
-    headers: {
-      'Content-Type': contentType,
-    },
-  })
+//   const fileBlob = await ipfsResponse.blob()
+//   const response = await fetch(directUpload.url, {
+//     method: 'PUT',
+//     body: fileBlob,
+//     headers: {
+//       'Content-Type': contentType,
+//     },
+//   })
 
 
-  if (!response.ok) {
-    throw new Error('Failed to upload to Mux: ' + response.statusText)
-  }
+//   if (!response.ok) {
+//     throw new Error('Failed to upload to Mux: ' + response.statusText)
+//   }
 
 
   let muxUpload
