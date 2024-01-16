@@ -25,8 +25,8 @@ export const uploadToMux = async (uploadedFileCid: string, contentType: string) 
 
   let muxUpload;
   let retries = 0;
-  const maxRetries = 10;
-  const retryInterval = 3000;
+  const maxRetries = 200;
+  const retryInterval = 5000;
 
   do {
     console.log(`Retry ${retries + 1}/${maxRetries}`);
