@@ -16,6 +16,7 @@
     "@ipld/dag-ucan": "^3.4.0",
     "@mux/mux-node": "^7.3.3",
     "@mux/mux-player-react": "^2.3.0",
+    "@mux/upchunk": "^3.3.0",
     "@privy-io/react-auth": "^1.51.1",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
