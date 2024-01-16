@@ -3,6 +3,28 @@ import { muxClient } from '@/config/muxClient'
 import { ipfsUrlToCid, pinataUrlFromCid } from 'lib/ipfs'
 import { isVideo } from 'lib/isContent'
 
+const fetchWithRetry = async (url: string, options: RequestInit, maxRetries = 3) => {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const response = await fetch(url, options);
+      if (response.ok) {
+        return response
+      }
+      console.error(`Attempt ${attempt} failed: ${response.statusText}`);
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(`Attempt ${attempt} failed: ${error.message}`);
+      } else {
+        console.error(`Attempt ${attempt} failed with an unknown error`);
+      }
+      if (attempt === maxRetries) {
+        throw error
+      }
+    }
+    await new Promise((resolve) => setTimeout(resolve, 1000 * attempt));
+  }
+};
+
 
 export const uploadToMux = async (
   contentType: string,
@@ -26,9 +48,10 @@ export const uploadToMux = async (
 
   console.log("post upload", directUpload)
 
-  const ipfsResponse = await fetch(assetEndpointForMux);
-  if (!ipfsResponse.ok) {
-    throw new Error('Failed to fetch file from IPFS: ' + ipfsResponse.statusText);
+  const ipfsResponse = await fetchWithRetry(assetEndpointForMux, {}, 3)
+
+  if (!ipfsResponse?.ok) {
+    throw new Error('Failed to fetch file from IPFS: ' + ipfsResponse?.statusText)
   }
 
   // Upload the file blob to Mux
