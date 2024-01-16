@@ -33,7 +33,7 @@ export async function ChannelItems({
   metadata: any
 }) {
   return (
-    <Table className="flex-grow md:overflow-auto md:ml-2">
+    <Table className="md:ml-2">
       <TableBody>
         {channel.references.map((reference: Reference, index: number) => (
           <Link key={index} href={`/item/${reference.id}`} legacyBehavior>
