@@ -8,6 +8,8 @@ export const uploadToMux = async (uploadedFileCid: string, contentType: string) 
     cid: ipfsUrlToCid({ ipfsUrl: uploadedFileCid }),
   })
 
+  console.log('Asset Endpoint for Mux:', assetEndpointForMux);
+
   const directUpload = await muxClient.Video.Uploads.create({
     cors_origin: '*',
     new_asset_settings: {
@@ -19,22 +21,32 @@ export const uploadToMux = async (uploadedFileCid: string, contentType: string) 
     },
   });
 
-  let muxUpload, retries = 0;
-  const maxRetries = 10, retryInterval = 3000
+  console.log('Direct Upload Response:', directUpload);
+
+  let muxUpload;
+  let retries = 0;
+  const maxRetries = 10;
+  const retryInterval = 3000;
 
   do {
+    console.log(`Retry ${retries + 1}/${maxRetries}`);
     await new Promise(resolve => setTimeout(resolve, retryInterval));
     muxUpload = await muxClient.Video.Uploads.get(directUpload.id);
+    console.log('Mux Upload Status:', muxUpload.status);
     retries++;
   } while (muxUpload.status === 'waiting' && retries < maxRetries);
 
   if (!muxUpload || !muxUpload.asset_id) {
+    console.error('Mux Asset is not available.');
     throw new Error('Mux Asset is not available.');
   }
+
   const muxAsset = await muxClient.Video.Assets.get(muxUpload.asset_id);
+
+  console.log('Mux Asset:', muxAsset);
+
   return {
     muxAssetId: muxAsset.id || '',
     muxPlaybackId: muxAsset.playback_ids?.[0]?.id || '',
-  };
-};
-
+  }
+}
