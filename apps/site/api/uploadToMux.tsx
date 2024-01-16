@@ -3,7 +3,7 @@ import { muxClient } from '@/config/muxClient'
 import { ipfsUrlToCid, pinataUrlFromCid } from 'lib/ipfs'
 import { isVideo } from 'lib/isContent'
 
-export const uploadToMux = async (uploadedFileCid: string, contentType: string) => {
+export const uploadToMux = async (contentType: string, uploadedFileCid: string,) => {
   const assetEndpointForMux = pinataUrlFromCid({
     cid: ipfsUrlToCid({ ipfsUrl: uploadedFileCid }),
   })
