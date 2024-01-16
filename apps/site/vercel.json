@@ -6,15 +6,8 @@
       "item/[id].tsx": {
         "maxDuration": 200 
       },
-      "item/[id].rsc":
-      {
-        "maxDuration": 200 
-      },
       "channel/[id].tsx": {
         "maxDuration": 200 
-      },
-      "channel/[id].rsc": {
-        "maxDuration": 200
       }
     }
   }
