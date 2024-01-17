@@ -52,13 +52,13 @@ export function Dropzone({
           image: imageUri,
           animationUri: animationUri,
         }
-        let muxAssetId = ''
-        let muxPlaybackId = ''
+        let muxAssetId
+        let muxPlaybackId
 
         if (contentTypeKey === 2) {
-          const muxUploadResult = await uploadToMux(contentType, animationUri)
-          muxAssetId = muxUploadResult.muxAssetId
-          muxPlaybackId = muxUploadResult.muxPlaybackId
+          const { id, playbackId } = await uploadToMux(animationUri)
+          muxAssetId = id
+          muxPlaybackId = playbackId
         }
 
         await sendToDb({
@@ -101,7 +101,7 @@ export function Dropzone({
 
   return (
     <div {...getRootProps()}>
-      <input {...getInputProps()} formEncType='multipart/form-data' />
+      <input {...getInputProps()} formEncType="multipart/form-data" />
       <AddItem isDragActive={isDragActive} />
     </div>
   )
