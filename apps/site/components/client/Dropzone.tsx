@@ -24,28 +24,44 @@ export function Dropzone({
   const { signMessage, userId: targetUserId } = useUserContext()
   const params = useParams()
 
+  // Initialize the counter state
+  const [processingCount, setProcessingCount] = useState(0)
+  const [totalFiles, setTotalFiles] = useState(0)
+
   const onDrop = async (acceptedFiles: File[]) => {
+    // Set the total number of files and reset the processing count
+    setTotalFiles(acceptedFiles.length)
+    setProcessingCount(0)
+
     for (const file of acceptedFiles) {
-      const uploadPromise = handleFileUpload(file)
-      toast.promise(uploadPromise, {
-        loading: `Uploading ${file.name} to IPFS`,
-        success: (data) => `${file.name} has been uploaded successfully`,
-        error: 'Error during upload',
-        position: 'bottom-right',
-        icon: false,
-      })
-      await uploadPromise
+      await handleFileUpload(file)
     }
   }
 
   const handleFileUpload = async (file: File) => {
+    const uploadToast = toast.custom(
+      (t) => (
+        <Stack className="gap-2 w-80">
+          <div>
+            Uploading {processingCount}/{totalFiles}
+          </div>
+          <Flex className="text-secondary-foreground">
+            Creating a content address
+            <div className="pt-[3px]">
+              <Loading />
+            </div>
+          </Flex>
+        </Stack>
+      ),
+      { position: 'bottom-right', duration: 8000 },
+    )
+
     const formData = new FormData()
     formData.append('file', file)
 
     const { cid } = await w3sUpload(formData)
 
     if (cid) {
-      console.log(cid)
       const uploadedFileName = file.name || 'unnamed'
       const contentType = determineContentType(file)
       const contentTypeKey =
@@ -65,11 +81,20 @@ export function Dropzone({
         image: imageUri,
         animationUri: animationUri,
       }
-      
+
       let muxAssetId
       let muxPlaybackId
 
       if (contentTypeKey === 2) {
+        toast(
+          <Flex>
+            Processing video
+            <div className="pt-[2px]">
+              <Loading />
+            </div>
+          </Flex>,
+          { position: 'bottom-right', id: uploadToast },
+        )
         const { id, playbackId } = await uploadToMux(animationUri)
         muxAssetId = id
         muxPlaybackId = playbackId
@@ -85,6 +110,16 @@ export function Dropzone({
         },
       })
 
+      toast(
+        <Flex>
+          Adding to
+          <div className="pt-[2px]">
+            <Loading />
+          </div>
+        </Flex>,
+        { position: 'bottom-right', id: uploadToast },
+      )
+
       if (signMessage && targetUserId) {
         await processCreatePubPost({
           pubUri: cid,
@@ -93,6 +128,11 @@ export function Dropzone({
           privySignMessage: signMessage,
         })
       }
+
+      toast(<Flex>Item uploaded successfully</Flex>, {
+        position: 'bottom-right',
+        id: uploadToast,
+      })
     } else {
       console.log('no cid')
     }
@@ -125,3 +165,23 @@ function AddItem({ isDragActive }: { isDragActive: boolean }) {
     </Flex>
   )
 }
+
+// const uploadPromise = handleFileUpload(file)
+// toast.promise(uploadPromise, {
+//   loading: `Uploading ${file.name} to IPFS`,
+//   success: (data) => `${file.name} has been uploaded successfully`,
+//   error: 'Error during upload',
+//   position: 'bottom-right',
+//   icon: <></>,
+// })
+// await uploadPromise
+
+// const uploadToast = toast(
+//   <Flex>
+//     Creating a content address
+//     <div className="pt-[2px]">
+//       <Loading />
+//     </div>
+//   </Flex>,
+//   { position: 'bottom-right', duration: 8000 },
+// )

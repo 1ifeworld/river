@@ -8,12 +8,8 @@ import {
   FormMessage,
   Input,
   Separator,
-  Stack,
-  Toast,
-  Typography,
 } from '@/design-system'
 import {
-  checkUsernameAvailability,
   getDataForUsername,
   processEditChannelAccessPost,
   usernameSchema,
@@ -81,7 +77,7 @@ export function AddMembersForm({ targetChannelId }: AddMembersFormProps) {
 
   async function onSubmit(data: z.infer<typeof usernameSchema>) {
     // initialize bool for txn success check
-    let txSuccess: boolean = false
+    let txSuccess = false
     if (signMessage && embeddedWallet?.address && usernameId) {
       txSuccess = await processEditChannelAccessPost({
         targetUserId: userId as bigint,
@@ -92,15 +88,9 @@ export function AddMembersForm({ targetChannelId }: AddMembersFormProps) {
       })
     }
     if (txSuccess) {
-      toast.custom((t) => (
-        <Toast>
-          You added{' '}
-          <span className="font-bold">{form.getValues().username}</span> to this
-          channel
-        </Toast>
-      ))
+      toast(`Added ${form.getValues().username} to this channel`)
     } else {
-      toast.custom((t) => <Toast>Error adding new member</Toast>)
+      toast('Error adding new member')
     }
   }
 
