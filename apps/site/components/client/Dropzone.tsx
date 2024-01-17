@@ -38,10 +38,29 @@ export function Dropzone({
     }
   }
 
+  const renderToast = () => {
+    const uploadToast = toast.custom(
+      (t) => (
+        <Stack className="gap-2 h-14 w-80 py-4">
+          <div>
+            Uploading {processingCount}/{totalFiles}
+          </div>
+          <Flex className="text-secondary-foreground">
+            Creating a content address
+            <div className="pt-[3px]">
+              <Loading />
+            </div>
+          </Flex>
+        </Stack>
+      ),
+      { position: 'bottom-right', duration: 8000 },
+    )
+  }
+
   const handleFileUpload = async (file: File) => {
     const uploadToast = toast.custom(
       (t) => (
-        <Stack className="gap-2 w-80">
+        <Stack className="gap-2 h-14 w-80 py-4">
           <div>
             Uploading {processingCount}/{totalFiles}
           </div>
@@ -144,10 +163,13 @@ export function Dropzone({
   })
 
   return (
-    <div {...getRootProps()}>
-      <input {...getInputProps()} formEncType="multipart/form-data" />
-      <AddItem isDragActive={isDragActive} />
-    </div>
+    <>
+      <div {...getRootProps()}>
+        <input {...getInputProps()} formEncType="multipart/form-data" />
+        <AddItem isDragActive={isDragActive} />
+      </div>
+      <Button onClick={renderToast}>Upload</Button>
+    </>
   )
 }
 
