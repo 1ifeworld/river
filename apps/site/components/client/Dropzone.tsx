@@ -12,6 +12,7 @@ import {
   sendToDb,
   uploadToMux,
   MetadataObject,
+  dropzoneParallelizer
 } from '@/lib'
 import { Typography, Toast, Flex, Stack, Button } from '@/design-system'
 import { toast } from 'sonner'
@@ -25,73 +26,21 @@ export function Dropzone({
   const params = useParams()
 
   const onDrop = async (acceptedFiles: File[]) => {
-    for (const file of acceptedFiles) {
-      const formData = new FormData()
-      formData.append('file', file)
-      const { cid } = await w3sUpload(formData)
-
-      if (cid) {
-        console.log(cid)
-        const uploadedFileName = file.name || 'unnamed'
-        const contentType = determineContentType(file)
-        const contentTypeKey =
-          isVideo({ mimeType: contentType }) ||
-          isAudio({ mimeType: contentType })
-            ? 2
-            : isPdf({ mimeType: contentType }) || isGLB(file) || isText(file)
-            ? 1
-            : 0
-
-        const animationUri =
-          contentTypeKey === 2 || contentTypeKey === 1 ? cid : ''
-        const imageUri = contentTypeKey === 0 ? cid : ''
-
-        const metadataObject: MetadataObject = {
-          name: uploadedFileName,
-          description: 'Dynamic metadata based on timestamp',
-          image: imageUri,
-          animationUri: animationUri,
-        }
-        let muxAssetId
-        let muxPlaybackId
-
-        if (contentTypeKey === 2) {
-          const { id, playbackId } = await uploadToMux(animationUri)
-          muxAssetId = id
-          muxPlaybackId = playbackId
-        }
-
-        await sendToDb({
-          key: cid,
-          value: {
-            ...metadataObject,
-            contentType: contentType,
-            muxAssetId: muxAssetId,
-            muxPlaybackId: muxPlaybackId,
-          },
-        })
-
-        if (signMessage && targetUserId) {
-          await processCreatePubPost({
-            pubUri: cid,
-            targetChannelId: BigInt(params.id as string),
-            targetUserId: BigInt(targetUserId),
-            privySignMessage: signMessage,
-          })
-        }
-
-        toast.custom((t) => (
-          <Toast>
-            {'Successfully uploaded '}
-            <Typography>
-              <span className="font-bold">{file.name}</span>
-            </Typography>
-          </Toast>
-        ))
-      } else {
-        console.log('no cid')
-      }
+    // do undefined checks
+    if (!targetUserId) {
+      console.error("targetUserIdundefined in on drop call")
+      return
+    }      
+    if (!signMessage) {
+      console.error("sign message undefined in on drop call")
+      return
     }
+    await dropzoneParallelizer({
+      params,
+      targetUserId: BigInt(targetUserId), // Ensure targetUserId is correctly cast to BigInt
+      acceptedFiles,
+      signMessage
+    });
   }
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
