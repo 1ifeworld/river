@@ -20,7 +20,6 @@ import {
   Separator,
   Stack,
   Textarea,
-  Toast,
   Typography,
 } from '@/design-system'
 import { useWeb3Storage } from '@/hooks'
