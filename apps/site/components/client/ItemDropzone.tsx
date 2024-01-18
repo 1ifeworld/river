@@ -109,7 +109,7 @@ export function ItemDropzone() {
       setProgressInfo((prev) => ({
         ...prev,
         statusHeader: 'Uploaded',
-        statusMessage: 'Added to River!',
+        statusMessage: 'Complete!',
         showLoadingIcon: false,
       }))
     } else {
