@@ -13,7 +13,6 @@ import {
   Input,
   Separator,
   Stack,
-  Toast,
   Typography,
 } from '@/design-system'
 import {
@@ -95,14 +94,7 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                 // Close the dialog
                 setOpen(false)
                 // Render a toast
-                toast.custom((t) => (
-                  <Toast>
-                    Welcome to River{' '}
-                    <span className="font-bold">
-                      {form.getValues().username}
-                    </span>
-                  </Toast>
-                ))
+                toast(`Welcome to River ${form.getValues().username}`)
               }}
               className="w-full"
             >
