@@ -6,7 +6,7 @@ export default createConfig({
   networks: {    
     river_j5bpjduqfv: {
       chainId: 36912,
-      transport: http("https://l2-river-j5bpjduqfv.t.conduit.xyz/"),
+      transport: http(process.env.PONDER_RPC_URL_36912),
     },
     // anvil: {
     //   chainId: 31337,

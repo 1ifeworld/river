@@ -20,7 +20,9 @@ import { useParams } from 'next/navigation'
 
 export function Dropzone({
   acceptMultipleFiles,
-}: { acceptMultipleFiles: boolean }) {
+}: {
+  acceptMultipleFiles: boolean
+}) {
   const { signMessage, userId: targetUserId, authToken } = useUserContext()
   const params = useParams()
 
@@ -29,7 +31,7 @@ export function Dropzone({
       const formData = new FormData()
       formData.append('file', file)
       const verifying = await authToken
-      console.log("verifying", verifying)
+      console.log('verifying', verifying)
       const { cid } = await w3sUpload(formData, verifying)
 
       if (cid) {
@@ -59,7 +61,10 @@ export function Dropzone({
 
         if (contentTypeKey === 2) {
           const muxVerifying = await authToken
-          const { id, playbackId } = await uploadToMux(animationUri, muxVerifying)
+          const { id, playbackId } = await uploadToMux(
+            animationUri,
+            muxVerifying
+          )
           muxAssetId = id
           muxPlaybackId = playbackId
         }
@@ -87,7 +92,7 @@ export function Dropzone({
           <Toast>
             {'Successfully uploaded '}
             <Typography>
-              <span className="font-bold">{file.name}</span>
+              <span className='font-bold'>{file.name}</span>
             </Typography>
           </Toast>
         ))
@@ -104,7 +109,7 @@ export function Dropzone({
 
   return (
     <div {...getRootProps()}>
-      <input {...getInputProps()} formEncType="multipart/form-data" />
+      <input {...getInputProps()} formEncType='multipart/form-data' />
       <AddItem isDragActive={isDragActive} />
     </div>
   )
@@ -112,15 +117,15 @@ export function Dropzone({
 
 function AddItem({ isDragActive }: { isDragActive: boolean }) {
   return (
-    <Flex className="gap-4 items-center">
+    <Flex className='gap-4 items-center'>
       <Stack
         className={`w-10 h-10 bg-background border border-border justify-center items-center hover:bg-primary/[0.025] transition-all ${
           isDragActive ? 'bg-primary/[0.025]' : ''
         }`}
       >
-        <Typography variant="h1">+</Typography>
+        <Typography variant='h1'>+</Typography>
       </Stack>
-      <Button variant="link">Add an item</Button>
+      <Button variant='link'>Add an item</Button>
     </Flex>
   )
 }
