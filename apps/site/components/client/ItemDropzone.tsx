@@ -33,7 +33,7 @@ export function ItemDropzone() {
   const onDrop = async (acceptedFiles: File[]) => {
     setIsUploading(true)
 
-    const uploadPromises = acceptedFiles.map((file, index) => {
+    for (const [index, file] of acceptedFiles.entries()) {
       setProgressInfo({
         fileIndex: index + 1,
         totalFiles: acceptedFiles.length,
@@ -42,14 +42,13 @@ export function ItemDropzone() {
           acceptedFiles.length > 1 ? 'Adding your files' : 'Adding your file',
         showLoadingIcon: true,
       })
-      return handleFileUpload(file)
-    })
 
-    await Promise.all(uploadPromises)
+      await handleFileUpload(file)
+    }
 
     setTimeout(() => {
       setIsUploading(false)
-    }, 5000)
+    }, 4500)
   }
 
   const handleFileUpload = async (file: File) => {
@@ -180,7 +179,7 @@ function UploadProgress({
       <Typography className="leading-0">
         {statusHeader} {fileIndex}/{totalFiles}
       </Typography>
-      <Typography className="leading-0">
+      <Typography as="div" className="leading-0">
         <Flex className="text-secondary-foreground">
           {statusMessage}
           <div
