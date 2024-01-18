@@ -82,10 +82,6 @@ export function ItemDropzone() {
       let muxPlaybackId
 
       if (contentTypeKey === 2) {
-        setProgressInfo((prev) => ({
-          ...prev,
-          statusMessage: 'Processing video',
-        }))
         const { id, playbackId } = await uploadToMux(animationUri)
         muxAssetId = id
         muxPlaybackId = playbackId
