@@ -28,7 +28,7 @@ export function UploadProgress({
           as="div"
           className="leading-0 text-secondary-foreground whitespace-nowrap"
         >
-          {statusMessage.substring(0, 40)}
+          {statusMessage.substring(0, 35)}
         </Typography>
         <div
           className={`${

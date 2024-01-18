@@ -43,15 +43,22 @@ export function ItemDropzone() {
         showLoadingIcon: true,
       })
 
-      await handleFileUpload(file)
+      await handleFileUpload(file, index + 1)
     }
+
+    setProgressInfo((prev) => ({
+      ...prev,
+      statusHeader: 'Uploaded',
+      statusMessage: 'Complete!',
+      showLoadingIcon: false,
+    }))
 
     setTimeout(() => {
       setIsUploading(false)
     }, 4500)
   }
 
-  const handleFileUpload = async (file: File) => {
+  const handleFileUpload = async (file: File, fileIndex: number) => {
     const formData = new FormData()
     formData.append('file', file)
 
@@ -98,22 +105,29 @@ export function ItemDropzone() {
       })
 
       if (signMessage && targetUserId) {
-        await processCreatePubPost({
+        const txSuccess = await processCreatePubPost({
           pubUri: cid,
           targetChannelId: BigInt(params.id as string),
           targetUserId: BigInt(targetUserId),
           privySignMessage: signMessage,
         })
+        if (!txSuccess) {
+          setProgressInfo((prev) => ({
+            ...prev,
+            fileIndex: fileIndex - 1,
+            statusHeader: 'Error',
+            statusMessage: 'Transaction failed, try again!',
+            showLoadingIcon: false,
+          }))
+        }
       }
-
+    } else {
       setProgressInfo((prev) => ({
         ...prev,
-        statusHeader: 'Uploaded',
-        statusMessage: 'Complete!',
+        statusHeader: 'Error',
+        statusMessage: 'Trouble fetching content address!',
         showLoadingIcon: false,
       }))
-    } else {
-      console.log('No cid')
     }
   }
 
