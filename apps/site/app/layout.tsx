@@ -27,7 +27,7 @@ export default function RootLayout({
           <div className="px-5">
             <Header />
             {children}
-            <Toaster position="bottom-center" />
+            <Toaster position="bottom-center" expand visibleToasts={5} />
             <ThemeToggle />
           </div>
           <Analytics />

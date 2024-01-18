@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import {
   w3sUpload,
@@ -13,7 +13,14 @@ import {
   uploadToMux,
   MetadataObject,
 } from '@/lib'
-import { Typography, Loading, Flex, Stack, Button } from '@/design-system'
+import {
+  Typography,
+  Loading,
+  Flex,
+  Stack,
+  Button,
+  Toaster,
+} from '@/design-system'
 import { toast } from 'sonner'
 import { useUserContext } from '@/context'
 import { useParams } from 'next/navigation'
@@ -24,55 +31,30 @@ export function Dropzone({
   const { signMessage, userId: targetUserId } = useUserContext()
   const params = useParams()
 
-  // Initialize the counter state
-  const [processingCount, setProcessingCount] = useState(0)
-  const [totalFiles, setTotalFiles] = useState(0)
-
   const onDrop = async (acceptedFiles: File[]) => {
-    // Set the total number of files and reset the processing count
-    setTotalFiles(acceptedFiles.length)
-    setProcessingCount(0)
-
-    for (const file of acceptedFiles) {
-      await handleFileUpload(file)
+    for (const [index, file] of acceptedFiles.entries()) {
+      const progressInfo = {
+        fileIndex: index + 1,
+        totalFiles: acceptedFiles.length,
+      }
+      await handleFileUpload(file, progressInfo)
     }
   }
 
-  const renderToast = () => {
+  const handleFileUpload = async (
+    file: File,
+    progressInfo: { fileIndex: number; totalFiles: number },
+  ) => {
     const uploadToast = toast.custom(
       (t) => (
-        <Stack className="gap-2 h-14 w-80 py-4">
-          <div>
-            Uploading {processingCount}/{totalFiles}
-          </div>
-          <Flex className="text-secondary-foreground">
-            Creating a content address
-            <div className="pt-[3px]">
-              <Loading />
-            </div>
-          </Flex>
-        </Stack>
+        <ProgressToast
+          {...progressInfo}
+          toastHeader={'Uploading'}
+          toastBody={'Creating a content address'}
+          renderIcon={true}
+        />
       ),
-      { position: 'bottom-right', duration: 8000 },
-    )
-  }
-
-  const handleFileUpload = async (file: File) => {
-    const uploadToast = toast.custom(
-      (t) => (
-        <Stack className="gap-2 h-14 w-80 py-4">
-          <div>
-            Uploading {processingCount}/{totalFiles}
-          </div>
-          <Flex className="text-secondary-foreground">
-            Creating a content address
-            <div className="pt-[3px]">
-              <Loading />
-            </div>
-          </Flex>
-        </Stack>
-      ),
-      { position: 'bottom-right', duration: 8000 },
+      { position: 'bottom-right', duration: 15000 },
     )
 
     const formData = new FormData()
@@ -105,14 +87,16 @@ export function Dropzone({
       let muxPlaybackId
 
       if (contentTypeKey === 2) {
-        toast(
-          <Flex>
-            Processing video
-            <div className="pt-[2px]">
-              <Loading />
-            </div>
-          </Flex>,
-          { position: 'bottom-right', id: uploadToast },
+        toast.custom(
+          (t) => (
+            <ProgressToast
+              {...progressInfo}
+              toastHeader={'Uploading'}
+              toastBody={'Processing video'}
+              renderIcon={true}
+            />
+          ),
+          { id: uploadToast },
         )
         const { id, playbackId } = await uploadToMux(animationUri)
         muxAssetId = id
@@ -129,16 +113,6 @@ export function Dropzone({
         },
       })
 
-      toast(
-        <Flex>
-          Adding to
-          <div className="pt-[2px]">
-            <Loading />
-          </div>
-        </Flex>,
-        { position: 'bottom-right', id: uploadToast },
-      )
-
       if (signMessage && targetUserId) {
         await processCreatePubPost({
           pubUri: cid,
@@ -148,12 +122,23 @@ export function Dropzone({
         })
       }
 
-      toast(<Flex>Item uploaded successfully</Flex>, {
-        position: 'bottom-right',
-        id: uploadToast,
-      })
+      toast.custom(
+        (t) => (
+          <ProgressToast
+            {...progressInfo}
+            toastHeader={'Uploaded'}
+            toastBody={'Added to River!'}
+            renderIcon={false}
+          />
+        ),
+        { id: uploadToast },
+      )
+
+      setTimeout(() => {
+        toast.dismiss(uploadToast)
+      }, 3500)
     } else {
-      console.log('no cid')
+      console.log('No cid')
     }
   }
 
@@ -168,7 +153,6 @@ export function Dropzone({
         <input {...getInputProps()} formEncType="multipart/form-data" />
         <AddItem isDragActive={isDragActive} />
       </div>
-      <Button onClick={renderToast}>Upload</Button>
     </>
   )
 }
@@ -177,8 +161,8 @@ function AddItem({ isDragActive }: { isDragActive: boolean }) {
   return (
     <Flex className="gap-4 items-center">
       <Stack
-        className={`w-10 h-10 bg-background border border-border justify-center items-center hover:bg-primary/[0.025] transition-all ${
-          isDragActive ? 'bg-primary/[0.025]' : ''
+        className={`w-10 h-10 bg-background border border-border justify-center items-center cursor-pointer hover:bg-primary/[0.05] transition-all ${
+          isDragActive ? 'bg-primary/[0.05]' : ''
         }`}
       >
         <Typography variant="h1">+</Typography>
@@ -188,22 +172,33 @@ function AddItem({ isDragActive }: { isDragActive: boolean }) {
   )
 }
 
-// const uploadPromise = handleFileUpload(file)
-// toast.promise(uploadPromise, {
-//   loading: `Uploading ${file.name} to IPFS`,
-//   success: (data) => `${file.name} has been uploaded successfully`,
-//   error: 'Error during upload',
-//   position: 'bottom-right',
-//   icon: <></>,
-// })
-// await uploadPromise
+interface ProgressToastProps {
+  toastHeader: string
+  toastBody: string
+  renderIcon: boolean
+  fileIndex: number
+  totalFiles: number
+}
 
-// const uploadToast = toast(
-//   <Flex>
-//     Creating a content address
-//     <div className="pt-[2px]">
-//       <Loading />
-//     </div>
-//   </Flex>,
-//   { position: 'bottom-right', duration: 8000 },
-// )
+function ProgressToast({
+  toastHeader,
+  toastBody,
+  renderIcon,
+  fileIndex,
+  totalFiles,
+}: ProgressToastProps) {
+  return (
+    <Stack className="gap-1 min-w-80 py-[2px]">
+      <div>
+        {toastHeader} {fileIndex}/{totalFiles}
+      </div>
+      <Flex className="text-secondary-foreground">
+        {toastBody}
+        {/* Invisible placeholder for the loading component to avoid layout shift */}
+        <div className={`pt-[3px] ${renderIcon ? '' : 'opacity-0'}`}>
+          <Loading />
+        </div>
+      </Flex>
+    </Stack>
+  )
+}
