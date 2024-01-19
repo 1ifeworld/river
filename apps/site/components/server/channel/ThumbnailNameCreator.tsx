@@ -62,7 +62,7 @@ export function ThumbnailNameCreator({
         </Typography>
         {/* This component is hidden on small screens */}
         <Typography className="hidden md:block text-primary-foreground leading-none">
-          {referenceMetadata.name}
+          {truncateText(referenceMetadata.name, 50)}
         </Typography>
         {/* </Button> */}
         {/* </Link> */}
