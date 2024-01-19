@@ -151,7 +151,7 @@ export function ItemDropzone({channel}: {channel: Channel}) {
           <AddItem isDragActive={isDragActive} isUploading={isUploading} />
         </div>
       )}
-      {showDropzone && isUploading && <UploadProgress {...progressInfo} />}
+      {isUploading && <UploadProgress {...progressInfo} />}
     </>
   );
   
