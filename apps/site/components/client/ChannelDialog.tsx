@@ -109,7 +109,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                 className="flex flex-col justify-center w-full gap-6"
                 action={async () => {
                   // initialize bool for txn success check
-                  let txSuccess: boolean = false;
+                  let txSuccess: boolean = false
                   // Prevent non-authenticated users from proceeding
                   if (!targetUserId) return
                   // Upload cover image to IPFS if it one was provided
@@ -154,18 +154,18 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                       toast.custom((t) => (
                         <Toast>
                           {'Successfully created '}
-                          <span className="font-bold">{form.getValues().name}</span>
+                          <span className="font-bold">
+                            {form.getValues().name}
+                          </span>
                         </Toast>
                       ))
                       resetFormAndFiles()
                     } else {
                       // Render a toast with error message
                       toast.custom((t) => (
-                        <Toast>
-                          {'Error creating channel'}
-                        </Toast>
+                        <Toast>{'Error creating channel'}</Toast>
                       ))
-                      resetFormAndFiles()                    
+                      resetFormAndFiles()
                     }
                   }
                 }}

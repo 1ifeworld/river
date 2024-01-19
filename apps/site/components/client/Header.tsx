@@ -28,7 +28,7 @@ export function Header() {
 
   return (
     <>
-      <Flex className="items-center justify-between bg-popover sticky top-0 py-[6px] z-50">
+      <Flex className="items-center justify-between bg-popover fixed top-0 left-5 right-5 py-[6px] z-50">
         <RiverLogo />
         <Flex className="gap-5">
           <ChannelDialog authenticated={authenticated} login={login} />

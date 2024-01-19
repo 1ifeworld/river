@@ -27,9 +27,9 @@ export default async function Channel({
   const { metadata } = await getReferenceMetadata(channel?.references)
 
   return (
-    <Flex className="pt-10 gap-28">
+    <Flex className="pt-10 gap-36">
       <AllChannelsList params={params} />
-      <Stack className="w-full md:w-3/4">
+      <Stack className="w-full">
         <ChannelBanner channel={channel} metadata={channelMetadata} />
         <ChannelItems channel={channel} metadata={metadata} />
         <ChannelDetails channel={channel} />
