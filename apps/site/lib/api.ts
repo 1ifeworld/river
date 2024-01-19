@@ -1,6 +1,7 @@
-export async function w3sUpload(body: FormData) {
-  const res = await fetch('https://w3s.up.railway.app/w3s', {
+export async function w3sUpload(body: FormData, authToken: string | null) {
+    const res = await fetch('https://w3s.up.railway.app/w3s', {
     method: 'POST',
+    headers: authToken ? { Authorization: `Bearer ${authToken}` } : undefined,
     body,
     // TODO: Add credentials check
     //   credentials: 'same-origin',
@@ -12,9 +13,10 @@ export async function w3sUpload(body: FormData) {
   return res.json()
 }
 
-export async function uploadToMux(body: string) {
-  const res = await fetch('https://w3s.up.railway.app/mux', {
+export async function uploadToMux(body: string, authToken: string | null) {
+    const res = await fetch('https://w3s.up.railway.app/mux/upload', {
     method: 'POST',
+    headers: authToken ? { Authorization: `Bearer ${authToken}` } : undefined,
     body,
   })
   if (!res.ok) {

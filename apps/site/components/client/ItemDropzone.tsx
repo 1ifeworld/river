@@ -29,7 +29,7 @@ export function ItemDropzone({channel}: {channel: Channel}) {
     showLoadingIcon: true,
   })
 
-  const { signMessage, userId: targetUserId } = useUserContext()
+  const { signMessage, userId: targetUserId, authToken } = useUserContext()
   const params = useParams()
   const showDropzone =  
     channel.admins.includes(targetUserId)
@@ -68,8 +68,8 @@ export function ItemDropzone({channel}: {channel: Channel}) {
   const handleFileUpload = async (file: File, fileIndex: number) => {
     const formData = new FormData()
     formData.append('file', file)
-
-    const { cid } = await w3sUpload(formData)
+    const verifying = await authToken
+    const { cid } = await w3sUpload(formData, verifying)
 
     if (cid) {
       const uploadedFileName = file.name || 'unnamed'
@@ -96,7 +96,8 @@ export function ItemDropzone({channel}: {channel: Channel}) {
       let muxPlaybackId
 
       if (contentTypeKey === 2) {
-        const { id, playbackId } = await uploadToMux(animationUri)
+        const muxVerifyingKey = await authToken
+        const { id, playbackId } = await uploadToMux(animationUri, muxVerifyingKey)
         muxAssetId = id
         muxPlaybackId = playbackId
       }
