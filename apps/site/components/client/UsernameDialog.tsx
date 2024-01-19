@@ -45,6 +45,7 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
 
   const [usernameExists, setUsernameExists] = useState(false)
   const [validationComplete, setValidationComplete] = useState(false)
+  const [isCheckingAvailability, setIsCheckingAvailability] = useState(false)
 
   // Subscribe to changes to the username input
   const watchUsername = debounce(() => form.watch('username'), 500)
@@ -62,6 +63,7 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
     if (form.formState.isValid && validationComplete) {
       checkUsernameAvailability(form.getValues().username).then((result) => {
         setUsernameExists(result.exists)
+        setIsCheckingAvailability(false)
       })
       return () => {
         setValidationComplete(false)
@@ -119,6 +121,7 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                           {...field}
                           onChange={(e) => {
                             field.onChange(e)
+                            setIsCheckingAvailability(true)
                             triggerValidation()
                           }}
                         />
@@ -141,7 +144,11 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                 <SubmitButton
                   type="submit"
                   variant="link"
-                  disabled={!form.formState.isValid || usernameExists}
+                  disabled={
+                    !form.formState.isValid ||
+                    usernameExists ||
+                    isCheckingAvailability
+                  }
                 >
                   Complete
                 </SubmitButton>
