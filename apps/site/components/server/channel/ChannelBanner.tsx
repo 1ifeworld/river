@@ -106,7 +106,7 @@ export async function ChannelBanner({
       <Typography className="md:hidden text-secondary-foreground leading-none">
         {truncateText(channelMetadata.description, 90)}
       </Typography>
-      <ItemDropzone />
+      <ItemDropzone channel={channel} />
     </Stack>
   )
 }
