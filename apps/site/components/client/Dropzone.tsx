@@ -31,11 +31,9 @@ export function Dropzone({
       const formData = new FormData()
       formData.append('file', file)
       const verifying = await authToken
-      console.log('verifying', verifying)
       const { cid } = await w3sUpload(formData, verifying)
 
       if (cid) {
-        console.log(cid)
         const uploadedFileName = file.name || 'unnamed'
         const contentType = determineContentType(file)
         const contentTypeKey =
@@ -58,12 +56,12 @@ export function Dropzone({
         }
         let muxAssetId
         let muxPlaybackId
-
+ 
         if (contentTypeKey === 2) {
-          const muxVerifying = await authToken
+          const muxVerifyingKey = await authToken
           const { id, playbackId } = await uploadToMux(
             animationUri,
-            muxVerifying
+            muxVerifyingKey
           )
           muxAssetId = id
           muxPlaybackId = playbackId
