@@ -124,7 +124,8 @@ export default async function View({
       <Stack className="flex-grow md:overflow-auto w-full h-full gap-y-4 md:gap-y-0 md:justify-center">
         <ContentWrapper
           item={reference}
-          className="w-full h-[480px] md:h-[calc(100vh/1.1)] md:max-w-[calc(100vw/1.2)] relative">
+          className="w-full h-[480px] md:h-[calc(100vh/1.1)] md:max-w-[calc(100vw/1.2)] relative"
+        >
           {content}
         </ContentWrapper>
         <MobileItemStub

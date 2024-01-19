@@ -4,7 +4,7 @@ import React from 'react'
 
 export function RiverLogo() {
   return (
-    <Link href={'/'} >
+    <Link href={'/'}>
       <Button variant="link" className="hover:no-underline">
         River
       </Button>

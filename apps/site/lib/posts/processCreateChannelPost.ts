@@ -23,7 +23,7 @@ export async function processCreateChannelPost({
     message: string,
     uiOptions?: SignMessageModalUIOptions | undefined,
   ) => Promise<string>
-}): Promise<boolean>  {
+}): Promise<boolean> {
   // Declare constants/params
   const postVersion = postTypes.v1
   const postExpiration: bigint = getExpiration()
@@ -72,7 +72,10 @@ export async function processCreateChannelPost({
   if (!postInput) return false
   console.log('postInput encoded correctly')
   // pass postInputs into the createPost server action
-  const relaySuccess = await relayPost({ postInput: postInput, pathsToRevalidate: ['/'] })
+  const relaySuccess = await relayPost({
+    postInput: postInput,
+    pathsToRevalidate: ['/'],
+  })
   // return relay success boolean value
   return relaySuccess
 }

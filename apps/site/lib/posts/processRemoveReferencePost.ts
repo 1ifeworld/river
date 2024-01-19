@@ -26,7 +26,7 @@ export async function processRemoveReferencePost({
   targetUserId,
   targetChannelId,
   targetReferenceId,
-  privySignMessage
+  privySignMessage,
 }: ProcessRemoveReferencePostProps): Promise<boolean> {
   // Declare constants/params
   const postVersion = postTypes.v1
@@ -70,7 +70,7 @@ export async function processRemoveReferencePost({
     messageArray: messageArray,
   })
   // add this in to prevent postInputs being null
-  if (!postInput) return false// prevent `postInput` from being null
+  if (!postInput) return false // prevent `postInput` from being null
   // pass postInputs into the createPost server action
   const relaySuccess = await relayPost({
     postInput: postInput,

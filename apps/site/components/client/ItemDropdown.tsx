@@ -1,4 +1,4 @@
-import { useUserContext } from "@/context";
+import { useUserContext } from '@/context'
 import {
   Button,
   DropdownMenu,
@@ -9,29 +9,25 @@ import {
   DropdownMenuTrigger,
   Toast,
   Typography,
-} from "@/design-system";
-import { processRemoveReferencePost } from "@/lib";
-import { toast } from "sonner";
+} from '@/design-system'
+import { processRemoveReferencePost } from '@/lib'
+import { toast } from 'sonner'
 
 interface ItemDropdownProps {
-  targetChannelId: bigint;
-  targetReferenceId: bigint;
+  targetChannelId: bigint
+  targetReferenceId: bigint
 }
 
 export function ItemDropdown({
   targetChannelId,
   targetReferenceId,
 }: ItemDropdownProps) {
-  const {
-    signMessage,
-    userId: targetUserId,
-    embeddedWallet,
-  } = useUserContext();
+  const { signMessage, userId: targetUserId, embeddedWallet } = useUserContext()
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="focus:outline-none md:mr-4 mb-1">
-        <Typography variant="h2">{"..."}</Typography>
+        <Typography variant="h2">{'...'}</Typography>
       </DropdownMenuTrigger>
       <DropdownMenuPortal>
         <DropdownMenuContent side="bottom" className="w-32 mx-4 md:mx-6">
@@ -43,7 +39,7 @@ export function ItemDropdown({
                 disabled={!targetUserId}
                 onClick={async () => {
                   // initialize bool for txn success check
-                  let txSuccess: boolean = false;
+                  let txSuccess: boolean = false
                   // Generate removeReference post
                   if (signMessage) {
                     txSuccess = await processRemoveReferencePost({
@@ -51,13 +47,13 @@ export function ItemDropdown({
                       targetChannelId: targetChannelId,
                       targetReferenceId: targetReferenceId,
                       privySignMessage: signMessage,
-                    });
+                    })
                     if (txSuccess) {
                       toast.custom((t) => (
-                        <Toast>{"Item successfully removed"}</Toast>
-                      ));
+                        <Toast>{'Item successfully removed'}</Toast>
+                      ))
                     } else {
-                      <Toast>{"Error removing item"}</Toast>;
+                      ;<Toast>{'Error removing item'}</Toast>
                     }
                   }
                 }}
@@ -69,5 +65,5 @@ export function ItemDropdown({
         </DropdownMenuContent>
       </DropdownMenuPortal>
     </DropdownMenu>
-  );
+  )
 }
