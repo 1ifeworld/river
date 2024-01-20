@@ -17,7 +17,7 @@
       "./styles/**",
       "./utils/**"
     ],
-    "ignore": ["./.next/**"]
+    "ignore": ["./.next/**", "./gql/sdk.generated.ts"]
   },
   "linter": {
     "enabled": true,
@@ -35,6 +35,6 @@
       "./styles/**",
       "./utils/**"
     ],
-    "ignore": ["./.next/**"]
+    "ignore": ["./.next/**", "./gql/sdk.generated.ts"]
   }
 }
