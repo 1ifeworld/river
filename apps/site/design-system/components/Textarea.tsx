@@ -2,7 +2,6 @@ import * as React from 'react'
 
 import { cn } from '../utils'
 
-// biome-ignore lint:
 export interface TextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
 

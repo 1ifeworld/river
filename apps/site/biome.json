@@ -25,7 +25,8 @@
       "recommended": true,
       "suspicious": {
         "noRedeclare": "off",
-        "noArrayIndexKey": "off"
+        "noArrayIndexKey": "off",
+        "noEmptyInterface": "off"
       },
       "complexity": {
         "useOptionalChain": "off",

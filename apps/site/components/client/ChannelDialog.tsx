@@ -113,9 +113,11 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                   // Prevent non-authenticated users from proceeding
                   if (!targetUserId) return
                   // Upload cover image to IPFS if it one was provided
-                  let uploadedFileCid
-                  let uploadedFileType
+                  let uploadedFileCid: string | undefined
+                  let uploadedFileType: string | undefined
+
                   if (filesToUpload.length !== 0) {
+                    // @ts-ignore
                     uploadedFileCid = await client?.uploadFile(filesToUpload[0])
                     uploadedFileType = filesToUpload[0].type
                   }
