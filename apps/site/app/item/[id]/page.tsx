@@ -56,7 +56,7 @@ export default async function View({
   // Extract content type from referenceMetadata
   const contentType = referenceMetadata.contentType
   // Initialize dynamic variable for setting contentUrl
-  let contentUrl
+  let contentUrl: string | undefined
   // Set contentUrl to appropriate route
   if (
     referenceMetadata.contentType === 'model/gltf-binary' ||
@@ -71,7 +71,7 @@ export default async function View({
     contentUrl = pinataUrlFromCid({ cid })
   }
   // Initialize dynamic variable for setting content
-  let content
+  let content: React.ReactNode
   // Set content to appropriate media player
   switch (true) {
     case isImage({ mimeType: contentType }):
