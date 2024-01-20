@@ -9,6 +9,7 @@ export async function ChannelCard({
   metadata,
 }: {
   channel: Channel
+  // biome-ignore lint: allow unspecified type for metadata
   metadata: any
 }) {
   const username = await getUsername({ id: channel.createdBy })

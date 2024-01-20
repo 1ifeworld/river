@@ -4,7 +4,12 @@
     "enabled": false
   },
   "files": {
-    "ignore": ["apps/metadata", "apps/delta", "packages/river-contracts", "packages/scrypt"]
+    "ignore": [
+      "apps/metadata",
+      "apps/delta",
+      "packages/river-contracts",
+      "packages/scrypt"
+    ]
   },
   "formatter": {
     "enabled": true,
@@ -35,13 +40,15 @@
       },
       "complexity": {
         "useOptionalChain": "off",
-        "noExtraBooleanCast": "off"
+        "noExtraBooleanCast": "off",
+        "noForEach": "off"
       },
       "correctness": {
         "useExhaustiveDependencies": "off"
       },
       "a11y": {
-        "noSvgWithoutTitle": "off"
+        "noSvgWithoutTitle": "off",
+        "useKeyWithClickEvents": "off"
       }
     },
     "ignore": [

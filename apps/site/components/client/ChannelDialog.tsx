@@ -109,7 +109,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                 className="flex flex-col justify-center w-full gap-6"
                 action={async () => {
                   // initialize bool for txn success check
-                  let txSuccess: boolean = false
+                  let txSuccess = false
                   // Prevent non-authenticated users from proceeding
                   if (!targetUserId) return
                   // Upload cover image to IPFS if it one was provided

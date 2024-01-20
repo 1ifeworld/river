@@ -14,6 +14,7 @@ import { pluralize, selectPluralForm, truncateText } from '@/utils'
 export async function ChannelBanner({
   channel,
   metadata,
+  // biome-ignore lint: allow unspecified type for metadata
 }: { channel: Channel; metadata: any }) {
   const channelMetadata = metadata.data[channel.uri as string]
 

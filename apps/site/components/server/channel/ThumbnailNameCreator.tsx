@@ -1,14 +1,14 @@
-import { Button, Stack, Typography } from '@/design-system'
+import { Stack, Typography } from '@/design-system'
 import { type Channel, type Reference } from '@/gql'
 import { ipfsUrlToCid, pinataUrlFromCid } from '@/lib'
 import { GenericThumbnailSmall, Username } from '@/server'
 import { truncateText } from '@/utils'
 import Image from 'next/image'
-import Link from 'next/link'
 
 interface ThumbnailNameCreatorProps {
   channel: Channel
   reference: Reference
+  // biome-ignore lint: allow unspecified type for metadata
   metadata: any
 }
 

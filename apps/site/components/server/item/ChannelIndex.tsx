@@ -7,8 +7,11 @@ import Link from 'next/link'
 interface ChannelIndexProps {
   reference: Reference
   channel: Channel
+  // biome-ignore lint: allow unspecified type for metadata
   referenceMetadata: any
+  // biome-ignore lint: allow unspecified type for metadata
   channelMetadata: any
+  // biome-ignore lint: allow unspecified type for metadata
   channelRefsMetadata: any
   showTop: boolean
   className?: string
@@ -68,6 +71,7 @@ export function ItemListView({
   metadata,
 }: {
   reference: Reference
+  // biome-ignore lint: allow unspecified type for metadata
   metadata: any
 }) {
   const referenceMetadata = metadata.data[reference.pubRef?.uri as string]

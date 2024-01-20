@@ -39,7 +39,7 @@ export function ItemDropdown({
                 disabled={!targetUserId}
                 onClick={async () => {
                   // initialize bool for txn success check
-                  let txSuccess: boolean = false
+                  let txSuccess = false
                   // Generate removeReference post
                   if (signMessage) {
                     txSuccess = await processRemoveReferencePost({

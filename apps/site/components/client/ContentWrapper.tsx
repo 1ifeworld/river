@@ -34,11 +34,11 @@ export function ContentWrapper({
   // Next ref: if current index == baseChannelReferences.length -1, return null since there are no next references in channel
   if (baseChannelReferences) {
     nextReference =
-      currentReferenceIndex == baseChannelReferences.length - 1
+      currentReferenceIndex === baseChannelReferences.length - 1
         ? null
         : item.channel?.references[(currentReferenceIndex as number) + 1].id
     prevReference =
-      currentReferenceIndex == 0
+      currentReferenceIndex === 0
         ? null
         : item.channel?.references[(currentReferenceIndex as number) - 1].id
   }

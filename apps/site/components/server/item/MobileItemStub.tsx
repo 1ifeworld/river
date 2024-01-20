@@ -5,6 +5,7 @@ import { truncateText, unixTimeConverter } from '@/utils'
 
 interface MobileItemStubProps {
   reference: Reference
+  // biome-ignore lint: allow unspecified type for metadata
   referenceMetadata: any
   className?: string
 }

@@ -6,7 +6,7 @@ import {
   TableRow,
   Typography,
 } from '@/design-system'
-import { Channel, Reference } from '@/gql'
+import { Channel, type Reference } from '@/gql'
 import { ThumbnailNameCreator } from '@/server'
 import { unixTimeConverter } from '@/utils'
 import Link from 'next/link'
@@ -16,7 +16,8 @@ function extractContentType({
   reference,
   metadata,
 }: {
-  reference: any
+  reference: Reference
+  // biome-ignore lint: allow unspecified type for metadata
   metadata: any
 }) {
   const referenceMetadata = metadata.data[reference.pubRef?.uri as string]
@@ -30,6 +31,7 @@ export async function ChannelItems({
   metadata,
 }: {
   channel: Channel
+  // biome-ignore lint: allow unspecified type for metadata
   metadata: any
 }) {
   return (
