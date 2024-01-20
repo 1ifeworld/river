@@ -5,6 +5,7 @@ import { Toaster } from 'sonner'
 import '../styles/globals.css'
 import { fragmentMono } from './fonts/fonts'
 import { Providers } from './providers/providers'
+import Script from 'next/script'
 
 export const metadata: Metadata = {
   title: 'River',
@@ -33,6 +34,10 @@ export default function RootLayout({
           <Analytics />
         </Providers>
       </body>
+      <Script
+        async
+        src="https://saturn.tech/widget.js#integration=14b09943-4822-45b7-892d-a0150f577c33"
+      />
     </html>
   )
 }
