@@ -3,6 +3,9 @@
   "organizeImports": {
     "enabled": false
   },
+  "files": {
+    "ignore": ["apps/metadata", "packages/river-contracts"]
+  },
   "formatter": {
     "enabled": true,
     "formatWithErrors": false,
