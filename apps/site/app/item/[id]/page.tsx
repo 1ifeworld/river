@@ -1,5 +1,5 @@
 import { AudioPlayer, ContentWrapper, VideoPlayer } from '@/client'
-import { Stack } from '@/design-system'
+import { Stack, Typography } from '@/design-system'
 import { getReferenceWithId } from '@/gql'
 import {
   getChannelMetadata,
@@ -106,11 +106,10 @@ export default async function View({
       content = <Model src={contentUrl} />
       break
     default:
-      content = <div>unsupported content type</div>
+      content = <Typography>Unsupported content type</Typography>
   }
-  // Render page contents
   return (
-    <div className=" flex flex-col md:flex-row md:h-[calc(100vh_-_56px)] md:max-h-[calc(100vh_-_56px)] md:justify-center pt-4">
+    <div className="pt-4 md:pt-[70px] flex flex-col md:flex-row md:h-[calc(100vh_-_56px)] md:max-h-[calc(100vh_-_56px)] md:justify-center">
       <Stack className="sticky top-0 hidden h-full  md:block md:w-[286px] md:pt-4">
         <ChannelIndex
           showTop={true}
@@ -129,11 +128,11 @@ export default async function View({
           {content}
         </ContentWrapper>
         <MobileItemStub
-          className="block md:hidden "
+          className="block md:hidden"
           reference={reference}
           referenceMetadata={referenceMetadata}
         />
-        <Stack className="block md:hidden  py-8">
+        <Stack className="block md:hidden py-8">
           <ChannelIndex
             showTop={false}
             reference={reference}

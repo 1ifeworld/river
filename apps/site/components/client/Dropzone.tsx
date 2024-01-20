@@ -21,14 +21,15 @@ import { useParams } from 'next/navigation'
 export function Dropzone({
   acceptMultipleFiles,
 }: { acceptMultipleFiles: boolean }) {
-  const { signMessage, userId: targetUserId } = useUserContext()
+  const { signMessage, userId: targetUserId, authToken } = useUserContext()
   const params = useParams()
 
   const onDrop = async (acceptedFiles: File[]) => {
     for (const file of acceptedFiles) {
       const formData = new FormData()
       formData.append('file', file)
-      const { cid } = await w3sUpload(formData)
+      const verifying = await authToken
+      const { cid } = await w3sUpload(formData, verifying)
 
       if (cid) {
         console.log(cid)
@@ -57,7 +58,11 @@ export function Dropzone({
         let muxPlaybackId: string | undefined
 
         if (contentTypeKey === 2) {
-          const { id, playbackId } = await uploadToMux(animationUri)
+          const muxVerifyingKey = await authToken
+          const { id, playbackId } = await uploadToMux(
+            animationUri,
+            muxVerifyingKey,
+          )
           muxAssetId = id
           muxPlaybackId = playbackId
         }

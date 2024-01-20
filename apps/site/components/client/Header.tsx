@@ -1,8 +1,9 @@
-import { ChannelDialog, User, UsernameDialog } from '@/client'
-import { Button, Flex } from '@/design-system'
+import { ChannelDialog, User, UsernameDialog, Marquee } from '@/client'
+import { Button, Flex, Separator } from '@/design-system'
 import { RiverLogo } from '@/server'
 import { useLogin, usePrivy } from '@privy-io/react-auth'
 import { useState } from 'react'
+import { usePathname } from 'next/navigation'
 
 export function Header() {
   const [open, setOpen] = useState<boolean>(false)
@@ -21,14 +22,17 @@ export function Header() {
     },
   })
 
+  const pathname = usePathname()
+
   // If the `PrivyProvider` is loading, just display the River logo
   if (!ready) {
     return <RiverLogo />
   }
 
   return (
-    <>
-      <Flex className="items-center justify-between bg-popover fixed top-0 left-5 right-5 py-[6px] z-50">
+    <div className="fixed left-0 right-0 z-50">
+      {/* Header */}
+      <Flex className="items-center justify-between bg-popover h-10 fixed left-5 right-5 md:absolute">
         <RiverLogo />
         <Flex className="gap-5">
           <ChannelDialog authenticated={authenticated} login={login} />
@@ -42,6 +46,13 @@ export function Header() {
         </Flex>
       </Flex>
       <UsernameDialog open={open} setOpen={setOpen} />
-    </>
+      <Separator className="md:hidden absolute top-10" />
+      {/* Marquee */}
+      {pathname.startsWith('/item') ? null : (
+        <div className="hidden md:block absolute w-screen top-10">
+          <Marquee />
+        </div>
+      )}
+    </div>
   )
 }
