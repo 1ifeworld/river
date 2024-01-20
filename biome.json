@@ -4,7 +4,7 @@
     "enabled": false
   },
   "files": {
-    "ignore": ["apps/metadata", "packages/river-contracts"]
+    "ignore": ["apps/metadata", "apps/delta", "packages/river-contracts", "packages/scrypt"]
   },
   "formatter": {
     "enabled": true,
