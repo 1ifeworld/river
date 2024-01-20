@@ -12,6 +12,7 @@
       "./components/**",
       "./constants/**",
       "./design-system/**",
+      "./gql/**",
       "./hooks/**",
       "./styles/**",
       "./utils/**"
@@ -29,6 +30,7 @@
       "./components/**",
       "./constants/**",
       "./design-system/**",
+      "./gql/**",
       "./hooks/**",
       "./styles/**",
       "./utils/**"

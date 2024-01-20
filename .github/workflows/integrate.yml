@@ -31,19 +31,22 @@ jobs:
 
   coding-standards:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project: ['apps/delta', 'apps/site']
     steps:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Setup Node
-      uses: actions/setup-node@v4
+    - name: Setup Biome
+      uses: biomejs/setup-biome@v2
       with:
-        node-version: 16.x
-
-    - name: Setup pnpm
-      uses: pnpm/action-setup@v2
-      with:
-        run_install: true
+        # This allows the setup action to resolve the biome version to install
+        # from the package.json file in the project's directory. Falls back to
+        # the latest stable version if no version is specified.
+        working-dir: ${{ matrix.project }}
 
     - name: Run Biome
-      run: pnpm biome ci .
+      # This runs the biome command in the project's directory.
+      working-directory: ${{ matrix.project }}
+      run: biome ci .      
