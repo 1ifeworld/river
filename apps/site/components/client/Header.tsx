@@ -11,7 +11,7 @@ export function Header() {
   const { ready, authenticated } = usePrivy()
 
   const { login } = useLogin({
-    onComplete: (isNewUser) => {
+    onComplete: (user, isNewUser) => {
       // Open the `UsernameDialog` if the user is new
       if (isNewUser) {
         setOpen(true)
