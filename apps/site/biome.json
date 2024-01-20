@@ -12,7 +12,6 @@
       "./components/**",
       "./constants/**",
       "./design-system/**",
-      "./gql/requests/**",
       "./hooks/**",
       "./styles/**",
       "./utils/**"
@@ -30,7 +29,6 @@
       "./components/**",
       "./constants/**",
       "./design-system/**",
-      "./gql/requests/**",
       "./hooks/**",
       "./styles/**",
       "./utils/**"
