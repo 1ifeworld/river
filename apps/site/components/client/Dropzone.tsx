@@ -52,7 +52,7 @@ export function Dropzone({
           image: imageUri,
           animationUri: animationUri,
         }
-        
+
         let muxAssetId: string | undefined
         let muxPlaybackId: string | undefined
 
