@@ -12,12 +12,12 @@
       "./components/**",
       "./constants/**",
       "./design-system/**",
-      "./gql/**",
+      "./gql/requests/**",
       "./hooks/**",
       "./styles/**",
       "./utils/**"
     ],
-    "ignore": ["./.next/**", "./gql/sdk.generated.ts"]
+    "ignore": ["./.next/**"]
   },
   "linter": {
     "enabled": true,
@@ -30,11 +30,11 @@
       "./components/**",
       "./constants/**",
       "./design-system/**",
-      "./gql/**",
+      "./gql/requests/**",
       "./hooks/**",
       "./styles/**",
       "./utils/**"
     ],
-    "ignore": ["./.next/**", "./gql/sdk.generated.ts"]
+    "ignore": ["./.next/**"]
   }
 }
