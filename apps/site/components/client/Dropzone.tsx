@@ -52,8 +52,9 @@ export function Dropzone({
           image: imageUri,
           animationUri: animationUri,
         }
-        let muxAssetId
-        let muxPlaybackId
+        
+        let muxAssetId: string | undefined
+        let muxPlaybackId: string | undefined
 
         if (contentTypeKey === 2) {
           const { id, playbackId } = await uploadToMux(animationUri)
