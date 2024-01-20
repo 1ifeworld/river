@@ -16,9 +16,9 @@ export function unixTimeConverter(seconds: number) {
   // Format output with pluralization
   if (days > 0) {
     return `${pluralize(days, 'day', 'days')} ago`
-  } else if (hours > 0) {
-    return `${pluralize(hours, 'hour', 'hours')} ago`
-  } else {
-    return `${pluralize(minutes, 'minute', 'minutes')} ago`
   }
+  if (hours > 0) {
+    return `${pluralize(hours, 'hour', 'hours')} ago`
+  }
+  return `${pluralize(minutes, 'minute', 'minutes')} ago`
 }
