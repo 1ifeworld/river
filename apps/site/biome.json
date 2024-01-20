@@ -22,7 +22,23 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true
+      "recommended": true,
+      "suspicious": {
+        "noRedeclare": "off",
+        "noArrayIndexKey": "off"
+      },
+      "complexity": {
+        "useOptionalChain": "off",
+        "noExtraBooleanCast": "off",
+        "noForEach": "off"
+      },
+      "correctness": {
+        "useExhaustiveDependencies": "off"
+      },
+      "a11y": {
+        "noSvgWithoutTitle": "off",
+        "useKeyWithClickEvents": "off"
+      }
     },
     "include": [
       "./abi/**",

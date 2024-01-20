@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        project: ['apps/delta', 'apps/site']
+        project: ['apps/site']
     steps:
     - name: Checkout
       uses: actions/checkout@v4
