@@ -6,11 +6,11 @@ export async function ChannelDetails({ channel }: { channel: Channel }) {
   return (
     <Stack className="py-8 ml-2">
       {/* Number of items */}
-      <Typography className="text-secondary-foreground leading-2">
+      <Typography className="text-secondary-foreground">
         {pluralize(channel.references.length, 'item', 'items')}
       </Typography>
       {/* Channel creation date */}
-      <Typography className="text-secondary-foreground leading-2">
+      <Typography className="text-secondary-foreground">
         Channel created {unixTimeConverter(channel.createdTimestamp)}
       </Typography>
     </Stack>
