@@ -64,11 +64,11 @@ export function encodeReferenceChannel({
 export function encodeEditChannelAccess({
   channelTarget,
   admins,
-  members
-} : { 
-  channelTarget: bigint; 
-  admins: readonly bigint[]; 
-  members: readonly bigint[] 
+  members,
+}: {
+  channelTarget: bigint
+  admins: readonly bigint[]
+  members: readonly bigint[]
 }): {
   msgBody: Hash
 } | null {
@@ -165,7 +165,7 @@ export function decodeEditChannelAccess({ msgBody }: { msgBody: Hash }): {
     return {
       channelTarget: channelTarget,
       admins: admins,
-      members: members
+      members: members,
     }
   } catch (error) {
     console.error('Failed to decode edit channel access', error)
