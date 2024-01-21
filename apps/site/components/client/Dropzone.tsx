@@ -40,8 +40,8 @@ export function Dropzone({
           isAudio({ mimeType: contentType })
             ? 2
             : isPdf({ mimeType: contentType }) || isGLB(file) || isText(file)
-            ? 1
-            : 0
+              ? 1
+              : 0
 
         const animationUri =
           contentTypeKey === 2 || contentTypeKey === 1 ? cid : ''
