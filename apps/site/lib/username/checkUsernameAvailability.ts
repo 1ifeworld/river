@@ -1,14 +1,10 @@
-export interface CheckUsernameResponse {
-  exists: boolean
-}
-
-export interface CheckOwnerReponse {
+export interface CheckResponse {
   exists: boolean
 }
 
 export async function checkUsernameAvailability(
   username: string,
-): Promise<CheckUsernameResponse> {
+): Promise<CheckResponse> {
   try {
     const response = await fetch(
       `https://server.talktomenice.workers.dev/get/${`${username}.sbvrsv.eth`}`,
@@ -26,7 +22,7 @@ export async function checkUsernameAvailability(
 }
 
 export async function checkOwnerHasId(owner: string,): 
-Promise<CheckOwnerReponse>{
+Promise<CheckResponse>{
   try {
     const response = await fetch(
       `https://server.talktomenice.workers.dev/id/${`${owner}`}`,
