@@ -28,7 +28,7 @@ export function ChannelIndex({
       {/* pinned to top */}
       {showTop ? (
         <Stack>
-          <Typography className="text-black leading-0">
+          <Typography className="text-black">
             {referenceMetadata?.name
               ? truncateText(referenceMetadata.name, 25)
               : 'untitled'}
@@ -37,7 +37,7 @@ export function ChannelIndex({
             <Username id={reference.pubRef?.createdBy} />
             <span className="text-secondary-foreground">{'·'}</span>
             <Link className="hover:underline" href={`/channel/${channel.id}`}>
-              <Typography className="text-secondary-foreground leading-0">
+              <Typography className="text-secondary-foreground">
                 {truncateText(channelMetadata.name, 20)}
               </Typography>
             </Link>
@@ -48,7 +48,7 @@ export function ChannelIndex({
       )}
       {/* scrollable under index */}
       <Stack className="overflow-hidden gap-y-3">
-        <Typography className="text-black leading-0">Index</Typography>
+        <Typography className="text-black">Index</Typography>
         <Stack className="h-full gap-y-3 overflow-scroll">
           {channel.references.map((reference: Reference, index: number) => (
             <ItemListView
@@ -76,7 +76,7 @@ export function ItemListView({
       className="flex flex-col hover:bg-divider hover:cursor-pointer"
       href={`/item/${reference.id}`}
     >
-      <Typography className="leading-0">
+      <Typography>
         {referenceMetadata?.name
           ? truncateText(referenceMetadata.name, 25)
           : 'untitled'}

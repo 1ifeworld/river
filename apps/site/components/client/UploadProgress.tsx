@@ -17,8 +17,8 @@ export function UploadProgress({
   showLoadingIcon,
 }: UploadProgressProps) {
   return (
-    <Stack className="bg-background border-[0.5px] border-secondary-foreground gap-1 px-4 py-3 text-primary-foreground tracking-tight font-sans text-base leading-[14px] fixed bottom-4 left-4 right-4 mx-auto w-auto md:left-auto md:w-80 md:mx-0 z-50">
-      <Typography className="leading-0">
+    <Stack className="bg-background border-[0.5px] border-secondary-foreground gap-1 px-4 py-3 text-primary-foreground tracking-tight font-sans text-base fixed bottom-4 left-4 right-4 mx-auto w-auto md:left-auto md:w-80 md:mx-0 z-50">
+      <Typography>
         {`${statusHeader} ${fileIndex}/${totalFiles} ${
           totalFiles > 1 ? 'items' : 'item'
         }`}
@@ -26,7 +26,7 @@ export function UploadProgress({
       <Flex>
         <Typography
           as="div"
-          className="leading-0 text-secondary-foreground whitespace-nowrap"
+          className="text-secondary-foreground whitespace-nowrap"
         >
           {statusMessage.substring(0, 35)}
         </Typography>

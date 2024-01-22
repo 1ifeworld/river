@@ -29,14 +29,14 @@ export async function ChannelBanner({
     // Include left margin to accommodate for margin necessary for hover states for items
     <Stack className="gap-5 md:ml-2">
       <Stack>
-        <Typography className="leading-0">{channelMetadata.name}</Typography>
+        <Typography className="">{channelMetadata.name}</Typography>
         {channel?.admins?.[0] ? (
           <HoverCard>
             <HoverCardTrigger className="cursor-pointer">
               <Flex>
-                <Username className="leading-0" id={channel?.admins?.[0]} />
+                <Username id={channel?.admins?.[0]} />
                 {channel?.members?.length > 0 && (
-                  <Typography className="leading-0 text-secondary-foreground ">
+                  <Typography className="text-secondary-foreground ">
                     {`${'\u00A0'}+ ${pluralize(
                       channel?.members?.length,
                       'other',
@@ -49,18 +49,18 @@ export async function ChannelBanner({
             <HoverCardContent className="w-full border-2" align="start">
               <Stack className="gap-3">
                 <span>
-                  <Typography className="leading-0">
+                  <Typography>
                     {selectPluralForm(
                       channel?.admins?.length,
                       'Admin',
                       'Admins',
                     )}
                   </Typography>
-                  <Username className="leading-0" id={channel?.admins?.[0]} />
+                  <Username id={channel?.admins?.[0]} />
                 </span>
                 {channel?.members?.length > 0 && (
                   <span>
-                    <Typography className="leading-0">
+                    <Typography>
                       {selectPluralForm(
                         channel?.members?.length,
                         'Member',
@@ -70,11 +70,7 @@ export async function ChannelBanner({
                     <Flex className="items-center">
                       {channel.members.map((member, index) => (
                         <>
-                          <Username
-                            className="leading-0"
-                            id={member}
-                            key={index}
-                          />
+                          <Username id={member} key={index} />
                           {index < channel.members.length - 1 && (
                             <Typography className="text-secondary-foreground">
                               {'·'}
@@ -96,11 +92,11 @@ export async function ChannelBanner({
         )}
       </Stack>
       {/* This component is hidden on small screens */}
-      <Typography className="hidden md:block max-w-[848px] leading-0 line-clamp-3">
+      <Typography className="hidden md:block max-w-[848px] line-clamp-3">
         {channelMetadata.description || '--'}
       </Typography>
       {/* This component is hidden on large screens */}
-      <Typography className="md:hidden leading-none">
+      <Typography className="md:hidden">
         {truncateText(channelMetadata.description, 90) || '--'}
       </Typography>
       <ItemDropzone channel={channel} />

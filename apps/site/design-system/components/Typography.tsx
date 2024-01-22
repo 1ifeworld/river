@@ -8,7 +8,7 @@ const typographyVariants = cva('text-primary-foreground tracking-tight', {
     variant: {
       h1: 'text-2xl',
       h2: 'text-xl',
-      p: 'text-base leading-6',
+      p: 'text-base leading-[14px]',
       small: 'text-sm',
     },
   },
