@@ -19,7 +19,7 @@ import { useParams } from 'next/navigation'
 import { UploadProgress } from '@/client'
 import { type Channel } from '@/gql'
 
-export function ItemDropzone({channel}: {channel: Channel}) {
+export function ItemDropzone({ channel }: { channel: Channel }) {
   const [isUploading, setIsUploading] = useState(false)
   const [progressInfo, setProgressInfo] = useState({
     fileIndex: 0,
@@ -31,12 +31,11 @@ export function ItemDropzone({channel}: {channel: Channel}) {
 
   const { signMessage, userId: targetUserId, authToken } = useUserContext()
   const params = useParams()
-  const showDropzone =  
-    channel.admins.includes(targetUserId)
-    || channel.members.includes(targetUserId)
-    ? true
-    : false
-  
+  const showDropzone =
+    channel.admins.includes(targetUserId) ||
+    channel.members.includes(targetUserId)
+      ? true
+      : false
 
   const onDrop = async (acceptedFiles: File[]) => {
     setIsUploading(true)
@@ -78,8 +77,8 @@ export function ItemDropzone({channel}: {channel: Channel}) {
         isVideo({ mimeType: contentType }) || isAudio({ mimeType: contentType })
           ? 2
           : isPdf({ mimeType: contentType }) || isGLB(file) || isText(file)
-          ? 1
-          : 0
+            ? 1
+            : 0
 
       const animationUri =
         contentTypeKey === 2 || contentTypeKey === 1 ? cid : ''
@@ -97,7 +96,10 @@ export function ItemDropzone({channel}: {channel: Channel}) {
 
       if (contentTypeKey === 2) {
         const muxVerifyingKey = await authToken
-        const { id, playbackId } = await uploadToMux(animationUri, muxVerifyingKey)
+        const { id, playbackId } = await uploadToMux(
+          animationUri,
+          muxVerifyingKey,
+        )
         muxAssetId = id
         muxPlaybackId = playbackId
       }
@@ -154,8 +156,7 @@ export function ItemDropzone({channel}: {channel: Channel}) {
       )}
       {isUploading && <UploadProgress {...progressInfo} />}
     </>
-  );
-  
+  )
 }
 
 interface AddItemProps {

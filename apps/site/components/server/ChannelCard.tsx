@@ -19,7 +19,7 @@ export async function ChannelCard({
       <Stack className="border px-4 py-3 justify-between aspect-square hover:bg-primary/[0.025] transition-all">
         {/* Channel name */}
         <Typography>{channelMetadata?.name ?? 'untitled'}</Typography>
-        <Flex>
+        <Flex className="items-center">
           {/* Channel owner */}
           <Typography className="text-secondary-foreground">
             {username ?? ''}

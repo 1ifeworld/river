@@ -17,12 +17,12 @@ export function MobileItemStub({
   return (
     <Stack className={cn(className)}>
       <Stack className="">
-        <Typography className="text-black leading-0">
+        <Typography className="text-black">
           {truncateText(referenceMetadata.name, 50)}
         </Typography>
         <Username id={reference.pubRef?.createdBy} />
       </Stack>
-      <Typography className="pt-4 text-secondary-foreground leading-0">
+      <Typography className="pt-4 text-secondary-foreground">
         {unixTimeConverter(reference.pubRef?.createdTimestamp)}
       </Typography>
     </Stack>
