@@ -57,11 +57,11 @@ export function ThumbnailNameCreator({
         {/* <Link href={`/item/${reference.id}`}> */}
         {/* <Button variant="link"> */}
         {/* This component is hidden on large screens */}
-        <Typography className="md:hidden text-primary-foreground">
+        <Typography className="md:hidden text-primary-foreground leading-none whitespace-nowrap">
           {truncateText(referenceMetadata.name, 35)}
         </Typography>
         {/* This component is hidden on small screens */}
-        <Typography className="hidden md:block text-primary-foreground">
+        <Typography className="hidden md:block text-primary-foreground leading-none whitespace-nowrap">
           {truncateText(referenceMetadata.name, 50)}
         </Typography>
         {/* </Button> */}
