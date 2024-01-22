@@ -5,7 +5,7 @@ export async function getDataForUsername({ username }: { username: string }) {
 
   try {
     const response = await fetch(
-      `https://server.talktomenice.workers.dev/getName/${username}.sbvrsv.eth`,
+      `https://server.talktomenice.workers.dev/names/getName/${username}.sbvrsv.eth`,
       {
         method: 'GET',
       },

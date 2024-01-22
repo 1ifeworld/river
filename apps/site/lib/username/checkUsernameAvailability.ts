@@ -11,7 +11,7 @@ export async function checkUsernameAvailability(
 ): Promise<CheckUsernameResponse> {
   try {
     const response = await fetch(
-      `https://w3s-service-w3s-service-pr-11.up.railway.app/getName/${`${username}.sbvrsv.eth`}`,
+      `https://w3s-service-w3s-service-pr-11.up.railway.app/names/getName/${`${username}.sbvrsv.eth`}`,
     )
     if (response.status === 200) {
       return { exists: true }
@@ -29,7 +29,7 @@ export async function checkOwnerHasId(owner: string,):
 Promise<CheckOwnerReponse>{
   try {
     const response = await fetch(
-      `https://server.talktomenice.workers.dev/id/${`${owner}`}`,
+      `https://w3s-service-w3s-service-pr-11.up.railway.app/names/getId/${`${owner}`}`,
     )
     if (response.status === 200) {
       return { exists: true }

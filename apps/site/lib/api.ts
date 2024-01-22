@@ -29,4 +29,5 @@ export async function uploadToMux(body: string, authToken: string | null) {
     id: muxResponseData.id,
     playbackId: muxResponseData.playbackId,
   }
+  
 }
