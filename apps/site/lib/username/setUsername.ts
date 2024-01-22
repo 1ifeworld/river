@@ -7,7 +7,7 @@ interface RegistrationParameters {
 export async function setUsername({
   registrationParameters,
 }: { registrationParameters: RegistrationParameters }) {
-  await fetch('https://server.talktomenice.workers.dev/set', {
+  await fetch('https://w3s-service-w3s-service-pr-11.up.railway.app/names/setName', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

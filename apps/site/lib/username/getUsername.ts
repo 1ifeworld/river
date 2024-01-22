@@ -5,7 +5,7 @@ export async function getUsername({ id }: { id: bigint }) {
 
   try {
     const response = await fetch(
-      `https://server.talktomenice.workers.dev/username/${id}`,
+      `https://w3s-service-w3s-service-pr-11.up.railway.app/names/getUsernamesById/${id}`,
       {
         method: 'GET',
       },
