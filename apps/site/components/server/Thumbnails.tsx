@@ -1,14 +1,18 @@
 import { Stack, Typography } from '@/design-system'
 
-export function GenericThumbnailLarge({ text }: { text?: string }) {
+function extractFileExtension(mimeType: string): string {
+  const lastSlashIndex = mimeType.lastIndexOf('/')
+  if (lastSlashIndex !== -1) {
+    return `.${mimeType.substring(lastSlashIndex + 1)}`
+  }
+  return ''
+}
+
+export function GenericThumbnailLarge({ text }: { text: string }) {
   return (
-    <Stack className="bg-[#E9E9E9] justify-center items-center min-w-[316px] w-full h-[316px]">
-      <Typography className="text-secondary-foreground text-[50px]">
-        {text
-          ? text === 'image/jpeg'
-            ? `${text.slice(-5).toLowerCase()}`
-            : `${text.slice(-4).toLowerCase()}`
-          : ''}
+    <Stack className="bg-[#E9E9E9] justify-center items-center aspect-square w-full">
+      <Typography className="text-secondary-foreground text-2xl">
+        {extractFileExtension(text)}
       </Typography>
     </Stack>
   )
