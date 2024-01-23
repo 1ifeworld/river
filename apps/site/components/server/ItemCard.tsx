@@ -1,10 +1,6 @@
 import { Flex, Stack, Typography } from '@/design-system'
 import { type Publication } from '@/gql'
-import {
-  getUsername,
-  type MediaAssetObject,
-  pinataUrlFromCid,
-} from '@/lib'
+import { getUsername, type MediaAssetObject, pinataUrlFromCid } from '@/lib'
 import { unixTimeConverter } from '@/utils'
 import { kv } from '@vercel/kv'
 import Image from 'next/image'

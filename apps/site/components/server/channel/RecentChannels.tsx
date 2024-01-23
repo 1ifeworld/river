@@ -6,7 +6,7 @@ import Link from 'next/link'
 export async function RecentChannels({
   params,
 }: {
-  params: { id: string }
+  params?: { id: string }
 }) {
   const { channels } = await getAllChannels()
   const { metadata } = await getChannelMetadata(channels)
@@ -16,18 +16,16 @@ export async function RecentChannels({
   }
 
   return (
-    <Stack className="hidden md:flex gap-6 max-w-[192px]">
-      <Typography>
-        All Channels
-      </Typography>
-      <div>
+    <Stack className="hidden md:flex gap-y-[34px] max-w-[192px]">
+      <Typography>Recent channels</Typography>
+      <Stack className="gap-y-[5px]">
         {channels.slice(0, 50).map((channel) => {
           const channelMetadata = metadata.data[channel.uri as string]
           return (
             <Link href={`/channel/${channel.id}`}>
               <Typography
-                className={`leading-1 text-nowrap truncate hover:underline underline-offset-2 transition-all ${
-                  channel?.id === params.id ? 'underline' : ''
+                className={`hover:underline underline-offset-2 transition-all truncate ${
+                  channel?.id === params?.id ? 'underline' : ''
                 }`}
                 key={channel.createdTimestamp}
               >
@@ -36,7 +34,7 @@ export async function RecentChannels({
             </Link>
           )
         })}
-      </div>
+      </Stack>
     </Stack>
   )
 }
