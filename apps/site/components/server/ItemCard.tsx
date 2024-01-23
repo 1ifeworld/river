@@ -1,6 +1,10 @@
 import { Flex, Stack, Typography } from '@/design-system'
 import { type Publication } from '@/gql'
-import { getUsername, type MediaAssetObject, pinataUrlFromCid } from '@/lib'
+import {
+  getUsername,
+  type MediaAssetObject,
+  pinataUrlFromCid,
+} from '@/lib'
 import { unixTimeConverter } from '@/utils'
 import { kv } from '@vercel/kv'
 import Image from 'next/image'
@@ -38,7 +42,10 @@ export async function ItemCard({
       </Stack>
       <Stack className="gap-y-[10px]">
         <div>
-          <Typography className='truncate'>{itemMetadata?.name ?? 'untitled'}</Typography>
+          {/* TODO: Add link out to item in the context of its channel */}
+          <Typography className="truncate">
+            {itemMetadata?.name ?? 'untitled'}
+          </Typography>
           <Flex className="items-center">
             <Typography className="text-secondary-foreground">
               {username ?? ''}
