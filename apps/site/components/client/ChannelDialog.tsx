@@ -23,20 +23,18 @@ import {
   Toast,
   Typography,
 } from '@/design-system'
-import { useWeb3Storage } from '@/hooks'
 import {
   type MetadataObject,
+  type NewChannelSchemaValues,
   newChannelSchema,
   processCreateChannelPost,
   sendToDb,
+  w3sUpload,
 } from '@/lib'
-import { FileList } from '@/server'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as React from 'react'
-import { useDropzone } from 'react-dropzone'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import * as z from 'zod'
 
 interface ChannelDialogProps {
   authenticated: boolean
@@ -45,37 +43,67 @@ interface ChannelDialogProps {
 
 export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
   const [dialogOpen, setDialogOpen] = React.useState(false)
-  const { signMessage, userId: targetUserId, embeddedWallet } = useUserContext()
 
-  /**
-   * Dropzone hooks
-   */
-  const [showFileList, setShowFileList] = React.useState<boolean>(false)
-  const [filesToUpload, setFilesToUpload] = React.useState<File[]>([])
-  const onDrop = React.useCallback((filesToUpload: File[]) => {
-    setShowFileList(true)
-    setFilesToUpload(filesToUpload)
-  }, [])
-  const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
-    onDrop,
-    disabled: filesToUpload.length > 0, // Disable dropzone if a file is already uploaded
-  })
+  const { signMessage, userId: targetUserId, authToken } = useUserContext()
 
-  const { client } = useWeb3Storage()
-
-  const form = useForm<z.infer<typeof newChannelSchema>>({
+  const form = useForm<NewChannelSchemaValues>({
     resolver: zodResolver(newChannelSchema),
     defaultValues: {
       name: '',
       description: '',
-      cover: undefined,
     },
   })
 
-  const resetFormAndFiles = () => {
-    form.reset()
-    setFilesToUpload([])
-    setShowFileList(false)
+  async function createNewChannel(data: NewChannelSchemaValues) {
+    const formData = new FormData()
+    formData.append('name', data.name)
+    formData.append('description', data.description as string)
+    const verifying = await authToken
+    const { cid } = await w3sUpload(formData, verifying)
+
+    // Prevent non-authenticated users from proceeding
+    if (!targetUserId) return
+
+    const metadataObject: MetadataObject = {
+      name: data.name,
+      description: data.description || '',
+      image: '',
+      animationUri: '',
+      contentType: '',
+    }
+
+    await sendToDb({
+      key: cid,
+      value: {
+        ...metadataObject,
+        // contentType: uploadedFileType as string,
+      },
+    })
+    // Initialize bool for txn success check
+    let txSuccess = false
+    // Generate create channel post for user and post transaction
+    if (signMessage) {
+      txSuccess = await processCreateChannelPost({
+        channelUri: cid,
+        targetUserId: targetUserId,
+        privySignMessage: signMessage,
+      })
+      setDialogOpen(false)
+      if (txSuccess) {
+        // Render a toast with the name of the channel
+        toast.custom((t) => (
+          <Toast>
+            {'Successfully created '}
+            <span className="font-bold">{data.name}</span>
+          </Toast>
+        ))
+        // Reset form fields to their initial values
+        form.reset()
+      } else {
+        // Render a toast with error message
+        toast.custom((t) => <Toast>{'Error creating channel'}</Toast>)
+      }
+    }
   }
 
   return (
@@ -102,73 +130,11 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                 <Typography>close</Typography>
               </Button>
             </DialogClose>
-            {/* Channel form */}
             <Form {...form}>
               <form
                 id="newChannel"
                 className="flex flex-col justify-center w-full gap-6"
-                action={async () => {
-                  // initialize bool for txn success check
-                  let txSuccess: boolean = false
-                  // Prevent non-authenticated users from proceeding
-                  if (!targetUserId) return
-                  // Upload cover image to IPFS if it one was provided
-                  let uploadedFileCid
-                  let uploadedFileType
-                  if (filesToUpload.length !== 0) {
-                    uploadedFileCid = await client?.uploadFile(filesToUpload[0])
-                    uploadedFileType = filesToUpload[0].type
-                  }
-                  const metadataObject: MetadataObject = {
-                    name: form.getValues().name,
-                    description: form.getValues().description || '',
-                    image: (uploadedFileCid?.toString() as string) || '',
-                    animationUri: '',
-                  }
-
-                  const channelUri = await client?.uploadFile(
-                    new Blob([JSON.stringify(metadataObject)], {
-                      type: 'application/json',
-                    }),
-                  )
-                  await sendToDb({
-                    key: channelUri?.toString() as string,
-                    value: {
-                      name: form.getValues().name,
-                      description: form.getValues().description || '',
-                      image: (uploadedFileCid?.toString() as string) || '',
-                      animationUri: '',
-                      contentType: uploadedFileType as string,
-                    },
-                  })
-                  // Generate create channel post for user and post transaction
-                  if (signMessage) {
-                    txSuccess = await processCreateChannelPost({
-                      channelUri: channelUri?.toString() as string,
-                      targetUserId: targetUserId,
-                      privySignMessage: signMessage,
-                    })
-                    setDialogOpen(false)
-                    if (txSuccess) {
-                      // Render a toast with the name of the channel
-                      toast.custom((t) => (
-                        <Toast>
-                          {'Successfully created '}
-                          <span className="font-bold">
-                            {form.getValues().name}
-                          </span>
-                        </Toast>
-                      ))
-                      resetFormAndFiles()
-                    } else {
-                      // Render a toast with error message
-                      toast.custom((t) => (
-                        <Toast>{'Error creating channel'}</Toast>
-                      ))
-                      resetFormAndFiles()
-                    }
-                  }
-                }}
+                onSubmit={form.handleSubmit(createNewChannel)}
               >
                 <Separator />
                 <FormField
@@ -211,41 +177,6 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                     </FormItem>
                   )}
                 />
-                {/* Dropzone */}
-                <div className="mx-5" {...getRootProps()}>
-                  <FormLabel htmlFor="cover">
-                    <Typography variant="small">Cover</Typography>
-                  </FormLabel>
-                  {!showFileList ? (
-                    <div className="border border-border bg-transparent text-center px-3 py-1">
-                      <input id="cover" {...getInputProps()} />
-                      {isDragActive ? (
-                        <Typography
-                          variant="small"
-                          className="text-muted-foreground min-h-[35px] tracking-normal"
-                        >
-                          Drop your files here
-                        </Typography>
-                      ) : (
-                        <Typography
-                          variant="small"
-                          className="hover:cursor-pointer text-muted-foreground tracking-normal"
-                        >
-                          Drag and drop a cover image here or
-                          {'\u00A0'}
-                          <span className="underline underline-offset-2">
-                            browse
-                          </span>
-                          {'\u00A0'}your local file system
-                        </Typography>
-                      )}
-                    </div>
-                  ) : (
-                    <Stack className="border border-border bg-transparent items-center text-center px-3 py-2">
-                      <FileList filesToUpload={filesToUpload} />
-                    </Stack>
-                  )}
-                </div>
                 <Separator />
                 <DialogFooter className="flex flex-col py-2">
                   <SubmitButton
