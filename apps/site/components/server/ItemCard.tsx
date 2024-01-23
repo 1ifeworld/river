@@ -38,7 +38,7 @@ export async function ItemCard({
       </Stack>
       <Stack className="gap-y-[10px]">
         <div>
-          <Typography>{itemMetadata?.name ?? 'untitled'}</Typography>
+          <Typography className='truncate'>{itemMetadata?.name ?? 'untitled'}</Typography>
           <Flex className="items-center">
             <Typography className="text-secondary-foreground">
               {username ?? ''}
