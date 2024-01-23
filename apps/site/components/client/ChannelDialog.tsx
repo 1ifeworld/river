@@ -1,4 +1,3 @@
-import { SubmitButton } from '@/client'
 import { useUserContext } from '@/context'
 import {
   Button,
@@ -22,9 +21,9 @@ import {
   Textarea,
   Toast,
   Typography,
+  Loading,
 } from '@/design-system'
 import {
-  type MetadataObject,
   type NewChannelSchemaValues,
   newChannelSchema,
   processCreateChannelPost,
@@ -43,6 +42,7 @@ interface ChannelDialogProps {
 
 export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
   const [dialogOpen, setDialogOpen] = React.useState(false)
+  const [isSubmitting, setIsSubmitting] = React.useState(false)
 
   const { signMessage, userId: targetUserId, authToken } = useUserContext()
 
@@ -55,6 +55,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
   })
 
   async function createNewChannel(data: NewChannelSchemaValues) {
+    setIsSubmitting(true)
     const formData = new FormData()
     formData.append('name', data.name)
     formData.append('description', data.description as string)
@@ -64,7 +65,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
     // Prevent non-authenticated users from proceeding
     if (!targetUserId) return
 
-    const metadataObject: MetadataObject = {
+    const metadataObject = {
       name: data.name,
       description: data.description || '',
       image: '',
@@ -76,7 +77,6 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
       key: cid,
       value: {
         ...metadataObject,
-        // contentType: uploadedFileType as string,
       },
     })
     // Initialize bool for txn success check
@@ -120,16 +120,17 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
       <DialogPortal>
         <DialogContent className="sm:max-w-[425px] focus:outline-none">
           <Stack className="items-center gap-4">
-            <DialogHeader>
-              <DialogTitle>
+            <DialogHeader className="flex w-full px-5 justify-between items-center">
+              <div className="flex-1">{/* Placholder */}</div>
+              <DialogTitle className="flex-1 text-center">
                 <Typography>New channel</Typography>
               </DialogTitle>
+              <DialogClose asChild className="flex-1 justify-end">
+                <Button variant="link">
+                  <Typography>close</Typography>
+                </Button>
+              </DialogClose>
             </DialogHeader>
-            <DialogClose asChild className="absolute right-4 top-8">
-              <Button variant="link">
-                <Typography>close</Typography>
-              </Button>
-            </DialogClose>
             <Form {...form}>
               <form
                 id="newChannel"
@@ -152,7 +153,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                           {...field}
                         />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="pt-2 text-red-500" />
                     </FormItem>
                   )}
                 />
@@ -173,20 +174,20 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
                           {...field}
                         />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="pt-2 text-red-500" />
                     </FormItem>
                   )}
                 />
                 <Separator />
                 <DialogFooter className="flex flex-col py-2">
-                  <SubmitButton
+                  <Button
                     form="newChannel"
                     type="submit"
                     variant="link"
-                    disabled={!targetUserId}
+                    disabled={!targetUserId || isSubmitting}
                   >
-                    Create
-                  </SubmitButton>
+                    {isSubmitting ? <Loading /> : 'Create'}
+                  </Button>
                 </DialogFooter>
               </form>
             </Form>
