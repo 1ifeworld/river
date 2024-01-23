@@ -1,5 +1,5 @@
 export async function w3sUpload(body: FormData, authToken: string | null) {
-    const res = await fetch('https://w3s.up.railway.app/w3s', {
+    const res = await fetch('https://w3s-service-w3s-service-pr-13.up.railway.app/w3s', {
     method: 'POST',
     headers: authToken ? { Authorization: `Bearer ${authToken}` } : undefined,
     body,
