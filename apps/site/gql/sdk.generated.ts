@@ -1,7 +1,7 @@
-import type { DocumentNode } from 'graphql/language/ast'
 import { GraphQLClient } from 'graphql-request'
 import { GraphQLClientRequestHeaders } from 'graphql-request/build/cjs/types'
 import gql from 'graphql-tag'
+import type { DocumentNode } from 'graphql/language/ast'
 export type Maybe<T> = T | null
 export type InputMaybe<T> = Maybe<T>
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -806,19 +806,6 @@ export type AllChannelsQuery = {
   }>
 }
 
-export type AllPublicationsQueryVariables = Exact<{ [key: string]: never }>
-
-export type AllPublicationsQuery = {
-  __typename?: 'Query'
-  publications: Array<{
-    __typename?: 'Publication'
-    createdBy: any
-    createdTimestamp: any
-    uri: string
-    id: any
-  }>
-}
-
 export type AllUserIdsQueryVariables = Exact<{ [key: string]: never }>
 
 export type AllUserIdsQuery = {
@@ -944,16 +931,6 @@ export const AllChannelsDocument = gql`
   }
 }
     `
-export const AllPublicationsDocument = gql`
-    query allPublications {
-  publications(orderBy: "id", orderDirection: "desc") {
-    createdBy
-    createdTimestamp
-    uri
-    id
-  }
-}
-    `
 export const AllUserIdsDocument = gql`
     query allUserIds {
   users(orderBy: "id", orderDirection: "desc") {
@@ -1064,21 +1041,6 @@ export function getSdk(
             ...wrappedRequestHeaders,
           }),
         'allChannels',
-        'query',
-      )
-    },
-    allPublications(
-      variables?: AllPublicationsQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<AllPublicationsQuery> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<AllPublicationsQuery>(
-            AllPublicationsDocument,
-            variables,
-            { ...requestHeaders, ...wrappedRequestHeaders },
-          ),
-        'allPublications',
         'query',
       )
     },
