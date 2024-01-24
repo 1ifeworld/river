@@ -21,22 +21,24 @@ export async function ItemCard({
 
   return (
     <Stack className="gap-y-[10px]">
-      <Stack className="relative aspect-[5/6] justify-center items-center">
-        {renderableThumbnailTypes.includes(
-          itemMetadata?.contentType as string,
-        ) ? (
-          <Image
-            className="object-contain"
-            src={pinataUrlFromCid({ cid: itemMetadata?.image as string })}
-            alt={itemMetadata?.name as string}
-            fill
-            quality={100}
-            priority={true}
-          />
-        ) : (
-          <GenericThumbnailLarge text={itemMetadata?.contentType as string} />
-        )}
-      </Stack>
+      <Link href={`/item/${publication.id}`} className="transition-all">
+        <Stack className="relative aspect-[5/6] justify-center items-center">
+          {renderableThumbnailTypes.includes(
+            itemMetadata?.contentType as string,
+          ) ? (
+            <Image
+              className="object-contain"
+              src={pinataUrlFromCid({ cid: itemMetadata?.image as string })}
+              alt={itemMetadata?.name as string}
+              fill
+              quality={100}
+              priority={true}
+            />
+          ) : (
+            <GenericThumbnailLarge text={itemMetadata?.contentType as string} />
+          )}
+        </Stack>
+      </Link>
       <Stack className="gap-y-[10px]">
         <div>
           <Link
