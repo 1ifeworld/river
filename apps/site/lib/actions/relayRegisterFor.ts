@@ -6,7 +6,7 @@ import { addresses, idRegistryABI } from 'scrypt'
 import { publicClient } from '@/config/publicClient'
 import { relayWalletClient } from '@/config/viemWalletClient'
 import { writeContract, getTxnInclusion } from '@/lib'
-import { setUsername } from '../username'
+import { prepareAndSetUsername, setUsername } from '../username'
 
 interface RelayRegisterForProps {
   registerForRecipient: Hex
@@ -47,12 +47,10 @@ export async function relayRegisterFor({
       16,
     )
     // set username in username db
-    await setUsername({
-      registrationParameters: {
-        id: String(userIdRegistered),
-        name: username,
-        owner: registerForRecipient,
-      },
+    await prepareAndSetUsername({
+      userIdRegistered: String(userIdRegistered),
+      username,
+      registerForRecipient,
     })
 
     // If writeContract + setUsername were successful, registerFor txn is valid and we proceed to check its inclusion
