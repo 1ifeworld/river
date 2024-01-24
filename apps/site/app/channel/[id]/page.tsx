@@ -4,7 +4,7 @@ import { getChannelMetadata, getReferenceMetadata } from '@/lib'
 import {
   ChannelBanner,
   ChannelItems,
-  AllChannelsList,
+  RecentChannels,
   ChannelDetails,
 } from '@/server'
 
@@ -28,7 +28,7 @@ export default async function Channel({
 
   return (
     <Flex className="pt-[70px] md:pt-[110px] gap-36">
-      <AllChannelsList params={params} />
+      <RecentChannels params={params} />
       <Stack className="w-full">
         <ChannelBanner channel={channel} metadata={channelMetadata} />
         <ChannelItems channel={channel} metadata={metadata} />
