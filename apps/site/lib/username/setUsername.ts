@@ -1,5 +1,4 @@
 import { Hex } from "viem"
-import { useUserContext } from "context/UserContext"
 
 interface RegistrationParameters {
   id: string
@@ -10,60 +9,47 @@ interface RegistrationParameters {
 interface AssembledReqBody { 
   registrationParameters: RegistrationParameters
   signature: string
-  walletAddress: string
 }
 
 export async function prepareAndSetUsername({
   userIdRegistered,
   username,
   registerForRecipient,
+  signature, // Expect signature as a parameter
+  
 }: {
   userIdRegistered: string,
   username: string,
   registerForRecipient: Hex,
+  signature: string, // Include signature in the parameters
 }) {
-  const { signMessage, embeddedWallet } = useUserContext()
-
-  // Check if required functions and data are available
-  if (!signMessage || !embeddedWallet) {
-    console.error("Missing user context data")
-    return
-  }
-
   // Prepare the registration parameters
   const registrationParameters = {
     id: userIdRegistered,
     name: username,
     owner: registerForRecipient,
-  }
+  };
 
-  // Sign the message
-  const messageToSign = JSON.stringify(registrationParameters)
-  const signature = await signMessage(messageToSign)
-
-  // Assemble the request body
-  const assembledReqBody: AssembledReqBody = {
+  // Assemble the request body with the provided signature
+  const assembledReqBody = {
     registrationParameters,
     signature,
-    walletAddress: embeddedWallet.address,
-  }
+  };
 
   // Call setUsername with the assembled data
-  await setUsername(assembledReqBody)
+  console.log("ASSEMBLED REQ BODY",assembledReqBody)
+  await setUsername(assembledReqBody);
 }
-
 export async function setUsername({
   registrationParameters,
   signature,
-  walletAddress,
 }: AssembledReqBody) {
   const requestBody = {
     registrationParameters,
     signature,
-    walletAddress,
   }
 
-  await fetch('https://server.talktomenice.workers.dev/set', {
+  await fetch('http://localhost:3000/set', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

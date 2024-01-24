@@ -5,7 +5,7 @@ export async function getDataForUsername({ username }: { username: string }) {
 
   try {
     const response = await fetch(
-      `https://server.talktomenice.workers.dev/get/${username}.sbvrsv.eth`,
+      `http://localhost:3000/get/${username}`,
       {
         method: 'GET',
       },

@@ -1,15 +1,20 @@
+
 export async function getUsername({ id }: { id: bigint }) {
   if (!id) {
     throw new Error('Error: id is required')
   }
 
   try {
-    const response = await fetch(
-      `https://server.talktomenice.workers.dev/username/${id}`,
-      {
-        method: 'GET',
+    // Convert BigInt to string
+    const idString = id.toString()
+
+    const response = await fetch('http://localhost:3000/getUsernameById', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    )
+      body: JSON.stringify({ id: idString }), 
+    })
 
     if (!response.ok) {
       return
@@ -24,6 +29,6 @@ export async function getUsername({ id }: { id: bigint }) {
       console.error('Error:', data.error)
     }
   } catch (error) {
-    console.error('Failed to parse JSON:', error)
+    console.error('Failed to fetch username:', error)
   }
 }

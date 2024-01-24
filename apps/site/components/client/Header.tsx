@@ -3,6 +3,7 @@ import { Button, Flex, Separator } from '@/design-system'
 import { RiverLogo } from '@/server'
 import { useLogin, usePrivy } from '@privy-io/react-auth'
 import { useState } from 'react'
+import { checkOwnerHasId } from 'lib'
 import { usePathname } from 'next/navigation'
 
 export function Header() {
@@ -11,17 +12,24 @@ export function Header() {
   const { ready, authenticated } = usePrivy()
 
   const { login } = useLogin({
-    onComplete: (user, isNewUser) => {
-      // Open the `UsernameDialog` if the user is new
+    onComplete: async (user, isNewUser) => {
       if (isNewUser) {
         setOpen(true)
+      } else {
+        const owner = user.wallet ? user.wallet.address : null
+        if (owner) {
+          const response = await checkOwnerHasId(owner)
+          if (!response.exists) {
+            setOpen(true)
+          }
+        }
       }
     },
     onError: (error) => {
       console.log('Error with Privy login:', error)
     },
   })
-
+  
   const pathname = usePathname()
 
   // If the `PrivyProvider` is loading, just display the River logo

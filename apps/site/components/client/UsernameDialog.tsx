@@ -76,7 +76,7 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
       await processRegisterFor({
         privySignerAddress: embeddedWallet.address,
         privySignMessage: signMessage,
-        username: `${username}.sbvrsv.eth`,
+        username: `${username}`,
       })
       await fetchUserData()
     }
