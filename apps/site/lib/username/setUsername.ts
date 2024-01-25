@@ -1,4 +1,4 @@
-import { Hex } from "viem"
+import { Hex } from 'viem'
 
 interface RegistrationParameters {
   id: string
@@ -6,7 +6,7 @@ interface RegistrationParameters {
   owner: string
 }
 
-interface AssembledReqBody { 
+interface AssembledReqBody {
   registrationParameters: RegistrationParameters
   signature: string
 }
@@ -16,29 +16,28 @@ export async function prepareAndSetUsername({
   username,
   registerForRecipient,
   signature, // Expect signature as a parameter
-  
 }: {
-  userIdRegistered: string,
-  username: string,
-  registerForRecipient: Hex,
-  signature: string, // Include signature in the parameters
+  userIdRegistered: string
+  username: string
+  registerForRecipient: Hex
+  signature: Hex
 }) {
   // Prepare the registration parameters
   const registrationParameters = {
     id: userIdRegistered,
     name: username,
     owner: registerForRecipient,
-  };
+  }
 
   // Assemble the request body with the provided signature
   const assembledReqBody = {
     registrationParameters,
     signature,
-  };
+  }
 
   // Call setUsername with the assembled data
-  console.log("ASSEMBLED REQ BODY",assembledReqBody)
-  await setUsername(assembledReqBody);
+  console.log('ASSEMBLED REQ BODY', assembledReqBody)
+  await setUsername(assembledReqBody)
 }
 export async function setUsername({
   registrationParameters,

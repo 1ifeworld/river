@@ -18,7 +18,7 @@ const UserContext = createContext<{
   embeddedWallet?: ConnectedWallet
   signMessage?: (
     message: string,
-    uiOptions?: SignMessageModalUIOptions
+    uiOptions?: SignMessageModalUIOptions,
   ) => Promise<string>
   userId?: bigint
   authToken: Promise<string | null>
@@ -31,13 +31,13 @@ export function UserContextComponent({ children }: { children: ReactNode }) {
   const [userId, setUserId] = useState<bigint>()
   const [username, setUsername] = useState<string>()
   const [authToken, setAuthToken] = useState<Promise<string | null>>(
-    Promise.resolve(null)
+    Promise.resolve(null),
   )
   const { signMessage, getAccessToken } = usePrivy()
   const { wallets } = useWallets()
 
   const embeddedWallet = wallets.find(
-    (wallet) => wallet.walletClientType === 'privy'
+    (wallet) => wallet.walletClientType === 'privy',
   )
 
   async function fetchUserData() {

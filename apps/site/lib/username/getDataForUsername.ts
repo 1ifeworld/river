@@ -4,12 +4,9 @@ export async function getDataForUsername({ username }: { username: string }) {
   }
 
   try {
-    const response = await fetch(
-      `http://localhost:3000/get/${username}`,
-      {
-        method: 'GET',
-      },
-    )
+    const response = await fetch(`http://localhost:3000/get/${username}`, {
+      method: 'GET',
+    })
 
     if (!response.ok) {
       // console.error('Network response was not ok')

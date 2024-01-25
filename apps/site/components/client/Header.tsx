@@ -29,7 +29,7 @@ export function Header() {
       console.log('Error with Privy login:', error)
     },
   })
-  
+
   const pathname = usePathname()
 
   // If the `PrivyProvider` is loading, just display the River logo

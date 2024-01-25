@@ -21,12 +21,15 @@ import {
   checkUsernameAvailability,
   processRegisterFor,
   usernameSchema,
+  setUsername,
+  prepareAndSetUsername,
 } from '@/lib'
 import { zodResolver } from '@hookform/resolvers/zod'
 import debounce from 'debounce'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import { Hex } from 'viem'
 
 interface UsernameDialogProps {
   open: boolean
@@ -73,13 +76,37 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
 
   async function registerUsername({ username }: { username: string }) {
     if (signMessage && embeddedWallet?.address && fetchUserData) {
-      await processRegisterFor({
+      const userId = await processRegisterFor({
         privySignerAddress: embeddedWallet.address,
         privySignMessage: signMessage,
         username: `${username}`,
       })
       await fetchUserData()
+      if (userId === undefined) {
+        throw new Error('User ID is undefined')
+      }
+      const messageToVerify = {
+        message: JSON.stringify({
+          userIdRegistered: String(userId),
+          username,
+          registerForRecipient: embeddedWallet.address,
+        }),
+      }
+
+      const signature = await signMessage(JSON.stringify(messageToVerify))
+
+      await prepareAndSetUsername({
+        userIdRegistered: String(userId),
+        username,
+        registerForRecipient: embeddedWallet.address as Hex,
+        signature: signature as Hex,
+      })
+
+      await fetchUserData()
+
+      return userId
     }
+    return undefined
   }
 
   return (
@@ -92,8 +119,20 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
           <Form {...form}>
             <form
               action={async () => {
-                // Register the supplied username
-                await registerUsername({ username: form.getValues().username })
+                const userId = await registerUsername({
+                  username: form.getValues().username,
+                })
+
+                if (userId === undefined) {
+                  throw new Error('User ID is undefined')
+                }
+
+                if (!signMessage) {
+                  throw new Error('signMessage is undefined')
+                }
+
+                const messageForUsernameDb = signMessage(userId.toString())
+
                 // Close the dialog
                 setOpen(false)
                 // Render a toast

@@ -7,7 +7,7 @@ export async function checkUsernameAvailability(
   username: string,
 ): Promise<CheckResponse> {
   try {
-    console.log("getusername")
+    console.log('getusername')
     const response = await fetch('http://localhost:3000/get', {
       method: 'POST',
       headers: {
@@ -28,10 +28,10 @@ export async function checkUsernameAvailability(
   }
 }
 
-// passes owner get back boolean if it has an id 
+// passes owner get back boolean if it has an id
 export async function checkOwnerHasId(owner: string): Promise<CheckResponse> {
   try {
-    console.log("getIdByOwner")
+    console.log('getIdByOwner')
     const response = await fetch('http://localhost:3000/getIdByOwner', {
       method: 'POST',
       headers: {

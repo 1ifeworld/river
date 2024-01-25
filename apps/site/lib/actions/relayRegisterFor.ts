@@ -7,6 +7,7 @@ import { publicClient } from '@/config/publicClient'
 import { relayWalletClient } from '@/config/viemWalletClient'
 import { writeContract, getTxnInclusion } from '@/lib'
 import { prepareAndSetUsername } from '@/lib'
+
 interface RelayRegisterForProps {
   registerForRecipient: Hex
   expiration: bigint
@@ -37,29 +38,16 @@ export async function relayRegisterFor({
       ],
     })
 
-    console.log("signature", signature)
     // wait for txn receipt
     const txnReceipt = await publicClient.waitForTransactionReceipt({
       hash: registerTxn,
     })
-    console.log("TXNRECEIPT",txnReceipt )
-    // extract userId from logs
 
     const userIdRegistered = parseInt(
       txnReceipt.logs[0].topics[2] as string,
       16,
     )
-    console.log("USER REGISTERED", userIdRegistered)
     // set username in username db
-
-    await prepareAndSetUsername({
-      userIdRegistered: String(userIdRegistered),
-      username,
-      registerForRecipient,
-      signature, // Pass the signature directly
-    });
-
-    console.log("SENT TO FETCH CALL")
 
     // If writeContract + setUsername were successful, registerFor txn is valid and we proceed to check its inclusion
     const txnInclusion = await getTxnInclusion(registerTxn)
@@ -69,7 +57,7 @@ export async function relayRegisterFor({
       console.log(`Transaction ${registerTxn} was processed by ponder`)
       // Revalidate path. This is typically for cache invalidation.
       revalidatePath(pathToRevalidate)
-      return true // Return true to indicate successful processing
+      return userIdRegistered // Return userId to indicate successful processing
     } else {
       // If txnInclusion is false, the transaction was not found or not processed
       console.log(`Transaction ${registerTxn} NOT found by ponder`)

@@ -24,11 +24,12 @@ export async function processRegisterFor({
   // Check if sig generated
   if (!sig) return
   // pass inputs to relayRegisterFor
-  await relayRegisterFor({
+  const userId = await relayRegisterFor({
     registerForRecipient: privySignerAddress as Hex,
     expiration: sigExpiration,
     signature: sig as Hash,
     username: username,
     pathToRevalidate: '/',
   })
+  return userId
 }
