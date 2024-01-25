@@ -1,5 +1,5 @@
 import { Flex, Stack, Typography } from '@/design-system'
-import { type Publication } from '@/gql'
+import { type Reference } from '@/gql'
 import { getUsername, type MediaAssetObject, pinataUrlFromCid } from '@/lib'
 import { unixTimeConverter } from '@/utils'
 import { kv } from '@vercel/kv'
@@ -8,20 +8,20 @@ import Link from 'next/link'
 import { GenericThumbnailLarge } from '@/server'
 
 export async function ItemCard({
-  publication,
+  reference,
 }: {
-  publication: Publication
+  reference: Reference
 }) {
-  const username = await getUsername({ id: publication.createdBy })
+  const username = await getUsername({ id: reference?.pubRef?.createdBy })
   const itemMetadata = await kv.get<Pick<MediaAssetObject, 'value'>['value']>(
-    publication.uri,
+    reference?.pubRef?.uri as string,
   )
 
   const renderableThumbnailTypes = ['image/png', 'image/gif', 'image/jpeg']
 
   return (
     <Stack className="gap-y-[10px]">
-      <Link href={`/item/${publication.id}`} className="transition-all">
+      <Link href={`/item/${reference?.id}`} className="transition-all">
         <Stack className="relative aspect-[5/6] justify-center items-center">
           {renderableThumbnailTypes.includes(
             itemMetadata?.contentType as string,
@@ -42,7 +42,7 @@ export async function ItemCard({
       <Stack className="gap-y-[10px]">
         <div>
           <Link
-            href={`/item/${publication.id}`}
+            href={`/item/${reference?.id}`}
             className="hover:underline underline-offset-2 transition-all"
           >
             <Typography className="truncate">
@@ -57,7 +57,7 @@ export async function ItemCard({
           </Flex>
         </div>
         <Typography className="text-secondary-foreground">
-          {unixTimeConverter(publication.createdTimestamp)}
+          {unixTimeConverter(reference?.pubRef?.createdTimestamp)}
         </Typography>
       </Stack>
     </Stack>
