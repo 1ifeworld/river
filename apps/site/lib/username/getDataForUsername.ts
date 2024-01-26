@@ -4,24 +4,22 @@ export async function getDataForUsername({ username }: { username: string }) {
   }
 
   try {
-    const response = await fetch(`https://username-service-production.up.railway.app/get/${username}`, {
-      method: 'GET',
+    const response = await fetch(`https://username-service-production.up.railway.app/get`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username }),
     })
 
     if (!response.ok) {
-      return
+      throw new Error('Network response was not ok')
     }
 
     const data = await response.json()
-
-
-    if (data) {
-      console.log('Username returned successfully')
-      return data
-    } else {
-      console.error('Error:', data.error)
-    }
+    console.log('Username returned successfully', data)
+    return data
   } catch (error) {
-    console.error('Failed to parse JSON:', error)
+    console.error('Fetch error:', error)
   }
 }
