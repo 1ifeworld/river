@@ -45,7 +45,7 @@ export default createConfig({
       address: addresses.itemRegistry.river_dev_2_d5hb5orqim,
       startBlock: 0,
     },      
-    roleBasedAccess: {
+    RoleBasedAccess: {
       network: 'river_dev_2_d5hb5orqim',
       abi: roleBasedAccessABI,
       address: addresses.roleBasedAccess.river_dev_2_d5hb5orqim,
