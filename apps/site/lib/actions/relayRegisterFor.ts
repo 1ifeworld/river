@@ -6,7 +6,6 @@ import { addresses, idRegistryABI } from 'scrypt'
 import { publicClient } from '@/config/publicClient'
 import { relayWalletClient } from '@/config/viemWalletClient'
 import { writeContract, getTxnInclusion } from '@/lib'
-import { prepareAndSetUsername } from '@/lib'
 
 interface RelayRegisterForProps {
   registerForRecipient: Hex

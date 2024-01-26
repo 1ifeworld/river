@@ -27,9 +27,11 @@ export async function signForUsername({
 
     await prepareForSetUsername({
       userIdRegistered: String(userId),
-      username,
+      to: '',
       registerForRecipient,
+      username,
       signature: signature as Hex,
+      timestamp: Date.now().toString(),
     })
 
     return true 

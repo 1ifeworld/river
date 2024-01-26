@@ -9,13 +9,11 @@ export async function getDataForUsername({ username }: { username: string }) {
     })
 
     if (!response.ok) {
-      // console.error('Network response was not ok')
       return
     }
 
     const data = await response.json()
 
-    console.log('data: ', data)
 
     if (data) {
       console.log('Username returned successfully')

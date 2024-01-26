@@ -1,70 +1,75 @@
-import { Hex } from 'viem'
+import { Hex } from "viem"
 
 interface RegistrationParameters {
   id: string
-  name: string
+  to?: string
   owner: string
-}
-
-interface AssembledReqBody {
-  registrationParameters: RegistrationParameters
+  name: string
   signature: string
+  timestamp: string
+
 }
 
 export async function prepareForSetUsername({
   userIdRegistered,
   username,
   registerForRecipient,
-  signature, // Expect signature as a parameter
+  signature,
+  timestamp,
+  to,
 }: {
   userIdRegistered: string
   username: string
   registerForRecipient: Hex
   signature: Hex
+  timestamp: string
+  to?: string
 }) {
   // Prepare the registration parameters
   const registrationParameters = {
     id: userIdRegistered,
-    name: username,
+    ...(to && { to }),
     owner: registerForRecipient,
-  }
-
-  // Assemble the request body with the provided signature
-  const assembledReqBody = {
-    registrationParameters,
+    name: username,
     signature,
+    timestamp, 
   }
 
-  // Call setUsername with the assembled data
-  console.log('ASSEMBLED REQ BODY', assembledReqBody)
-  await setUsername(assembledReqBody)
+  await setUsername(registrationParameters)
 }
+
 export async function setUsername({
-  registrationParameters,
+  id,
+  to,
+  owner,
+  name,
   signature,
-}: AssembledReqBody) {
+  timestamp,
+}: RegistrationParameters) {
   const requestBody = {
-    registrationParameters,
+    id,
+    to,
+    owner,
+    name,
     signature,
+    timestamp,
   }
 
-  await fetch('http://localhost:3000/set', {
-    method: 'POST',
+  await fetch("http://localhost:3000/set", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(requestBody),
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data)
       if (data.success) {
-        console.log('Name set successfully')
       } else {
-        console.error('Error:', data.error)
+        console.error("Error:", data.error)
       }
     })
     .catch((error) => {
-      console.error('Fetch error:', error)
+      console.error("Fetch error:", error)
     })
 }
