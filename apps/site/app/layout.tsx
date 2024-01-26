@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fragmentMono.variable} overflow-hidden`}
+      className={`${fragmentMono.variable}`}
       suppressHydrationWarning
     >
       <body>

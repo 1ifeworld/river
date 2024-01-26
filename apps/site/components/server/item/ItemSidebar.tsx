@@ -1,25 +1,31 @@
 import { Typography, Stack, Flex } from '@/design-system'
-import { kv } from '@vercel/kv'
-import { getReferenceWithId } from '@/gql'
-import { type MediaAssetObject, getUsername } from '@/lib'
+import { type Reference } from '@/gql'
+import { getUsername } from '@/lib'
+import { unixTimeConverter } from '@/utils'
 
-export async function ItemSidebar({ itemId }: { itemId: string }) {
-  const { reference } = await getReferenceWithId({
-    id: itemId,
-  })
+interface ItemSidebarProps {
+  contentUrl: string
+  reference: Reference
+  itemMetadata: {
+    name: string
+    description: string
+    image: string
+    animationUri: string
+    contentType: string
+    muxAssetId?: string | undefined
+    muxPlaybackId?: string | undefined
+  } | null
+}
 
-  if (!reference || !reference.channel) {
-    return <Typography>Not a valid item</Typography>
-  }
-
+export async function ItemSidebar({
+  contentUrl,
+  reference,
+  itemMetadata,
+}: ItemSidebarProps) {
   const username = await getUsername({ id: reference?.pubRef?.createdBy })
 
-  const itemMetadata = await kv.get<Pick<MediaAssetObject, 'value'>['value']>(
-    reference?.pubRef?.uri as string,
-  )
-
   return (
-    <Stack className="px-5 py-[10px] h-full justify-between">
+    <Stack className="px-5 py-[10px] h-full justify-between fixed">
       {/* Info / Index */}
       <div>
         <Flex className="gap-x-4 items-center">
@@ -35,9 +41,56 @@ export async function ItemSidebar({ itemId }: { itemId: string }) {
           </div>
           <Typography>{'--'}</Typography>
         </Stack>
+        <Stack className="pt-[45px] gap-y-[3px]">
+          <Flex className="justify-between">
+            <Typography>Added to</Typography>
+            <Typography className="text-secondary-foreground">
+              {reference.channelId}
+            </Typography>
+          </Flex>
+          <Flex className="justify-between">
+            <Typography>Added by</Typography>
+            <Typography className="text-secondary-foreground">
+              {username}
+            </Typography>
+          </Flex>
+          <Flex className="justify-between">
+            <Typography>Date added</Typography>
+            <Typography className="text-secondary-foreground">
+              {unixTimeConverter(reference.createdTimestamp)}
+            </Typography>
+          </Flex>
+          <Flex className="justify-between">
+            <Typography>Kind</Typography>
+            <Typography className="text-secondary-foreground">
+              {itemMetadata?.contentType}
+            </Typography>
+          </Flex>
+          <Flex className="justify-between">
+            <Typography>Content hash</Typography>
+            <Typography className="text-secondary-foreground truncate">
+              {/* imageMetadata?.animationUri */}
+              {truncateMiddle(itemMetadata?.image as string)}
+            </Typography>
+          </Flex>
+        </Stack>
       </div>
-      {/* Actions */}
-      <Typography>Add to channel/Download</Typography>
+      {/* Add / Download */}
+      <Flex className="justify-between">
+        <Typography>Add to channel</Typography>
+        <Typography>Download</Typography>
+      </Flex>
     </Stack>
   )
+}
+
+export function truncateMiddle(str: string, ellipsis = '...'): string {
+  const frontChars = 5
+  const backChars = 5
+  if (str.length <= frontChars + backChars) {
+    return str
+  }
+  const start = str.substring(0, frontChars)
+  const end = str.substring(str.length - backChars)
+  return `${start}${ellipsis}${end}`
 }

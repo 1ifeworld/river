@@ -4,6 +4,9 @@ export default function ItemLayout({
   children: React.ReactNode
 }) {
   return (
-    <section className="overflow-hidden overscroll-none">{children}</section>
+    // overflow-hidden overscroll-none
+    // pt-[38px]
+    // h-[calc(100dvh-38px)]
+    <section className="pt-[38px]">{children}</section>
   )
 }

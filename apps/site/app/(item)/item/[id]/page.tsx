@@ -76,12 +76,10 @@ export default async function ItemPage({
     .with(
       P.when((type) => isImage({ mimeType: type })),
       () => (
-        <div className="relative h-[100dvh]">
+        <div className="relative h-full">
           <Image
             className="object-contain"
-            src={pinataUrlFromCid({
-              cid: ipfsUrlToCid({ ipfsUrl: itemMetadata?.image as string }),
-            })}
+            src={contentUrl as string}
             alt={itemMetadata?.name as string}
             fill
             quality={100}
@@ -113,10 +111,14 @@ export default async function ItemPage({
     .otherwise(() => <Typography>Unsupported content type</Typography>)
 
   return (
-    <Flex className="pt-[38px]">
+    <Flex>
       <div className="bg-[#F3F4F6] w-full md:w-[78%]">{content}</div>
       <div className="hidden md:w-[22%] md:block">
-        <ItemSidebar itemId={params.id} />
+        <ItemSidebar
+          contentUrl={contentUrl}
+          reference={reference}
+          itemMetadata={itemMetadata}
+        />
       </div>
     </Flex>
   )
