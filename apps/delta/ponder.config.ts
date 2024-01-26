@@ -1,12 +1,19 @@
 import { createConfig } from '@ponder/core'
 import { http } from 'viem'
-import { addresses, idRegistryABI, postGatewayABI } from 'scrypt'
+import { 
+  addresses, 
+  idRegistryABI, 
+  delegateRegistryABI, 
+  channelRegistryABI, 
+  itemRegistryABI,
+  roleBasedAccessABI
+} from 'scrypt'
 
 export default createConfig({
   networks: {    
-    river_j5bpjduqfv: {
-      chainId: 36912,
-      transport: http(process.env.PONDER_RPC_URL_36912),
+    river_dev_2_d5hb5orqim: {
+      chainId: 3600855875265181,
+      transport: http(process.env.PONDER_RPC_URL_3600855875265181),
     },
     // anvil: {
     //   chainId: 31337,
@@ -15,17 +22,41 @@ export default createConfig({
   },
   contracts: {
     IdRegistry: {
-      network: 'river_j5bpjduqfv',
+      network: 'river_dev_2_d5hb5orqim',
       abi: idRegistryABI,
-      address: addresses.idRegistry.river_j5bpjduqfv,
+      address: addresses.idRegistry.river_dev_2_d5hb5orqim,
       startBlock: 0,
     },
-    PostGateway: {
-      network: 'river_j5bpjduqfv',
-      abi: postGatewayABI,
-      address: addresses.postGateway.river_j5bpjduqfv,
+    DelegateRegistry: {
+      network: 'river_dev_2_d5hb5orqim',
+      abi: delegateRegistryABI,
+      address: addresses.delegateRegistry.river_dev_2_d5hb5orqim,
       startBlock: 0,
-    },
+    },    
+    ChannelRegistry: {
+      network: 'river_dev_2_d5hb5orqim',
+      abi: channelRegistryABI,
+      address: addresses.channelRegistry.river_dev_2_d5hb5orqim,
+      startBlock: 0,
+    },        
+    ItemRegistry: {
+      network: 'river_dev_2_d5hb5orqim',
+      abi: itemRegistryABI,
+      address: addresses.itemRegistry.river_dev_2_d5hb5orqim,
+      startBlock: 0,
+    },      
+    roleBasedAccess: {
+      network: 'river_dev_2_d5hb5orqim',
+      abi: roleBasedAccessABI,
+      address: addresses.roleBasedAccess.river_dev_2_d5hb5orqim,
+      startBlock: 0,
+    },     
+    // PostGateway: {
+    //   network: 'river_j5bpjduqfv',
+    //   abi: postGatewayABI,
+    //   address: addresses.postGateway.river_j5bpjduqfv,
+    //   startBlock: 0,
+    // },
     // IdRegistry: {
     //   network: "anvil",
     //   abi: idRegistryABI,

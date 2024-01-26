@@ -12,10 +12,22 @@ export default defineConfig({
         'Item.json',
       ],
     }),
+    // foundry({
+    //   project: '../river-contracts/lib/imp',
+    //   include: ['IdRegistry.json', 'PostGateway.json'],
+    // }),
     foundry({
-      project: '../river-contracts/lib/imp',
-      include: ['IdRegistry.json', 'PostGateway.json'],
-    }),
+      project: '../river-contracts/lib/river-contracts',
+      include: [
+        'IdRegistry.json', 
+        'DelegateRegistry.json', 
+        'ChannelRegistry.json', 
+        'ItemRegistry.json', 
+        'RoleBasedAccess.json', 
+        'StringRenderer.json', 
+        'NftRenderer.json', 
+      ],
+    }),    
   ],
   out: './abi/generated.ts',
 })
