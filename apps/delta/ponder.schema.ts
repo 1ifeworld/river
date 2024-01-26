@@ -64,6 +64,9 @@ export default createSchema((p) => ({
     id: p.bytes(),
     createdTimestamp: p.bigint(),
     createdBy: p.bigint().references('User.id'),
+    pointer: p.bytes(),
+    renderer: p.bytes(),
+    dataForUri: p.bytes(),
     uri: p.string(),
     admins: p.bigint().list(),
     adds: p.many('Add.itemId')
@@ -71,11 +74,13 @@ export default createSchema((p) => ({
   
   Add: p.createTable({
     // item/channel
-    id: p.bytes(),
-    timestamp: p.bigint(),
+    id: p.string(),
+    createdTimestamp: p.bigint(),
     createdBy: p.bigint().references('User.id'),
     itemId: p.bytes().references('Item.id'),
-    channelId: p.bytes().references('Channel.id')
+    item: p.one("itemId"),
+    channelId: p.bytes().references('Channel.id'),
+    channel: p.one("channelId")
   }),
 
   /* ************************************************
