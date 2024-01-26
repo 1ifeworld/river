@@ -202,6 +202,9 @@ importers:
       three:
         specifier: ^0.159.0
         version: 0.159.0
+      ts-pattern:
+        specifier: ^5.0.6
+        version: 5.0.6
       usehooks-ts:
         specifier: ^2.9.1
         version: 2.9.1(react-dom@18.2.0)(react@18.2.0)
@@ -12292,6 +12295,10 @@ packages:
       typescript: 4.9.5
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
+    dev: false
+
+  /ts-pattern@5.0.6:
+    resolution: {integrity: sha512-Y+jOjihlFriWzcBjncPCf2/am+Hgz7LtsWs77pWg5vQQKLQj07oNrJryo/wK2G0ndNaoVn2ownFMeoeAuReu3Q==}
     dev: false
 
   /ts-toolbelt@6.15.5:

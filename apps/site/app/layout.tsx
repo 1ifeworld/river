@@ -16,12 +16,11 @@ export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
-  params: { id: string }
 }) {
   return (
     <html
       lang="en"
-      className={`${fragmentMono.variable}`}
+      className={`${fragmentMono.variable} overflow-hidden`}
       suppressHydrationWarning
     >
       <body>

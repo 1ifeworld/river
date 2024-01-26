@@ -1,20 +1,23 @@
-import { AudioPlayer, ContentWrapper, VideoPlayer } from '@/client'
-import { Stack, Typography } from '@/design-system'
+import { AudioPlayer, VideoPlayer } from '@/client'
+import { ItemSidebar } from '@/server'
+import { Typography, Flex } from '@/design-system'
 import { getReferenceWithId } from '@/gql'
 import {
-  getChannelMetadata,
-  getReferenceMetadata,
+  type MediaAssetObject,
   ipfsUrlToCid,
   isAudio,
+  isGlb,
   isImage,
+  isMarkdown,
   isPdf,
   isVideo,
   pinataUrlFromCid,
 } from '@/lib'
-import { ChannelIndex, MobileItemStub } from '@/server'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
+import { match, P } from 'ts-pattern'
 import * as React from 'react'
+import { kv } from '@vercel/kv'
 
 const Model = dynamic(
   () => import('../../../../components/client/renderers/ModelRenderer'),
@@ -31,118 +34,126 @@ const PdfViewer = dynamic(
   { ssr: false },
 )
 
-export default async function View({
+export default async function ItemPage({
   params,
 }: {
-  params: { itemId: string; id: string }
+  params: { id: string }
 }) {
-  // Top level getter for reference information
   const { reference } = await getReferenceWithId({
     id: params.id,
   })
-  // Check if reference is valid
+
   if (!reference || !reference.channel) {
-    return <div>Not a valid item</div>
+    return <Typography>Not a valid item</Typography>
   }
-  // Fetch metadata for various downstream targets
-  const { metadata: channelMetadata } = await getChannelMetadata([
-    reference.channel,
-  ])
-  const { metadata: itemMetadata } = await getReferenceMetadata([reference])
-  const { metadata: channelReferencesMetadata } = await getReferenceMetadata(
-    reference.channel.references,
+
+  const itemMetadata = await kv.get<Pick<MediaAssetObject, 'value'>['value']>(
+    reference?.pubRef?.uri as string,
   )
-  const referenceMetadata = itemMetadata.data[reference?.pubRef?.uri as string]
-  // Extract content type from referenceMetadata
-  const contentType = referenceMetadata.contentType
-  // Initialize dynamic variable for setting contentUrl
-  let contentUrl
-  // Set contentUrl to appropriate route
+
+  const contentType = itemMetadata?.contentType as string
+
+  console.log('Content type:', contentType)
+
+  let contentUrl: string | undefined
+
   if (
-    referenceMetadata.contentType === 'model/gltf-binary' ||
-    referenceMetadata.contentType === 'application/pdf' ||
-    referenceMetadata.contentType === 'text/markdown' ||
-    isAudio({ mimeType: referenceMetadata.contentType })
+    itemMetadata?.contentType === 'model/gltf-binary' ||
+    itemMetadata?.contentType === 'application/pdf' ||
+    itemMetadata?.contentType === 'text/markdown' ||
+    isAudio({ mimeType: itemMetadata?.contentType as string })
   ) {
-    const cid = ipfsUrlToCid({ ipfsUrl: referenceMetadata.animationUri })
+    const cid = ipfsUrlToCid({ ipfsUrl: itemMetadata?.animationUri as string })
     contentUrl = pinataUrlFromCid({ cid })
   } else {
-    const cid = ipfsUrlToCid({ ipfsUrl: referenceMetadata.image })
+    const cid = ipfsUrlToCid({ ipfsUrl: itemMetadata?.image as string })
     contentUrl = pinataUrlFromCid({ cid })
   }
-  // Initialize dynamic variable for setting content
-  let content
-  // Set content to appropriate media player
-  switch (true) {
-    case isImage({ mimeType: contentType }):
-      content = (
-        <Image
-          className="object-contain"
-          src={contentUrl}
-          alt={referenceMetadata.name}
-          fill
-          quality={100}
-          priority={true}
-        />
-      )
-      break
-    case isVideo({ mimeType: contentType }):
-      content = (
-        <div className="flex w-full h-full">
-          <VideoPlayer playbackId={referenceMetadata.muxPlaybackId} />
-        </div>
-      )
-      break
-    case isAudio({ mimeType: contentType }):
-      content = <AudioPlayer playbackId={referenceMetadata.muxPlaybackId} />
-      break
-    case isPdf({ mimeType: contentType }):
-      content = <PdfViewer file={contentUrl} />
-      break
-    case contentType === 'text/markdown':
-      content = <MarkdownRenderer contentUrl={contentUrl} />
-      break
-    case contentType === 'model/gltf-binary':
-      content = <Model src={contentUrl} />
-      break
-    default:
-      content = <Typography>Unsupported content type</Typography>
-  }
-  return (
-    <div className="pt-4 md:pt-[70px] flex flex-col md:flex-row md:h-[calc(100vh_-_56px)] md:max-h-[calc(100vh_-_56px)] md:justify-center">
-      <Stack className="sticky top-0 hidden h-full  md:block md:w-[286px] md:pt-4">
-        <ChannelIndex
-          showTop={true}
-          reference={reference}
-          channel={reference.channel}
-          referenceMetadata={referenceMetadata}
-          channelMetadata={channelMetadata.data[reference.channel.uri]}
-          channelRefsMetadata={channelReferencesMetadata}
-        />
-      </Stack>
-      <Stack className="flex-grow md:overflow-auto w-full h-full gap-y-4 md:gap-y-0 md:justify-center">
-        <ContentWrapper
-          item={reference}
-          className="w-full h-[480px] md:h-[calc(100vh/1.1)] md:max-w-[calc(100vw/1.2)] relative"
-        >
-          {content}
-        </ContentWrapper>
-        <MobileItemStub
-          className="block md:hidden"
-          reference={reference}
-          referenceMetadata={referenceMetadata}
-        />
-        <Stack className="block md:hidden py-8">
-          <ChannelIndex
-            showTop={false}
-            reference={reference}
-            channel={reference.channel}
-            referenceMetadata={referenceMetadata}
-            channelMetadata={channelMetadata.data[reference.channel.uri]}
-            channelRefsMetadata={channelReferencesMetadata}
+
+  console.log('Content url:', contentUrl)
+
+  const content = match(contentType)
+    .with(
+      P.when((type) => isImage({ mimeType: type })),
+      () => (
+        <div className="relative h-[100dvh]">
+          <Image
+            className="object-contain"
+            src={pinataUrlFromCid({
+              cid: ipfsUrlToCid({ ipfsUrl: itemMetadata?.image as string }),
+            })}
+            alt={itemMetadata?.name as string}
+            fill
+            quality={100}
+            priority={true}
           />
-        </Stack>
-      </Stack>
-    </div>
+        </div>
+      ),
+    )
+    .with(
+      P.when((type) => isVideo({ mimeType: type })),
+      () => <VideoPlayer playbackId={itemMetadata?.muxPlaybackId as string} />,
+    )
+    .with(
+      P.when((type) => isAudio({ mimeType: type })),
+      () => <AudioPlayer playbackId={itemMetadata?.muxPlaybackId as string} />,
+    )
+    .with(
+      P.when((type) => isPdf({ mimeType: type })),
+      () => <PdfViewer file={contentUrl as string} />,
+    )
+    .with(
+      P.when((type) => isGlb({ mimeType: type })),
+      () => <Model src={contentUrl as string} />,
+    )
+    .with(
+      P.when((type) => isMarkdown({ mimeType: type })),
+      () => <MarkdownRenderer contentUrl={contentUrl as string} />,
+    )
+    .otherwise(() => <Typography>Unsupported content type</Typography>)
+
+  return (
+    <Flex className="pt-[38px]">
+      <div className="bg-[#F3F4F6] w-full md:w-[78%]">{content}</div>
+      <div className="hidden md:w-[22%] md:block">
+        <ItemSidebar itemId={params.id} />
+      </div>
+    </Flex>
   )
 }
+
+// <div className="pt-4 md:pt-[70px] flex flex-col md:flex-row md:h-[calc(100vh_-_56px)] md:max-h-[calc(100vh_-_56px)] md:justify-center">
+//   <Stack className="sticky top-0 hidden h-full  md:block md:w-[286px] md:pt-4">
+//     <ChannelIndex
+//       showTop={true}
+//       reference={reference}
+//       channel={reference.channel}
+//       referenceMetadata={referenceMetadata}
+//       channelMetadata={channelMetadata.data[reference.channel.uri]}
+//       channelRefsMetadata={channelReferencesMetadata}
+//     />
+//   </Stack>
+//   <Stack className="flex-grow md:overflow-auto w-full h-full gap-y-4 md:gap-y-0 md:justify-center">
+//     <ContentWrapper
+//       item={reference}
+//       className="w-full h-[480px] md:h-[calc(100vh/1.1)] md:max-w-[calc(100vw/1.2)] relative"
+//     >
+//       {content}
+//     </ContentWrapper>
+//     <MobileItemStub
+//       className="block md:hidden"
+//       reference={reference}
+//       referenceMetadata={referenceMetadata}
+//     />
+//     <Stack className="block md:hidden py-8">
+//       <ChannelIndex
+//         showTop={false}
+//         reference={reference}
+//         channel={reference.channel}
+//         referenceMetadata={referenceMetadata}
+//         channelMetadata={channelMetadata.data[reference.channel.uri]}
+//         channelRefsMetadata={channelReferencesMetadata}
+//       />
+//     </Stack>
+//   </Stack>
+// </div>
