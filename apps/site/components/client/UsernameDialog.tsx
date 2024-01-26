@@ -21,8 +21,7 @@ import {
   checkUsernameAvailability,
   processRegisterFor,
   usernameSchema,
-  setUsername,
-  prepareAndSetUsername,
+  signForUsername,
 } from '@/lib'
 import { zodResolver } from '@hookform/resolvers/zod'
 import debounce from 'debounce'
@@ -81,33 +80,33 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
         privySignMessage: signMessage,
         username: `${username}`,
       })
-      await fetchUserData()
-      if (userId === undefined) {
-        throw new Error('User ID is undefined')
+  
+      if (userId) {
+        const success = await signForUsername({
+          userId: String(userId),
+          username: username,
+          registerForRecipient: embeddedWallet.address as Hex,
+          privySignMessage: signMessage,
+        })
+  
+        if (success) {
+          await fetchUserData()
+          return true // Indicate success
+        } else {
+          console.error('Failed to prepare and set username.')
+          // Handle failure here
+          return false
+        }
+      } else {
+        console.log('User ID not obtained from processRegisterFor.')
+        return false // Indicate failure to obtain userId
       }
-      const messageToVerify = {
-        message: JSON.stringify({
-          userIdRegistered: String(userId),
-          username,
-          registerForRecipient: embeddedWallet.address,
-        }),
-      }
-
-      const signature = await signMessage(JSON.stringify(messageToVerify))
-
-      await prepareAndSetUsername({
-        userIdRegistered: String(userId),
-        username,
-        registerForRecipient: embeddedWallet.address as Hex,
-        signature: signature as Hex,
-      })
-
-      await fetchUserData()
-
-      return userId
+    } else {
+      console.log('Required conditions not met for registerUsername.')
+      return false // Indicate failure due to unmet conditions
     }
-    return undefined
   }
+  
 
   return (
     <Dialog open={open}>
@@ -130,8 +129,6 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                 if (!signMessage) {
                   throw new Error('signMessage is undefined')
                 }
-
-                const messageForUsernameDb = signMessage(userId.toString())
 
                 // Close the dialog
                 setOpen(false)

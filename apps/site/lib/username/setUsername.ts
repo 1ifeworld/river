@@ -11,7 +11,7 @@ interface AssembledReqBody {
   signature: string
 }
 
-export async function prepareAndSetUsername({
+export async function prepareForSetUsername({
   userIdRegistered,
   username,
   registerForRecipient,
