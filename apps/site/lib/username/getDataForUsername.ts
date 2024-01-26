@@ -4,7 +4,7 @@ export async function getDataForUsername({ username }: { username: string }) {
   }
 
   try {
-    const response = await fetch(`http://localhost:3000/get/${username}`, {
+    const response = await fetch(`https://username-service-production.up.railway.app/get/${username}`, {
       method: 'GET',
     })
 
