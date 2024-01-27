@@ -31,20 +31,6 @@ import { createWalletClient, custom, EIP1193Provider, Hex, zeroAddress, hashType
 import { river_dev_2_d5hb5orqim } from '@/config/customChainConfig'
 import { getExpiration, addresses } from 'scrypt'
 import { relayWalletClient } from '@/config/viemWalletClient'  
-
-const ID_REGISTRY_EIP_712_DOMAIN = {
-  name: "River IdRegistry",
-  version: "1",
-  chainId: 3600855875265181, 
-  verifyingContract: "0xd35fF289853947472b22773E323D6239C32e1E7A", 
-} as const;
-
-const REGISTER_TYPE = [
-  { name: "to", type: "address" },
-  { name: "recovery", type: "address" },
-  { name: "nonce", type: "uint256" },
-  { name: "deadline", type: "uint256" },
-] as const;
   
 interface UsernameDialogProps {
   open: boolean
@@ -117,18 +103,19 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                   transport: custom(eip1193Provider as EIP1193Provider)
                 })  
                 const deadline = getExpiration()
-                const hash = hashTypedData({
-                  domain: ID_REGISTRY_EIP_712_DOMAIN,
-                  types: { Register: REGISTER_TYPE },
-                  primaryType: 'Register',
-                  message: {
-                    to: embeddedWallet.address as Hex,
-                    recovery: zeroAddress,
-                    nonce: BigInt(0),
-                    deadline: deadline
-                  }
-                })  
-                console.log("hash: ", hash)                 
+                const ID_REGISTRY_EIP_712_DOMAIN = {
+                  name: "River IdRegistry",
+                  version: "1",
+                  chainId: 3600855875265181, 
+                  verifyingContract: addresses.idRegistry.river_dev_2_d5hb5orqim, 
+                } as const;              
+                const REGISTER_TYPE = [
+                  { name: "to", type: "address" },
+                  { name: "recovery", type: "address" },
+                  { name: "nonce", type: "uint256" },
+                  { name: "deadline", type: "uint256" },
+                ] as const;                 
+
                 const sig = await customEip1193Client.signTypedData({
                   account: embeddedWallet.address as Hex,
                   domain: ID_REGISTRY_EIP_712_DOMAIN,
