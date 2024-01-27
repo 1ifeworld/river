@@ -2,20 +2,15 @@ import { SignMessageModalUIOptions } from '@privy-io/react-auth'
 import { Hex } from 'viem'
 import { prepareForSetUsername } from './setUsername'
 
-export async function signForUsername({
-  userId,
-  username,
-  registerForRecipient,
-  privySignMessage,
-}: {
+export async function signForUsername(
   userId: bigint | string,
   username: string,
   registerForRecipient: Hex,
   privySignMessage: (
     message: string,
-    uiOptions?: SignMessageModalUIOptions | undefined,
-  ) => Promise<string>,
-}): Promise<boolean> { 
+    uiOptions?: SignMessageModalUIOptions | undefined
+  ) => Promise<string>
+): Promise<boolean> {
   const messageToSign = JSON.stringify({
     userIdRegistered: String(userId),
     username,

@@ -1,5 +1,5 @@
-import { SubmitButton } from '@/client'
-import { useUserContext } from '@/context'
+import { SubmitButton } from "@/client"
+import { useUserContext } from "@/context"
 import {
   Dialog,
   DialogContent,
@@ -15,20 +15,21 @@ import {
   Stack,
   Toast,
   Typography,
-} from '@/design-system'
+} from "@/design-system"
 import {
   type UsernameSchemaValues,
   checkUsernameAvailability,
   processRegisterFor,
   usernameSchema,
   signForUsername,
-} from '@/lib'
-import { zodResolver } from '@hookform/resolvers/zod'
-import debounce from 'debounce'
-import React, { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
-import { Hex } from 'viem'
+} from "@/lib"
+import { SignMessageModalUIOptions } from "@privy-io/react-auth"
+import { zodResolver } from "@hookform/resolvers/zod"
+import debounce from "debounce"
+import React, { useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import { Hex } from "viem"
 
 interface UsernameDialogProps {
   open: boolean
@@ -39,7 +40,7 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
   const form = useForm<UsernameSchemaValues>({
     resolver: zodResolver(usernameSchema),
     defaultValues: {
-      username: '',
+      username: "",
     },
   })
 
@@ -50,15 +51,15 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
   const [isCheckingAvailability, setIsCheckingAvailability] = useState(false)
 
   // Subscribe to changes to the username input
-  const watchUsername = debounce(() => form.watch('username'), 500)
+  const watchUsername = debounce(() => form.watch("username"), 500)
 
   const triggerValidation = React.useMemo(
     () =>
       debounce(() => {
-        form.trigger('username')
+        form.trigger("username")
         setValidationComplete(true)
       }, 500),
-    [form],
+    [form]
   )
 
   useEffect(() => {
@@ -73,40 +74,80 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
     }
   }, [validationComplete, watchUsername])
 
-  async function registerUsername({ username }: { username: string }) {
-    if (signMessage && embeddedWallet?.address && fetchUserData) {
+  // async function registerUsername({ username }: { username: string }) {
+  //   if (signMessage && embeddedWallet?.address && fetchUserData) {
+  //     const userId = await processRegisterFor({
+  //       privySignerAddress: embeddedWallet.address,
+  //       privySignMessage: signMessage,
+  //       username: `${username}`,
+  //     })
+
+  //     if (userId) {
+  //       const success = await signForUsername({
+  //         userId: String(userId),
+  //         username: username,
+  //         registerForRecipient: embeddedWallet.address as Hex,
+  //         privySignMessage: signMessage,
+  //       })
+
+  //       if (success) {
+  //         await fetchUserData()
+  //         return true // Indicate success
+  //       } else {
+  //         console.error('Failed to prepare and set username.')
+  //         // Handle failure here
+  //         return false
+  //       }
+  //     } else {
+  //       console.log('User ID not obtained from processRegisterFor.')
+  //       return false // Indicate failure to obtain userId
+  //     }
+  //   } else {
+  //     console.log('Required conditions not met for registerUsername.')
+  //     return false // Indicate failure due to unmet conditions
+  //   }
+  // }
+
+  async function registerUsername(
+    username: string,
+    privySignMessage: (
+      message: string,
+      uiOptions?: SignMessageModalUIOptions | undefined
+    ) => Promise<string>, // Updated type
+    embeddedWalletAddress: string,
+    fetchUserData: () => Promise<void>
+  ): Promise<boolean> {
+    // Check if the necessary conditions are met using the passed parameters
+    if (privySignMessage && embeddedWalletAddress && fetchUserData) {
       const userId = await processRegisterFor({
-        privySignerAddress: embeddedWallet.address,
-        privySignMessage: signMessage,
-        username: `${username}`,
+        privySignerAddress: embeddedWalletAddress,
+        privySignMessage: privySignMessage, // Pass the function
+        username: username,
       })
-  
+
       if (userId) {
-        const success = await signForUsername({
-          userId: String(userId),
-          username: username,
-          registerForRecipient: embeddedWallet.address as Hex,
-          privySignMessage: signMessage,
-        })
-  
+        const success = await signForUsername(
+          String(userId),             
+          username,                  
+          embeddedWalletAddress as Hex,
+          privySignMessage            
+        );
         if (success) {
           await fetchUserData()
           return true // Indicate success
         } else {
-          console.error('Failed to prepare and set username.')
-          // Handle failure here
-          return false
+          console.error("Failed to prepare and set username.")
+          return false // Handle failure here
         }
       } else {
-        console.log('User ID not obtained from processRegisterFor.')
+        console.log("User ID not obtained from processRegisterFor.")
         return false // Indicate failure to obtain userId
       }
     } else {
-      console.log('Required conditions not met for registerUsername.')
+      console.log("Required conditions not met for registerUsername.")
       return false // Indicate failure due to unmet conditions
     }
   }
-  
 
   return (
     <Dialog open={open}>
@@ -118,24 +159,28 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
           <Form {...form}>
             <form
               action={async () => {
-                const userId = await registerUsername({
-                  username: form.getValues().username,
-                })
-
-                if (userId === undefined) {
-                  throw new Error('User ID is undefined')
+                // Check if signMessage is defined
+                if (
+                  typeof signMessage === 'function' &&
+                  embeddedWallet &&
+                  embeddedWallet.address &&
+                  typeof fetchUserData === 'function'
+                ) {
+                  const userId = await registerUsername(
+                    form.getValues().username,
+                    signMessage,
+                    embeddedWallet.address,
+                    fetchUserData
+                  )
+                } else {
+                  console.error("signMessage or embeddedWallet is not defined")
                 }
-
-                if (!signMessage) {
-                  throw new Error('signMessage is undefined')
-                }
-
                 // Close the dialog
                 setOpen(false)
                 // Render a toast
                 toast.custom((t) => (
                   <Toast>
-                    Welcome to River{' '}
+                    Welcome to River{" "}
                     <span className="font-bold">
                       {form.getValues().username}
                     </span>
