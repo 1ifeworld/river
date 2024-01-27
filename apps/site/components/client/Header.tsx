@@ -13,16 +13,14 @@ export function Header() {
 
   const { login } = useLogin({
     onComplete: async (user, isNewUser) => {
-      if (isNewUser) {
+      const ownerAddress = user?.wallet?.address
+        if (isNewUser || !ownerAddress) {
         setOpen(true)
-      } else {
-        const owner = user.wallet ? user.wallet.address : null
-        if (owner) {
-          const response = await checkOwnerHasId(owner)
-          if (!response.exists) {
-            setOpen(true)
-          }
-        }
+        return
+      }
+        const response = await checkOwnerHasId(ownerAddress)
+      if (!response.exists) {
+        setOpen(true)
       }
     },
     onError: (error) => {
@@ -32,7 +30,6 @@ export function Header() {
   
   const pathname = usePathname()
 
-  // If the `PrivyProvider` is loading, just display the River logo
   if (!ready) {
     return <RiverLogo />
   }
