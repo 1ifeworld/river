@@ -115,7 +115,6 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                   { name: "nonce", type: "uint256" },
                   { name: "deadline", type: "uint256" },
                 ] as const;                 
-
                 const sig = await customEip1193Client.signTypedData({
                   account: embeddedWallet.address as Hex,
                   domain: ID_REGISTRY_EIP_712_DOMAIN,
