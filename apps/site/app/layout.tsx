@@ -16,6 +16,7 @@ export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
+  params: { id: string }
 }) {
   return (
     <html
@@ -23,14 +24,12 @@ export default function RootLayout({
       className={`${fragmentMono.variable}`}
       suppressHydrationWarning
     >
-      <body className="overscroll-none">
+      <body>
         <Providers>
-          <div className="px-5">
-            <Header />
-            {children}
-            <Toaster position="bottom-center" />
-            <ThemeToggle />
-          </div>
+          <Header />
+          {children}
+          <Toaster position="bottom-center" />
+          <ThemeToggle />
           <Analytics />
         </Providers>
       </body>

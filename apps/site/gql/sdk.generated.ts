@@ -784,6 +784,11 @@ export type AllPublicationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type AllPublicationsQuery = { __typename?: 'Query', publications: Array<{ __typename?: 'Publication', createdBy: any, createdTimestamp: any, uri: string, id: any }> };
 
+export type AllReferencesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllReferencesQuery = { __typename?: 'Query', references: Array<{ __typename?: 'Reference', id: any, pubRef?: { __typename?: 'Publication', createdBy: any, createdTimestamp: any, id: any, uri: string } | null }> };
+
 export type AllUserIdsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -850,6 +855,19 @@ export const AllPublicationsDocument = gql`
     createdTimestamp
     uri
     id
+  }
+}
+    `;
+export const AllReferencesDocument = gql`
+    query allReferences {
+  references(orderBy: "id", orderDirection: "desc") {
+    id
+    pubRef {
+      createdBy
+      createdTimestamp
+      id
+      uri
+    }
   }
 }
     `;
@@ -947,6 +965,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     allPublications(variables?: AllPublicationsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<AllPublicationsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<AllPublicationsQuery>(AllPublicationsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'allPublications', 'query');
+    },
+    allReferences(variables?: AllReferencesQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<AllReferencesQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<AllReferencesQuery>(AllReferencesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'allReferences', 'query');
     },
     allUserIds(variables?: AllUserIdsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<AllUserIdsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<AllUserIdsQuery>(AllUserIdsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'allUserIds', 'query');

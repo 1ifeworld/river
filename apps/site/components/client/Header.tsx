@@ -26,7 +26,7 @@ export function Header() {
       console.log('Error with Privy login:', error)
     },
   })
-  
+
   return (
     <div className="bg-popover fixed z-50 w-screen">
       {/* Header */}
