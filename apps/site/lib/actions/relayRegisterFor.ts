@@ -10,6 +10,7 @@ import { setUsername } from '../username'
 
 interface RelayRegisterForProps {
   registerForRecipient: Hex
+  recovery: Hex
   expiration: bigint
   signature: Hash
   username: string
@@ -18,6 +19,7 @@ interface RelayRegisterForProps {
 
 export async function relayRegisterFor({
   registerForRecipient,
+  recovery,
   expiration,
   signature,
   username,
@@ -27,12 +29,12 @@ export async function relayRegisterFor({
     // Attempt to send the transaction via writeContract
     const registerTxn = await writeContract(relayWalletClient, {
       chain: relayWalletClient.chain ?? null,
-      address: addresses.idRegistry.river_j5bpjduqfv,
+      address: addresses.idRegistry.river_dev_2_d5hb5orqim,
       abi: idRegistryABI,
       functionName: 'registerFor',
       args: [
         registerForRecipient, // to
-        '0x33F59bfD58c16dEfB93612De65A5123F982F58bA', // backup
+        recovery, // recovery
         expiration, // expiration
         signature, // sig
       ],
@@ -46,14 +48,14 @@ export async function relayRegisterFor({
       txnReceipt.logs[0].topics[2] as string,
       16,
     )
-    // set username in username db
-    await setUsername({
-      registrationParameters: {
-        id: String(userIdRegistered),
-        name: username,
-        owner: registerForRecipient,
-      },
-    })
+    // // set username in username db
+    // await setUsername({
+    //   registrationParameters: {
+    //     id: String(userIdRegistered),
+    //     name: username,
+    //     owner: registerForRecipient,
+    //   },
+    // })
 
     // If writeContract + setUsername were successful, registerFor txn is valid and we proceed to check its inclusion
     const txnInclusion = await getTxnInclusion(registerTxn)

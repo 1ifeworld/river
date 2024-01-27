@@ -1,10 +1,10 @@
-import { cache } from 'react'
-import sdk from '../client'
+// import { cache } from 'react'
+// import sdk from '../client'
 
-export const getAllPublications = cache(async () => {
-  const response = await sdk.allPublications()
+// export const getAllPublications = cache(async () => {
+//   const response = await sdk.allPublications()
 
-  return {
-    publications: response.publications,
-  }
-})
+//   return {
+//     publications: response.publications,
+//   }
+// })

@@ -26,6 +26,9 @@ export const addresses: AddressBook = {
   roleBasedAccess: {
     river_dev_2_d5hb5orqim: '0x05aD6cA9C2b3F71a6B30A8C7d414C95E10EC0217',
   },      
+  stringRenderer: {
+    river_dev_2_d5hb5orqim: '0xdc151805e5A93284e1E337Bf5B7c4060AB9BC5Be',
+  }
   // attestationRegistry: {
   //   opGoerli: '0x6d8313bBac1C0596Ff115DE28c8E0E4d3328DbE3',
   // },

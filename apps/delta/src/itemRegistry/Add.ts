@@ -5,6 +5,7 @@ ponder.on('ItemRegistry:Add', async ({ event, context }) => {
   const { sender, userId, itemId, channelId } = event.args
 
   await Add.create({
+    // TODO: add a counter before itemId + channelId
     id: `${itemId}/${channelId}`,
     data: {
         createdTimestamp: event.block.timestamp,

@@ -27,7 +27,25 @@ import debounce from 'debounce'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import { createWalletClient, custom, EIP1193Provider, Hex, zeroAddress, hashTypedData } from 'viem'
+import { river_dev_2_d5hb5orqim } from '@/config/customChainConfig'
+import { getExpiration, addresses } from 'scrypt'
+import { relayWalletClient } from '@/config/viemWalletClient'  
 
+const ID_REGISTRY_EIP_712_DOMAIN = {
+  name: "River IdRegistry",
+  version: "1",
+  chainId: 3600855875265181, 
+  verifyingContract: "0xd35fF289853947472b22773E323D6239C32e1E7A", 
+} as const;
+
+const REGISTER_TYPE = [
+  { name: "to", type: "address" },
+  { name: "recovery", type: "address" },
+  { name: "nonce", type: "uint256" },
+  { name: "deadline", type: "uint256" },
+] as const;
+  
 interface UsernameDialogProps {
   open: boolean
   setOpen: (open: boolean) => void
@@ -59,28 +77,28 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
     [form],
   )
 
-  useEffect(() => {
-    if (form.formState.isValid && validationComplete) {
-      checkUsernameAvailability(form.getValues().username).then((result) => {
-        setUsernameExists(result.exists)
-        setIsCheckingAvailability(false)
-      })
-      return () => {
-        setValidationComplete(false)
-      }
-    }
-  }, [validationComplete, watchUsername])
+  // useEffect(() => {
+  //   if (form.formState.isValid && validationComplete) {
+  //     checkUsernameAvailability(form.getValues().username).then((result) => {
+  //       setUsernameExists(result.exists)
+  //       setIsCheckingAvailability(false)
+  //     })
+  //     return () => {
+  //       setValidationComplete(false)
+  //     }
+  //   }
+  // }, [validationComplete, watchUsername])
 
-  async function registerUsername({ username }: { username: string }) {
-    if (signMessage && embeddedWallet?.address && fetchUserData) {
-      await processRegisterFor({
-        privySignerAddress: embeddedWallet.address,
-        privySignMessage: signMessage,
-        username: `${username}.sbvrsv.eth`,
-      })
-      await fetchUserData()
-    }
-  }
+  // async function registerUsername({ username }: { username: string }) {
+  //   if (signMessage && embeddedWallet?.address && fetchUserData) {
+  //     await processRegisterFor({
+  //       privySignerAddress: embeddedWallet.address,
+  //       privySignMessage: signMessage,
+  //       username: `${username}.sbvrsv.eth`,
+  //     })
+  //     await fetchUserData()
+  //   }
+  // }
 
   return (
     <Dialog open={open}>
@@ -92,8 +110,49 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
           <Form {...form}>
             <form
               action={async () => {
-                // Register the supplied username
-                await registerUsername({ username: form.getValues().username })
+                if (!embeddedWallet) return
+                const eip1193Provider = await embeddedWallet.getEthereumProvider();
+                const customEip1193Client = createWalletClient({
+                  chain: river_dev_2_d5hb5orqim,
+                  transport: custom(eip1193Provider as EIP1193Provider)
+                })  
+                const deadline = getExpiration()
+                const hash = hashTypedData({
+                  domain: ID_REGISTRY_EIP_712_DOMAIN,
+                  types: { Register: REGISTER_TYPE },
+                  primaryType: 'Register',
+                  message: {
+                    to: embeddedWallet.address as Hex,
+                    recovery: zeroAddress,
+                    nonce: BigInt(0),
+                    deadline: deadline
+                  }
+                })  
+                console.log("hash: ", hash)                 
+                const sig = await customEip1193Client.signTypedData({
+                  account: embeddedWallet.address as Hex,
+                  domain: ID_REGISTRY_EIP_712_DOMAIN,
+                  types: { Register: REGISTER_TYPE },
+                  primaryType: 'Register',
+                  message: {
+                    to: embeddedWallet.address as Hex,
+                    recovery: zeroAddress,
+                    nonce: BigInt(0),
+                    deadline: deadline
+                  }
+                })                
+                await processRegisterFor({
+                  signer: embeddedWallet.address as Hex,
+                  recovery: zeroAddress,
+                  deadline: deadline,
+                  sig: sig,
+                  // privySignMessage: signMessage,
+                  username: `no`,
+                })
+                // await fetchUserData()                
+
+                // // Register the supplied username
+                // await registerUsername({ username: form.getValues().username })
                 // Close the dialog
                 setOpen(false)
                 // Render a toast
@@ -144,11 +203,11 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                 <SubmitButton
                   type="submit"
                   variant="link"
-                  disabled={
-                    !form.formState.isValid ||
-                    usernameExists ||
-                    isCheckingAvailability
-                  }
+                  // disabled={
+                  //   !form.formState.isValid ||
+                  //   usernameExists ||
+                  //   isCheckingAvailability
+                  // }
                 >
                   Complete
                 </SubmitButton>

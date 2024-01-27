@@ -1,4 +1,4 @@
 export * from './configStorageClient'
-export * from './relayPost'
+export * from './relayNewChannel'
 export * from './relayRegisterFor'
 export * from './getTxnInclusion'

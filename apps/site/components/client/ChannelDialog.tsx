@@ -34,6 +34,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as React from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import { river_dev_2_d5hb5orqim } from '@/config/customChainConfig'
+import { createWalletClient, custom, EIP1193Provider, Hex } from 'viem'
+import { addresses } from 'scrypt'
+import { getExpiration } from 'scrypt'
+import { processNewChannel } from '@/lib'
 
 interface ChannelDialogProps {
   authenticated: boolean
@@ -44,7 +49,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
   const [dialogOpen, setDialogOpen] = React.useState(false)
   const [isSubmitting, setIsSubmitting] = React.useState(false)
 
-  const { signMessage, userId: targetUserId, authToken } = useUserContext()
+  const { signMessage, userId: targetUserId, authToken, embeddedWallet } = useUserContext()
 
   const form = useForm<NewChannelSchemaValues>({
     resolver: zodResolver(newChannelSchema),
@@ -61,10 +66,10 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
     formData.append('description', data.description as string)
     const verifying = await authToken
     const { cid } = await w3sUpload(formData, verifying)
-
+    // Prevent invalid cid returns 
+    if (!cid) return
     // Prevent non-authenticated users from proceeding
-    if (!targetUserId) return
-
+    if (!targetUserId || !embeddedWallet) return
     const metadataObject = {
       name: data.name,
       description: data.description || '',
@@ -72,7 +77,6 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
       animationUri: '',
       contentType: '',
     }
-
     await sendToDb({
       key: cid,
       value: {
@@ -81,13 +85,51 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
     })
     // Initialize bool for txn success check
     let txSuccess = false
+    // Initialize custom eip1193 signer
+    const eip1193Provider = await embeddedWallet.getEthereumProvider();
+    const customEip1193Client = createWalletClient({
+      chain: river_dev_2_d5hb5orqim,
+      transport: custom(eip1193Provider as EIP1193Provider)
+    })    
     // Generate create channel post for user and post transaction
-    if (signMessage) {
-      txSuccess = await processCreateChannelPost({
-        channelUri: cid,
-        targetUserId: targetUserId,
-        privySignMessage: signMessage,
-      })
+    if (customEip1193Client) {
+      // NOTE: what needs to happen protocol + indexing wise to be done for the UI
+      /* 
+        1. generate signature from user for specific function call
+        2. call the function
+        3. pick up that the function happened, and revalidate the cache/page
+      */
+        const deadline = getExpiration()
+        const sig = await customEip1193Client.signTypedData({
+          account: embeddedWallet.address as Hex,
+          domain: {
+            name: 'ChannelRegistry',
+            version: '1',
+            chainId: river_dev_2_d5hb5orqim.id,
+            verifyingContract: addresses.channelRegistry.river_dev_2_d5hb5orqim,            
+          },
+          types: {
+            NewChannel: [
+              { name: 'userId', type: 'uint256' },
+              { name: 'logic', type: 'address' },            
+              { name: 'deadline', type: 'uint256' },            
+            ]
+          },
+          primaryType: 'NewChannel',
+          message: {
+            userId: targetUserId,
+            logic: addresses.roleBasedLogic.river_dev_2_d5hb5orqim,
+            deadline: deadline
+          }
+        })
+        txSuccess = await processNewChannel({
+          signer: embeddedWallet.address as Hex,
+          targetUserId: targetUserId,
+          channelUri: cid,
+          deadline: deadline,
+          sig: sig
+        })
+
       setDialogOpen(false)
       if (txSuccess) {
         // Render a toast with the name of the channel
@@ -107,6 +149,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
   }
 
   return (
+    // TODO: make this require a userId, not just privy authentication
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       {!authenticated ? (
         <Button variant="link" onClick={login}>
