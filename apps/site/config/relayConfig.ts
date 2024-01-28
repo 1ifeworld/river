@@ -1,6 +1,8 @@
-'server-only'
+"server-only";
 
 import {
+  createWalletClient,
+  http,
   BaseError,
   BlockTag,
   Client,
@@ -8,12 +10,10 @@ import {
   NonceTooHighError,
   NonceTooLowError,
 } from "viem";
-import { parseAccount } from "viem/accounts";
+import { privateKeyToAccount, parseAccount,  } from "viem/accounts";
 import { getTransactionCount } from "viem/actions";
 import PQueue from "p-queue";
-import { createWalletClient, http } from 'viem'
-import { privateKeyToAccount } from 'viem/accounts'
-import { river_j5bpjduqfv } from './customChainConfig'
+import { river_j5bpjduqfv } from "./customChainConfig";
 
 type CreateNonceManagerOptions = {
   client: Client;
@@ -21,7 +21,7 @@ type CreateNonceManagerOptions = {
   blockTag?: BlockTag;
 };
 
-type CreateNonceManagerResult = {
+export type CreateNonceManagerResult = {
   account: Hex;
   hasNonce: () => boolean;
   nextNonce: () => number;
@@ -30,19 +30,18 @@ type CreateNonceManagerResult = {
   mempoolQueue: PQueue;
 };
 
-function setupGlobalNonceManager({
+function createNonceManager({
   client,
   address, // TODO: rename to account?
   blockTag = "pending",
 }: CreateNonceManagerOptions): CreateNonceManagerResult {
-  console.log("Setting up global nonce manager");
   const nonceRef = { current: -1 };
   let channel: BroadcastChannel | null = null;
   const channelName = "relayerBroadcast";
   channel = new BroadcastChannel(channelName);
   channel.addEventListener("message", (event) => {
     const nonce = JSON.parse(event.data);
-    console.log("starting nonce for relayerBroadcast channel: ", nonce);
+    console.log("RelayerBroadcastChannel beginning nonce: ", nonce);
     nonceRef.current = nonce;
   });
 
@@ -73,9 +72,7 @@ function setupGlobalNonceManager({
     );
   }
 
-  const mempoolQueue = new PQueue({ concurrency: 1 });
-
-  console.log("is address correct in global nonce manager: ", address)
+  const mempoolQueue = new PQueue({ concurrency: 100 });
 
   return {
     account: address,
@@ -89,15 +86,13 @@ function setupGlobalNonceManager({
 
 // Nonce mamanger setup
 
-const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`);
 
 export const relayWalletClient = createWalletClient({
   account,
   chain: river_j5bpjduqfv,
   transport: http(process.env.RPC_URL),
-})
-
-console.log("relay wallet  ")
+});
 
 const rawAccount = relayWalletClient.account;
 if (!rawAccount) {
@@ -106,7 +101,7 @@ if (!rawAccount) {
 }
 const parsedAccount = parseAccount(rawAccount);
 
-export const globalNonceManager = setupGlobalNonceManager({
+export const globalNonceManager = createNonceManager({
   client: relayWalletClient,
   address: parsedAccount.address,
   blockTag: "pending",

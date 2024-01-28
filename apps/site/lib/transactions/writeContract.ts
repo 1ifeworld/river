@@ -15,19 +15,7 @@ import {
   writeContract as viem_writeContract,
 } from 'viem/actions'
 import pRetry from 'p-retry'
-import { parseAccount } from 'viem/accounts'
-import { createNonceManager } from '@/lib'
-import { globalNonceManager } from '@/config/globalNonceManager'
-import PQueue from "p-queue";
-
-type CreateNonceManagerResult = {
-  account: Hex;
-  hasNonce: () => boolean;
-  nextNonce: () => number;
-  resetNonce: () => Promise<void>;
-  shouldResetNonce: (error: unknown) => boolean;
-  mempoolQueue: PQueue;
-};
+import { CreateNonceManagerResult } from '@/config/relayConfig'
 
 export async function writeContract<
   TChain extends Chain | undefined,

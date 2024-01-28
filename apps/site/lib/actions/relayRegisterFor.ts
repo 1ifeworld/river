@@ -4,10 +4,9 @@ import { revalidatePath } from 'next/cache'
 import { Hash, Hex } from 'viem'
 import { addresses, idRegistryABI } from 'scrypt'
 import { publicClient } from '@/config/publicClient'
-// import { relayWalletClient } from '@/config/viemWalletClient'
+import { relayWalletClient, globalNonceManager } from '@/config/relayConfig'
 import { writeContract, getTxnInclusion } from '@/lib'
 import { setUsername } from '../username'
-import { relayWalletClient, globalNonceManager } from '@/config/globalNonceManager'
 
 interface RelayRegisterForProps {
   registerForRecipient: Hex

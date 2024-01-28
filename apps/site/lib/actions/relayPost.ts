@@ -4,8 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { addresses, postGatewayABI } from 'scrypt'
 import { Hash } from 'viem'
 import { writeContract, getTxnInclusion } from '@/lib'
-// import { relayWalletClient } from '@/config/viemWalletClient'
-import { relayWalletClient, globalNonceManager } from '@/config/globalNonceManager'
+import { relayWalletClient, globalNonceManager } from '@/config/relayConfig'
 
 interface RelayPostProps {
   postInput: Hash
