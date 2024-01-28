@@ -4,7 +4,8 @@ import { revalidatePath } from 'next/cache'
 import { addresses, postGatewayABI } from 'scrypt'
 import { Hash } from 'viem'
 import { writeContract, getTxnInclusion } from '@/lib'
-import { relayWalletClient } from '@/config/viemWalletClient'
+// import { relayWalletClient } from '@/config/viemWalletClient'
+import { relayWalletClient, globalNonceManager } from '@/config/globalNonceManager'
 
 interface RelayPostProps {
   postInput: Hash
@@ -16,7 +17,7 @@ export async function relayPost({
   pathsToRevalidate,
 }: RelayPostProps) {
     // Attempt to send the transaction via writeContract
-    const postTxn = await writeContract(relayWalletClient, {
+    const postTxn = await writeContract(relayWalletClient, globalNonceManager, {
       chain: relayWalletClient.chain ?? null,
       address: addresses.postGateway.river_j5bpjduqfv,
       abi: postGatewayABI,

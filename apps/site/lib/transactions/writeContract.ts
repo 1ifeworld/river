@@ -7,6 +7,8 @@ import {
   Transport,
   WriteContractParameters,
   WriteContractReturnType,
+  BlockTag,
+  Hex  
 } from 'viem'
 import {
   simulateContract,
@@ -15,6 +17,17 @@ import {
 import pRetry from 'p-retry'
 import { parseAccount } from 'viem/accounts'
 import { createNonceManager } from '@/lib'
+import { globalNonceManager } from '@/config/globalNonceManager'
+import PQueue from "p-queue";
+
+type CreateNonceManagerResult = {
+  account: Hex;
+  hasNonce: () => boolean;
+  nextNonce: () => number;
+  resetNonce: () => Promise<void>;
+  shouldResetNonce: (error: unknown) => boolean;
+  mempoolQueue: PQueue;
+};
 
 export async function writeContract<
   TChain extends Chain | undefined,
@@ -24,6 +37,7 @@ export async function writeContract<
   TChainOverride extends Chain | undefined,
 >(
   client: Client<Transport, TChain, TAccount>,
+  nonceManager: CreateNonceManagerResult,
   request: WriteContractParameters<
     TAbi,
     TFunctionName,
@@ -32,18 +46,11 @@ export async function writeContract<
     TChainOverride
   >,
 ): Promise<WriteContractReturnType> {
-  const rawAccount = request.account ?? client.account
-  if (!rawAccount) {
+  const account = request.account ?? client.account
+  if (!account) {
     // TODO: replace with viem AccountNotFoundError once its exported
     throw new Error('No account provided')
   }
-  const account = parseAccount(rawAccount)
-
-  const nonceManager = createNonceManager({
-    client,
-    address: account.address,
-    blockTag: 'pending',
-  })
 
   async function prepareWrite(): Promise<
     WriteContractParameters<
@@ -67,7 +74,7 @@ export async function writeContract<
     >(client, {
       ...request,
       blockTag: 'pending',
-      account: account,
+      account: account
     } as unknown as SimulateContractParameters<
       TAbi,
       TFunctionName,
