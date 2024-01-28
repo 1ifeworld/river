@@ -1,15 +1,11 @@
 import { type Channel, type Reference } from '@/gql'
 
-// This type is currently unused
 export interface ChannelMetadata {
-  metadata?: {
-    name: string
-    description: string
-    image: string
-    animationUri?: string
-    contentType: string
-  } | null
-  error?: unknown
+  name: string
+  description: string
+  image?: string
+  animationUri?: string
+  contentType: string
 }
 
 export async function getChannelMetadata(channels: Channel[]) {

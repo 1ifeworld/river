@@ -1,7 +1,7 @@
+import type { DocumentNode } from 'graphql/language/ast'
 import { GraphQLClient } from 'graphql-request'
 import { GraphQLClientRequestHeaders } from 'graphql-request/build/cjs/types'
 import gql from 'graphql-tag'
-import type { DocumentNode } from 'graphql/language/ast'
 export type Maybe<T> = T | null
 export type InputMaybe<T> = Maybe<T>
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -806,6 +806,37 @@ export type AllChannelsQuery = {
   }>
 }
 
+export type AllPublicationsQueryVariables = Exact<{ [key: string]: never }>
+
+export type AllPublicationsQuery = {
+  __typename?: 'Query'
+  publications: Array<{
+    __typename?: 'Publication'
+    createdBy: any
+    createdTimestamp: any
+    uri: string
+    id: any
+  }>
+}
+
+export type AllReferencesQueryVariables = Exact<{ [key: string]: never }>
+
+export type AllReferencesQuery = {
+  __typename?: 'Query'
+  references: Array<{
+    __typename?: 'Reference'
+    id: any
+    pubRef?: {
+      __typename?: 'Publication'
+      createdBy: any
+      createdTimestamp: any
+      id: any
+      uri: string
+    } | null
+    channel?: { __typename?: 'Channel'; id: any; uri: string } | null
+  }>
+}
+
 export type AllUserIdsQueryVariables = Exact<{ [key: string]: never }>
 
 export type AllUserIdsQuery = {
@@ -931,6 +962,33 @@ export const AllChannelsDocument = gql`
   }
 }
     `
+export const AllPublicationsDocument = gql`
+    query allPublications {
+  publications(orderBy: "id", orderDirection: "desc") {
+    createdBy
+    createdTimestamp
+    uri
+    id
+  }
+}
+    `
+export const AllReferencesDocument = gql`
+    query allReferences {
+  references(orderBy: "id", orderDirection: "desc") {
+    id
+    pubRef {
+      createdBy
+      createdTimestamp
+      id
+      uri
+    }
+    channel {
+      id
+      uri
+    }
+  }
+}
+    `
 export const AllUserIdsDocument = gql`
     query allUserIds {
   users(orderBy: "id", orderDirection: "desc") {
@@ -1041,6 +1099,35 @@ export function getSdk(
             ...wrappedRequestHeaders,
           }),
         'allChannels',
+        'query',
+      )
+    },
+    allPublications(
+      variables?: AllPublicationsQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<AllPublicationsQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<AllPublicationsQuery>(
+            AllPublicationsDocument,
+            variables,
+            { ...requestHeaders, ...wrappedRequestHeaders },
+          ),
+        'allPublications',
+        'query',
+      )
+    },
+    allReferences(
+      variables?: AllReferencesQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<AllReferencesQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<AllReferencesQuery>(AllReferencesDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'allReferences',
         'query',
       )
     },

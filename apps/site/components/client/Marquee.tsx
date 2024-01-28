@@ -10,7 +10,10 @@ const currentDate = new Date().toLocaleString('en-US', {
 
 export function Marquee() {
   return (
-    <ReactMarquee className="py-1 border-t border-b border-border bg-popover">
+    <ReactMarquee
+      className="py-3 border-t border-b border-border bg-popover"
+      speed={40}
+    >
       <Typography>
         {`Welcome to River – Today is ${currentDate} – There are 32 channels, 412 items, and 17 users on River today.`}
       </Typography>

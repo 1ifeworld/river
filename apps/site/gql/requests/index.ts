@@ -1,4 +1,6 @@
 export * from './getAllChannels'
+export * from './getAllPublications'
+export * from './getAllReferences'
 export * from './getAllUserIds'
 export * from './getChannelWithId'
 export * from './getReferenceWithId'
