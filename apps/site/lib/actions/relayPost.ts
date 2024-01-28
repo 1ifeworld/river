@@ -16,15 +16,14 @@ export async function relayPost({
   pathsToRevalidate,
 }: RelayPostProps) {
   // Attempt to send the transaction via writeContract
-  const postTxn = await writeContract(relayWalletClient, globalNonceManager, {
-    chain: relayWalletClient.chain ?? null,
-    address: addresses.postGateway.river_j5bpjduqfv,
-    abi: postGatewayABI,
-    functionName: 'post',
-    args: [postInput],
-  })  
-  if (!postTxn) return false
   try {
+    const postTxn = await writeContract(relayWalletClient, globalNonceManager, {
+      chain: relayWalletClient.chain ?? null,
+      address: addresses.postGateway.river_j5bpjduqfv,
+      abi: postGatewayABI,
+      functionName: 'post',
+      args: [postInput],
+    })      
     // If writeContract is successful, postTxn is valid and we proceed to check its inclusion
     const txnInclusion = await getTxnInclusion(postTxn)
     // Check if the transaction is successfully included
