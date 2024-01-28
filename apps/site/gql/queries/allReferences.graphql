@@ -1,0 +1,15 @@
+query allReferences {
+  references(orderBy: "id", orderDirection: "desc") {
+    id
+    pubRef {
+      createdBy
+      createdTimestamp
+      id
+      uri
+    }
+    channel {
+      id
+      uri
+    }
+  }
+}

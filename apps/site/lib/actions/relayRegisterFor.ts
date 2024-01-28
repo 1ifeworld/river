@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { Hash, Hex } from 'viem'
 import { addresses, idRegistryABI } from 'scrypt'
 import { publicClient } from '@/config/publicClient'
-import { relayWalletClient } from '@/config/viemWalletClient'
+import { relayWalletClient, globalNonceManager } from '@/config/relayConfig'
 import { writeContract, getTxnInclusion } from '@/lib'
 
 interface RelayRegisterForProps {
@@ -24,7 +24,7 @@ export async function relayRegisterFor({
 }: RelayRegisterForProps) {
   try {
     // Attempt to send the transaction via writeContract
-    const registerTxn = await writeContract(relayWalletClient, {
+    const registerTxn = await writeContract(relayWalletClient, globalNonceManager, {
       chain: relayWalletClient.chain ?? null,
       address: addresses.idRegistry.river_j5bpjduqfv,
       abi: idRegistryABI,
