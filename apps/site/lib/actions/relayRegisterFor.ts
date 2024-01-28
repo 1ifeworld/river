@@ -36,6 +36,7 @@ export async function relayRegisterFor({
         signature, // sig
       ],
     })  
+    if (!registerTxn) return false
   try {
     // wait for txn receipt
     const txnReceipt = await publicClient.waitForTransactionReceipt({
