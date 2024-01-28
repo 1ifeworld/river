@@ -7,5 +7,9 @@ query allReferences {
       id
       uri
     }
+    channel {
+      id
+      uri
+    }
   }
 }

@@ -1,6 +1,11 @@
 import { Flex, Stack, Typography } from '@/design-system'
 import { type Reference } from '@/gql'
-import { getUsername, type MediaAssetObject, pinataUrlFromCid } from '@/lib'
+import {
+  getUsername,
+  type MediaAssetObject,
+  type ChannelMetadata,
+  pinataUrlFromCid,
+} from '@/lib'
 import { unixTimeConverter } from '@/utils'
 import { kv } from '@vercel/kv'
 import Image from 'next/image'
@@ -15,6 +20,9 @@ export async function ItemCard({
   const username = await getUsername({ id: reference?.pubRef?.createdBy })
   const itemMetadata = await kv.get<Pick<MediaAssetObject, 'value'>['value']>(
     reference?.pubRef?.uri as string,
+  )
+  const channelMetadata = await kv.get<ChannelMetadata>(
+    reference?.channel?.uri as string,
   )
 
   const renderableThumbnailTypes = ['image/png', 'image/gif', 'image/jpeg']
@@ -53,7 +61,15 @@ export async function ItemCard({
             <Typography className="text-secondary-foreground">
               {username ?? ''}
             </Typography>
-            {/* TODO: Add which channel the item belongs to */}
+            <span className="text-secondary-foreground">{'·'}</span>
+            <Link
+              href={`/channel/${reference.channel?.id}`}
+              className="hover:underline underline-offset-2 transition-all decoration-secondary-foreground"
+            >
+              <Typography className="text-secondary-foreground">
+                {channelMetadata?.name}
+              </Typography>
+            </Link>
           </Flex>
         </div>
         <Typography className="text-secondary-foreground">
