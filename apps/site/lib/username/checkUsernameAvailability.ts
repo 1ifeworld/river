@@ -30,7 +30,7 @@ export async function checkUsernameAvailability(
 // passes owner get back boolean if it has an id
 export async function checkOwnerHasId(owner: string): Promise<CheckResponse> {
   try {
-    const response = await fetch('https://username-service-production.up.railway.app/getIdByOwner', {
+    const response = await fetch('https://username-service-username-service-pr-4.up.railway.app/getIdByOwner', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
