@@ -17,9 +17,4 @@
   
   .tableRow:hover::before {
     opacity: 1;
-    @media (max-width: 768px) {
-      .tableRow:hover::before {
-        display: none;
-      }
-    }
   }

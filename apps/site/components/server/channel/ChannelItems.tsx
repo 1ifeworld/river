@@ -37,7 +37,7 @@ export async function ChannelItems({
       <TableBody>
         {channel.references.map((reference: Reference, index: number) => (
           <Link key={index} href={`/item/${reference.id}`} legacyBehavior>
-            <TableRow className={`${styles.tableRow} hover:cursor-pointer`}>
+            <TableRow className={`md:${styles.tableRow} hover:cursor-pointer`}>
               <TableCell className="flex gap-4 items-center">
                 <ThumbnailNameCreator
                   channel={channel}
