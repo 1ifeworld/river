@@ -43,9 +43,11 @@ export default async function ItemPage({
     id: params.id,
   })
 
-  if (!reference || !reference.channel) {
-    return <Typography>Not a valid item</Typography>
-  }
+  // if (!reference || !reference.channel) {
+  //   return <Typography>Not a valid item</Typography>
+  // }
+
+  console.log('Ref:', reference)
 
   const itemMetadata = await kv.get<Pick<MediaAssetObject, 'value'>['value']>(
     reference?.pubRef?.uri as string,
@@ -76,7 +78,7 @@ export default async function ItemPage({
     .with(
       P.when((type) => isImage({ mimeType: type })),
       () => (
-        <div className="relative h-full">
+        <div className="relative h-full mx-40">
           <Image
             className="object-contain"
             src={contentUrl as string}
@@ -90,7 +92,11 @@ export default async function ItemPage({
     )
     .with(
       P.when((type) => isVideo({ mimeType: type })),
-      () => <VideoPlayer playbackId={itemMetadata?.muxPlaybackId as string} />,
+      () => (
+        <Flex className="h-full">
+          <VideoPlayer playbackId={itemMetadata?.muxPlaybackId as string} />
+        </Flex>
+      ),
     )
     .with(
       P.when((type) => isAudio({ mimeType: type })),
@@ -111,7 +117,7 @@ export default async function ItemPage({
     .otherwise(() => <Typography>Unsupported content type</Typography>)
 
   return (
-    <Flex>
+    <Flex className="h-[calc(100dvh-38px)]">
       <div className="bg-[#F3F4F6] w-full md:w-[78%]">{content}</div>
       <div className="hidden md:w-[22%] md:block">
         <ItemSidebar

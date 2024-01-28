@@ -25,7 +25,7 @@ export async function ItemSidebar({
   const username = await getUsername({ id: reference?.pubRef?.createdBy })
 
   return (
-    <Stack className="px-5 py-[10px] h-full justify-between fixed">
+    <Stack className="px-5 py-[10px] h-full justify-between">
       {/* Info / Index */}
       <div>
         <Flex className="gap-x-4 items-center">
@@ -34,7 +34,7 @@ export async function ItemSidebar({
         </Flex>
         <Stack className="pt-[30px] gap-y-5">
           <div>
-            <Typography>{itemMetadata?.name}</Typography>
+            <Typography className="truncate">{itemMetadata?.name}</Typography>
             <Typography className="text-secondary-foreground">
               {username}
             </Typography>
