@@ -84,7 +84,7 @@ function createNonceManager({
   };
 }
 
-// Nonce mamanger setup
+// Nonce manager setup
 
 const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`);
 
@@ -97,7 +97,7 @@ export const relayWalletClient = createWalletClient({
 const rawAccount = relayWalletClient.account;
 if (!rawAccount) {
   // TODO: replace with viem AccountNotFoundError once its exported
-  throw new Error("No account provided in nonce mamanger");
+  throw new Error("No account provided in nonce manager");
 }
 const parsedAccount = parseAccount(rawAccount);
 
