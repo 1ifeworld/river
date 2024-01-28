@@ -23,7 +23,6 @@ export async function relayRegisterFor({
   username,
   pathToRevalidate,
 }: RelayRegisterForProps) {
-  try {
     // Attempt to send the transaction via writeContract
     const registerTxn = await writeContract(relayWalletClient, {
       chain: relayWalletClient.chain ?? null,
@@ -36,7 +35,8 @@ export async function relayRegisterFor({
         expiration, // expiration
         signature, // sig
       ],
-    })
+    })  
+  try {
     // wait for txn receipt
     const txnReceipt = await publicClient.waitForTransactionReceipt({
       hash: registerTxn,

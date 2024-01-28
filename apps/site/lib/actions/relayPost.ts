@@ -15,7 +15,6 @@ export async function relayPost({
   postInput,
   pathsToRevalidate,
 }: RelayPostProps) {
-  try {
     // Attempt to send the transaction via writeContract
     const postTxn = await writeContract(relayWalletClient, {
       chain: relayWalletClient.chain ?? null,
@@ -23,7 +22,8 @@ export async function relayPost({
       abi: postGatewayABI,
       functionName: 'post',
       args: [postInput],
-    })
+    })  
+  try {
     // If writeContract is successful, postTxn is valid and we proceed to check its inclusion
     const txnInclusion = await getTxnInclusion(postTxn)
     // Check if the transaction is successfully included
