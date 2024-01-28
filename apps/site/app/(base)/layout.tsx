@@ -11,7 +11,7 @@ export default function BaseLayout({
 }) {
   return (
     <section>
-      <div className="hidden md:block fixed top-[38px] z-50">
+      <div className="hidden md:block fixed top-[38px] z-50 w-full">
         <Marquee />
       </div>
       <Flex className="px-5 pt-[70px] md:pt-[110px]">
