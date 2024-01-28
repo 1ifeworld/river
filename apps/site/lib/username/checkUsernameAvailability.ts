@@ -7,7 +7,7 @@ export async function checkUsernameAvailability(
   username: string,
 ): Promise<CheckResponse> {
   try {
-    const response = await fetch('https://username-service-production.up.railway.app/get', {
+    const response = await fetch('https://username-service-username-service-pr-4.up.railway.app/get', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

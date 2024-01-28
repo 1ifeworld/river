@@ -7,7 +7,7 @@ export async function getUsername({ id }: { id: bigint }) {
     // Convert BigInt to string
     const idString = id.toString()
 
-    const response = await fetch('https://username-service-production.up.railway.app/getUsernameById', {
+    const response = await fetch('https://username-service-username-service-pr-4.up.railway.app/getUsernameById', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
