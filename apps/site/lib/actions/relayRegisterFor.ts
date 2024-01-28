@@ -23,6 +23,7 @@ export async function relayRegisterFor({
   username,
   pathToRevalidate,
 }: RelayRegisterForProps) {
+  try {
     // Attempt to send the transaction via writeContract
     const registerTxn = await writeContract(relayWalletClient, globalNonceManager, {
       chain: relayWalletClient.chain ?? null,
@@ -35,9 +36,7 @@ export async function relayRegisterFor({
         expiration, // expiration
         signature, // sig
       ],
-    })  
-    if (!registerTxn) return false
-  try {
+    })      
     // wait for txn receipt
     const txnReceipt = await publicClient.waitForTransactionReceipt({
       hash: registerTxn,
