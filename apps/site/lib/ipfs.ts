@@ -1,5 +1,5 @@
-export function pinataUrlFromCid({ cid }: { cid: string }) {
-  return `https://${process.env.NEXT_PUBLIC_PINATA_GATEWAY}/ipfs/${cid}?pinataGatewayToken=${process.env.NEXT_PUBLIC_PINATA_GATEWAY_KEY}`
+export function w3sUrlFromCid({ cid }: { cid: string }) {
+  return `https://ipfs.w3s.link/ipfs/${cid}`
 }
 
 export function ipfsUrlToCid({ ipfsUrl }: { ipfsUrl: string }) {
