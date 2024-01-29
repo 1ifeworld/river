@@ -55,7 +55,7 @@ export async function setUsername({
     timestamp,
   }
 
-  await fetch("https://username-service-production.up.railway.app/set", {
+  await fetch(`${process.env.NEXT_PUBLIC_USERNAME_DB}/set`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

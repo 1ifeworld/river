@@ -7,7 +7,7 @@ export async function checkUsernameAvailability(
   username: string,
 ): Promise<CheckResponse> {
   try {
-    const response = await fetch('https://username-service-production.up.railway.app/get', {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_USERNAME_DB}/get`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -30,7 +30,7 @@ export async function checkUsernameAvailability(
 // passes owner get back boolean if it has an id
 export async function checkOwnerHasId(owner: string): Promise<CheckResponse> {
   try {
-    const response = await fetch('https://username-service-production.up.railway.app/getIdByOwner', {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_USERNAME_DB}/getIdByOwner`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
