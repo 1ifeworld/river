@@ -4,6 +4,7 @@ import { RiverLogo } from '@/server'
 import { useLogin, usePrivy } from '@privy-io/react-auth'
 import { checkOwnerHasId } from 'lib/username'
 import { useState } from 'react'
+import { usePathname } from 'next/navigation'
 
 export function Header() {
   const [open, setOpen] = useState<boolean>(false)
@@ -23,10 +24,16 @@ export function Header() {
     }
   })
 
+  const pathname = usePathname()
+
   return (
     <div className="bg-popover fixed z-50 w-screen">
       {/* Header */}
-      <Flex className="py-3 px-5 items-center justify-between border-b border-border md:border-none">
+      <Flex
+        className={`py-3 px-5 items-center justify-between border-b border-border ${
+          pathname.startsWith('/item') ? '' : 'md:border-none'
+        }`}
+      >
         <RiverLogo />
         {/* If the `PrivyProvider` is loading, display only the River logo */}
         {!ready ? (

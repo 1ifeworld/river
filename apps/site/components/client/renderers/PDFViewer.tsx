@@ -1,4 +1,5 @@
 'use client'
+
 import React, { useEffect, useState, useRef } from 'react'
 import { Document, Page, pdfjs } from 'react-pdf'
 
@@ -53,7 +54,11 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
       className="flex flex-col items-center my-4 bg-gray-100"
     >
       <div className="my-2 p-4">
-        <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
+        <Document
+          className="text-secondary-foreground font-mono text-base"
+          file={file}
+          onLoadSuccess={onDocumentLoadSuccess}
+        >
           {Array.from({ length: numPages }, (_, index) => (
             <div key={`page_${index + 1}`} className="flex justify-center my-2">
               <Page

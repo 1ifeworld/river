@@ -3,5 +3,5 @@ export default function ItemLayout({
 }: {
   children: React.ReactNode
 }) {
-  return <section className="px-5">{children}</section>
+  return <section className="pt-[38px]">{children}</section>
 }
