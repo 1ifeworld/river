@@ -31,7 +31,7 @@ export async function signForUsername(
 
     return true
   } catch (error) {
-    console.error('Error in prepUsername:', error)
+    console.error('Error in setUsername:', error)
     return false
   }
 }
