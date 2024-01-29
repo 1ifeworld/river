@@ -11,7 +11,7 @@ import {
   isMarkdown,
   isPdf,
   isVideo,
-  pinataUrlFromCid,
+  w3sUrlFromCid,
 } from '@/lib'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
@@ -58,10 +58,10 @@ export default async function ItemPage({
     isAudio({ mimeType: itemMetadata?.contentType as string })
   ) {
     const cid = ipfsUrlToCid({ ipfsUrl: itemMetadata?.animationUri as string })
-    contentUrl = pinataUrlFromCid({ cid })
+    contentUrl = w3sUrlFromCid({ cid })
   } else {
     const cid = ipfsUrlToCid({ ipfsUrl: itemMetadata?.image as string })
-    contentUrl = pinataUrlFromCid({ cid })
+    contentUrl = w3sUrlFromCid({ cid })
   }
 
   const content = match(contentType)

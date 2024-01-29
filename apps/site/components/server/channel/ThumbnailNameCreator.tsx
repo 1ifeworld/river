@@ -1,6 +1,6 @@
 import { Button, Stack, Typography } from '@/design-system'
 import { type Channel, type Reference } from '@/gql'
-import { ipfsUrlToCid, pinataUrlFromCid } from '@/lib'
+import { ipfsUrlToCid, w3sUrlFromCid } from '@/lib'
 import { GenericThumbnailSmall, Username } from '@/server'
 import { truncateText } from '@/utils'
 import Image from 'next/image'
@@ -43,7 +43,7 @@ export function ThumbnailNameCreator({
       {cid ? (
         <Image
           className="object-cover aspect-square "
-          src={pinataUrlFromCid({ cid })}
+          src={w3sUrlFromCid({ cid })}
           alt={referenceMetadata.name}
           width={40}
           height={40}
