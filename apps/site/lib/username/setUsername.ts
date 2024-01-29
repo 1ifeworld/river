@@ -9,7 +9,7 @@ interface RegistrationParameters {
   timestamp: string
 }
 
-export async function prepareForSetUsername({
+export async function setUsername({
   userIdRegistered,
   username,
   registerForRecipient,
@@ -24,34 +24,21 @@ export async function prepareForSetUsername({
   timestamp: string
   to?: string
 }) {
-  // Prepare the registration parameters
-  const registrationParameters = {
+  const registrationParameters: RegistrationParameters = {
     id: userIdRegistered,
-    ...(to && { to }),
+    to: to || undefined,
     owner: registerForRecipient,
     name: username,
     signature,
     timestamp,
   }
-
-  await setUsername(registrationParameters)
-}
-
-export async function setUsername({
-  id,
-  to,
-  owner,
-  name,
-  signature,
-  timestamp,
-}: RegistrationParameters) {
   const requestBody = {
-    id,
-    to,
-    owner,
-    name,
-    signature,
-    timestamp,
+    id: registrationParameters.id,
+    to: registrationParameters.to,
+    owner: registrationParameters.owner,
+    name: registrationParameters.name,
+    signature: registrationParameters.signature,
+    timestamp: registrationParameters.timestamp,
   }
 
   await fetch(`${process.env.NEXT_PUBLIC_USERNAME_DB}/set`, {
@@ -61,14 +48,13 @@ export async function setUsername({
     },
     body: JSON.stringify(requestBody),
   })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.success) {
-      } else {
-        console.error('Error:', data.error)
-      }
-    })
-    .catch((error) => {
-      console.error('Fetch error:', error)
-    })
+  .then((response) => response.json())
+  .then((data) => {
+    if (!data.success) {
+      console.error('Error:', data.error)
+    }
+  })
+  .catch((error) => {
+    console.error('Fetch error:', error)
+  })
 }

@@ -2,7 +2,6 @@ export interface CheckResponse {
   exists: boolean
 }
 
-// checks if username is available
 export async function checkUsernameAvailability(
   username: string,
 ): Promise<CheckResponse> {
@@ -27,7 +26,6 @@ export async function checkUsernameAvailability(
   }
 }
 
-// passes owner get back boolean if it has an id
 export async function checkOwnerHasId(owner: string): Promise<CheckResponse> {
   try {
     const response = await fetch(

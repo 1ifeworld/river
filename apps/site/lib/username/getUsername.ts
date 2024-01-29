@@ -4,7 +4,6 @@ export async function getUsername({ id }: { id: bigint }) {
   }
 
   try {
-    // Convert BigInt to string
     const idString = id.toString()
 
     const response = await fetch(
