@@ -5,7 +5,7 @@ module.exports = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: `${process.env.NEXT_PUBLIC_PINATA_GATEWAY}`,
+        hostname: 'ipfs.w3s.link',
       },
       {
         protocol: 'https',
