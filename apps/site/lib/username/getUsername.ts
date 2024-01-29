@@ -24,7 +24,7 @@ export async function getUsername({ id }: { id: bigint }) {
     const data = await response.json()
 
     if (data) {
-      const username = data.username
+      const username = data.username.replace('.sbvrsv.eth', '')
       return username
     } else {
       console.error('Error:', data.error)
