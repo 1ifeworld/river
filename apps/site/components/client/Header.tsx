@@ -2,6 +2,7 @@ import { ChannelDialog, User, UsernameDialog } from '@/client'
 import { Button, Flex } from '@/design-system'
 import { RiverLogo } from '@/server'
 import { useLogin, usePrivy } from '@privy-io/react-auth'
+import { checkOwnerHasId } from 'lib/username'
 import { useState } from 'react'
 
 export function Header() {
@@ -10,9 +11,9 @@ export function Header() {
   const { ready, authenticated } = usePrivy()
 
   const { login } = useLogin({
-    onComplete: (user, isNewUser) => {
-      // Open the `UsernameDialog` if the user is new
-      if (isNewUser) {
+    onComplete: async (user) => {
+      const ownerAddress = user?.wallet?.address
+      if (!ownerAddress || !(await checkOwnerHasId(ownerAddress)).exists) {
         setOpen(true)
       }
     },
