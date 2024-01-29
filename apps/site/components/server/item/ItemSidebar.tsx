@@ -1,10 +1,11 @@
 import { Typography, Stack, Flex } from '@/design-system'
 import { type Reference } from '@/gql'
-import { getUsername } from '@/lib'
+import { getUsername, ipfsUrlToCid, type ChannelMetadata } from '@/lib'
 import { unixTimeConverter } from '@/utils'
+import { kv } from '@vercel/kv'
+import Link from 'next/link'
 
 interface ItemSidebarProps {
-  contentUrl: string
   reference: Reference
   itemMetadata: {
     name: string
@@ -18,19 +19,25 @@ interface ItemSidebarProps {
 }
 
 export async function ItemSidebar({
-  contentUrl,
   reference,
   itemMetadata,
 }: ItemSidebarProps) {
   const username = await getUsername({ id: reference?.pubRef?.createdBy })
 
+  const channelMetadata = await kv.get<ChannelMetadata>(
+    reference?.channel?.uri as string,
+  )
+
   return (
-    <Stack className="px-5 py-[10px] h-full justify-between">
+    <Stack className="px-5 py-[10px] h-full justify-between border-t border-border md:border-none">
       {/* Info / Index */}
       <div>
         <Flex className="gap-x-4 items-center">
           <Typography>Info</Typography>
-          <Typography className="text-secondary-foreground">Index</Typography>
+          {/* TODO: Enable index */}
+          <Typography className="text-secondary-foreground opacity-0">
+            Index
+          </Typography>
         </Flex>
         <Stack className="pt-[30px] gap-y-5">
           <div>
@@ -44,9 +51,15 @@ export async function ItemSidebar({
         <Stack className="pt-[45px] gap-y-[3px]">
           <Flex className="justify-between">
             <Typography>Added to</Typography>
-            <Typography className="text-secondary-foreground">
-              {reference.channelId}
-            </Typography>
+            <Link
+              href={`/channel/${reference.channel?.id}`}
+              className="hover:underline underline-offset-2 transition-all decoration-secondary-foreground"
+            >
+              <Typography className="text-secondary-foreground">
+                {/* @ts-ignore */}
+                {channelMetadata?.name}
+              </Typography>
+            </Link>
           </Flex>
           <Flex className="justify-between">
             <Typography>Added by</Typography>
@@ -69,16 +82,26 @@ export async function ItemSidebar({
           <Flex className="justify-between">
             <Typography>Content hash</Typography>
             <Typography className="text-secondary-foreground truncate">
-              {/* imageMetadata?.animationUri */}
-              {truncateMiddle(itemMetadata?.image as string)}
+              {itemMetadata?.image === ''
+                ? truncateMiddle(
+                    ipfsUrlToCid({ ipfsUrl: itemMetadata?.animationUri }),
+                  )
+                : truncateMiddle(
+                    ipfsUrlToCid({ ipfsUrl: itemMetadata?.image as string }),
+                  )}
             </Typography>
           </Flex>
         </Stack>
       </div>
+      {/* TODO: Enable these features */}
       {/* Add / Download */}
-      <Flex className="justify-between">
-        <Typography>Add to channel</Typography>
-        <Typography>Download</Typography>
+      <Flex className="justify-between opacity-0">
+        <Typography className="text-secondary-foreground/50">
+          Add to channel
+        </Typography>
+        <Typography className="text-secondary-foreground/50">
+          Download
+        </Typography>
       </Flex>
     </Stack>
   )

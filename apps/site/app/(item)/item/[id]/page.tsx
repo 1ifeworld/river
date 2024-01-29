@@ -1,6 +1,6 @@
 import { AudioPlayer, VideoPlayer } from '@/client'
 import { ItemSidebar } from '@/server'
-import { Typography, Flex } from '@/design-system'
+import { Typography, Flex, Stack } from '@/design-system'
 import { getReferenceWithId } from '@/gql'
 import {
   type MediaAssetObject,
@@ -43,19 +43,11 @@ export default async function ItemPage({
     id: params.id,
   })
 
-  // if (!reference || !reference.channel) {
-  //   return <Typography>Not a valid item</Typography>
-  // }
-
-  console.log('Ref:', reference)
-
   const itemMetadata = await kv.get<Pick<MediaAssetObject, 'value'>['value']>(
     reference?.pubRef?.uri as string,
   )
 
   const contentType = itemMetadata?.contentType as string
-
-  console.log('Content type:', contentType)
 
   let contentUrl: string | undefined
 
@@ -72,13 +64,11 @@ export default async function ItemPage({
     contentUrl = pinataUrlFromCid({ cid })
   }
 
-  console.log('Content url:', contentUrl)
-
   const content = match(contentType)
     .with(
       P.when((type) => isImage({ mimeType: type })),
       () => (
-        <div className="relative h-full mx-40">
+        <div className="relative h-full md:mx-40">
           <Image
             className="object-contain"
             src={contentUrl as string}
@@ -114,54 +104,24 @@ export default async function ItemPage({
       P.when((type) => isMarkdown({ mimeType: type })),
       () => <MarkdownRenderer contentUrl={contentUrl as string} />,
     )
-    .otherwise(() => <Typography>Unsupported content type</Typography>)
+    .otherwise(() => (
+      <Stack className="h-full items-center justify-center">
+        <Typography className="text-secondary-foreground">
+          Unsupported content type
+        </Typography>
+      </Stack>
+    ))
 
   return (
-    <Flex className="h-[calc(100dvh-38px)]">
-      <div className="bg-[#F3F4F6] w-full md:w-[78%]">{content}</div>
-      <div className="hidden md:w-[22%] md:block">
+    <Stack className="h-[calc(100dvh-38px)] md:flex-row">
+      <div className="bg-[#F3F4F6] w-full h-full md:w-[78%]">{content}</div>
+      <div className="md:w-[22%]">
         <ItemSidebar
-          contentUrl={contentUrl}
+          // @ts-ignore
           reference={reference}
           itemMetadata={itemMetadata}
         />
       </div>
-    </Flex>
+    </Stack>
   )
 }
-
-// <div className="pt-4 md:pt-[70px] flex flex-col md:flex-row md:h-[calc(100vh_-_56px)] md:max-h-[calc(100vh_-_56px)] md:justify-center">
-//   <Stack className="sticky top-0 hidden h-full  md:block md:w-[286px] md:pt-4">
-//     <ChannelIndex
-//       showTop={true}
-//       reference={reference}
-//       channel={reference.channel}
-//       referenceMetadata={referenceMetadata}
-//       channelMetadata={channelMetadata.data[reference.channel.uri]}
-//       channelRefsMetadata={channelReferencesMetadata}
-//     />
-//   </Stack>
-//   <Stack className="flex-grow md:overflow-auto w-full h-full gap-y-4 md:gap-y-0 md:justify-center">
-//     <ContentWrapper
-//       item={reference}
-//       className="w-full h-[480px] md:h-[calc(100vh/1.1)] md:max-w-[calc(100vw/1.2)] relative"
-//     >
-//       {content}
-//     </ContentWrapper>
-//     <MobileItemStub
-//       className="block md:hidden"
-//       reference={reference}
-//       referenceMetadata={referenceMetadata}
-//     />
-//     <Stack className="block md:hidden py-8">
-//       <ChannelIndex
-//         showTop={false}
-//         reference={reference}
-//         channel={reference.channel}
-//         referenceMetadata={referenceMetadata}
-//         channelMetadata={channelMetadata.data[reference.channel.uri]}
-//         channelRefsMetadata={channelReferencesMetadata}
-//       />
-//     </Stack>
-//   </Stack>
-// </div>
