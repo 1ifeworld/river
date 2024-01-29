@@ -4,10 +4,16 @@ export async function getUsername({ id }: { id: bigint }) {
   }
 
   try {
+    const idString = id.toString()
+
     const response = await fetch(
-      `https://server.talktomenice.workers.dev/username/${id}`,
+      `${process.env.NEXT_PUBLIC_USERNAME_DB}/getUsernameById`,
       {
-        method: 'GET',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: idString }),
       },
     )
 
@@ -18,12 +24,12 @@ export async function getUsername({ id }: { id: bigint }) {
     const data = await response.json()
 
     if (data) {
-      const username = data.username.replace('.sbvrsv.eth', '')
+      const username = data.username
       return username
     } else {
       console.error('Error:', data.error)
     }
   } catch (error) {
-    console.error('Failed to parse JSON:', error)
+    console.error('Failed to fetch username:', error)
   }
 }

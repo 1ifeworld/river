@@ -6,7 +6,6 @@ import { addresses, idRegistryABI } from 'scrypt'
 import { publicClient } from '@/config/publicClient'
 import { relayWalletClient, globalNonceManager } from '@/config/relayConfig'
 import { writeContract, getTxnInclusion } from '@/lib'
-import { setUsername } from '../username'
 
 interface RelayRegisterForProps {
   registerForRecipient: Hex
@@ -25,35 +24,33 @@ export async function relayRegisterFor({
 }: RelayRegisterForProps) {
   try {
     // Attempt to send the transaction via writeContract
-    const registerTxn = await writeContract(relayWalletClient, globalNonceManager, {
-      chain: relayWalletClient.chain ?? null,
-      address: addresses.idRegistry.river_j5bpjduqfv,
-      abi: idRegistryABI,
-      functionName: 'registerFor',
-      args: [
-        registerForRecipient, // to
-        '0x33F59bfD58c16dEfB93612De65A5123F982F58bA', // backup
-        expiration, // expiration
-        signature, // sig
-      ],
-    })      
+    const registerTxn = await writeContract(
+      relayWalletClient,
+      globalNonceManager,
+      {
+        chain: relayWalletClient.chain ?? null,
+        address: addresses.idRegistry.river_j5bpjduqfv,
+        abi: idRegistryABI,
+        functionName: 'registerFor',
+        args: [
+          registerForRecipient, // to
+          '0x33F59bfD58c16dEfB93612De65A5123F982F58bA', // backup
+          expiration, // expiration
+          signature, // sig
+        ],
+      },
+    )
+
     // wait for txn receipt
     const txnReceipt = await publicClient.waitForTransactionReceipt({
       hash: registerTxn,
     })
-    // extract userId from logs
+
     const userIdRegistered = parseInt(
       txnReceipt.logs[0].topics[2] as string,
       16,
     )
     // set username in username db
-    await setUsername({
-      registrationParameters: {
-        id: String(userIdRegistered),
-        name: username,
-        owner: registerForRecipient,
-      },
-    })
 
     // If writeContract + setUsername were successful, registerFor txn is valid and we proceed to check its inclusion
     const txnInclusion = await getTxnInclusion(registerTxn)
@@ -63,7 +60,7 @@ export async function relayRegisterFor({
       console.log(`Transaction ${registerTxn} was processed by ponder`)
       // Revalidate path. This is typically for cache invalidation.
       revalidatePath(pathToRevalidate)
-      return true // Return true to indicate successful processing
+      return userIdRegistered // Return userId to indicate successful processing
     } else {
       // If txnInclusion is false, the transaction was not found or not processed
       console.log(`Transaction ${registerTxn} NOT found by ponder`)

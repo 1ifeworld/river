@@ -4,29 +4,22 @@ export async function getDataForUsername({ username }: { username: string }) {
   }
 
   try {
-    const response = await fetch(
-      `https://server.talktomenice.workers.dev/get/${username}.sbvrsv.eth`,
-      {
-        method: 'GET',
+    const response = await fetch(`${process.env.NEXT_PUBLIC_USERNAME_DB}/get`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    )
+      body: JSON.stringify({ username }),
+    })
 
     if (!response.ok) {
-      // console.error('Network response was not ok')
-      return
+      throw new Error('Network response was not ok')
     }
 
     const data = await response.json()
-
-    console.log('data: ', data)
-
-    if (data) {
-      console.log('Username returned successfully')
-      return data
-    } else {
-      console.error('Error:', data.error)
-    }
+    console.log('Username returned successfully', data)
+    return data
   } catch (error) {
-    console.error('Failed to parse JSON:', error)
+    console.error('Fetch error:', error)
   }
 }

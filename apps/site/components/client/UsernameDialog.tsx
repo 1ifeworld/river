@@ -21,12 +21,15 @@ import {
   checkUsernameAvailability,
   processRegisterFor,
   usernameSchema,
+  signForUsername,
 } from '@/lib'
+import { SignMessageModalUIOptions } from '@privy-io/react-auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import debounce from 'debounce'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import { Hex } from 'viem'
 
 interface UsernameDialogProps {
   open: boolean
@@ -71,14 +74,44 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
     }
   }, [validationComplete, watchUsername])
 
-  async function registerUsername({ username }: { username: string }) {
-    if (signMessage && embeddedWallet?.address && fetchUserData) {
-      await processRegisterFor({
-        privySignerAddress: embeddedWallet.address,
-        privySignMessage: signMessage,
-        username: `${username}.sbvrsv.eth`,
+  async function registerUsername(
+    username: string,
+    privySignMessage: (
+      message: string,
+      uiOptions?: SignMessageModalUIOptions | undefined,
+    ) => Promise<string>, // Updated type
+    embeddedWalletAddress: string,
+    fetchUserData: () => Promise<void>,
+  ): Promise<boolean> {
+    // Check if the necessary conditions are met using the passed parameters
+    if (privySignMessage && embeddedWalletAddress && fetchUserData) {
+      const userId = await processRegisterFor({
+        privySignerAddress: embeddedWalletAddress,
+        privySignMessage: privySignMessage, // Pass the function
+        username: username,
       })
-      await fetchUserData()
+
+      if (userId) {
+        const success = await signForUsername(
+          String(userId),
+          username,
+          embeddedWalletAddress as Hex,
+          privySignMessage,
+        )
+        if (success) {
+          await fetchUserData()
+          return true // Indicate success
+        } else {
+          console.error('Failed to prepare and set username.')
+          return false // Handle failure here
+        }
+      } else {
+        console.log('User ID not obtained from processRegisterFor.')
+        return false // Indicate failure to obtain userId
+      }
+    } else {
+      console.log('Required conditions not met for registerUsername.')
+      return false // Indicate failure due to unmet conditions
     }
   }
 
@@ -92,8 +125,22 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
           <Form {...form}>
             <form
               action={async () => {
-                // Register the supplied username
-                await registerUsername({ username: form.getValues().username })
+                // Check if signMessage is defined
+                if (
+                  typeof signMessage === 'function' &&
+                  embeddedWallet &&
+                  embeddedWallet.address &&
+                  typeof fetchUserData === 'function'
+                ) {
+                  const userId = await registerUsername(
+                    form.getValues().username,
+                    signMessage,
+                    embeddedWallet.address,
+                    fetchUserData,
+                  )
+                } else {
+                  console.error('signMessage or embeddedWallet is not defined')
+                }
                 // Close the dialog
                 setOpen(false)
                 // Render a toast

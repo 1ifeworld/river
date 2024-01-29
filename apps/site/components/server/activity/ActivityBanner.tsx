@@ -8,7 +8,7 @@ export async function ActivityBanner({
   user: any
 }) {
   const userData = await getDataForUsername({
-    username: `${user.name}.sbvrsv.eth`,
+    username: `${user.name}`,
   })
 
   return (
