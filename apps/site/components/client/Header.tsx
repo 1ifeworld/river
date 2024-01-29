@@ -13,13 +13,14 @@ export function Header() {
   const { login } = useLogin({
     onComplete: async (user) => {
       const ownerAddress = user?.wallet?.address
-      if (!ownerAddress || !(await checkOwnerHasId(ownerAddress)).exists) {
+      if (!ownerAddress) {
         setOpen(true)
+      } else {
+        if (!(await checkOwnerHasId(ownerAddress)).exists) {
+          setOpen(true)
+        }
       }
-    },
-    onError: (error) => {
-      console.log('Error with Privy login:', error)
-    },
+    }
   })
 
   return (
