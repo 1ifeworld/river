@@ -24,21 +24,13 @@ export async function setUsername({
   timestamp: string
   to?: string
 }) {
-  const registrationParameters: RegistrationParameters = {
+  const requestBody: RegistrationParameters = {
     id: userIdRegistered,
-    to: to || undefined,
+    to: to || undefined, 
     owner: registerForRecipient,
     name: username,
     signature,
     timestamp,
-  }
-  const requestBody = {
-    id: registrationParameters.id,
-    to: registrationParameters.to,
-    owner: registrationParameters.owner,
-    name: registrationParameters.name,
-    signature: registrationParameters.signature,
-    timestamp: registrationParameters.timestamp,
   }
 
   await fetch(`${process.env.NEXT_PUBLIC_USERNAME_DB}/set`, {
