@@ -1,5 +1,5 @@
-import { SubmitButton } from "@/client"
-import { useUserContext } from "@/context"
+import { SubmitButton } from '@/client'
+import { useUserContext } from '@/context'
 import {
   Dialog,
   DialogContent,
@@ -15,21 +15,21 @@ import {
   Stack,
   Toast,
   Typography,
-} from "@/design-system"
+} from '@/design-system'
 import {
   type UsernameSchemaValues,
   checkUsernameAvailability,
   processRegisterFor,
   usernameSchema,
   signForUsername,
-} from "@/lib"
-import { SignMessageModalUIOptions } from "@privy-io/react-auth"
-import { zodResolver } from "@hookform/resolvers/zod"
-import debounce from "debounce"
-import React, { useEffect, useState } from "react"
-import { useForm } from "react-hook-form"
-import { toast } from "sonner"
-import { Hex } from "viem"
+} from '@/lib'
+import { SignMessageModalUIOptions } from '@privy-io/react-auth'
+import { zodResolver } from '@hookform/resolvers/zod'
+import debounce from 'debounce'
+import React, { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import { Hex } from 'viem'
 
 interface UsernameDialogProps {
   open: boolean
@@ -40,7 +40,7 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
   const form = useForm<UsernameSchemaValues>({
     resolver: zodResolver(usernameSchema),
     defaultValues: {
-      username: "",
+      username: '',
     },
   })
 
@@ -51,15 +51,15 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
   const [isCheckingAvailability, setIsCheckingAvailability] = useState(false)
 
   // Subscribe to changes to the username input
-  const watchUsername = debounce(() => form.watch("username"), 500)
+  const watchUsername = debounce(() => form.watch('username'), 500)
 
   const triggerValidation = React.useMemo(
     () =>
       debounce(() => {
-        form.trigger("username")
+        form.trigger('username')
         setValidationComplete(true)
       }, 500),
-    [form]
+    [form],
   )
 
   useEffect(() => {
@@ -78,10 +78,10 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
     username: string,
     privySignMessage: (
       message: string,
-      uiOptions?: SignMessageModalUIOptions | undefined
+      uiOptions?: SignMessageModalUIOptions | undefined,
     ) => Promise<string>, // Updated type
     embeddedWalletAddress: string,
-    fetchUserData: () => Promise<void>
+    fetchUserData: () => Promise<void>,
   ): Promise<boolean> {
     // Check if the necessary conditions are met using the passed parameters
     if (privySignMessage && embeddedWalletAddress && fetchUserData) {
@@ -93,24 +93,24 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
 
       if (userId) {
         const success = await signForUsername(
-          String(userId),             
-          username,                  
+          String(userId),
+          username,
           embeddedWalletAddress as Hex,
-          privySignMessage            
-        );
+          privySignMessage,
+        )
         if (success) {
           await fetchUserData()
           return true // Indicate success
         } else {
-          console.error("Failed to prepare and set username.")
+          console.error('Failed to prepare and set username.')
           return false // Handle failure here
         }
       } else {
-        console.log("User ID not obtained from processRegisterFor.")
+        console.log('User ID not obtained from processRegisterFor.')
         return false // Indicate failure to obtain userId
       }
     } else {
-      console.log("Required conditions not met for registerUsername.")
+      console.log('Required conditions not met for registerUsername.')
       return false // Indicate failure due to unmet conditions
     }
   }
@@ -136,17 +136,17 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                     form.getValues().username,
                     signMessage,
                     embeddedWallet.address,
-                    fetchUserData
+                    fetchUserData,
                   )
                 } else {
-                  console.error("signMessage or embeddedWallet is not defined")
+                  console.error('signMessage or embeddedWallet is not defined')
                 }
                 // Close the dialog
                 setOpen(false)
                 // Render a toast
                 toast.custom((t) => (
                   <Toast>
-                    Welcome to River{" "}
+                    Welcome to River{' '}
                     <span className="font-bold">
                       {form.getValues().username}
                     </span>

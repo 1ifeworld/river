@@ -8,8 +8,8 @@ export async function signForUsername(
   registerForRecipient: Hex,
   privySignMessage: (
     message: string,
-    uiOptions?: SignMessageModalUIOptions | undefined
-  ) => Promise<string>
+    uiOptions?: SignMessageModalUIOptions | undefined,
+  ) => Promise<string>,
 ): Promise<boolean> {
   const messageToSign = JSON.stringify({
     userIdRegistered: String(userId),
@@ -29,7 +29,7 @@ export async function signForUsername(
       timestamp: Date.now().toString(),
     })
 
-    return true 
+    return true
   } catch (error) {
     console.error('Error in prepUsername:', error)
     return false

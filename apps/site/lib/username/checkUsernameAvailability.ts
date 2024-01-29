@@ -30,13 +30,16 @@ export async function checkUsernameAvailability(
 // passes owner get back boolean if it has an id
 export async function checkOwnerHasId(owner: string): Promise<CheckResponse> {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_USERNAME_DB}/getIdByOwner`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_USERNAME_DB}/getIdByOwner`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ owner }),
       },
-      body: JSON.stringify({ owner }),
-    })
+    )
 
     if (response.status === 200) {
       return { exists: true }

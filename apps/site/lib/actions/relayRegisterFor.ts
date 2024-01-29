@@ -24,18 +24,22 @@ export async function relayRegisterFor({
 }: RelayRegisterForProps) {
   try {
     // Attempt to send the transaction via writeContract
-    const registerTxn = await writeContract(relayWalletClient, globalNonceManager, {
-      chain: relayWalletClient.chain ?? null,
-      address: addresses.idRegistry.river_j5bpjduqfv,
-      abi: idRegistryABI,
-      functionName: 'registerFor',
-      args: [
-        registerForRecipient, // to
-        '0x33F59bfD58c16dEfB93612De65A5123F982F58bA', // backup
-        expiration, // expiration
-        signature, // sig
-      ],
-    })
+    const registerTxn = await writeContract(
+      relayWalletClient,
+      globalNonceManager,
+      {
+        chain: relayWalletClient.chain ?? null,
+        address: addresses.idRegistry.river_j5bpjduqfv,
+        abi: idRegistryABI,
+        functionName: 'registerFor',
+        args: [
+          registerForRecipient, // to
+          '0x33F59bfD58c16dEfB93612De65A5123F982F58bA', // backup
+          expiration, // expiration
+          signature, // sig
+        ],
+      },
+    )
 
     // wait for txn receipt
     const txnReceipt = await publicClient.waitForTransactionReceipt({

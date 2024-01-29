@@ -1,4 +1,4 @@
-import { Hex } from "viem"
+import { Hex } from 'viem'
 
 interface RegistrationParameters {
   id: string
@@ -7,7 +7,6 @@ interface RegistrationParameters {
   name: string
   signature: string
   timestamp: string
-
 }
 
 export async function prepareForSetUsername({
@@ -32,7 +31,7 @@ export async function prepareForSetUsername({
     owner: registerForRecipient,
     name: username,
     signature,
-    timestamp, 
+    timestamp,
   }
 
   await setUsername(registrationParameters)
@@ -56,9 +55,9 @@ export async function setUsername({
   }
 
   await fetch(`${process.env.NEXT_PUBLIC_USERNAME_DB}/set`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(requestBody),
   })
@@ -66,10 +65,10 @@ export async function setUsername({
     .then((data) => {
       if (data.success) {
       } else {
-        console.error("Error:", data.error)
+        console.error('Error:', data.error)
       }
     })
     .catch((error) => {
-      console.error("Fetch error:", error)
+      console.error('Fetch error:', error)
     })
 }

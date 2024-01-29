@@ -7,13 +7,16 @@ export async function getUsername({ id }: { id: bigint }) {
     // Convert BigInt to string
     const idString = id.toString()
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_USERNAME_DB}/getUsernameById`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_USERNAME_DB}/getUsernameById`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: idString }),
       },
-      body: JSON.stringify({ id: idString }),
-    })
+    )
 
     if (!response.ok) {
       return
