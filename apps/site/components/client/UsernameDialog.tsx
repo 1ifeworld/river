@@ -74,40 +74,6 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
     }
   }, [validationComplete, watchUsername])
 
-  // async function registerUsername({ username }: { username: string }) {
-  //   if (signMessage && embeddedWallet?.address && fetchUserData) {
-  //     const userId = await processRegisterFor({
-  //       privySignerAddress: embeddedWallet.address,
-  //       privySignMessage: signMessage,
-  //       username: `${username}`,
-  //     })
-
-  //     if (userId) {
-  //       const success = await signForUsername({
-  //         userId: String(userId),
-  //         username: username,
-  //         registerForRecipient: embeddedWallet.address as Hex,
-  //         privySignMessage: signMessage,
-  //       })
-
-  //       if (success) {
-  //         await fetchUserData()
-  //         return true // Indicate success
-  //       } else {
-  //         console.error('Failed to prepare and set username.')
-  //         // Handle failure here
-  //         return false
-  //       }
-  //     } else {
-  //       console.log('User ID not obtained from processRegisterFor.')
-  //       return false // Indicate failure to obtain userId
-  //     }
-  //   } else {
-  //     console.log('Required conditions not met for registerUsername.')
-  //     return false // Indicate failure due to unmet conditions
-  //   }
-  // }
-
   async function registerUsername(
     username: string,
     privySignMessage: (
