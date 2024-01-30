@@ -23,6 +23,7 @@ import {
   recoverMessageAddress,
 } from "viem";
 import { createDID, encodeJSONToBytes } from "../utils/did";
+import { createCidFromAnything } from "../utils/cid";
 
 ponder.on("PostGateway:Post", async ({ event, context }) => {
   /* ************************************************
@@ -42,8 +43,8 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
     Channel,
     // Nft, -- not in protocol yet
     // Url, -- not in protocol yet
-    ReferenceCounter,
-    Reference,
+    // ReferenceCounter,
+    // Reference,
     Txn,
   } = context.db;
 
@@ -296,80 +297,97 @@ ponder.on("PostGateway:Post", async ({ event, context }) => {
           // create channel
           // TODO: update this so id is ifps cid
 
-        //   // Example usage:
-        //   const jsonData = {
-        //     id: "someId",
-        //     key: new Uint8Array(/* your key data here */),
-        //   };
+          //   // Example usage:
+          //   const jsonData = {
+          //     id: "someId",
+          //     key: new Uint8Array(/* your key data here */),
+          //   };
 
           const JsonToHash = {
             signature: decodedPost.sig,
-            message: messageQueue[i]
-          }
+            message: messageQueue[i],
+          };
 
           const jsonBytes = encodeJSONToBytes(JsonToHash);
           const did = createDID(jsonBytes);
           console.log(did);
 
-        //     const referenceCounter = await ReferenceCounter.upsert({
-        //       id: "ReferenceCounter",
-        //       create: {
-        //         counter: BigInt(1),
-        //         lastUpdated: event.block.timestamp,
-        //       },
-        //       update: ({ current }) => ({
-        //         counter: (current.counter as bigint) + BigInt(1),
-        //         lastUpdated: event.block.timestamp,
-        //       }),
+          const createChannelJsonForCid = {
+            userId: decodedPost.userId,
+            timestamp: decodedPost.expiration,
+            message: {
+              type: messageQueue[i].msgType,
+              body: {
+                data: {
+                  schema: 500,
+                  contents: {
+                    uri: decodedCreateChannel.uri,
+                  },
+                },
+                access: {
+                  schema: 500,
+                  contents: {
+                    admins: decodedCreateChannel.adminIds,
+                    members: decodedCreateChannel.memberIds,
+                  },
+                },
+              },
+            },
+          };
+
+          const cid = await createCidFromAnything({
+            input: createChannelJsonForCid,
+          });
+          const cidStringified = cid.toString();
 
           await Channel.upsert({
-            id: did,
+            id: cidStringified,
             create: {
-                createdTimestamp: event.block.timestamp,
-                createdBy: decodedPost?.userId,
-                uri: decodedCreateChannel.uri,
-                admins: decodedCreateChannel.adminIds as bigint[],
-                members: decodedCreateChannel.memberIds as bigint[],                
+              createdTimestamp: event.block.timestamp,
+              createdBy: decodedPost?.userId,
+              uri: decodedCreateChannel.uri,
+              admins: decodedCreateChannel.adminIds as bigint[],
+              members: decodedCreateChannel.memberIds as bigint[],
             },
             update: {},
           });
           // process channel tags
-        //   for (let i = 0; i < decodedCreateChannel.channelTags.length; ++i) {
-        //     // check if channel exists
-        //     const channelLookup = await Channel.findUnique({
-        //       id: decodedCreateChannel.channelTags[i],
-        //     });
-        //     if (!channelLookup) continue;
-        //     // can only add references if admin/memmber of channel
-        //     if (
-        //       !channelLookup.admins.includes(decodedPost.userId) &&
-        //       !channelLookup.members?.includes(decodedPost.userId)
-        //     )
-        //       continue;
-        //     // increment reference counter
-        //     const referenceCounter = await ReferenceCounter.upsert({
-        //       id: "ReferenceCounter",
-        //       create: {
-        //         counter: BigInt(1),
-        //         lastUpdated: event.block.timestamp,
-        //       },
-        //       update: ({ current }) => ({
-        //         counter: (current.counter as bigint) + BigInt(1),
-        //         lastUpdated: event.block.timestamp,
-        //       }),
-        //     });
-        //     // create reference
-        //     await Reference.create({
-        //       id: referenceCounter?.counter as bigint,
-        //       data: {
-        //         createdTimestamp: event.block.timestamp,
-        //         createdBy: decodedPost.userId,
-        //         channelId: decodedCreateChannel.channelTags[i], // these are the channels to add the newly created refererence to to
-        //         pubRefId: undefined, // purposely left undefined
-        //         chanRefId: channelCounter?.counter, // this is the channel that was just created
-        //       },
-        //     });
-        //   }
+          //   for (let i = 0; i < decodedCreateChannel.channelTags.length; ++i) {
+          //     // check if channel exists
+          //     const channelLookup = await Channel.findUnique({
+          //       id: decodedCreateChannel.channelTags[i],
+          //     });
+          //     if (!channelLookup) continue;
+          //     // can only add references if admin/memmber of channel
+          //     if (
+          //       !channelLookup.admins.includes(decodedPost.userId) &&
+          //       !channelLookup.members?.includes(decodedPost.userId)
+          //     )
+          //       continue;
+          //     // increment reference counter
+          //     const referenceCounter = await ReferenceCounter.upsert({
+          //       id: "ReferenceCounter",
+          //       create: {
+          //         counter: BigInt(1),
+          //         lastUpdated: event.block.timestamp,
+          //       },
+          //       update: ({ current }) => ({
+          //         counter: (current.counter as bigint) + BigInt(1),
+          //         lastUpdated: event.block.timestamp,
+          //       }),
+          //     });
+          //     // create reference
+          //     await Reference.create({
+          //       id: referenceCounter?.counter as bigint,
+          //       data: {
+          //         createdTimestamp: event.block.timestamp,
+          //         createdBy: decodedPost.userId,
+          //         channelId: decodedCreateChannel.channelTags[i], // these are the channels to add the newly created refererence to to
+          //         pubRefId: undefined, // purposely left undefined
+          //         chanRefId: channelCounter?.counter, // this is the channel that was just created
+          //       },
+          //     });
+          //   }
           break;
 
         // /*
