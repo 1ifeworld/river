@@ -4,8 +4,6 @@ export * from './channel'
 export * from './item'
 
 // Individual components
-export * from './ChannelCard'
-export * from './FileList'
 export * from './Footer'
 export * from './ItemCard'
 export * from './RiverLogo'
