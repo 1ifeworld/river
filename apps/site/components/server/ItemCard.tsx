@@ -4,7 +4,7 @@ import {
   getUsername,
   type MediaAssetObject,
   type ChannelMetadata,
-  pinataUrlFromCid,
+  w3sUrlFromCid,
 } from '@/lib'
 import { unixTimeConverter } from '@/utils'
 import { kv } from '@vercel/kv'
@@ -36,7 +36,7 @@ export async function ItemCard({
           ) ? (
             <Image
               className="object-contain"
-              src={pinataUrlFromCid({ cid: itemMetadata?.image as string })}
+              src={w3sUrlFromCid({ cid: itemMetadata?.image as string })}
               alt={itemMetadata?.name as string}
               fill
               quality={100}
