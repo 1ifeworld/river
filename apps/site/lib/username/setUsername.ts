@@ -26,7 +26,7 @@ export async function setUsername({
 }) {
   const requestBody: RegistrationParameters = {
     id: userIdRegistered,
-    to: to || undefined, 
+    to: to || undefined,
     owner: registerForRecipient,
     name: username,
     signature,
@@ -40,13 +40,13 @@ export async function setUsername({
     },
     body: JSON.stringify(requestBody),
   })
-  .then((response) => response.json())
-  .then((data) => {
-    if (!data.success) {
-      console.error('Error:', data.error)
-    }
-  })
-  .catch((error) => {
-    console.error('Fetch error:', error)
-  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (!data.success) {
+        console.error('Error:', data.error)
+      }
+    })
+    .catch((error) => {
+      console.error('Fetch error:', error)
+    })
 }

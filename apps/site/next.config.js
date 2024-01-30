@@ -7,10 +7,6 @@ module.exports = {
         protocol: 'https',
         hostname: 'ipfs.w3s.link',
       },
-      {
-        protocol: 'https',
-        hostname: 'ipfs.io',
-      },
     ],
   },
   webpack: (config) => {

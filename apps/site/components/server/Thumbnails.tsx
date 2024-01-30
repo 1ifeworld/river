@@ -11,22 +11,16 @@ function extractFileExtension(mimeType: string): string {
 export function GenericThumbnailLarge({ text }: { text: string }) {
   return (
     <Stack className="bg-[#E9E9E9] justify-center items-center aspect-square w-full">
-      <Typography className="text-secondary-foreground text-2xl">
-        {extractFileExtension(text)}
-      </Typography>
+      <Typography className="text-secondary-foreground text-2xl"></Typography>
     </Stack>
   )
 }
 
-export function GenericThumbnailSmall({ text }: { text?: string }) {
+export function GenericThumbnailSmall({ text }: { text: string }) {
   return (
     <Stack className="bg-[#E9E9E9] justify-center items-center w-[38px] h-[38px]">
       <Typography className="text-secondary-foreground text-[10px]">
-        {text
-          ? text === 'image/jpeg'
-            ? `${text.slice(-5).toLowerCase()}`
-            : `${text.slice(-4).toLowerCase()}`
-          : ''}
+        {extractFileExtension(text)}
       </Typography>
     </Stack>
   )

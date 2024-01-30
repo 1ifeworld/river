@@ -4,8 +4,8 @@
 export * from './renderers'
 
 // Individual components
+export * from './AddMembersForm'
 export * from './ChannelDialog'
-export * from './ContentWrapper'
 export * from './Header'
 export * from './ItemDropdown'
 export * from './ItemDropzone'
@@ -15,4 +15,3 @@ export * from './ThemeToggle'
 export * from './UploadProgress'
 export * from './User'
 export * from './UsernameDialog'
-export * from './AddMembersForm'
