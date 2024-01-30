@@ -17,12 +17,39 @@ importers:
 
   apps/delta:
     dependencies:
+      '@ipld/dag-cbor':
+        specifier: ^9.1.0
+        version: 9.1.0
+      '@noble/hashes':
+        specifier: ^1.3.3
+        version: 1.3.3
       '@ponder/core':
         specifier: ^0.1.6
         version: 0.1.6(@types/node@18.11.18)(typescript@5.1.6)(viem@1.20.0)
+      base58:
+        specifier: link:multiformats/bases/base58
+        version: link:multiformats/bases/base58
+      base64url:
+        specifier: ^3.0.1
+        version: 3.0.1
+      multiformats:
+        specifier: ^13.0.1
+        version: 13.0.1
+      rfc4648:
+        specifier: ^1.5.3
+        version: 1.5.3
       scrypt:
         specifier: workspace:*
         version: link:../../packages/scrypt
+      sha2:
+        specifier: link:multiformats/hashes/sha2
+        version: link:multiformats/hashes/sha2
+      sha256:
+        specifier: link:@noble/hashes/sha256
+        version: link:@noble/hashes/sha256
+      utils:
+        specifier: link:@noble/hashes/utils
+        version: link:@noble/hashes/utils
     devDependencies:
       '@types/node':
         specifier: ^18.11.18
@@ -2735,6 +2762,14 @@ packages:
     dependencies:
       cborg: 4.0.5
       multiformats: 13.0.0
+    dev: false
+
+  /@ipld/dag-cbor@9.1.0:
+    resolution: {integrity: sha512-7pMKjBaapEh+1Nk/1umPPhQGT6znb5E71lke2ekxlcuVZLLrPPdDSy0UAMwWgj3a28cjir/ZJ6CQH2DEs3DUOQ==}
+    engines: {node: '>=16.0.0', npm: '>=7.0.0'}
+    dependencies:
+      cborg: 4.0.5
+      multiformats: 13.0.1
     dev: false
 
   /@ipld/dag-json@10.1.6:
@@ -5964,6 +5999,11 @@ packages:
   /base64-js@1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
 
+  /base64url@3.0.1:
+    resolution: {integrity: sha512-ir1UPr3dkwexU7FdV8qBBbNDRUhMmIekYMFZfi+C/sLNnRESKPl23nB9b2pltqfOQNnGzsDdId90AEtG5tCx4A==}
+    engines: {node: '>=6.0.0'}
+    dev: false
+
   /bech32@1.1.4:
     resolution: {integrity: sha512-s0IrSOzLlbvX7yp4WBfPITzpAU8sqQcpsmwXDiKwrG4r491vwCO/XpejasRNl0piBMe/DvP4Tz0mIS/X1DPJBQ==}
     dev: false
@@ -7577,7 +7617,6 @@ packages:
       is-hex-prefixed: 1.0.0
       strip-hex-prefix: 1.0.0
     dev: false
-    bundledDependencies: false
 
   /event-target-shim@5.0.1:
     resolution: {integrity: sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==}
@@ -9602,6 +9641,10 @@ packages:
     resolution: {integrity: sha512-xiIB0p7EKmETm3wyKedOg/xuyQ18PoWwXCzzgpZAiDxL9ktl3XTh8AqoDT5kAqRg+DU48XAGPsUJL2Rn6Bx3Lw==}
     dev: false
 
+  /multiformats@13.0.1:
+    resolution: {integrity: sha512-bt3R5iXe2O8xpp3wkmQhC73b/lC4S2ihU8Dndwcsysqbydqb8N+bpP116qMcClZ17g58iSIwtXUTcg2zT4sniA==}
+    dev: false
+
   /multiformats@9.9.0:
     resolution: {integrity: sha512-HoMUjhH9T8DDBNT+6xzkrd9ga/XiBI4xLr58LJACwK6G3HTOPeMz4nB4KJs33L2BelrIJa7P0VuNaVF3hMYfjg==}
     dev: false
@@ -11341,6 +11384,10 @@ packages:
   /reusify@1.0.4:
     resolution: {integrity: sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==}
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
+
+  /rfc4648@1.5.3:
+    resolution: {integrity: sha512-MjOWxM065+WswwnmNONOT+bD1nXzY9Km6u3kzvnx8F8/HXGZdz3T6e6vZJ8Q/RIMUSp/nxqjH3GwvJDy8ijeQQ==}
+    dev: false
 
   /rfdc@1.3.0:
     resolution: {integrity: sha512-V2hovdzFbOi77/WajaSMXk2OLm+xNIeQdMMuB7icj7bk6zi2F8GGAxigcnDFpJHbNyNcgyJDiP+8nOrY5cZGrA==}

@@ -54,13 +54,13 @@ export default createSchema((p) => ({
     lastUpdated: p.bigint(),
   }),
   Channel: p.createTable({
-    id: p.bigint(),
+    id: p.string(),
     createdTimestamp: p.bigint(),
     createdBy: p.bigint().references('User.id'),
     uri: p.string(),
     admins: p.bigint().list(), // UPDATE to reference User
     members: p.bigint().list(), // UPDATE to reference User
-    references: p.many('Reference.channelId'),
+    // references: p.many('Reference.channelId'),
     // mentions: p.many("Reference.chanRefId")
   }),
   PublicationCounter: p.createTable({
@@ -75,20 +75,20 @@ export default createSchema((p) => ({
     uri: p.string(),
     // mentions: p.many("Reference.pubRefId")
   }),
-  ReferenceCounter: p.createTable({
-    id: p.string(),
-    counter: p.bigint(),
-    lastUpdated: p.bigint(),
-  }),
-  Reference: p.createTable({
-    id: p.bigint(),
-    createdTimestamp: p.bigint(),
-    createdBy: p.bigint().references('User.id'),
-    channelId: p.bigint().references('Channel.id').optional(),
-    channel: p.one('channelId'),
-    pubRefId: p.bigint().references('Publication.id').optional(),
-    pubRef: p.one('pubRefId'),
-    chanRefId: p.bigint().references('Channel.id').optional(),
-    chanRef: p.one('chanRefId'),
-  }),
+  // ReferenceCounter: p.createTable({
+  //   id: p.string(),
+  //   counter: p.bigint(),
+  //   lastUpdated: p.bigint(),
+  // }),
+  // Reference: p.createTable({
+  //   id: p.bigint(),
+  //   createdTimestamp: p.bigint(),
+  //   createdBy: p.bigint().references('User.id'),
+  //   channelId: p.string().references('Channel.id').optional(),
+  //   channel: p.one('channelId'),
+  //   pubRefId: p.bigint().references('Publication.id').optional(),
+  //   pubRef: p.one('pubRefId'),
+  //   chanRefId: p.string().references('Channel.id').optional(),
+  //   chanRef: p.one('chanRefId'),
+  // }),
 }))
