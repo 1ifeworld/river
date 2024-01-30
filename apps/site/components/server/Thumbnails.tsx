@@ -1,4 +1,5 @@
 import { Stack, Typography } from '@/design-system'
+import { truncateText } from '@/utils'
 
 function extractFileExtension(mimeType: string): string {
   const lastSlashIndex = mimeType.lastIndexOf('/')
@@ -11,7 +12,9 @@ function extractFileExtension(mimeType: string): string {
 export function GenericThumbnailLarge({ text }: { text: string }) {
   return (
     <Stack className="bg-[#E9E9E9] justify-center items-center aspect-square w-full">
-      <Typography className="text-secondary-foreground text-2xl"></Typography>
+      <Typography className="text-secondary-foreground text-2xl">
+        {extractFileExtension(text)}
+      </Typography>
     </Stack>
   )
 }
@@ -20,7 +23,7 @@ export function GenericThumbnailSmall({ text }: { text: string }) {
   return (
     <Stack className="bg-[#E9E9E9] justify-center items-center w-[38px] h-[38px]">
       <Typography className="text-secondary-foreground text-[10px]">
-        {extractFileExtension(text)}
+        {truncateText(extractFileExtension(text), 5, false)}
       </Typography>
     </Stack>
   )
