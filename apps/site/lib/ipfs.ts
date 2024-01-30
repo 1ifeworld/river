@@ -6,8 +6,3 @@ export function ipfsUrlToCid({ ipfsUrl }: { ipfsUrl: string }) {
   if (!ipfsUrl) return ''
   return ipfsUrl.replace('ipfs://', '')
 }
-
-export function ipfsToHttps(ipfsString: string) {
-  if (!ipfsString) return ''
-  return ipfsString.replace('ipfs://', 'https://ipfs.io/ipfs/')
-}
