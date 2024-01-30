@@ -11,9 +11,7 @@ function extractFileExtension(mimeType: string): string {
 export function GenericThumbnailLarge({ text }: { text: string }) {
   return (
     <Stack className="bg-[#E9E9E9] justify-center items-center aspect-square w-full">
-      <Typography className="text-secondary-foreground text-2xl">
-        
-      </Typography>
+      <Typography className="text-secondary-foreground text-2xl"></Typography>
     </Stack>
   )
 }

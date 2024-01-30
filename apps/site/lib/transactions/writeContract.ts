@@ -8,7 +8,7 @@ import {
   WriteContractParameters,
   WriteContractReturnType,
   BlockTag,
-  Hex  
+  Hex,
 } from 'viem'
 import {
   simulateContract,
@@ -62,7 +62,7 @@ export async function writeContract<
     >(client, {
       ...request,
       blockTag: 'pending',
-      account: account
+      account: account,
     } as unknown as SimulateContractParameters<
       TAbi,
       TFunctionName,

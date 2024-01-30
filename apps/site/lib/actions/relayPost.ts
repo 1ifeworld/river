@@ -23,7 +23,7 @@ export async function relayPost({
       abi: postGatewayABI,
       functionName: 'post',
       args: [postInput],
-    })      
+    })
     // If writeContract is successful, postTxn is valid and we proceed to check its inclusion
     const txnInclusion = await getTxnInclusion(postTxn)
     // Check if the transaction is successfully included

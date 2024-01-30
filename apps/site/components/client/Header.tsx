@@ -21,7 +21,7 @@ export function Header() {
           setOpen(true)
         }
       }
-    }
+    },
   })
 
   const pathname = usePathname()
