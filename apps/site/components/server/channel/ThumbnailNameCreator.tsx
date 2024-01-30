@@ -50,7 +50,7 @@ export function ThumbnailNameCreator({
         />
       ) : (
         <GenericThumbnailSmall
-          text={referenceMetadata.name ? referenceMetadata.name : '?'}
+          text={referenceMetadata?.contentType as string}
         />
       )}
       <Stack>
