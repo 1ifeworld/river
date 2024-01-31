@@ -70,7 +70,7 @@ export default {
       },
       fontFamily: {
         // Configured to be a mono font so that it functions as the project default
-        sans: ['var(--font-fragment-mono)', ...fontFamily.mono],
+        sans: ['var(--font-sf-mono)', ...fontFamily.mono],
       },
     },
   },
