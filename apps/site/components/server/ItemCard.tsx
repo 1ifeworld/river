@@ -66,7 +66,7 @@ export async function ItemCard({
               href={`/channel/${reference.channel?.id}`}
               className="hover:underline underline-offset-2 transition-all decoration-secondary-foreground"
             >
-              <Typography className="text-secondary-foreground">
+              <Typography className="text-secondary-foreground truncate">
                 {channelMetadata?.name}
               </Typography>
             </Link>
