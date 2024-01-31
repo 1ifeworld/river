@@ -33,7 +33,7 @@ export async function setUsername({
     timestamp,
   }
 
-  await fetch(`${process.env.NEXT_PUBLIC_USERNAME_DB}/set`, {
+  await fetch(`${process.env.NEXT_PUBLIC_USERNAME_DB_LOCAL}/set`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
