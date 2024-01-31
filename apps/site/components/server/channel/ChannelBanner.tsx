@@ -29,7 +29,7 @@ export async function ChannelBanner({
     // Include left margin to accommodate for margin necessary for hover states for items
     <Stack className="gap-5 md:ml-2">
       <Stack>
-        <Typography className="">{channelMetadata.name}</Typography>
+        <Typography className='font-medium'>{channelMetadata.name}</Typography>
         {channel?.admins?.[0] ? (
           <HoverCard>
             <HoverCardTrigger className="cursor-pointer">
