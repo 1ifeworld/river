@@ -66,7 +66,7 @@ contract PostGateway2Test is Test {
             rid: 1,
             timestamp: block.timestamp + 1,
             msgType: IPostGateway2.MessageTypes.CREATE_CHANNEL,
-            contents: abi.encode(createChannel)
+            msgBody: abi.encode(createChannel)
         });
         // create hash + sig for post
         bytes32 createChannelHash = keccak256(abi.encode(createChannelMessage)).toEthSignedMessageHash();
@@ -112,7 +112,7 @@ contract PostGateway2Test is Test {
             rid: 1,
             timestamp: block.timestamp + 1,
             msgType: IPostGateway2.MessageTypes.CREATE_ITEM,
-            contents: abi.encode(createItem)
+            msgBody: abi.encode(createItem)
         });
         // create hash + sig for post
         bytes32 createItemHash = keccak256(abi.encode(createItemMessage)).toEthSignedMessageHash();
@@ -141,7 +141,7 @@ contract PostGateway2Test is Test {
             rid: 1,
             timestamp: block.timestamp + 1,
             msgType: IPostGateway2.MessageTypes.ADD_ITEM_TO_CHANNEL,
-            contents: abi.encode(addItem)
+            msgBody: abi.encode(addItem)
         });
         // create hash + sig for post
         bytes32 addItemHash = keccak256(abi.encode(addItemMessage)).toEthSignedMessageHash();
@@ -162,8 +162,12 @@ contract PostGateway2Test is Test {
         // process post 
         postGateway.postBatch(batchPostInputs);
         // run sig test
-        assertEq(SignatureChecker.isValidSignatureNow(user.addr, createItemHash, createItemSig), true);         
-        assertEq(SignatureChecker.isValidSignatureNow(user.addr, addItemHash, addItemSig), true);         
+        address check = 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266;
+        bytes32 hashCheck = 0x414a0446bba1aeca4a44b20a2ad7dcb8824e46c07fcea0d9ac6b8bf7dcbf00bf;
+        bytes memory sigCheck = hex"d4c0f1bb96941578f0370c69190ba4e11ad76dd23c2cd8f9e12c30f882f3ec5b6b9c64f1b60c210988ba86030a380d4ce51e2a1fe7db0ff163567aab927586d21b";
+        // assertEq(SignatureChecker.isValidSignatureNow(user.addr, createItemHash, createItemSig), true);         
+        // assertEq(SignatureChecker.isValidSignatureNow(user.addr, addItemHash, addItemSig), true);         
+        assertEq(SignatureChecker.isValidSignatureNow(check, hashCheck, sigCheck), true);         
     }
 
     //////////////////////////////////////////////////

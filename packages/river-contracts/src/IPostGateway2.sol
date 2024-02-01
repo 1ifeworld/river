@@ -24,7 +24,7 @@ interface IPostGateway2 {
         uint256 rid; // could use sig here instead? rid seems fine tho
         uint256 timestamp;
         MessageTypes msgType;			
-        bytes contents;				
+        bytes msgBody;				
     }         
 
     enum MessageTypes {
@@ -104,4 +104,9 @@ interface IPostGateway2 {
         bytes itemCid;
         bytes channelCid;
     }        
+
+    struct RemoveItem {
+        bytes itemCid;
+        bytes channelCid;
+    }      
 }

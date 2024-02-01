@@ -1,31 +1,38 @@
-import { ponder } from '@/generated'
-import { absBigInt } from '../utils'
+import { ponder } from "@/generated";
 import {
-  decodePost,
-  decodeMessage,
   decodeCreateChannel,
-  decodeReferenceChannel,
-  decodeEditChannelAccess,
   decodeCreatePublication,
+  decodeEditChannelAccess,
+  decodeMessage,
+  decodePost,
+  decodeReferenceChannel,
   decodeReferencePublication,
   decodeRemoveReference,
-  messageTypes,
   isSupportedMessageType,
+  messageTypes,
+  postGateway2ABI,
   remove0xPrefix,
-  postGateway2ABI
-} from 'scrypt'
+} from "scrypt";
 import {
   Address,
-  slice,
   Hash,
-  verifyMessage,
-  recoverPublicKey,
-  recoverMessageAddress,
+  Hex,
   decodeFunctionData,
-} from 'viem'
-import { createCidFromAnything } from '../utils/cid'
+  recoverMessageAddress,
+  recoverPublicKey,
+  hashMessage,
+  keccak256,
+  slice,
+  verifyMessage,
+  recoverAddress,
+  getAddress,
+  decodeAbiParameters,
+  parseAbiParameters,
+} from "viem";
+import { absBigInt } from "../utils";
+import { createBlockFromAnything } from "../utils/cid";
 
-ponder.on('PostGateway:NewPost', async ({ event, context }) => {
+ponder.on("PostGateway:NewPost", async ({ event, context }) => {
   /* ************************************************
 
                     DATA STRUCTURES
@@ -35,18 +42,18 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
   const {
     User,
     // PostCounter,
-    // Post,
-    // Message,
+    Post,
+    Message,
     // PublicationCounter,
     // Publication,
     // ChannelCounter,
-    Channel,
+    // Channel,
     // Nft, -- not in protocol yet
     // Url, -- not in protocol yet
     // ReferenceCounter,
     // Reference,
     // Txn,
-  } = context.db
+  } = context.db;
 
   /* ************************************************
 
@@ -54,7 +61,7 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
 
   ************************************************ */
 
-  let txnReceipt: { id: `0x${string}` } | null = null
+  const txnReceipt: { id: `0x${string}` } | null = null;
 
   // let userLookup: {
   //   id: bigint
@@ -85,43 +92,176 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
 
   ************************************************ */
 
-  // console.log("txn input: ", event.transaction.input)
+  type Message = {
+    rid: bigint;
+    timestamp: bigint;
+    msgType: number;
+    msgBody: Hash;
+  };
+
+  type Post = {
+    signer: Hex;
+    message: Message;
+    hashType: bigint;
+    hash: Hash;
+    sigType: bigint;
+    sig: Hash;
+  };
+
+  let posts: Post[] = [];
 
   const { args } = decodeFunctionData({
     abi: postGateway2ABI,
-    data: event.transaction.input
-  })
+    data: event.transaction.input,
+  });
 
-  console.log("args: ", args)
+  // Check if args is an array of posts or a batch of posts
+  if (Array.isArray(args[0])) {
+    const batchPost = args[0] as Post[];
+    batchPost.forEach((post) => {
+      posts.push(post);
+    });
+  } else {
+    const singlePost = args[0] as Post;
+    posts.push(singlePost);
+  }
 
-  // const {signer, message, hashType, hash, sigType, sig} = args[0]
+  console.log("posts: ", posts);
 
-  // console.log("message.userId", message.rid)
+  for (let i = 0; i < posts.length; ++i) {
+    // check for message validity
+    // check if timestamp is greater than 10 mins in the future of the block it was emitted din
+    // NOTE: can potentially make this way lower in our blockchain era?
+    if (posts[i].message.timestamp > event.block.timestamp + BigInt(600))
+      return;
 
-  // // get custody address from user id
-  // const userLookup = await User.findUnique({ id: message.rid })
-  // console.log('user lookup: ', userLookup)
+    // get custody address from user id
+    const userLookup = await User.findUnique({ id: posts[i].message.rid });
+    console.log("user lookup: ", userLookup);
 
-  // // NOTE: update to context.client.verifyMessage to unlock support
-  // //       for smart accounts in addition to EOAs
-  // const recoverAddressFromPostSignature = await recoverMessageAddress({
-  //   message: hash,
-  //   signature: sig,
-  // })
-  // if (!userLookup) return
-  // const signerIsValid = userLookup.to === recoverAddressFromPostSignature  
+    if (!userLookup) return;
 
-  // const valid = await verifyMessage({ 
-  //   address: signer,
-  //   message: {raw: hash},
-  //   signature: sig
-  // })  
+    console.log("hash:", posts[i].hash);
+
+    // NOTE: update to context.client.verifyMessage to unlock support
+    //       for smart accounts in addition to EOAs
+    const recoveredAddress = await recoverAddress({
+      hash: posts[i].hash,
+      signature: posts[i].sig,
+    });
+
+    const signerIsValid = getAddress(userLookup.to) === recoveredAddress;
+
+    // Create cids for things
+    const postBlock = await createBlockFromAnything(posts[i]);
+    const messageBlock = await createBlockFromAnything(posts[i].message);
+
+    // store post + message
+    const storedPost = await Post.create({
+      id: postBlock.cid.toString(),
+      data: {
+        relayer: event.transaction.from,
+        signer: posts[i].signer,
+        messageId: messageBlock.cid.toString(),
+        hashType: BigInt(posts[i].hashType),
+        hash: posts[i].hash,
+        sigType: BigInt(posts[i].sigType),
+        sig: posts[i].sig,
+      },
+    });
+
+    const storedMessage = await Message.create({
+      id: messageBlock.cid.toString(),
+      data: {
+        rid: posts[i].message.rid,
+        timestamp: posts[i].message.timestamp,
+        msgType: BigInt(posts[i].message.msgType),
+        msgBody: posts[i].message.msgBody,
+      },
+    });
+
+    enum MessageTypes {
+      NONE, // 0
+      CREATE_ITEM, // 1
+      UPDATE_ITEM, // 2
+      CREATE_CHANNEL, // 3
+      UPDATE_CHANNEL, // 4
+      ADD_ITEM_TO_CHANNEL, // 5
+      REMOVE_ITEM_FROM_CHANNEL, // 6
+    }
+
+    /* MESSAGE TYPES */
+    const CREATE_ITEM = 1;
+    const UPDATE_ITEM = 2;
+    const CREATE_CHANNEL = 3;
+    const UPDATE_CHANNEL = 4;
+    const ADD_ITEM_TO_CHANNEL = 5;
+
+    console.log("bout to get to message type")
+    console.log(posts[i].message.msgType)
+    switch (posts[i].message.msgType) {
+      case CREATE_CHANNEL:
+
+      console.log("msg body: ", posts[i].message.msgBody)
+
+        const channelStructAbi = [
+          {
+            name: "channel",
+            outputs: [
+              {
+                components: [
+                  {
+                    // name: "data", // channelData struct
+                    type: "tuple",
+                    components: [
+                      {
+                        // name: "dataType", // channelDataTypes enum
+                        type: "uint8",
+                      },
+                      {
+                        // name: "contents",
+                        type: "bytes",
+                      },
+                    ],
+                  },
+                  {
+                    // name: "access", // channelAccess struct
+                    type: "tuple",  
+                    components: [
+                      {
+                        // name: "accessType", // channelAccessTypes enum
+                        type: "uint8",
+                      },
+                      {
+                        // name: "contents",
+                        type: "bytes",
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ];
+
+        const decodedChannelStruct = decodeAbiParameters(
+          channelStructAbi,
+          posts[i].message.msgBody
+        );
+
+        console.log("decoded channel struct: ", decodedChannelStruct);
+
+        break;
+    }
+  }
+
+  // process messages
 
   // create asset depending on message type:
-  // const cid = await createCidFromAnything({
+  // const cid = await createBlockFromAnything({
   //   input: message,
   // });
-  // const cidStringified = cid.toString();  
+  // const cidStringified = cid.toString();
 
   // console.log("cid stringified: ", cidStringified)
 
@@ -135,8 +275,7 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
   //     members: []
   //   },
   //   update: {},
-  // });  
-
+  // });
 
   // // skips first 68 bytes which contain 4 byte function selector + 32 byte data offset + 32 byte data length
   // const cleanedTxnData = slice(event.transaction.input, 68)
@@ -272,423 +411,422 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
   //     })
   //   }
 
-    /* ************************************************
+  /* ************************************************
 
                       MESSAGE PROCESSING
 
     ************************************************ */
 
+  /*
+   * MESSAGE TYPES
+   * 100 create id
+   * 101 update id
+   */
 
-    /*
-     * MESSAGE TYPES
-     * 100 create id
-     * 101 update id
-     */
+  // processs messages in queue. only validly formatted messages will make it here
+  // for (let i = 0; i < messageQueue.length; ++i) {
+  //   console.log('what message type: ', messageQueue[i]?.msgType)
+  //   switch (messageQueue[i]?.msgType) {
 
-    // processs messages in queue. only validly formatted messages will make it here
-    // for (let i = 0; i < messageQueue.length; ++i) {
-    //   console.log('what message type: ', messageQueue[i]?.msgType)
-    //   switch (messageQueue[i]?.msgType) {
+  //     /**************************************************
 
-    //     /**************************************************
+  //                       CHANNEL CASES
 
-    //                       CHANNEL CASES
+  //     **************************************************/
 
-    //     **************************************************/    
+  //     /*
+  //      * CREATE CHANNEL
+  //      */
+  //     case messageTypes.createChannel:
+  //       console.log('running 100 create chan case')
+  //       // decode msgBody into channel uri
+  //       const decodedCreateChannel = decodeCreateChannel({
+  //         msgBody: messageQueue[i].msgBody,
+  //       })
+  //       // if decode uncessful exist case
+  //       if (!decodedCreateChannel) break
+  //       // increment channel counter
+  //       const channelCounter = await ChannelCounter.upsert({
+  //         id: `${context.network.chainId}/${event.transaction.to}`,
+  //         create: {
+  //           counter: BigInt(1),
+  //           lastUpdated: event.block.timestamp,
+  //         },
+  //         update: ({ current }) => ({
+  //           counter: (current.counter as bigint) + BigInt(1),
+  //           lastUpdated: event.block.timestamp,
+  //         }),
+  //       })
+  //       // create channel
+  //       await Channel.create({
+  //         id: channelCounter?.counter as bigint,
+  //         data: {
+  //           createdTimestamp: event.block.timestamp,
+  //           createdBy: decodedPost?.userId,
+  //           uri: decodedCreateChannel.uri,
+  //           admins: decodedCreateChannel.adminIds as bigint[],
+  //           members: decodedCreateChannel.memberIds as bigint[],
+  //         },
+  //       })
+  //       // process channel tags
+  //       for (let i = 0; i < decodedCreateChannel.channelTags.length; ++i) {
+  //         // check if channel exists
+  //         const channelLookup = await Channel.findUnique({
+  //           id: decodedCreateChannel.channelTags[i],
+  //         })
+  //         if (!channelLookup) continue
+  //         // can only add references if admin/memmber of channel
+  //         if (
+  //           !channelLookup.admins.includes(decodedPost.userId) &&
+  //           !channelLookup.members?.includes(decodedPost.userId)
+  //         )
+  //           continue
+  //         // increment reference counter
+  //         const referenceCounter = await ReferenceCounter.upsert({
+  //           id: 'ReferenceCounter',
+  //           create: {
+  //             counter: BigInt(1),
+  //             lastUpdated: event.block.timestamp,
+  //           },
+  //           update: ({ current }) => ({
+  //             counter: (current.counter as bigint) + BigInt(1),
+  //             lastUpdated: event.block.timestamp,
+  //           }),
+  //         })
+  //         // create reference
+  //         await Reference.create({
+  //           id: referenceCounter?.counter as bigint,
+  //           data: {
+  //             createdTimestamp: event.block.timestamp,
+  //             createdBy: decodedPost.userId,
+  //             channelId: decodedCreateChannel.channelTags[i], // these are the channels to add the newly created refererence to to
+  //             pubRefId: undefined, // purposely left undefined
+  //             chanRefId: channelCounter?.counter, // this is the channel that was just created
+  //           },
+  //         })
+  //       }
+  //       break
 
-    //     /*
-    //      * CREATE CHANNEL
-    //      */
-    //     case messageTypes.createChannel:
-    //       console.log('running 100 create chan case')
-    //       // decode msgBody into channel uri
-    //       const decodedCreateChannel = decodeCreateChannel({
-    //         msgBody: messageQueue[i].msgBody,
-    //       })
-    //       // if decode uncessful exist case
-    //       if (!decodedCreateChannel) break
-    //       // increment channel counter
-    //       const channelCounter = await ChannelCounter.upsert({
-    //         id: `${context.network.chainId}/${event.transaction.to}`,
-    //         create: {
-    //           counter: BigInt(1),
-    //           lastUpdated: event.block.timestamp,
-    //         },
-    //         update: ({ current }) => ({
-    //           counter: (current.counter as bigint) + BigInt(1),
-    //           lastUpdated: event.block.timestamp,
-    //         }),
-    //       })
-    //       // create channel
-    //       await Channel.create({
-    //         id: channelCounter?.counter as bigint,
-    //         data: {
-    //           createdTimestamp: event.block.timestamp,
-    //           createdBy: decodedPost?.userId,
-    //           uri: decodedCreateChannel.uri,
-    //           admins: decodedCreateChannel.adminIds as bigint[],
-    //           members: decodedCreateChannel.memberIds as bigint[],
-    //         },
-    //       })
-    //       // process channel tags
-    //       for (let i = 0; i < decodedCreateChannel.channelTags.length; ++i) {
-    //         // check if channel exists
-    //         const channelLookup = await Channel.findUnique({
-    //           id: decodedCreateChannel.channelTags[i],
-    //         })
-    //         if (!channelLookup) continue
-    //         // can only add references if admin/memmber of channel
-    //         if (
-    //           !channelLookup.admins.includes(decodedPost.userId) &&
-    //           !channelLookup.members?.includes(decodedPost.userId)
-    //         )
-    //           continue
-    //         // increment reference counter
-    //         const referenceCounter = await ReferenceCounter.upsert({
-    //           id: 'ReferenceCounter',
-    //           create: {
-    //             counter: BigInt(1),
-    //             lastUpdated: event.block.timestamp,
-    //           },
-    //           update: ({ current }) => ({
-    //             counter: (current.counter as bigint) + BigInt(1),
-    //             lastUpdated: event.block.timestamp,
-    //           }),
-    //         })
-    //         // create reference
-    //         await Reference.create({
-    //           id: referenceCounter?.counter as bigint,
-    //           data: {
-    //             createdTimestamp: event.block.timestamp,
-    //             createdBy: decodedPost.userId,
-    //             channelId: decodedCreateChannel.channelTags[i], // these are the channels to add the newly created refererence to to
-    //             pubRefId: undefined, // purposely left undefined
-    //             chanRefId: channelCounter?.counter, // this is the channel that was just created
-    //           },
-    //         })
-    //       }
-    //       break
+  // /*
+  //  * REFERENCE CHANNEL
+  //  */
+  // case messageTypes.referenceChannel:
+  //   console.log('running 101 ref chan case')
+  //   // decode msgBody into channel target + channel tags
+  //   const decodedReferenceChannels = decodeReferenceChannel({
+  //     msgBody: messageQueue[i].msgBody,
+  //   })
+  //   // if decode uncessful exist case
+  //   if (!decodedReferenceChannels) break
+  //   // process tags
+  //   for (
+  //     let i = 0;
+  //     i < decodedReferenceChannels.channelTags.length;
+  //     ++i
+  //   ) {
+  //     // check if channel exists
+  //     channelLookup = await Channel.findUnique({
+  //       id: decodedReferenceChannels.channelTags[i],
+  //     })
+  //     if (!channelLookup) continue
+  //     // can only add reference if admin/memmber of channel
+  //     if (
+  //       !channelLookup.admins.includes(decodedPost.userId) &&
+  //       !channelLookup.members?.includes(decodedPost.userId)
+  //     )
+  //       continue
+  //     // increment reference counter
+  //     referenceCounter = await ReferenceCounter.upsert({
+  //       id: 'ReferenceCounter',
+  //       create: {
+  //         counter: BigInt(1),
+  //         lastUpdated: event.block.timestamp,
+  //       },
+  //       update: ({ current }) => ({
+  //         counter: (current.counter as bigint) + BigInt(1),
+  //         lastUpdated: event.block.timestamp,
+  //       }),
+  //     })
+  //     // create reference
+  //     await Reference.create({
+  //       id: referenceCounter?.counter as bigint,
+  //       data: {
+  //         createdTimestamp: event.block.timestamp,
+  //         createdBy: decodedPost.userId,
+  //         channelId: decodedReferenceChannels.channelTags[i],
+  //         pubRefId: undefined, // purposely left undefined
+  //         chanRefId: decodedReferenceChannels.channelTarget,
+  //       },
+  //     })
+  //   }
+  //   break
 
-        // /*
-        //  * REFERENCE CHANNEL
-        //  */
-        // case messageTypes.referenceChannel:
-        //   console.log('running 101 ref chan case')
-        //   // decode msgBody into channel target + channel tags
-        //   const decodedReferenceChannels = decodeReferenceChannel({
-        //     msgBody: messageQueue[i].msgBody,
-        //   })
-        //   // if decode uncessful exist case
-        //   if (!decodedReferenceChannels) break
-        //   // process tags
-        //   for (
-        //     let i = 0;
-        //     i < decodedReferenceChannels.channelTags.length;
-        //     ++i
-        //   ) {
-        //     // check if channel exists
-        //     channelLookup = await Channel.findUnique({
-        //       id: decodedReferenceChannels.channelTags[i],
-        //     })
-        //     if (!channelLookup) continue
-        //     // can only add reference if admin/memmber of channel
-        //     if (
-        //       !channelLookup.admins.includes(decodedPost.userId) &&
-        //       !channelLookup.members?.includes(decodedPost.userId)
-        //     )
-        //       continue
-        //     // increment reference counter
-        //     referenceCounter = await ReferenceCounter.upsert({
-        //       id: 'ReferenceCounter',
-        //       create: {
-        //         counter: BigInt(1),
-        //         lastUpdated: event.block.timestamp,
-        //       },
-        //       update: ({ current }) => ({
-        //         counter: (current.counter as bigint) + BigInt(1),
-        //         lastUpdated: event.block.timestamp,
-        //       }),
-        //     })
-        //     // create reference
-        //     await Reference.create({
-        //       id: referenceCounter?.counter as bigint,
-        //       data: {
-        //         createdTimestamp: event.block.timestamp,
-        //         createdBy: decodedPost.userId,
-        //         channelId: decodedReferenceChannels.channelTags[i],
-        //         pubRefId: undefined, // purposely left undefined
-        //         chanRefId: decodedReferenceChannels.channelTarget,
-        //       },
-        //     })
-        //   }
-        //   break
+  // /*
+  //  * EDIT CHANNEL ACCESS
+  //  */
+  // case messageTypes.editChannelAccess:
+  //   console.log('running 103 edit chan access case')
+  //   // decode editchannelaccess message
+  //   const decodedEditChannelAccess = decodeEditChannelAccess({
+  //     msgBody: messageQueue[i].msgBody
+  //   })
+  //   // if decode uncessful exist case
+  //   if (!decodedEditChannelAccess) break
+  //   // lookup target channel
+  //   channelLookup = await Channel.findUnique({
+  //     id: decodedEditChannelAccess.channelTarget,
+  //   })
+  //   // if lookup unsuccessful exit case
+  //   if (!channelLookup) break
+  //   // check if user id sender is admin of channel
+  //   if (!channelLookup.admins.includes(decodedPost.userId)) break
+  //   // process admin changes in for loop
+  //   for (let i = 0; i < decodedEditChannelAccess.admins.length; ++i) {
+  //     let instructions = decodedEditChannelAccess.admins[i] < 0 ? 0 : 1 // 0 = remove, 1 = add
+  //     // lookup userid to add/remove. do absolute value check incase of remove which will be negative
+  //     userLookup = await User.findUnique({ id: absBigInt(decodedEditChannelAccess.admins[i]) })
+  //     // skip to next i in for loop if doesnt exist
+  //     if (!userLookup) continue
+  //     // logic branch for add or removal
+  //     if (instructions === 1) {
+  //       // skip to next i in for loop if admin already present in admin/member arrays
+  //       if (
+  //         channelLookup.admins.includes(decodedEditChannelAccess.admins[i])
+  //         || channelLookup.members.includes(decodedEditChannelAccess.admins[i])
+  //       ) continue
+  //       // add user as admin
+  //       await Channel.update({
+  //         id: decodedEditChannelAccess.channelTarget,
+  //         data: ({ current }) => ({
+  //           admins: [...current.admins, decodedEditChannelAccess.admins[i]]
+  //         })
+  //       })
+  //     } else {
+  //       // skip to next i in for loop if admin is not present
+  //       if (!channelLookup.admins.includes(absBigInt(decodedEditChannelAccess.admins[i]))) continue
+  //       // remove user as admin
+  //       await Channel.update({
+  //         id: decodedEditChannelAccess.channelTarget,
+  //         data: ({ current }) => ({
+  //           admins: current.admins.filter(adminId => adminId !== absBigInt(decodedEditChannelAccess.admins[i]))
+  //         })
+  //       })
+  //     }
+  //   }
+  //   // process member changes in for loop
+  //   for (let i = 0; i < decodedEditChannelAccess.members.length; ++i) {
+  //     let instructions = decodedEditChannelAccess.members[i] < 0 ? 0 : 1 // 0 = remove, 1 = add
+  //     // lookup userid to add/remove. do absolute value check incase of remove which will be negative
+  //     userLookup = await User.findUnique({ id: absBigInt(decodedEditChannelAccess.members[i]) })
+  //     // skip to next i in for loop if doesnt exist
+  //     if (!userLookup) continue
+  //     // logic branch for add or removal
+  //     if (instructions === 1) {
+  //       // skip to next i in for loop if admin already present in admin/member arrays
+  //       if (
+  //         channelLookup.admins.includes(decodedEditChannelAccess.members[i])
+  //         || channelLookup.members.includes(decodedEditChannelAccess.members[i])
+  //       ) continue
+  //       // add user as member
+  //       await Channel.update({
+  //         id: decodedEditChannelAccess.channelTarget,
+  //         data: ({ current }) => ({
+  //           members: [...current.members, decodedEditChannelAccess.members[i]]
+  //         })
+  //       })
+  //     } else {
+  //       // skip to next i in for loop if member is not present
+  //       if (!channelLookup.members.includes(absBigInt(decodedEditChannelAccess.members[i]))) continue
+  //       // remove user as admin
+  //       await Channel.update({
+  //         id: decodedEditChannelAccess.channelTarget,
+  //         data: ({ current }) => ({
+  //           members: current.members.filter(memberId => memberId !== absBigInt(decodedEditChannelAccess.members[i]))
+  //         })
+  //       })
+  //     }
+  //   }
+  //   break
 
-        // /*
-        //  * EDIT CHANNEL ACCESS
-        //  */          
-        // case messageTypes.editChannelAccess:
-        //   console.log('running 103 edit chan access case')
-        //   // decode editchannelaccess message
-        //   const decodedEditChannelAccess = decodeEditChannelAccess({
-        //     msgBody: messageQueue[i].msgBody
-        //   })
-        //   // if decode uncessful exist case
-        //   if (!decodedEditChannelAccess) break
-        //   // lookup target channel
-        //   channelLookup = await Channel.findUnique({
-        //     id: decodedEditChannelAccess.channelTarget,
-        //   })
-        //   // if lookup unsuccessful exit case
-        //   if (!channelLookup) break          
-        //   // check if user id sender is admin of channel
-        //   if (!channelLookup.admins.includes(decodedPost.userId)) break
-        //   // process admin changes in for loop
-        //   for (let i = 0; i < decodedEditChannelAccess.admins.length; ++i) {
-        //     let instructions = decodedEditChannelAccess.admins[i] < 0 ? 0 : 1 // 0 = remove, 1 = add
-        //     // lookup userid to add/remove. do absolute value check incase of remove which will be negative
-        //     userLookup = await User.findUnique({ id: absBigInt(decodedEditChannelAccess.admins[i]) })
-        //     // skip to next i in for loop if doesnt exist
-        //     if (!userLookup) continue
-        //     // logic branch for add or removal
-        //     if (instructions === 1) {
-        //       // skip to next i in for loop if admin already present in admin/member arrays
-        //       if (
-        //         channelLookup.admins.includes(decodedEditChannelAccess.admins[i])
-        //         || channelLookup.members.includes(decodedEditChannelAccess.admins[i])
-        //       ) continue
-        //       // add user as admin
-        //       await Channel.update({
-        //         id: decodedEditChannelAccess.channelTarget,
-        //         data: ({ current }) => ({
-        //           admins: [...current.admins, decodedEditChannelAccess.admins[i]]
-        //         })
-        //       })
-        //     } else {
-        //       // skip to next i in for loop if admin is not present
-        //       if (!channelLookup.admins.includes(absBigInt(decodedEditChannelAccess.admins[i]))) continue
-        //       // remove user as admin
-        //       await Channel.update({
-        //         id: decodedEditChannelAccess.channelTarget,
-        //         data: ({ current }) => ({
-        //           admins: current.admins.filter(adminId => adminId !== absBigInt(decodedEditChannelAccess.admins[i]))
-        //         })
-        //       })
-        //     }
-        //   }
-        //   // process member changes in for loop
-        //   for (let i = 0; i < decodedEditChannelAccess.members.length; ++i) {
-        //     let instructions = decodedEditChannelAccess.members[i] < 0 ? 0 : 1 // 0 = remove, 1 = add
-        //     // lookup userid to add/remove. do absolute value check incase of remove which will be negative
-        //     userLookup = await User.findUnique({ id: absBigInt(decodedEditChannelAccess.members[i]) })            
-        //     // skip to next i in for loop if doesnt exist
-        //     if (!userLookup) continue
-        //     // logic branch for add or removal
-        //     if (instructions === 1) {
-        //       // skip to next i in for loop if admin already present in admin/member arrays
-        //       if (
-        //         channelLookup.admins.includes(decodedEditChannelAccess.members[i])
-        //         || channelLookup.members.includes(decodedEditChannelAccess.members[i])
-        //       ) continue
-        //       // add user as member
-        //       await Channel.update({
-        //         id: decodedEditChannelAccess.channelTarget,
-        //         data: ({ current }) => ({
-        //           members: [...current.members, decodedEditChannelAccess.members[i]]
-        //         })
-        //       })
-        //     } else {
-        //       // skip to next i in for loop if member is not present
-        //       if (!channelLookup.members.includes(absBigInt(decodedEditChannelAccess.members[i]))) continue
-        //       // remove user as admin
-        //       await Channel.update({
-        //         id: decodedEditChannelAccess.channelTarget,
-        //         data: ({ current }) => ({
-        //           members: current.members.filter(memberId => memberId !== absBigInt(decodedEditChannelAccess.members[i]))
-        //         })
-        //       })
-        //     }
-        //   }
-        //   break
+  // /**************************************************
 
-        // /**************************************************
+  //                   PUBLICATION CASES
 
-        //                   PUBLICATION CASES
+  // **************************************************/
 
-        // **************************************************/
+  // /*
+  //  * CREATE PUBLICATION
+  //  */
+  // case messageTypes.createPublication:
+  //   console.log('running 200 create pub case')
+  //   // decode msgBody into pub uri + channel tags
+  //   const decodedCreatePublication = decodeCreatePublication({
+  //     msgBody: messageQueue[i].msgBody,
+  //   })
+  //   console.log(
+  //     'decoded create pub before break: ',
+  //     decodedCreatePublication,
+  //   )
+  //   // if decode unsuccessful, exist case
+  //   if (!decodedCreatePublication) break
+  //   console.log('decoded the pub: ', decodedCreatePublication)
+  //   // increment publication counter
+  //   const publicationCounter = await PublicationCounter.upsert({
+  //     id: `${context.network.chainId}/${event.transaction.to}`,
+  //     create: {
+  //       counter: BigInt(1),
+  //       lastUpdated: event.block.timestamp,
+  //     },
+  //     update: ({ current }) => ({
+  //       counter: (current.counter as bigint) + BigInt(1),
+  //       lastUpdated: event.block.timestamp,
+  //     }),
+  //   })
+  //   // create publication
+  //   await Publication.create({
+  //     id: publicationCounter.counter as bigint,
+  //     data: {
+  //       createdTimestamp: event.block.timestamp,
+  //       createdBy: decodedPost.userId,
+  //       uri: decodedCreatePublication.uri,
+  //     },
+  //   })
+  //   // process channel tags
+  //   for (
+  //     let i = 0;
+  //     i < decodedCreatePublication.channelTags.length;
+  //     ++i
+  //   ) {
+  //     // check if channel exists
+  //     channelLookup = await Channel.findUnique({
+  //       id: decodedCreatePublication.channelTags[i],
+  //     })
+  //     if (!channelLookup) continue
+  //     // can only add references if admin/memmber of channel
+  //     if (
+  //       !channelLookup.admins.includes(decodedPost.userId) &&
+  //       !channelLookup.members?.includes(decodedPost.userId)
+  //     )
+  //       continue
+  //     // increment reference counter
+  //     referenceCounter = await ReferenceCounter.upsert({
+  //       id: 'ReferenceCounter',
+  //       create: {
+  //         counter: BigInt(1),
+  //         lastUpdated: event.block.timestamp,
+  //       },
+  //       update: ({ current }) => ({
+  //         counter: (current.counter as bigint) + BigInt(1),
+  //         lastUpdated: event.block.timestamp,
+  //       }),
+  //     })
+  //     // create reference
+  //     await Reference.create({
+  //       id: referenceCounter?.counter as bigint,
+  //       data: {
+  //         createdTimestamp: event.block.timestamp,
+  //         createdBy: decodedPost.userId,
+  //         channelId: decodedCreatePublication.channelTags[i],
+  //         pubRefId: publicationCounter?.counter as bigint,
+  //         chanRefId: undefined, // purposely left undefined
+  //       },
+  //     })
+  //   }
+  //   break
 
-        // /*
-        //  * CREATE PUBLICATION
-        //  */
-        // case messageTypes.createPublication:
-        //   console.log('running 200 create pub case')
-        //   // decode msgBody into pub uri + channel tags
-        //   const decodedCreatePublication = decodeCreatePublication({
-        //     msgBody: messageQueue[i].msgBody,
-        //   })
-        //   console.log(
-        //     'decoded create pub before break: ',
-        //     decodedCreatePublication,
-        //   )
-        //   // if decode unsuccessful, exist case
-        //   if (!decodedCreatePublication) break
-        //   console.log('decoded the pub: ', decodedCreatePublication)
-        //   // increment publication counter
-        //   const publicationCounter = await PublicationCounter.upsert({
-        //     id: `${context.network.chainId}/${event.transaction.to}`,
-        //     create: {
-        //       counter: BigInt(1),
-        //       lastUpdated: event.block.timestamp,
-        //     },
-        //     update: ({ current }) => ({
-        //       counter: (current.counter as bigint) + BigInt(1),
-        //       lastUpdated: event.block.timestamp,
-        //     }),
-        //   })
-        //   // create publication
-        //   await Publication.create({
-        //     id: publicationCounter.counter as bigint,
-        //     data: {
-        //       createdTimestamp: event.block.timestamp,
-        //       createdBy: decodedPost.userId,
-        //       uri: decodedCreatePublication.uri,
-        //     },
-        //   })
-        //   // process channel tags
-        //   for (
-        //     let i = 0;
-        //     i < decodedCreatePublication.channelTags.length;
-        //     ++i
-        //   ) {
-        //     // check if channel exists
-        //     channelLookup = await Channel.findUnique({
-        //       id: decodedCreatePublication.channelTags[i],
-        //     })
-        //     if (!channelLookup) continue
-        //     // can only add references if admin/memmber of channel
-        //     if (
-        //       !channelLookup.admins.includes(decodedPost.userId) &&
-        //       !channelLookup.members?.includes(decodedPost.userId)
-        //     )
-        //       continue
-        //     // increment reference counter
-        //     referenceCounter = await ReferenceCounter.upsert({
-        //       id: 'ReferenceCounter',
-        //       create: {
-        //         counter: BigInt(1),
-        //         lastUpdated: event.block.timestamp,
-        //       },
-        //       update: ({ current }) => ({
-        //         counter: (current.counter as bigint) + BigInt(1),
-        //         lastUpdated: event.block.timestamp,
-        //       }),
-        //     })
-        //     // create reference
-        //     await Reference.create({
-        //       id: referenceCounter?.counter as bigint,
-        //       data: {
-        //         createdTimestamp: event.block.timestamp,
-        //         createdBy: decodedPost.userId,
-        //         channelId: decodedCreatePublication.channelTags[i],
-        //         pubRefId: publicationCounter?.counter as bigint,
-        //         chanRefId: undefined, // purposely left undefined
-        //       },
-        //     })
-        //   }
-        //   break
+  // /*
+  //  * REFERENCE PUBLICATION
+  //  */
+  // case messageTypes.referencePublication:
+  //   console.log('running 201 reference pub case')
+  //   const decodedReferencePublication = decodeReferencePublication({
+  //     msgBody: messageQueue[i].msgBody,
+  //   })
+  //   // if decode uncessful exist case
+  //   if (!decodedReferencePublication) break
+  //   // process tags
+  //   for (
+  //     let i = 0;
+  //     i < decodedReferencePublication.channelTags.length;
+  //     ++i
+  //   ) {
+  //     // check if channel exists
+  //     channelLookup = await Channel.findUnique({
+  //       id: decodedReferencePublication.channelTags[i],
+  //     })
+  //     if (!channelLookup) continue
+  //     // can only add reference if admin/memmber of channel
+  //     if (
+  //       !channelLookup.admins.includes(decodedPost.userId) &&
+  //       !channelLookup.members?.includes(decodedPost.userId)
+  //     )
+  //       continue
+  //     // increment reference counter
+  //     referenceCounter = await ReferenceCounter.upsert({
+  //       id: 'ReferenceCounter',
+  //       create: {
+  //         counter: BigInt(1),
+  //         lastUpdated: event.block.timestamp,
+  //       },
+  //       update: ({ current }) => ({
+  //         counter: (current.counter as bigint) + BigInt(1),
+  //         lastUpdated: event.block.timestamp,
+  //       }),
+  //     })
+  //     // create reference
+  //     await Reference.create({
+  //       id: referenceCounter?.counter as bigint,
+  //       data: {
+  //         createdTimestamp: event.block.timestamp,
+  //         createdBy: decodedPost.userId,
+  //         channelId: decodedReferencePublication.channelTags[i],
+  //         pubRefId: decodedReferencePublication.targetPublication,
+  //         chanRefId: undefined, // purposely left undefined
+  //       },
+  //     })
+  //   }
+  //   break
 
-        // /*
-        //  * REFERENCE PUBLICATION
-        //  */
-        // case messageTypes.referencePublication:
-        //   console.log('running 201 reference pub case')
-        //   const decodedReferencePublication = decodeReferencePublication({
-        //     msgBody: messageQueue[i].msgBody,
-        //   })
-        //   // if decode uncessful exist case
-        //   if (!decodedReferencePublication) break
-        //   // process tags
-        //   for (
-        //     let i = 0;
-        //     i < decodedReferencePublication.channelTags.length;
-        //     ++i
-        //   ) {
-        //     // check if channel exists
-        //     channelLookup = await Channel.findUnique({
-        //       id: decodedReferencePublication.channelTags[i],
-        //     })
-        //     if (!channelLookup) continue
-        //     // can only add reference if admin/memmber of channel
-        //     if (
-        //       !channelLookup.admins.includes(decodedPost.userId) &&
-        //       !channelLookup.members?.includes(decodedPost.userId)
-        //     )
-        //       continue
-        //     // increment reference counter
-        //     referenceCounter = await ReferenceCounter.upsert({
-        //       id: 'ReferenceCounter',
-        //       create: {
-        //         counter: BigInt(1),
-        //         lastUpdated: event.block.timestamp,
-        //       },
-        //       update: ({ current }) => ({
-        //         counter: (current.counter as bigint) + BigInt(1),
-        //         lastUpdated: event.block.timestamp,
-        //       }),
-        //     })
-        //     // create reference
-        //     await Reference.create({
-        //       id: referenceCounter?.counter as bigint,
-        //       data: {
-        //         createdTimestamp: event.block.timestamp,
-        //         createdBy: decodedPost.userId,
-        //         channelId: decodedReferencePublication.channelTags[i],
-        //         pubRefId: decodedReferencePublication.targetPublication,
-        //         chanRefId: undefined, // purposely left undefined
-        //       },
-        //     })
-        //   }
-        //   break
+  // /**************************************************
 
-        // /**************************************************
+  //                     REMOVE CASE
 
-        //                     REMOVE CASE
+  // **************************************************/
 
-        // **************************************************/
-
-        // /*
-        //  * REMOVE REFERENCE
-        //  */
-        // case messageTypes.removeReference:
-        //   console.log('running 500 remove reference case')
-        //   const decodedRemoveReference = decodeRemoveReference({
-        //     msgBody: messageQueue[i].msgBody,
-        //   })
-        //   // if decode uncessful exist case
-        //   if (!decodedRemoveReference) break
-        //   // check if channel exists
-        //   channelLookup = await Channel.findUnique({
-        //     id: decodedRemoveReference.channelId,
-        //   })
-        //   if (!channelLookup) break
-        //   // check if reference exists and is in channel
-        //   const referenceLookup = await Reference.findUnique({
-        //     id: decodedRemoveReference.referenceId,
-        //   })
-        //   if (referenceLookup?.channelId != decodedRemoveReference.channelId)
-        //     break
-        //   // can only remove references if you are channel admin or reference creator
-        //   if (
-        //     !channelLookup.admins.includes(decodedPost.userId) &&
-        //     referenceLookup.createdBy != decodedPost.userId
-        //   )
-        //     break
-        //   // update reference so that it no longer has a target channel
-        //   // NOTE: this was updated to delete the entire reference
-        //   //    as opposed to just clearing the value of the channel it was anchored to
-        //   await Reference.delete({
-        //     id: decodedRemoveReference.referenceId,
-        //   })
-        //   break
+  // /*
+  //  * REMOVE REFERENCE
+  //  */
+  // case messageTypes.removeReference:
+  //   console.log('running 500 remove reference case')
+  //   const decodedRemoveReference = decodeRemoveReference({
+  //     msgBody: messageQueue[i].msgBody,
+  //   })
+  //   // if decode uncessful exist case
+  //   if (!decodedRemoveReference) break
+  //   // check if channel exists
+  //   channelLookup = await Channel.findUnique({
+  //     id: decodedRemoveReference.channelId,
+  //   })
+  //   if (!channelLookup) break
+  //   // check if reference exists and is in channel
+  //   const referenceLookup = await Reference.findUnique({
+  //     id: decodedRemoveReference.referenceId,
+  //   })
+  //   if (referenceLookup?.channelId != decodedRemoveReference.channelId)
+  //     break
+  //   // can only remove references if you are channel admin or reference creator
+  //   if (
+  //     !channelLookup.admins.includes(decodedPost.userId) &&
+  //     referenceLookup.createdBy != decodedPost.userId
+  //   )
+  //     break
+  //   // update reference so that it no longer has a target channel
+  //   // NOTE: this was updated to delete the entire reference
+  //   //    as opposed to just clearing the value of the channel it was anchored to
+  //   await Reference.delete({
+  //     id: decodedRemoveReference.referenceId,
+  //   })
+  //   break
   //     }
   //   }
   // }
@@ -708,4 +846,4 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
   //     event.transaction.hash,
   //   )
   // }
-})
+});

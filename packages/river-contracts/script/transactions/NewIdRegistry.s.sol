@@ -28,4 +28,5 @@ contract IdRegistryScript is Script {
 
 // source .env
 // forge script script/transactions/NewIdRegistry.s.sol:IdRegistryScript -vvvv --fork-url http://localhost:8545 --broadcast
+
 // forge script script/transactions/NewIdRegistry.s.sol:IdRegistryScript -vvvv --rpc-url $RPC_URL --broadcast  

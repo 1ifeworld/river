@@ -18,21 +18,24 @@ contract NewPostScript is Script {
     Account public relayer;
     Account public user;    
     uint256 public deployerPrivateKey;
+    VmSafe.Wallet public deployerWallet;
     
     function setUp() public {
         relayer = makeAccount("relayer");
-        user = makeAccount("user");        
+        user = makeAccount("user");              
     }
 
     function run() public {
         /* Load private key */
         bytes32 privateKeyBytes = vm.envBytes32("PRIVATE_KEY");
         deployerPrivateKey = uint256(privateKeyBytes);
+        deployerWallet = vm.createWallet(deployerPrivateKey);
+        console2.log("address", deployerWallet.addr);
         /* Start function transmission */
         vm.startBroadcast(deployerPrivateKey);
 
-        // createChannel();        
-        createItemAndAddToChannel();
+        createChannel();        
+        // createItemAndAddToChannel();
         // editChannelAccess_AddAdmin();
         // editChannelAccess_RemoveAdmin();
         // editChannelAccess_AddMember();
@@ -69,19 +72,18 @@ contract NewPostScript is Script {
             rid: 1,
             timestamp: block.timestamp + 1,
             msgType: IPostGateway2.MessageTypes.CREATE_CHANNEL, // create/init id
-            contents: abi.encode(channel)
+            msgBody: abi.encode(channel)
         });
         // create hash + sig for post
-        bytes32 hash = keccak256(abi.encode(message)).toEthSignedMessageHash();
-        bytes memory sig = signMessage(user.key, message);
+        (bytes32 createChannelHash, bytes memory createChannelSig) = signMessage(deployerPrivateKey, message);
         // structure Post
         IPostGateway2.Post memory post = IPostGateway2.Post({
-            signer: user.addr,
+            signer: deployerWallet.addr,
             message: message,
             hashType: 1,
-            hash: hash, 
+            hash: createChannelHash, 
             sigType: 1,
-            sig: sig
+            sig: createChannelSig
         });
         // process post 
         postGateway.post(post);
@@ -111,14 +113,13 @@ contract NewPostScript is Script {
             rid: 1,
             timestamp: block.timestamp + 1,
             msgType: IPostGateway2.MessageTypes.CREATE_ITEM,
-            contents: abi.encode(createItem)
+            msgBody: abi.encode(createItem)
         });
         // create hash + sig for post
-        bytes32 createItemHash = keccak256(abi.encode(createItemMessage)).toEthSignedMessageHash();
-        bytes memory createItemSig = signMessage(user.key, createItemMessage);
+        (bytes32 createItemHash, bytes memory createItemSig) = signMessage(deployerPrivateKey, createItemMessage);
         // structure create item Post
         IPostGateway2.Post memory createItemPost = IPostGateway2.Post({
-            signer: user.addr,
+            signer: deployerWallet.addr,
             message: createItemMessage,
             hashType: 1,
             hash: createItemHash, 
@@ -140,14 +141,13 @@ contract NewPostScript is Script {
             rid: 1,
             timestamp: block.timestamp + 1,
             msgType: IPostGateway2.MessageTypes.ADD_ITEM_TO_CHANNEL,
-            contents: abi.encode(addItem)
+            msgBody: abi.encode(addItem)
         });
         // create hash + sig for post
-        bytes32 addItemHash = keccak256(abi.encode(addItemMessage)).toEthSignedMessageHash();
-        bytes memory addItemSig = signMessage(user.key, addItemMessage);
+        (bytes32 addItemHash, bytes memory addItemSig) = signMessage(deployerPrivateKey, addItemMessage);
         // structure add item Post
         IPostGateway2.Post memory addItemPost = IPostGateway2.Post({
-            signer: user.addr,
+            signer: deployerWallet.addr,
             message: addItemMessage,
             hashType: 1,
             hash: addItemHash, 
@@ -426,8 +426,8 @@ contract NewPostScript is Script {
     function signMessage(
         uint256 privateKey, 
         PostGateway2.Message memory message
-    ) public pure returns (bytes memory signedMessage) {
-        bytes32 hash = keccak256(abi.encode(message)).toEthSignedMessageHash();
+    ) public pure returns (bytes32 hash, bytes memory signedMessage) {
+        hash = keccak256(abi.encode(message)).toEthSignedMessageHash();
         signedMessage = _sign(privateKey, hash);
     }           
 }
