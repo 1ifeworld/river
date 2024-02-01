@@ -1,16 +1,78 @@
 // SPDX-License-Identifier: MIT
-// OpenZeppelin Contracts (last updated v4.9.0) (utils/math/Math.sol)
+// OpenZeppelin Contracts (last updated v5.0.0) (utils/math/Math.sol)
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.20;
 
 /**
  * @dev Standard math utilities missing in the Solidity language.
  */
 library Math {
+    /**
+     * @dev Muldiv operation overflow.
+     */
+    error MathOverflowedMulDiv();
+
     enum Rounding {
-        Down, // Toward negative infinity
-        Up, // Toward infinity
-        Zero // Toward zero
+        Floor, // Toward negative infinity
+        Ceil, // Toward positive infinity
+        Trunc, // Toward zero
+        Expand // Away from zero
+    }
+
+    /**
+     * @dev Returns the addition of two unsigned integers, with an success flag (no overflow).
+     */
+    function tryAdd(uint256 a, uint256 b) internal pure returns (bool success, uint256 result) {
+        unchecked {
+            uint256 c = a + b;
+            if (c < a) return (false, 0);
+            return (true, c);
+        }
+    }
+
+    /**
+     * @dev Returns the subtraction of two unsigned integers, with an success flag (no overflow).
+     */
+    function trySub(uint256 a, uint256 b) internal pure returns (bool success, uint256 result) {
+        unchecked {
+            if (b > a) return (false, 0);
+            return (true, a - b);
+        }
+    }
+
+    /**
+     * @dev Returns the multiplication of two unsigned integers, with an success flag (no overflow).
+     */
+    function tryMul(uint256 a, uint256 b) internal pure returns (bool success, uint256 result) {
+        unchecked {
+            // Gas optimization: this is cheaper than requiring 'a' not being zero, but the
+            // benefit is lost if 'b' is also tested.
+            // See: https://github.com/OpenZeppelin/openzeppelin-contracts/pull/522
+            if (a == 0) return (true, 0);
+            uint256 c = a * b;
+            if (c / a != b) return (false, 0);
+            return (true, c);
+        }
+    }
+
+    /**
+     * @dev Returns the division of two unsigned integers, with a success flag (no division by zero).
+     */
+    function tryDiv(uint256 a, uint256 b) internal pure returns (bool success, uint256 result) {
+        unchecked {
+            if (b == 0) return (false, 0);
+            return (true, a / b);
+        }
+    }
+
+    /**
+     * @dev Returns the remainder of dividing two unsigned integers, with a success flag (no division by zero).
+     */
+    function tryMod(uint256 a, uint256 b) internal pure returns (bool success, uint256 result) {
+        unchecked {
+            if (b == 0) return (false, 0);
+            return (true, a % b);
+        }
     }
 
     /**
@@ -39,29 +101,41 @@ library Math {
     /**
      * @dev Returns the ceiling of the division of two numbers.
      *
-     * This differs from standard division with `/` in that it rounds up instead
-     * of rounding down.
+     * This differs from standard division with `/` in that it rounds towards infinity instead
+     * of rounding towards zero.
      */
     function ceilDiv(uint256 a, uint256 b) internal pure returns (uint256) {
-        // (a + b - 1) / b can overflow on addition, so we distribute.
-        return a == 0 ? 0 : (a - 1) / b + 1;
+        if (b == 0) {
+            // Guarantee the same behavior as in a regular Solidity division.
+            return a / b;
+        }
+
+        // The following calculation ensures accurate ceiling division without overflow.
+        // Since a is non-zero, (a - 1) / b will not overflow.
+        // The largest possible result occurs when (a - 1) / b is type(uint256).max,
+        // but the largest value we can obtain is type(uint256).max - 1, which happens
+        // when a = type(uint256).max and b = 1.
+        unchecked {
+            return a == 0 ? 0 : (a - 1) / b + 1;
+        }
     }
 
     /**
-     * @notice Calculates floor(x * y / denominator) with full precision. Throws if result overflows a uint256 or denominator == 0
-     * @dev Original credit to Remco Bloemen under MIT license (https://xn--2-umb.com/21/muldiv)
-     * with further edits by Uniswap Labs also under MIT license.
+     * @dev Calculates floor(x * y / denominator) with full precision. Throws if result overflows a uint256 or
+     * denominator == 0.
+     *
+     * Original credit to Remco Bloemen under MIT license (https://xn--2-umb.com/21/muldiv) with further edits by
+     * Uniswap Labs also under MIT license.
      */
     function mulDiv(uint256 x, uint256 y, uint256 denominator) internal pure returns (uint256 result) {
         unchecked {
             // 512-bit multiply [prod1 prod0] = x * y. Compute the product mod 2^256 and mod 2^256 - 1, then use
             // use the Chinese Remainder Theorem to reconstruct the 512 bit result. The result is stored in two 256
             // variables such that product = prod1 * 2^256 + prod0.
-            uint256 prod0; // Least significant 256 bits of the product
+            uint256 prod0 = x * y; // Least significant 256 bits of the product
             uint256 prod1; // Most significant 256 bits of the product
             assembly {
                 let mm := mulmod(x, y, not(0))
-                prod0 := mul(x, y)
                 prod1 := sub(sub(mm, prod0), lt(mm, prod0))
             }
 
@@ -74,7 +148,9 @@ library Math {
             }
 
             // Make sure the result is less than 2^256. Also prevents denominator == 0.
-            require(denominator > prod1, "Math: mulDiv overflow");
+            if (denominator <= prod1) {
+                revert MathOverflowedMulDiv();
+            }
 
             ///////////////////////////////////////////////
             // 512 by 256 division.
@@ -91,11 +167,10 @@ library Math {
                 prod0 := sub(prod0, remainder)
             }
 
-            // Factor powers of two out of denominator and compute largest power of two divisor of denominator. Always >= 1.
-            // See https://cs.stackexchange.com/q/138556/92363.
+            // Factor powers of two out of denominator and compute largest power of two divisor of denominator.
+            // Always >= 1. See https://cs.stackexchange.com/q/138556/92363.
 
-            // Does not overflow because the denominator cannot be zero at this stage in the function.
-            uint256 twos = denominator & (~denominator + 1);
+            uint256 twos = denominator & (0 - denominator);
             assembly {
                 // Divide denominator by twos.
                 denominator := div(denominator, twos)
@@ -115,8 +190,8 @@ library Math {
             // four bits. That is, denominator * inv = 1 mod 2^4.
             uint256 inverse = (3 * denominator) ^ 2;
 
-            // Use the Newton-Raphson iteration to improve the precision. Thanks to Hensel's lifting lemma, this also works
-            // in modular arithmetic, doubling the correct bits in each step.
+            // Use the Newton-Raphson iteration to improve the precision. Thanks to Hensel's lifting lemma, this also
+            // works in modular arithmetic, doubling the correct bits in each step.
             inverse *= 2 - denominator * inverse; // inverse mod 2^8
             inverse *= 2 - denominator * inverse; // inverse mod 2^16
             inverse *= 2 - denominator * inverse; // inverse mod 2^32
@@ -134,18 +209,75 @@ library Math {
     }
 
     /**
-     * @notice Calculates x * y / denominator with full precision, following the selected rounding direction.
+     * @dev Calculates x * y / denominator with full precision, following the selected rounding direction.
      */
     function mulDiv(uint256 x, uint256 y, uint256 denominator, Rounding rounding) internal pure returns (uint256) {
         uint256 result = mulDiv(x, y, denominator);
-        if (rounding == Rounding.Up && mulmod(x, y, denominator) > 0) {
+        if (unsignedRoundsUp(rounding) && mulmod(x, y, denominator) > 0) {
             result += 1;
         }
         return result;
     }
 
     /**
-     * @dev Returns the square root of a number. If the number is not a perfect square, the value is rounded down.
+     * @dev Calculate the modular multiplicative inverse of a number in Z/nZ.
+     *
+     * If n is a prime, then Z/nZ is a field. In that case all elements are inversible, expect 0.
+     * If n is not a prime, then Z/nZ is not a field, and some elements might not be inversible.
+     *
+     * If the input value is not inversible, 0 is returned.
+     */
+    function invMod(uint256 a, uint256 n) internal pure returns (uint256) {
+        unchecked {
+            if (n == 0) return 0;
+
+            // The inverse modulo is calculated using the Extended Euclidean Algorithm (iterative version)
+            // Used to compute integers x and y such that: ax + ny = gcd(a, n).
+            // When the gcd is 1, then the inverse of a modulo n exists and it's x.
+            // ax + ny = 1
+            // ax = 1 + (-y)n
+            // ax ≡ 1 (mod n) # x is the inverse of a modulo n
+
+            // If the remainder is 0 the gcd is n right away.
+            uint256 remainder = a % n;
+            uint256 gcd = n;
+
+            // Therefore the initial coefficients are:
+            // ax + ny = gcd(a, n) = n
+            // 0a + 1n = n
+            int256 x = 0;
+            int256 y = 1;
+
+            while (remainder != 0) {
+                uint256 quotient = gcd / remainder;
+
+                (gcd, remainder) = (
+                    // The old remainder is the next gcd to try.
+                    remainder,
+                    // Compute the next remainder.
+                    // Can't overflow given that (a % gcd) * (gcd // (a % gcd)) <= gcd
+                    // where gcd is at most n (capped to type(uint256).max)
+                    gcd - remainder * quotient
+                );
+
+                (x, y) = (
+                    // Increment the coefficient of a.
+                    y,
+                    // Decrement the coefficient of n.
+                    // Can overflow, but the result is casted to uint256 so that the
+                    // next value of y is "wrapped around" to a value between 0 and n - 1.
+                    x - y * int256(quotient)
+                );
+            }
+
+            if (gcd != 1) return 0; // No inverse exists.
+            return x < 0 ? (n - uint256(-x)) : uint256(x); // Wrap the result if it's negative.
+        }
+    }
+
+    /**
+     * @dev Returns the square root of a number. If the number is not a perfect square, the value is rounded
+     * towards zero.
      *
      * Inspired by Henry S. Warren, Jr.'s "Hacker's Delight" (Chapter 11).
      */
@@ -183,17 +315,17 @@ library Math {
     }
 
     /**
-     * @notice Calculates sqrt(a), following the selected rounding direction.
+     * @dev Calculates sqrt(a), following the selected rounding direction.
      */
     function sqrt(uint256 a, Rounding rounding) internal pure returns (uint256) {
         unchecked {
             uint256 result = sqrt(a);
-            return result + (rounding == Rounding.Up && result * result < a ? 1 : 0);
+            return result + (unsignedRoundsUp(rounding) && result * result < a ? 1 : 0);
         }
     }
 
     /**
-     * @dev Return the log in base 2, rounded down, of a positive value.
+     * @dev Return the log in base 2 of a positive value rounded towards zero.
      * Returns 0 if given 0.
      */
     function log2(uint256 value) internal pure returns (uint256) {
@@ -241,12 +373,12 @@ library Math {
     function log2(uint256 value, Rounding rounding) internal pure returns (uint256) {
         unchecked {
             uint256 result = log2(value);
-            return result + (rounding == Rounding.Up && 1 << result < value ? 1 : 0);
+            return result + (unsignedRoundsUp(rounding) && 1 << result < value ? 1 : 0);
         }
     }
 
     /**
-     * @dev Return the log in base 10, rounded down, of a positive value.
+     * @dev Return the log in base 10 of a positive value rounded towards zero.
      * Returns 0 if given 0.
      */
     function log10(uint256 value) internal pure returns (uint256) {
@@ -290,12 +422,12 @@ library Math {
     function log10(uint256 value, Rounding rounding) internal pure returns (uint256) {
         unchecked {
             uint256 result = log10(value);
-            return result + (rounding == Rounding.Up && 10 ** result < value ? 1 : 0);
+            return result + (unsignedRoundsUp(rounding) && 10 ** result < value ? 1 : 0);
         }
     }
 
     /**
-     * @dev Return the log in base 256, rounded down, of a positive value.
+     * @dev Return the log in base 256 of a positive value rounded towards zero.
      * Returns 0 if given 0.
      *
      * Adding one to the result gives the number of pairs of hex symbols needed to represent `value` as a hex string.
@@ -333,7 +465,14 @@ library Math {
     function log256(uint256 value, Rounding rounding) internal pure returns (uint256) {
         unchecked {
             uint256 result = log256(value);
-            return result + (rounding == Rounding.Up && 1 << (result << 3) < value ? 1 : 0);
+            return result + (unsignedRoundsUp(rounding) && 1 << (result << 3) < value ? 1 : 0);
         }
+    }
+
+    /**
+     * @dev Returns whether a provided rounding mode is considered rounding up for unsigned integers.
+     */
+    function unsignedRoundsUp(Rounding rounding) internal pure returns (bool) {
+        return uint8(rounding) % 2 == 1;
     }
 }

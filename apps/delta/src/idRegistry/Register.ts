@@ -5,9 +5,9 @@ ponder.on('IdRegistry:Register', async ({ event, context }) => {
   const {
     // IdRegistry,
     User,
-    Txn,
+    // Txn,
   } = context.db
-  const { to, id, backup, data } = event.args
+  const { to, id, recovery } = event.args
 
   // console.log("id registry address: ", event.transaction.to)
   // console.log("register event -- id: ", id)
@@ -19,20 +19,20 @@ ponder.on('IdRegistry:Register', async ({ event, context }) => {
     data: {
       userId: id,
       to: to,
-      backup: backup,
+      recovery: recovery,
       from: event.transaction.from,
     },
   })
 
   // record every transaction that has entered the crud cycle
-  const txnReceipt = await Txn.findUnique({ id: event.transaction.hash })
-  if (!txnReceipt) {
-    await Txn.create({ id: event.transaction.hash })
-    console.log(
-      'processing complete. processed txn hash: ',
-      event.transaction.hash,
-    )
-  }
+  // const txnReceipt = await Txn.findUnique({ id: event.transaction.hash })
+  // if (!txnReceipt) {
+  //   await Txn.create({ id: event.transaction.hash })
+  //   console.log(
+  //     'processing complete. processed txn hash: ',
+  //     event.transaction.hash,
+  //   )
+  // }
 
   // await IdRegistry.create({
   //   id: `420/${to}/${id}`,

@@ -1,11 +1,10 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.20;
 
-import "forge-std/Test.sol";
+import {Test} from "forge-std/Test.sol";
 
-import "../../../contracts/utils/math/Math.sol";
-import "../../../contracts/utils/math/SafeMath.sol";
+import {Math} from "@openzeppelin/contracts/utils/math/Math.sol";
 
 contract MathTest is Test {
     // CEILDIV
@@ -17,10 +16,11 @@ contract MathTest is Test {
         if (result == 0) {
             assertEq(a, 0);
         } else {
-            uint256 maxdiv = UINT256_MAX / b;
-            bool overflow = maxdiv * b < a;
-            assertTrue(a > b * (result - 1));
-            assertTrue(overflow ? result == maxdiv + 1 : a <= b * result);
+            uint256 expect = a / b;
+            if (expect * b < a) {
+                expect += 1;
+            }
+            assertEq(result, expect);
         }
     }
 
@@ -32,12 +32,12 @@ contract MathTest is Test {
 
         // square of result is bigger than input
         if (_squareBigger(result, input)) {
-            assertTrue(rounding == Math.Rounding.Up);
+            assertTrue(Math.unsignedRoundsUp(rounding));
             assertTrue(_squareSmaller(result - 1, input));
         }
         // square of result is smaller than input
         else if (_squareSmaller(result, input)) {
-            assertFalse(rounding == Math.Rounding.Up);
+            assertFalse(Math.unsignedRoundsUp(rounding));
             assertTrue(_squareBigger(result + 1, input));
         }
         // input is perfect square
@@ -47,12 +47,47 @@ contract MathTest is Test {
     }
 
     function _squareBigger(uint256 value, uint256 ref) private pure returns (bool) {
-        (bool noOverflow, uint256 square) = SafeMath.tryMul(value, value);
+        (bool noOverflow, uint256 square) = Math.tryMul(value, value);
         return !noOverflow || square > ref;
     }
 
     function _squareSmaller(uint256 value, uint256 ref) private pure returns (bool) {
         return value * value < ref;
+    }
+
+    // INV
+    function testInvMod(uint256 value, uint256 p) public {
+        _testInvMod(value, p, true);
+    }
+
+    function testInvMod2(uint256 seed) public {
+        uint256 p = 2; // prime
+        _testInvMod(bound(seed, 1, p - 1), p, false);
+    }
+
+    function testInvMod17(uint256 seed) public {
+        uint256 p = 17; // prime
+        _testInvMod(bound(seed, 1, p - 1), p, false);
+    }
+
+    function testInvMod65537(uint256 seed) public {
+        uint256 p = 65537; // prime
+        _testInvMod(bound(seed, 1, p - 1), p, false);
+    }
+
+    function testInvModP256(uint256 seed) public {
+        uint256 p = 0xffffffff00000001000000000000000000000000ffffffffffffffffffffffff; // prime
+        _testInvMod(bound(seed, 1, p - 1), p, false);
+    }
+
+    function _testInvMod(uint256 value, uint256 p, bool allowZero) private {
+        uint256 inverse = Math.invMod(value, p);
+        if (inverse != 0) {
+            assertEq(mulmod(value, inverse, p), 1);
+            assertLt(inverse, p);
+        } else {
+            assertTrue(allowZero);
+        }
     }
 
     // LOG2
@@ -64,10 +99,10 @@ contract MathTest is Test {
         if (input == 0) {
             assertEq(result, 0);
         } else if (_powerOf2Bigger(result, input)) {
-            assertTrue(rounding == Math.Rounding.Up);
+            assertTrue(Math.unsignedRoundsUp(rounding));
             assertTrue(_powerOf2Smaller(result - 1, input));
         } else if (_powerOf2Smaller(result, input)) {
-            assertFalse(rounding == Math.Rounding.Up);
+            assertFalse(Math.unsignedRoundsUp(rounding));
             assertTrue(_powerOf2Bigger(result + 1, input));
         } else {
             assertEq(2 ** result, input);
@@ -91,10 +126,10 @@ contract MathTest is Test {
         if (input == 0) {
             assertEq(result, 0);
         } else if (_powerOf10Bigger(result, input)) {
-            assertTrue(rounding == Math.Rounding.Up);
+            assertTrue(Math.unsignedRoundsUp(rounding));
             assertTrue(_powerOf10Smaller(result - 1, input));
         } else if (_powerOf10Smaller(result, input)) {
-            assertFalse(rounding == Math.Rounding.Up);
+            assertFalse(Math.unsignedRoundsUp(rounding));
             assertTrue(_powerOf10Bigger(result + 1, input));
         } else {
             assertEq(10 ** result, input);
@@ -118,10 +153,10 @@ contract MathTest is Test {
         if (input == 0) {
             assertEq(result, 0);
         } else if (_powerOf256Bigger(result, input)) {
-            assertTrue(rounding == Math.Rounding.Up);
+            assertTrue(Math.unsignedRoundsUp(rounding));
             assertTrue(_powerOf256Smaller(result - 1, input));
         } else if (_powerOf256Smaller(result, input)) {
-            assertFalse(rounding == Math.Rounding.Up);
+            assertFalse(Math.unsignedRoundsUp(rounding));
             assertTrue(_powerOf256Bigger(result + 1, input));
         } else {
             assertEq(256 ** result, input);

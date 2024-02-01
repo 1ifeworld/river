@@ -1,0 +1,4 @@
+openzeppelin-contracts/=lib/openzeppelin-contracts/contracts/
+sstore2/=lib/sstore2/contracts/
+micro-onchain-metadata-utils/=lib/micro-onchain-metadata-utils/src/
+solidity-bytes-utils/=lib/solidity-bytes-utils/contracts

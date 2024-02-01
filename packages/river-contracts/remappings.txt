@@ -1,4 +1,2 @@
-imp/=lib/imp/src
-light-account/=lib/light-account/src/
-light-account-lib/=lib/light-account/lib/
 openzeppelin-contracts/=lib/openzeppelin-contracts/contracts/
+river-contracts/=lib/river-contracts/src

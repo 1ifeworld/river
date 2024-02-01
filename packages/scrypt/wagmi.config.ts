@@ -10,12 +10,13 @@ export default defineConfig({
         'Post.json',
         'Message.json',
         'Item.json',
+        'PostGateway2.json'
       ],
     }),
     foundry({
-      project: '../river-contracts/lib/imp',
-      include: ['IdRegistry.json', 'PostGateway.json'],
-    }),
+      project: '../river-contracts/lib/river-contracts',
+      include: ['IdRegistry.json'],
+    }) 
   ],
   out: './abi/generated.ts',
 })
