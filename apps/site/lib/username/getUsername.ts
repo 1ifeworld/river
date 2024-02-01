@@ -7,7 +7,7 @@ export async function getUsername({ id }: { id: bigint }) {
     const idString = id.toString()
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_USERNAME_DB}/getUsernameById`,
+      `${process.env.NEXT_PUBLIC_USERNAME_SERVICE}/getUsernameById`,
       {
         method: 'POST',
         headers: {
