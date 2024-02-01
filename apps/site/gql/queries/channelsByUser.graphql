@@ -1,0 +1,10 @@
+query channelsByUser($userId: BigInt!) {
+  channels(where: {createdBy: $userId}, orderBy: "id", orderDirection: "desc") {
+    id
+    admins
+    createdBy
+    createdTimestamp
+    members
+    uri
+  }
+}

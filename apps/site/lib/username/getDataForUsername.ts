@@ -1,4 +1,5 @@
 export async function getDataForUsername({ username }: { username: string }) {
+  console.log('Provided username', username)
   if (!username) {
     throw new Error('username is required')
   }

@@ -874,6 +874,23 @@ export type ChannelWithIdQuery = {
   } | null
 }
 
+export type ChannelsByUserQueryVariables = Exact<{
+  userId: Scalars['BigInt']['input']
+}>
+
+export type ChannelsByUserQuery = {
+  __typename?: 'Query'
+  channels: Array<{
+    __typename?: 'Channel'
+    id: any
+    admins: Array<any>
+    createdBy: any
+    createdTimestamp: any
+    members: Array<any>
+    uri: string
+  }>
+}
+
 export type ReferenceWithIdQueryVariables = Exact<{
   id: Scalars['BigInt']['input']
 }>
@@ -1020,6 +1037,18 @@ export const ChannelWithIdDocument = gql`
   }
 }
     `
+export const ChannelsByUserDocument = gql`
+    query channelsByUser($userId: BigInt!) {
+  channels(where: {createdBy: $userId}, orderBy: "id", orderDirection: "desc") {
+    id
+    admins
+    createdBy
+    createdTimestamp
+    members
+    uri
+  }
+}
+    `
 export const ReferenceWithIdDocument = gql`
     query referenceWithId($id: BigInt!) {
   reference(id: $id) {
@@ -1156,6 +1185,21 @@ export function getSdk(
             ...wrappedRequestHeaders,
           }),
         'channelWithId',
+        'query',
+      )
+    },
+    channelsByUser(
+      variables: ChannelsByUserQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<ChannelsByUserQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<ChannelsByUserQuery>(
+            ChannelsByUserDocument,
+            variables,
+            { ...requestHeaders, ...wrappedRequestHeaders },
+          ),
+        'channelsByUser',
         'query',
       )
     },

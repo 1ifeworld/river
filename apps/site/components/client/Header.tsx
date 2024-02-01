@@ -1,4 +1,4 @@
-import { ChannelDialog, User, UsernameDialog } from '@/client'
+import { ChannelDialog, UserDropdown, UsernameDialog } from '@/client'
 import { Button, Flex, Typography } from '@/design-system'
 import { RiverLogo } from '@/server'
 import { useLogin, usePrivy } from '@privy-io/react-auth'
@@ -42,7 +42,7 @@ export function Header() {
           <Flex className="gap-x-5">
             <ChannelDialog authenticated={authenticated} login={login} />
             {authenticated ? (
-              <User setOpen={setOpen} />
+              <UserDropdown setOpen={setOpen} />
             ) : (
               <Button variant="link" onClick={login}>
                 <Typography>Login</Typography>

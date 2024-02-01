@@ -28,10 +28,10 @@ export default function RootLayout({
           <Analytics />
         </Providers>
       </body>
-      <Script
+      {/* <Script
         async
         src="https://saturn.tech/widget.js#integration=14b09943-4822-45b7-892d-a0150f577c33"
-      />
+      /> */}
     </html>
   )
 }

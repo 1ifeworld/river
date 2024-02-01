@@ -1,88 +1,42 @@
-import { Stack } from '@/design-system'
-import { ActivityBanner, ActivityChannels, ActivityItems } from '@/server'
+import { Stack, Typography, Flex, Grid, Separator } from '@/design-system'
+import { ChannelCard } from '@/server'
+import { getDataForUsername } from '@/lib'
+import { getChannelsByUser } from '@/gql'
+import { pluralize } from '@/utils'
 
-export default async function User({
+export default async function Profile({
   params,
 }: {
   params: { username: string }
 }) {
-  const mockUserObject: {
-    name: string
-    desc: string
-    channels: {
-      id: string
-      name: string
-      creator: string
-      imageUri: string
-      modified: string
-    }[]
-    items: {
-      id: string
-      name: string
-      creator: string
-      imageUri: string
-      channel: string
-      added: string
-    }[]
-  } = {
-    name: params.username,
-    desc: 'Design, Research, Art Direction - j@lifeworld.co',
-    channels: [
-      {
-        id: 'unique-id-1',
-        name: 'nothing was the same',
-        creator: 'tranqui.eth',
-        imageUri: 'naHH',
-        modified: '23 minutes ago',
-      },
-      {
-        id: 'unique-id-2',
-        name: 'what about us',
-        creator: 'salief.eth',
-        imageUri: 'naHH',
-        modified: '3 days ago',
-      },
-      {
-        id: 'unique-id-3',
-        name: 'nothing was the same',
-        creator: 'tranqui.eth',
-        imageUri: 'naHH',
-        modified: '4 days ago',
-      },
-    ],
-    items: [
-      {
-        id: 'unique-id-1',
-        name: 'uknxwWthevib832os.png',
-        creator: 'joey',
-        imageUri: 'naHH',
-        channel: 'nothing was the same',
-        added: '1 day ago',
-      },
-      {
-        id: 'unique-id-2',
-        name: 'heyyyyyyyyY.mp4',
-        creator: 'tranqui.eth',
-        imageUri: 'naHH',
-        channel: 'Network Protagonist',
-        added: '2 days ago',
-      },
-      {
-        id: 'unique-id-3',
-        name: 'Unstoppable',
-        creator: 'verymehari.eth',
-        imageUri: 'naHH',
-        channel: 'Vestiges - pt 1',
-        added: '5 days ago',
-      },
-    ],
-  }
+  const userData = await getDataForUsername({ username: params.username })
+
+  const { channels } = await getChannelsByUser(userData.id)
 
   return (
-    <Stack className="pt-[72px] gap-14">
-      <ActivityBanner user={mockUserObject} />
-      <ActivityChannels user={mockUserObject} />
-      <ActivityItems user={mockUserObject} />
+    <Stack className="gap-y-8 pt-[38px] px-5 pb-8">
+      <div>
+        <Typography>{params.username}</Typography>
+        {/* TODO: Display number of items */}
+        <Typography className="text-secondary-foreground">
+          {pluralize(channels.length, 'channel', 'channels')}
+        </Typography>
+      </div>
+      <Separator />
+      <Flex className="gap-x-4 items-center">
+        <Typography>Channels</Typography>
+        {/* TODO: Display created items */}
+        <Typography className="text-secondary-foreground opacity-0">
+          Items
+        </Typography>
+      </Flex>
+      {/* Channels */}
+      <Grid className="grid-cols-1 md:grid-cols-[repeat(auto-fill,_minmax(256px,_1fr))] gap-5">
+        {channels.map((channel, index: number) => (
+          // @ts-ignore
+          <ChannelCard channel={channel} />
+        ))}
+      </Grid>
     </Stack>
   )
 }
