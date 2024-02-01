@@ -6,7 +6,7 @@ export async function checkUsernameAvailability(
   username: string,
 ): Promise<CheckResponse> {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_USERNAME_DB}/get`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_USERNAME_SERVICE}/get`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
