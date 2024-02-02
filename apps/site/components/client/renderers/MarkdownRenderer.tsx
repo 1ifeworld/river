@@ -137,7 +137,7 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
 
   const editorStyle = {
     height: 'calc(100% - 40px)', 
-    maxHeight: '90vh',
+    maxHeight: '110vh',
     width: '80%', 
     overflow: 'auto',
     padding: '1.5rem',
