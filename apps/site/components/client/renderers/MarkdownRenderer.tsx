@@ -47,6 +47,7 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
     maxHeight: '70vh',
     overflow: 'auto',
     padding: editorPadding, 
+    marginTop: '40px', 
   }
   
   const loadingStyle = {
