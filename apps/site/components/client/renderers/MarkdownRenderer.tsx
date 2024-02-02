@@ -60,13 +60,20 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
     backgroundColor: 'white', 
     fontFamily: 'SFMono-Regular'
   }
-  
+
+  const loadingStyle = {
+    ...editorStyle, 
+    display: 'flex', 
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '70vh', 
+  }
 
   return (
     <div ref={containerRef} className="flex justify-center items-center py-4">
-      <div className="flex h-full w-full justify-center bg-white"> 
+      <div className="flex h-full w-full justify-center bg-white">
         {isLoading ? (
-          <div>Loading...</div>
+          <div style={loadingStyle}>Loading...</div>
         ) : (
           <Editor
             className="editor-body-text"
