@@ -18,7 +18,7 @@ export const base = {
   fontFamily:
     "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen, Ubuntu,Cantarell,'Open Sans','Helvetica Neue',sans-serif",
   fontFamilyMono:
-    "'SFMono-Regular',Consolas,'Liberation Mono', Menlo, Courier,monospace",
+    "'SFMono-Regular",
   fontWeight: 400,
   zIndex: 100,
   link: colors.primary,
@@ -74,7 +74,6 @@ export const light = {
   fontFamily: "'SFMono-Regular'",
   fontSize: '16px', 
   lineHeight: '17px',
-  marginTop: '40px',
 
   toolbarBackground: colors.lightBlack,
   toolbarHoverBackground: colors.black,

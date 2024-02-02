@@ -116,20 +116,15 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
 
   useEffect(() => {
     const handleResize = () => {
-      // Calculate the available height for the editor
-      const headerHeight = 40 // Replace with the actual header height if present
-      const additionalPadding = 60 // Adjust as needed for additional spacing
+      const headerHeight = 40 
+      const additionalPadding = 60 
       const adjustedHeight = window.innerHeight - headerHeight - additionalPadding
       setEditorHeight(`${adjustedHeight}px`)
     }
+        handleResize()
 
-    // Set the height on component mount
-    handleResize()
-
-    // Update the height whenever the window is resized
     window.addEventListener('resize', handleResize)
 
-    // Clean up the event listener when the component is unmounted
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
