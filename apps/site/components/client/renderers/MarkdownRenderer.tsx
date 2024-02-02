@@ -13,6 +13,30 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
   const [isLoading, setIsLoading] = useState(true)
   const containerRef = useRef<HTMLDivElement>(null)
 
+  const calculateContentHeight = () => {
+    const headerHeight = 40 // Adjust as necessary for your header
+    const additionalPadding = 60 // Adjust as necessary for your layout
+    return `calc(100vh - ${headerHeight}px - ${additionalPadding}px)`
+  }
+
+  const editorStyle: React.CSSProperties = {
+    width: '100%',
+    height: calculateContentHeight(),
+    overflowY: 'auto',
+    padding: '1.5rem',
+    backgroundColor: 'white',
+    fontFamily: customTheme.fontFamilyMono,
+    fontSize: customTheme.fontSize,
+    lineHeight: customTheme.lineHeight,
+  }
+
+  const loadingStyle = {
+    ...editorStyle,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
+
   useEffect(() => {
     setIsLoading(true)
     fetch(contentUrl)
@@ -31,40 +55,17 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
         setIsLoading(false)
       })
   }, [contentUrl])
+
   useEffect(() => {
     const handleResize = () => {
       if (containerRef.current) {
-        const headerHeight = 40 
-        const additionalPadding = 60
-        const adjustedHeight = window.innerHeight - headerHeight - additionalPadding
-        containerRef.current.style.minHeight = `${adjustedHeight}px`
+        containerRef.current.style.height = calculateContentHeight()
       }
     }
     handleResize()
-  
     window.addEventListener('resize', handleResize)
-  
     return () => window.removeEventListener('resize', handleResize)
   }, [])
-  
-
-  const editorStyle: React.CSSProperties = {
-    width: '100%',
-    minHeight: '75vh', // Use min-height for a flexible container
-    overflowY: 'auto',
-    padding: '1.5rem',
-    backgroundColor: 'white',
-    fontFamily: customTheme.fontFamilyMono,
-    fontSize: customTheme.fontSize,
-    lineHeight: customTheme.lineHeight,
-  }
-
-  const loadingStyle = {
-    ...editorStyle,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  }
 
   return (
     <div ref={containerRef} className="flex flex-col justify-center items-center py-4">
