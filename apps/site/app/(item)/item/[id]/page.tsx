@@ -112,9 +112,18 @@ export default async function ItemPage({
       </Stack>
     ))
 
+    const contentWrapperClass = match({ mimeType: contentType }) // Wrap the contentType string in an object
+  .with(
+    P.when(isMarkdown), 
+    () => "bg-white"
+  )
+  .otherwise(() => "bg-[#F3F4F6]")
+
   return (
     <Stack className="h-[calc(100dvh-38px)] md:flex-row">
-      <div className="bg-[#F3F4F6] w-full h-full md:w-[78%]">{content}</div>
+      <div className={`${contentWrapperClass} w-full h-full md:w-[78%]`}>
+        {content}
+      </div>
       <div className="md:w-[22%]">
         <ItemSidebar
           // @ts-ignore
