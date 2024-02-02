@@ -121,7 +121,6 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
     fontFamily: customTheme.fontFamilyMono,
     fontSize: customTheme.fontSize,
     lineHeight: customTheme.lineHeight,
-    marginTop: '40px',
   }
 
   const loadingStyle = {
@@ -132,8 +131,8 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
   }
 
   return (
-    <div className="editor-container flex justify-center items-center py-4" style={{ height: '100%' }}>
-      <div className="flex h-full w-full justify-center bg-white"> 
+    <div className="editor-container flex justify-center items-center py-4">
+      {/* <div className="flex h-full w-full justify-center bg-white">  */}
 
       {isLoading ? (
         <div style={loadingStyle}>Loading...</div>
