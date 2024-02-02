@@ -81,7 +81,7 @@
 
 'use client'
 
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState,useRef } from 'react'
 import Editor from 'rich-markdown-editor'
 import { light as customTheme } from '../../../styles/editorTheme'
 
@@ -135,11 +135,11 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
     }
   }, [])
 
-  const editorStyle: React.CSSProperties = {
+  const editorStyle = {
     height: 'calc(100% - 40px)', 
-    width: '100%', 
+    maxHeight: '90vh',
+    width: '80%', 
     overflow: 'auto',
-    overflowY: 'auto',
     padding: '1.5rem',
     backgroundColor: 'white',
     fontFamily: customTheme.fontFamilyMono,
