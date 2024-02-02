@@ -12,7 +12,6 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
   const [content, setContent] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const containerRef = useRef<HTMLDivElement>(null)
-  const [editorHeight, setEditorHeight] = useState('75vh')
 
   useEffect(() => {
     setIsLoading(true)
@@ -32,26 +31,27 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
         setIsLoading(false)
       })
   }, [contentUrl])
-
   useEffect(() => {
     const handleResize = () => {
-      const headerHeight = 40 
-      const additionalPadding = 60 
-      const adjustedHeight = window.innerHeight - headerHeight - additionalPadding
-      setEditorHeight(`${adjustedHeight}px`)
+      if (containerRef.current) {
+        const headerHeight = 40 
+        const additionalPadding = 60
+        const adjustedHeight = window.innerHeight - headerHeight - additionalPadding
+        containerRef.current.style.minHeight = `${adjustedHeight}px`
+      }
     }
-        handleResize()
-
+    handleResize()
+  
     window.addEventListener('resize', handleResize)
-
+  
     return () => window.removeEventListener('resize', handleResize)
   }, [])
+  
 
   const editorStyle: React.CSSProperties = {
     width: '100%',
-    height: editorHeight,
+    minHeight: '75vh', // Use min-height for a flexible container
     overflowY: 'auto',
-    overflow: 'auto',
     padding: '1.5rem',
     backgroundColor: 'white',
     fontFamily: customTheme.fontFamilyMono,
@@ -86,4 +86,3 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
 }
 
 export default MarkdownRenderer
-
