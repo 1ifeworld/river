@@ -135,18 +135,18 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
     }
   }, [])
 
-  const editorStyle = {
-    height: '100%',
+  const editorStyle: React.CSSProperties = {
+    height: '100%', 
     marginTop: '40px',
-    maxHeight: '85h',
-    width: '80%', 
-    overflow: 'auto',
-    padding: '1.5rem',
-    backgroundColor: 'white',
-    fontFamily: customTheme.fontFamilyMono,
-    fontSize: customTheme.fontSize,
-    lineHeight: customTheme.lineHeight,
-  }
+    width: '100%', 
+    overflowX: 'hidden', 
+    overflowY: 'auto', 
+    padding: '1.5rem', 
+    backgroundColor: 'white', 
+    fontFamily: customTheme.fontFamilyMono, 
+    fontSize: customTheme.fontSize, 
+    lineHeight: customTheme.lineHeight, 
+  };
 
   const loadingStyle = {
     ...editorStyle,
