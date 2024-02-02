@@ -12,7 +12,7 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
   const [content, setContent] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const containerRef = useRef<HTMLDivElement>(null)
-  const [editorHeight, setEditorHeight] = useState('calc(100vh-10px)')
+  const [editorHeight, setEditorHeight] = useState('120vh')
 
   useEffect(() => {
     setIsLoading(true)
