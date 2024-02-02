@@ -12,8 +12,31 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
   const [content, setContent] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const containerRef = useRef<HTMLDivElement>(null)
-  const [editorHeight, setEditorHeight] = useState('120vh')
+  
+  // Define state for component dimensions
+  const [size, setSize] = useState({ width: 0, height: 0 })
 
+  // Define a resize observer to update component dimensions
+  useEffect(() => {
+    const observer = new ResizeObserver(entries => {
+      for (let entry of entries) {
+        setSize({
+          width: entry.contentRect.width,
+          height: entry.contentRect.height,
+        })
+      }
+    })
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current)
+    }
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
+
+  // Fetch content for markdown editor
   useEffect(() => {
     setIsLoading(true)
     fetch(contentUrl)
@@ -33,23 +56,9 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
       })
   }, [contentUrl])
 
-  useEffect(() => {
-    const handleResize = () => {
-      const headerHeight = 40 
-      const additionalPadding = 60 
-      const adjustedHeight = window.innerHeight - headerHeight - additionalPadding
-      setEditorHeight(`${adjustedHeight}px`)
-    }
-        handleResize()
-
-    window.addEventListener('resize', handleResize)
-
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
-
   const editorStyle: React.CSSProperties = {
-    width: '100%',
-    height: editorHeight,
+    width: size.width,
+    height: size.height,
     overflowY: 'auto',
     padding: '1.5rem',
     backgroundColor: 'white',
@@ -85,4 +94,3 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
 }
 
 export default MarkdownRenderer
-
