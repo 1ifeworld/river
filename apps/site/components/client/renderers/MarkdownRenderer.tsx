@@ -79,7 +79,8 @@
 
 // export default MarkdownRenderer
 
-'use client'
+// 'use client'
+
 import React, { useEffect, useState, useRef } from 'react'
 import Editor from 'rich-markdown-editor'
 import { light as customTheme } from '../../../styles/editorTheme'
@@ -92,7 +93,7 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
   const [content, setContent] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const containerRef = useRef<HTMLDivElement>(null)
-  const [editorWidth, setEditorWidth] = useState('100%')
+  const [editorHeight, setEditorHeight] = useState('calc(100vh - 100px)') // Start with a default height
 
   useEffect(() => {
     setIsLoading(true)
@@ -114,27 +115,28 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
   }, [contentUrl])
 
   useEffect(() => {
-    const observer = new ResizeObserver((entries) => {
-      if (entries[0].target) {
-        setEditorWidth(`${entries[0].contentRect.width}px`)
-      }
-    })
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current)
+    const handleResize = () => {
+      // Calculate the available height for the editor
+      const headerHeight = 40 // Replace with the actual header height if present
+      const additionalPadding = 60 // Adjust as needed for additional spacing
+      const adjustedHeight = window.innerHeight - headerHeight - additionalPadding
+      setEditorHeight(`${adjustedHeight}px`)
     }
 
-    return () => {
-      if (containerRef.current) {
-        observer.unobserve(containerRef.current)
-      }
-    }
+    // Set the height on component mount
+    handleResize()
+
+    // Update the height whenever the window is resized
+    window.addEventListener('resize', handleResize)
+
+    // Clean up the event listener when the component is unmounted
+    return () => window.removeEventListener('resize', handleResize)
   }, [])
 
   const editorStyle: React.CSSProperties = {
-    width: editorWidth,
-    height: 'calc(100vh - 40px)', // Adjust the height as needed
-    overflowY: 'auto', // Enable vertical scrolling
+    width: '100%',
+    height: editorHeight,
+    overflowY: 'auto',
     padding: '1.5rem',
     backgroundColor: 'white',
     fontFamily: customTheme.fontFamilyMono,
@@ -169,3 +171,4 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
 }
 
 export default MarkdownRenderer
+
