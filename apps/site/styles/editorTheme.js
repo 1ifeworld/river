@@ -72,6 +72,9 @@ export const light = {
   cursor: colors.black,
   divider: colors.greyMid,
   fontFamily: "'SFMono-Regular'",
+  fontSize: '16px', 
+  lineHeight: '17px',
+  marginTop: '40px',
 
   toolbarBackground: colors.lightBlack,
   toolbarHoverBackground: colors.black,
