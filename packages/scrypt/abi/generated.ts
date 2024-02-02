@@ -576,6 +576,105 @@ export const postABI = [
 
 export const postGateway2ABI = [
   {
+    stateMutability: 'pure',
+    type: 'function',
+    inputs: [],
+    name: 'exportAddItemStruct',
+    outputs: [
+      {
+        name: 'addItem',
+        internalType: 'struct IPostGateway2.AddItem',
+        type: 'tuple',
+        components: [
+          { name: 'itemCid', internalType: 'bytes', type: 'bytes' },
+          { name: 'channelCid', internalType: 'bytes', type: 'bytes' },
+        ],
+      },
+    ],
+  },
+  {
+    stateMutability: 'pure',
+    type: 'function',
+    inputs: [],
+    name: 'exportChannelStruct',
+    outputs: [
+      {
+        name: 'channel',
+        internalType: 'struct IPostGateway2.Channel',
+        type: 'tuple',
+        components: [
+          {
+            name: 'data',
+            internalType: 'struct IPostGateway2.ChannelData',
+            type: 'tuple',
+            components: [
+              {
+                name: 'dataType',
+                internalType: 'enum IPostGateway2.ChannelDataTypes',
+                type: 'uint8',
+              },
+              { name: 'contents', internalType: 'bytes', type: 'bytes' },
+            ],
+          },
+          {
+            name: 'access',
+            internalType: 'struct IPostGateway2.ChannelAccess',
+            type: 'tuple',
+            components: [
+              {
+                name: 'accessType',
+                internalType: 'enum IPostGateway2.ChannelAccessTypes',
+                type: 'uint8',
+              },
+              { name: 'contents', internalType: 'bytes', type: 'bytes' },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    stateMutability: 'pure',
+    type: 'function',
+    inputs: [],
+    name: 'exportItemStruct',
+    outputs: [
+      {
+        name: 'item',
+        internalType: 'struct IPostGateway2.Item',
+        type: 'tuple',
+        components: [
+          {
+            name: 'data',
+            internalType: 'struct IPostGateway2.ItemData',
+            type: 'tuple',
+            components: [
+              {
+                name: 'dataType',
+                internalType: 'enum IPostGateway2.ItemDataTypes',
+                type: 'uint8',
+              },
+              { name: 'contents', internalType: 'bytes', type: 'bytes' },
+            ],
+          },
+          {
+            name: 'access',
+            internalType: 'struct IPostGateway2.ItemAccess',
+            type: 'tuple',
+            components: [
+              {
+                name: 'accessType',
+                internalType: 'enum IPostGateway2.ItemAccessTypes',
+                type: 'uint8',
+              },
+              { name: 'contents', internalType: 'bytes', type: 'bytes' },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
     stateMutability: 'nonpayable',
     type: 'function',
     inputs: [

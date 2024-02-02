@@ -34,8 +34,8 @@ contract NewPostScript is Script {
         /* Start function transmission */
         vm.startBroadcast(deployerPrivateKey);
 
-        createChannel();        
-        // createItemAndAddToChannel();
+        // createChannel();        
+        createItemAndAddToChannel();
         // editChannelAccess_AddAdmin();
         // editChannelAccess_RemoveAdmin();
         // editChannelAccess_AddMember();
@@ -60,7 +60,7 @@ contract NewPostScript is Script {
         IPostGateway2.Channel memory channel = IPostGateway2.Channel({
             data: IPostGateway2.ChannelData({
                 dataType: IPostGateway2.ChannelDataTypes.STRING_URI,
-                contents: abi.encode("ipfs://bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf354")
+                contents: abi.encode("omRuYW1la2NoYW5uZWxOYW1la2Rlc2NyaXB0aW9ucmNoYW5uZWxEZXNjcmlwdGlvbg")
             }),
             access: IPostGateway2.ChannelAccess({
                 accessType: IPostGateway2.ChannelAccessTypes.ROLES,
@@ -101,7 +101,7 @@ contract NewPostScript is Script {
         IPostGateway2.Item memory createItem = IPostGateway2.Item({
             data: IPostGateway2.ItemData({
                 dataType: IPostGateway2.ItemDataTypes.STRING_URI,
-                contents: abi.encode("ipfs://contentsOf")
+                contents: abi.encode("ipfs://placeholderItemUri")
             }),
             access: IPostGateway2.ItemAccess({
                 accessType: IPostGateway2.ItemAccessTypes.ADMINS,

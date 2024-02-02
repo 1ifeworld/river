@@ -33,5 +33,21 @@ contract PostGateway2 is IPostGateway2 {
         for (uint256 i; i < posts.length; ++i) {
             emit NewPost(sender);
         }        
-    }        
+    }          
+
+    //////////////////////////////////////////////////
+    // TYPE HELPRES
+    //////////////////////////////////////////////////
+
+    function exportChannelStruct() external pure returns (Channel memory channel) {
+        return channel;
+    }
+
+    function exportItemStruct() external pure returns (Item memory item) {
+        return item;
+    }    
+
+    function exportAddItemStruct() external pure returns (AddItem memory addItem) {
+        return addItem;
+    }    
 }
