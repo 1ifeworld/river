@@ -13,17 +13,16 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
   const [isLoading, setIsLoading] = useState(true)
   const containerRef = useRef<HTMLDivElement>(null)
 
-  // Dynamically calculate the content height based on the viewport
   const calculateContentHeight = () => {
-    const headerHeight = 40 // Height of the header or any fixed elements
-    const additionalPadding = 60 // Additional space you want to spare
+    const headerHeight = 40 
+    const additionalPadding = 60 
     return `calc(100vh - ${headerHeight}px - ${additionalPadding}px)`
   }
 
   const editorStyle: React.CSSProperties = {
     width: '100%',
-    minHeight: calculateContentHeight(), // Ensures that the content is at least as tall as the calculated height
-    overflowY: 'auto', // Only vertical scrolling
+    minHeight: calculateContentHeight(), 
+    overflowY: 'auto', 
     padding: '1.5rem',
     backgroundColor: 'white',
     fontFamily: customTheme.fontFamilyMono,
@@ -69,19 +68,20 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
   }, [])
 
   return (
-    <div ref={containerRef} className="flex flex-col justify-center items-center py-4">
-      <div className="flex h-full w-full justify-center bg-white">
+    <div className="flex flex-col md:flex-row py-4 w-full">
+      <div className="flex-1 overflow-auto bg-white p-6">
         {isLoading ? (
-          <div style={loadingStyle}>Loading...</div>
+          <div className="flex justify-center items-center h-full">Loading...</div>
         ) : (
           <Editor
-            className="editor-body-text"
-            style={editorStyle}
+            className="prose max-w-none" 
             value={content}
             readOnly
             theme={customTheme}
           />
         )}
+      </div>
+      <div className="w-full md:w-1/4 bg-gray-100 p-6 mt-4 md:mt-0 md:ml-4">
       </div>
     </div>
   )
