@@ -11,31 +11,8 @@ type Props = {
 const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
   const [content, setContent] = useState('')
   const [isLoading, setIsLoading] = useState(true)
+  const [editorWidth, setEditorWidth] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
-
-  const calculateContentHeight = () => {
-    const headerHeight = 40 
-    const additionalPadding = 60 
-    return `calc(100vh - ${headerHeight}px - ${additionalPadding}px)`
-  }
-
-  const editorStyle: React.CSSProperties = {
-    width: '100%',
-    minHeight: calculateContentHeight(), 
-    overflowY: 'auto', 
-    padding: '1.5rem',
-    backgroundColor: 'white',
-    fontFamily: customTheme.fontFamilyMono,
-    fontSize: customTheme.fontSize,
-    lineHeight: customTheme.lineHeight,
-  }
-
-  const loadingStyle = {
-    ...editorStyle,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  }
 
   useEffect(() => {
     setIsLoading(true)
@@ -57,31 +34,55 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
   }, [contentUrl])
 
   useEffect(() => {
-    const handleResize = () => {
+    const observer = new ResizeObserver((entries) => {
+      if (entries[0].target) {
+        const newWidth = Math.min(entries[0].contentRect.width * 0.8, 1200) 
+        setEditorWidth(newWidth)
+      }
+    })
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current)
+    }
+
+    return () => {
       if (containerRef.current) {
-        containerRef.current.style.minHeight = calculateContentHeight()
+        observer.unobserve(containerRef.current)
       }
     }
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
   }, [])
 
+  const editorStyle = {
+    width: `${editorWidth}px`,
+    maxHeight: '70vh',
+    overflow: 'auto',
+    padding: '1.5rem',
+    backgroundColor: 'white', 
+    fontFamily: 'SFMono-Regular'
+  }
+
+  const loadingStyle = {
+    ...editorStyle, 
+    display: 'flex', 
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '70vh', 
+  }
+
   return (
-    <div className="flex flex-col md:flex-row py-4 w-full">
-      <div className="flex-1 overflow-auto bg-white p-6">
+    <div ref={containerRef} className="flex justify-center items-center py-4">
+      <div className="flex h-full w-full justify-center bg-white">
         {isLoading ? (
-          <div className="flex justify-center items-center h-full">Loading...</div>
+          <div style={loadingStyle}>Loading...</div>
         ) : (
           <Editor
-            className="prose max-w-none" 
+            className="editor-body-text"
+            style={editorStyle}
             value={content}
             readOnly
             theme={customTheme}
           />
         )}
-      </div>
-      <div className="w-full md:w-1/4 bg-gray-100 p-6 mt-4 md:mt-0 md:ml-4">
       </div>
     </div>
   )
