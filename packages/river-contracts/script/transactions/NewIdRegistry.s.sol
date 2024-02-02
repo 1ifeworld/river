@@ -7,7 +7,7 @@ import {IdRegistry} from "river-contracts/IdRegistry.sol";
 
 contract IdRegistryScript is Script {
 
-    IdRegistry public idRegistry = IdRegistry(0x5FbDB2315678afecb367f032d93F642f64180aa3);  
+    IdRegistry public idRegistry = IdRegistry(0x339513226Afd92B309837Bad402c6D3ADDE9Ad24);  
     
     function setUp() public {}
 

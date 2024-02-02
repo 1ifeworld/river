@@ -13,8 +13,9 @@ contract NewPostScript is Script {
     using ECDSA for bytes32;
     using MessageHashUtils for bytes32;
 
-    PostGateway2 postGateway = PostGateway2(0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0); // anvil
-    // PostGateway postGateway = PostGateway(0x339513226Afd92B309837Bad402c6D3ADDE9Ad24); // opGoerli
+    // PostGateway2 postGateway = PostGateway2(0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0); // anvil
+    PostGateway2 postGateway = PostGateway2(0x05aD6cA9C2b3F71a6B30A8C7d414C95E10EC0217); // arb nova
+    
     Account public relayer;
     Account public user;    
     uint256 public deployerPrivateKey;
@@ -30,7 +31,6 @@ contract NewPostScript is Script {
         bytes32 privateKeyBytes = vm.envBytes32("PRIVATE_KEY");
         deployerPrivateKey = uint256(privateKeyBytes);
         deployerWallet = vm.createWallet(deployerPrivateKey);
-        console2.log("address", deployerWallet.addr);
         /* Start function transmission */
         vm.startBroadcast(deployerPrivateKey);
 
@@ -53,10 +53,10 @@ contract NewPostScript is Script {
     function createChannel() public {
         // structure init + data + message
         uint256[] memory admins = new uint256[](1);
-        uint256[] memory members = new uint256[](2);
+        uint256[] memory members = new uint256[](0);
         admins[0] = 1;
-        members[0] = 2;
-        members[1] = 3;
+        // members[0] = 2;
+        // members[1] = 3;
         IPostGateway2.Channel memory channel = IPostGateway2.Channel({
             data: IPostGateway2.ChannelData({
                 dataType: IPostGateway2.ChannelDataTypes.STRING_URI,
@@ -67,12 +67,13 @@ contract NewPostScript is Script {
                 contents: abi.encode(admins, members)
             })
         });
+        bytes memory encodedChannel = abi.encode(channel);
         // structure Message
         IPostGateway2.Message memory message = IPostGateway2.Message({
             rid: 1,
-            timestamp: block.timestamp + 1,
+            timestamp: 1706853740,
             msgType: IPostGateway2.MessageTypes.CREATE_CHANNEL, // create/init id
-            msgBody: abi.encode(channel)
+            msgBody: encodedChannel
         });
         // create hash + sig for post
         (bytes32 createChannelHash, bytes memory createChannelSig) = signMessage(deployerPrivateKey, message);
@@ -85,8 +86,10 @@ contract NewPostScript is Script {
             sigType: 1,
             sig: createChannelSig
         });
+        // console2.logBytes(post);
         // process post 
         postGateway.post(post);
+    
     }
 
     function createItemAndAddToChannel() public {
@@ -101,7 +104,7 @@ contract NewPostScript is Script {
         IPostGateway2.Item memory createItem = IPostGateway2.Item({
             data: IPostGateway2.ItemData({
                 dataType: IPostGateway2.ItemDataTypes.STRING_URI,
-                contents: abi.encode("ipfs://placeholderItemUri")
+                contents: abi.encode("bafkreig6fmbdm7cacbislqditpxjkhadzdlcuwr3ujqhsj4e7hjrbxxnaa")
             }),
             access: IPostGateway2.ItemAccess({
                 accessType: IPostGateway2.ItemAccessTypes.ADMINS,
@@ -111,7 +114,7 @@ contract NewPostScript is Script {
         // structure create item Message
         IPostGateway2.Message memory createItemMessage = IPostGateway2.Message({
             rid: 1,
-            timestamp: block.timestamp + 1,
+            timestamp: 1706853940,
             msgType: IPostGateway2.MessageTypes.CREATE_ITEM,
             msgBody: abi.encode(createItem)
         });
@@ -133,13 +136,13 @@ contract NewPostScript is Script {
 
         // structure ADD_ITEM_TO_CHANNEL  data/access + message
         IPostGateway2.AddItem memory addItem = IPostGateway2.AddItem({
-            itemCid: "ipfs://itemPlaceholder",
-            channelCid: "ipfs://channelPlaceholder"
+            itemCid: "bafyreig36f4vknxpfqtli3hegy24a4z56zehylfpbdbr74zgi645uw6xua",
+            channelCid: "bafyreiajeyzvo3vc3zgonbguqapeiz2o662w5al6av5ror6g2yvhafrn4m"
         });
         // structure add item Message
         IPostGateway2.Message memory addItemMessage = IPostGateway2.Message({
             rid: 1,
-            timestamp: block.timestamp + 1,
+            timestamp: 1706853940,
             msgType: IPostGateway2.MessageTypes.ADD_ITEM_TO_CHANNEL,
             msgBody: abi.encode(addItem)
         });
@@ -155,9 +158,9 @@ contract NewPostScript is Script {
             sig: addItemSig
         });
         //  setup batch post
-        IPostGateway2.Post[] memory batchPostInputs = new IPostGateway2.Post[](2);
-        batchPostInputs[0] = createItemPost;
-        batchPostInputs[1] = addItemPost;
+        IPostGateway2.Post[] memory batchPostInputs = new IPostGateway2.Post[](1);
+        // batchPostInputs[0] = createItemPost;
+        batchPostInputs[0] = addItemPost;
         // process batch post 
         postGateway.postBatch(batchPostInputs);
     }
@@ -436,4 +439,4 @@ contract NewPostScript is Script {
 
 // source .env
 // forge script script/transactions/NewPost.s.sol:NewPostScript -vvvv --fork-url http://localhost:8545 --broadcast
-// forge script script/transactions/NewPost.s.sol:NewPostScript -vvvv --rpc-url $RPC_URL --broadcast
+// forge script script/transactions/NewPost.s.sol:NewPostScript -vvvv --rpc-url $RPC_URL --gas-estimate-multiplier 200 --broadcast

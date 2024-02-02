@@ -1,7 +1,5 @@
 import { Hash, slice, encodePacked, decodeAbiParameters, Hex } from 'viem'
-import { messageABI } from '../../abi'
 import { postGateway2ABI } from '../../abi'
-
 
 //////////////////////////////////////////////////
 // DECODING

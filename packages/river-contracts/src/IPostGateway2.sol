@@ -101,12 +101,12 @@ interface IPostGateway2 {
     //////////////////////////////////////////////////    
 
     struct AddItem {
-        bytes itemCid;
-        bytes channelCid;
+        string itemCid;
+        string channelCid;
     }        
 
     struct RemoveItem {
-        bytes itemCid;
-        bytes channelCid;
+        string itemCid;
+        string channelCid;
     }      
 }

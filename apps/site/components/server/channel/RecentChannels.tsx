@@ -9,9 +9,8 @@ export async function RecentChannels({
   params: { id: string }
 }) {
   const { channels } = await getAllChannels()
-  const { metadata } = await getChannelMetadata(channels)
 
-  if (!channels || !metadata) {
+  if (!channels?.items) {
     return <Typography>Error fetching channels</Typography>
   }
 
@@ -19,17 +18,16 @@ export async function RecentChannels({
     <Stack className="hidden md:flex gap-y-[34px]">
       <Typography>Recent channels</Typography>
       <Stack className="gap-y-[5px]">
-        {channels.slice(0, 50).map((channel) => {
-          const channelMetadata = metadata.data[channel.uri as string]
+        {channels.items.slice(0, 50).map((channel) => {
           return (
             <Link href={`/channel/${channel.id}`}>
               <Typography
                 className={`hover:underline underline-offset-2 transition-all truncate ${
                   channel?.id === params?.id ? 'underline' : ''
                 }`}
-                key={channel.createdTimestamp}
+                key={channel.timestamp}
               >
-                {channelMetadata?.name || '--'}
+                {channel?.name || '--'}
               </Typography>
             </Link>
           )

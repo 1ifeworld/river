@@ -49,10 +49,13 @@ export default createSchema((p) => ({
     id: p.string(),
     messageId: p.string().references('Message.id'),
     message: p.one('messageId'),    
+    timestamp: p.bigint(),
+    createdBy: p.bigint().references('User.id'),
     uri: p.string(),
     name: p.string(),
     description: p.string(),
-    roles: p.many("ChannelRoles.channelId")
+    roles: p.many("ChannelRoles.channelId"),
+    adds: p.many('Adds.channelId'),
   }),
   ChannelRoles: p.createTable({
     id: p.string(),
@@ -65,7 +68,10 @@ export default createSchema((p) => ({
     id: p.string(),
     messageId: p.string().references('Message.id'),
     message: p.one('messageId'),
+    timestamp: p.bigint(),
+    createdby: p.bigint().references('User.id'),
     uri: p.string(),
+    adds: p.many('Adds.itemId')
   }),
   ItemRoles: p.createTable({
     id: p.string(),
@@ -78,8 +84,10 @@ export default createSchema((p) => ({
     id: p.string(),
     messageId: p.string().references('Message.id'),
     message: p.one('messageId'),
+    timestamp: p.bigint(),
+    addedBy: p.bigint().references('User.id'),
     itemId: p.string().references('Item.id'),
-    itemm: p.one('itemId'),
+    item: p.one('itemId'),
     channelId: p.string().references('Channel.id'),
     channel: p.one('channelId')
   })

@@ -1,28 +1,57 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { addresses, postGatewayABI } from 'scrypt'
-import { Hash } from 'viem'
+import { addresses, postGateway2ABI } from 'scrypt'
+import { Hash, Hex } from 'viem'
 import { writeContract, getTxnInclusion } from '@/lib'
 import { relayWalletClient, globalNonceManager } from '@/config/relayConfig'
 
 interface RelayPostProps {
-  postInput: Hash
+  signer: Hex
+  msgRid: bigint
+  msgTimestamp: bigint
+  msgType: number
+  msgBody: Hash
+  hashType: number
+  hash: Hash
+  sigType: number
+  sig: Hash
   pathsToRevalidate: string[]
 }
 
-export async function relayPost({
-  postInput,
-  pathsToRevalidate,
+export async function newRelayPost({
+  signer,
+  msgRid,
+  msgTimestamp,
+  msgType,
+  msgBody,
+  hashType,
+  hash,
+  sigType,
+  sig,
+  pathsToRevalidate
 }: RelayPostProps) {
   // Attempt to send the transaction via writeContract
   try {
     const postTxn = await writeContract(relayWalletClient, globalNonceManager, {
       chain: relayWalletClient.chain ?? null,
-      address: addresses.postGateway.river_j5bpjduqfv,
-      abi: postGatewayABI,
+      // address: addresses.postGateway.river_j5bpjduqfv,
+      address: "0x05aD6cA9C2b3F71a6B30A8C7d414C95E10EC0217", // arb nova
+      abi: postGateway2ABI,
       functionName: 'post',
-      args: [postInput],
+      args: [{
+        signer: signer,
+        message: {
+            rid: msgRid,
+            timestamp: msgTimestamp,
+            msgType: msgType,
+            msgBody: msgBody
+        },
+        hashType: hashType,
+        hash: hash,
+        sigType: sigType,
+        sig: sig
+      }]
     })
     // If writeContract is successful, postTxn is valid and we proceed to check its inclusion
     const txnInclusion = await getTxnInclusion(postTxn)

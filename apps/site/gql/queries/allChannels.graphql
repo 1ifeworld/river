@@ -1,24 +1,29 @@
 query allChannels {
-  channels(orderBy: "id", orderDirection: "desc") {
-    id
-    createdTimestamp
-    createdBy
-    uri
-    admins
-    members
-    references(orderBy: "id", orderDirection: "desc") {
+  channels(orderBy: "timestamp", orderDirection: "desc") {
+    items {
       id
-      createdTimestamp
+      timestamp
       createdBy
-      channelId
-      pubRefId
-      pubRef {
-        id
-        createdTimestamp
-        createdBy
-        uri
+      uri
+      name
+      description
+      roles {
+        items {
+          rid
+          role
+        }
+      }
+      adds(orderBy: "timestamp", orderDirection: "desc") {
+        items {
+          timestamp
+          channelId
+          addedBy
+          item {
+            id
+            uri
+          }
+        }
       }
     }
   }
 }
-

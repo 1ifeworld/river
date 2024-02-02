@@ -1,5 +1,5 @@
 import { ponder } from "@/generated";
-import { postGateway2ABI, decodeCreateAssetMsgBody, decodeAddItemMsgBody } from "scrypt";
+import { postGateway2ABI, decodeCreateAssetMsgBody, decodeAddItemMsgBody, remove0xPrefix } from "scrypt";
 import {
   Hash,
   Hex,
@@ -7,6 +7,7 @@ import {
   recoverAddress,
   getAddress,
   decodeAbiParameters,
+  recoverMessageAddress
 } from "viem";
 import { absBigInt } from "../utils";
 import {
@@ -37,7 +38,7 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
   type Post = {
     signer: Hex;
     message: Message;
-    hashType: bigint;
+    hashType: number;
     hash: Hash;
     sigType: bigint;
     sig: Hash;
@@ -94,18 +95,33 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
     data: event.transaction.input,
   });
 
+  console.log("args coming in correcltly? ", args)
+
+  // if decode fails return
+  if (!args?.[0]) return
+
   // Check if args is an array of posts or a batch of posts
   if (Array.isArray(args[0])) {
-    const batchPost = args[0] as Post[];
-    batchPost.forEach((post) => {
-      posts.push(post);
-    });
+    console.log("is array")
+    // const batchPost = args[0] as Post[];
+    for (let i = 0; i < args[0].length; ++i) {
+      // console.log("post #", i + 1)
+      // console.log(batchPost[i])
+      posts[i] = args[0][i];
+      console.log("args[0][i]", args[0][i])
+      // let postBlock = await createBlockFromAnything(posts[i]);
+      // console.log(`post block ${i}`, (await createBlockFromAnything(posts[i])).cid.toString())      
+    }
+    // batchPost.forEach((post) => {
+    //   console.log(post)
+    //   posts.push(post);
+    // });
   } else {
+    console.log("not array")
     const singlePost = args[0] as Post;
+    // console.log("single post: ", singlePost)
     posts.push(singlePost);
   }
-
-  console.log("posts: ", posts);
 
   // process every post -> associated message
   for (let i = 0; i < posts.length; ++i) {
@@ -119,29 +135,37 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
 
     if (!userLookup) return;
 
-    // NOTE: update to context.client.verifyMessage to unlock support
-    //       for smart accounts in addition to EOAs
-    const recoveredAddress = await recoverAddress({
-      hash: posts[i].hash,
-      signature: posts[i].sig,
-    });
+    console.log("user look up happening?", userLookup)
 
-    const signerIsValid = getAddress(userLookup.to) === recoveredAddress;
+    // const recoveredAddress = await recoverAddress({
+    //   hash: posts[i].hash,
+    //   signature: posts[i].sig,
+    // });
+
+    const recoverAddressFromMessageSignature = await recoverMessageAddress({
+      message: remove0xPrefix({ bytes32Hash: posts[i].hash }),
+      signature: posts[i].sig,
+    })
+
+    const signerIsValid = getAddress(userLookup.to) === recoverAddressFromMessageSignature;
 
     if (!signerIsValid) return
 
+    console.log("signature is valid here")
+
     // Create blocks for things
     const postBlock = await createBlockFromAnything(posts[i]);
-    console.log("postBlock.cid.toString()", postBlock.cid.toString())
+    const postId = postBlock.cid.toString()
+    console.log("postId: ", postId)
     const messageBlock = await createBlockFromAnything(posts[i].message);
     // Create message id which will be saved in asset create events
     const messageId = messageBlock.cid.toString()
     // Save base64 encoded representatiosn of block bytes
-    const encodedPostBlockBytes = bytesToBase64Url(postBlock.bytes);
+    const encodedPostBlockBytes = bytesToBase64Url((await createBlockFromAnything(posts[i])).bytes);
 
     // store post + message
     const storedPost = await Post.create({
-      id: postBlock.cid.toString(),
+      id: postId,
       data: {
         parentBlock: encodedPostBlockBytes,
         relayer: event.transaction.from,
@@ -168,7 +192,6 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
       case MessageTypes.CREATE_CHANNEL:
         // Create channelId from original message. channelId = cid(Message(rid, timestamp, msgType, msgBody))
         const channelId = messageBlock.cid.toString();
-        console.log("channelId: ", channelId)
         // decode channel data + channel access
         const { data: channelData, access: channelAccess } =
           decodeCreateAssetMsgBody({ msgBody: posts[i].message.msgBody }) || {};
@@ -203,6 +226,8 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
           id: channelId,
           data: {
             messageId: messageId,
+            timestamp: posts[i].message.timestamp,
+            createdBy: posts[i].message.rid,
             uri: channelInfoUri,
             name: channelInfo.name,
             description: channelInfo.description,
@@ -239,9 +264,9 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
         // end case
         break;
       case MessageTypes.CREATE_ITEM:
+        console.log("running create item")
         // Create itemId from original message. itemId = cid(Message(rid, timestamp, msgType, msgBody))
         const itemId = messageBlock.cid.toString();
-        console.log("item cid:", itemId)
         // decode channel data + channel access
         const { data: itemData, access: itemAccess } =
           decodeCreateAssetMsgBody({ msgBody: posts[i].message.msgBody }) || {};
@@ -263,6 +288,8 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
           id: itemId,
           data: {
             messageId: messageId,
+            timestamp: posts[i].message.timestamp,
+            createdby: posts[i].message.rid,
             uri: itemUri,
           },
         });
@@ -288,9 +315,11 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
         // end case
         break;
       case MessageTypes.ADD_ITEM_TO_CHANNEL:
+        console.log("running add item to channel")
         // decode channel data + channel access
         const { itemCid, channelCid } =
           decodeAddItemMsgBody({ msgBody: posts[i].message.msgBody }) || {};
+        // const [itemCidString] = decodeAbiParameters
         // check for proper decode
         if (!itemCid || !channelCid) return
         // lookup itemCid + channelCid
@@ -298,13 +327,19 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
         const channel = await Channel.findUnique({id: channelCid})
         // check to see if target item + channel exist at timestamp of procesing
         if (!itemCid || !channelCid ) break;
+        console.log("item cid: ", itemCid)
+        console.log("channelCid cid: ", channelCid)
         // Check to see if rid has access to add to channel
         const access = await ChannelRoles.findUnique({id: `${channelCid}/${posts[i].message.rid}`})
+        console.log("has access! lets add it", access)
         // Check to see if role is greater than 0
         if (access?.role && access.role > 0) {
+          console.log("made it to end")
           await Adds.create({
             id: `${itemCid}/${channelCid}`,
             data: {
+              timestamp: posts[i].message.timestamp,
+              addedBy: posts[i].message.rid,
               messageId: messageId,
               itemId: itemCid,
               channelId: channelCid,

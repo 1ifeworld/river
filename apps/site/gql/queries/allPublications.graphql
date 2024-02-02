@@ -1,8 +1,0 @@
-query allPublications {
-  publications(orderBy: "id", orderDirection: "desc") {
-    createdBy
-    createdTimestamp
-    uri
-    id
-  }
-}
