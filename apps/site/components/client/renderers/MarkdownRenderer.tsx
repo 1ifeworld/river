@@ -93,7 +93,7 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
   useEffect(() => {
     const observer = new ResizeObserver((entries) => {
       if (entries[0].target) {
-        const newWidth = Math.min(entries[0].contentRect.width * 0.8, 1200) // Adjust the 0.8 if you want different padding
+        const newWidth = Math.min(entries[0].contentRect.width * 0.8, 1200) 
         setEditorWidth(newWidth)
       }
     })
@@ -114,7 +114,9 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
     maxHeight: '70vh', 
     overflow: 'auto',
     padding: '1.5rem',    
+    backgroundColor: 'white',
   }
+  
 
   return (
     <div ref={containerRef} className="flex justify-center items-center py-4">
