@@ -79,7 +79,7 @@
 
 // export default MarkdownRenderer
 
-// 'use client'
+'use client'
 
 import React, { useEffect, useState, useRef } from 'react'
 import Editor from 'rich-markdown-editor'
@@ -93,7 +93,7 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
   const [content, setContent] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const containerRef = useRef<HTMLDivElement>(null)
-  const [editorHeight, setEditorHeight] = useState('calc(100vh - 100px)') // Start with a default height
+  const [editorHeight, setEditorHeight] = useState('calc(100vh - 100px)')
 
   useEffect(() => {
     setIsLoading(true)
