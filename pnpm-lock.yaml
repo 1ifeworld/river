@@ -79,6 +79,9 @@ importers:
       '@hookform/resolvers':
         specifier: ^3.3.2
         version: 3.3.2(react-hook-form@7.47.0)
+      '@ipld/dag-cbor':
+        specifier: ^9.1.0
+        version: 9.1.0
       '@mux/mux-player-react':
         specifier: ^2.3.0
         version: 2.3.0(@types/react-dom@18.2.7)(@types/react@18.2.21)(react-dom@18.2.0)(react@18.2.0)
@@ -136,6 +139,9 @@ importers:
       graphql-tag:
         specifier: ^2.12.6
         version: 2.12.6(graphql@16.8.0)
+      multiformats:
+        specifier: ^13.0.1
+        version: 13.0.1
       next:
         specifier: 14.0.1
         version: 14.0.1(@babel/core@7.23.9)(react-dom@18.2.0)(react@18.2.0)

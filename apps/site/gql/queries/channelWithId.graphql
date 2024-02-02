@@ -1,0 +1,28 @@
+query channelWithId($id: String!) {
+  channel(id: $id) {
+    id
+    timestamp
+    createdBy
+    uri
+    name
+    description
+    roles(orderBy: "timestamp", orderDirection: "desc") {
+      items {
+        timestamp
+        rid
+        role
+      }
+    }
+    adds(orderBy: "timestamp", orderDirection: "desc") {
+      items {
+        timestamp
+        channelId
+        addedBy
+        item {
+          id
+          uri
+        }
+      }
+    }
+  }
+}

@@ -15,7 +15,7 @@ import {
 import {
   checkUsernameAvailability,
   getDataForUsername,
-  processEditChannelAccessPost,
+  // processEditChannelAccessPost,
   usernameSchema,
 } from '@/lib'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -83,13 +83,13 @@ export function AddMembersForm({ targetChannelId }: AddMembersFormProps) {
     // initialize bool for txn success check
     let txSuccess: boolean = false
     if (signMessage && embeddedWallet?.address && usernameId) {
-      txSuccess = await processEditChannelAccessPost({
-        targetUserId: userId as bigint,
-        targetChannelId: targetChannelId,
-        admins: [], // hardcoded as empty
-        members: [usernameId], // only supports one at a time for now
-        privySignMessage: signMessage,
-      })
+      // txSuccess = await processEditChannelAccessPost({
+      //   targetUserId: userId as bigint,
+      //   targetChannelId: targetChannelId,
+      //   admins: [], // hardcoded as empty
+      //   members: [usernameId], // only supports one at a time for now
+      //   privySignMessage: signMessage,
+      // })
     }
     if (txSuccess) {
       toast.custom((t) => (

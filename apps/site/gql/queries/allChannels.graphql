@@ -7,8 +7,9 @@ query allChannels {
       uri
       name
       description
-      roles {
+      roles(orderBy: "timestamp", orderDirection: "desc") {
         items {
+          timestamp
           rid
           role
         }

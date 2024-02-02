@@ -6,7 +6,10 @@ import {
   TableRow,
   Typography,
 } from '@/design-system'
-import { Channel, Reference } from '@/gql'
+import { 
+  Channel, 
+  // Reference 
+} from '@/gql'
 import { ThumbnailNameCreator } from '@/server'
 import { unixTimeConverter } from '@/utils'
 import Link from 'next/link'
@@ -34,7 +37,7 @@ export async function ChannelItems({
 }) {
   return (
     <Table className="md:ml-2">
-      <TableBody>
+      {/* <TableBody>
         {channel.references.map((reference: Reference, index: number) => (
           <Link key={index} href={`/item/${reference.id}`} legacyBehavior>
             <TableRow className={`${styles.tableRow} hover:cursor-pointer`}>
@@ -44,16 +47,16 @@ export async function ChannelItems({
                   reference={reference}
                   metadata={metadata}
                 />
-              </TableCell>
+              </TableCell> */}
               {/* This component is hidden on small screens */}
-              <TableCell className="hidden md:table-cell max-w-[118px] text-primary-foreground text-nowrap truncate pr-12">
+              {/* <TableCell className="hidden md:table-cell max-w-[118px] text-primary-foreground text-nowrap truncate pr-12">
                 <Typography>{`${extractContentType({
                   reference: reference,
                   metadata: metadata,
                 })}`}</Typography>
-              </TableCell>
+              </TableCell> */}
               {/* This component is hidden on small screens */}
-              <TableCell className="hidden md:table-cell text-primary-foreground text-nowrap truncate">
+              {/* <TableCell className="hidden md:table-cell text-primary-foreground text-nowrap truncate">
                 <Typography>
                   {unixTimeConverter(reference.createdTimestamp)}
                 </Typography>
@@ -67,7 +70,7 @@ export async function ChannelItems({
             </TableRow>
           </Link>
         ))}
-      </TableBody>
+      </TableBody> */}
     </Table>
   )
 }

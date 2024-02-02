@@ -59,6 +59,7 @@ export default createSchema((p) => ({
   }),
   ChannelRoles: p.createTable({
     id: p.string(),
+    timestamp: p.bigint(),
     rid: p.bigint(),
     channelId: p.string().references('Channel.id'),
     channel: p.one('channelId'),

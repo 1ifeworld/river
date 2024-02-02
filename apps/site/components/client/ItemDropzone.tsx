@@ -8,7 +8,6 @@ import {
   isPdf,
   isText,
   isVideo,
-  processCreatePubPost,
   sendToDb,
   uploadToMux,
   MetadataObject,
@@ -31,11 +30,11 @@ export function ItemDropzone({ channel }: { channel: Channel }) {
 
   const { signMessage, userId: targetUserId, authToken } = useUserContext()
   const params = useParams()
-  const showDropzone =
-    channel.admins.includes(targetUserId) ||
-    channel.members.includes(targetUserId)
-      ? true
-      : false
+  const showDropzone = false
+    // channel.admins.includes(targetUserId) ||
+    // channel.members.includes(targetUserId)
+    //   ? true
+    //   : false
 
   const onDrop = async (acceptedFiles: File[]) => {
     setIsUploading(true)
@@ -49,7 +48,7 @@ export function ItemDropzone({ channel }: { channel: Channel }) {
         showLoadingIcon: true,
       })
 
-      await handleFileUpload(file, index + 1)
+      // await handleFileUpload(file, index + 1)
     }
 
     setProgressInfo((prev) => ({
@@ -64,82 +63,82 @@ export function ItemDropzone({ channel }: { channel: Channel }) {
     }, 4500)
   }
 
-  const handleFileUpload = async (file: File, fileIndex: number) => {
-    const formData = new FormData()
-    formData.append('file', file)
-    const verifying = await authToken
-    const { cid } = await w3sUpload(formData, verifying)
+  // const handleFileUpload = async (file: File, fileIndex: number) => {
+  //   const formData = new FormData()
+  //   formData.append('file', file)
+  //   const verifying = await authToken
+  //   const { cid } = await w3sUpload(formData, verifying)
 
-    if (cid) {
-      const uploadedFileName = file.name || 'unnamed'
-      const contentType = determineContentType(file)
-      const contentTypeKey =
-        isVideo({ mimeType: contentType }) || isAudio({ mimeType: contentType })
-          ? 2
-          : isPdf({ mimeType: contentType }) || isGLB(file) || isText(file)
-          ? 1
-          : 0
+  //   if (cid) {
+  //     const uploadedFileName = file.name || 'unnamed'
+  //     const contentType = determineContentType(file)
+  //     const contentTypeKey =
+  //       isVideo({ mimeType: contentType }) || isAudio({ mimeType: contentType })
+  //         ? 2
+  //         : isPdf({ mimeType: contentType }) || isGLB(file) || isText(file)
+  //         ? 1
+  //         : 0
 
-      const animationUri =
-        contentTypeKey === 2 || contentTypeKey === 1 ? cid : ''
-      const imageUri = contentTypeKey === 0 ? cid : ''
+  //     const animationUri =
+  //       contentTypeKey === 2 || contentTypeKey === 1 ? cid : ''
+  //     const imageUri = contentTypeKey === 0 ? cid : ''
 
-      const metadataObject: MetadataObject = {
-        name: uploadedFileName,
-        description: 'Dynamic metadata based on timestamp',
-        image: imageUri,
-        animationUri: animationUri,
-      }
+  //     const metadataObject: MetadataObject = {
+  //       name: uploadedFileName,
+  //       description: 'Dynamic metadata based on timestamp',
+  //       image: imageUri,
+  //       animationUri: animationUri,
+  //     }
 
-      let muxAssetId
-      let muxPlaybackId
+  //     let muxAssetId
+  //     let muxPlaybackId
 
-      if (contentTypeKey === 2) {
-        const muxVerifyingKey = await authToken
-        const { id, playbackId } = await uploadToMux(
-          animationUri,
-          muxVerifyingKey,
-        )
-        muxAssetId = id
-        muxPlaybackId = playbackId
-      }
+  //     if (contentTypeKey === 2) {
+  //       const muxVerifyingKey = await authToken
+  //       const { id, playbackId } = await uploadToMux(
+  //         animationUri,
+  //         muxVerifyingKey,
+  //       )
+  //       muxAssetId = id
+  //       muxPlaybackId = playbackId
+  //     }
 
-      await sendToDb({
-        key: cid,
-        value: {
-          ...metadataObject,
-          contentType: contentType,
-          muxAssetId: muxAssetId,
-          muxPlaybackId: muxPlaybackId,
-        },
-      })
+  //     await sendToDb({
+  //       key: cid,
+  //       value: {
+  //         ...metadataObject,
+  //         contentType: contentType,
+  //         muxAssetId: muxAssetId,
+  //         muxPlaybackId: muxPlaybackId,
+  //       },
+  //     })
 
-      if (signMessage && targetUserId) {
-        const txSuccess = await processCreatePubPost({
-          pubUri: cid,
-          targetChannelId: BigInt(params.id as string),
-          targetUserId: BigInt(targetUserId),
-          privySignMessage: signMessage,
-        })
-        if (!txSuccess) {
-          setProgressInfo((prev) => ({
-            ...prev,
-            fileIndex: fileIndex - 1,
-            statusHeader: 'Error',
-            statusMessage: 'Transaction failed, try again!',
-            showLoadingIcon: false,
-          }))
-        }
-      }
-    } else {
-      setProgressInfo((prev) => ({
-        ...prev,
-        statusHeader: 'Error',
-        statusMessage: 'Trouble fetching content address!',
-        showLoadingIcon: false,
-      }))
-    }
-  }
+  //     if (signMessage && targetUserId) {
+  //       const txSuccess = await processCreatePubPost({
+  //         pubUri: cid,
+  //         targetChannelId: BigInt(params.id as string),
+  //         targetUserId: BigInt(targetUserId),
+  //         privySignMessage: signMessage,
+  //       })
+  //       if (!txSuccess) {
+  //         setProgressInfo((prev) => ({
+  //           ...prev,
+  //           fileIndex: fileIndex - 1,
+  //           statusHeader: 'Error',
+  //           statusMessage: 'Transaction failed, try again!',
+  //           showLoadingIcon: false,
+  //         }))
+  //       }
+  //     }
+  //   } else {
+  //     setProgressInfo((prev) => ({
+  //       ...prev,
+  //       statusHeader: 'Error',
+  //       statusMessage: 'Trouble fetching content address!',
+  //       showLoadingIcon: false,
+  //     }))
+  //   }
+  // }
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,

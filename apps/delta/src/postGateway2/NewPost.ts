@@ -236,6 +236,7 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
         // Store channel roles (ChannelAccessTypes.ROLES)
         let channelRolesStore: {
           id: string;
+          timestamp: bigint;
           channelId: string;
           rid: bigint;
           role: bigint;
@@ -244,6 +245,7 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
         for (let i = 0; i < channelAdmins.length; ++i) {
           channelRolesStore.push({
             id: `${channelId}/${channelAdmins[i]}`,
+            timestamp: posts[i].message.timestamp,
             channelId: channelId,
             rid: channelAdmins[i],
             role: BigInt(2),
@@ -252,6 +254,7 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
         for (let i = 0; i < channelMembers.length; ++i) {
           channelRolesStore.push({
             id: `${channelId}/${channelMembers[i]}`,
+            timestamp: posts[i].message.timestamp,
             channelId: channelId,
             rid: channelMembers[i],
             role: BigInt(1),
