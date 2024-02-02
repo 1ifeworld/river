@@ -132,7 +132,7 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
 
   return (
     <div className="editor-container flex justify-center items-center py-4">
-      {/* <div className="flex h-full w-full justify-center bg-white">  */}
+      <div className="flex justify-center bg-white"> 
 
       {isLoading ? (
         <div style={loadingStyle}>Loading...</div>
@@ -145,6 +145,7 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
           theme={customTheme}
         />
       )}
+    </div>
     </div>
   )
 }
