@@ -16,7 +16,6 @@ export async function processRegisterFor({
   deadline: bigint
   sig: Hash,
   username: string
-
   // privySignMessage: (
   //   message: string,
   //   uiOptions?: SignMessageModalUIOptions | undefined,
@@ -34,17 +33,18 @@ export async function processRegisterFor({
   })
 
 
-  // // Declare constants/params
+  // Declare constants/params
   // const sigExpiration: bigint = getExpiration()
-  // // Get the hash to be signed
+  // Get the hash to be signed
   // const hash = registerForHash({ expiration: sigExpiration })
-  // // Sign hash with privy. hash is first wrapped in eip191 wrapper.
+  // Sign hash with privy. hash is first wrapped in eip191 wrapper.
   // const sig = await privySignMessage(hash)
-  // // Check if sig generated
+  // Check if sig generated
   // if (!sig) return
-  // pass inputs to relayRegisterFor
+  // // pass inputs to relayRegisterFor
   // await relayRegisterFor({
-  //   registerForRecipient: privySignerAddress as Hex,
+  //   registerForRecipient: signer,
+  //   recovery: recovery,
   //   expiration: sigExpiration,
   //   signature: sig as Hash,
   //   username: username,
