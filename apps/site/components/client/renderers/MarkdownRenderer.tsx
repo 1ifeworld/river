@@ -80,8 +80,7 @@
 // export default MarkdownRenderer
 
 'use client'
-
-import React, { useEffect, useState,useRef } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import Editor from 'rich-markdown-editor'
 import { light as customTheme } from '../../../styles/editorTheme'
 
@@ -93,9 +92,7 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
   const [content, setContent] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const containerRef = useRef<HTMLDivElement>(null)
-  const [editorWidth, setEditorWidth] = useState(0)
-
-
+  const [editorWidth, setEditorWidth] = useState('100%')
 
   useEffect(() => {
     setIsLoading(true)
@@ -119,8 +116,7 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
   useEffect(() => {
     const observer = new ResizeObserver((entries) => {
       if (entries[0].target) {
-        const newWidth = Math.min(entries[0].contentRect.width * 0.8, 1200) 
-        setEditorWidth(newWidth)
+        setEditorWidth(`${entries[0].contentRect.width}px`)
       }
     })
 
@@ -136,17 +132,15 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
   }, [])
 
   const editorStyle: React.CSSProperties = {
-    height: '100%', 
-    marginTop: '40px',
-    width: '100%', 
-    overflowX: 'hidden', 
-    overflowY: 'auto', 
-    padding: '1.5rem', 
-    backgroundColor: 'white', 
-    fontFamily: customTheme.fontFamilyMono, 
-    fontSize: customTheme.fontSize, 
-    lineHeight: customTheme.lineHeight, 
-  };
+    width: editorWidth,
+    height: 'calc(100vh - 40px)', // Adjust the height as needed
+    overflowY: 'auto', // Enable vertical scrolling
+    padding: '1.5rem',
+    backgroundColor: 'white',
+    fontFamily: customTheme.fontFamilyMono,
+    fontSize: customTheme.fontSize,
+    lineHeight: customTheme.lineHeight,
+  }
 
   const loadingStyle = {
     ...editorStyle,
@@ -157,19 +151,19 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
 
   return (
     <div ref={containerRef} className="flex justify-center items-center py-4">
-      <div className="flex h-full w-full justify-center bg-white"> 
-      {isLoading ? (
-        <div style={loadingStyle}>Loading...</div>
-      ) : (
-        <Editor
-          className="editor-body-text"
-          style={editorStyle}
-          value={content}
-          readOnly
-          theme={customTheme}
-        />
-      )}
-    </div>
+      <div className="flex h-full w-full justify-center bg-white">
+        {isLoading ? (
+          <div style={loadingStyle}>Loading...</div>
+        ) : (
+          <Editor
+            className="editor-body-text"
+            style={editorStyle}
+            value={content}
+            readOnly
+            theme={customTheme}
+          />
+        )}
+      </div>
     </div>
   )
 }
