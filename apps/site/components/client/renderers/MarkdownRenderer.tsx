@@ -146,7 +146,6 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
         />
       )}
     </div>
-    </div>
   )
 }
 
