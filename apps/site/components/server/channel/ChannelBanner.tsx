@@ -40,10 +40,7 @@ export async function ChannelBanner({
           <HoverCard>
             <HoverCardTrigger className="cursor-pointer">
               <Flex>
-                <Typography className="text-secondary-foreground ">
-                  {`rid: ${channel?.roles?.items?.[0].rid.toString()}`}
-                </Typography>
-                {/* <Username id={channel?.admins?.[0]} /> */}
+                <Username id={channel?.roles?.items?.[0].rid} />
                 {/* {channel?.members?.length > 0 && (
                   <Typography className="text-secondary-foreground ">
                     {`${'\u00A0'}+ ${pluralize(

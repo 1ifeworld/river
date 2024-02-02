@@ -23,11 +23,12 @@ export function User({ setOpen }: UserProps) {
     },
   })
   const { username, clearUserData, userId } = useUserContext()
+  console.log({username})
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="link">{userId ? `rid: ${userId}` : 'Logout'}</Button>
+        <Button variant="link">{username ? ` ${username}` : 'Logout'}</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-32" align="end">
         <DropdownMenuGroup className="flex flex-col gap-2">

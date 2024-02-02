@@ -15,16 +15,6 @@ export function decodeAddItemMsgBody({ msgBody }: { msgBody: Hash }): {
       msgBody
     );
 
-    // const [itemCidString] = decodeAbiParameters(
-    //   [{name: "itemCidString", type: "string"}],
-    //   itemCid
-    // )    
-
-    // const [channelCidString] = decodeAbiParameters(
-    //   [{name: "channelCid", type: "string"}],
-    //   channelCid
-    // )        
-
     return {
       itemCid: itemCid,
       channelCid: channelCid,

@@ -5,9 +5,10 @@ export async function getUsername({ id }: { id: bigint }) {
 
   try {
     const idString = id.toString()
+    console.log({idString})
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_USERNAME_DB}/getUsernameById`,
+      `${process.env.NEXT_PUBLIC_USERNAME_SERVICE}/getUsernameById`,
       {
         method: 'POST',
         headers: {
@@ -24,7 +25,7 @@ export async function getUsername({ id }: { id: bigint }) {
     const data = await response.json()
 
     if (data) {
-      const username = data.username.replace('.sbvrsv.eth', '')
+      const username = data.username
       return username
     } else {
       console.error('Error:', data.error)

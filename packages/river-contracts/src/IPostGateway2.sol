@@ -25,7 +25,7 @@ interface IPostGateway2 {
         uint256 timestamp;
         MessageTypes msgType;			
         bytes msgBody;				
-    }         
+    }          
 
     enum MessageTypes {
         NONE,                       // 0
