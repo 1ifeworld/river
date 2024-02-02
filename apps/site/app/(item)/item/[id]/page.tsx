@@ -112,7 +112,7 @@ export default async function ItemPage({
       </Stack>
     ))
 
-    const contentWrapperClass = match({ mimeType: contentType }) // Wrap the contentType string in an object
+    const contentWrapperClass = match({ mimeType: contentType }) 
   .with(
     P.when(isMarkdown), 
     () => "bg-white"

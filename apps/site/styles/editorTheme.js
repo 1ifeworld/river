@@ -71,6 +71,7 @@ export const light = {
   code: colors.lightBlack,
   cursor: colors.black,
   divider: colors.greyMid,
+  fontFamily: "'SFMono-Regular'",
 
   toolbarBackground: colors.lightBlack,
   toolbarHoverBackground: colors.black,
