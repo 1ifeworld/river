@@ -81,7 +81,7 @@
 
 'use client'
 
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import Editor from 'rich-markdown-editor'
 import { light as customTheme } from '../../../styles/editorTheme'
 
@@ -92,8 +92,6 @@ type Props = {
 const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
   const [content, setContent] = useState('')
   const [isLoading, setIsLoading] = useState(true)
-  const [editorWidth, setEditorWidth] = useState(0)
-  const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setIsLoading(true)
@@ -114,58 +112,38 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
       })
   }, [contentUrl])
 
-  useEffect(() => {
-    const observer = new ResizeObserver((entries) => {
-      if (entries[0].target) {
-        const newWidth = Math.min(entries[0].contentRect.width * 0.8, 1200) 
-        setEditorWidth(newWidth)
-      }
-    })
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current)
-    }
-
-    return () => {
-      if (containerRef.current) {
-        observer.unobserve(containerRef.current)
-      }
-    }
-  }, [])
-
   const editorStyle = {
-    height: '100%', 
-    width: `${editorWidth}px`,
-    maxHeight: '70vh',
+    height: 'calc(100% - 40px)', 
+    width: '40vw', 
     overflow: 'auto',
     padding: '1.5rem',
-    backgroundColor: 'white', 
-    fontFamily: 'SFMono-Regular',
-    marginTop: '40px', 
+    backgroundColor: 'white',
+    fontFamily: customTheme.fontFamilyMono,
+    fontSize: customTheme.fontSize,
+    lineHeight: customTheme.lineHeight,
+    marginTop: '40px',
   }
 
   const loadingStyle = {
-    display: 'flex', 
+    ...editorStyle,
+    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    height: '70vh', 
   }
 
   return (
-    <div ref={containerRef} className="flex justify-center items-center py-4">
-      <div className="flex h-full w-full justify-center bg-white">
-        {isLoading ? (
-          <div style={loadingStyle}>Loading...</div>
-        ) : (
-          <Editor
-            className="editor-body-text"
-            style={editorStyle}
-            value={content}
-            readOnly
-            theme={customTheme}
-          />
-        )}
-      </div>
+    <div className="editor-container" style={{ height: '100%' }}>
+      {isLoading ? (
+        <div style={loadingStyle}>Loading...</div>
+      ) : (
+        <Editor
+          className="editor-body-text"
+          style={editorStyle}
+          value={content}
+          readOnly
+          theme={customTheme}
+        />
+      )}
     </div>
   )
 }
