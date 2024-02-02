@@ -12,58 +12,46 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
   const [content, setContent] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const [editorWidth, setEditorWidth] = useState(0)
+  const [editorPadding, setEditorPadding] = useState('0 15px') 
+
+  const editorContentStyle = {
+    width: '100%', 
+    maxWidth: '40vw', 
+    fontFamily: "'SFMono-Regular'",
+    fontSize: '16px', 
+    lineHeight: '17px',
+    backgroundColor: 'white',
+    padding: '0 15px', 
+  }
+  
   const containerRef = useRef<HTMLDivElement>(null)
-
+  
   useEffect(() => {
-    setIsLoading(true)
-    fetch(contentUrl)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok')
-        }
-        return response.text()
-      })
-      .then((data) => {
-        setContent(data)
-        setIsLoading(false)
-      })
-      .catch((error) => {
-        console.error('Error fetching Markdown content:', error)
-        setIsLoading(false)
-      })
-  }, [contentUrl])
-
-  useEffect(() => {
-    const observer = new ResizeObserver((entries) => {
-      if (entries[0].target) {
-        const newWidth = Math.min(entries[0].contentRect.width * 0.8, 1200) 
-        setEditorWidth(newWidth)
-      }
-    })
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current)
+    const updateStyle = () => {
+      const containerWidth = containerRef.current?.offsetWidth || 0
+      
+      setEditorWidth(containerWidth) 
+      setEditorPadding(containerWidth < 768 ? '0 15px' : '1.5rem') 
     }
-
-    return () => {
-      if (containerRef.current) {
-        observer.unobserve(containerRef.current)
-      }
-    }
+  
+    updateStyle()
+  
+    window.addEventListener('resize', updateStyle)
+  
+    return () => window.removeEventListener('resize', updateStyle)
   }, [])
-
+  
   const editorStyle = {
-    width: `${editorWidth}px`,
+    ...editorContentStyle,
+    width: `${editorWidth}px`, 
     maxHeight: '70vh',
     overflow: 'auto',
-    padding: '1.5rem',
-    backgroundColor: 'white', 
-    fontFamily: 'SFMono-Regular'
+    padding: editorPadding, 
   }
-
+  
   const loadingStyle = {
-    ...editorStyle, 
-    display: 'flex', 
+    ...editorContentStyle,
+    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     height: '70vh', 
