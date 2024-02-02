@@ -109,6 +109,12 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
     }
   }, [])
 
+  const editorStyle = {
+    width: `${editorWidth}px`,
+    maxHeight: '70vh', 
+    overflow: 'auto'  
+  };
+
   return (
     <div ref={containerRef} className="flex justify-center items-center py-4">
       <div className="flex h-full w-full justify-center">
@@ -117,7 +123,7 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
         ) : (
           <Editor
             className="editor-body-text"
-            style={{ width: `${editorWidth}px` }}
+            style={editorStyle}
             value={content}
             readOnly
             theme={customTheme}
