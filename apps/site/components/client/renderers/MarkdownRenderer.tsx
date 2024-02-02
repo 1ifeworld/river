@@ -112,8 +112,9 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
   const editorStyle = {
     width: `${editorWidth}px`,
     maxHeight: '70vh', 
-    overflow: 'auto'  
-  };
+    overflow: 'auto',
+    padding: '1.5rem',    
+  }
 
   return (
     <div ref={containerRef} className="flex justify-center items-center py-4">
