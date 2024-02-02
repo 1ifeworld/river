@@ -51,6 +51,7 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
     width: '100%',
     height: editorHeight,
     overflowY: 'auto',
+    overflow: 'auto',
     padding: '1.5rem',
     backgroundColor: 'white',
     fontFamily: customTheme.fontFamilyMono,
@@ -66,7 +67,7 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
   }
 
   return (
-    <div ref={containerRef} className="flex justify-center items-center py-4">
+    <div ref={containerRef} className="flex flex-col justify-center items-center py-4">
       <div className="flex h-full w-full justify-center bg-white">
         {isLoading ? (
           <div style={loadingStyle}>Loading...</div>
