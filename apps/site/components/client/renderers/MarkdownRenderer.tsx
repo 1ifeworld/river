@@ -13,16 +13,17 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
   const [isLoading, setIsLoading] = useState(true)
   const containerRef = useRef<HTMLDivElement>(null)
 
+  // Dynamically calculate the content height based on the viewport
   const calculateContentHeight = () => {
-    const headerHeight = 40 // Adjust as necessary for your header
-    const additionalPadding = 60 // Adjust as necessary for your layout
+    const headerHeight = 40 // Height of the header or any fixed elements
+    const additionalPadding = 60 // Additional space you want to spare
     return `calc(100vh - ${headerHeight}px - ${additionalPadding}px)`
   }
 
   const editorStyle: React.CSSProperties = {
     width: '100%',
-    height: calculateContentHeight(),
-    overflowY: 'auto',
+    minHeight: calculateContentHeight(), // Ensures that the content is at least as tall as the calculated height
+    overflowY: 'auto', // Only vertical scrolling
     padding: '1.5rem',
     backgroundColor: 'white',
     fontFamily: customTheme.fontFamilyMono,
@@ -59,7 +60,7 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
   useEffect(() => {
     const handleResize = () => {
       if (containerRef.current) {
-        containerRef.current.style.height = calculateContentHeight()
+        containerRef.current.style.minHeight = calculateContentHeight()
       }
     }
     handleResize()
