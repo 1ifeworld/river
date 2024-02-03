@@ -16,7 +16,7 @@ export async function RecentChannels({
 
   return (
     <Stack className="hidden md:flex gap-y-[34px]">
-      <Typography>Recent channels</Typography>
+      <Typography className="font-medium">Recent channels</Typography>
       <Stack className="gap-y-[5px]">
         {channels.items.slice(0, 50).map((channel) => {
           return (

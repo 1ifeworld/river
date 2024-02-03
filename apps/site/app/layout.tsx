@@ -3,7 +3,7 @@ import { Analytics } from '@vercel/analytics/react'
 import type { Metadata } from 'next'
 import { Toaster } from 'sonner'
 import '../styles/globals.css'
-import { fragmentMono } from './fonts/fonts'
+import { sfMono } from './fonts/fonts'
 import { Providers } from './providers/providers'
 import Script from 'next/script'
 
@@ -18,11 +18,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html
-      lang="en"
-      className={`${fragmentMono.variable}`}
-      suppressHydrationWarning
-    >
+    <html lang="en" className={`${sfMono.variable}`} suppressHydrationWarning>
       <body>
         <Providers>
           <Header />

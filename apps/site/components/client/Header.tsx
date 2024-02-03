@@ -1,5 +1,5 @@
 import { ChannelDialog, User, UsernameDialog } from '@/client'
-import { Button, Flex } from '@/design-system'
+import { Button, Flex, Typography } from '@/design-system'
 import { RiverLogo } from '@/server'
 import { useLogin, usePrivy } from '@privy-io/react-auth'
 import { checkOwnerHasId } from 'lib/username'
@@ -45,7 +45,7 @@ export function Header() {
               <User setOpen={setOpen} />
             ) : (
               <Button variant="link" onClick={login}>
-                Login
+                <Typography>Login</Typography>
               </Button>
             )}
           </Flex>
