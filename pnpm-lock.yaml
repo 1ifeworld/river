@@ -121,6 +121,9 @@ importers:
       '@vercel/kv':
         specifier: ^1.0.0
         version: 1.0.0
+      base64url:
+        specifier: ^3.0.1
+        version: 3.0.1
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0

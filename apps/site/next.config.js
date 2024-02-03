@@ -15,8 +15,8 @@ module.exports = {
     config.resolve.alias.canvas = false
     return config
   },
-  experimental: {
-    webpackBuildWorker: true,
-  },
+  // experimental: {
+  //   webpackBuildWorker: true,
+  // },
   transpilePackages: ['scrypt'],
 }

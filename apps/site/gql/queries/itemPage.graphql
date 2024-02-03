@@ -1,0 +1,14 @@
+query itemPage($id: String!) {
+  adds(id: $id) {
+    addedBy
+    timestamp    
+    itemId
+    channel {
+      name
+    }
+    channelId
+    item {
+      uri
+    }
+  }
+}

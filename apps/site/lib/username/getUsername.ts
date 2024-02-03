@@ -1,7 +1,7 @@
 export async function getUsername({ id }: { id: bigint }) {
-  if (!id) {
-    throw new Error('Error: id is required')
-  }
+  // if (!id) {
+  //   throw new Error('Error: id is required')
+  // }
 
   try {
     const idString = id.toString()

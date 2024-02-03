@@ -79,7 +79,7 @@ channelId: string;
   const createItemPost: Post = {
     signer: signer,
     message: {
-        rid: rid,
+        rid: BigInt(rid),
         timestamp: timestamp,
         msgType: createItemMsgType,
         msgBody: createItemMsgBody.msgBody
@@ -91,6 +91,14 @@ channelId: string;
   }
   const itemBlock = await createBlockFromAnything(createItemPost.message);
   const itemCid = itemBlock.cid.toString()
+  console.log("site site item message strucT: ", {
+    rid: BigInt(rid),
+    timestamp: timestamp,
+    msgType: createItemMsgType,
+    msgBody: createItemMsgBody.msgBody
+})
+console.log("site site item cid: ", itemCid)
+
     /*
         ADD ITEM POST
     */  

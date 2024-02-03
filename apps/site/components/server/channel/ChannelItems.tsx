@@ -8,7 +8,8 @@ import {
 } from '@/design-system'
 import { 
   Channel, 
-  // Reference 
+  Adds,
+  Item
 } from '@/gql'
 import { ThumbnailNameCreator } from '@/server'
 import { unixTimeConverter } from '@/utils'
@@ -16,15 +17,16 @@ import Link from 'next/link'
 import styles from './ChannelItems.module.css'
 
 function extractContentType({
-  reference,
+  item,
   metadata,
 }: {
-  reference: any
+  item: Item
   metadata: any
 }) {
-  const referenceMetadata = metadata.data[reference.pubRef?.uri as string]
-  return referenceMetadata?.contentType
-    ? referenceMetadata.contentType
+  if (!item || !item.uri) return undefined
+  const itemMetadata = metadata.data[item.uri]
+  return itemMetadata?.contentType
+    ? itemMetadata.contentType
     : 'undefined'
 }
 
@@ -35,42 +37,45 @@ export async function ChannelItems({
   channel: Channel
   metadata: any
 }) {
+  console.log("all the adds: ", channel.adds?.items)
+  console.log("typeof cmon: ", typeof(channel.adds?.items?.[0].timestamp))
+  const myFaveTimestamp = Number(channel.adds?.items?.[0].timestamp)
   return (
     <Table className="md:ml-2">
-      {/* <TableBody>
-        {channel.references.map((reference: Reference, index: number) => (
-          <Link key={index} href={`/item/${reference.id}`} legacyBehavior>
+      <TableBody>
+        {channel?.adds?.items?.map((add: Adds, index: number) => (
+          <Link key={index} href={`/item/${add.itemId}`} legacyBehavior>
             <TableRow className={`${styles.tableRow} hover:cursor-pointer`}>
               <TableCell className="flex gap-4 items-center">
                 <ThumbnailNameCreator
                   channel={channel}
-                  reference={reference}
+                  item={add.item}
                   metadata={metadata}
                 />
-              </TableCell> */}
+              </TableCell>
               {/* This component is hidden on small screens */}
-              {/* <TableCell className="hidden md:table-cell max-w-[118px] text-primary-foreground text-nowrap truncate pr-12">
+              <TableCell className="hidden md:table-cell max-w-[118px] text-primary-foreground text-nowrap truncate pr-12">
                 <Typography>{`${extractContentType({
-                  reference: reference,
+                  item: add?.item,
                   metadata: metadata,
                 })}`}</Typography>
-              </TableCell> */}
+              </TableCell>
               {/* This component is hidden on small screens */}
-              {/* <TableCell className="hidden md:table-cell text-primary-foreground text-nowrap truncate">
+              <TableCell className="hidden md:table-cell text-primary-foreground text-nowrap truncate">
                 <Typography>
-                  {unixTimeConverter(reference.createdTimestamp)}
+                  {unixTimeConverter(Number(add.item.timestamp))}
                 </Typography>
               </TableCell>
               <TableCell className="text-right w-fit md:w-[100px] text-primary-foreground">
                 <ItemDropdown
                   targetChannelId={channel.id}
-                  targetReferenceId={reference.id}
+                  targetReferenceId={add.itemId}
                 />
               </TableCell>
             </TableRow>
           </Link>
         ))}
-      </TableBody> */}
+      </TableBody>
     </Table>
   )
 }

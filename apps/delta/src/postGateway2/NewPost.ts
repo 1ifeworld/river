@@ -1,5 +1,13 @@
 import { ponder } from "@/generated";
-import { postGateway2ABI, decodeCreateAssetMsgBody, decodeAddItemMsgBody, remove0xPrefix } from "scrypt";
+import {
+  postGateway2ABI,
+  decodeCreateAssetMsgBody,
+  decodeAddItemMsgBody,
+  remove0xPrefix,
+  createBlockFromAnything,
+  bytesToBase64Url,
+  base64UrlToBytes,  
+} from "scrypt";
 import {
   Hash,
   Hex,
@@ -7,14 +15,9 @@ import {
   recoverAddress,
   getAddress,
   decodeAbiParameters,
-  recoverMessageAddress
+  recoverMessageAddress,
 } from "viem";
 import { absBigInt } from "../utils";
-import {
-  createBlockFromAnything,
-  bytesToBase64Url,
-  base64UrlToBytes,
-} from "../utils/cid";
 import * as codec from "@ipld/dag-cbor";
 import * as Block from "multiformats/block";
 import { sha256 } from "multiformats/hashes/sha2";
@@ -26,7 +29,17 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
 
   ************************************************ */
 
-  const { Txn, User, Post, Message, Channel, ChannelRoles, Item, ItemRoles, Adds } = context.db;
+  const {
+    Txn,
+    User,
+    Post,
+    Message,
+    Channel,
+    ChannelRoles,
+    Item,
+    ItemRoles,
+    Adds,
+  } = context.db;
 
   type Message = {
     rid: bigint;
@@ -42,7 +55,7 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
     hash: Hash;
     sigType: bigint;
     sig: Hash;
-  };  
+  };
 
   enum ChannelDataTypes {
     NONE,
@@ -72,7 +85,7 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
     UPDATE_CHANNEL, // 4
     ADD_ITEM_TO_CHANNEL, // 5
     REMOVE_ITEM_FROM_CHANNEL, // 6
-  }  
+  }
 
   /* ************************************************
 
@@ -95,29 +108,29 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
     data: event.transaction.input,
   });
 
-  console.log("args coming in correcltly? ", args)
+  console.log("args coming in correcltly? ", args);
 
   // if decode fails return
-  if (!args?.[0]) return
+  if (!args?.[0]) return;
 
   // Check if args is an array of posts or a batch of posts
   if (Array.isArray(args[0])) {
-    console.log("is array")
+    console.log("is array");
     // const batchPost = args[0] as Post[];
     for (let i = 0; i < args[0].length; ++i) {
       // console.log("post #", i + 1)
       // console.log(batchPost[i])
       posts[i] = args[0][i];
-      console.log("args[0][i]", args[0][i])
+      console.log("args[0][i]", args[0][i]);
       // let postBlock = await createBlockFromAnything(posts[i]);
-      // console.log(`post block ${i}`, (await createBlockFromAnything(posts[i])).cid.toString())      
+      // console.log(`post block ${i}`, (await createBlockFromAnything(posts[i])).cid.toString())
     }
     // batchPost.forEach((post) => {
     //   console.log(post)
     //   posts.push(post);
     // });
   } else {
-    console.log("not array")
+    console.log("not array");
     const singlePost = args[0] as Post;
     // console.log("single post: ", singlePost)
     posts.push(singlePost);
@@ -128,14 +141,15 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
     // check for message validity
     // check if timestamp is greater than 10 mins in the future of the block it was emitted din
     // NOTE: can potentially make this way lower in our blockchain era?
-    if (posts[i].message.timestamp > event.block.timestamp + BigInt(600)) return;
+    if (posts[i].message.timestamp > event.block.timestamp + BigInt(600))
+      return;
 
     // get custody address from user id
     const userLookup = await User.findUnique({ id: posts[i].message.rid });
 
     if (!userLookup) return;
 
-    console.log("user look up happening?", userLookup)
+    console.log("user look up happening?", userLookup);
 
     // const recoveredAddress = await recoverAddress({
     //   hash: posts[i].hash,
@@ -145,28 +159,37 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
     const recoverAddressFromMessageSignature = await recoverMessageAddress({
       message: remove0xPrefix({ bytes32Hash: posts[i].hash }),
       signature: posts[i].sig,
-    })
+    });
 
-    const signerIsValid = getAddress(userLookup.to) === recoverAddressFromMessageSignature;
+    const signerIsValid =
+      getAddress(userLookup.to) === recoverAddressFromMessageSignature;
 
-    if (!signerIsValid) return
+    if (!signerIsValid) return;
 
-    console.log("signature is valid here")
+    console.log("signature is valid here");
 
     // Create blocks for things
     const postBlock = await createBlockFromAnything(posts[i]);
-    const postId = postBlock.cid.toString()
-    console.log("postId: ", postId)
+    const postId = postBlock.cid.toString();
+    if (posts[i].message.msgType === MessageTypes.CREATE_ITEM) {
+      console.log("create item message struct: ", posts[i].message);
+    }
     const messageBlock = await createBlockFromAnything(posts[i].message);
     // Create message id which will be saved in asset create events
-    const messageId = messageBlock.cid.toString()
+    const messageId = messageBlock.cid.toString();
+    if (posts[i].message.msgType === MessageTypes.CREATE_ITEM) {
+      console.log("create item messge id to cid string: ", messageId);
+    }
+
     // Save base64 encoded representatiosn of block bytes
-    const encodedPostBlockBytes = bytesToBase64Url((await createBlockFromAnything(posts[i])).bytes);
+    const encodedPostBlockBytes = bytesToBase64Url(
+      (await createBlockFromAnything(posts[i])).bytes
+    );
 
     // store post + message
-    const storedPost = await Post.create({
+    const storedPost = await Post.upsert({
       id: postId,
-      data: {
+      create: {
         parentBlock: encodedPostBlockBytes,
         relayer: event.transaction.from,
         signer: posts[i].signer,
@@ -176,16 +199,18 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
         sigType: BigInt(posts[i].sigType),
         sig: posts[i].sig,
       },
+      update: {},
     });
 
-    const storedMessage = await Message.create({
+    const storedMessage = await Message.upsert({
       id: messageId,
-      data: {
+      create: {
         rid: posts[i].message.rid,
         timestamp: posts[i].message.timestamp,
         msgType: BigInt(posts[i].message.msgType),
         msgBody: posts[i].message.msgBody,
       },
+      update: {},
     });
 
     switch (posts[i].message.msgType) {
@@ -222,9 +247,9 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
           channelAccess.contents
         );
         // Create channel
-        await Channel.create({
+        await Channel.upsert({
           id: channelId,
-          data: {
+          create: {
             messageId: messageId,
             timestamp: posts[i].message.timestamp,
             createdBy: posts[i].message.rid,
@@ -232,6 +257,7 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
             name: channelInfo.name,
             description: channelInfo.description,
           },
+          update: {},
         });
         // Store channel roles (ChannelAccessTypes.ROLES)
         let channelRolesStore: {
@@ -260,14 +286,27 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
             role: BigInt(1),
           });
         }
+        // set roles
+        for (let i = 0; i < channelRolesStore.length; ++i) {
+          await ChannelRoles.upsert({
+            id: `${channelId}/${channelRolesStore[i].rid}`,
+            create: {
+              timestamp: posts[i].message.timestamp,
+              channelId: channelId,
+              rid: channelRolesStore[i].rid,
+              role: channelRolesStore[i].role,
+            },
+            update: {},
+          });
+        }
         // Set roles
-        await ChannelRoles.createMany({
-          data: channelRolesStore,
-        });
+        // await ChannelRoles.createMany({
+        //   data: channelRolesStore,
+        // });
         // end case
         break;
       case MessageTypes.CREATE_ITEM:
-        console.log("running create item")
+        console.log("running create item");
         // Create itemId from original message. itemId = cid(Message(rid, timestamp, msgType, msgBody))
         const itemId = messageBlock.cid.toString();
         // decode channel data + channel access
@@ -287,14 +326,15 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
           itemAccess.contents
         );
         // Create item
-        await Item.create({
+        await Item.upsert({
           id: itemId,
-          data: {
+          create: {
             messageId: messageId,
             timestamp: posts[i].message.timestamp,
             createdby: posts[i].message.rid,
             uri: itemUri,
           },
+          update: {},
         });
         // Store item roles (ItemAccessTypes.ADMINS)
         let itemAdminStore: {
@@ -302,7 +342,7 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
           itemId: string;
           rid: bigint;
           role: bigint;
-        }[] = [];        
+        }[] = [];
         for (let i = 0; i < itemAdmins.length; ++i) {
           itemAdminStore.push({
             id: `${itemId}/${itemAdmins[i]}`,
@@ -310,45 +350,63 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
             rid: itemAdmins[i],
             role: BigInt(2),
           });
-        }        
+        }
+        // set roles
+        for (let i = 0; i < itemAdminStore.length; ++i) {
+          await ItemRoles.upsert({
+            id: `${itemId}/${itemAdminStore[i].rid}`,
+            create: {
+              itemId: itemId,
+              rid: itemAdminStore[i].rid,
+              role: itemAdminStore[i].role,
+            },
+            update: {},
+          });
+        }
         // Set roles
-        await ItemRoles.createMany({
-          data: itemAdminStore,
-        });        
+        // await ItemRoles.createMany({
+        //   data: itemAdminStore,
+        // });
         // end case
         break;
       case MessageTypes.ADD_ITEM_TO_CHANNEL:
-        console.log("running add item to channel")
+        console.log("running add item to channel");
         // decode channel data + channel access
         const { itemCid, channelCid } =
           decodeAddItemMsgBody({ msgBody: posts[i].message.msgBody }) || {};
         // const [itemCidString] = decodeAbiParameters
         // check for proper decode
-        if (!itemCid || !channelCid) return
+        if (!itemCid || !channelCid) return;
         // lookup itemCid + channelCid
-        const item = await Item.findUnique({id: itemCid})
-        const channel = await Channel.findUnique({id: channelCid})
+        const item = await Item.findUnique({ id: itemCid });
+        const channel = await Channel.findUnique({ id: channelCid });
         // check to see if target item + channel exist at timestamp of procesing
-        if (!itemCid || !channelCid ) break;
-        console.log("item cid: ", itemCid)
-        console.log("channelCid cid: ", channelCid)
+        if (!itemCid || !channelCid) break;
+        console.log("item cid: ", itemCid);
+        console.log("channelCid cid: ", channelCid);
         // Check to see if rid has access to add to channel
-        const access = await ChannelRoles.findUnique({id: `${channelCid}/${posts[i].message.rid}`})
-        console.log("has access! lets add it", access)
+        const access = await ChannelRoles.findUnique({
+          id: `${channelCid}/${posts[i].message.rid}`,
+        });
+        console.log("has access! lets add it", access);
         // Check to see if role is greater than 0
         if (access?.role && access.role > 0) {
-          console.log("made it to end")
-          await Adds.create({
-            id: `${itemCid}/${channelCid}`,
-            data: {
+          // check if item exists. prevent adding item cids that dont exist
+          const itemLookup = await Item.findUnique({ id: itemCid });
+          if (!itemLookup) break;
+          console.log("made it to end");
+          await Adds.upsert({
+            id: `${channelCid}/${itemCid}`,
+            create: {
               timestamp: posts[i].message.timestamp,
               addedBy: posts[i].message.rid,
               messageId: messageId,
               itemId: itemCid,
               channelId: channelCid,
-            }
-          })
-        } 
+            },
+            update: {},
+          });
+        }
         break;
     }
   }

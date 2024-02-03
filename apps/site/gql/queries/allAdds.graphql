@@ -1,0 +1,20 @@
+query allAdds {
+  addss {
+    items {
+      timestamp
+      addedBy
+      itemId
+      item {
+        id
+        timestamp
+        createdby
+        uri
+      }
+      channelId
+      channel {
+        id
+        name
+      }
+    }
+  }
+}

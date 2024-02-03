@@ -823,17 +823,36 @@ export type UserPage = {
   pageInfo?: Maybe<PageInfo>;
 };
 
+export type AllAddsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllAddsQuery = { __typename?: 'Query', addss?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', timestamp: any, addedBy: any, itemId: string, channelId: string, item: { __typename?: 'Item', id: string, timestamp: any, createdby: any, uri: string }, channel: { __typename?: 'Channel', id: string, name: string } }> | null } | null };
+
 export type AllChannelsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllChannelsQuery = { __typename?: 'Query', channels?: { __typename?: 'ChannelPage', items?: Array<{ __typename?: 'Channel', id: string, timestamp: any, createdBy: any, uri: string, name: string, description: string, roles?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> | null } | null, adds?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', timestamp: any, channelId: string, addedBy: any, item: { __typename?: 'Item', id: string, uri: string } }> | null } | null }> | null } | null };
+export type AllChannelsQuery = { __typename?: 'Query', channels?: { __typename?: 'ChannelPage', items?: Array<{ __typename?: 'Channel', id: string, timestamp: any, createdBy: any, uri: string, name: string, description: string, roles?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> | null } | null }> | null } | null };
 
 export type ChannelWithIdQueryVariables = Exact<{
   id: Scalars['String']['input'];
 }>;
 
 
-export type ChannelWithIdQuery = { __typename?: 'Query', channel?: { __typename?: 'Channel', id: string, timestamp: any, createdBy: any, uri: string, name: string, description: string, roles?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> | null } | null, adds?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', timestamp: any, channelId: string, addedBy: any, item: { __typename?: 'Item', id: string, uri: string } }> | null } | null } | null };
+export type ChannelWithIdQuery = { __typename?: 'Query', channel?: { __typename?: 'Channel', id: string, timestamp: any, createdBy: any, uri: string, name: string, description: string, roles?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> | null } | null, adds?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', timestamp: any, channelId: string, addedBy: any, item: { __typename?: 'Item', id: string, uri: string, timestamp: any } }> | null } | null } | null };
+
+export type ItemPageQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type ItemPageQuery = { __typename?: 'Query', adds?: { __typename?: 'Adds', addedBy: any, timestamp: any, itemId: string, channelId: string, channel: { __typename?: 'Channel', name: string }, item: { __typename?: 'Item', uri: string } } | null };
+
+export type ItemWithIdQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type ItemWithIdQuery = { __typename?: 'Query', item?: { __typename?: 'Item', id: string, timestamp: any, createdby: any, uri: string } | null };
 
 export type TxnHashQueryVariables = Exact<{
   hash: Scalars['String']['input'];
@@ -850,6 +869,28 @@ export type UserIdQueryVariables = Exact<{
 export type UserIdQuery = { __typename?: 'Query', users?: { __typename?: 'UserPage', items?: Array<{ __typename?: 'User', id: any, userId: any, to: string, recovery: string, from: string }> | null } | null };
 
 
+export const AllAddsDocument = gql`
+    query allAdds {
+  addss {
+    items {
+      timestamp
+      addedBy
+      itemId
+      item {
+        id
+        timestamp
+        createdby
+        uri
+      }
+      channelId
+      channel {
+        id
+        name
+      }
+    }
+  }
+}
+    `;
 export const AllChannelsDocument = gql`
     query allChannels {
   channels(orderBy: "timestamp", orderDirection: "desc") {
@@ -865,17 +906,6 @@ export const AllChannelsDocument = gql`
           timestamp
           rid
           role
-        }
-      }
-      adds(orderBy: "timestamp", orderDirection: "desc") {
-        items {
-          timestamp
-          channelId
-          addedBy
-          item {
-            id
-            uri
-          }
         }
       }
     }
@@ -906,9 +936,36 @@ export const ChannelWithIdDocument = gql`
         item {
           id
           uri
+          timestamp
         }
       }
     }
+  }
+}
+    `;
+export const ItemPageDocument = gql`
+    query itemPage($id: String!) {
+  adds(id: $id) {
+    addedBy
+    timestamp
+    itemId
+    channel {
+      name
+    }
+    channelId
+    item {
+      uri
+    }
+  }
+}
+    `;
+export const ItemWithIdDocument = gql`
+    query itemWithId($id: String!) {
+  item(id: $id) {
+    id
+    timestamp
+    createdby
+    uri
   }
 }
     `;
@@ -940,11 +997,20 @@ const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationTy
 
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
+    allAdds(variables?: AllAddsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<AllAddsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<AllAddsQuery>(AllAddsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'allAdds', 'query');
+    },
     allChannels(variables?: AllChannelsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<AllChannelsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<AllChannelsQuery>(AllChannelsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'allChannels', 'query');
     },
     channelWithId(variables: ChannelWithIdQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<ChannelWithIdQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<ChannelWithIdQuery>(ChannelWithIdDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'channelWithId', 'query');
+    },
+    itemPage(variables: ItemPageQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<ItemPageQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<ItemPageQuery>(ItemPageDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'itemPage', 'query');
+    },
+    itemWithId(variables: ItemWithIdQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<ItemWithIdQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<ItemWithIdQuery>(ItemWithIdDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'itemWithId', 'query');
     },
     txnHash(variables: TxnHashQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<TxnHashQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<TxnHashQuery>(TxnHashDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'txnHash', 'query');

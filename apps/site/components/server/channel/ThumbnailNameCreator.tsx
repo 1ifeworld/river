@@ -1,5 +1,5 @@
 import { Button, Stack, Typography } from '@/design-system'
-import { type Channel, type Reference } from '@/gql'
+import { type Channel, type Item } from '@/gql'
 import { ipfsUrlToCid, w3sUrlFromCid } from '@/lib'
 import { GenericThumbnailSmall, Username } from '@/server'
 import { truncateText } from '@/utils'
@@ -8,18 +8,35 @@ import Link from 'next/link'
 
 interface ThumbnailNameCreatorProps {
   channel: Channel
-  reference: Reference
+  item: Item
   metadata: any
 }
 
 export function ThumbnailNameCreator({
   channel,
-  reference,
+  item,
   metadata,
 }: ThumbnailNameCreatorProps) {
-  const referenceMetadata = metadata.data[reference.pubRef?.uri as string]
+  if (!item || item?.createdby) {
+    return (
+      <>
+        <Image
+          className="object-cover aspect-square "
+          src={''}
+          alt={''}
+          width={40}
+          height={40}
+        />
+        <Stack className="">
+          <Typography className="text-primary-foreground">{''}</Typography>
+        </Stack>
+      </>
+    )
+  }
+  
+  const itemMetadata = metadata.data[item.uri as string]
 
-  if (!referenceMetadata) {
+  if (!itemMetadata) {
     return (
       <>
         <Image
@@ -36,7 +53,7 @@ export function ThumbnailNameCreator({
     )
   }
 
-  const cid = ipfsUrlToCid({ ipfsUrl: referenceMetadata.image })
+  const cid = ipfsUrlToCid({ ipfsUrl: itemMetadata.image })
 
   return (
     <>
@@ -44,13 +61,13 @@ export function ThumbnailNameCreator({
         <Image
           className="object-cover aspect-square "
           src={w3sUrlFromCid({ cid })}
-          alt={referenceMetadata.name}
+          alt={itemMetadata.name}
           width={40}
           height={40}
         />
       ) : (
         <GenericThumbnailSmall
-          text={referenceMetadata?.contentType as string}
+          text={itemMetadata?.contentType as string}
         />
       )}
       <Stack>
@@ -58,15 +75,15 @@ export function ThumbnailNameCreator({
         {/* <Button variant="link"> */}
         {/* This component is hidden on large screens */}
         <Typography className="md:hidden text-primary-foreground leading-none whitespace-nowrap">
-          {truncateText(referenceMetadata.name, 35)}
+          {truncateText(itemMetadata.name, 35)}
         </Typography>
         {/* This component is hidden on small screens */}
         <Typography className="hidden md:block text-primary-foreground leading-none whitespace-nowrap">
-          {truncateText(referenceMetadata.name, 50)}
+          {truncateText(itemMetadata.name, 50)}
         </Typography>
         {/* </Button> */}
         {/* </Link> */}
-        <Username id={reference.createdBy} />
+        <Username id={item.createdby} />
       </Stack>
     </>
   )

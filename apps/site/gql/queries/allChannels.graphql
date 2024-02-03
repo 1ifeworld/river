@@ -14,17 +14,17 @@ query allChannels {
           role
         }
       }
-      adds(orderBy: "timestamp", orderDirection: "desc") {
-        items {
-          timestamp
-          channelId
-          addedBy
-          item {
-            id
-            uri
-          }
-        }
-      }
+      # adds(orderBy: "timestamp", orderDirection: "desc") {
+      #   items {
+      #     timestamp
+      #     channelId
+      #     addedBy
+      #     item {
+      #       id
+      #       uri
+      #     }
+      #   }
+      # }
     }
   }
 }

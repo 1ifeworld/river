@@ -1,12 +1,12 @@
 import { Typography, Stack, Flex } from '@/design-system'
-import { type Reference } from '@/gql'
+import { type Adds } from '@/gql'
 import { getUsername, ipfsUrlToCid, type ChannelMetadata } from '@/lib'
 import { unixTimeConverter } from '@/utils'
 import { kv } from '@vercel/kv'
 import Link from 'next/link'
 
 interface ItemSidebarProps {
-  reference: Reference
+  itemContext: Adds
   itemMetadata: {
     name: string
     description: string
@@ -19,14 +19,11 @@ interface ItemSidebarProps {
 }
 
 export async function ItemSidebar({
-  reference,
+  itemContext,
   itemMetadata,
 }: ItemSidebarProps) {
-  const username = await getUsername({ id: reference?.pubRef?.createdBy })
-
-  const channelMetadata = await kv.get<ChannelMetadata>(
-    reference?.channel?.uri as string,
-  )
+  const username = await getUsername({ id: itemContext.item.createdby })
+  const channelName = itemContext.channel.name
 
   return (
     <Stack className="px-5 py-[10px] h-full justify-between border-t border-border md:border-none">
@@ -52,12 +49,12 @@ export async function ItemSidebar({
           <Flex className="justify-between">
             <Typography>Added to</Typography>
             <Link
-              href={`/channel/${reference.channel?.id}`}
+              href={`/channel/${itemContext.channelId}`}
               className="hover:underline underline-offset-2 transition-all decoration-secondary-foreground"
             >
               <Typography className="text-secondary-foreground">
                 {/* @ts-ignore */}
-                {channelMetadata?.name}
+                {channelName}
               </Typography>
             </Link>
           </Flex>
@@ -70,7 +67,7 @@ export async function ItemSidebar({
           <Flex className="justify-between">
             <Typography>Date added</Typography>
             <Typography className="text-secondary-foreground">
-              {unixTimeConverter(reference.createdTimestamp)}
+              {unixTimeConverter(itemContext.timestamp)}
             </Typography>
           </Flex>
           <Flex className="justify-between">

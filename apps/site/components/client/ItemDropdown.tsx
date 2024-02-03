@@ -14,8 +14,8 @@ import {
 import { toast } from 'sonner'
 
 interface ItemDropdownProps {
-  targetChannelId: bigint
-  targetReferenceId: bigint
+  targetChannelId: string
+  targetReferenceId: string
 }
 
 export function ItemDropdown({
