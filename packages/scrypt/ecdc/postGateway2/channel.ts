@@ -1,6 +1,5 @@
 import { Hash, encodeAbiParameters } from "viem";
 import { postGateway2ABI } from "../../abi";
-import { createBlockFromAnything, bytesToBase64Url } from "../../lib";
 
 export async function encodeCreateChannelMsgBody({
   name,
@@ -14,21 +13,17 @@ export async function encodeCreateChannelMsgBody({
   members: bigint[];
 }): Promise<{ msgBody: Hash; } | null>  {
   try {
-    const channelUriBlock = await createBlockFromAnything({
-      name: name,
-      description: description,
-    });
-    const base64EncodedChannelUriBlockBytes = bytesToBase64Url(
-      channelUriBlock.bytes
-    );
 
     const encodedCreateChannelStruct = encodeAbiParameters(postGateway2ABI[1].outputs, [
       {
         data: {
           dataType: 1,
           contents: encodeAbiParameters(
-            [{ name: "channelUri", type: "string" }],
-            [base64EncodedChannelUriBlockBytes]
+            [
+              { name: "name", type: "string" },
+              { name: "description", type: "string" },
+          ],
+            [name, description]
           ),
         },
         access: {

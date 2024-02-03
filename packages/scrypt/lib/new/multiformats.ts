@@ -2,6 +2,15 @@ import * as codec from '@ipld/dag-cbor'
 import * as Block from 'multiformats/block'
 import { sha256 } from 'multiformats/hashes/sha2'
 import base64url from 'base64url'
+const Hash = require('ipfs-only-hash')
+
+const cidVersion = 1
+
+export async function createIpfsHashFromAnything(input: string) {
+  const hash = await Hash.of(input, {cidVersion})
+  console.log(hash)
+  return hash
+}
 
 export async function createBlockFromAnything(input: unknown) {
   return await Block.encode({

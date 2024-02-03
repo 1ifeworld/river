@@ -8,7 +8,8 @@ import {
   generateMessageHash,
   encodeCreateAssetMsgBody,
   encodeAddItemMsgBody,
-  createBlockFromAnything
+  createBlockFromAnything,
+  createIpfsHashFromAnything
 } from "scrypt";
 
 type Message = {
@@ -26,6 +27,12 @@ type Message = {
     sigType: number;
     sig: Hash;
   };
+
+// NOTE: this is here to help with serialization of message object -> stringified json, and properly handle bigints
+// @ts-ignore
+BigInt.prototype.toJSON = function () {
+  return this.toString();
+};  
 
 export async function processBatchCreateAddItemPost({
   signer,
@@ -89,15 +96,8 @@ channelId: string;
     sigType: 1,
     sig: createItemSig
   }
-  const itemBlock = await createBlockFromAnything(createItemPost.message);
-  const itemCid = itemBlock.cid.toString()
-  console.log("site site item message strucT: ", {
-    rid: BigInt(rid),
-    timestamp: timestamp,
-    msgType: createItemMsgType,
-    msgBody: createItemMsgBody.msgBody
-})
-console.log("site site item cid: ", itemCid)
+  const itemCid = await createIpfsHashFromAnything(JSON.stringify(createItemPost.message))
+  console.log("site site item cid: ", itemCid)
 
     /*
         ADD ITEM POST

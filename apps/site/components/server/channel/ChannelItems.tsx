@@ -37,8 +37,8 @@ export async function ChannelItems({
   channel: Channel
   metadata: any
 }) {
-  console.log(" first add: ", channel.adds?.items?.[0])
-  console.log("all the adds: ", channel.adds?.items?.[0].channelId)
+  // console.log(" first add: ", channel.adds?.items?.[0])
+  // console.log("all the adds: ", channel.adds?.items?.[0].channelId)
   // console.log("typeof cmon: ", typeof(channel.adds?.items?.[0].timestamp))
   // const myFaveTimestamp = Number(channel.adds?.items?.[0].timestamp)
   return (

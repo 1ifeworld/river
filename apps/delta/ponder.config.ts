@@ -28,7 +28,8 @@ export default createConfig({
       network: 'arbitrumNova',
       abi: postGateway2ABI,
       address: '0x05aD6cA9C2b3F71a6B30A8C7d414C95E10EC0217',
-      startBlock: 44780000,
+      // startBlock: 44780000,
+      startBlock: 45188374,
     },    
     // IdRegistry: {
     //   network: 'anvil',
