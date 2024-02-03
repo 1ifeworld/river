@@ -838,7 +838,7 @@ export type ChannelWithIdQueryVariables = Exact<{
 }>;
 
 
-export type ChannelWithIdQuery = { __typename?: 'Query', channel?: { __typename?: 'Channel', id: string, timestamp: any, createdBy: any, uri: string, name: string, description: string, roles?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> | null } | null, adds?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', timestamp: any, channelId: string, addedBy: any, item: { __typename?: 'Item', id: string, uri: string, timestamp: any } }> | null } | null } | null };
+export type ChannelWithIdQuery = { __typename?: 'Query', channel?: { __typename?: 'Channel', id: string, timestamp: any, createdBy: any, uri: string, name: string, description: string, roles?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> | null } | null, adds?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', timestamp: any, channelId: string, itemId: string, addedBy: any, item: { __typename?: 'Item', id: string, uri: string, timestamp: any } }> | null } | null } | null };
 
 export type ItemPageQueryVariables = Exact<{
   id: Scalars['String']['input'];
@@ -932,6 +932,7 @@ export const ChannelWithIdDocument = gql`
       items {
         timestamp
         channelId
+        itemId
         addedBy
         item {
           id

@@ -17,6 +17,7 @@ query channelWithId($id: String!) {
       items {
         timestamp
         channelId
+        itemId
         addedBy
         item {
           id
