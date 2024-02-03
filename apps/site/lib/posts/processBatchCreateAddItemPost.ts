@@ -8,7 +8,6 @@ import {
   generateMessageHash,
   encodeCreateAssetMsgBody,
   encodeAddItemMsgBody,
-  createBlockFromAnything,
   createIpfsHashFromAnything
 } from "scrypt";
 

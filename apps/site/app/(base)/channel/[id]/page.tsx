@@ -26,16 +26,17 @@ export default async function Channel({
   // const itemMetadata = await kv.get(
   //   reference?.pubRef?.uri as string,
   // )
-
-
   return (
     <Stack>
       <Stack className="gap-y-[45px]">
         {/* <ChannelBanner channel={channel} metadata={channelMetadata} /> */}
+        {/* @ts-ignore */}
         <ChannelBanner channel={channel}  />
+        {/* @ts-ignore */}
         <ChannelItems channel={channel} metadata={metadata} />
         {/* <ChannelItems channel={channel}  /> */}
       </Stack>
+      {/* @ts-ignore */}
       <ChannelDetails channel={channel} />
     </Stack>
   )
