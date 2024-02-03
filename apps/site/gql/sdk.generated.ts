@@ -474,7 +474,6 @@ export type Post = {
   id: Scalars['String']['output'];
   message: Message;
   messageId: Scalars['String']['output'];
-  parentBlock: Scalars['String']['output'];
   relayer: Scalars['String']['output'];
   sig: Scalars['String']['output'];
   sigType: Scalars['BigInt']['output'];
@@ -518,16 +517,6 @@ export type PostFilter = {
   messageId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   messageId_not_starts_with?: InputMaybe<Scalars['String']['input']>;
   messageId_starts_with?: InputMaybe<Scalars['String']['input']>;
-  parentBlock?: InputMaybe<Scalars['String']['input']>;
-  parentBlock_contains?: InputMaybe<Scalars['String']['input']>;
-  parentBlock_ends_with?: InputMaybe<Scalars['String']['input']>;
-  parentBlock_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  parentBlock_not?: InputMaybe<Scalars['String']['input']>;
-  parentBlock_not_contains?: InputMaybe<Scalars['String']['input']>;
-  parentBlock_not_ends_with?: InputMaybe<Scalars['String']['input']>;
-  parentBlock_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  parentBlock_not_starts_with?: InputMaybe<Scalars['String']['input']>;
-  parentBlock_starts_with?: InputMaybe<Scalars['String']['input']>;
   relayer?: InputMaybe<Scalars['String']['input']>;
   relayer_gt?: InputMaybe<Scalars['String']['input']>;
   relayer_gte?: InputMaybe<Scalars['String']['input']>;
