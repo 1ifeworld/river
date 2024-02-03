@@ -1,9 +1,7 @@
 query allAdds {
-  addss {
+  addss(orderBy: "timestamp", orderDirection: "desc") {
     items {
-      timestamp
       addedBy
-      itemId
       item {
         id
         timestamp
@@ -12,8 +10,12 @@ query allAdds {
       }
       channelId
       channel {
-        id
         name
+        adds(orderBy: "timestamp", orderDirection: "desc") {
+          items {
+            itemId
+          }
+        }
       }
     }
   }

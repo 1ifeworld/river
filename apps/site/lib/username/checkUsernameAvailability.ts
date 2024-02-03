@@ -6,13 +6,16 @@ export async function checkUsernameAvailability(
   username: string,
 ): Promise<CheckResponse> {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_USERNAME_SERVICE}/get`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_USERNAME_SERVICE}/get`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: `${username}` }),
       },
-      body: JSON.stringify({ username: `${username}` }),
-    })
+    )
 
     if (response.status === 200) {
       return { exists: true }
@@ -29,7 +32,6 @@ export async function checkUsernameAvailability(
 export async function checkOwnerHasId(owner: string): Promise<CheckResponse> {
   try {
     const response = await fetch(
-
       `${process.env.NEXT_PUBLIC_USERNAME_SERVICE}/getIdByOwner`,
 
       {

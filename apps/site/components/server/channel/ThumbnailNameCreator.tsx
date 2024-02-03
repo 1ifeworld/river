@@ -33,7 +33,7 @@ export function ThumbnailNameCreator({
       </>
     )
   }
-  
+
   const itemMetadata = metadata.data[item.uri as string]
 
   if (!itemMetadata) {
@@ -66,9 +66,7 @@ export function ThumbnailNameCreator({
           height={40}
         />
       ) : (
-        <GenericThumbnailSmall
-          text={itemMetadata?.contentType as string}
-        />
+        <GenericThumbnailSmall text={itemMetadata?.contentType as string} />
       )}
       <Stack>
         {/* <Link href={`/item/${reference.id}`}> */}

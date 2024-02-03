@@ -3,7 +3,6 @@ import { type Channel } from '@/gql'
 import { pluralize, unixTimeConverter } from '@/utils'
 
 export async function ChannelDetails({ channel }: { channel: Channel }) {
-
   const length = channel.adds?.items ? channel.adds?.items.length : 0
 
   return (

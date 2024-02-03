@@ -1,5 +1,5 @@
 import { Flex, Stack, Typography } from '@/design-system'
-import { type Adds, Item } from '@/gql'
+import { type Adds } from '@/gql'
 import {
   getUsername,
   type MediaAssetObject,
@@ -17,7 +17,6 @@ export async function ItemCard({
 }: {
   add: Adds
 }) {
-
   const username = await getUsername({ id: BigInt(add.item.createdby) })
   const itemMetadata = await kv.get<Pick<MediaAssetObject, 'value'>['value']>(
     add?.item?.uri as string,
@@ -25,14 +24,20 @@ export async function ItemCard({
   const channelName = add.channel.name
   const renderableThumbnailTypes = ['image/png', 'image/gif', 'image/jpeg']
 
-  console.log("add.itemId", add.itemId)
+  const totalItems = add.channel.adds?.items?.length ?? 0
 
-  const itemIndexPlaceholder = 1
-  const idealRoute = `channel/${add.channelId}/${itemIndexPlaceholder}`
+  const itemIndex =
+    totalItems -
+    (add.channel.adds?.items?.findIndex(
+      (item) => item.itemId === add.item.id,
+    ) as number)
 
   return (
     <Stack className="gap-y-[10px]">
-      <Link href={`/channel/${add?.channelId}/${add?.itemId}`} className="transition-all">
+      <Link
+        href={`/channel/${add?.channelId}/${itemIndex}`}
+        className="transition-all"
+      >
         <Stack className="relative aspect-[5/6] justify-center items-center">
           {renderableThumbnailTypes.includes(
             itemMetadata?.contentType as string,
@@ -53,7 +58,7 @@ export async function ItemCard({
       <Stack className="gap-y-[10px]">
         <div>
           <Link
-            href={`/channel/${add?.channelId}/${add?.itemId}`}
+            href={`/channel/${add?.channelId}/${itemIndex}`}
             className="hover:underline underline-offset-2 transition-all"
           >
             <Typography className="truncate">

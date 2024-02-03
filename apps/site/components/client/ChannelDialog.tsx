@@ -45,7 +45,12 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
   const [dialogOpen, setDialogOpen] = React.useState(false)
   const [isSubmitting, setIsSubmitting] = React.useState(false)
 
-  const { signMessage, userId: targetUserId, authToken, embeddedWallet } = useUserContext()
+  const {
+    signMessage,
+    userId: targetUserId,
+    authToken,
+    embeddedWallet,
+  } = useUserContext()
 
   const form = useForm<NewChannelSchemaValues>({
     resolver: zodResolver(newChannelSchema),
@@ -89,7 +94,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
         name: data.name,
         description: data.description || '',
         rid: targetUserId,
-        privySignMessage: signMessage
+        privySignMessage: signMessage,
       })
       // txSuccess = await processCreateChannelPost({
       //   channelUri: cid,

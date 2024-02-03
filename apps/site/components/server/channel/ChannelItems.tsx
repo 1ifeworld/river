@@ -6,11 +6,7 @@ import {
   TableRow,
   Typography,
 } from '@/design-system'
-import { 
-  Channel, 
-  Adds,
-  Item
-} from '@/gql'
+import { Channel, Adds, Item } from '@/gql'
 import { ThumbnailNameCreator } from '@/server'
 import { unixTimeConverter } from '@/utils'
 import Link from 'next/link'
@@ -25,9 +21,7 @@ function extractContentType({
 }) {
   if (!item || !item.uri) return undefined
   const itemMetadata = metadata.data[item.uri]
-  return itemMetadata?.contentType
-    ? itemMetadata.contentType
-    : 'undefined'
+  return itemMetadata?.contentType ? itemMetadata.contentType : 'undefined'
 }
 
 export async function ChannelItems({
@@ -37,15 +31,17 @@ export async function ChannelItems({
   channel: Channel
   metadata: any
 }) {
-  // console.log(" first add: ", channel.adds?.items?.[0])
-  // console.log("all the adds: ", channel.adds?.items?.[0].channelId)
-  // console.log("typeof cmon: ", typeof(channel.adds?.items?.[0].timestamp))
-  // const myFaveTimestamp = Number(channel.adds?.items?.[0].timestamp)
+  const totalItems = channel.adds?.items?.length ?? 0
+
   return (
     <Table className="md:ml-2">
       <TableBody>
         {channel?.adds?.items?.map((add: Adds, index: number) => (
-          <Link key={index} href={`/channel/${add.channelId}/${add.itemId}`} legacyBehavior>
+          <Link
+            key={index}
+            href={`/channel/${add.channelId}/${totalItems - index}`}
+            legacyBehavior
+          >
             <TableRow className={`${styles.tableRow} hover:cursor-pointer`}>
               <TableCell className="flex gap-4 items-center">
                 <ThumbnailNameCreator
