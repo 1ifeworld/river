@@ -1,5 +1,4 @@
 // Subdirectories
-export * from './activity'
 export * from './channel'
 export * from './item'
 

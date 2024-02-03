@@ -13,7 +13,7 @@ export async function getUserId({
   })
 
   return {
-    userId: response.users?.items?.[0] ? response.users.items[0].userId : null
+    userId: response.users?.items?.[0] ? response.users.items[0].userId : null,
   }
 
   // return {

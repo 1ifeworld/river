@@ -29,7 +29,13 @@ import debounce from 'debounce'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import { Hex, createWalletClient, custom, EIP1193Provider, zeroAddress } from 'viem'
+import {
+  Hex,
+  createWalletClient,
+  custom,
+  EIP1193Provider,
+  zeroAddress,
+} from 'viem'
 import { arbitrumNova } from 'viem/chains'
 import { getExpiration } from 'scrypt'
 
@@ -85,7 +91,7 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
   //   embeddedWalletAddress: string,
   //   fetchUserData: () => Promise<void>,
   // ) {
-    // Check if the necessary conditions are met using the passed parameters
+  // Check if the necessary conditions are met using the passed parameters
   //   if (privySignMessage && embeddedWalletAddress) {
   //     const userId = await processRegisterFor({
   //       privySignerAddress: embeddedWalletAddress,
@@ -128,25 +134,27 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
             <form
               action={async () => {
                 if (!embeddedWallet || !signMessage || !fetchUserData) return
-                const eip1193Provider = await embeddedWallet.getEthereumProvider();
+                const eip1193Provider =
+                  await embeddedWallet.getEthereumProvider()
                 const customEip1193Client = createWalletClient({
                   chain: arbitrumNova,
-                  transport: custom(eip1193Provider as EIP1193Provider)
-                })  
+                  transport: custom(eip1193Provider as EIP1193Provider),
+                })
                 const deadline = getExpiration()
                 const ID_REGISTRY_EIP_712_DOMAIN = {
-                  name: "River IdRegistry",
-                  version: "1",
-                  chainId: 42170, 
-                  // verifyingContract: addresses.idRegistry.river_dev_2_d5hb5orqim, 
-                  verifyingContract: "0x339513226Afd92B309837Bad402c6D3ADDE9Ad24", //arb nova 
-                } as const;              
+                  name: 'River IdRegistry',
+                  version: '1',
+                  chainId: 42170,
+                  // verifyingContract: addresses.idRegistry.river_dev_2_d5hb5orqim,
+                  verifyingContract:
+                    '0x339513226Afd92B309837Bad402c6D3ADDE9Ad24', //arb nova
+                } as const
                 const REGISTER_TYPE = [
-                  { name: "to", type: "address" },
-                  { name: "recovery", type: "address" },
-                  { name: "nonce", type: "uint256" },
-                  { name: "deadline", type: "uint256" },
-                ] as const;                 
+                  { name: 'to', type: 'address' },
+                  { name: 'recovery', type: 'address' },
+                  { name: 'nonce', type: 'uint256' },
+                  { name: 'deadline', type: 'uint256' },
+                ] as const
                 const sig = await customEip1193Client.signTypedData({
                   account: embeddedWallet.address as Hex,
                   domain: ID_REGISTRY_EIP_712_DOMAIN,
@@ -156,9 +164,9 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                     to: embeddedWallet.address as Hex,
                     recovery: zeroAddress,
                     nonce: BigInt(0),
-                    deadline: deadline
-                  }
-                })                
+                    deadline: deadline,
+                  },
+                })
                 await processRegisterFor({
                   signer: embeddedWallet.address as Hex,
                   recovery: zeroAddress,

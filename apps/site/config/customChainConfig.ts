@@ -33,15 +33,6 @@ export const arbitrumNova = defineChain({
   },
 })
 
-
-
-
-
-
-
-
-
-
 export const river_j5bpjduqfv = defineChain({
   id: 36912,
   name: 'river_j5bpjduqfv',

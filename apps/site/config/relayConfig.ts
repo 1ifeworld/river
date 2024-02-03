@@ -16,7 +16,6 @@ import PQueue from 'p-queue'
 // import { arbitrumNova } from './customChainConfig'
 import { arbitrumNova } from 'viem/chains'
 
-
 type CreateNonceManagerOptions = {
   client: Client
   address: Hex

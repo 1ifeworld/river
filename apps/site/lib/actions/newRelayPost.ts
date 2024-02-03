@@ -29,29 +29,31 @@ export async function newRelayPost({
   hash,
   sigType,
   sig,
-  pathsToRevalidate
+  pathsToRevalidate,
 }: RelayPostProps) {
   // Attempt to send the transaction via writeContract
   try {
     const postTxn = await writeContract(relayWalletClient, globalNonceManager, {
       chain: relayWalletClient.chain ?? null,
       // address: addresses.postGateway.river_j5bpjduqfv,
-      address: "0x05aD6cA9C2b3F71a6B30A8C7d414C95E10EC0217", // arb nova
+      address: '0x05aD6cA9C2b3F71a6B30A8C7d414C95E10EC0217', // arb nova
       abi: postGateway2ABI,
       functionName: 'post',
-      args: [{
-        signer: signer,
-        message: {
+      args: [
+        {
+          signer: signer,
+          message: {
             rid: msgRid,
             timestamp: msgTimestamp,
             msgType: msgType,
-            msgBody: msgBody
+            msgBody: msgBody,
+          },
+          hashType: hashType,
+          hash: hash,
+          sigType: sigType,
+          sig: sig,
         },
-        hashType: hashType,
-        hash: hash,
-        sigType: sigType,
-        sig: sig
-      }]
+      ],
     })
     // If writeContract is successful, postTxn is valid and we proceed to check its inclusion
     const txnInclusion = await getTxnInclusion(postTxn)

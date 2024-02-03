@@ -1,7 +1,7 @@
 import { AudioPlayer, VideoPlayer } from '@/client'
 import { ItemSidebar } from '@/server'
 import { Typography, Flex, Stack } from '@/design-system'
-import { getItemPage } from '@/gql'
+import { getItemPage, getChannelWithId } from '@/gql'
 import {
   type MediaAssetObject,
   ipfsUrlToCid,
@@ -37,15 +37,22 @@ const PdfViewer = dynamic(
 export default async function ItemPage({
   params,
 }: {
-  params: { id: string, itemId: string }
+  params: { id: string; index: string }
 }) {
+  const { channel } = await getChannelWithId({
+    id: params.id,
+  })
+
+  const totalItems = channel?.adds?.items?.length ?? 0
+  const reversedIndex = totalItems - Number(params.index)
+  const itemToRender = channel?.adds?.items?.[reversedIndex]
 
   const { itemPage } = await getItemPage({
-    id: `${params.id}/${params.itemId}`
+    id: `${channel?.id}/${itemToRender?.itemId}`,
   })
 
   const itemMetadata = await kv.get<Pick<MediaAssetObject, 'value'>['value']>(
-    itemPage?.item.uri as string,
+    itemToRender?.item.uri as string,
   )
 
   const contentType = itemMetadata?.contentType as string

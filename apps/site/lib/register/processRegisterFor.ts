@@ -14,7 +14,7 @@ export async function processRegisterFor({
   signer: Hex
   recovery: Hex
   deadline: bigint
-  sig: Hash,
+  sig: Hash
   username: string
   // privySignMessage: (
   //   message: string,
@@ -22,7 +22,6 @@ export async function processRegisterFor({
   // ) => Promise<string>
   // username: string
 }) {
-
   await relayRegisterFor({
     registerForRecipient: signer,
     recovery: zeroAddress,
@@ -31,7 +30,6 @@ export async function processRegisterFor({
     username: username,
     pathToRevalidate: '/',
   })
-
 
   // Declare constants/params
   // const sigExpiration: bigint = getExpiration()

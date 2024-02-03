@@ -49,7 +49,7 @@ export async function getAddsMetadata(manyAdds: Adds[]) {
     // .map((add) => add?.item?.uri)
     .map((add) => add.item?.uri)
     .filter((uri: string | undefined) => uri != null)
-    console.log("uris: ", uris)
+  console.log('uris: ', uris)
   // Setup endpoint
   const getMetadataEndpoint = `${process.env.NEXT_PUBLIC_METADATA_SERVER_URL}/get`
   // Prepare the request body
