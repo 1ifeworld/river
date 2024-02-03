@@ -1,3 +1,4 @@
-export * from './relayPost'
+export * from './newRelayPost'
+export * from './newRelayBatchPost'
 export * from './relayRegisterFor'
 export * from './getTxnInclusion'

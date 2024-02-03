@@ -1,5 +1,11 @@
 query UserId($custodyAddress: String!) {
   users(where: {to: $custodyAddress}) {
-    userId
+    items {
+      id
+      userId
+      to
+      recovery
+      from
+    }
   }
 }

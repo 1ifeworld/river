@@ -26,7 +26,7 @@ import {
 import {
   type NewChannelSchemaValues,
   newChannelSchema,
-  processCreateChannelPost,
+  newProcessCreateChannelPost,
   sendToDb,
   w3sUpload,
 } from '@/lib'
@@ -34,6 +34,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as React from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import { Hex } from 'viem'
 
 interface ChannelDialogProps {
   authenticated: boolean
@@ -44,7 +45,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
   const [dialogOpen, setDialogOpen] = React.useState(false)
   const [isSubmitting, setIsSubmitting] = React.useState(false)
 
-  const { signMessage, userId: targetUserId, authToken } = useUserContext()
+  const { signMessage, userId: targetUserId, authToken, embeddedWallet } = useUserContext()
 
   const form = useForm<NewChannelSchemaValues>({
     resolver: zodResolver(newChannelSchema),
@@ -65,29 +66,36 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
     // Prevent non-authenticated users from proceeding
     if (!targetUserId) return
 
-    const metadataObject = {
-      name: data.name,
-      description: data.description || '',
-      image: '',
-      animationUri: '',
-      contentType: '',
-    }
+    // const metadataObject = {
+    //   name: data.name,
+    //   description: data.description || '',
+    //   image: '',
+    //   animationUri: '',
+    //   contentType: '',
+    // }
 
-    await sendToDb({
-      key: cid,
-      value: {
-        ...metadataObject,
-      },
-    })
+    // await sendToDb({
+    //   key: cid,
+    //   value: {
+    //     ...metadataObject,
+    //   },
+    // })
     // Initialize bool for txn success check
     let txSuccess = false
     // Generate create channel post for user and post transaction
-    if (signMessage) {
-      txSuccess = await processCreateChannelPost({
-        channelUri: cid,
-        targetUserId: targetUserId,
-        privySignMessage: signMessage,
+    if (signMessage && embeddedWallet) {
+      txSuccess = await newProcessCreateChannelPost({
+        signer: embeddedWallet.address as Hex,
+        name: data.name,
+        description: data.description || '',
+        rid: targetUserId,
+        privySignMessage: signMessage
       })
+      // txSuccess = await processCreateChannelPost({
+      //   channelUri: cid,
+      //   targetUserId: targetUserId,
+      //   privySignMessage: signMessage,
+      // })
       setDialogOpen(false)
       if (txSuccess) {
         // Render a toast with the name of the channel

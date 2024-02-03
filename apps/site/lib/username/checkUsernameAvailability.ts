@@ -29,7 +29,9 @@ export async function checkUsernameAvailability(
 export async function checkOwnerHasId(owner: string): Promise<CheckResponse> {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_USERNAME_DB_SERVICE}/getIdByOwner`,
+
+      `${process.env.NEXT_PUBLIC_USERNAME_SERVICE}/getIdByOwner`,
+
       {
         method: 'POST',
         headers: {

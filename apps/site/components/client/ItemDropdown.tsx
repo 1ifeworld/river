@@ -10,12 +10,12 @@ import {
   Toast,
   Typography,
 } from '@/design-system'
-import { processRemoveReferencePost } from '@/lib'
+// import { processRemoveReferencePost } from '@/lib'
 import { toast } from 'sonner'
 
 interface ItemDropdownProps {
-  targetChannelId: bigint
-  targetReferenceId: bigint
+  targetChannelId: string
+  targetReferenceId: string
 }
 
 export function ItemDropdown({
@@ -42,12 +42,12 @@ export function ItemDropdown({
                   let txSuccess: boolean = false
                   // Generate removeReference post
                   if (signMessage) {
-                    txSuccess = await processRemoveReferencePost({
-                      targetUserId: targetUserId as bigint,
-                      targetChannelId: targetChannelId,
-                      targetReferenceId: targetReferenceId,
-                      privySignMessage: signMessage,
-                    })
+                    // txSuccess = await processRemoveReferencePost({
+                    //   targetUserId: targetUserId as bigint,
+                    //   targetChannelId: targetChannelId,
+                    //   targetReferenceId: targetReferenceId,
+                    //   privySignMessage: signMessage,
+                    // })
                     if (txSuccess) {
                       toast.custom((t) => (
                         <Toast>{'Item successfully removed'}</Toast>

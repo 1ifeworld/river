@@ -17,6 +17,7 @@ export async function getDataForUsername({ username }: { username: string }) {
     }
 
     const data = await response.json()
+    console.log({data})
     console.log('Username returned successfully', data)
     return data
   } catch (error) {

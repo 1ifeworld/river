@@ -1,4 +1,4 @@
-import { type Channel, type Reference } from '@/gql'
+import { type Channel, type Adds } from '@/gql'
 
 export interface ChannelMetadata {
   name: string
@@ -40,11 +40,16 @@ export async function getChannelMetadata(channels: Channel[]) {
   }
 }
 
-export async function getReferenceMetadata(references: Reference[]) {
+export async function getAddsMetadata(manyAdds: Adds[]) {
+  // const { items } = manyAdds
+  // console.log("wahts getting pasesed to get Adds", manyAdds)
+  // console.log("the one that works", manyAdds[5])
   // Extract URIs from the references array
-  const uris = references
-    .map((reference) => reference.pubRef?.uri)
+  const uris = manyAdds
+    // .map((add) => add?.item?.uri)
+    .map((add) => add.item?.uri)
     .filter((uri: string | undefined) => uri != null)
+    console.log("uris: ", uris)
   // Setup endpoint
   const getMetadataEndpoint = `${process.env.NEXT_PUBLIC_METADATA_SERVER_URL}/get`
   // Prepare the request body

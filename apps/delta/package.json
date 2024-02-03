@@ -9,7 +9,10 @@
     "format": "biome format . --write"
   },
   "dependencies": {
-    "@ponder/core": "^0.1.6",
+    "@ipld/dag-cbor": "^9.1.0",
+    "@ponder/core": "^0.2.0",
+    "base64url": "^3.0.1",
+    "multiformats": "^13.0.1",
     "scrypt": "workspace:*"
   },
   "devDependencies": {

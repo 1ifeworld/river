@@ -1,5 +1,5 @@
 import { Flex, Stack, Typography } from '@/design-system'
-import { type Reference } from '@/gql'
+import { type Adds, Item } from '@/gql'
 import {
   getUsername,
   type MediaAssetObject,
@@ -13,23 +13,26 @@ import Link from 'next/link'
 import { GenericThumbnailLarge } from '@/server'
 
 export async function ItemCard({
-  reference,
+  add,
 }: {
-  reference: Reference
+  add: Adds
 }) {
-  const username = await getUsername({ id: reference?.pubRef?.createdBy })
-  const itemMetadata = await kv.get<Pick<MediaAssetObject, 'value'>['value']>(
-    reference?.pubRef?.uri as string,
-  )
-  const channelMetadata = await kv.get<ChannelMetadata>(
-    reference?.channel?.uri as string,
-  )
 
+  const username = await getUsername({ id: BigInt(add.item.createdby) })
+  const itemMetadata = await kv.get<Pick<MediaAssetObject, 'value'>['value']>(
+    add?.item?.uri as string,
+  )
+  const channelName = add.channel.name
   const renderableThumbnailTypes = ['image/png', 'image/gif', 'image/jpeg']
+
+  console.log("add.itemId", add.itemId)
+
+  const itemIndexPlaceholder = 1
+  const idealRoute = `channel/${add.channelId}/${itemIndexPlaceholder}`
 
   return (
     <Stack className="gap-y-[10px]">
-      <Link href={`/item/${reference?.id}`} className="transition-all">
+      <Link href={`/channel/${add?.channelId}/${add?.itemId}`} className="transition-all">
         <Stack className="relative aspect-[5/6] justify-center items-center">
           {renderableThumbnailTypes.includes(
             itemMetadata?.contentType as string,
@@ -50,7 +53,7 @@ export async function ItemCard({
       <Stack className="gap-y-[10px]">
         <div>
           <Link
-            href={`/item/${reference?.id}`}
+            href={`/channel/${add?.channelId}/${add?.itemId}`}
             className="hover:underline underline-offset-2 transition-all"
           >
             <Typography className="truncate">
@@ -63,17 +66,17 @@ export async function ItemCard({
             </Typography>
             <span className="text-secondary-foreground">{'·'}</span>
             <Link
-              href={`/channel/${reference.channel?.id}`}
+              href={`/channel/${add.channelId}`}
               className="hover:underline underline-offset-2 transition-all decoration-secondary-foreground"
             >
               <Typography className="text-secondary-foreground truncate">
-                {channelMetadata?.name}
+                {channelName}
               </Typography>
             </Link>
           </Flex>
         </div>
         <Typography className="text-secondary-foreground">
-          {unixTimeConverter(reference?.pubRef?.createdTimestamp)}
+          {unixTimeConverter(add.item.timestamp)}
         </Typography>
       </Stack>
     </Stack>

@@ -1,0 +1,25 @@
+{
+  "name": "micro-onchain-metadata-utils",
+  "version": "0.1.1",
+  "description": "On-chain JSON builder in solidity",
+  "directories": {
+    "lib": "lib",
+    "src": "src",
+    "test": "test"
+  },
+  "files": ["src", "out"],
+  "scripts": {
+    "test": "forge test",
+    "build": "forge build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iainnash/micro-onchain-metadata-utils.git"
+  },
+  "author": "iain nash",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/iainnash/micro-onchain-metadata-utils/issues"
+  },
+  "homepage": "https://github.com/iainnash/micro-onchain-metadata-utils#readme"
+}

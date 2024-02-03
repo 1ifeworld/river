@@ -13,7 +13,9 @@ import {
 import { privateKeyToAccount, parseAccount } from 'viem/accounts'
 import { getTransactionCount } from 'viem/actions'
 import PQueue from 'p-queue'
-import { river_j5bpjduqfv } from './customChainConfig'
+// import { arbitrumNova } from './customChainConfig'
+import { arbitrumNova } from 'viem/chains'
+
 
 type CreateNonceManagerOptions = {
   client: Client
@@ -90,7 +92,7 @@ const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
 
 export const relayWalletClient = createWalletClient({
   account,
-  chain: river_j5bpjduqfv,
+  chain: arbitrumNova,
   transport: http(process.env.RPC_URL),
 })
 

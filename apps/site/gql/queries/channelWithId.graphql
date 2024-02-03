@@ -1,20 +1,29 @@
-query channelWithId($id: BigInt!) {
+query channelWithId($id: String!) {
   channel(id: $id) {
     id
-    createdTimestamp
+    timestamp
     createdBy
     uri
-    admins
-    members
-    references(orderBy: "id", orderDirection: "desc") {
-      id
-      createdTimestamp
-      createdBy
-      pubRef {
-        id
-        createdTimestamp
-        createdBy
-        uri
+    name
+    description
+    roles(orderBy: "timestamp", orderDirection: "desc") {
+      items {
+        timestamp
+        rid
+        role
+      }
+    }
+    adds(orderBy: "timestamp", orderDirection: "desc") {
+      items {
+        timestamp
+        channelId
+        itemId
+        addedBy
+        item {
+          id
+          uri
+          timestamp
+        }
       }
     }
   }

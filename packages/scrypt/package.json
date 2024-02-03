@@ -14,7 +14,7 @@
     "typescript": "5.1.6"
   },
   "dependencies": {
-    "@noble/hashes": "^1.3.3",
+    "ipfs-only-hash": "^4.0.0",
     "viem": "^1.19.3"
   }
 }

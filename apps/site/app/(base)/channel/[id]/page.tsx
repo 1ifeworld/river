@@ -1,6 +1,6 @@
 import { Stack, Typography } from '@/design-system'
-import { getChannelWithId } from '@/gql'
-import { getChannelMetadata, getReferenceMetadata } from '@/lib'
+import { getChannelWithId, type Adds } from '@/gql'
+import { getAddsMetadata } from '@/lib'
 import { ChannelBanner, ChannelItems, ChannelDetails } from '@/server'
 
 export default async function Channel({
@@ -16,15 +16,27 @@ export default async function Channel({
     return <Typography>This is not a valid channel</Typography>
   }
 
-  const { metadata: channelMetadata } = await getChannelMetadata([channel])
-  const { metadata } = await getReferenceMetadata(channel?.references)
+  // const { metadata: channelMetadata } = await getChannelMetadata([channel])
+  // const { metadata } = await getItemMetadata(channel?.references)
+  // @ts-ignore
+  const { metadata } = await getAddsMetadata(channel?.adds?.items)
 
+  console.log("metadat: ", metadata)
+
+  // const itemMetadata = await kv.get(
+  //   reference?.pubRef?.uri as string,
+  // )
   return (
     <Stack>
       <Stack className="gap-y-[45px]">
-        <ChannelBanner channel={channel} metadata={channelMetadata} />
+        {/* <ChannelBanner channel={channel} metadata={channelMetadata} /> */}
+        {/* @ts-ignore */}
+        <ChannelBanner channel={channel}  />
+        {/* @ts-ignore */}
         <ChannelItems channel={channel} metadata={metadata} />
+        {/* <ChannelItems channel={channel}  /> */}
       </Stack>
+      {/* @ts-ignore */}
       <ChannelDetails channel={channel} />
     </Stack>
   )

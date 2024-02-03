@@ -1,6 +1,0 @@
-query allUserIds {
-  users(orderBy: "id", orderDirection: "desc") {
-    id
-    to
-  }
-}
