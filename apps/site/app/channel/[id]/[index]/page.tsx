@@ -20,17 +20,17 @@ import * as React from 'react'
 import { kv } from '@vercel/kv'
 
 const Model = dynamic(
-  () => import('../../../../../components/client/renderers/ModelRenderer'),
+  () => import('../../../../components/client/renderers/ModelRenderer'),
   { ssr: false },
 )
 
 const MarkdownRenderer = dynamic(
-  () => import('../../../../../components/client/renderers/MarkdownRenderer'),
+  () => import('../../../../components/client/renderers/MarkdownRenderer'),
   { ssr: false },
 )
 
 const PdfViewer = dynamic(
-  () => import('../../../../../components/client/renderers/PDFViewer'),
+  () => import('../../../../components/client/renderers/PDFViewer'),
   { ssr: false },
 )
 
