@@ -860,6 +860,26 @@ export type AllChannelsQuery = {
   } | null
 }
 
+export type AllItemsQueryVariables = Exact<{ [key: string]: never }>
+
+export type AllItemsQuery = {
+  __typename?: 'Query'
+  items?: {
+    __typename?: 'ItemPage'
+    items?: Array<{ __typename?: 'Item'; id: string }> | null
+  } | null
+}
+
+export type AllUsersQueryVariables = Exact<{ [key: string]: never }>
+
+export type AllUsersQuery = {
+  __typename?: 'Query'
+  users?: {
+    __typename?: 'UserPage'
+    items?: Array<{ __typename?: 'User'; id: any }> | null
+  } | null
+}
+
 export type ChannelWithIdQueryVariables = Exact<{
   id: Scalars['String']['input']
 }>
@@ -1002,6 +1022,24 @@ export const AllChannelsDocument = gql`
   }
 }
     `
+export const AllItemsDocument = gql`
+    query allItems {
+  items(orderDirection: "desc", orderBy: "timestamp") {
+    items {
+      id
+    }
+  }
+}
+    `
+export const AllUsersDocument = gql`
+    query allUsers {
+  users(orderDirection: "desc") {
+    items {
+      id
+    }
+  }
+}
+    `
 export const ChannelWithIdDocument = gql`
     query channelWithId($id: String!) {
   channel(id: $id) {
@@ -1123,6 +1161,34 @@ export function getSdk(
             ...wrappedRequestHeaders,
           }),
         'allChannels',
+        'query',
+      )
+    },
+    allItems(
+      variables?: AllItemsQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<AllItemsQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<AllItemsQuery>(AllItemsDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'allItems',
+        'query',
+      )
+    },
+    allUsers(
+      variables?: AllUsersQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<AllUsersQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<AllUsersQuery>(AllUsersDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'allUsers',
         'query',
       )
     },

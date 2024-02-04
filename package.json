@@ -12,6 +12,7 @@
     "lint": "turbo lint",
     "format": "turbo format",
     "start:delta": "pnpm build --filter=scrypt && pnpm start --filter=delta",
+    "dev:delta": "pnpm build --filter=scrypt && pnpm dev --filter=delta",
     "build:site": "pnpm build --filter=site",
     "dev:site": "pnpm dev --filter=site"
   },

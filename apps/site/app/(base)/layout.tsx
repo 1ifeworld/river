@@ -1,6 +1,5 @@
-import { Marquee } from '@/client'
 import { Flex } from '@/design-system'
-import { RecentChannels } from '@/server'
+import { RecentChannels, MarqueeWrapper } from '@/server'
 
 export default function BaseLayout({
   children,
@@ -12,7 +11,7 @@ export default function BaseLayout({
   return (
     <section>
       <div className="hidden md:block fixed top-[38px] z-50 w-full">
-        <Marquee />
+        <MarqueeWrapper />
       </div>
       <Flex className="px-5 pt-[70px] md:pt-[110px]">
         <div className="hidden md:w-[19%] md:block">

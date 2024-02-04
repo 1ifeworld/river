@@ -21,8 +21,8 @@ importers:
         specifier: ^9.1.0
         version: 9.1.0
       '@ponder/core':
-        specifier: ^0.2.0
-        version: 0.2.0(@types/node@18.11.18)(typescript@5.1.6)(viem@1.20.0)
+        specifier: ^0.2.2
+        version: 0.2.2(@types/node@18.11.18)(typescript@5.1.6)(viem@1.20.0)
       base64url:
         specifier: ^3.0.1
         version: 3.0.1
@@ -3436,8 +3436,8 @@ packages:
     dev: false
     optional: true
 
-  /@ponder/core@0.2.0(@types/node@18.11.18)(typescript@5.1.6)(viem@1.20.0):
-    resolution: {integrity: sha512-LopFBd1A0oLwtvMeSJ/Fcp94TRZqOGSP3UKbsvF2XaSWaKiSBE+CP+KJFlwpIfkRamjRQlktI39SefwQHOj64w==}
+  /@ponder/core@0.2.2(@types/node@18.11.18)(typescript@5.1.6)(viem@1.20.0):
+    resolution: {integrity: sha512-0VBy/vwkKJwSVb1ve9qcnppebLGhqWZfA/6tNWPdtU1u0Oc5cPYPi4fZyyMPwRpli1XeLeGNi1V+Mhren8u9uA==}
     engines: {node: '>=18.14'}
     hasBin: true
     peerDependencies:
@@ -3480,6 +3480,7 @@ packages:
       viem: 1.20.0(typescript@5.1.6)
       vite: 5.0.12(@types/node@18.11.18)
       vite-node: 1.2.2(@types/node@18.11.18)
+      vite-tsconfig-paths: 4.3.1(typescript@5.1.6)(vite@5.0.12)
     transitivePeerDependencies:
       - '@types/node'
       - '@types/react'
@@ -6646,18 +6647,6 @@ packages:
       ms: 2.0.0
     dev: false
 
-  /debug@4.3.4:
-    resolution: {integrity: sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==}
-    engines: {node: '>=6.0'}
-    peerDependencies:
-      supports-color: '*'
-    peerDependenciesMeta:
-      supports-color:
-        optional: true
-    dependencies:
-      ms: 2.1.2
-    dev: false
-
   /debug@4.3.4(supports-color@5.5.0):
     resolution: {integrity: sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==}
     engines: {node: '>=6.0'}
@@ -7404,6 +7393,7 @@ packages:
       is-hex-prefixed: 1.0.0
       strip-hex-prefix: 1.0.0
     dev: false
+    bundledDependencies: false
 
   /event-target-shim@5.0.1:
     resolution: {integrity: sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==}
@@ -7904,6 +7894,10 @@ packages:
       merge2: 1.4.1
       slash: 4.0.0
     dev: true
+
+  /globrex@0.1.2:
+    resolution: {integrity: sha512-uHJgbwAMwNFf5mLst7IWLNg14x1CkeqglJb/K3doi4dw6q2IvAAmM/Y81kevy83wP+Sst+nutFTYOGg3d1lsxg==}
+    dev: false
 
   /glsl-noise@0.0.0:
     resolution: {integrity: sha512-b/ZCF6amfAUb7dJM/MxRs7AetQEahYzJ8PtgfrmEdtw6uyGOr+ZSGtgjFm6mfsBkxJ4d2W7kg+Nlqzqvn3Bc0w==}
@@ -9621,18 +9615,6 @@ packages:
       whatwg-url: 5.0.0
     dev: false
 
-  /node-fetch@2.7.0:
-    resolution: {integrity: sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==}
-    engines: {node: 4.x || >=6.0.0}
-    peerDependencies:
-      encoding: ^0.1.0
-    peerDependenciesMeta:
-      encoding:
-        optional: true
-    dependencies:
-      whatwg-url: 5.0.0
-    dev: false
-
   /node-fetch@2.7.0(encoding@0.1.13):
     resolution: {integrity: sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==}
     engines: {node: 4.x || >=6.0.0}
@@ -10750,9 +10732,9 @@ packages:
     dependencies:
       '@assemblyscript/loader': 0.9.4
       bl: 5.1.0
-      debug: 4.3.4
+      debug: 4.3.4(supports-color@5.5.0)
       minimist: 1.2.8
-      node-fetch: 2.7.0
+      node-fetch: 2.7.0(encoding@0.1.13)
       readable-stream: 3.6.2
     transitivePeerDependencies:
       - encoding
@@ -12216,6 +12198,19 @@ packages:
     resolution: {integrity: sha512-FZIXf1ksVyLcfr7M317jbB67XFJhOO1YqdTcuGaq9q5jLUoTikukZ+98TPjKiP2jC5CgmYdWWYs0s2nLSU0/1A==}
     dev: false
 
+  /tsconfck@3.0.1(typescript@5.1.6):
+    resolution: {integrity: sha512-7ppiBlF3UEddCLeI1JRx5m2Ryq+xk4JrZuq4EuYXykipebaq1dV0Fhgr1hb7CkmHt32QSgOZlcqVLEtHBG4/mg==}
+    engines: {node: ^18 || >=20}
+    hasBin: true
+    peerDependencies:
+      typescript: ^5.0.0
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      typescript: 5.1.6
+    dev: false
+
   /tslib@1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
     dev: false
@@ -12817,6 +12812,23 @@ packages:
       - sugarss
       - supports-color
       - terser
+    dev: false
+
+  /vite-tsconfig-paths@4.3.1(typescript@5.1.6)(vite@5.0.12):
+    resolution: {integrity: sha512-cfgJwcGOsIxXOLU/nELPny2/LUD/lcf1IbfyeKTv2bsupVbTH/xpFtdQlBmIP1GEK2CjjLxYhFfB+QODFAx5aw==}
+    peerDependencies:
+      vite: '*'
+    peerDependenciesMeta:
+      vite:
+        optional: true
+    dependencies:
+      debug: 4.3.4(supports-color@5.5.0)
+      globrex: 0.1.2
+      tsconfck: 3.0.1(typescript@5.1.6)
+      vite: 5.0.12(@types/node@18.11.18)
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
     dev: false
 
   /vite@5.0.12(@types/node@18.11.18):
