@@ -8,14 +8,24 @@ const currentDate = new Date().toLocaleString('en-US', {
   day: 'numeric',
 })
 
-export function Marquee() {
+interface MarqueeProps {
+  totalChannels?: number
+  totalItems?: number
+  totalUsers?: number
+}
+
+export function Marquee({
+  totalChannels,
+  totalItems,
+  totalUsers,
+}: MarqueeProps) {
   return (
     <ReactMarquee
       className="py-3 border-t border-b border-border bg-popover"
       speed={40}
     >
       <Typography>
-        {`Welcome to River – Today is ${currentDate} – There are 32 channels, 412 items, and 17 users on River today.`}
+        {`Welcome to River – Today is ${currentDate} – There are ${totalChannels} channels, ${totalItems} items, and ${totalUsers} users on River today.`}
       </Typography>
     </ReactMarquee>
   )

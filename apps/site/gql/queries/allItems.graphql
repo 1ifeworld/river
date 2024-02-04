@@ -1,0 +1,7 @@
+query allItems {
+  items(orderDirection: "desc", orderBy: "timestamp") {
+    items {
+      id
+    }
+  }
+}
