@@ -4,30 +4,22 @@ import {
   decodeCreateAssetMsgBody,
   decodeAddItemMsgBody,
   remove0xPrefix,
-  createBlockFromAnything,
-  bytesToBase64Url,
-  base64UrlToBytes,
-  createIpfsHashFromAnything,
+  Post,
+  MessageTypes,
+  ChannelAccessTypes,
+  ChannelDataTypes,
+  ItemAccessTypes,
+  ItemDataTypes
 } from "scrypt";
 import {
   Hash,
   Hex,
   decodeFunctionData,
-  recoverAddress,
   getAddress,
   decodeAbiParameters,
   recoverMessageAddress,
 } from "viem";
-import { absBigInt } from "../utils";
-import * as codec from "@ipld/dag-cbor";
-import * as Block from "multiformats/block";
-import { sha256 } from "multiformats/hashes/sha2";
-
-// NOTE: this is here to help with serialization of message object -> stringified json, and properly handle bigints
-// @ts-ignore
-BigInt.prototype.toJSON = function () {
-  return this.toString();
-};
+import { messageToCid, postToCid } from "../utils";
 
 ponder.on("PostGateway:NewPost", async ({ event, context }) => {
   /* ************************************************
@@ -48,52 +40,6 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
     Adds,
   } = context.db;
 
-  type Message = {
-    rid: bigint;
-    timestamp: bigint;
-    msgType: number;
-    msgBody: Hash;
-  };
-
-  type Post = {
-    signer: Hex;
-    message: Message;
-    hashType: number;
-    hash: Hash;
-    sigType: bigint;
-    sig: Hash;
-  };
-
-  enum ChannelDataTypes {
-    NONE,
-    NAME_AND_DESC
-  }
-
-  enum ChannelAccessTypes {
-    NONE,
-    ROLES,
-  }
-
-  enum ItemDataTypes {
-    NONE,
-    STRING_URI,
-  }
-
-  enum ItemAccessTypes {
-    NONE,
-    ADMINS,
-  }
-
-  enum MessageTypes {
-    NONE, // 0
-    CREATE_ITEM, // 1
-    UPDATE_ITEM, // 2
-    CREATE_CHANNEL, // 3
-    UPDATE_CHANNEL, // 4
-    ADD_ITEM_TO_CHANNEL, // 5
-    REMOVE_ITEM_FROM_CHANNEL, // 6
-  }
-
   /* ************************************************
 
                   DYNAMIC VARIABLES
@@ -107,6 +53,11 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
                       INTAKE
 
   ************************************************ */
+
+    // @ts-ignore
+    BigInt.prototype.toJSON = function () {
+      return this.toString()
+    }                         
 
   let posts: Post[] = [];
 
@@ -156,13 +107,6 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
 
     if (!userLookup) return;
 
-    // console.log("user look up happening?", userLookup);
-
-    // const recoveredAddress = await recoverAddress({
-    //   hash: posts[i].hash,
-    //   signature: posts[i].sig,
-    // });
-
     const recoverAddressFromMessageSignature = await recoverMessageAddress({
       message: remove0xPrefix({ bytes32Hash: posts[i].hash }),
       signature: posts[i].sig,
@@ -176,28 +120,14 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
     console.log("signature is valid here");
 
     // Create blocks for things
-    // const postBlock = await createBlockFromAnything(posts[i]);
-    // const postId = postBlock.cid.toString();
-    const postId = await createIpfsHashFromAnything(JSON.stringify(posts[i]));
-    if (posts[i].message.msgType === MessageTypes.CREATE_ITEM) {
-      console.log("create item post struct: ", posts[i].message);
-    }
-    // const messageBlock = await createBlockFromAnything(posts[i].message);
+    const postId = (await postToCid(posts[i])).cid.toString()
     // Create message id which will be saved in asset create events
-    // const messageId = messageBlock.cid.toString();
-    const messageId = await createIpfsHashFromAnything(JSON.stringify(posts[i].message));
-    if (posts[i].message.msgType === MessageTypes.CREATE_ITEM) {
-      // console.log("create item messge id to cid string: ", messageId);
-      console.log(
-        "create ipsf hash from anything: ",
-        await createIpfsHashFromAnything(JSON.stringify(posts[i].message))
-      );
-    }
 
-    // // Save base64 encoded representatiosn of block bytes
-    // const encodedPostBlockBytes = bytesToBase64Url(
-    //   (await createBlockFromAnything(posts[i])).bytes
-    // );
+    console.log("incoming message: ", posts[i].message)
+
+    const messageId = (await messageToCid(posts[i].message)).cid.toString()
+
+    console.log("messageId: ", messageId)
 
     // store post + message
     const storedPost = await Post.upsert({
@@ -228,8 +158,6 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
 
     switch (posts[i].message.msgType) {
       case MessageTypes.CREATE_CHANNEL:
-        // Create channelId from original message. channelId = cid(Message(rid, timestamp, msgType, msgBody))
-        // const channelId = messageBlock.cid.toString();
         // decode channel data + channel access
         const { data: channelData, access: channelAccess } =
           decodeCreateAssetMsgBody({ msgBody: posts[i].message.msgBody }) || {};
@@ -244,16 +172,6 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
           ],
           channelData.contents
         );
-        // decode base64EncodedBytesUrl and extract channel info
-        // const recreateBlockFromChannelUri = await Block.decode({
-        //   bytes: base64UrlToBytes(channelInfoUri),
-        //   codec: codec,
-        //   hasher: sha256,
-        // });
-        // const channelInfo = recreateBlockFromChannelUri.value as {
-        //   name: string;
-        //   description: string;
-        // };
         // decode admins + members from access.contents (if ChannelAccessTypes.Roles)
         const [channelAdmins, channelMembers] = decodeAbiParameters(
           [
@@ -324,13 +242,12 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
       case MessageTypes.CREATE_ITEM:
         console.log("running create item");
         // Create itemId from original message. itemId = cid(Message(rid, timestamp, msgType, msgBody))
-        // const itemId = messageBlock.cid.toString();
         // decode channel data + channel access
         const { data: itemData, access: itemAccess } =
           decodeCreateAssetMsgBody({ msgBody: posts[i].message.msgBody }) || {};
         // check to see if data type + access type are valid
         if (itemData?.dataType != ItemDataTypes.STRING_URI) break;
-        if (itemAccess?.accessType != ItemAccessTypes.ADMINS) break;
+        if (itemAccess?.accessType != ItemAccessTypes.ROLES) break;
         // decode item ipfs uri from itemData.conetnts
         const [itemUri] = decodeAbiParameters(
           [{ name: "itemIpfsCid", type: "string" }],
@@ -379,10 +296,6 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
             update: {},
           });
         }
-        // Set roles
-        // await ItemRoles.createMany({
-        //   data: itemAdminStore,
-        // });
         // end case
         break;
       case MessageTypes.ADD_ITEM_TO_CHANNEL:

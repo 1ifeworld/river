@@ -11,7 +11,7 @@ export const arbitrumNova = defineChain({
   },
   rpcUrls: {
     default: {
-       http: [process.env.NOVA_RPC_URL as string],
+      http: [process.env.NOVA_RPC_URL as string],
     },
     public: {
       http: [process.env.NOVA_RPC_URL as string],

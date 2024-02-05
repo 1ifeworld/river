@@ -26,11 +26,12 @@ import {
 import {
   type NewChannelSchemaValues,
   newChannelSchema,
-  newProcessCreateChannelPost,
+  processCreateChannelPost,
   sendToDb,
   w3sUpload,
 } from '@/lib'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { revalidatePath } from 'next/cache'
 import * as React from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -65,44 +66,20 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
     const formData = new FormData()
     formData.append('name', data.name)
     formData.append('description', data.description as string)
-    const verifying = await authToken
-    if (!verifying) return
-    const { cid } = await w3sUpload(formData, verifying)
 
     // Prevent non-authenticated users from proceeding
     if (!targetUserId) return
-
-    // const metadataObject = {
-    //   name: data.name,
-    //   description: data.description || '',
-    //   image: '',
-    //   animationUri: '',
-    //   contentType: '',
-    // }
-
-    // await sendToDb({
-    //   key: cid,
-    //   value: {
-    //     ...metadataObject,
-    //   },
-    // })
     // Initialize bool for txn success check
     let txSuccess = false
     // Generate create channel post for user and post transaction
     if (signMessage && embeddedWallet) {
-      txSuccess = await newProcessCreateChannelPost({
+      txSuccess = await processCreateChannelPost({
         signer: embeddedWallet.address as Hex,
         name: data.name,
         description: data.description || '',
         rid: targetUserId,
-        pathsToRevalidate: ['/'],
         privySignMessage: signMessage,
       })
-      // txSuccess = await processCreateChannelPost({
-      //   channelUri: cid,
-      //   targetUserId: targetUserId,
-      //   privySignMessage: signMessage,
-      // })
       setDialogOpen(false)
       if (txSuccess) {
         // Render a toast with the name of the channel

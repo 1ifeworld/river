@@ -8,6 +8,7 @@ import {
 } from "viem";
 import { postGatewayABI } from "../../abi";
 
+
 //////////////////////////////////////////////////
 // ENCODING
 //////////////////////////////////////////////////
@@ -23,6 +24,7 @@ export function encodeCreateAssetMsgBody({
 } | null {
   try {
     const msgBody = encodeAbiParameters(postGatewayABI[4].outputs, [
+
       { data, access },
     ]);
 

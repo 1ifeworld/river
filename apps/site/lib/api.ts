@@ -1,17 +1,17 @@
 type Message = {
-  rid: bigint,
-  timestamp: bigint,
-  msgType: number,
-  msgBody: string, 
+  rid: bigint
+  timestamp: bigint
+  msgType: number
+  msgBody: string
 }
 
 type Post = {
-  signer: string, 
-  message: Message,
-  hashType: number,
-  hash: string,
-  sigType: number,
-  sig: string,
+  signer: string
+  message: Message
+  hashType: number
+  hash: string
+  sigType: number
+  sig: string
 }
 
 type User = {
@@ -23,14 +23,20 @@ type User = {
 
 /* API ROUTES */
 
+// This is in to help with serialization of bigints during json stringify
+// @ts-ignore
+BigInt.prototype.toJSON = function () {
+  return this.toString()
+}    
+
 export async function relayPost(post: Post) {
   const res = await fetch('/api/post', {
     method: 'POST',
     body: JSON.stringify(post),
   })
   if (!res.ok) {
-    console.error('Could not relay post batch txn', await res.text())
-    throw new Error('Could not relay post batch txn')
+    console.error('Could not relay post txn', await res.text())
+    throw new Error('Could not relay post txn')
   }
   return res.json()
 }
@@ -46,7 +52,10 @@ export async function relayPostBatch(postArray: Post[]) {
   }
   return res.json()
 }
-export async function relayRegisterFor(user: User): Promise<{success: boolean, hash?: string, rid?: string, error?: string}> {
+
+export async function relayRegisterFor(
+  user: User,
+): Promise<{ success: boolean; hash?: string; rid?: string; error?: string }> {
   try {
     const response = await fetch('/api/registerFor', {
       method: 'POST',
@@ -56,13 +65,16 @@ export async function relayRegisterFor(user: User): Promise<{success: boolean, h
 
     const data = await response.json()
     if (data.success) {
-      return { success: true, hash: data.hash, rid: data.rid } 
+      return { success: true, hash: data.hash, rid: data.rid }
     } else {
       throw new Error(data.error || 'Transaction not included')
     }
   } catch (error) {
     console.error('relayRegisterFor error:', error)
-    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' }
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    }
   }
 }
 

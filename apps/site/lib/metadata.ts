@@ -9,12 +9,11 @@ export interface ChannelMetadata {
 }
 
 export async function getChannelMetadata(channels: Channel[]) {
-  // Extract URIs from the channels array
+  // extract URIs from the channels array
   const uris = channels.map((channel: { uri: string }) => channel.uri)
   // setup endpoint
   const getMetadataEndpoint = `${process.env.NEXT_PUBLIC_METADATA_SERVER_URL}/get`
-
-  // Prepare the request body
+  // prepare the request body
   const body = JSON.stringify({ cids: uris })
 
   try {
@@ -41,18 +40,14 @@ export async function getChannelMetadata(channels: Channel[]) {
 }
 
 export async function getAddsMetadata(manyAdds: Adds[]) {
-  // const { items } = manyAdds
-  // console.log("wahts getting pasesed to get Adds", manyAdds)
-  // console.log("the one that works", manyAdds[5])
-  // Extract URIs from the references array
+  // extract URIs from the references array
   const uris = manyAdds
-    // .map((add) => add?.item?.uri)
     .map((add) => add.item?.uri)
     .filter((uri: string | undefined) => uri != null)
   console.log('uris: ', uris)
-  // Setup endpoint
+  // setup endpoint
   const getMetadataEndpoint = `${process.env.NEXT_PUBLIC_METADATA_SERVER_URL}/get`
-  // Prepare the request body
+  // prepare request body
   const body = JSON.stringify({ cids: uris })
 
   try {
