@@ -115,7 +115,7 @@ export default async function ItemPage({
     .otherwise(() => (
       <Stack className="h-full items-center justify-center">
         <Typography className="text-secondary-foreground">
-          Unsupported content type
+          Unsupported file type
         </Typography>
       </Stack>
     ))

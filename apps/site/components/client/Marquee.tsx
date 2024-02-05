@@ -22,7 +22,8 @@ export function Marquee({
   return (
     <ReactMarquee
       className="py-3 border-t border-b border-border bg-popover"
-      speed={40}
+      speed={30}
+      pauseOnHover
     >
       <Typography>
         {`Welcome to River – Today is ${currentDate} – There are ${totalChannels} channels, ${totalItems} items, and ${totalUsers} users on River today.`}

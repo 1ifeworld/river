@@ -71,13 +71,13 @@ export async function ItemSidebar({
             </Typography>
           </Flex>
           <Flex className="justify-between">
-            <Typography>Kind</Typography>
+            <Typography>Type</Typography>
             <Typography className="text-secondary-foreground">
               {itemMetadata?.contentType}
             </Typography>
           </Flex>
           <Flex className="justify-between">
-            <Typography>Content hash</Typography>
+            <Typography>Content</Typography>
             <Typography className="text-secondary-foreground truncate">
               {itemMetadata?.image === ''
                 ? truncateMiddle(
