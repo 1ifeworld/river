@@ -126,7 +126,7 @@ export async function processBatchCreateAddItemPost({
       const txnInclusion = await getTxnInclusion(transactionHash)
 
       if (txnInclusion) {
-        revalidatePath('/', 'layout')
+        revalidationHelper('/', 'layout')
         return true
       } else {
         console.error('Transaction was not successfully included.')
