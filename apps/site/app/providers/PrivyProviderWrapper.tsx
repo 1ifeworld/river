@@ -1,5 +1,6 @@
-import { river_j5bpjduqfv } from '@/config/customChainConfig'
 import { PrivyProvider } from '@privy-io/react-auth'
+import { arbitrumNova } from '@/config/customChainConfig'
+
 import * as React from 'react'
 
 export function PrivyProviderWrapper({
@@ -21,8 +22,8 @@ export function PrivyProviderWrapper({
           requireUserPasswordOnCreate: false,
           noPromptOnSignature: true,
         },
-        defaultChain: river_j5bpjduqfv,
-        supportedChains: [river_j5bpjduqfv],
+        defaultChain: arbitrumNova,
+        supportedChains: [arbitrumNova],
       }}
     >
       {children}

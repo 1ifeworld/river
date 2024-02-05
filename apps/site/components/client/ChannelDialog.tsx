@@ -94,6 +94,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
         name: data.name,
         description: data.description || '',
         rid: targetUserId,
+        pathsToRevalidate: ['/'],
         privySignMessage: signMessage,
       })
       // txSuccess = await processCreateChannelPost({

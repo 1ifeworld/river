@@ -1,6 +1,6 @@
 import { SignMessageModalUIOptions } from '@privy-io/react-auth'
 import { Hash, Hex, encodeAbiParameters } from 'viem'
-import { newRelayBatchPost } from '@/lib'
+import {  getTxnInclusion, relayPostBatch } from '@/lib'
 import {
   getExpiration,
   remove0xPrefix,
@@ -37,12 +37,14 @@ export async function processBatchCreateAddItemPost({
   rid,
   itemUri,
   channelId,
+  pathsToRevalidate,
   privySignMessage,
 }: {
   signer: Hex
   rid: bigint
   itemUri: string
   channelId: string
+  pathsToRevalidate: string[]
   privySignMessage: (
     message: string,
     uiOptions?: SignMessageModalUIOptions | undefined,
@@ -101,18 +103,16 @@ export async function processBatchCreateAddItemPost({
   const itemCid = await createIpfsHashFromAnything(
     JSON.stringify(createItemPost.message),
   )
-  console.log('site site item cid: ', itemCid)
 
   /*
-        ADD ITEM POST
-    */
+  ADD ITEM POST
+  */
   const addItemMsgType: number = 5
   const addItemMsgBody = encodeAddItemMsgBody({
     itemCid: itemCid,
     channelCid: channelId,
   })
   if (!addItemMsgBody?.msgBody) return false
-  // generate hash to include in post
   const addItemMessageHash = generateMessageHash({
     rid: rid,
     timestamp: timestamp,
@@ -122,7 +122,6 @@ export async function processBatchCreateAddItemPost({
   const addItemMsgHashForSig = remove0xPrefix({
     bytes32Hash: addItemMessageHash,
   })
-  // Get signature from user over signed hash of encodePacked version + expiration + messages
   const addItemSig = (await privySignMessage(addItemMsgHashForSig)) as Hash
   const addItemPost: Post = {
     signer: signer,
@@ -137,10 +136,30 @@ export async function processBatchCreateAddItemPost({
     sigType: 1,
     sig: addItemSig,
   }
-  const relaySuccess = newRelayBatchPost({
-    posts: [createItemPost, addItemPost],
-    pathsToRevalidate: ['/'],
-  })
-  // return relay success boolean value
-  return relaySuccess
+
+  try {
+    
+    const postBatchResponse = await relayPostBatch([createItemPost, addItemPost])
+  
+    if (postBatchResponse.success) {
+      const transactionHash = postBatchResponse.hash
+  
+      const txnInclusion = await getTxnInclusion(transactionHash)
+  
+      if (txnInclusion) {
+        return true 
+        
+      } else {
+        console.error("Transaction was not included successfully.")
+        return false 
+      }
+    } else {
+      console.error("Relay Post Batch was not successful.")
+      return false 
+    }
+  } catch (error) {
+    console.error("Error relaying post batch:", error)
+    return false 
+  } 
 }
+
