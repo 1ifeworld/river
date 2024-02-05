@@ -28,7 +28,6 @@ export default createSchema((p) => ({
 
   Post: p.createTable({
     id: p.string(),
-    // parentBlock: p.string(),
     relayer: p.hex(),
     signer: p.hex(),
     messageId: p.string().references('Message.id'),
