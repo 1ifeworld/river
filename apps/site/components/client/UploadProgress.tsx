@@ -1,5 +1,4 @@
 import { Stack, Typography, Flex, Loading } from '@/design-system'
-import { truncateText } from '@/utils'
 
 interface UploadProgressProps {
   fileIndex: number

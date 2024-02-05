@@ -147,7 +147,7 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                   chainId: 42170,
                   // verifyingContract: addresses.idRegistry.river_dev_2_d5hb5orqim,
                   verifyingContract:
-                    '0x339513226Afd92B309837Bad402c6D3ADDE9Ad24', //arb nova                    
+                    '0x339513226Afd92B309837Bad402c6D3ADDE9Ad24', //arb nova
                 } as const
                 const REGISTER_TYPE = [
                   { name: 'to', type: 'address' },

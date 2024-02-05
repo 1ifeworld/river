@@ -1,6 +1,6 @@
 import { SignMessageModalUIOptions } from '@privy-io/react-auth'
 import { Hash, Hex, encodeAbiParameters } from 'viem'
-import {  getTxnInclusion, relayPostBatch } from '@/lib'
+import { getTxnInclusion, relayPostBatch } from '@/lib'
 import {
   getExpiration,
   remove0xPrefix,
@@ -55,7 +55,7 @@ export async function processBatchCreateAddItemPost({
   /*
         CREATE ITEM POST
     */
-  const createItemMsgType: number = 1
+  const createItemMsgType = 1
   const createItemMsgBody = encodeCreateAssetMsgBody({
     data: {
       dataType: 1,
@@ -103,7 +103,6 @@ export async function processBatchCreateAddItemPost({
   const itemCid = await createIpfsHashFromAnything(
     JSON.stringify(createItemPost.message),
   )
-
   /*
   ADD ITEM POST
   */
@@ -138,28 +137,28 @@ export async function processBatchCreateAddItemPost({
   }
 
   try {
-    
-    const postBatchResponse = await relayPostBatch([createItemPost, addItemPost])
-  
+    const postBatchResponse = await relayPostBatch([
+      createItemPost,
+      addItemPost,
+    ])
+
     if (postBatchResponse.success) {
       const transactionHash = postBatchResponse.hash
-  
+
       const txnInclusion = await getTxnInclusion(transactionHash)
-  
+
       if (txnInclusion) {
-        return true 
-        
+        return true
       } else {
-        console.error("Transaction was not included successfully.")
-        return false 
+        console.error('Transaction was not successfully included.')
+        return false
       }
     } else {
-      console.error("Relay Post Batch was not successful.")
-      return false 
+      console.error('Relay post batch was unsuccessful.')
+      return false
     }
   } catch (error) {
-    console.error("Error relaying post batch:", error)
-    return false 
-  } 
+    console.error('Error relaying post batch:', error)
+    return false
+  }
 }
-

@@ -9,13 +9,11 @@ import {
   encodeCreateChannelMsgBody,
 } from 'scrypt'
 
-
-export async function newProcessCreateChannelPost({
+export async function processCreateChannelPost({
   signer,
   name,
   description,
   rid,
-  pathsToRevalidate,
   privySignMessage,
 }: {
   signer: Hex
@@ -30,7 +28,7 @@ export async function newProcessCreateChannelPost({
 }): Promise<boolean> {
   // Declare constants/params
   const msgTimestamp: bigint = getExpiration() // gives 120s buffer
-  const msgType: number = 3
+  const msgType = 3
   const msgBody = await encodeCreateChannelMsgBody({
     name: name,
     description: description,
@@ -61,29 +59,27 @@ export async function newProcessCreateChannelPost({
     sigType: 1,
     sig: sig,
   }
-  
+
   try {
     const relayResponse = await relayPost(post)
 
     if (relayResponse.success) {
-
       const transactionHash = relayResponse.hash
-  
+
       const txnInclusion = await getTxnInclusion(transactionHash)
 
       if (txnInclusion) {
-        return true 
-        
+        return true
       } else {
-        console.error("Transaction was not included successfully.")
-        return false 
+        console.error('Transaction was not successfully included.')
+        return false
       }
     } else {
-      console.error("Relay Post was not successful.")
-      return false 
+      console.error('Relay post was unsuccessful.')
+      return false
     }
   } catch (error) {
-    console.error("Error relaying post:", error)
-    return false 
-  } 
+    console.error('Error relaying post:', error)
+    return false
+  }
 }
