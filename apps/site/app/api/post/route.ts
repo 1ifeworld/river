@@ -1,5 +1,5 @@
 import { ethers } from "ethers"
-import { postGateway2ABI, addresses } from "scrypt"
+import { postGatewayABI, addresses } from "scrypt"
 import { Defender } from "@openzeppelin/defender-sdk"
 import { publicClient } from "@/config/publicClient"
 import { NextRequest } from "next/server"
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
 
     const postGateway = new ethers.Contract(
       addresses.postGateway.nova,
-      postGateway2ABI,
+      postGatewayABI,
       signer as unknown as ethers.Signer 
     )
 

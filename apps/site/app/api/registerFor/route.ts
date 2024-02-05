@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
   console.log({userWithoutUsername})
   const credentials = {
     relayerApiKey: process.env.IDREGISTRY_API_UNO,
-    relayerApiSecret: process.env.IDREGISTRY_API_UNO,
+    relayerApiSecret: process.env.IDREGISTRY_SECRET_UNO,
   }
 
 

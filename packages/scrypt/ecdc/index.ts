@@ -1,2 +1,2 @@
 export * from './postGateway'
-export * from './postGateway2'
+export * from './postGateway'
