@@ -14,14 +14,6 @@ type Message = {
   msgBody: string 
 }
 
-type Post = {
-  signer: string // Assuming Hex is a string type adjust as necessary
-  message: Message
-  hashType: number
-  hash: string
-  sigType: number
-  sig: string
-}
 
 export async function POST(req: NextRequest) {
   const postsArray = await req.json()

@@ -38,12 +38,14 @@ export async function processBatchCreateAddItemPost({
   rid,
   itemUri,
   channelId,
+  pathsToRevalidate,
   privySignMessage,
 }: {
   signer: Hex
   rid: bigint
   itemUri: string
   channelId: string
+  pathsToRevalidate: string[]
   privySignMessage: (
     message: string,
     uiOptions?: SignMessageModalUIOptions | undefined,
@@ -138,33 +140,6 @@ export async function processBatchCreateAddItemPost({
     sigType: 1,
     sig: addItemSig,
   }
-  // const relaySuccess = newRelayBatchPost({
-  //   posts: [createItemPost, addItemPost],
-  //   pathsToRevalidate: ['/'],
-  // })
-
-  // const txnHashFromRelayer = //
-
-
-  //   // If writeContract + setUsername were successful, registerFor txn is valid and we proceed to check its inclusion
-  //   const txnInclusion = await getTxnInclusion(response.hash as Hex)
-  //   // Check if the transaction is successfully included
-  //   if (txnInclusion) {
-  //     // If txnInclusion is true, the transaction was found and processed
-  //     console.log(`Transaction ${registerTxn} was processed by ponder`)
-  //     // Revalidate path. This is typically for cache invalidation.
-  //     revalidatePath(pathToRevalidate)
-  //     return true // Return true to indicate successful processing
-  //   } else {
-  //     // If txnInclusion is false, the transaction was not found or not processed
-  //     console.log(`Transaction ${registerTxn} NOT found by ponder`)
-  //     return false // Return false to indicate the transaction was not processed
-  //   }
-  // } catch (error) {
-  //   // Catch and log any errors that occur during the txn processing or username setting
-  //   console.error('Error in user registration: ', error)
-  //   return false // Return false to indicate failure due to an error
-  // }
 
   try {
     const postBatchResponse = await relayPostBatch([createItemPost, addItemPost])
@@ -176,6 +151,7 @@ export async function processBatchCreateAddItemPost({
       const txnInclusion = await getTxnInclusion(transactionHash)
   
       if (txnInclusion) {
+        pathsToRevalidate.forEach((path) => revalidatePath(path))
         return true // Indicates success all the way through
         
       } else {
