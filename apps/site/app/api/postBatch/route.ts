@@ -1,19 +1,7 @@
-
-"use server"
-
 import { ethers } from "ethers"
 import { postGateway2ABI, addresses } from "scrypt"
 import { Defender } from "@openzeppelin/defender-sdk"
-
 import { NextRequest } from "next/server"
-
-type Message = {
-  rid: bigint
-  timestamp: bigint
-  msgType: number
-  msgBody: string 
-}
-
 
 export async function POST(req: NextRequest) {
   const postsArray = await req.json()
