@@ -27,7 +27,7 @@ export function isAudio({ mimeType }: { mimeType: string }) {
 }
 
 export function isImage({ mimeType }: { mimeType: string }) {
-  return ['image/jpeg', 'image/png'].includes(mimeType)
+  return ['image/jpeg', 'image/png', 'image/webp', 'image/heic'].includes(mimeType)
 }
 
 // TODO: Maybe can removed in favor of the function below?
