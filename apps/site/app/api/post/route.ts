@@ -7,7 +7,6 @@ import { type Hex } from 'viem'
 
 export async function POST(req: NextRequest) {
   const post = await req.json()
-  console.log({ post })
 
   const credentials = {
     relayerApiKey: process.env.NONCE_API_UNO,

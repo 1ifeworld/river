@@ -2,6 +2,6 @@
 
 import { revalidatePath } from 'next/cache'
 
-export async function revalidationHelper(tagToRevalidate: string) {
-  revalidatePath(tagToRevalidate)
+export async function revalidationHelper(path: string, type?: 'page' | 'layout') {
+  revalidatePath(path, type)
 }

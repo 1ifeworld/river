@@ -1,50 +1,29 @@
 import { SignMessageModalUIOptions } from '@privy-io/react-auth'
 import { Hash, Hex, encodeAbiParameters } from 'viem'
 import { getTxnInclusion, relayPostBatch, revalidationHelper } from '@/lib'
+import { messageToCid } from '@/utils'
 import {
   getExpiration,
   remove0xPrefix,
   generateMessageHash,
   encodeCreateAssetMsgBody,
   encodeAddItemMsgBody,
-  createIpfsHashFromAnything,
+  type Message,
+  type Post
 } from 'scrypt'
-
-type Message = {
-  rid: bigint
-  timestamp: bigint
-  msgType: number
-  msgBody: Hash
-}
-
-type Post = {
-  signer: Hex
-  message: Message
-  hashType: number
-  hash: Hash
-  sigType: number
-  sig: Hash
-}
-
-// NOTE: this is here to help with serialization of message object -> stringified json, and properly handle bigints
-// @ts-ignore
-BigInt.prototype.toJSON = function () {
-  return this.toString()
-}
+import { revalidatePath } from 'next/cache'
 
 export async function processBatchCreateAddItemPost({
   signer,
   rid,
   itemUri,
   channelId,
-  pathsToRevalidate,
   privySignMessage,
 }: {
   signer: Hex
   rid: bigint
   itemUri: string
   channelId: string
-  pathsToRevalidate: string[]
   privySignMessage: (
     message: string,
     uiOptions?: SignMessageModalUIOptions | undefined,
@@ -75,9 +54,9 @@ export async function processBatchCreateAddItemPost({
   if (!createItemMsgBody?.msgBody) return false
   // generate hash to include in post
   const createItemMessageHash = generateMessageHash({
-    rid: rid,
-    timestamp: timestamp,
-    msgType: createItemMsgType,
+    rid: BigInt(rid),
+    timestamp: BigInt(timestamp),
+    msgType: createItemMsgType as number,
     msgBody: createItemMsgBody.msgBody,
   })
   const createItemMsgHashForSig = remove0xPrefix({
@@ -91,8 +70,8 @@ export async function processBatchCreateAddItemPost({
     signer: signer,
     message: {
       rid: BigInt(rid),
-      timestamp: timestamp,
-      msgType: createItemMsgType,
+      timestamp: BigInt(timestamp),
+      msgType: createItemMsgType as number,
       msgBody: createItemMsgBody.msgBody,
     },
     hashType: 1,
@@ -100,9 +79,8 @@ export async function processBatchCreateAddItemPost({
     sigType: 1,
     sig: createItemSig,
   }
-  const itemCid = await createIpfsHashFromAnything(
-    JSON.stringify(createItemPost.message),
-  )
+  // Create itemCid using canonical types
+  const itemCid = (await messageToCid(createItemPost.message)).cid.toString()  
   /*
   ADD ITEM POST
   */
@@ -113,9 +91,9 @@ export async function processBatchCreateAddItemPost({
   })
   if (!addItemMsgBody?.msgBody) return false
   const addItemMessageHash = generateMessageHash({
-    rid: rid,
-    timestamp: timestamp,
-    msgType: addItemMsgType,
+    rid: BigInt(rid),
+    timestamp: BigInt(timestamp),
+    msgType: addItemMsgType as number,
     msgBody: addItemMsgBody.msgBody,
   })
   const addItemMsgHashForSig = remove0xPrefix({
@@ -125,18 +103,18 @@ export async function processBatchCreateAddItemPost({
   const addItemPost: Post = {
     signer: signer,
     message: {
-      rid: rid,
-      timestamp: timestamp,
-      msgType: addItemMsgType,
+      rid: BigInt(rid),
+      timestamp: BigInt(timestamp),
+      msgType: addItemMsgType as number,
       msgBody: addItemMsgBody.msgBody,
     },
-    hashType: 1,
+    hashType: 1 as number,
     hash: addItemMessageHash,
-    sigType: 1,
+    sigType: 1 as number,
     sig: addItemSig,
   }
 
-  try {
+  try {   
     const postBatchResponse = await relayPostBatch([
       createItemPost,
       addItemPost,
@@ -148,7 +126,7 @@ export async function processBatchCreateAddItemPost({
       const txnInclusion = await getTxnInclusion(transactionHash)
 
       if (txnInclusion) {
-        revalidationHelper('/channel')
+        revalidationHelper('/', 'layout')
         return true
       } else {
         console.error('Transaction was not successfully included.')

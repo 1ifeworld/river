@@ -143,7 +143,6 @@ export function ItemDropzone({ channel }: { channel: Channel }) {
           itemUri: cid,
           channelId: channel.id,
           privySignMessage: signMessage,
-          pathsToRevalidate: ['/'],
         })
         if (!txSuccess) {
           setProgressInfo((prev) => ({
