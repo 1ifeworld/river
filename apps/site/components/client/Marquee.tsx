@@ -1,5 +1,6 @@
 import { Typography } from '@/design-system'
 import ReactMarquee from 'react-fast-marquee'
+import { pluralize } from '@/utils'
 
 const currentDate = new Date().toLocaleString('en-US', {
   weekday: 'long',
@@ -26,7 +27,15 @@ export function Marquee({
       pauseOnHover
     >
       <Typography>
-        {`Welcome to River – Today is ${currentDate} – There are ${totalChannels} channels, ${totalItems} items, and ${totalUsers} users on River today.`}
+        {`Welcome to River – Today is ${currentDate} – There are ${pluralize(
+          totalChannels as number,
+          'channel',
+          'channels',
+        )}, ${pluralize(
+          totalItems as number,
+          'item',
+          'items',
+        )}, and ${pluralize(totalUsers as number, 'user', 'users')}.`}
       </Typography>
     </ReactMarquee>
   )
