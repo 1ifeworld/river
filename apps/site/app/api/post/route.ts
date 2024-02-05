@@ -1,9 +1,9 @@
-import { ethers } from 'ethers'
-import { postGateway2ABI, addresses } from 'scrypt'
-import { Defender } from '@openzeppelin/defender-sdk'
-import { publicClient } from '@/config/publicClient'
-import { NextRequest } from 'next/server'
-import { type Hex } from 'viem'
+import { ethers } from "ethers"
+import { postGatewayABI, addresses } from "scrypt"
+import { Defender } from "@openzeppelin/defender-sdk"
+import { publicClient } from "@/config/publicClient"
+import { NextRequest } from "next/server"
+import { type Hex } from "viem"
 
 export async function POST(req: NextRequest) {
   const post = await req.json()
@@ -22,8 +22,8 @@ export async function POST(req: NextRequest) {
 
     const postGateway = new ethers.Contract(
       addresses.postGateway.nova,
-      postGateway2ABI,
-      signer as unknown as ethers.Signer,
+      postGatewayABI,
+      signer as unknown as ethers.Signer 
     )
 
     const tx = await postGateway.post(post)

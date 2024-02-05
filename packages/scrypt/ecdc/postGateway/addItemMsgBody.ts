@@ -1,5 +1,5 @@
 import { Hash, decodeAbiParameters, encodeAbiParameters } from "viem";
-import { postGateway2ABI } from "../../abi";
+import { postGatewayABI } from "../../abi";
 
 //////////////////////////////////////////////////
 // ENCODING
@@ -16,7 +16,7 @@ export function encodeAddItemMsgBody({
 } | null {
   try {
     const msgBody = encodeAbiParameters(
-      postGateway2ABI[0].outputs,
+      postGatewayABI[3].outputs,
       [{ itemCid, channelCid }]
     );
 
@@ -39,7 +39,7 @@ export function decodeAddItemMsgBody({ msgBody }: { msgBody: Hash }): {
 } | null {
   try {
     const [{ itemCid, channelCid }] = decodeAbiParameters(
-      postGateway2ABI[0].outputs,
+      postGatewayABI[3].outputs,
       msgBody
     );
 
