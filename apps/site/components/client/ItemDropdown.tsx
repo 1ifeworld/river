@@ -7,7 +7,6 @@ import {
   DropdownMenuItem,
   DropdownMenuPortal,
   DropdownMenuTrigger,
-  Toast,
   Typography,
 } from '@/design-system'
 // import { processRemoveReferencePost } from '@/lib'
@@ -39,7 +38,7 @@ export function ItemDropdown({
                 disabled={!targetUserId}
                 onClick={async () => {
                   // initialize bool for txn success check
-                  let txSuccess: boolean = false
+                  let txSuccess = false
                   // Generate removeReference post
                   if (signMessage) {
                     // txSuccess = await processRemoveReferencePost({
@@ -49,11 +48,9 @@ export function ItemDropdown({
                     //   privySignMessage: signMessage,
                     // })
                     if (txSuccess) {
-                      toast.custom((t) => (
-                        <Toast>{'Item successfully removed'}</Toast>
-                      ))
+                      toast('Item successfully removed')
                     } else {
-                      ;<Toast>{'Error removing item'}</Toast>
+                      toast('Error removing item')
                     }
                   }
                 }}
