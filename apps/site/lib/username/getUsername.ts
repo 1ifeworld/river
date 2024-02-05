@@ -1,4 +1,5 @@
 export async function getUsername({ id }: { id: bigint }) {
+  if (!id) return
   try {
     const idString = id.toString()
 
