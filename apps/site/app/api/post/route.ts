@@ -1,19 +1,9 @@
-
-"use server"
-
 import { ethers } from "ethers"
 import { postGateway2ABI, addresses } from "scrypt"
 import { Defender } from "@openzeppelin/defender-sdk"
-
+import { publicClient } from "@/config/publicClient"
 import { NextRequest } from "next/server"
-
-type Message = {
-  rid: bigint
-  timestamp: bigint
-  msgType: number
-  msgBody: string 
-}
-
+import { type Hex } from "viem"
 
 export async function POST(req: NextRequest) {
   const post = await req.json()
@@ -36,12 +26,13 @@ export async function POST(req: NextRequest) {
       addresses.postGateway.nova,
       postGateway2ABI,
       signer as unknown as ethers.Signer 
-
     )
 
     const tx = await postGateway.post(post)
-    await tx.wait()
-
+    
+    await publicClient.waitForTransactionReceipt({
+      hash: tx.hash as Hex ,
+    })
 
     return new Response(JSON.stringify({ success: true, hash: tx.hash }), {
       status: 200,

@@ -9,7 +9,6 @@ import {
   encodeAddItemMsgBody,
   createIpfsHashFromAnything,
 } from 'scrypt'
-import { revalidatePath } from 'next/cache'
 
 type Message = {
   rid: bigint
@@ -104,7 +103,6 @@ export async function processBatchCreateAddItemPost({
   const itemCid = await createIpfsHashFromAnything(
     JSON.stringify(createItemPost.message),
   )
-  console.log('site site item cid: ', itemCid)
 
   /*
   ADD ITEM POST
@@ -140,16 +138,15 @@ export async function processBatchCreateAddItemPost({
   }
 
   try {
+    
     const postBatchResponse = await relayPostBatch([createItemPost, addItemPost])
   
     if (postBatchResponse.success) {
       const transactionHash = postBatchResponse.hash
-      console.log("Transaction Hash:", transactionHash)
   
       const txnInclusion = await getTxnInclusion(transactionHash)
   
       if (txnInclusion) {
-        pathsToRevalidate.forEach((path) => revalidatePath(path))
         return true 
         
       } else {
@@ -165,3 +162,4 @@ export async function processBatchCreateAddItemPost({
     return false 
   } 
 }
+

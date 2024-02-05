@@ -1,6 +1,3 @@
-
-"use server"
-
 import { ethers } from "ethers"
 import { addresses, idRegistryABI } from "scrypt"
 import { Defender } from "@openzeppelin/defender-sdk"

@@ -8,7 +8,6 @@ import {
   generateMessageHash,
   encodeCreateChannelMsgBody,
 } from 'scrypt'
-import { revalidatePath } from 'next/cache'
 
 
 export async function newProcessCreateChannelPost({
@@ -23,7 +22,7 @@ export async function newProcessCreateChannelPost({
   name: string
   description: string
   rid: bigint
-  pathsToRevalidate: string[]
+  pathsToRevalidate?: string[]
   privySignMessage: (
     message: string,
     uiOptions?: SignMessageModalUIOptions | undefined,
@@ -67,15 +66,12 @@ export async function newProcessCreateChannelPost({
     const relayResponse = await relayPost(post)
 
     if (relayResponse.success) {
-      console.log("Channel created with hash:", relayResponse.hash)
 
       const transactionHash = relayResponse.hash
-      console.log("Transaction Hash:", transactionHash)
   
       const txnInclusion = await getTxnInclusion(transactionHash)
 
       if (txnInclusion) {
-        pathsToRevalidate.forEach((path) => revalidatePath(path))
         return true 
         
       } else {
