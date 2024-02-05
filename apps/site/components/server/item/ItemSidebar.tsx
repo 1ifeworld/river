@@ -22,7 +22,8 @@ export async function ItemSidebar({
   itemContext,
   itemMetadata,
 }: ItemSidebarProps) {
-  const username = await getUsername({ id: itemContext.item.createdby })
+  const createdByUsername = await getUsername({ id: itemContext.item.createdById })
+  const addedByUsername = await getUsername({ id: itemContext.addedById })
   const channelName = itemContext.channel.name
 
   return (
@@ -40,7 +41,7 @@ export async function ItemSidebar({
           <div>
             <Typography className="truncate">{itemMetadata?.name}</Typography>
             <Typography className="text-secondary-foreground">
-              {username}
+              {createdByUsername}
             </Typography>
           </div>
           <Typography>{'--'}</Typography>
@@ -61,7 +62,7 @@ export async function ItemSidebar({
           <Flex className="justify-between">
             <Typography>Added by</Typography>
             <Typography className="text-secondary-foreground">
-              {username}
+              {addedByUsername}
             </Typography>
           </Flex>
           <Flex className="justify-between">

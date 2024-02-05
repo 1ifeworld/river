@@ -3,7 +3,7 @@ query allChannels {
     items {
       id
       timestamp
-      createdBy
+      createdById
       uri
       name
       description

@@ -4,15 +4,24 @@ import { postGateway2ABI } from "../../abi";
 export async function encodeCreateChannelMsgBody({
   name,
   description,
-  admins,
   members,
+  roles,
 }: {
   name: string;
   description: string;
-  admins: bigint[];
   members: bigint[];
+  roles: bigint[];
 }): Promise<{ msgBody: Hash; } | null>  {
+
+  console.log("members in func", members)
+  console.log("roles in func", roles)
+
   try {
+
+
+    console.log("visibility in channel ts", members)
+    console.log("visibility in channel ts", roles)
+
 
     const encodedCreateChannelStruct = encodeAbiParameters(postGateway2ABI[1].outputs, [
       {
@@ -30,10 +39,10 @@ export async function encodeCreateChannelMsgBody({
           accessType: 1,
           contents: encodeAbiParameters(
             [
-              { name: "admins", type: "uint256[]" },
               { name: "members", type: "uint256[]" },
+              { name: "roles", type: "uint256[]" },
             ],
-            [admins, members]
+            [members, roles]
           ),
         },
       },

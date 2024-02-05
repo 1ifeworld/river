@@ -17,7 +17,7 @@ export async function ItemCard({
 }: {
   add: Adds
 }) {
-  const username = await getUsername({ id: BigInt(add.item.createdby) })
+  const username = await getUsername({ id: BigInt(add.item.createdById) })
   const itemMetadata = await kv.get<Pick<MediaAssetObject, 'value'>['value']>(
     add?.item?.uri as string,
   )

@@ -40,6 +40,8 @@ export function UserContextComponent({ children }: { children: ReactNode }) {
     (wallet) => wallet.walletClientType === 'privy',
   )
 
+    console.log("Wallet", embeddedWallet)
+
   async function fetchUserData() {
     if (!embeddedWallet) return
 
@@ -50,15 +52,17 @@ export function UserContextComponent({ children }: { children: ReactNode }) {
       custodyAddress: embeddedWallet.address as Address,
     })
 
+    console.log("fetcehd uer id: ", fetchedUserId)
+
     if (!fetchedUserId.userId) return
 
     setUserId(fetchedUserId.userId)
 
-    const fetchedUsername = await getUsername({
-      id: BigInt(fetchedUserId.userId),
-    })
+    // const fetchedUsername = await getUsername({
+    //   id: BigInt(fetchedUserId.userId),
+    // })
 
-    setUsername(fetchedUsername)
+    // setUsername(fetchedUsername)
   }
 
   function clearUserData() {
