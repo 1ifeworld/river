@@ -24,7 +24,7 @@ export default createConfig({
       network: 'arbitrumNova',
       abi: postGatewayABI,
       address: addresses.postGateway.nova,
-      startBlock: 45796398, // River genesis
+      startBlock: 45799650, // River genesis
     },    
   },
 })
