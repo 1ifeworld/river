@@ -1,5 +1,6 @@
-import { arbitrumNova } from 'viem/chains'
 import { PrivyProvider } from '@privy-io/react-auth'
+import { arbitrumNova } from '@/config/customChainConfig'
+
 import * as React from 'react'
 
 export function PrivyProviderWrapper({

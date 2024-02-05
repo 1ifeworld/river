@@ -42,6 +42,7 @@ export async function POST(req: NextRequest) {
     const tx = await postGateway.post(post)
     await tx.wait()
 
+
     return new Response(JSON.stringify({ success: true, hash: tx.hash }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
