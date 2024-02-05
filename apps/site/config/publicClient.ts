@@ -1,9 +1,14 @@
 import { http, createPublicClient } from 'viem'
 import { arbitrumNova } from './customChainConfig'
+import { optimism } from 'viem/chains'
 
-const transport = http(process.env.NOVA_RPC_URL)
 
-export const publicClient = createPublicClient({
+export const optimismPubClient = createPublicClient({
+  chain: optimism,
+  transport: http(process.env.NEXT_PUBLIC_OPTIMISM_RPC_URL),
+})
+
+export const novaPubClient = createPublicClient({
   chain: arbitrumNova,
-  transport: transport,
+  transport: http(process.env.NEXT_PUBLIC_NOVA_RPC_URL),
 })
