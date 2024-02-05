@@ -27,7 +27,9 @@ export function Marquee({
       pauseOnHover
     >
       <Typography>
-        {`Welcome to River – Today is ${currentDate} – There are ${pluralize(
+        {`Welcome to River – Today is ${currentDate} – There ${
+          totalChannels === 1 ? 'is' : 'are'
+        } ${pluralize(
           totalChannels as number,
           'channel',
           'channels',
