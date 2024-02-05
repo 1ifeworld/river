@@ -28,7 +28,6 @@ export default createSchema((p) => ({
 
   Post: p.createTable({
     id: p.string(),
-    // parentBlock: p.string(),
     relayer: p.hex(),
     signer: p.hex(),
     messageId: p.string().references('Message.id'),
@@ -51,7 +50,7 @@ export default createSchema((p) => ({
     message: p.one('messageId'),    
     timestamp: p.bigint(),
     createdById: p.bigint().references('User.id'),
-    createdBy: p.one('createdById'),
+    // createdBy: p.one('createdById'),
     uri: p.string(),
     name: p.string(),
     description: p.string(),
@@ -72,7 +71,7 @@ export default createSchema((p) => ({
     message: p.one('messageId'),
     timestamp: p.bigint(),
     createdById: p.bigint().references('User.id'),
-    createdBy: p.one('createdById'),
+    // createdBy: p.one('createdById'),
     uri: p.string(),
     adds: p.many('Adds.itemId')
   }),
@@ -89,7 +88,7 @@ export default createSchema((p) => ({
     message: p.one('messageId'),
     timestamp: p.bigint(),
     addedById: p.bigint().references('User.id'),
-    addedBy: p.one('addedById'),
+    // addedBy: p.one('addedById'),
     itemId: p.string().references('Item.id'),
     item: p.one('itemId'),
     channelId: p.string().references('Channel.id'),
