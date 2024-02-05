@@ -1,6 +1,6 @@
 import { SignMessageModalUIOptions } from '@privy-io/react-auth'
 import { Hash, Hex, encodeAbiParameters } from 'viem'
-import { newRelayBatchPost } from '@/lib'
+import {  getTxnInclusion, relayPostBatch } from '@/lib'
 import {
   getExpiration,
   remove0xPrefix,
@@ -9,6 +9,7 @@ import {
   encodeAddItemMsgBody,
   createIpfsHashFromAnything,
 } from 'scrypt'
+import { revalidatePath } from 'next/cache'
 
 type Message = {
   rid: bigint
@@ -137,10 +138,56 @@ export async function processBatchCreateAddItemPost({
     sigType: 1,
     sig: addItemSig,
   }
-  const relaySuccess = newRelayBatchPost({
-    posts: [createItemPost, addItemPost],
-    pathsToRevalidate: ['/'],
-  })
-  // return relay success boolean value
-  return relaySuccess
+  // const relaySuccess = newRelayBatchPost({
+  //   posts: [createItemPost, addItemPost],
+  //   pathsToRevalidate: ['/'],
+  // })
+
+  // const txnHashFromRelayer = //
+
+
+  //   // If writeContract + setUsername were successful, registerFor txn is valid and we proceed to check its inclusion
+  //   const txnInclusion = await getTxnInclusion(response.hash as Hex)
+  //   // Check if the transaction is successfully included
+  //   if (txnInclusion) {
+  //     // If txnInclusion is true, the transaction was found and processed
+  //     console.log(`Transaction ${registerTxn} was processed by ponder`)
+  //     // Revalidate path. This is typically for cache invalidation.
+  //     revalidatePath(pathToRevalidate)
+  //     return true // Return true to indicate successful processing
+  //   } else {
+  //     // If txnInclusion is false, the transaction was not found or not processed
+  //     console.log(`Transaction ${registerTxn} NOT found by ponder`)
+  //     return false // Return false to indicate the transaction was not processed
+  //   }
+  // } catch (error) {
+  //   // Catch and log any errors that occur during the txn processing or username setting
+  //   console.error('Error in user registration: ', error)
+  //   return false // Return false to indicate failure due to an error
+  // }
+
+  try {
+    const postBatchResponse = await relayPostBatch([createItemPost, addItemPost])
+  
+    if (postBatchResponse.success) {
+      const transactionHash = postBatchResponse.hash
+      console.log("Transaction Hash:", transactionHash)
+  
+      const txnInclusion = await getTxnInclusion(transactionHash)
+  
+      if (txnInclusion) {
+        return true // Indicates success all the way through
+        
+      } else {
+        console.error("Transaction was not included successfully.")
+        return false // Indicates the transaction hash was not included as expected
+      }
+    } else {
+      console.error("Relay was not successful.")
+      return false // Relay itself was not successful
+    }
+  } catch (error) {
+    console.error("Error relaying post batch:", error)
+    return false // Catch any error during the process and indicate failure
+  } 
 }
