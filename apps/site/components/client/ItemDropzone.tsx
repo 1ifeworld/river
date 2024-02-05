@@ -13,12 +13,13 @@ import {
   MetadataObject,
   processBatchCreateAddItemPost,
 } from '@/lib'
-import { Typography, Flex, Stack, Button } from '@/design-system'
+import { Typography, Flex, Stack, Button, Toast } from '@/design-system'
 import { useUserContext } from '@/context'
 import { useParams } from 'next/navigation'
 import { UploadProgress } from '@/client'
 import { ChannelRoles, type Channel } from '@/gql'
 import { Hex } from 'viem'
+import { toast } from 'sonner'
 
 function isRidPresent({
   roleData,
@@ -60,7 +61,9 @@ export function ItemDropzone({ channel }: { channel: Channel }) {
         })
 
   const onDrop = async (acceptedFiles: File[]) => {
-    setIsUploading(true)
+    if (acceptedFiles.length > 0) {
+      setIsUploading(true)
+    }
 
     for (const [index, file] of acceptedFiles.entries()) {
       setProgressInfo({
@@ -168,6 +171,20 @@ export function ItemDropzone({ channel }: { channel: Channel }) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     disabled: isUploading,
+    accept: {
+      'image/png': ['.png'],
+      'image/heic': ['.heic'],
+      'image/jpeg': ['.jpeg', '.jpg'],
+      'video/mp4': ['.mp4'],
+      'application/pdf': ['.pdf'],
+      'audio/wav': ['.wav'],
+      'model/gltf-binary': ['.glb'],
+    },
+    onDropRejected: () => {
+      toast.custom((t) => (
+        <Toast>We don't currently support that file type</Toast>
+      ))
+    },
   })
 
   return (
