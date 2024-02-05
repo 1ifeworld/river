@@ -1,17 +1,17 @@
 type Message = {
-  rid: bigint,
-  timestamp: bigint,
-  msgType: number,
-  msgBody: string, 
+  rid: bigint
+  timestamp: bigint
+  msgType: number
+  msgBody: string
 }
 
 type Post = {
-  signer: string, 
-  message: Message,
-  hashType: number,
-  hash: string,
-  sigType: number,
-  sig: string,
+  signer: string
+  message: Message
+  hashType: number
+  hash: string
+  sigType: number
+  sig: string
 }
 
 type User = {
@@ -46,7 +46,9 @@ export async function relayPostBatch(postArray: Post[]) {
   }
   return res.json()
 }
-export async function relayRegisterFor(user: User): Promise<{success: boolean, hash?: string, rid?: string, error?: string}> {
+export async function relayRegisterFor(
+  user: User,
+): Promise<{ success: boolean; hash?: string; rid?: string; error?: string }> {
   try {
     const response = await fetch('/api/registerFor', {
       method: 'POST',
@@ -56,13 +58,16 @@ export async function relayRegisterFor(user: User): Promise<{success: boolean, h
 
     const data = await response.json()
     if (data.success) {
-      return { success: true, hash: data.hash, rid: data.rid } 
+      return { success: true, hash: data.hash, rid: data.rid }
     } else {
       throw new Error(data.error || 'Transaction not included')
     }
   } catch (error) {
     console.error('relayRegisterFor error:', error)
-    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' }
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    }
   }
 }
 

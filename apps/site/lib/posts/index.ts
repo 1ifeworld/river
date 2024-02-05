@@ -1,2 +1,2 @@
-export * from './newProcessCreateChannelPost'
+export * from './processCreateChannelPost'
 export * from './processBatchCreateAddItemPost'
