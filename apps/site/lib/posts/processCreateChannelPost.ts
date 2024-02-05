@@ -8,6 +8,7 @@ import {
   generateMessageHash,
   encodeCreateChannelMsgBody,
 } from 'scrypt'
+import { revalidatePath } from 'next/cache'
 
 export async function processCreateChannelPost({
   signer,
@@ -20,7 +21,6 @@ export async function processCreateChannelPost({
   name: string
   description: string
   rid: bigint
-  pathsToRevalidate?: string[]
   privySignMessage: (
     message: string,
     uiOptions?: SignMessageModalUIOptions | undefined,
@@ -69,7 +69,7 @@ export async function processCreateChannelPost({
       const txnInclusion = await getTxnInclusion(transactionHash)
 
       if (txnInclusion) {
-        revalidationHelper(['/'])
+        revalidatePath('/', 'layout')
         return true
       } else {
         console.error('Transaction was not successfully included.')

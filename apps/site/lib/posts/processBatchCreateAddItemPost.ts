@@ -11,20 +11,19 @@ import {
   type Message,
   type Post
 } from 'scrypt'
+import { revalidatePath } from 'next/cache'
 
 export async function processBatchCreateAddItemPost({
   signer,
   rid,
   itemUri,
   channelId,
-  pathsToRevalidate,
   privySignMessage,
 }: {
   signer: Hex
   rid: bigint
   itemUri: string
   channelId: string
-  pathsToRevalidate: string[]
   privySignMessage: (
     message: string,
     uiOptions?: SignMessageModalUIOptions | undefined,
@@ -127,7 +126,7 @@ export async function processBatchCreateAddItemPost({
       const txnInclusion = await getTxnInclusion(transactionHash)
 
       if (txnInclusion) {
-        revalidationHelper(pathsToRevalidate)
+        revalidatePath('/', 'layout')
         return true
       } else {
         console.error('Transaction was not successfully included.')

@@ -77,7 +77,6 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
         name: data.name,
         description: data.description || '',
         rid: targetUserId,
-        pathsToRevalidate: ['/'],
         privySignMessage: signMessage,
       })
       setDialogOpen(false)
