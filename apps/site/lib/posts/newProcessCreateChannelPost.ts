@@ -1,12 +1,14 @@
 import { SignMessageModalUIOptions } from '@privy-io/react-auth'
 import { Hash, Hex } from 'viem'
-import { newRelayPost } from '@/lib'
+import { relayPost } from '@/lib'
+import { getTxnInclusion } from '@/lib'
 import {
   getExpiration,
   remove0xPrefix,
   generateMessageHash,
   encodeCreateChannelMsgBody,
 } from 'scrypt'
+
 
 export async function newProcessCreateChannelPost({
   signer,
@@ -46,18 +48,45 @@ export async function newProcessCreateChannelPost({
   // const sig = await privySignMessage(remove0xPrefix({bytes32Hash: postHash}))
   const sig = (await privySignMessage(msgHashForSig)) as Hash
   // pass postInputs into the createPost server action
-  const relaySuccess = await newRelayPost({
+
+  const post = {
     signer: signer,
-    msgRid: rid,
-    msgTimestamp: msgTimestamp,
-    msgType: msgType,
-    msgBody: msgBody.msgBody,
+    message: {
+      rid: rid,
+      timestamp: msgTimestamp,
+      msgType: msgType,
+      msgBody: msgBody.msgBody,
+    },
     hashType: 1,
     hash: messageHash,
     sigType: 1,
     sig: sig,
-    pathsToRevalidate: ['/'],
-  })
-  // return relay success boolean value
-  return relaySuccess
+  }
+  
+  try {
+    const relayResponse = await relayPost(post)
+
+    if (relayResponse.success) {
+      console.log("Channel created with hash:", relayResponse.hash)
+
+      const transactionHash = relayResponse.hash
+      console.log("Transaction Hash:", transactionHash)
+  
+      const txnInclusion = await getTxnInclusion(transactionHash)
+
+      if (txnInclusion) {
+        return true 
+        
+      } else {
+        console.error("Transaction was not included successfully.")
+        return false 
+      }
+    } else {
+      console.error("Relay Post was not successful.")
+      return false 
+    }
+  } catch (error) {
+    console.error("Error relaying post:", error)
+    return false 
+  } 
 }

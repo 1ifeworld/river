@@ -107,15 +107,14 @@ export async function processBatchCreateAddItemPost({
   console.log('site site item cid: ', itemCid)
 
   /*
-        ADD ITEM POST
-    */
+  ADD ITEM POST
+  */
   const addItemMsgType: number = 5
   const addItemMsgBody = encodeAddItemMsgBody({
     itemCid: itemCid,
     channelCid: channelId,
   })
   if (!addItemMsgBody?.msgBody) return false
-  // generate hash to include in post
   const addItemMessageHash = generateMessageHash({
     rid: rid,
     timestamp: timestamp,
@@ -125,7 +124,6 @@ export async function processBatchCreateAddItemPost({
   const addItemMsgHashForSig = remove0xPrefix({
     bytes32Hash: addItemMessageHash,
   })
-  // Get signature from user over signed hash of encodePacked version + expiration + messages
   const addItemSig = (await privySignMessage(addItemMsgHashForSig)) as Hash
   const addItemPost: Post = {
     signer: signer,
@@ -152,18 +150,18 @@ export async function processBatchCreateAddItemPost({
   
       if (txnInclusion) {
         pathsToRevalidate.forEach((path) => revalidatePath(path))
-        return true // Indicates success all the way through
+        return true 
         
       } else {
         console.error("Transaction was not included successfully.")
-        return false // Indicates the transaction hash was not included as expected
+        return false 
       }
     } else {
-      console.error("Relay was not successful.")
-      return false // Relay itself was not successful
+      console.error("Relay Post Batch was not successful.")
+      return false 
     }
   } catch (error) {
     console.error("Error relaying post batch:", error)
-    return false // Catch any error during the process and indicate failure
+    return false 
   } 
 }

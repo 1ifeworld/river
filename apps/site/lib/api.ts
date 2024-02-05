@@ -1,19 +1,41 @@
 import { NextRequest } from "next/server"
+import { Hex } from "viem"
 
 type Message = {
   rid: bigint,
   timestamp: bigint,
   msgType: number,
-  msgBody: string, // Assuming Hash is a string type adjust as necessary
+  msgBody: string, 
 }
 
 type Post = {
-  signer: string, // Assuming Hex is a string type adjust as necessary
+  signer: string, 
   message: Message,
   hashType: number,
   hash: string,
   sigType: number,
   sig: string,
+}
+
+type User = {
+  to: string
+  recovery: string
+  deadline: number | string | bigint
+  sig: string
+}
+
+/* API ROUTES */
+
+export async function relayPost(post: Post) {
+  const res = await fetch('/api/post', {
+    method: 'POST',
+    body: JSON.stringify(post),
+  })
+  if (!res.ok) {
+    console.error('Could not relay post batch txn', await res.text())
+    throw new Error('Could not relay post batch txn')
+  }
+  return res.json()
 }
 
 export async function relayPostBatch(postArray: Post[]) {
@@ -27,6 +49,28 @@ export async function relayPostBatch(postArray: Post[]) {
   }
   return res.json()
 }
+export async function relayRegisterFor(user: User): Promise<{success: boolean, hash?: string, rid?: string, error?: string}> {
+  try {
+    const response = await fetch('/api/registerFor', {
+      method: 'POST',
+      body: JSON.stringify(user),
+    })
+    if (!response.ok) throw new Error('Transaction failed')
+
+    const data = await response.json()
+    // Removed erroneous else block
+    if (data.success) {
+      return { success: true, hash: data.hash, rid: data.rid } // Assuming the backend returns `rid` along with success
+    } else {
+      throw new Error(data.error || 'Transaction not included')
+    }
+  } catch (error) {
+    console.error('relayRegisterFor error:', error)
+    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' }
+  }
+}
+
+/* MEDIA SERVICE */
 
 export async function w3sUpload(body: FormData, authToken: string | null) {
   const res = await fetch('https://river-media-service.up.railway.app/w3s', {
