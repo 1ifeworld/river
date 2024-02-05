@@ -21,13 +21,7 @@ type User = {
   sig: string
 }
 
-/* API ROUTES */
-
-// This is in to help with serialization of bigints during json stringify
-// @ts-ignore
-BigInt.prototype.toJSON = function () {
-  return this.toString()
-}    
+/* API ROUTES */ 
 
 export async function relayPost(post: Post) {
   const res = await fetch('/api/post', {

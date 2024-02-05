@@ -55,9 +55,9 @@ export async function processBatchCreateAddItemPost({
   if (!createItemMsgBody?.msgBody) return false
   // generate hash to include in post
   const createItemMessageHash = generateMessageHash({
-    rid: rid,
-    timestamp: timestamp,
-    msgType: createItemMsgType,
+    rid: BigInt(rid),
+    timestamp: BigInt(timestamp),
+    msgType: createItemMsgType as number,
     msgBody: createItemMsgBody.msgBody,
   })
   const createItemMsgHashForSig = remove0xPrefix({
@@ -71,8 +71,8 @@ export async function processBatchCreateAddItemPost({
     signer: signer,
     message: {
       rid: BigInt(rid),
-      timestamp: timestamp,
-      msgType: createItemMsgType,
+      timestamp: BigInt(timestamp),
+      msgType: createItemMsgType as number,
       msgBody: createItemMsgBody.msgBody,
     },
     hashType: 1,
@@ -80,7 +80,7 @@ export async function processBatchCreateAddItemPost({
     sigType: 1,
     sig: createItemSig,
   }
-  console.log("credate item message in site: ", createItemPost.message)
+  // Create itemCid using canonical types
   const itemCid = (await messageToCid(createItemPost.message)).cid.toString()  
   /*
   ADD ITEM POST
@@ -90,13 +90,11 @@ export async function processBatchCreateAddItemPost({
     itemCid: itemCid,
     channelCid: channelId,
   })
-  console.log("item cid: ", itemCid)
-  console.log("channel cid: ", channelId)
   if (!addItemMsgBody?.msgBody) return false
   const addItemMessageHash = generateMessageHash({
-    rid: rid,
-    timestamp: timestamp,
-    msgType: addItemMsgType,
+    rid: BigInt(rid),
+    timestamp: BigInt(timestamp),
+    msgType: addItemMsgType as number,
     msgBody: addItemMsgBody.msgBody,
   })
   const addItemMsgHashForSig = remove0xPrefix({
@@ -106,22 +104,22 @@ export async function processBatchCreateAddItemPost({
   const addItemPost: Post = {
     signer: signer,
     message: {
-      rid: rid,
-      timestamp: timestamp,
-      msgType: addItemMsgType,
+      rid: BigInt(rid),
+      timestamp: BigInt(timestamp),
+      msgType: addItemMsgType as number,
       msgBody: addItemMsgBody.msgBody,
     },
-    hashType: 1,
+    hashType: 1 as number,
     hash: addItemMessageHash,
-    sigType: 1,
+    sigType: 1 as number,
     sig: addItemSig,
   }
 
   try {  
-  // @ts-ignore
-  BigInt.prototype.toJSON = function () {
-    return this.toString()
-  }          
+    // @ts-ignore
+    BigInt.prototype.toJSON = function () {
+      return this.toString()
+    }          
     const postBatchResponse = await relayPostBatch([
       createItemPost,
       addItemPost,

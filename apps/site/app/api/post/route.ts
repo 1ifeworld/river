@@ -6,8 +6,7 @@ import { NextRequest } from 'next/server'
 import { type Hex } from 'viem'
 
 export async function POST(req: NextRequest) {
-  const post = await req.blob()
-  console.log("incoming post for route.ts, issa blob", post )
+  const post = await req.json()
 
   const credentials = {
     relayerApiKey: process.env.NONCE_API_UNO,
