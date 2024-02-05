@@ -1,6 +1,3 @@
-import { NextRequest } from "next/server"
-import { Hex } from "viem"
-
 type Message = {
   rid: bigint,
   timestamp: bigint,
@@ -58,9 +55,8 @@ export async function relayRegisterFor(user: User): Promise<{success: boolean, h
     if (!response.ok) throw new Error('Transaction failed')
 
     const data = await response.json()
-    // Removed erroneous else block
     if (data.success) {
-      return { success: true, hash: data.hash, rid: data.rid } // Assuming the backend returns `rid` along with success
+      return { success: true, hash: data.hash, rid: data.rid } 
     } else {
       throw new Error(data.error || 'Transaction not included')
     }

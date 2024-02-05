@@ -47,10 +47,7 @@ export async function newProcessCreateChannelPost({
     msgBody: msgBody.msgBody,
   })
   const msgHashForSig = remove0xPrefix({ bytes32Hash: messageHash })
-  // Get signature from user over signed hash of encodePacked version + expiration + messages
-  // const sig = await privySignMessage(remove0xPrefix({bytes32Hash: postHash}))
   const sig = (await privySignMessage(msgHashForSig)) as Hash
-  // pass postInputs into the createPost server action
 
   const post = {
     signer: signer,
