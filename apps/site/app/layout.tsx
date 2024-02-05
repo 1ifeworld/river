@@ -1,7 +1,7 @@
 import { Header, ThemeToggle } from '@/client'
 import { Analytics } from '@vercel/analytics/react'
 import type { Metadata } from 'next'
-import { Toaster } from 'sonner'
+import { Toaster } from '@/design-system'
 import '../styles/globals.css'
 import { sfMono } from './fonts/fonts'
 import { Providers } from './providers/providers'

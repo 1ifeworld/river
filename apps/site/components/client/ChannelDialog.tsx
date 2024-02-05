@@ -19,7 +19,6 @@ import {
   Separator,
   Stack,
   Textarea,
-  Toast,
   Typography,
   Loading,
 } from '@/design-system'
@@ -27,11 +26,8 @@ import {
   type NewChannelSchemaValues,
   newChannelSchema,
   processCreateChannelPost,
-  sendToDb,
-  w3sUpload,
 } from '@/lib'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { revalidatePath } from 'next/cache'
 import * as React from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -83,17 +79,17 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
       setDialogOpen(false)
       if (txSuccess) {
         // Render a toast with the name of the channel
-        toast.custom((t) => (
-          <Toast>
+        toast(
+          <>
             {'Successfully created '}
             <span className="font-bold">{data.name}</span>
-          </Toast>
-        ))
+          </>,
+        )
         // Reset form fields to their initial values
         form.reset()
       } else {
         // Render a toast with error message
-        toast.custom((t) => <Toast>{'Error creating channel'}</Toast>)
+        toast('Error creating channel')
       }
     }
   }
