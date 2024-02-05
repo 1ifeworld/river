@@ -1,0 +1,1 @@
+{"abi":[],"bytecode":{"object":"0x","linkReferences":{}},"deployedBytecode":{"object":"0x","linkReferences":{}},"ast":{"absolutePath":"test/PostGateway.t.sol","id":48174,"exportedSymbols":{},"nodeType":"SourceUnit","src":"32:4948:55","nodes":[{"id":48173,"nodeType":"PragmaDirective","src":"32:23:55","nodes":[],"literals":["solidity","0.8",".23"]}],"license":"MIT"},"id":55}

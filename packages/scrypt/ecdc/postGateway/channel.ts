@@ -5,18 +5,17 @@ import { postGatewayABI } from "../../abi";
 export async function encodeCreateChannelMsgBody({
   name,
   description,
-  admins,
   members,
+  roles,
 }: {
   name: string;
   description: string;
-  admins: bigint[];
   members: bigint[];
+  roles: bigint[];
 }): Promise<{ msgBody: Hash; } | null>  {
+
   try {
-
- const encodedCreateChannelStruct = encodeAbiParameters(postGatewayABI[4].outputs, [
-
+    const encodedCreateChannelStruct = encodeAbiParameters(postGatewayABI[4].outputs, [
       {
         data: {
           dataType: 1,
@@ -32,10 +31,10 @@ export async function encodeCreateChannelMsgBody({
           accessType: 1,
           contents: encodeAbiParameters(
             [
-              { name: "admins", type: "uint256[]" },
               { name: "members", type: "uint256[]" },
+              { name: "roles", type: "uint256[]" },
             ],
-            [admins, members]
+            [members, roles]
           ),
         },
       },

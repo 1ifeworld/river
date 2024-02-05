@@ -1,991 +1,885 @@
-import type { DocumentNode } from 'graphql/language/ast'
-import { GraphQLClient } from 'graphql-request'
-import { GraphQLClientRequestHeaders } from 'graphql-request/build/cjs/types'
-import gql from 'graphql-tag'
-export type Maybe<T> = T | null
-export type InputMaybe<T> = Maybe<T>
-export type Exact<T extends { [key: string]: unknown }> = {
-  [K in keyof T]: T[K]
-}
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]?: Maybe<T[SubKey]>
-}
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]: Maybe<T[SubKey]>
-}
-export type MakeEmpty<
-  T extends { [key: string]: unknown },
-  K extends keyof T,
-> = { [_ in K]?: never }
-export type Incremental<T> =
-  | T
-  | {
-      [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never
-    }
+import type { DocumentNode } from "graphql/language/ast";
+import { GraphQLClient } from 'graphql-request';
+import { GraphQLClientRequestHeaders } from 'graphql-request/build/cjs/types';
+import gql from 'graphql-tag';
+export type Maybe<T> = T | null;
+export type InputMaybe<T> = Maybe<T>;
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string }
-  String: { input: string; output: string }
-  Boolean: { input: boolean; output: boolean }
-  Int: { input: number; output: number }
-  Float: { input: number; output: number }
-  BigInt: { input: any; output: any }
-}
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
+  BigInt: { input: any; output: any; }
+};
 
 export type Adds = {
-  __typename?: 'Adds'
-  addedBy: Scalars['BigInt']['output']
-  channel: Channel
-  channelId: Scalars['String']['output']
-  id: Scalars['String']['output']
-  item: Item
-  itemId: Scalars['String']['output']
-  message: Message
-  messageId: Scalars['String']['output']
-  timestamp: Scalars['BigInt']['output']
-}
+  __typename?: 'Adds';
+  addedBy: User;
+  addedById: Scalars['BigInt']['output'];
+  channel: Channel;
+  channelId: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  item: Item;
+  itemId: Scalars['String']['output'];
+  message: Message;
+  messageId: Scalars['String']['output'];
+  timestamp: Scalars['BigInt']['output'];
+};
 
 export type AddsFilter = {
-  addedBy?: InputMaybe<Scalars['BigInt']['input']>
-  addedBy_gt?: InputMaybe<Scalars['BigInt']['input']>
-  addedBy_gte?: InputMaybe<Scalars['BigInt']['input']>
-  addedBy_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  addedBy_lt?: InputMaybe<Scalars['BigInt']['input']>
-  addedBy_lte?: InputMaybe<Scalars['BigInt']['input']>
-  addedBy_not?: InputMaybe<Scalars['BigInt']['input']>
-  addedBy_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  channelId?: InputMaybe<Scalars['String']['input']>
-  channelId_contains?: InputMaybe<Scalars['String']['input']>
-  channelId_ends_with?: InputMaybe<Scalars['String']['input']>
-  channelId_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  channelId_not?: InputMaybe<Scalars['String']['input']>
-  channelId_not_contains?: InputMaybe<Scalars['String']['input']>
-  channelId_not_ends_with?: InputMaybe<Scalars['String']['input']>
-  channelId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  channelId_not_starts_with?: InputMaybe<Scalars['String']['input']>
-  channelId_starts_with?: InputMaybe<Scalars['String']['input']>
-  id?: InputMaybe<Scalars['String']['input']>
-  id_contains?: InputMaybe<Scalars['String']['input']>
-  id_ends_with?: InputMaybe<Scalars['String']['input']>
-  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  id_not?: InputMaybe<Scalars['String']['input']>
-  id_not_contains?: InputMaybe<Scalars['String']['input']>
-  id_not_ends_with?: InputMaybe<Scalars['String']['input']>
-  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  id_not_starts_with?: InputMaybe<Scalars['String']['input']>
-  id_starts_with?: InputMaybe<Scalars['String']['input']>
-  itemId?: InputMaybe<Scalars['String']['input']>
-  itemId_contains?: InputMaybe<Scalars['String']['input']>
-  itemId_ends_with?: InputMaybe<Scalars['String']['input']>
-  itemId_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  itemId_not?: InputMaybe<Scalars['String']['input']>
-  itemId_not_contains?: InputMaybe<Scalars['String']['input']>
-  itemId_not_ends_with?: InputMaybe<Scalars['String']['input']>
-  itemId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  itemId_not_starts_with?: InputMaybe<Scalars['String']['input']>
-  itemId_starts_with?: InputMaybe<Scalars['String']['input']>
-  messageId?: InputMaybe<Scalars['String']['input']>
-  messageId_contains?: InputMaybe<Scalars['String']['input']>
-  messageId_ends_with?: InputMaybe<Scalars['String']['input']>
-  messageId_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  messageId_not?: InputMaybe<Scalars['String']['input']>
-  messageId_not_contains?: InputMaybe<Scalars['String']['input']>
-  messageId_not_ends_with?: InputMaybe<Scalars['String']['input']>
-  messageId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  messageId_not_starts_with?: InputMaybe<Scalars['String']['input']>
-  messageId_starts_with?: InputMaybe<Scalars['String']['input']>
-  timestamp?: InputMaybe<Scalars['BigInt']['input']>
-  timestamp_gt?: InputMaybe<Scalars['BigInt']['input']>
-  timestamp_gte?: InputMaybe<Scalars['BigInt']['input']>
-  timestamp_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  timestamp_lt?: InputMaybe<Scalars['BigInt']['input']>
-  timestamp_lte?: InputMaybe<Scalars['BigInt']['input']>
-  timestamp_not?: InputMaybe<Scalars['BigInt']['input']>
-  timestamp_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-}
+  addedById?: InputMaybe<Scalars['BigInt']['input']>;
+  addedById_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  addedById_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  addedById_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  addedById_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  addedById_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  addedById_not?: InputMaybe<Scalars['BigInt']['input']>;
+  addedById_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  channelId?: InputMaybe<Scalars['String']['input']>;
+  channelId_contains?: InputMaybe<Scalars['String']['input']>;
+  channelId_ends_with?: InputMaybe<Scalars['String']['input']>;
+  channelId_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  channelId_not?: InputMaybe<Scalars['String']['input']>;
+  channelId_not_contains?: InputMaybe<Scalars['String']['input']>;
+  channelId_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  channelId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  channelId_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  channelId_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  id_contains?: InputMaybe<Scalars['String']['input']>;
+  id_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains?: InputMaybe<Scalars['String']['input']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id_starts_with?: InputMaybe<Scalars['String']['input']>;
+  itemId?: InputMaybe<Scalars['String']['input']>;
+  itemId_contains?: InputMaybe<Scalars['String']['input']>;
+  itemId_ends_with?: InputMaybe<Scalars['String']['input']>;
+  itemId_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  itemId_not?: InputMaybe<Scalars['String']['input']>;
+  itemId_not_contains?: InputMaybe<Scalars['String']['input']>;
+  itemId_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  itemId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  itemId_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  itemId_starts_with?: InputMaybe<Scalars['String']['input']>;
+  messageId?: InputMaybe<Scalars['String']['input']>;
+  messageId_contains?: InputMaybe<Scalars['String']['input']>;
+  messageId_ends_with?: InputMaybe<Scalars['String']['input']>;
+  messageId_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  messageId_not?: InputMaybe<Scalars['String']['input']>;
+  messageId_not_contains?: InputMaybe<Scalars['String']['input']>;
+  messageId_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  messageId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  messageId_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  messageId_starts_with?: InputMaybe<Scalars['String']['input']>;
+  timestamp?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  timestamp_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_not?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+};
 
 export type AddsPage = {
-  __typename?: 'AddsPage'
-  items?: Maybe<Array<Adds>>
-  pageInfo?: Maybe<PageInfo>
-}
+  __typename?: 'AddsPage';
+  items?: Maybe<Array<Adds>>;
+  pageInfo?: Maybe<PageInfo>;
+};
 
 export type Channel = {
-  __typename?: 'Channel'
-  adds?: Maybe<AddsPage>
-  createdBy: Scalars['BigInt']['output']
-  description: Scalars['String']['output']
-  id: Scalars['String']['output']
-  message: Message
-  messageId: Scalars['String']['output']
-  name: Scalars['String']['output']
-  roles?: Maybe<ChannelRolesPage>
-  timestamp: Scalars['BigInt']['output']
-  uri: Scalars['String']['output']
-}
+  __typename?: 'Channel';
+  adds?: Maybe<AddsPage>;
+  createdBy: User;
+  createdById: Scalars['BigInt']['output'];
+  description: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  message: Message;
+  messageId: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  roles?: Maybe<ChannelRolesPage>;
+  timestamp: Scalars['BigInt']['output'];
+  uri: Scalars['String']['output'];
+};
+
 
 export type ChannelAddsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>
-  before?: InputMaybe<Scalars['String']['input']>
-  limit?: InputMaybe<Scalars['Int']['input']>
-  orderBy?: InputMaybe<Scalars['String']['input']>
-  orderDirection?: InputMaybe<Scalars['String']['input']>
-  timestamp?: InputMaybe<Scalars['Int']['input']>
-}
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+};
+
 
 export type ChannelRolesArgs = {
-  after?: InputMaybe<Scalars['String']['input']>
-  before?: InputMaybe<Scalars['String']['input']>
-  limit?: InputMaybe<Scalars['Int']['input']>
-  orderBy?: InputMaybe<Scalars['String']['input']>
-  orderDirection?: InputMaybe<Scalars['String']['input']>
-  timestamp?: InputMaybe<Scalars['Int']['input']>
-}
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+};
 
 export type ChannelFilter = {
-  createdBy?: InputMaybe<Scalars['BigInt']['input']>
-  createdBy_gt?: InputMaybe<Scalars['BigInt']['input']>
-  createdBy_gte?: InputMaybe<Scalars['BigInt']['input']>
-  createdBy_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  createdBy_lt?: InputMaybe<Scalars['BigInt']['input']>
-  createdBy_lte?: InputMaybe<Scalars['BigInt']['input']>
-  createdBy_not?: InputMaybe<Scalars['BigInt']['input']>
-  createdBy_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  description?: InputMaybe<Scalars['String']['input']>
-  description_contains?: InputMaybe<Scalars['String']['input']>
-  description_ends_with?: InputMaybe<Scalars['String']['input']>
-  description_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  description_not?: InputMaybe<Scalars['String']['input']>
-  description_not_contains?: InputMaybe<Scalars['String']['input']>
-  description_not_ends_with?: InputMaybe<Scalars['String']['input']>
-  description_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  description_not_starts_with?: InputMaybe<Scalars['String']['input']>
-  description_starts_with?: InputMaybe<Scalars['String']['input']>
-  id?: InputMaybe<Scalars['String']['input']>
-  id_contains?: InputMaybe<Scalars['String']['input']>
-  id_ends_with?: InputMaybe<Scalars['String']['input']>
-  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  id_not?: InputMaybe<Scalars['String']['input']>
-  id_not_contains?: InputMaybe<Scalars['String']['input']>
-  id_not_ends_with?: InputMaybe<Scalars['String']['input']>
-  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  id_not_starts_with?: InputMaybe<Scalars['String']['input']>
-  id_starts_with?: InputMaybe<Scalars['String']['input']>
-  messageId?: InputMaybe<Scalars['String']['input']>
-  messageId_contains?: InputMaybe<Scalars['String']['input']>
-  messageId_ends_with?: InputMaybe<Scalars['String']['input']>
-  messageId_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  messageId_not?: InputMaybe<Scalars['String']['input']>
-  messageId_not_contains?: InputMaybe<Scalars['String']['input']>
-  messageId_not_ends_with?: InputMaybe<Scalars['String']['input']>
-  messageId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  messageId_not_starts_with?: InputMaybe<Scalars['String']['input']>
-  messageId_starts_with?: InputMaybe<Scalars['String']['input']>
-  name?: InputMaybe<Scalars['String']['input']>
-  name_contains?: InputMaybe<Scalars['String']['input']>
-  name_ends_with?: InputMaybe<Scalars['String']['input']>
-  name_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  name_not?: InputMaybe<Scalars['String']['input']>
-  name_not_contains?: InputMaybe<Scalars['String']['input']>
-  name_not_ends_with?: InputMaybe<Scalars['String']['input']>
-  name_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  name_not_starts_with?: InputMaybe<Scalars['String']['input']>
-  name_starts_with?: InputMaybe<Scalars['String']['input']>
-  timestamp?: InputMaybe<Scalars['BigInt']['input']>
-  timestamp_gt?: InputMaybe<Scalars['BigInt']['input']>
-  timestamp_gte?: InputMaybe<Scalars['BigInt']['input']>
-  timestamp_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  timestamp_lt?: InputMaybe<Scalars['BigInt']['input']>
-  timestamp_lte?: InputMaybe<Scalars['BigInt']['input']>
-  timestamp_not?: InputMaybe<Scalars['BigInt']['input']>
-  timestamp_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  uri?: InputMaybe<Scalars['String']['input']>
-  uri_contains?: InputMaybe<Scalars['String']['input']>
-  uri_ends_with?: InputMaybe<Scalars['String']['input']>
-  uri_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  uri_not?: InputMaybe<Scalars['String']['input']>
-  uri_not_contains?: InputMaybe<Scalars['String']['input']>
-  uri_not_ends_with?: InputMaybe<Scalars['String']['input']>
-  uri_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  uri_not_starts_with?: InputMaybe<Scalars['String']['input']>
-  uri_starts_with?: InputMaybe<Scalars['String']['input']>
-}
+  createdById?: InputMaybe<Scalars['BigInt']['input']>;
+  createdById_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  createdById_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  createdById_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  createdById_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  createdById_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  createdById_not?: InputMaybe<Scalars['BigInt']['input']>;
+  createdById_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  description_contains?: InputMaybe<Scalars['String']['input']>;
+  description_ends_with?: InputMaybe<Scalars['String']['input']>;
+  description_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  description_not?: InputMaybe<Scalars['String']['input']>;
+  description_not_contains?: InputMaybe<Scalars['String']['input']>;
+  description_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  description_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  description_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  description_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  id_contains?: InputMaybe<Scalars['String']['input']>;
+  id_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains?: InputMaybe<Scalars['String']['input']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id_starts_with?: InputMaybe<Scalars['String']['input']>;
+  messageId?: InputMaybe<Scalars['String']['input']>;
+  messageId_contains?: InputMaybe<Scalars['String']['input']>;
+  messageId_ends_with?: InputMaybe<Scalars['String']['input']>;
+  messageId_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  messageId_not?: InputMaybe<Scalars['String']['input']>;
+  messageId_not_contains?: InputMaybe<Scalars['String']['input']>;
+  messageId_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  messageId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  messageId_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  messageId_starts_with?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_contains?: InputMaybe<Scalars['String']['input']>;
+  name_ends_with?: InputMaybe<Scalars['String']['input']>;
+  name_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  name_not?: InputMaybe<Scalars['String']['input']>;
+  name_not_contains?: InputMaybe<Scalars['String']['input']>;
+  name_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  name_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  name_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  name_starts_with?: InputMaybe<Scalars['String']['input']>;
+  timestamp?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  timestamp_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_not?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  uri?: InputMaybe<Scalars['String']['input']>;
+  uri_contains?: InputMaybe<Scalars['String']['input']>;
+  uri_ends_with?: InputMaybe<Scalars['String']['input']>;
+  uri_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  uri_not?: InputMaybe<Scalars['String']['input']>;
+  uri_not_contains?: InputMaybe<Scalars['String']['input']>;
+  uri_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  uri_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  uri_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  uri_starts_with?: InputMaybe<Scalars['String']['input']>;
+};
 
 export type ChannelPage = {
-  __typename?: 'ChannelPage'
-  items?: Maybe<Array<Channel>>
-  pageInfo?: Maybe<PageInfo>
-}
+  __typename?: 'ChannelPage';
+  items?: Maybe<Array<Channel>>;
+  pageInfo?: Maybe<PageInfo>;
+};
 
 export type ChannelRoles = {
-  __typename?: 'ChannelRoles'
-  channel: Channel
-  channelId: Scalars['String']['output']
-  id: Scalars['String']['output']
-  rid: Scalars['BigInt']['output']
-  role: Scalars['BigInt']['output']
-  timestamp: Scalars['BigInt']['output']
-}
+  __typename?: 'ChannelRoles';
+  channel: Channel;
+  channelId: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  rid: Scalars['BigInt']['output'];
+  role: Scalars['BigInt']['output'];
+  timestamp: Scalars['BigInt']['output'];
+};
 
 export type ChannelRolesFilter = {
-  channelId?: InputMaybe<Scalars['String']['input']>
-  channelId_contains?: InputMaybe<Scalars['String']['input']>
-  channelId_ends_with?: InputMaybe<Scalars['String']['input']>
-  channelId_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  channelId_not?: InputMaybe<Scalars['String']['input']>
-  channelId_not_contains?: InputMaybe<Scalars['String']['input']>
-  channelId_not_ends_with?: InputMaybe<Scalars['String']['input']>
-  channelId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  channelId_not_starts_with?: InputMaybe<Scalars['String']['input']>
-  channelId_starts_with?: InputMaybe<Scalars['String']['input']>
-  id?: InputMaybe<Scalars['String']['input']>
-  id_contains?: InputMaybe<Scalars['String']['input']>
-  id_ends_with?: InputMaybe<Scalars['String']['input']>
-  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  id_not?: InputMaybe<Scalars['String']['input']>
-  id_not_contains?: InputMaybe<Scalars['String']['input']>
-  id_not_ends_with?: InputMaybe<Scalars['String']['input']>
-  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  id_not_starts_with?: InputMaybe<Scalars['String']['input']>
-  id_starts_with?: InputMaybe<Scalars['String']['input']>
-  rid?: InputMaybe<Scalars['BigInt']['input']>
-  rid_gt?: InputMaybe<Scalars['BigInt']['input']>
-  rid_gte?: InputMaybe<Scalars['BigInt']['input']>
-  rid_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  rid_lt?: InputMaybe<Scalars['BigInt']['input']>
-  rid_lte?: InputMaybe<Scalars['BigInt']['input']>
-  rid_not?: InputMaybe<Scalars['BigInt']['input']>
-  rid_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  role?: InputMaybe<Scalars['BigInt']['input']>
-  role_gt?: InputMaybe<Scalars['BigInt']['input']>
-  role_gte?: InputMaybe<Scalars['BigInt']['input']>
-  role_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  role_lt?: InputMaybe<Scalars['BigInt']['input']>
-  role_lte?: InputMaybe<Scalars['BigInt']['input']>
-  role_not?: InputMaybe<Scalars['BigInt']['input']>
-  role_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  timestamp?: InputMaybe<Scalars['BigInt']['input']>
-  timestamp_gt?: InputMaybe<Scalars['BigInt']['input']>
-  timestamp_gte?: InputMaybe<Scalars['BigInt']['input']>
-  timestamp_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  timestamp_lt?: InputMaybe<Scalars['BigInt']['input']>
-  timestamp_lte?: InputMaybe<Scalars['BigInt']['input']>
-  timestamp_not?: InputMaybe<Scalars['BigInt']['input']>
-  timestamp_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-}
+  channelId?: InputMaybe<Scalars['String']['input']>;
+  channelId_contains?: InputMaybe<Scalars['String']['input']>;
+  channelId_ends_with?: InputMaybe<Scalars['String']['input']>;
+  channelId_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  channelId_not?: InputMaybe<Scalars['String']['input']>;
+  channelId_not_contains?: InputMaybe<Scalars['String']['input']>;
+  channelId_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  channelId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  channelId_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  channelId_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  id_contains?: InputMaybe<Scalars['String']['input']>;
+  id_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains?: InputMaybe<Scalars['String']['input']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id_starts_with?: InputMaybe<Scalars['String']['input']>;
+  rid?: InputMaybe<Scalars['BigInt']['input']>;
+  rid_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  rid_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  rid_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  rid_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  rid_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  rid_not?: InputMaybe<Scalars['BigInt']['input']>;
+  rid_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  role?: InputMaybe<Scalars['BigInt']['input']>;
+  role_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  role_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  role_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  role_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  role_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  role_not?: InputMaybe<Scalars['BigInt']['input']>;
+  role_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  timestamp?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  timestamp_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_not?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+};
 
 export type ChannelRolesPage = {
-  __typename?: 'ChannelRolesPage'
-  items?: Maybe<Array<ChannelRoles>>
-  pageInfo?: Maybe<PageInfo>
-}
+  __typename?: 'ChannelRolesPage';
+  items?: Maybe<Array<ChannelRoles>>;
+  pageInfo?: Maybe<PageInfo>;
+};
 
 export type Item = {
-  __typename?: 'Item'
-  adds?: Maybe<AddsPage>
-  createdby: Scalars['BigInt']['output']
-  id: Scalars['String']['output']
-  message: Message
-  messageId: Scalars['String']['output']
-  timestamp: Scalars['BigInt']['output']
-  uri: Scalars['String']['output']
-}
+  __typename?: 'Item';
+  adds?: Maybe<AddsPage>;
+  createdBy: User;
+  createdById: Scalars['BigInt']['output'];
+  id: Scalars['String']['output'];
+  message: Message;
+  messageId: Scalars['String']['output'];
+  timestamp: Scalars['BigInt']['output'];
+  uri: Scalars['String']['output'];
+};
+
 
 export type ItemAddsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>
-  before?: InputMaybe<Scalars['String']['input']>
-  limit?: InputMaybe<Scalars['Int']['input']>
-  orderBy?: InputMaybe<Scalars['String']['input']>
-  orderDirection?: InputMaybe<Scalars['String']['input']>
-  timestamp?: InputMaybe<Scalars['Int']['input']>
-}
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+};
 
 export type ItemFilter = {
-  createdby?: InputMaybe<Scalars['BigInt']['input']>
-  createdby_gt?: InputMaybe<Scalars['BigInt']['input']>
-  createdby_gte?: InputMaybe<Scalars['BigInt']['input']>
-  createdby_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  createdby_lt?: InputMaybe<Scalars['BigInt']['input']>
-  createdby_lte?: InputMaybe<Scalars['BigInt']['input']>
-  createdby_not?: InputMaybe<Scalars['BigInt']['input']>
-  createdby_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  id?: InputMaybe<Scalars['String']['input']>
-  id_contains?: InputMaybe<Scalars['String']['input']>
-  id_ends_with?: InputMaybe<Scalars['String']['input']>
-  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  id_not?: InputMaybe<Scalars['String']['input']>
-  id_not_contains?: InputMaybe<Scalars['String']['input']>
-  id_not_ends_with?: InputMaybe<Scalars['String']['input']>
-  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  id_not_starts_with?: InputMaybe<Scalars['String']['input']>
-  id_starts_with?: InputMaybe<Scalars['String']['input']>
-  messageId?: InputMaybe<Scalars['String']['input']>
-  messageId_contains?: InputMaybe<Scalars['String']['input']>
-  messageId_ends_with?: InputMaybe<Scalars['String']['input']>
-  messageId_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  messageId_not?: InputMaybe<Scalars['String']['input']>
-  messageId_not_contains?: InputMaybe<Scalars['String']['input']>
-  messageId_not_ends_with?: InputMaybe<Scalars['String']['input']>
-  messageId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  messageId_not_starts_with?: InputMaybe<Scalars['String']['input']>
-  messageId_starts_with?: InputMaybe<Scalars['String']['input']>
-  timestamp?: InputMaybe<Scalars['BigInt']['input']>
-  timestamp_gt?: InputMaybe<Scalars['BigInt']['input']>
-  timestamp_gte?: InputMaybe<Scalars['BigInt']['input']>
-  timestamp_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  timestamp_lt?: InputMaybe<Scalars['BigInt']['input']>
-  timestamp_lte?: InputMaybe<Scalars['BigInt']['input']>
-  timestamp_not?: InputMaybe<Scalars['BigInt']['input']>
-  timestamp_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  uri?: InputMaybe<Scalars['String']['input']>
-  uri_contains?: InputMaybe<Scalars['String']['input']>
-  uri_ends_with?: InputMaybe<Scalars['String']['input']>
-  uri_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  uri_not?: InputMaybe<Scalars['String']['input']>
-  uri_not_contains?: InputMaybe<Scalars['String']['input']>
-  uri_not_ends_with?: InputMaybe<Scalars['String']['input']>
-  uri_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  uri_not_starts_with?: InputMaybe<Scalars['String']['input']>
-  uri_starts_with?: InputMaybe<Scalars['String']['input']>
-}
+  createdById?: InputMaybe<Scalars['BigInt']['input']>;
+  createdById_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  createdById_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  createdById_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  createdById_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  createdById_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  createdById_not?: InputMaybe<Scalars['BigInt']['input']>;
+  createdById_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  id_contains?: InputMaybe<Scalars['String']['input']>;
+  id_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains?: InputMaybe<Scalars['String']['input']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id_starts_with?: InputMaybe<Scalars['String']['input']>;
+  messageId?: InputMaybe<Scalars['String']['input']>;
+  messageId_contains?: InputMaybe<Scalars['String']['input']>;
+  messageId_ends_with?: InputMaybe<Scalars['String']['input']>;
+  messageId_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  messageId_not?: InputMaybe<Scalars['String']['input']>;
+  messageId_not_contains?: InputMaybe<Scalars['String']['input']>;
+  messageId_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  messageId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  messageId_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  messageId_starts_with?: InputMaybe<Scalars['String']['input']>;
+  timestamp?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  timestamp_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_not?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  uri?: InputMaybe<Scalars['String']['input']>;
+  uri_contains?: InputMaybe<Scalars['String']['input']>;
+  uri_ends_with?: InputMaybe<Scalars['String']['input']>;
+  uri_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  uri_not?: InputMaybe<Scalars['String']['input']>;
+  uri_not_contains?: InputMaybe<Scalars['String']['input']>;
+  uri_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  uri_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  uri_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  uri_starts_with?: InputMaybe<Scalars['String']['input']>;
+};
 
 export type ItemPage = {
-  __typename?: 'ItemPage'
-  items?: Maybe<Array<Item>>
-  pageInfo?: Maybe<PageInfo>
-}
+  __typename?: 'ItemPage';
+  items?: Maybe<Array<Item>>;
+  pageInfo?: Maybe<PageInfo>;
+};
 
 export type ItemRoles = {
-  __typename?: 'ItemRoles'
-  id: Scalars['String']['output']
-  item: Item
-  itemId: Scalars['String']['output']
-  rid: Scalars['BigInt']['output']
-  role: Scalars['BigInt']['output']
-}
+  __typename?: 'ItemRoles';
+  id: Scalars['String']['output'];
+  item: Item;
+  itemId: Scalars['String']['output'];
+  rid: Scalars['BigInt']['output'];
+  role: Scalars['BigInt']['output'];
+};
 
 export type ItemRolesFilter = {
-  id?: InputMaybe<Scalars['String']['input']>
-  id_contains?: InputMaybe<Scalars['String']['input']>
-  id_ends_with?: InputMaybe<Scalars['String']['input']>
-  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  id_not?: InputMaybe<Scalars['String']['input']>
-  id_not_contains?: InputMaybe<Scalars['String']['input']>
-  id_not_ends_with?: InputMaybe<Scalars['String']['input']>
-  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  id_not_starts_with?: InputMaybe<Scalars['String']['input']>
-  id_starts_with?: InputMaybe<Scalars['String']['input']>
-  itemId?: InputMaybe<Scalars['String']['input']>
-  itemId_contains?: InputMaybe<Scalars['String']['input']>
-  itemId_ends_with?: InputMaybe<Scalars['String']['input']>
-  itemId_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  itemId_not?: InputMaybe<Scalars['String']['input']>
-  itemId_not_contains?: InputMaybe<Scalars['String']['input']>
-  itemId_not_ends_with?: InputMaybe<Scalars['String']['input']>
-  itemId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  itemId_not_starts_with?: InputMaybe<Scalars['String']['input']>
-  itemId_starts_with?: InputMaybe<Scalars['String']['input']>
-  rid?: InputMaybe<Scalars['BigInt']['input']>
-  rid_gt?: InputMaybe<Scalars['BigInt']['input']>
-  rid_gte?: InputMaybe<Scalars['BigInt']['input']>
-  rid_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  rid_lt?: InputMaybe<Scalars['BigInt']['input']>
-  rid_lte?: InputMaybe<Scalars['BigInt']['input']>
-  rid_not?: InputMaybe<Scalars['BigInt']['input']>
-  rid_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  role?: InputMaybe<Scalars['BigInt']['input']>
-  role_gt?: InputMaybe<Scalars['BigInt']['input']>
-  role_gte?: InputMaybe<Scalars['BigInt']['input']>
-  role_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  role_lt?: InputMaybe<Scalars['BigInt']['input']>
-  role_lte?: InputMaybe<Scalars['BigInt']['input']>
-  role_not?: InputMaybe<Scalars['BigInt']['input']>
-  role_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-}
+  id?: InputMaybe<Scalars['String']['input']>;
+  id_contains?: InputMaybe<Scalars['String']['input']>;
+  id_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains?: InputMaybe<Scalars['String']['input']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id_starts_with?: InputMaybe<Scalars['String']['input']>;
+  itemId?: InputMaybe<Scalars['String']['input']>;
+  itemId_contains?: InputMaybe<Scalars['String']['input']>;
+  itemId_ends_with?: InputMaybe<Scalars['String']['input']>;
+  itemId_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  itemId_not?: InputMaybe<Scalars['String']['input']>;
+  itemId_not_contains?: InputMaybe<Scalars['String']['input']>;
+  itemId_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  itemId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  itemId_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  itemId_starts_with?: InputMaybe<Scalars['String']['input']>;
+  rid?: InputMaybe<Scalars['BigInt']['input']>;
+  rid_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  rid_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  rid_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  rid_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  rid_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  rid_not?: InputMaybe<Scalars['BigInt']['input']>;
+  rid_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  role?: InputMaybe<Scalars['BigInt']['input']>;
+  role_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  role_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  role_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  role_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  role_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  role_not?: InputMaybe<Scalars['BigInt']['input']>;
+  role_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+};
 
 export type ItemRolesPage = {
-  __typename?: 'ItemRolesPage'
-  items?: Maybe<Array<ItemRoles>>
-  pageInfo?: Maybe<PageInfo>
-}
+  __typename?: 'ItemRolesPage';
+  items?: Maybe<Array<ItemRoles>>;
+  pageInfo?: Maybe<PageInfo>;
+};
 
 export type Message = {
-  __typename?: 'Message'
-  id: Scalars['String']['output']
-  msgBody: Scalars['String']['output']
-  msgType: Scalars['BigInt']['output']
-  rid: Scalars['BigInt']['output']
-  timestamp: Scalars['BigInt']['output']
-}
+  __typename?: 'Message';
+  id: Scalars['String']['output'];
+  msgBody: Scalars['String']['output'];
+  msgType: Scalars['BigInt']['output'];
+  rid: Scalars['BigInt']['output'];
+  timestamp: Scalars['BigInt']['output'];
+};
 
 export type MessageFilter = {
-  id?: InputMaybe<Scalars['String']['input']>
-  id_contains?: InputMaybe<Scalars['String']['input']>
-  id_ends_with?: InputMaybe<Scalars['String']['input']>
-  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  id_not?: InputMaybe<Scalars['String']['input']>
-  id_not_contains?: InputMaybe<Scalars['String']['input']>
-  id_not_ends_with?: InputMaybe<Scalars['String']['input']>
-  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  id_not_starts_with?: InputMaybe<Scalars['String']['input']>
-  id_starts_with?: InputMaybe<Scalars['String']['input']>
-  msgBody?: InputMaybe<Scalars['String']['input']>
-  msgBody_gt?: InputMaybe<Scalars['String']['input']>
-  msgBody_gte?: InputMaybe<Scalars['String']['input']>
-  msgBody_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  msgBody_lt?: InputMaybe<Scalars['String']['input']>
-  msgBody_lte?: InputMaybe<Scalars['String']['input']>
-  msgBody_not?: InputMaybe<Scalars['String']['input']>
-  msgBody_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  msgType?: InputMaybe<Scalars['BigInt']['input']>
-  msgType_gt?: InputMaybe<Scalars['BigInt']['input']>
-  msgType_gte?: InputMaybe<Scalars['BigInt']['input']>
-  msgType_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  msgType_lt?: InputMaybe<Scalars['BigInt']['input']>
-  msgType_lte?: InputMaybe<Scalars['BigInt']['input']>
-  msgType_not?: InputMaybe<Scalars['BigInt']['input']>
-  msgType_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  rid?: InputMaybe<Scalars['BigInt']['input']>
-  rid_gt?: InputMaybe<Scalars['BigInt']['input']>
-  rid_gte?: InputMaybe<Scalars['BigInt']['input']>
-  rid_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  rid_lt?: InputMaybe<Scalars['BigInt']['input']>
-  rid_lte?: InputMaybe<Scalars['BigInt']['input']>
-  rid_not?: InputMaybe<Scalars['BigInt']['input']>
-  rid_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  timestamp?: InputMaybe<Scalars['BigInt']['input']>
-  timestamp_gt?: InputMaybe<Scalars['BigInt']['input']>
-  timestamp_gte?: InputMaybe<Scalars['BigInt']['input']>
-  timestamp_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  timestamp_lt?: InputMaybe<Scalars['BigInt']['input']>
-  timestamp_lte?: InputMaybe<Scalars['BigInt']['input']>
-  timestamp_not?: InputMaybe<Scalars['BigInt']['input']>
-  timestamp_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-}
+  id?: InputMaybe<Scalars['String']['input']>;
+  id_contains?: InputMaybe<Scalars['String']['input']>;
+  id_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains?: InputMaybe<Scalars['String']['input']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id_starts_with?: InputMaybe<Scalars['String']['input']>;
+  msgBody?: InputMaybe<Scalars['String']['input']>;
+  msgBody_gt?: InputMaybe<Scalars['String']['input']>;
+  msgBody_gte?: InputMaybe<Scalars['String']['input']>;
+  msgBody_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  msgBody_lt?: InputMaybe<Scalars['String']['input']>;
+  msgBody_lte?: InputMaybe<Scalars['String']['input']>;
+  msgBody_not?: InputMaybe<Scalars['String']['input']>;
+  msgBody_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  msgType?: InputMaybe<Scalars['BigInt']['input']>;
+  msgType_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  msgType_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  msgType_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  msgType_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  msgType_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  msgType_not?: InputMaybe<Scalars['BigInt']['input']>;
+  msgType_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  rid?: InputMaybe<Scalars['BigInt']['input']>;
+  rid_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  rid_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  rid_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  rid_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  rid_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  rid_not?: InputMaybe<Scalars['BigInt']['input']>;
+  rid_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  timestamp?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  timestamp_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_not?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+};
 
 export type MessagePage = {
-  __typename?: 'MessagePage'
-  items?: Maybe<Array<Message>>
-  pageInfo?: Maybe<PageInfo>
-}
+  __typename?: 'MessagePage';
+  items?: Maybe<Array<Message>>;
+  pageInfo?: Maybe<PageInfo>;
+};
 
 export type PageInfo = {
-  __typename?: 'PageInfo'
-  endCursor?: Maybe<Scalars['String']['output']>
-  hasNextPage: Scalars['Boolean']['output']
-  hasPreviousPage: Scalars['Boolean']['output']
-  startCursor?: Maybe<Scalars['String']['output']>
-}
+  __typename?: 'PageInfo';
+  endCursor?: Maybe<Scalars['String']['output']>;
+  hasNextPage: Scalars['Boolean']['output'];
+  hasPreviousPage: Scalars['Boolean']['output'];
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
 
 export type Post = {
-  __typename?: 'Post'
-  hash: Scalars['String']['output']
-  hashType: Scalars['BigInt']['output']
-  id: Scalars['String']['output']
-  message: Message
-  messageId: Scalars['String']['output']
-  relayer: Scalars['String']['output']
-  sig: Scalars['String']['output']
-  sigType: Scalars['BigInt']['output']
-  signer: Scalars['String']['output']
-}
+  __typename?: 'Post';
+  hash: Scalars['String']['output'];
+  hashType: Scalars['BigInt']['output'];
+  id: Scalars['String']['output'];
+  message: Message;
+  messageId: Scalars['String']['output'];
+  relayer: Scalars['String']['output'];
+  sig: Scalars['String']['output'];
+  sigType: Scalars['BigInt']['output'];
+  signer: Scalars['String']['output'];
+};
 
 export type PostFilter = {
-  hash?: InputMaybe<Scalars['String']['input']>
-  hashType?: InputMaybe<Scalars['BigInt']['input']>
-  hashType_gt?: InputMaybe<Scalars['BigInt']['input']>
-  hashType_gte?: InputMaybe<Scalars['BigInt']['input']>
-  hashType_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  hashType_lt?: InputMaybe<Scalars['BigInt']['input']>
-  hashType_lte?: InputMaybe<Scalars['BigInt']['input']>
-  hashType_not?: InputMaybe<Scalars['BigInt']['input']>
-  hashType_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  hash_gt?: InputMaybe<Scalars['String']['input']>
-  hash_gte?: InputMaybe<Scalars['String']['input']>
-  hash_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  hash_lt?: InputMaybe<Scalars['String']['input']>
-  hash_lte?: InputMaybe<Scalars['String']['input']>
-  hash_not?: InputMaybe<Scalars['String']['input']>
-  hash_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  id?: InputMaybe<Scalars['String']['input']>
-  id_contains?: InputMaybe<Scalars['String']['input']>
-  id_ends_with?: InputMaybe<Scalars['String']['input']>
-  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  id_not?: InputMaybe<Scalars['String']['input']>
-  id_not_contains?: InputMaybe<Scalars['String']['input']>
-  id_not_ends_with?: InputMaybe<Scalars['String']['input']>
-  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  id_not_starts_with?: InputMaybe<Scalars['String']['input']>
-  id_starts_with?: InputMaybe<Scalars['String']['input']>
-  messageId?: InputMaybe<Scalars['String']['input']>
-  messageId_contains?: InputMaybe<Scalars['String']['input']>
-  messageId_ends_with?: InputMaybe<Scalars['String']['input']>
-  messageId_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  messageId_not?: InputMaybe<Scalars['String']['input']>
-  messageId_not_contains?: InputMaybe<Scalars['String']['input']>
-  messageId_not_ends_with?: InputMaybe<Scalars['String']['input']>
-  messageId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  messageId_not_starts_with?: InputMaybe<Scalars['String']['input']>
-  messageId_starts_with?: InputMaybe<Scalars['String']['input']>
-  relayer?: InputMaybe<Scalars['String']['input']>
-  relayer_gt?: InputMaybe<Scalars['String']['input']>
-  relayer_gte?: InputMaybe<Scalars['String']['input']>
-  relayer_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  relayer_lt?: InputMaybe<Scalars['String']['input']>
-  relayer_lte?: InputMaybe<Scalars['String']['input']>
-  relayer_not?: InputMaybe<Scalars['String']['input']>
-  relayer_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  sig?: InputMaybe<Scalars['String']['input']>
-  sigType?: InputMaybe<Scalars['BigInt']['input']>
-  sigType_gt?: InputMaybe<Scalars['BigInt']['input']>
-  sigType_gte?: InputMaybe<Scalars['BigInt']['input']>
-  sigType_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  sigType_lt?: InputMaybe<Scalars['BigInt']['input']>
-  sigType_lte?: InputMaybe<Scalars['BigInt']['input']>
-  sigType_not?: InputMaybe<Scalars['BigInt']['input']>
-  sigType_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  sig_gt?: InputMaybe<Scalars['String']['input']>
-  sig_gte?: InputMaybe<Scalars['String']['input']>
-  sig_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  sig_lt?: InputMaybe<Scalars['String']['input']>
-  sig_lte?: InputMaybe<Scalars['String']['input']>
-  sig_not?: InputMaybe<Scalars['String']['input']>
-  sig_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  signer?: InputMaybe<Scalars['String']['input']>
-  signer_gt?: InputMaybe<Scalars['String']['input']>
-  signer_gte?: InputMaybe<Scalars['String']['input']>
-  signer_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  signer_lt?: InputMaybe<Scalars['String']['input']>
-  signer_lte?: InputMaybe<Scalars['String']['input']>
-  signer_not?: InputMaybe<Scalars['String']['input']>
-  signer_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-}
+  hash?: InputMaybe<Scalars['String']['input']>;
+  hashType?: InputMaybe<Scalars['BigInt']['input']>;
+  hashType_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  hashType_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  hashType_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  hashType_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  hashType_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  hashType_not?: InputMaybe<Scalars['BigInt']['input']>;
+  hashType_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  hash_gt?: InputMaybe<Scalars['String']['input']>;
+  hash_gte?: InputMaybe<Scalars['String']['input']>;
+  hash_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  hash_lt?: InputMaybe<Scalars['String']['input']>;
+  hash_lte?: InputMaybe<Scalars['String']['input']>;
+  hash_not?: InputMaybe<Scalars['String']['input']>;
+  hash_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  id_contains?: InputMaybe<Scalars['String']['input']>;
+  id_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains?: InputMaybe<Scalars['String']['input']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id_starts_with?: InputMaybe<Scalars['String']['input']>;
+  messageId?: InputMaybe<Scalars['String']['input']>;
+  messageId_contains?: InputMaybe<Scalars['String']['input']>;
+  messageId_ends_with?: InputMaybe<Scalars['String']['input']>;
+  messageId_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  messageId_not?: InputMaybe<Scalars['String']['input']>;
+  messageId_not_contains?: InputMaybe<Scalars['String']['input']>;
+  messageId_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  messageId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  messageId_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  messageId_starts_with?: InputMaybe<Scalars['String']['input']>;
+  relayer?: InputMaybe<Scalars['String']['input']>;
+  relayer_gt?: InputMaybe<Scalars['String']['input']>;
+  relayer_gte?: InputMaybe<Scalars['String']['input']>;
+  relayer_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  relayer_lt?: InputMaybe<Scalars['String']['input']>;
+  relayer_lte?: InputMaybe<Scalars['String']['input']>;
+  relayer_not?: InputMaybe<Scalars['String']['input']>;
+  relayer_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  sig?: InputMaybe<Scalars['String']['input']>;
+  sigType?: InputMaybe<Scalars['BigInt']['input']>;
+  sigType_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  sigType_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  sigType_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  sigType_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  sigType_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  sigType_not?: InputMaybe<Scalars['BigInt']['input']>;
+  sigType_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  sig_gt?: InputMaybe<Scalars['String']['input']>;
+  sig_gte?: InputMaybe<Scalars['String']['input']>;
+  sig_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  sig_lt?: InputMaybe<Scalars['String']['input']>;
+  sig_lte?: InputMaybe<Scalars['String']['input']>;
+  sig_not?: InputMaybe<Scalars['String']['input']>;
+  sig_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  signer?: InputMaybe<Scalars['String']['input']>;
+  signer_gt?: InputMaybe<Scalars['String']['input']>;
+  signer_gte?: InputMaybe<Scalars['String']['input']>;
+  signer_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  signer_lt?: InputMaybe<Scalars['String']['input']>;
+  signer_lte?: InputMaybe<Scalars['String']['input']>;
+  signer_not?: InputMaybe<Scalars['String']['input']>;
+  signer_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+};
 
 export type PostPage = {
-  __typename?: 'PostPage'
-  items?: Maybe<Array<Post>>
-  pageInfo?: Maybe<PageInfo>
-}
+  __typename?: 'PostPage';
+  items?: Maybe<Array<Post>>;
+  pageInfo?: Maybe<PageInfo>;
+};
 
 export type Query = {
-  __typename?: 'Query'
-  adds?: Maybe<Adds>
-  addss?: Maybe<AddsPage>
-  channel?: Maybe<Channel>
-  channelRoles?: Maybe<ChannelRoles>
-  channelRoless?: Maybe<ChannelRolesPage>
-  channels?: Maybe<ChannelPage>
-  item?: Maybe<Item>
-  itemRoles?: Maybe<ItemRoles>
-  itemRoless?: Maybe<ItemRolesPage>
-  items?: Maybe<ItemPage>
-  message?: Maybe<Message>
-  messages?: Maybe<MessagePage>
-  post?: Maybe<Post>
-  posts?: Maybe<PostPage>
-  txn?: Maybe<Txn>
-  txns?: Maybe<TxnPage>
-  user?: Maybe<User>
-  users?: Maybe<UserPage>
-}
+  __typename?: 'Query';
+  adds?: Maybe<Adds>;
+  addss?: Maybe<AddsPage>;
+  channel?: Maybe<Channel>;
+  channelRoles?: Maybe<ChannelRoles>;
+  channelRoless?: Maybe<ChannelRolesPage>;
+  channels?: Maybe<ChannelPage>;
+  item?: Maybe<Item>;
+  itemRoles?: Maybe<ItemRoles>;
+  itemRoless?: Maybe<ItemRolesPage>;
+  items?: Maybe<ItemPage>;
+  message?: Maybe<Message>;
+  messages?: Maybe<MessagePage>;
+  post?: Maybe<Post>;
+  posts?: Maybe<PostPage>;
+  txn?: Maybe<Txn>;
+  txns?: Maybe<TxnPage>;
+  user?: Maybe<User>;
+  users?: Maybe<UserPage>;
+};
+
 
 export type QueryAddsArgs = {
-  id: Scalars['String']['input']
-  timestamp?: InputMaybe<Scalars['Int']['input']>
-}
+  id: Scalars['String']['input'];
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+};
+
 
 export type QueryAddssArgs = {
-  after?: InputMaybe<Scalars['String']['input']>
-  before?: InputMaybe<Scalars['String']['input']>
-  limit?: InputMaybe<Scalars['Int']['input']>
-  orderBy?: InputMaybe<Scalars['String']['input']>
-  orderDirection?: InputMaybe<Scalars['String']['input']>
-  timestamp?: InputMaybe<Scalars['Int']['input']>
-  where?: InputMaybe<AddsFilter>
-}
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<AddsFilter>;
+};
+
 
 export type QueryChannelArgs = {
-  id: Scalars['String']['input']
-  timestamp?: InputMaybe<Scalars['Int']['input']>
-}
+  id: Scalars['String']['input'];
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+};
+
 
 export type QueryChannelRolesArgs = {
-  id: Scalars['String']['input']
-  timestamp?: InputMaybe<Scalars['Int']['input']>
-}
+  id: Scalars['String']['input'];
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+};
+
 
 export type QueryChannelRolessArgs = {
-  after?: InputMaybe<Scalars['String']['input']>
-  before?: InputMaybe<Scalars['String']['input']>
-  limit?: InputMaybe<Scalars['Int']['input']>
-  orderBy?: InputMaybe<Scalars['String']['input']>
-  orderDirection?: InputMaybe<Scalars['String']['input']>
-  timestamp?: InputMaybe<Scalars['Int']['input']>
-  where?: InputMaybe<ChannelRolesFilter>
-}
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ChannelRolesFilter>;
+};
+
 
 export type QueryChannelsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>
-  before?: InputMaybe<Scalars['String']['input']>
-  limit?: InputMaybe<Scalars['Int']['input']>
-  orderBy?: InputMaybe<Scalars['String']['input']>
-  orderDirection?: InputMaybe<Scalars['String']['input']>
-  timestamp?: InputMaybe<Scalars['Int']['input']>
-  where?: InputMaybe<ChannelFilter>
-}
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ChannelFilter>;
+};
+
 
 export type QueryItemArgs = {
-  id: Scalars['String']['input']
-  timestamp?: InputMaybe<Scalars['Int']['input']>
-}
+  id: Scalars['String']['input'];
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+};
+
 
 export type QueryItemRolesArgs = {
-  id: Scalars['String']['input']
-  timestamp?: InputMaybe<Scalars['Int']['input']>
-}
+  id: Scalars['String']['input'];
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+};
+
 
 export type QueryItemRolessArgs = {
-  after?: InputMaybe<Scalars['String']['input']>
-  before?: InputMaybe<Scalars['String']['input']>
-  limit?: InputMaybe<Scalars['Int']['input']>
-  orderBy?: InputMaybe<Scalars['String']['input']>
-  orderDirection?: InputMaybe<Scalars['String']['input']>
-  timestamp?: InputMaybe<Scalars['Int']['input']>
-  where?: InputMaybe<ItemRolesFilter>
-}
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ItemRolesFilter>;
+};
+
 
 export type QueryItemsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>
-  before?: InputMaybe<Scalars['String']['input']>
-  limit?: InputMaybe<Scalars['Int']['input']>
-  orderBy?: InputMaybe<Scalars['String']['input']>
-  orderDirection?: InputMaybe<Scalars['String']['input']>
-  timestamp?: InputMaybe<Scalars['Int']['input']>
-  where?: InputMaybe<ItemFilter>
-}
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ItemFilter>;
+};
+
 
 export type QueryMessageArgs = {
-  id: Scalars['String']['input']
-  timestamp?: InputMaybe<Scalars['Int']['input']>
-}
+  id: Scalars['String']['input'];
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+};
+
 
 export type QueryMessagesArgs = {
-  after?: InputMaybe<Scalars['String']['input']>
-  before?: InputMaybe<Scalars['String']['input']>
-  limit?: InputMaybe<Scalars['Int']['input']>
-  orderBy?: InputMaybe<Scalars['String']['input']>
-  orderDirection?: InputMaybe<Scalars['String']['input']>
-  timestamp?: InputMaybe<Scalars['Int']['input']>
-  where?: InputMaybe<MessageFilter>
-}
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<MessageFilter>;
+};
+
 
 export type QueryPostArgs = {
-  id: Scalars['String']['input']
-  timestamp?: InputMaybe<Scalars['Int']['input']>
-}
+  id: Scalars['String']['input'];
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+};
+
 
 export type QueryPostsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>
-  before?: InputMaybe<Scalars['String']['input']>
-  limit?: InputMaybe<Scalars['Int']['input']>
-  orderBy?: InputMaybe<Scalars['String']['input']>
-  orderDirection?: InputMaybe<Scalars['String']['input']>
-  timestamp?: InputMaybe<Scalars['Int']['input']>
-  where?: InputMaybe<PostFilter>
-}
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<PostFilter>;
+};
+
 
 export type QueryTxnArgs = {
-  id: Scalars['String']['input']
-  timestamp?: InputMaybe<Scalars['Int']['input']>
-}
+  id: Scalars['String']['input'];
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+};
+
 
 export type QueryTxnsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>
-  before?: InputMaybe<Scalars['String']['input']>
-  limit?: InputMaybe<Scalars['Int']['input']>
-  orderBy?: InputMaybe<Scalars['String']['input']>
-  orderDirection?: InputMaybe<Scalars['String']['input']>
-  timestamp?: InputMaybe<Scalars['Int']['input']>
-  where?: InputMaybe<TxnFilter>
-}
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<TxnFilter>;
+};
+
 
 export type QueryUserArgs = {
-  id: Scalars['BigInt']['input']
-  timestamp?: InputMaybe<Scalars['Int']['input']>
-}
+  id: Scalars['BigInt']['input'];
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+};
+
 
 export type QueryUsersArgs = {
-  after?: InputMaybe<Scalars['String']['input']>
-  before?: InputMaybe<Scalars['String']['input']>
-  limit?: InputMaybe<Scalars['Int']['input']>
-  orderBy?: InputMaybe<Scalars['String']['input']>
-  orderDirection?: InputMaybe<Scalars['String']['input']>
-  timestamp?: InputMaybe<Scalars['Int']['input']>
-  where?: InputMaybe<UserFilter>
-}
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<UserFilter>;
+};
 
 export type Txn = {
-  __typename?: 'Txn'
-  id: Scalars['String']['output']
-}
+  __typename?: 'Txn';
+  id: Scalars['String']['output'];
+};
 
 export type TxnFilter = {
-  id?: InputMaybe<Scalars['String']['input']>
-  id_gt?: InputMaybe<Scalars['String']['input']>
-  id_gte?: InputMaybe<Scalars['String']['input']>
-  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  id_lt?: InputMaybe<Scalars['String']['input']>
-  id_lte?: InputMaybe<Scalars['String']['input']>
-  id_not?: InputMaybe<Scalars['String']['input']>
-  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-}
+  id?: InputMaybe<Scalars['String']['input']>;
+  id_gt?: InputMaybe<Scalars['String']['input']>;
+  id_gte?: InputMaybe<Scalars['String']['input']>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_lt?: InputMaybe<Scalars['String']['input']>;
+  id_lte?: InputMaybe<Scalars['String']['input']>;
+  id_not?: InputMaybe<Scalars['String']['input']>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+};
 
 export type TxnPage = {
-  __typename?: 'TxnPage'
-  items?: Maybe<Array<Txn>>
-  pageInfo?: Maybe<PageInfo>
-}
+  __typename?: 'TxnPage';
+  items?: Maybe<Array<Txn>>;
+  pageInfo?: Maybe<PageInfo>;
+};
 
 export type User = {
-  __typename?: 'User'
-  from: Scalars['String']['output']
-  id: Scalars['BigInt']['output']
-  recovery: Scalars['String']['output']
-  to: Scalars['String']['output']
-  userId: Scalars['BigInt']['output']
-}
+  __typename?: 'User';
+  from: Scalars['String']['output'];
+  id: Scalars['BigInt']['output'];
+  recovery: Scalars['String']['output'];
+  to: Scalars['String']['output'];
+  userId: Scalars['BigInt']['output'];
+};
 
 export type UserFilter = {
-  from?: InputMaybe<Scalars['String']['input']>
-  from_gt?: InputMaybe<Scalars['String']['input']>
-  from_gte?: InputMaybe<Scalars['String']['input']>
-  from_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  from_lt?: InputMaybe<Scalars['String']['input']>
-  from_lte?: InputMaybe<Scalars['String']['input']>
-  from_not?: InputMaybe<Scalars['String']['input']>
-  from_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  id?: InputMaybe<Scalars['BigInt']['input']>
-  id_gt?: InputMaybe<Scalars['BigInt']['input']>
-  id_gte?: InputMaybe<Scalars['BigInt']['input']>
-  id_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  id_lt?: InputMaybe<Scalars['BigInt']['input']>
-  id_lte?: InputMaybe<Scalars['BigInt']['input']>
-  id_not?: InputMaybe<Scalars['BigInt']['input']>
-  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  recovery?: InputMaybe<Scalars['String']['input']>
-  recovery_gt?: InputMaybe<Scalars['String']['input']>
-  recovery_gte?: InputMaybe<Scalars['String']['input']>
-  recovery_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  recovery_lt?: InputMaybe<Scalars['String']['input']>
-  recovery_lte?: InputMaybe<Scalars['String']['input']>
-  recovery_not?: InputMaybe<Scalars['String']['input']>
-  recovery_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  to?: InputMaybe<Scalars['String']['input']>
-  to_gt?: InputMaybe<Scalars['String']['input']>
-  to_gte?: InputMaybe<Scalars['String']['input']>
-  to_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  to_lt?: InputMaybe<Scalars['String']['input']>
-  to_lte?: InputMaybe<Scalars['String']['input']>
-  to_not?: InputMaybe<Scalars['String']['input']>
-  to_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>
-  userId?: InputMaybe<Scalars['BigInt']['input']>
-  userId_gt?: InputMaybe<Scalars['BigInt']['input']>
-  userId_gte?: InputMaybe<Scalars['BigInt']['input']>
-  userId_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-  userId_lt?: InputMaybe<Scalars['BigInt']['input']>
-  userId_lte?: InputMaybe<Scalars['BigInt']['input']>
-  userId_not?: InputMaybe<Scalars['BigInt']['input']>
-  userId_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>
-}
+  from?: InputMaybe<Scalars['String']['input']>;
+  from_gt?: InputMaybe<Scalars['String']['input']>;
+  from_gte?: InputMaybe<Scalars['String']['input']>;
+  from_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  from_lt?: InputMaybe<Scalars['String']['input']>;
+  from_lte?: InputMaybe<Scalars['String']['input']>;
+  from_not?: InputMaybe<Scalars['String']['input']>;
+  from_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id?: InputMaybe<Scalars['BigInt']['input']>;
+  id_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  id_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  id_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  id_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  id_not?: InputMaybe<Scalars['BigInt']['input']>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  recovery?: InputMaybe<Scalars['String']['input']>;
+  recovery_gt?: InputMaybe<Scalars['String']['input']>;
+  recovery_gte?: InputMaybe<Scalars['String']['input']>;
+  recovery_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  recovery_lt?: InputMaybe<Scalars['String']['input']>;
+  recovery_lte?: InputMaybe<Scalars['String']['input']>;
+  recovery_not?: InputMaybe<Scalars['String']['input']>;
+  recovery_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  to?: InputMaybe<Scalars['String']['input']>;
+  to_gt?: InputMaybe<Scalars['String']['input']>;
+  to_gte?: InputMaybe<Scalars['String']['input']>;
+  to_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  to_lt?: InputMaybe<Scalars['String']['input']>;
+  to_lte?: InputMaybe<Scalars['String']['input']>;
+  to_not?: InputMaybe<Scalars['String']['input']>;
+  to_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  userId?: InputMaybe<Scalars['BigInt']['input']>;
+  userId_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  userId_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  userId_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  userId_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  userId_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  userId_not?: InputMaybe<Scalars['BigInt']['input']>;
+  userId_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+};
 
 export type UserPage = {
-  __typename?: 'UserPage'
-  items?: Maybe<Array<User>>
-  pageInfo?: Maybe<PageInfo>
-}
+  __typename?: 'UserPage';
+  items?: Maybe<Array<User>>;
+  pageInfo?: Maybe<PageInfo>;
+};
 
-export type AllAddsQueryVariables = Exact<{ [key: string]: never }>
+export type AllAddsQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type AllAddsQuery = {
-  __typename?: 'Query'
-  addss?: {
-    __typename?: 'AddsPage'
-    items?: Array<{
-      __typename?: 'Adds'
-      addedBy: any
-      channelId: string
-      item: {
-        __typename?: 'Item'
-        id: string
-        timestamp: any
-        createdby: any
-        uri: string
-      }
-      channel: {
-        __typename?: 'Channel'
-        name: string
-        adds?: {
-          __typename?: 'AddsPage'
-          items?: Array<{ __typename?: 'Adds'; itemId: string }> | null
-        } | null
-      }
-    }> | null
-  } | null
-}
 
-export type AllChannelsQueryVariables = Exact<{ [key: string]: never }>
+export type AllAddsQuery = { __typename?: 'Query', addss?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', addedById: any, channelId: string, item: { __typename?: 'Item', id: string, timestamp: any, createdById: any, uri: string }, channel: { __typename?: 'Channel', name: string, adds?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', itemId: string }> | null } | null } }> | null } | null };
 
-export type AllChannelsQuery = {
-  __typename?: 'Query'
-  channels?: {
-    __typename?: 'ChannelPage'
-    items?: Array<{
-      __typename?: 'Channel'
-      id: string
-      timestamp: any
-      createdBy: any
-      uri: string
-      name: string
-      description: string
-      roles?: {
-        __typename?: 'ChannelRolesPage'
-        items?: Array<{
-          __typename?: 'ChannelRoles'
-          timestamp: any
-          rid: any
-          role: any
-        }> | null
-      } | null
-    }> | null
-  } | null
-}
+export type AllChannelsQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type AllItemsQueryVariables = Exact<{ [key: string]: never }>
 
-export type AllItemsQuery = {
-  __typename?: 'Query'
-  items?: {
-    __typename?: 'ItemPage'
-    items?: Array<{ __typename?: 'Item'; id: string }> | null
-  } | null
-}
+export type AllChannelsQuery = { __typename?: 'Query', channels?: { __typename?: 'ChannelPage', items?: Array<{ __typename?: 'Channel', id: string, timestamp: any, createdById: any, uri: string, name: string, description: string, roles?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> | null } | null }> | null } | null };
 
-export type AllUsersQueryVariables = Exact<{ [key: string]: never }>
+export type AllItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type AllUsersQuery = {
-  __typename?: 'Query'
-  users?: {
-    __typename?: 'UserPage'
-    items?: Array<{ __typename?: 'User'; id: any }> | null
-  } | null
-}
+
+export type AllItemsQuery = { __typename?: 'Query', items?: { __typename?: 'ItemPage', items?: Array<{ __typename?: 'Item', id: string }> | null } | null };
+
+export type AllUsersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllUsersQuery = { __typename?: 'Query', users?: { __typename?: 'UserPage', items?: Array<{ __typename?: 'User', id: any }> | null } | null };
 
 export type ChannelWithIdQueryVariables = Exact<{
-  id: Scalars['String']['input']
-}>
+  id: Scalars['String']['input'];
+}>;
 
-export type ChannelWithIdQuery = {
-  __typename?: 'Query'
-  channel?: {
-    __typename?: 'Channel'
-    id: string
-    timestamp: any
-    createdBy: any
-    uri: string
-    name: string
-    description: string
-    roles?: {
-      __typename?: 'ChannelRolesPage'
-      items?: Array<{
-        __typename?: 'ChannelRoles'
-        timestamp: any
-        rid: any
-        role: any
-      }> | null
-    } | null
-    adds?: {
-      __typename?: 'AddsPage'
-      items?: Array<{
-        __typename?: 'Adds'
-        timestamp: any
-        channelId: string
-        itemId: string
-        addedBy: any
-        item: { __typename?: 'Item'; id: string; uri: string; timestamp: any }
-      }> | null
-    } | null
-  } | null
-}
+
+export type ChannelWithIdQuery = { __typename?: 'Query', channel?: { __typename?: 'Channel', id: string, timestamp: any, createdById: any, uri: string, name: string, description: string, roles?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> | null } | null, adds?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', timestamp: any, channelId: string, itemId: string, addedById: any, item: { __typename?: 'Item', id: string, uri: string, timestamp: any } }> | null } | null } | null };
 
 export type ItemPageQueryVariables = Exact<{
-  id: Scalars['String']['input']
-}>
+  id: Scalars['String']['input'];
+}>;
 
-export type ItemPageQuery = {
-  __typename?: 'Query'
-  adds?: {
-    __typename?: 'Adds'
-    addedBy: any
-    timestamp: any
-    itemId: string
-    channelId: string
-    channel: { __typename?: 'Channel'; name: string }
-    item: { __typename?: 'Item'; uri: string }
-  } | null
-}
+
+export type ItemPageQuery = { __typename?: 'Query', adds?: { __typename?: 'Adds', addedById: any, timestamp: any, itemId: string, channelId: string, channel: { __typename?: 'Channel', name: string }, item: { __typename?: 'Item', uri: string, createdById: any } } | null };
 
 export type ItemWithIdQueryVariables = Exact<{
-  id: Scalars['String']['input']
-}>
+  id: Scalars['String']['input'];
+}>;
 
-export type ItemWithIdQuery = {
-  __typename?: 'Query'
-  item?: {
-    __typename?: 'Item'
-    id: string
-    timestamp: any
-    createdby: any
-    uri: string
-  } | null
-}
+
+export type ItemWithIdQuery = { __typename?: 'Query', item?: { __typename?: 'Item', id: string, timestamp: any, createdById: any, uri: string } | null };
 
 export type TxnHashQueryVariables = Exact<{
-  hash: Scalars['String']['input']
-}>
+  hash: Scalars['String']['input'];
+}>;
 
-export type TxnHashQuery = {
-  __typename?: 'Query'
-  txn?: { __typename?: 'Txn'; id: string } | null
-}
+
+export type TxnHashQuery = { __typename?: 'Query', txn?: { __typename?: 'Txn', id: string } | null };
 
 export type UserIdQueryVariables = Exact<{
-  custodyAddress: Scalars['String']['input']
-}>
+  custodyAddress: Scalars['String']['input'];
+}>;
 
-export type UserIdQuery = {
-  __typename?: 'Query'
-  users?: {
-    __typename?: 'UserPage'
-    items?: Array<{
-      __typename?: 'User'
-      id: any
-      userId: any
-      to: string
-      recovery: string
-      from: string
-    }> | null
-  } | null
-}
+
+export type UserIdQuery = { __typename?: 'Query', users?: { __typename?: 'UserPage', items?: Array<{ __typename?: 'User', id: any, userId: any, to: string, recovery: string, from: string }> | null } | null };
+
 
 export const AllAddsDocument = gql`
     query allAdds {
   addss(orderBy: "timestamp", orderDirection: "desc") {
     items {
-      addedBy
+      addedById
       item {
         id
         timestamp
-        createdby
+        createdById
         uri
       }
       channelId
@@ -1000,14 +894,14 @@ export const AllAddsDocument = gql`
     }
   }
 }
-    `
+    `;
 export const AllChannelsDocument = gql`
     query allChannels {
   channels(orderBy: "timestamp", orderDirection: "desc") {
     items {
       id
       timestamp
-      createdBy
+      createdById
       uri
       name
       description
@@ -1021,7 +915,7 @@ export const AllChannelsDocument = gql`
     }
   }
 }
-    `
+    `;
 export const AllItemsDocument = gql`
     query allItems {
   items(orderDirection: "desc", orderBy: "timestamp") {
@@ -1030,7 +924,7 @@ export const AllItemsDocument = gql`
     }
   }
 }
-    `
+    `;
 export const AllUsersDocument = gql`
     query allUsers {
   users(orderDirection: "desc") {
@@ -1039,13 +933,13 @@ export const AllUsersDocument = gql`
     }
   }
 }
-    `
+    `;
 export const ChannelWithIdDocument = gql`
     query channelWithId($id: String!) {
   channel(id: $id) {
     id
     timestamp
-    createdBy
+    createdById
     uri
     name
     description
@@ -1061,7 +955,7 @@ export const ChannelWithIdDocument = gql`
         timestamp
         channelId
         itemId
-        addedBy
+        addedById
         item {
           id
           uri
@@ -1071,11 +965,11 @@ export const ChannelWithIdDocument = gql`
     }
   }
 }
-    `
+    `;
 export const ItemPageDocument = gql`
     query itemPage($id: String!) {
   adds(id: $id) {
-    addedBy
+    addedById
     timestamp
     itemId
     channel {
@@ -1084,27 +978,28 @@ export const ItemPageDocument = gql`
     channelId
     item {
       uri
+      createdById
     }
   }
 }
-    `
+    `;
 export const ItemWithIdDocument = gql`
     query itemWithId($id: String!) {
   item(id: $id) {
     id
     timestamp
-    createdby
+    createdById
     uri
   }
 }
-    `
+    `;
 export const TxnHashDocument = gql`
     query txnHash($hash: String!) {
   txn(id: $hash) {
     id
   }
 }
-    `
+    `;
 export const UserIdDocument = gql`
     query UserId($custodyAddress: String!) {
   users(where: {to: $custodyAddress}) {
@@ -1117,151 +1012,42 @@ export const UserIdDocument = gql`
     }
   }
 }
-    `
+    `;
 
-export type SdkFunctionWrapper = <T>(
-  action: (requestHeaders?: Record<string, string>) => Promise<T>,
-  operationName: string,
-  operationType?: string,
-) => Promise<T>
+export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
 
-const defaultWrapper: SdkFunctionWrapper = (
-  action,
-  _operationName,
-  _operationType,
-) => action()
 
-export function getSdk(
-  client: GraphQLClient,
-  withWrapper: SdkFunctionWrapper = defaultWrapper,
-) {
+const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationType) => action();
+
+export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
-    allAdds(
-      variables?: AllAddsQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<AllAddsQuery> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<AllAddsQuery>(AllAddsDocument, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'allAdds',
-        'query',
-      )
+    allAdds(variables?: AllAddsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<AllAddsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<AllAddsQuery>(AllAddsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'allAdds', 'query');
     },
-    allChannels(
-      variables?: AllChannelsQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<AllChannelsQuery> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<AllChannelsQuery>(AllChannelsDocument, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'allChannels',
-        'query',
-      )
+    allChannels(variables?: AllChannelsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<AllChannelsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<AllChannelsQuery>(AllChannelsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'allChannels', 'query');
     },
-    allItems(
-      variables?: AllItemsQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<AllItemsQuery> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<AllItemsQuery>(AllItemsDocument, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'allItems',
-        'query',
-      )
+    allItems(variables?: AllItemsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<AllItemsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<AllItemsQuery>(AllItemsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'allItems', 'query');
     },
-    allUsers(
-      variables?: AllUsersQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<AllUsersQuery> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<AllUsersQuery>(AllUsersDocument, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'allUsers',
-        'query',
-      )
+    allUsers(variables?: AllUsersQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<AllUsersQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<AllUsersQuery>(AllUsersDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'allUsers', 'query');
     },
-    channelWithId(
-      variables: ChannelWithIdQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<ChannelWithIdQuery> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<ChannelWithIdQuery>(ChannelWithIdDocument, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'channelWithId',
-        'query',
-      )
+    channelWithId(variables: ChannelWithIdQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<ChannelWithIdQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<ChannelWithIdQuery>(ChannelWithIdDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'channelWithId', 'query');
     },
-    itemPage(
-      variables: ItemPageQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<ItemPageQuery> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<ItemPageQuery>(ItemPageDocument, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'itemPage',
-        'query',
-      )
+    itemPage(variables: ItemPageQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<ItemPageQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<ItemPageQuery>(ItemPageDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'itemPage', 'query');
     },
-    itemWithId(
-      variables: ItemWithIdQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<ItemWithIdQuery> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<ItemWithIdQuery>(ItemWithIdDocument, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'itemWithId',
-        'query',
-      )
+    itemWithId(variables: ItemWithIdQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<ItemWithIdQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<ItemWithIdQuery>(ItemWithIdDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'itemWithId', 'query');
     },
-    txnHash(
-      variables: TxnHashQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<TxnHashQuery> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<TxnHashQuery>(TxnHashDocument, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'txnHash',
-        'query',
-      )
+    txnHash(variables: TxnHashQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<TxnHashQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<TxnHashQuery>(TxnHashDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'txnHash', 'query');
     },
-    UserId(
-      variables: UserIdQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<UserIdQuery> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<UserIdQuery>(UserIdDocument, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'UserId',
-        'query',
-      )
-    },
-  }
+    UserId(variables: UserIdQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<UserIdQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<UserIdQuery>(UserIdDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'UserId', 'query');
+    }
+  };
 }
-export type Sdk = ReturnType<typeof getSdk>
+export type Sdk = ReturnType<typeof getSdk>;

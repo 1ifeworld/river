@@ -1,6 +1,6 @@
 query itemPage($id: String!) {
   adds(id: $id) {
-    addedBy
+    addedById
     timestamp    
     itemId
     channel {
@@ -9,6 +9,7 @@ query itemPage($id: String!) {
     channelId
     item {
       uri
+      createdById
     }
   }
 }

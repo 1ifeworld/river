@@ -17,7 +17,7 @@ export function ThumbnailNameCreator({
   item,
   metadata,
 }: ThumbnailNameCreatorProps) {
-  if (!item || item?.createdby) {
+  if (!item || item?.createdById) {
     return (
       <>
         <Image
@@ -81,7 +81,7 @@ export function ThumbnailNameCreator({
         </Typography>
         {/* </Button> */}
         {/* </Link> */}
-        <Username id={item.createdby} />
+        <Username id={item.createdById} />
       </Stack>
     </>
   )

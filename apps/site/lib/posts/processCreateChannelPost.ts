@@ -32,8 +32,8 @@ export async function processCreateChannelPost({
   const msgBody = await encodeCreateChannelMsgBody({
     name: name,
     description: description,
-    admins: [BigInt(rid)],
-    members: [],
+    members: [BigInt(rid)],
+    roles: [BigInt(2)],
   })
   if (!msgBody?.msgBody) return false
   // generate hash to include in post
