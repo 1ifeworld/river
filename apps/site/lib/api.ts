@@ -81,7 +81,7 @@ export async function relayRegisterFor(
 /* MEDIA SERVICE */
 
 export async function w3sUpload(body: FormData, authToken: string | null) {
-  const res = await fetch('http://localhost:3000/w3s', {
+  const res = await fetch('https://river-media-service.up.railway.app/w3s', {
     method: 'POST',
     headers: authToken ? { Authorization: `Bearer ${authToken}` } : undefined,
     body,

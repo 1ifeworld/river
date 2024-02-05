@@ -17,10 +17,10 @@ export function Header() {
       if (!ownerAddress) {
         setOpen(true)
       } else {
-        // if (!(await checkOwnerHasId(ownerAddress)).exists) {
+        if (!(await checkOwnerHasId(ownerAddress)).exists) {
 
-        //   setOpen(true)
-        // }
+          setOpen(true)
+        }
       }
     },
   })

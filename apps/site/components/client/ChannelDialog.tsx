@@ -49,11 +49,8 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
   const {
     signMessage,
     userId: targetUserId,
-    authToken,
     embeddedWallet,
   } = useUserContext()
-
-  console.log("user id in channel", targetUserId)
 
   const form = useForm<NewChannelSchemaValues>({
     resolver: zodResolver(newChannelSchema),
@@ -74,7 +71,6 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
     let txSuccess = false
     // Generate create channel post for user and post transaction
     if (signMessage && embeddedWallet) {
-      console.log("made it here")
       txSuccess = await processCreateChannelPost({
         signer: embeddedWallet.address as Hex,
         name: data.name,
