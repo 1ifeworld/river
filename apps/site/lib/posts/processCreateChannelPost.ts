@@ -29,17 +29,12 @@ export async function processCreateChannelPost({
   // Declare constants/params
   const msgTimestamp: bigint = getExpiration() // gives 120s buffer
   const msgType = 3 as number
-  console.log("name: ", name)
-  console.log("desc: ", description)
-  console.log("members: ", [BigInt(rid)])
-  console.log("roles: ", [BigInt(2)])
   const msgBody = await encodeCreateChannelMsgBody({
     name: name,
     description: description,
     members: [BigInt(rid)],
     roles: [BigInt(2)],
   })
-  console.log("msg body: ", msgBody)
   if (!msgBody?.msgBody) return false
   // generate hash to include in post
   const messageHash = generateMessageHash({

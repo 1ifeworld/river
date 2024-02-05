@@ -1,0 +1,13 @@
+{
+  "transactions": [
+    {
+      "rpc": "https://nova.arbitrum.io/rpc"
+    },
+    {
+      "rpc": "https://nova.arbitrum.io/rpc"
+    },
+    {
+      "rpc": "https://nova.arbitrum.io/rpc"
+    }
+  ]
+}
