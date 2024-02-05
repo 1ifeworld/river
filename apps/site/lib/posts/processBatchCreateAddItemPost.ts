@@ -115,11 +115,7 @@ export async function processBatchCreateAddItemPost({
     sig: addItemSig,
   }
 
-  try {  
-    // @ts-ignore
-    BigInt.prototype.toJSON = function () {
-      return this.toString()
-    }          
+  try {   
     const postBatchResponse = await relayPostBatch([
       createItemPost,
       addItemPost,
