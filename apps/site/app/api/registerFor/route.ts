@@ -4,6 +4,7 @@ import { Defender } from '@openzeppelin/defender-sdk'
 import { publicClient } from '@/config/publicClient'
 import { decodeAbiParameters, Hex } from 'viem'
 import { NextRequest } from 'next/server'
+import { revalidateTag } from 'next/cache'
 
 export async function POST(req: NextRequest) {
   const user = await req.json()
@@ -41,6 +42,8 @@ export async function POST(req: NextRequest) {
     const txnReceipt = await publicClient.waitForTransactionReceipt({
       hash: registerTxn.hash as Hex,
     })
+
+    revalidateTag('usernames')
 
     const [rid, recoveryAddress] = decodeAbiParameters(
       [

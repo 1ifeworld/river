@@ -21,9 +21,7 @@ import {
   checkUsernameAvailability,
   processRegisterFor,
   usernameSchema,
-  signForUsername,
 } from '@/lib'
-import { SignMessageModalUIOptions } from '@privy-io/react-auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import debounce from 'debounce'
 import React, { useEffect, useState } from 'react'
@@ -82,47 +80,6 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
     }
   }, [validationComplete, watchUsername])
 
-  // async function registerUsername(
-  //   username: string,
-  //   privySignMessage: (
-  //     message: string,
-  //     uiOptions?: SignMessageModalUIOptions | undefined,
-  //   ) => Promise<string>, // Updated type
-  //   embeddedWalletAddress: string,
-  //   fetchUserData: () => Promise<void>,
-  // ) {
-  // Check if the necessary conditions are met using the passed parameters
-  //   if (privySignMessage && embeddedWalletAddress) {
-  //     const userId = await processRegisterFor({
-  //       privySignerAddress: embeddedWalletAddress,
-  //       privySignMessage: privySignMessage, // Pass the function
-  //       username: username,
-  //     })
-
-  //     if (userId) {
-  //       const success = await signForUsername(
-  //         String(userId),
-  //         username,
-  //         embeddedWalletAddress as Hex,
-  //         privySignMessage,
-  //       )
-  //       if (success) {
-  //         await fetchUserData()
-  //         return true // Indicate success
-  //       } else {
-  //         console.error('Failed to prepare and set username.')
-  //         return false // Handle failure here
-  //       }
-  //     } else {
-  //       console.log('User ID not obtained from processRegisterFor.')
-  //       return false // Indicate failure to obtain userId
-  //     }
-  //   } else {
-  //     console.log('Required conditions not met for registerUsername.')
-  //     return false // Indicate failure due to unmet conditions
-  //   }
-  // }
-
   return (
     <Dialog open={open}>
       <DialogContent className="sm:max-w-[425px]">
@@ -145,9 +102,8 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                   name: 'River IdRegistry',
                   version: '1',
                   chainId: 42170,
-                  // verifyingContract: addresses.idRegistry.river_dev_2_d5hb5orqim,
                   verifyingContract:
-                    '0x339513226Afd92B309837Bad402c6D3ADDE9Ad24', //arb nova
+                    '0x339513226Afd92B309837Bad402c6D3ADDE9Ad24', // arb nova
                 } as const
                 const REGISTER_TYPE = [
                   { name: 'to', type: 'address' },
@@ -172,7 +128,6 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                   recovery: zeroAddress,
                   deadline: deadline,
                   sig: sig,
-                  // privySignMessage: signMessage,
                   username: form.getValues().username,
                 })
                 await fetchUserData()
@@ -182,7 +137,7 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                 toast.custom((t) => (
                   <Toast>
                     Welcome to River{' '}
-                    <span className="font-bold">
+                    <span className="font-medium">
                       {form.getValues().username}
                     </span>
                   </Toast>
@@ -226,11 +181,11 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                 <SubmitButton
                   type="submit"
                   variant="link"
-                  // disabled={
-                  //   !form.formState.isValid ||
-                  //   usernameExists ||
-                  //   isCheckingAvailability
-                  // }
+                  disabled={
+                    !form.formState.isValid ||
+                    usernameExists ||
+                    isCheckingAvailability
+                  }
                 >
                   Complete
                 </SubmitButton>

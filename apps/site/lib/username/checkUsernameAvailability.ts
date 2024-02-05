@@ -40,6 +40,7 @@ export async function checkOwnerHasId(owner: string): Promise<CheckResponse> {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ owner }),
+        next: { tags: ['usernames'] },
       },
     )
 

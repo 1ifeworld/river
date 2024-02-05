@@ -95,8 +95,8 @@ export function AddMembersForm({ targetChannelId }: AddMembersFormProps) {
       toast.custom((t) => (
         <Toast>
           You added{' '}
-          <span className="font-bold">{form.getValues().username}</span> to this
-          channel
+          <span className="font-medium">{form.getValues().username}</span> to
+          this channel
         </Toast>
       ))
     } else {

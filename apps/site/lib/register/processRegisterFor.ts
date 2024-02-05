@@ -34,12 +34,7 @@ export async function processRegisterFor({
 
   const { success, hash, rid, error } = await relayRegisterFor(user)
 
-  console.log('rid', rid)
-
   if (success && hash && rid) {
-    console.log('Transaction Hash:', hash)
-    console.log('rid', rid)
-
     await setUsername({
       userIdRegistered: rid,
       signature: sig,

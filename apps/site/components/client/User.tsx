@@ -22,8 +22,7 @@ export function User({ setOpen }: UserProps) {
       }
     },
   })
-  const { username, clearUserData, userId } = useUserContext()
-  console.log({ username })
+  const { username, clearUserData } = useUserContext()
 
   return (
     <DropdownMenu>

@@ -10,6 +10,7 @@ export async function getUsername({ id }: { id: bigint }) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ id: idString }),
+        next: { tags: ['usernames'] },
       },
     )
 

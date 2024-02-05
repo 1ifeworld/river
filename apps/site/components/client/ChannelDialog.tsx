@@ -86,7 +86,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
         toast.custom((t) => (
           <Toast>
             {'Successfully created '}
-            <span className="font-bold">{data.name}</span>
+            <span className="font-medium">{data.name}</span>
           </Toast>
         ))
         // Reset form fields to their initial values
