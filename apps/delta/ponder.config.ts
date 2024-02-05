@@ -18,13 +18,13 @@ export default createConfig({
       network: 'optimism',
       abi: idRegistryABI,
       address: addresses.idRegistry.optimism,
-      startBlock: 115761578,
+      startBlock: 115761578, // River genesis
     },
     PostGateway: {
       network: 'arbitrumNova',
       abi: postGatewayABI,
       address: addresses.postGateway.nova,
-      startBlock: 45718892,
+      startBlock: 45792519, // River genesis
     },    
   },
 })

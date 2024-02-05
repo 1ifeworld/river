@@ -18,6 +18,7 @@ export function Header() {
         setOpen(true)
       } else {
         if (!(await checkOwnerHasId(ownerAddress)).exists) {
+
           setOpen(true)
         }
       }

@@ -11,7 +11,6 @@ import {
   type Message,
   type Post,
 } from 'scrypt'
-import { revalidatePath } from 'next/cache'
 
 export async function processBatchCreateAddItemPost({
   signer,
@@ -46,8 +45,12 @@ export async function processBatchCreateAddItemPost({
     access: {
       accessType: 1,
       contents: encodeAbiParameters(
-        [{ name: 'admins', type: 'uint256[]' }],
-        [[rid]],
+        [
+          { name: 'members', type: 'uint256[]' },
+          { name: 'roles', type: 'uint256[]' },
+        ],
+        // Hardcoding in Roles.ADMIN for item creators
+        [[rid], [BigInt(2)]],
       ),
     },
   })

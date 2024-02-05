@@ -2,7 +2,7 @@ query channelWithId($id: String!) {
   channel(id: $id) {
     id
     timestamp
-    createdBy
+    createdById
     uri
     name
     description
@@ -18,7 +18,7 @@ query channelWithId($id: String!) {
         timestamp
         channelId
         itemId
-        addedBy
+        addedById
         item {
           id
           uri

@@ -1,11 +1,11 @@
 query allAdds {
   addss(orderBy: "timestamp", orderDirection: "desc") {
     items {
-      addedBy
+      addedById
       item {
         id
         timestamp
-        createdby
+        createdById
         uri
       }
       channelId

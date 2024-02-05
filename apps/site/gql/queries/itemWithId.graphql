@@ -2,7 +2,7 @@ query itemWithId($id: String!) {
   item(id: $id) {
     id
     timestamp
-    createdby
+    createdById
     uri
   }
 }

@@ -45,7 +45,6 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
   const {
     signMessage,
     userId: targetUserId,
-    authToken,
     embeddedWallet,
   } = useUserContext()
 
