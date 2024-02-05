@@ -22,15 +22,15 @@ export async function POST(req: NextRequest) {
 
   try {
     const defenderClient = new Defender(credentials)
-    const provider = defenderClient.relaySigner.getProvider()
-    const signer = defenderClient.relaySigner.getSigner(provider, {
-      speed: "fast",
-    })
+    // const provider = defenderClient.relaySigner.getProvider()
+    // const signer = defenderClient.relaySigner.getSigner(provider, {
+    //   speed: "fast",
+    // })
 
     const idRegistry = new ethers.Contract(
       addresses.idRegistry.nova,
       idRegistryABI,
-      signer
+      // signer
     )
 
     const registerTxn = await idRegistry.registerFor(user)
