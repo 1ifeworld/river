@@ -146,8 +146,7 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                   name: 'River IdRegistry',
                   version: '1',
                   chainId: 10,
-                  verifyingContract:
-                    addresses.idRegistry.optimism, 
+                  verifyingContract: addresses.idRegistry.optimism,
                 } as const
                 const REGISTER_TYPE = [
                   { name: 'to', type: 'address' },

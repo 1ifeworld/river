@@ -3,7 +3,6 @@ import { type Adds } from '@/gql'
 import {
   getUsername,
   type MediaAssetObject,
-  type ChannelMetadata,
   w3sUrlFromCid,
 } from '@/lib'
 import { unixTimeConverter } from '@/utils'
@@ -72,9 +71,9 @@ export async function ItemCard({
             <span className="text-secondary-foreground">{'·'}</span>
             <Link
               href={`/channel/${add.channelId}`}
-              className="hover:underline underline-offset-2 transition-all decoration-secondary-foreground"
+              className="hover:underline underline-offset-2 transition-all decoration-secondary-foreground truncate"
             >
-              <Typography className="text-secondary-foreground truncate">
+              <Typography className="text-secondary-foreground">
                 {channelName}
               </Typography>
             </Link>

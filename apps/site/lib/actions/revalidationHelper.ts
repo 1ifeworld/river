@@ -2,6 +2,9 @@
 
 import { revalidatePath } from 'next/cache'
 
-export async function revalidationHelper(path: string, type?: 'page' | 'layout') {
+export async function revalidationHelper(
+  path: string,
+  type?: 'page' | 'layout',
+) {
   revalidatePath(path, type)
 }

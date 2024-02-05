@@ -69,18 +69,14 @@ export function ThumbnailNameCreator({
         <GenericThumbnailSmall text={itemMetadata?.contentType as string} />
       )}
       <Stack>
-        {/* <Link href={`/item/${reference.id}`}> */}
-        {/* <Button variant="link"> */}
         {/* This component is hidden on large screens */}
-        <Typography className="md:hidden text-primary-foreground leading-none whitespace-nowrap">
-          {truncateText(itemMetadata.name, 35)}
+        <Typography className="md:hidden text-primary-foreground leading-none truncate">
+          itemMetadata.name
         </Typography>
         {/* This component is hidden on small screens */}
-        <Typography className="hidden md:block text-primary-foreground leading-none whitespace-nowrap">
-          {truncateText(itemMetadata.name, 50)}
+        <Typography className="hidden md:block text-primary-foreground leading-none truncate">
+          itemMetadata.name
         </Typography>
-        {/* </Button> */}
-        {/* </Link> */}
         <Username id={item.createdby} />
       </Stack>
     </>
