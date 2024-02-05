@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
 import { addresses, idRegistryABI } from 'scrypt'
 import { Defender } from '@openzeppelin/defender-sdk'
-import { publicClient } from '@/config/publicClient'
+import { optimismPubClient } from '@/config/publicClient'
 import { decodeAbiParameters, Hex } from 'viem'
 import { NextRequest } from 'next/server'
 
@@ -14,8 +14,8 @@ export async function POST(req: NextRequest) {
 
   console.log({ userWithoutUsername })
   const credentials = {
-    relayerApiKey: process.env.NONCE_API_UNO,
-    relayerApiSecret: process.env.NONCE_SECRET_UNO,
+    relayerApiKey: process.env.IDREGISTRY_API_UNO,
+    relayerApiSecret: process.env.IDREGISTRY_SECRET_UNO,
   }
 
   try {
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     })
 
     const idRegistry = new ethers.Contract(
-      addresses.idRegistry.nova,
+      addresses.idRegistry.optimism,
       idRegistryABI,
       signer as unknown as ethers.Signer,
     )
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
       sig,
     )
 
-    const txnReceipt = await publicClient.waitForTransactionReceipt({
+    const txnReceipt = await optimismPubClient.waitForTransactionReceipt({
       hash: registerTxn.hash as Hex,
     })
 

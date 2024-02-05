@@ -6,7 +6,8 @@ import {
   Hex,
   encodeAbiParameters,
 } from "viem";
-import { postGateway2ABI } from "../../abi";
+import { postGatewayABI } from "../../abi";
+
 
 //////////////////////////////////////////////////
 // ENCODING
@@ -22,7 +23,8 @@ export function encodeCreateAssetMsgBody({
   msgBody: Hash;
 } | null {
   try {
-    const msgBody = encodeAbiParameters(postGateway2ABI[1].outputs, [
+    const msgBody = encodeAbiParameters(postGatewayABI[4].outputs, [
+
       { data, access },
     ]);
 
@@ -45,7 +47,7 @@ export function decodeCreateAssetMsgBody({ msgBody }: { msgBody: Hash }): {
 } | null {
   try {
     const [{ data, access }] = decodeAbiParameters(
-      postGateway2ABI[1].outputs,
+      postGatewayABI[4].outputs,
       msgBody
     );
 

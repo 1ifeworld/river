@@ -65,6 +65,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
     const formData = new FormData()
     formData.append('name', data.name)
     formData.append('description', data.description as string)
+
     // Prevent non-authenticated users from proceeding
     if (!targetUserId) return
     // Initialize bool for txn success check
