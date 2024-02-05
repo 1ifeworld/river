@@ -11,20 +11,10 @@ export const arbitrumNova = defineChain({
   },
   rpcUrls: {
     default: {
-      http: [
-        'https://g.w.lavanet.xyz:443/gateway/arbn/rpc-http/86cbe35dfe0686d90306955304fb64d1',
-      ],
-      webSocket: [
-        'wss://g.w.lavanet.xyz:443/gateway/arbn/rpc/86cbe35dfe0686d90306955304fb64d1',
-      ],
+      http: [process.env.NEXT_PUBLIC_NOVA_RPC_URL as string],
     },
     public: {
-      http: [
-        'https://g.w.lavanet.xyz:443/gateway/arbn/rpc-http/86cbe35dfe0686d90306955304fb64d1',
-      ],
-      webSocket: [
-        'wss://g.w.lavanet.xyz:443/gateway/arbn/rpc/86cbe35dfe0686d90306955304fb64d1',
-      ],
+      http: [process.env.NEXT_PUBLIC_NOVA_RPC_URL as string],
     },
   },
   blockExplorers: {

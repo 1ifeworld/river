@@ -1,5 +1,6 @@
 import { Hash, encodeAbiParameters } from "viem";
-import { postGateway2ABI } from "../../abi";
+import { postGatewayABI } from "../../abi";
+
 
 export async function encodeCreateChannelMsgBody({
   name,
@@ -13,17 +14,8 @@ export async function encodeCreateChannelMsgBody({
   roles: bigint[];
 }): Promise<{ msgBody: Hash; } | null>  {
 
-  console.log("members in func", members)
-  console.log("roles in func", roles)
-
   try {
-
-
-    console.log("visibility in channel ts", members)
-    console.log("visibility in channel ts", roles)
-
-
-    const encodedCreateChannelStruct = encodeAbiParameters(postGateway2ABI[1].outputs, [
+    const encodedCreateChannelStruct = encodeAbiParameters(postGatewayABI[4].outputs, [
       {
         data: {
           dataType: 1,

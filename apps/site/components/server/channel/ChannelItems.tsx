@@ -63,12 +63,12 @@ export async function ChannelItems({
                   {unixTimeConverter(Number(add.item.timestamp))}
                 </Typography>
               </TableCell>
-              <TableCell className="text-right w-fit md:w-[100px] text-primary-foreground">
+              {/* <TableCell className="text-right w-fit md:w-[100px] text-primary-foreground">
                 <ItemDropdown
                   targetChannelId={channel.id}
                   targetReferenceId={add.itemId}
                 />
-              </TableCell>
+              </TableCell> */}
             </TableRow>
           </Link>
         ))}

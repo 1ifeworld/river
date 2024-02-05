@@ -23,6 +23,7 @@ import {
   usernameSchema,
   signForUsername,
 } from '@/lib'
+import { addresses } from 'scrypt'
 import { SignMessageModalUIOptions } from '@privy-io/react-auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import debounce from 'debounce'
@@ -36,7 +37,7 @@ import {
   EIP1193Provider,
   zeroAddress,
 } from 'viem'
-import { arbitrumNova } from 'viem/chains'
+import { arbitrumNova, optimism } from 'viem/chains'
 import { getExpiration } from 'scrypt'
 
 interface UsernameDialogProps {
@@ -137,17 +138,16 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                 const eip1193Provider =
                   await embeddedWallet.getEthereumProvider()
                 const customEip1193Client = createWalletClient({
-                  chain: arbitrumNova,
+                  chain: optimism,
                   transport: custom(eip1193Provider as EIP1193Provider),
                 })
                 const deadline = getExpiration()
                 const ID_REGISTRY_EIP_712_DOMAIN = {
                   name: 'River IdRegistry',
                   version: '1',
-                  chainId: 42170,
-                  // verifyingContract: addresses.idRegistry.river_dev_2_d5hb5orqim,
+                  chainId: 10,
                   verifyingContract:
-                    '0x339513226Afd92B309837Bad402c6D3ADDE9Ad24', //arb nova
+                    addresses.idRegistry.optimism, 
                 } as const
                 const REGISTER_TYPE = [
                   { name: 'to', type: 'address' },
@@ -162,17 +162,16 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                   primaryType: 'Register',
                   message: {
                     to: embeddedWallet.address as Hex,
-                    recovery: zeroAddress,
-                    nonce: BigInt(0),
+                    recovery: addresses.riverRecovery.optimism,
+                    nonce: BigInt(0), // this is assumes all wallets calling this have NO previous tx's
                     deadline: deadline,
                   },
                 })
                 await processRegisterFor({
                   signer: embeddedWallet.address as Hex,
-                  recovery: zeroAddress,
+                  recovery: addresses.riverRecovery.optimism,
                   deadline: deadline,
                   sig: sig,
-                  // privySignMessage: signMessage,
                   username: form.getValues().username,
                 })
                 await fetchUserData()
