@@ -1,4 +1,5 @@
 // Subdirectories
+export * from './actions'
 export * from './posts'
 export * from './register'
 export * from './schemas'
