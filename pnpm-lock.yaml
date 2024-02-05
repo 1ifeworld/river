@@ -151,9 +151,6 @@ importers:
       graphql-tag:
         specifier: ^2.12.6
         version: 2.12.6(graphql@16.8.0)
-      lambda:
-        specifier: link:aws-sdk/clients/lambda
-        version: link:aws-sdk/clients/lambda
       multiformats:
         specifier: ^13.0.1
         version: 13.0.1

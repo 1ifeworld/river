@@ -36,7 +36,6 @@
     "graphql": "^16.8.0",
     "graphql-request": "^6.1.0",
     "graphql-tag": "^2.12.6",
-    "lambda": "link:aws-sdk/clients/lambda",
     "multiformats": "^13.0.1",
     "next": "14.0.1",
     "next-themes": "^0.2.1",
