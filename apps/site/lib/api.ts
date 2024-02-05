@@ -29,8 +29,8 @@ export async function relayPost(post: Post) {
     body: JSON.stringify(post),
   })
   if (!res.ok) {
-    console.error('Could not relay post batch txn', await res.text())
-    throw new Error('Could not relay post batch txn')
+    console.error('Could not relay post txn', await res.text())
+    throw new Error('Could not relay post txn')
   }
   return res.json()
 }
@@ -46,6 +46,7 @@ export async function relayPostBatch(postArray: Post[]) {
   }
   return res.json()
 }
+
 export async function relayRegisterFor(
   user: User,
 ): Promise<{ success: boolean; hash?: string; rid?: string; error?: string }> {

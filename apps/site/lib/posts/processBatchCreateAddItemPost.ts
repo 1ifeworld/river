@@ -1,6 +1,6 @@
 import { SignMessageModalUIOptions } from '@privy-io/react-auth'
 import { Hash, Hex, encodeAbiParameters } from 'viem'
-import { getTxnInclusion, relayPostBatch } from '@/lib'
+import { getTxnInclusion, relayPostBatch, revalidationHelper } from '@/lib'
 import {
   getExpiration,
   remove0xPrefix,
@@ -148,6 +148,7 @@ export async function processBatchCreateAddItemPost({
       const txnInclusion = await getTxnInclusion(transactionHash)
 
       if (txnInclusion) {
+        revalidationHelper('/channel')
         return true
       } else {
         console.error('Transaction was not successfully included.')

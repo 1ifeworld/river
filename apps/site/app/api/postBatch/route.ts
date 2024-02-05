@@ -5,7 +5,6 @@ import { publicClient } from '@/config/publicClient'
 import { NextRequest } from 'next/server'
 import { type Hex } from 'viem'
 
-
 export async function POST(req: NextRequest) {
   const postsArray = await req.json()
   console.log({ postsArray })
@@ -31,7 +30,7 @@ export async function POST(req: NextRequest) {
     const tx = await postGateway.postBatch(postsArray)
 
     await publicClient.waitForTransactionReceipt({
-      hash: tx.hash as Hex ,
+      hash: tx.hash as Hex,
     })
 
     return new Response(JSON.stringify({ success: true, hash: tx.hash }), {
