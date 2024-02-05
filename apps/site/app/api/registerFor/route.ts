@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
 import { addresses, idRegistryABI } from 'scrypt'
 import { Defender } from '@openzeppelin/defender-sdk'
-import { publicClient } from '@/config/publicClient'
+import { optimismPubClient } from '@/config/publicClient'
 import { decodeAbiParameters, Hex } from 'viem'
 import { NextRequest } from 'next/server'
 
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
       sig,
     )
 
-    const txnReceipt = await publicClient.waitForTransactionReceipt({
+    const txnReceipt = await optimismPubClient.waitForTransactionReceipt({
       hash: registerTxn.hash as Hex,
     })
 

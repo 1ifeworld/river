@@ -2,7 +2,7 @@ import { ethers } from "ethers"
 import { postGatewayABI, addresses } from "scrypt"
 import { Defender } from "@openzeppelin/defender-sdk"
 import { NextRequest } from "next/server"
-import { publicClient } from "@/config/publicClient"
+import { novaPubClient } from "@/config/publicClient"
 import { type Hex } from "viem"
 
 export async function POST(req: NextRequest) {
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
     )
 
     const tx = await postGateway.postBatch(postsArray)
-    await publicClient.waitForTransactionReceipt({
+    await novaPubClient.waitForTransactionReceipt({
       hash: tx.hash as Hex ,
     })
 
