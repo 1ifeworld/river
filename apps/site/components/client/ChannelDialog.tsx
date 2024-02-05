@@ -66,6 +66,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
     formData.append('name', data.name)
     formData.append('description', data.description as string)
     const verifying = await authToken
+    if (!verifying) return
     const { cid } = await w3sUpload(formData, verifying)
 
     // Prevent non-authenticated users from proceeding

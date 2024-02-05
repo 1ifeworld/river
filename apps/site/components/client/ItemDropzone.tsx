@@ -90,6 +90,7 @@ export function ItemDropzone({ channel }: { channel: Channel }) {
     const formData = new FormData()
     formData.append('file', file)
     const verifying = await authToken
+    if (!verifying) return
     const { cid } = await w3sUpload(formData, verifying)
 
     if (cid) {
@@ -118,6 +119,7 @@ export function ItemDropzone({ channel }: { channel: Channel }) {
 
       if (contentTypeKey === 2) {
         const muxVerifyingKey = await authToken
+        if (!muxVerifyingKey) return
         const { id, playbackId } = await uploadToMux(
           animationUri,
           muxVerifyingKey,

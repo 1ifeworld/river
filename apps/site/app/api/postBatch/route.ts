@@ -2,6 +2,8 @@ import { ethers } from "ethers"
 import { postGateway2ABI, addresses } from "scrypt"
 import { Defender } from "@openzeppelin/defender-sdk"
 import { NextRequest } from "next/server"
+import { publicClient } from "@/config/publicClient"
+import { type Hex } from "viem"
 
 export async function POST(req: NextRequest) {
   const postsArray = await req.json()
@@ -28,7 +30,9 @@ export async function POST(req: NextRequest) {
     )
 
     const tx = await postGateway.postBatch(postsArray)
-    await tx.wait()
+    await publicClient.waitForTransactionReceipt({
+      hash: tx.hash as Hex ,
+    })
 
     return new Response(JSON.stringify({ success: true, hash: tx.hash }), {
       status: 200,
