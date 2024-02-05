@@ -1,6 +1,6 @@
 import { ponder } from "@/generated";
 import {
-  postGateway2ABI,
+  postGatewayABI,
   decodeCreateAssetMsgBody,
   decodeAddItemMsgBody,
   remove0xPrefix,
@@ -62,7 +62,7 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
   let posts: Post[] = [];
 
   const { args } = decodeFunctionData({
-    abi: postGateway2ABI,
+    abi: postGatewayABI,
     data: event.transaction.input,
   });
 
