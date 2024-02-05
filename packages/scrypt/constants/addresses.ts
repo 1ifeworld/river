@@ -14,6 +14,7 @@ export const addresses: AddressBook = {
     optimism: '0x44192479891D358Ec917765dbF6472B916DC9A0C'
   },
   postGateway: {
-    nova:'0x423a602F5e551A25b28eb33eB56B961590aD5290',
+    nova:'0x05aD6cA9C2b3F71a6B30A8C7d414C95E10EC0217',
+    // nova:'0x423a602F5e551A25b28eb33eB56B961590aD5290',
   },
 }

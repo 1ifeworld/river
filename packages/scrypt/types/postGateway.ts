@@ -12,7 +12,7 @@ export type Post = {
   message: Message;
   hashType: number;
   hash: Hash;
-  sigType: bigint;
+  sigType: number;
   sig: Hash;
 };
 

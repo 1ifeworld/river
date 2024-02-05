@@ -54,6 +54,11 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
 
   ************************************************ */
 
+    // @ts-ignore
+    BigInt.prototype.toJSON = function () {
+      return this.toString()
+    }                         
+
   let posts: Post[] = [];
 
   const { args } = decodeFunctionData({
@@ -117,7 +122,12 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
     // Create blocks for things
     const postId = (await postToCid(posts[i])).cid.toString()
     // Create message id which will be saved in asset create events
+
+    console.log("incoming message: ", posts[i].message)
+
     const messageId = (await messageToCid(posts[i].message)).cid.toString()
+
+    console.log("messageId: ", messageId)
 
     // store post + message
     const storedPost = await Post.upsert({

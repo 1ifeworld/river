@@ -28,19 +28,19 @@ export async function processCreateChannelPost({
 }): Promise<boolean> {
   // Declare constants/params
   const msgTimestamp: bigint = getExpiration() // gives 120s buffer
-  const msgType = 3
+  const msgType = 3 as number
   const msgBody = await encodeCreateChannelMsgBody({
     name: name,
     description: description,
-    admins: [rid],
+    admins: [BigInt(rid)],
     members: [],
   })
   if (!msgBody?.msgBody) return false
   // generate hash to include in post
   const messageHash = generateMessageHash({
-    rid: rid,
-    timestamp: msgTimestamp,
-    msgType: msgType,
+    rid: BigInt(rid),
+    timestamp: BigInt(msgTimestamp),
+    msgType: msgType as number,
     msgBody: msgBody.msgBody,
   })
   const msgHashForSig = remove0xPrefix({ bytes32Hash: messageHash })
@@ -49,14 +49,14 @@ export async function processCreateChannelPost({
   const post = {
     signer: signer,
     message: {
-      rid: rid,
-      timestamp: msgTimestamp,
-      msgType: msgType,
+      rid: BigInt(rid),
+      timestamp: BigInt(msgTimestamp),
+      msgType: msgType as number,
       msgBody: msgBody.msgBody,
     },
-    hashType: 1,
+    hashType: 1 as number,
     hash: messageHash,
-    sigType: 1,
+    sigType: 1 as number,
     sig: sig,
   }
 
@@ -69,7 +69,7 @@ export async function processCreateChannelPost({
       const txnInclusion = await getTxnInclusion(transactionHash)
 
       if (txnInclusion) {
-        revalidationHelper('/')
+        revalidationHelper(['/'])
         return true
       } else {
         console.error('Transaction was not successfully included.')

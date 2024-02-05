@@ -1,36 +1,16 @@
 import { SignMessageModalUIOptions } from '@privy-io/react-auth'
 import { Hash, Hex, encodeAbiParameters } from 'viem'
 import { getTxnInclusion, relayPostBatch, revalidationHelper } from '@/lib'
+import { messageToCid } from '@/utils'
 import {
   getExpiration,
   remove0xPrefix,
   generateMessageHash,
   encodeCreateAssetMsgBody,
   encodeAddItemMsgBody,
-  createIpfsHashFromAnything,
+  type Message,
+  type Post
 } from 'scrypt'
-
-type Message = {
-  rid: bigint
-  timestamp: bigint
-  msgType: number
-  msgBody: Hash
-}
-
-type Post = {
-  signer: Hex
-  message: Message
-  hashType: number
-  hash: Hash
-  sigType: number
-  sig: Hash
-}
-
-// NOTE: this is here to help with serialization of message object -> stringified json, and properly handle bigints
-// @ts-ignore
-BigInt.prototype.toJSON = function () {
-  return this.toString()
-}
 
 export async function processBatchCreateAddItemPost({
   signer,
@@ -100,9 +80,8 @@ export async function processBatchCreateAddItemPost({
     sigType: 1,
     sig: createItemSig,
   }
-  const itemCid = await createIpfsHashFromAnything(
-    JSON.stringify(createItemPost.message),
-  )
+  console.log("credate item message in site: ", createItemPost.message)
+  const itemCid = (await messageToCid(createItemPost.message)).cid.toString()  
   /*
   ADD ITEM POST
   */
@@ -111,6 +90,8 @@ export async function processBatchCreateAddItemPost({
     itemCid: itemCid,
     channelCid: channelId,
   })
+  console.log("item cid: ", itemCid)
+  console.log("channel cid: ", channelId)
   if (!addItemMsgBody?.msgBody) return false
   const addItemMessageHash = generateMessageHash({
     rid: rid,
@@ -136,7 +117,11 @@ export async function processBatchCreateAddItemPost({
     sig: addItemSig,
   }
 
-  try {
+  try {  
+  // @ts-ignore
+  BigInt.prototype.toJSON = function () {
+    return this.toString()
+  }          
     const postBatchResponse = await relayPostBatch([
       createItemPost,
       addItemPost,
@@ -148,7 +133,7 @@ export async function processBatchCreateAddItemPost({
       const txnInclusion = await getTxnInclusion(transactionHash)
 
       if (txnInclusion) {
-        revalidationHelper('/channel')
+        revalidationHelper(pathsToRevalidate)
         return true
       } else {
         console.error('Transaction was not successfully included.')
