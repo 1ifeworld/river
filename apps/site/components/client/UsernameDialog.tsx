@@ -135,18 +135,19 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                     // console.log(`Username ${username} set successfully.`)
                     await fetchUserData()
                   }                  
-                }
-                // this is the logic for emails with userIds, but no username
-                if (userId) {
-                  await setUsername({
-                    userIdRegistered: userId.toString(),
-                    signature: sig,
-                    timestamp: deadline.toString(),
-                    username: form.getValues().username,
-                    registerForRecipient: embeddedWallet.address as Hex,
-                    // console.log(`Username ${username} set successfully.`)
-                  })   
-                  await fetchUserData()
+                } else {
+                  // this is the logic for no username
+                  if (!username) {
+                    await setUsername({
+                      userIdRegistered: userId.toString(),
+                      signature: sig,
+                      timestamp: deadline.toString(),
+                      username: form.getValues().username,
+                      registerForRecipient: embeddedWallet.address as Hex,
+                      // console.log(`Username ${username} set successfully.`)
+                    })   
+                    await fetchUserData()     
+                  }          
                 }
                 // Close the dialog
                 setOpen(false)
