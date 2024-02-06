@@ -42,13 +42,13 @@ export function Header() {
     const fetchData = async () => {
       const { userId, username } = await userCheck(embeddedWallet?.address as Hex);
       if (!embeddedWallet?.address) {
+        setOpen(false)
+      } else {
         if (userId && username) {
           setOpen(false);
         } else {
           setOpen(true);
         }        
-      } else {
-        setOpen(false)
       }
     };
     fetchData();
