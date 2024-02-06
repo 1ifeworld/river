@@ -99,6 +99,7 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                   transport: custom(eip1193Provider as EIP1193Provider),
                 })
                 const deadline = getExpiration()
+                // generate signature for use in both register txn + username set
                 const sig = await customEip1193Client.signTypedData({
                   account: embeddedWallet.address as Hex,
                   domain: ID_REGISTRY_EIP_712_DOMAIN,
@@ -107,11 +108,14 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                   message: {
                     to: embeddedWallet.address as Hex,
                     recovery: addresses.riverRecovery.optimism,
-                    nonce: BigInt(0), // assumes all wallets calling this have 0 previous transactions
+                    // assumes all wallets calling this have 0 previous transactions
+                    // CURRENTLY this is fine because username db sig will not be rejected
+                    // if the nonce is off (since its still a valid recoverable message)
+                    nonce: BigInt(0), 
                     deadline: deadline,
                   },
                 })
-                // if not user Id registeed for wallet yet, submit register transaction
+                // if no user Id registeed for wallet yet, submit register transaction
                 if (!userId) {
                   const rid = await processRegisterFor({
                     signer: embeddedWallet.address as Hex,
