@@ -15,8 +15,4 @@ export async function getUserId({
   return {
     userId: response.users?.items?.[0] ? response.users.items[0].userId : null,
   }
-
-  // return {
-  //   userId: response?.users[0]?.userId as bigint,
-  // }
 }

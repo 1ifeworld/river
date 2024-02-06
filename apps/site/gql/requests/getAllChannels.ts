@@ -1,7 +1,6 @@
-import { cache } from 'react'
 import sdk from '../client'
 
-export const getAllChannels = cache(async () => {
+export const getAllChannels = (async () => {
   const response = await sdk.allChannels()
 
   return {
