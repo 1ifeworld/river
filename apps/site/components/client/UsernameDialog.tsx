@@ -31,11 +31,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Hex, createWalletClient, custom, EIP1193Provider } from "viem";
 import { optimism } from "viem/chains";
-import {
-  getExpiration,
-  // ID_REGISTRY_EIP_712_DOMAIN,
-  // REGISTER_TYPE,
-} from "scrypt";
+import { getExpiration} from "scrypt";
 
 interface UsernameDialogProps {
   open: boolean;
@@ -84,6 +80,10 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
   }, [validationComplete, watchUsername]);
 
   async function processUserRegistration() {
+    if (!fetchUserData) {
+      console.log("fetch user data missing")
+      return
+    }
     // set is processing to false. disables ability to submit form
     setIsProcessing(true);
     // initialize eip1193 provider for eip712 signature
@@ -138,14 +138,16 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
     }
     // If userId is still null here, skip username set process
     if (inFlightUserId) {
-      const rep = await setUsername({
+      const resp = await setUsername({
         userIdRegistered: inFlightUserId,
         signature: sig,
         timestamp: deadline.toString(),
         username: form.getValues().username,
-        registerForRecipient: embeddedWallet?.address as Hex,
+        registerForRecipient: embeddedWallet?.address as Hex,        
       });
     }
+    // reset context embeddedWallet + userId + username
+    await fetchUserData();    
     // set is processing to false. re enables ability to submit form
     setIsProcessing(false);
   }
@@ -166,8 +168,6 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                 if (!embeddedWallet || !signMessage || !fetchUserData) return;
                 // process registration
                 await processUserRegistration();
-                // reset context embeddedWallet + userId + username
-                await fetchUserData();
                 // recheck userId + username. only close dialog if both are true
                 if (userId && username) {
                   // Set registration status to true

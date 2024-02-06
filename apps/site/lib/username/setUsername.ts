@@ -44,10 +44,13 @@ export async function setUsername({
         body: JSON.stringify(requestBody),
       }
     );
+
+    // console.log("response.ok", response.ok)
+
     const data = await response.json();
-    if (response.ok && data.success) {
-      console.log("username successfully set: ", data.data.username)
-      return { success: true, name: data.data.username };
+    
+    if (data.success) {
+      return { success: true };
     } else {
       throw new Error(
         data.error || "An error occurred while setting the username."
