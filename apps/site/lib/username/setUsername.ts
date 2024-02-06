@@ -46,6 +46,7 @@ export async function setUsername({
     );
     const data = await response.json();
     if (response.ok && data.success) {
+      console.log("username successfully set: ", data.data.username)
       return { success: true, name: data.data.username };
     } else {
       throw new Error(

@@ -127,7 +127,6 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
     // we can lean on userContext since thats whats dictating header
     let inFlightUserId = userId ? userId.toString() : "";
     // check if inflightUserId was overwritten from valid userId in user context
-    console.log("inflight user id before", inFlightUserId )
     if (!inFlightUserId) {
       const registeredId = await processRegisterFor({
         signer: embeddedWallet?.address as Hex,
@@ -135,7 +134,6 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
         deadline: deadline,
         sig: sig,
       });
-      console.log("regiseredId", registeredId)
       if (registeredId) inFlightUserId = registeredId;
     }
     // If userId is still null here, skip username set process
@@ -147,7 +145,6 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
         username: form.getValues().username,
         registerForRecipient: embeddedWallet?.address as Hex,
       });
-      console.log("setUsername rep", rep)
     }
     // set is processing to false. re enables ability to submit form
     setIsProcessing(false);
@@ -173,8 +170,6 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                 await fetchUserData();
                 // recheck userId + username. only close dialog if both are true
                 if (userId && username) {
-                  console.log("userId post fetchUserData:", userId)
-                  console.log("userId post username:", username)
                   // Set registration status to true
                   // Close dialog
                   setOpen(false);
@@ -186,7 +181,6 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                     </Toast>
                   ));
                 } else {
-                  console.log("registration failed")
                   // if you submitted the form and post registration attempt
                   // userId + username are still invalid, display a
                   // registration failed attempt
