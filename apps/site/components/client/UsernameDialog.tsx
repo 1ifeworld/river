@@ -36,7 +36,7 @@ import {
   EIP1193Provider,
 } from 'viem'
 import { optimism } from 'viem/chains'
-import { getExpiration } from 'scrypt'
+import { getExpiration, ID_REGISTRY_EIP_712_DOMAIN, REGISTER_TYPE } from 'scrypt'
 
 interface UsernameDialogProps {
   open: boolean
@@ -99,19 +99,6 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                   transport: custom(eip1193Provider as EIP1193Provider),
                 })
                 const deadline = getExpiration()
-                const ID_REGISTRY_EIP_712_DOMAIN = {
-                  name: 'River IdRegistry',
-                  version: '1',
-                  chainId: 10,
-                  verifyingContract:
-                    addresses.idRegistry.optimism, 
-                } as const
-                const REGISTER_TYPE = [
-                  { name: 'to', type: 'address' },
-                  { name: 'recovery', type: 'address' },
-                  { name: 'nonce', type: 'uint256' },
-                  { name: 'deadline', type: 'uint256' },
-                ] as const
                 const sig = await customEip1193Client.signTypedData({
                   account: embeddedWallet.address as Hex,
                   domain: ID_REGISTRY_EIP_712_DOMAIN,
