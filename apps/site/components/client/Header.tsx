@@ -15,10 +15,6 @@ export function Header() {
   const { ready, login, authenticated } = usePrivy()
   const { embeddedWallet, userId, username } = useUserContext()
 
-  console.log("userId", userId)
-  console.log("embeddedWallet", embeddedWallet)
-  console.log("username", username)
-
   async function userCheck(embeddedWalletAddress: Hex | undefined) {
     let fetchedUserId
     let fetchedUsername;

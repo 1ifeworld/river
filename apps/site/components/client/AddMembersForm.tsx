@@ -56,7 +56,6 @@ export function AddMembersForm({ targetChannelId }: AddMembersFormProps) {
     setCheckState({ isChecking: true, debounceFinished: false })
 
     if (debouncedUsername) {
-      //   checkUsernameAvailability(debouncedUsername).then((result) => {
       getDataForUsername({ username: debouncedUsername }).then((result) => {
         if (isMounted) {
           setUsernameExists(result ? true : false)
