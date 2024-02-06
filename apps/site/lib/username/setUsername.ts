@@ -1,12 +1,12 @@
-import { Hex } from 'viem'
+import { Hex } from "viem";
 
 interface RegistrationParameters {
-  id: string
-  to?: string
-  owner: string
-  name: string
-  signature: string
-  timestamp: string
+  id: string;
+  to?: string;
+  owner: string;
+  name: string;
+  signature: string;
+  timestamp: string;
 }
 
 export async function setUsername({
@@ -17,12 +17,12 @@ export async function setUsername({
   timestamp,
   to,
 }: {
-  userIdRegistered: string
-  username: string
-  registerForRecipient: Hex
-  signature: Hex
-  timestamp: string
-  to?: string
+  userIdRegistered: string;
+  username: string;
+  registerForRecipient: Hex;
+  signature: Hex;
+  timestamp: string;
+  to?: string;
 }) {
   const requestBody: RegistrationParameters = {
     id: userIdRegistered,
@@ -31,22 +31,33 @@ export async function setUsername({
     name: username,
     signature,
     timestamp,
-  }
+  };
 
-  await fetch(`${process.env.NEXT_PUBLIC_USERNAME_SERVICE}/set`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(requestBody),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (!data.success) {
-        console.error('Error:', data.error)
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_USERNAME_SERVICE}/set`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
       }
-    })
-    .catch((error) => {
-      console.error('Fetch error:', error)
-    })
+    );
+    const data = await response.json();
+    if (response.ok && data.success) {
+      return { success: true, name: data.data.username };
+    } else {
+      throw new Error(
+        data.error || "An error occurred while setting the username."
+      );
+    }
+  } catch (error) {
+    console.error("Fetch error:", error);
+    if (error instanceof Error) {
+      return { success: false, error: error.message };
+    } else {
+      return { success: false, error: "An unknown error occurred." };
+    }
+  }
 }

@@ -115,51 +115,51 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                     deadline: deadline,
                   },
                 })
-                // if no user Id registeed for wallet yet, submit register transaction
-                if (!userId) {
-                  const rid = await processRegisterFor({
+                // setup default false values for success
+                // let userIdSuccess = false
+                // let userNameSuccess = false
+
+                // if no userId/usernmae, then go thru the reg + username flow
+                // if no username, only go through username flow
+                // we can lean on userContext since thats whats dictating header
+                let usernameSuccess = ""
+                let userIdSuccess = userId ? userId.toString() : ""
+                if (!userIdSuccess) {
+                  const registeredId = await processRegisterFor({
                     signer: embeddedWallet.address as Hex,
                     recovery: addresses.riverRecovery.optimism,
                     deadline: deadline,
                     sig: sig,
                   })  
-                  // if registration was sucecssful, set username
-                  if (rid) {
-                    await setUsername({
-                      userIdRegistered: rid?.toString(),
-                      signature: sig,
-                      timestamp: deadline.toString(),
-                      username: form.getValues().username,
-                      registerForRecipient: embeddedWallet.address as Hex,
-                    })
-                    // console.log(`Username ${username} set successfully.`)
-                    await fetchUserData()
-                  }                  
-                } else {
-                  // this is the logic for no username
-                  if (!username) {
-                    await setUsername({
-                      userIdRegistered: userId.toString(),
-                      signature: sig,
-                      timestamp: deadline.toString(),
-                      username: form.getValues().username,
-                      registerForRecipient: embeddedWallet.address as Hex,
-                      // console.log(`Username ${username} set successfully.`)
-                    })   
-                    await fetchUserData()     
-                  }          
+                  if (registeredId) userIdSuccess = registeredId
                 }
+                const registeredUsername = await setUsername({
+                  userIdRegistered: userIdSuccess,
+                  signature: sig,
+                  timestamp: deadline.toString(),
+                  username: form.getValues().username,
+                  registerForRecipient: embeddedWallet.address as Hex,                  
+                })
+                if (registeredUsername) usernameSuccess = registeredUsername.name
                 // Close the dialog
                 setOpen(false)
                 // Render a toast
-                toast.custom((t) => (
-                  <Toast>
-                    Welcome to River{' '}
-                    <span className="font-bold">
-                      {form.getValues().username}
-                    </span>
-                  </Toast>
-                ))
+                if (usernameSuccess) {
+                  toast.custom((t) => (
+                    <Toast>
+                      Welcome to River{' '}
+                      <span className="font-bold">
+                        {form.getValues().username}
+                      </span>
+                    </Toast>
+                  ))
+                } else {
+                  toast.custom((t) => (
+                    <Toast>
+                      Error setting username
+                    </Toast>
+                  ))                  
+                }
               }}
               className="w-full"
             >
