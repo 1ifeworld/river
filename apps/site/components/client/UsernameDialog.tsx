@@ -21,10 +21,8 @@ import {
   checkUsernameAvailability,
   processRegisterFor,
   usernameSchema,
-  signForUsername,
 } from '@/lib'
 import { addresses } from 'scrypt'
-import { SignMessageModalUIOptions } from '@privy-io/react-auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import debounce from 'debounce'
 import React, { useEffect, useState } from 'react'
@@ -35,7 +33,6 @@ import {
   createWalletClient,
   custom,
   EIP1193Provider,
-  zeroAddress,
 } from 'viem'
 import { arbitrumNova, optimism } from 'viem/chains'
 import { getExpiration } from 'scrypt'
@@ -83,47 +80,6 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
     }
   }, [validationComplete, watchUsername])
 
-  // async function registerUsername(
-  //   username: string,
-  //   privySignMessage: (
-  //     message: string,
-  //     uiOptions?: SignMessageModalUIOptions | undefined,
-  //   ) => Promise<string>, // Updated type
-  //   embeddedWalletAddress: string,
-  //   fetchUserData: () => Promise<void>,
-  // ) {
-  // Check if the necessary conditions are met using the passed parameters
-  //   if (privySignMessage && embeddedWalletAddress) {
-  //     const userId = await processRegisterFor({
-  //       privySignerAddress: embeddedWalletAddress,
-  //       privySignMessage: privySignMessage, // Pass the function
-  //       username: username,
-  //     })
-
-  //     if (userId) {
-  //       const success = await signForUsername(
-  //         String(userId),
-  //         username,
-  //         embeddedWalletAddress as Hex,
-  //         privySignMessage,
-  //       )
-  //       if (success) {
-  //         await fetchUserData()
-  //         return true // Indicate success
-  //       } else {
-  //         console.error('Failed to prepare and set username.')
-  //         return false // Handle failure here
-  //       }
-  //     } else {
-  //       console.log('User ID not obtained from processRegisterFor.')
-  //       return false // Indicate failure to obtain userId
-  //     }
-  //   } else {
-  //     console.log('Required conditions not met for registerUsername.')
-  //     return false // Indicate failure due to unmet conditions
-  //   }
-  // }
-
   return (
     <Dialog open={open}>
       <DialogContent className="sm:max-w-[425px]">
@@ -163,7 +119,7 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                   message: {
                     to: embeddedWallet.address as Hex,
                     recovery: addresses.riverRecovery.optimism,
-                    nonce: BigInt(0), // this is assumes all wallets calling this have NO previous tx's
+                    nonce: BigInt(0), // assumes all wallets calling this have 0 previous transactions
                     deadline: deadline,
                   },
                 })
@@ -225,11 +181,11 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                 <SubmitButton
                   type="submit"
                   variant="link"
-                  // disabled={
-                  //   !form.formState.isValid ||
-                  //   usernameExists ||
-                  //   isCheckingAvailability
-                  // }
+                  disabled={
+                    !form.formState.isValid ||
+                    usernameExists ||
+                    isCheckingAvailability
+                  }
                 >
                   Complete
                 </SubmitButton>
