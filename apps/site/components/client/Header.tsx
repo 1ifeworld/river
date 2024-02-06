@@ -40,13 +40,18 @@ export function Header() {
 
   useEffect(() => {
     const fetchData = async () => {
+      // fetch userId + username values. 
+      // will return null for userId or username if no adderss included, or no id/username found
       const { userId, username } = await userCheck(embeddedWallet?.address as Hex);
+      // if no wallet address detected, dialog shoul dbe false
       if (!embeddedWallet?.address) {
         setOpen(false)
       } else {
+        // if user is logged in with email, and has valid userId + username, dont show dialog
         if (userId && username) {
           setOpen(false);
         } else {
+          // show dialog when a user is logged in, and either userId or username is false
           setOpen(true);
         }        
       }
