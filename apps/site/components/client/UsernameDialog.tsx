@@ -1,5 +1,5 @@
-import { SubmitButton } from '@/client'
-import { useUserContext } from '@/context'
+import { SubmitButton } from "@/client"
+import { useUserContext } from "@/context"
 import {
   Dialog,
   DialogContent,
@@ -15,27 +15,24 @@ import {
   Stack,
   Toast,
   Typography,
-} from '@/design-system'
+} from "@/design-system"
 import {
   type UsernameSchemaValues,
   checkUsernameAvailability,
   processRegisterFor,
   usernameSchema,
-} from '@/lib'
-import { addresses } from 'scrypt'
-import { zodResolver } from '@hookform/resolvers/zod'
-import debounce from 'debounce'
-import React, { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
-import {
-  Hex,
-  createWalletClient,
-  custom,
-  EIP1193Provider,
-} from 'viem'
-import { arbitrumNova, optimism } from 'viem/chains'
-import { getExpiration } from 'scrypt'
+} from "@/lib"
+import { addresses } from "scrypt"
+import { zodResolver } from "@hookform/resolvers/zod"
+import debounce from "debounce"
+import React, { useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import { Hex, createWalletClient, custom, EIP1193Provider } from "viem"
+import { optimism } from "viem/chains"
+import { getExpiration } from "scrypt"
+import { setUsername } from "@/lib"
+import { checkOwnerHasRidInContract } from "@/lib"
 
 interface UsernameDialogProps {
   open: boolean
@@ -46,7 +43,7 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
   const form = useForm<UsernameSchemaValues>({
     resolver: zodResolver(usernameSchema),
     defaultValues: {
-      username: '',
+      username: "",
     },
   })
 
@@ -57,15 +54,15 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
   const [isCheckingAvailability, setIsCheckingAvailability] = useState(false)
 
   // Subscribe to changes to the username input
-  const watchUsername = debounce(() => form.watch('username'), 500)
+  const watchUsername = debounce(() => form.watch("username"), 500)
 
   const triggerValidation = React.useMemo(
     () =>
       debounce(() => {
-        form.trigger('username')
+        form.trigger("username")
         setValidationComplete(true)
       }, 500),
-    [form],
+    [form]
   )
 
   useEffect(() => {
@@ -99,23 +96,22 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                 })
                 const deadline = getExpiration()
                 const ID_REGISTRY_EIP_712_DOMAIN = {
-                  name: 'River IdRegistry',
-                  version: '1',
+                  name: "River IdRegistry",
+                  version: "1",
                   chainId: 10,
-                  verifyingContract:
-                    addresses.idRegistry.optimism, 
+                  verifyingContract: addresses.idRegistry.optimism,
                 } as const
                 const REGISTER_TYPE = [
-                  { name: 'to', type: 'address' },
-                  { name: 'recovery', type: 'address' },
-                  { name: 'nonce', type: 'uint256' },
-                  { name: 'deadline', type: 'uint256' },
+                  { name: "to", type: "address" },
+                  { name: "recovery", type: "address" },
+                  { name: "nonce", type: "uint256" },
+                  { name: "deadline", type: "uint256" },
                 ] as const
                 const sig = await customEip1193Client.signTypedData({
                   account: embeddedWallet.address as Hex,
                   domain: ID_REGISTRY_EIP_712_DOMAIN,
                   types: { Register: REGISTER_TYPE },
-                  primaryType: 'Register',
+                  primaryType: "Register",
                   message: {
                     to: embeddedWallet.address as Hex,
                     recovery: addresses.riverRecovery.optimism,
@@ -123,6 +119,44 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                     deadline: deadline,
                   },
                 })
+
+                const rid = await checkOwnerHasRidInContract(
+                  embeddedWallet.address as Hex
+                )
+
+                if (rid) {
+                  const setResult = await setUsername({
+                    userIdRegistered: rid.toString(),
+                    signature: sig,
+                    timestamp: deadline.toString(),
+                    username: form.getValues().username,
+                    registerForRecipient: embeddedWallet.address as Hex,
+                  })
+
+                  if (setResult.success) {
+                    toast.custom((t) => (
+                      <Toast>
+                        Welcome to River{" "}
+                        <span className="font-bold">
+                          {form.getValues().username}
+                        </span>
+                      </Toast>
+                    ))
+                    setOpen(false)
+                    return 
+                  } else {
+                    const errorMessage = setResult.error
+                      ? setResult.error
+                      : "Unknown error setting username"
+                    console.error("Error setting username:", errorMessage)
+                    toast.custom((t) => (
+                      <Toast>
+                        Error: <span className="font-bold">{errorMessage}</span>
+                      </Toast>
+                    ))
+                  }
+                }
+
                 await processRegisterFor({
                   signer: embeddedWallet.address as Hex,
                   recovery: addresses.riverRecovery.optimism,
@@ -136,7 +170,7 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                 // Render a toast
                 toast.custom((t) => (
                   <Toast>
-                    Welcome to River{' '}
+                    Welcome to River{" "}
                     <span className="font-bold">
                       {form.getValues().username}
                     </span>

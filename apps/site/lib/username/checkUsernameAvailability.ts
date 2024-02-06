@@ -1,3 +1,8 @@
+import { idRegistryABI } from "scrypt"
+import { readContract } from "viem/_types/actions/public/readContract"
+import { optimismPubClient } from "@/config/publicClient"
+import { addresses } from "scrypt"
+import { Hex } from "viem"
 export interface CheckResponse {
   exists: boolean
 }
@@ -53,4 +58,16 @@ export async function checkOwnerHasId(owner: string): Promise<CheckResponse> {
     console.error('Error checking for owner:', error)
     throw error
   }
+}
+
+export async function checkOwnerHasRidInContract(owner: Hex) {
+
+  const rid = await optimismPubClient.readContract({
+    address: addresses.idRegistry.optimism,
+    abi: idRegistryABI,
+    functionName: 'idOf',
+    args: [owner]
+  } )
+
+  return rid
 }

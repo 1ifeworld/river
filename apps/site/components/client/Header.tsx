@@ -6,24 +6,26 @@ import { checkOwnerHasId } from 'lib/username'
 import { useState } from 'react'
 import { useParams } from 'next/navigation'
 
+
 export function Header() {
   const [open, setOpen] = useState<boolean>(false)
 
   const { ready, authenticated } = usePrivy()
-
   const { login } = useLogin({
     onComplete: async (user) => {
-      const ownerAddress = user?.wallet?.address
+      const ownerAddress = user?.wallet?.address;
       if (!ownerAddress) {
         setOpen(true)
       } else {
-        if (!(await checkOwnerHasId(ownerAddress)).exists) {
-
+        const checkDbResult = await checkOwnerHasId(ownerAddress)
+        if (!checkDbResult.exists) {
           setOpen(true)
+
         }
       }
     },
   })
+  
 
   const params = useParams()
 
