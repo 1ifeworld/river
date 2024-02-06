@@ -45,8 +45,6 @@ export async function setUsername({
       }
     );
 
-    // console.log("response.ok", response.ok)
-
     const data = await response.json();
     
     if (data.success) {

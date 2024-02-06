@@ -137,6 +137,7 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
       if (registeredId) inFlightUserId = registeredId;
     }
     // If userId is still null here, skip username set process
+    let success = false
     if (inFlightUserId) {
       const resp = await setUsername({
         userIdRegistered: inFlightUserId,
@@ -145,11 +146,14 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
         username: form.getValues().username,
         registerForRecipient: embeddedWallet?.address as Hex,        
       });
+      if (resp.success) success = true
     }
     // reset context embeddedWallet + userId + username
     await fetchUserData();    
     // set is processing to false. re enables ability to submit form
     setIsProcessing(false);
+    // return success state
+    return success
   }
 
   return (
@@ -166,18 +170,17 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                 setRegistrationFailed(false);
                 // validating starting state
                 if (!embeddedWallet || !signMessage || !fetchUserData) return;
-                // process registration
-                await processUserRegistration();
+                // process userId registration + username
+                const registrationSuccess = await processUserRegistration();
                 // recheck userId + username. only close dialog if both are true
-                if (userId && username) {
-                  // Set registration status to true
+                if (registrationSuccess) {
                   // Close dialog
                   setOpen(false);
                   // Emit successful registration toast
                   toast.custom((t) => (
                     <Toast>
                       Welcome to River{" "}
-                      <span className="font-bold">{username}</span>
+                      <span className="font-bold">{form.getValues().username}</span>
                     </Toast>
                   ));
                 } else {
