@@ -1,7 +1,6 @@
-import { cache } from 'react'
 import sdk from '../client'
 
-export const getAllAdds = cache(async () => {
+export const getAllAdds = (async () => {
   const response = await sdk.allAdds()
 
   return {
