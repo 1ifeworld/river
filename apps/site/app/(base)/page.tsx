@@ -3,8 +3,6 @@ import { getAllAdds } from '@/gql'
 import { ItemCard } from '@/server'
 import { Typography } from '@/design-system'
 
-export const dynamic = 'force-dynamic'
-
 export default async function Home() {
   const { adds } = await getAllAdds()
 
