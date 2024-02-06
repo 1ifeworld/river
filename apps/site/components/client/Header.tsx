@@ -1,44 +1,58 @@
 import { ChannelDialog, User, UsernameDialog } from '@/client'
 import { Button, Flex, Typography } from '@/design-system'
 import { RiverLogo } from '@/server'
-import { useLogin, usePrivy } from '@privy-io/react-auth'
-import { checkOwnerHasId } from 'lib/username'
+import { usePrivy } from '@privy-io/react-auth'
 import { useState } from 'react'
 import { useParams } from 'next/navigation'
 import { useUserContext } from 'context/UserContext'
+import { useEffect } from 'react'
+import { getUserId } from 'gql/requests'
 import { Hex } from 'viem'
-import { getUserId } from '@/gql'
 import { getUsername } from 'lib/username'
-
 
 export function Header() {
   const [open, setOpen] = useState<boolean>(false)
-  const { ready, authenticated } = usePrivy()
+  const { ready, login, authenticated } = usePrivy()
+  const { embeddedWallet, userId, username } = useUserContext()
 
-  /*
-      The tricky part I believe is not being able to rely
-      on the userContext in the "onComplete" set, because
-      userContext wont necessarily have fetched the results yet
-  */
+  console.log("userId", userId)
+  console.log("embeddedWallet", embeddedWallet)
+  console.log("username", username)
 
-  const { login } = useLogin({
-    onComplete: async (user) => {
-      // Fetch user id for embedded wallet
-      const fetchedUserId = await getUserId({
-        custodyAddress: user.wallet?.address as Hex,
+  async function userCheck(embeddedWalletAddress: Hex | undefined) {
+    let fetchedUserId
+    let fetchedUsername;
+    if (embeddedWalletAddress) {
+      fetchedUserId = await getUserId({
+        custodyAddress: embeddedWallet?.address as Hex,
       })      
-      // Fetch username from ponder. this will let us know
-      // if user has succsffuly registered an id, even in cases
-      // where the writing to username db was unncessfuly
-      const fetchedUsername = await getUsername({
+    }
+    if (fetchedUserId?.userId) {
+      fetchedUsername = await getUsername({
         id: BigInt(fetchedUserId.userId),
-      })
-      // If user doesnt have id or username, open username dialog
-      if (!fetchedUserId || !fetchedUsername) {
-        setOpen(true)
+      })           
+    }
+    return {
+      userId: fetchedUserId?.userId ? fetchedUserId?.userId : null,
+      username: fetchedUsername ? fetchedUsername: null
+    }
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { userId, username } = await userCheck(embeddedWallet?.address as Hex);
+      if (!embeddedWallet?.address) {
+        if (userId && username) {
+          setOpen(false);
+        } else {
+          setOpen(true);
+        }        
+      } else {
+        setOpen(false)
       }
-    },
-  })
+    };
+    fetchData();
+  }, [embeddedWallet, userId, username])
 
   const params = useParams()
 
