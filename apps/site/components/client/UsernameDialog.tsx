@@ -21,6 +21,7 @@ import {
   checkUsernameAvailability,
   processRegisterFor,
   usernameSchema,
+  setUsername
 } from '@/lib'
 import { addresses } from 'scrypt'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -34,7 +35,7 @@ import {
   custom,
   EIP1193Provider,
 } from 'viem'
-import { arbitrumNova, optimism } from 'viem/chains'
+import { optimism } from 'viem/chains'
 import { getExpiration } from 'scrypt'
 
 interface UsernameDialogProps {
@@ -50,7 +51,7 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
     },
   })
 
-  const { signMessage, embeddedWallet, fetchUserData } = useUserContext()
+  const { userId, username, signMessage, embeddedWallet, fetchUserData } = useUserContext()
 
   const [usernameExists, setUsernameExists] = useState(false)
   const [validationComplete, setValidationComplete] = useState(false)
@@ -123,14 +124,39 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                     deadline: deadline,
                   },
                 })
-                await processRegisterFor({
-                  signer: embeddedWallet.address as Hex,
-                  recovery: addresses.riverRecovery.optimism,
-                  deadline: deadline,
-                  sig: sig,
-                  username: form.getValues().username,
-                })
-                await fetchUserData()
+                // if not user Id registeed for wallet yet, submit register transaction
+                if (!userId) {
+                  const rid = await processRegisterFor({
+                    signer: embeddedWallet.address as Hex,
+                    recovery: addresses.riverRecovery.optimism,
+                    deadline: deadline,
+                    sig: sig,
+                  })  
+                  // if registration was sucecssful, set username
+                  if (rid) {
+                    await setUsername({
+                      userIdRegistered: rid?.toString(),
+                      signature: sig,
+                      timestamp: deadline.toString(),
+                      username: form.getValues().username,
+                      registerForRecipient: embeddedWallet.address as Hex,
+                    })
+                    // console.log(`Username ${username} set successfully.`)
+                    await fetchUserData()
+                  }                  
+                }
+                // this is the logic for emails with userIds, but no username
+                if (userId) {
+                  await setUsername({
+                    userIdRegistered: userId.toString(),
+                    signature: sig,
+                    timestamp: deadline.toString(),
+                    username: form.getValues().username,
+                    registerForRecipient: embeddedWallet.address as Hex,
+                    // console.log(`Username ${username} set successfully.`)
+                  })   
+                  await fetchUserData()
+                }
                 // Close the dialog
                 setOpen(false)
                 // Render a toast
