@@ -1,18 +1,16 @@
-'use client'
-
-import React, { useEffect } from "react"
-// import Script from "next/script"
-import {ModelViewerElement } from '@google/model-viewer'
+import React, { useEffect, CSSProperties } from "react"
+import { ModelViewerElement } from '@google/model-viewer'
 
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      'model-viewer': Partial<ModelViewerElement>;
+      'model-viewer': Partial<ModelViewerElement>
     }
   }
 }
+
 interface ModelRendererProps {
-  src: string;
+  src: string
 }
 
 const ModelRenderer: React.FC<ModelRendererProps> = ({ src }) => {
@@ -20,65 +18,23 @@ const ModelRenderer: React.FC<ModelRendererProps> = ({ src }) => {
     import('@google/model-viewer').catch(console.error)
   }, [])
 
+  // Define the styles with the correct type
+  const style: CSSProperties = {
+    width: '100%',
+    height: '100%',
+  }
 
   return (
     <>
       <model-viewer
         src={src}
-        // ios-src={src}
-        // ios
-        // ar
-        autoplay  
-        // ar-modes="webxr scene-viewer" 
-        progress
+        autoplay
         camera-controls 
-        // loading ='eager'
-        // preload
-        touch-action="pan-y" 
-        style={{ width: '100%', height: '100%' }}
-      ></model-viewer>
+        touch-action="pan-y"
+        style={{ width: '100%', height: '100%' } as any}
+        ></model-viewer>
     </>
   )
 }
 
 export default ModelRenderer
-
-
-// import Script from "next/script"
-// import React from "react"
-
-// interface ModelRendererProps {
-//   src: string
-// }
-
-// const ModelRenderer: React.FC<ModelRendererProps> = ({ src }) => {
-//   const dracoDecoderLocation = './'
-//   return (
-//     <>
-//       <Script 
-//         src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"
-//         type="module"
-//         onLoad={() => {
-//           const scriptContent = `
-//             self.ModelViewerElement = self.ModelViewerElement || {}
-//             self.ModelViewerElement.dracoDecoderLocation = '${dracoDecoderLocation}'
-//           `
-//           if (typeof window !== "undefined") {
-//             const script = document.createElement('script')
-//             script.textContent = scriptContent
-//             document.head.appendChild(script)
-//           }
-//         }}
-//       />
-//       <model-viewer
-//         src={src}
-//         autoplay  
-//         camera-controls 
-//         touch-action="pan-y" 
-//         style={{ width: '100%', height: '100%' }}
-//       ></model-viewer>
-//     </>
-//   )
-// }
-
-// export default ModelRenderer
