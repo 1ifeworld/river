@@ -2,35 +2,23 @@
 
 import React, { useEffect } from "react"
 // import Script from "next/script"
-import '@google/model-viewer'
+import {ModelViewerElement } from '@google/model-viewer'
 
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      'model-viewer': {
-        src?: string;
-        ios?: boolean;
-        alt?: string;
-        ar?: boolean;
-        progress?: boolean;
-        autoRotate?: boolean;
-        preload?: boolean;
-        autoplay?: boolean;
-        loading?: string;
-        cameraControls?: boolean;
-      } & React.HTMLAttributes<HTMLElement>;
+      'model-viewer': Partial<ModelViewerElement>;
     }
   }
 }
-
 interface ModelRendererProps {
   src: string;
 }
 
 const ModelRenderer: React.FC<ModelRendererProps> = ({ src }) => {
-  // useEffect(() => {
-  //   import('@google/model-viewer').catch(console.error)
-  // }, [])
+  useEffect(() => {
+    import('@google/model-viewer').catch(console.error)
+  }, [])
 
 
   return (
