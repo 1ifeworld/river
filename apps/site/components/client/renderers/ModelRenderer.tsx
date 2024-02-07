@@ -2,7 +2,6 @@
 
 import React, { useEffect } from "react"
 // import Script from "next/script"
-import '@google/model-viewer'
 
 interface ModelRendererProps {
   src: string;
