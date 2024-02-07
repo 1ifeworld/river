@@ -2,6 +2,7 @@ query allAdds {
   addss(orderBy: "timestamp", orderDirection: "desc") {
     items {
       addedById
+      removed
       item {
         id
         timestamp

@@ -9,7 +9,8 @@ import {
   ChannelAccessTypes,
   ChannelDataTypes,
   ItemAccessTypes,
-  ItemDataTypes
+  ItemDataTypes,
+  decodeRemoveItemMsgBody
 } from "scrypt";
 import {
   decodeFunctionData,
@@ -226,38 +227,71 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
         }
         break;
       case MessageTypes.ADD_ITEM_TO_CHANNEL:
-        const { itemCid, channelCid } =
+        const { itemCid: addItemCid, channelCid: addChannelCid } =
           decodeAddItemMsgBody({ msgBody: posts[i].message.msgBody }) || {};
         // check for proper decode
-        if (!itemCid || !channelCid) return;
+        if (!addItemCid || !addChannelCid) return;
         // lookup itemCid + channelCid
-        const item = await Item.findUnique({ id: itemCid });
-        const channel = await Channel.findUnique({ id: channelCid });
+        const addItem = await Item.findUnique({ id: addItemCid });
+        const addChannel = await Channel.findUnique({ id: addChannelCid });
         // check to see if target item + channel exist at timestamp of procesing
-        if (!item || !channel) break;
+        if (!addItem || !addChannel) break;
         // Check to see if rid has access to add to channel
         const access = await ChannelRoles.findUnique({
-          id: `${channelCid}/${posts[i].message.rid}`,
+          id: `${addChannelCid}/${posts[i].message.rid}`,
         });
         // Check to see if role is greater than 0
         if (access?.role && access.role > 0) {
           // check if item exists. prevent adding item cids that dont exist
-          const itemLookup = await Item.findUnique({ id: itemCid });
+          const itemLookup = await Item.findUnique({ id: addItemCid });
           if (!itemLookup) break;
           console.log("made it to end");
           await Adds.upsert({
-            id: `${channelCid}/${itemCid}`,
+            id: `${addChannelCid}/${addItemCid}`,
             create: {
               timestamp: posts[i].message.timestamp,
               addedById: posts[i].message.rid,
               messageId: messageId,
-              itemId: itemCid,
-              channelId: channelCid,
+              itemId: addItemCid,
+              channelId: addChannelCid,
             },
             update: {},
           });
         }
         break;
+        case MessageTypes.REMOVE_ITEM_FROM_CHANNEL:
+          console.log("running remove item")
+          const { itemCid: remItemCid, channelCid: remChannelCid } =
+            decodeRemoveItemMsgBody({ msgBody: posts[i].message.msgBody }) || {};
+            //
+            const addLookup = await Adds.findUnique({ id: `${remChannelCid}/${remItemCid}` });
+          // check for proper decode
+          if (!remItemCid || !remChannelCid || !addLookup) return;
+          // lookup itemCid + channelCid
+          const remChannel = await Channel.findUnique({ id: remChannelCid });
+          // check to see if target item + channel exist at timestamp of procesing
+          if (!remChannel || !addLookup) break;
+          // Check to see if rid has access to remove from channel
+          const remAccess = await ChannelRoles.findUnique({
+            id: `${remChannelCid}/${posts[i].message.rid}`,
+          });
+          console.log("channel access: ", remAccess)
+          // Check to see if rid has admin role or was original adder
+          if (
+            remAccess?.role && remAccess.role > 1 // greater than member            
+            || addLookup.addedById == posts[i].message.rid // was original adder
+          ) {
+            console.log("made it to end of remove");
+            await Adds.update({
+              id: `${remChannelCid}/${remItemCid}`,
+              data: {
+                removed: true,
+                removedById: posts[i].message.rid
+              }
+            })
+          }
+        break; 
+            
     }
   }
 

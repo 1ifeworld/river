@@ -10,19 +10,29 @@ import {
   Toast,
   Typography,
 } from '@/design-system'
-// import { processRemoveReferencePost } from '@/lib'
+import { processRemoveItemPost } from 'lib/posts'
 import { toast } from 'sonner'
+import { Hex } from 'viem'
 
 interface ItemDropdownProps {
-  targetChannelId: string
-  targetReferenceId: string
+  itemCid: string
+  itemRemoved: boolean
+  channelCid: string
+  itemRemovedIndex: number
 }
 
 export function ItemDropdown({
-  targetChannelId,
-  targetReferenceId,
+  itemCid,
+  itemRemoved,
+  channelCid,
+  itemRemovedIndex
 }: ItemDropdownProps) {
   const { signMessage, userId: targetUserId, embeddedWallet } = useUserContext()
+
+  console.log("itemcid: ", itemCid)
+  console.log("both: ", `${channelCid}/${itemCid}`)
+  console.log("number: ", itemRemovedIndex)
+  console.log("itemRemoved: ", itemRemoved)
 
   return (
     <DropdownMenu>
@@ -38,16 +48,18 @@ export function ItemDropdown({
                 type="submit"
                 disabled={!targetUserId}
                 onClick={async () => {
+                  if (!embeddedWallet?.address) return false
                   // initialize bool for txn success check
                   let txSuccess: boolean = false
                   // Generate removeReference post
                   if (signMessage) {
-                    // txSuccess = await processRemoveReferencePost({
-                    //   targetUserId: targetUserId as bigint,
-                    //   targetChannelId: targetChannelId,
-                    //   targetReferenceId: targetReferenceId,
-                    //   privySignMessage: signMessage,
-                    // })
+                    txSuccess = await processRemoveItemPost({
+                      rid: targetUserId as bigint,
+                      signer: embeddedWallet.address as Hex,
+                      itemCid: itemCid,
+                      channelCid: channelCid,
+                      privySignMessage: signMessage
+                    })
                     if (txSuccess) {
                       toast.custom((t) => (
                         <Toast>{'Item successfully removed'}</Toast>

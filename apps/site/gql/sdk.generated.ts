@@ -30,6 +30,8 @@ export type Adds = {
   itemId: Scalars['String']['output'];
   message: Message;
   messageId: Scalars['String']['output'];
+  removed?: Maybe<Scalars['Boolean']['output']>;
+  removedById?: Maybe<Scalars['BigInt']['output']>;
   timestamp: Scalars['BigInt']['output'];
 };
 
@@ -82,6 +84,18 @@ export type AddsFilter = {
   messageId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   messageId_not_starts_with?: InputMaybe<Scalars['String']['input']>;
   messageId_starts_with?: InputMaybe<Scalars['String']['input']>;
+  removed?: InputMaybe<Scalars['Boolean']['input']>;
+  removedById?: InputMaybe<Scalars['BigInt']['input']>;
+  removedById_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  removedById_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  removedById_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  removedById_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  removedById_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  removedById_not?: InputMaybe<Scalars['BigInt']['input']>;
+  removedById_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  removed_in?: InputMaybe<Array<InputMaybe<Scalars['Boolean']['input']>>>;
+  removed_not?: InputMaybe<Scalars['Boolean']['input']>;
+  removed_not_in?: InputMaybe<Array<InputMaybe<Scalars['Boolean']['input']>>>;
   timestamp?: InputMaybe<Scalars['BigInt']['input']>;
   timestamp_gt?: InputMaybe<Scalars['BigInt']['input']>;
   timestamp_gte?: InputMaybe<Scalars['BigInt']['input']>;
@@ -818,7 +832,7 @@ export type UserPage = {
 export type AllAddsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllAddsQuery = { __typename?: 'Query', addss?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', addedById: any, channelId: string, item: { __typename?: 'Item', id: string, timestamp: any, createdById: any, uri: string }, channel: { __typename?: 'Channel', name: string, adds?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', itemId: string }> | null } | null } }> | null } | null };
+export type AllAddsQuery = { __typename?: 'Query', addss?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', addedById: any, removed?: boolean | null, channelId: string, item: { __typename?: 'Item', id: string, timestamp: any, createdById: any, uri: string }, channel: { __typename?: 'Channel', name: string, adds?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', itemId: string }> | null } | null } }> | null } | null };
 
 export type AllChannelsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -840,7 +854,7 @@ export type ChannelWithIdQueryVariables = Exact<{
 }>;
 
 
-export type ChannelWithIdQuery = { __typename?: 'Query', channel?: { __typename?: 'Channel', id: string, timestamp: any, createdById: any, uri: string, name: string, description: string, roles?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> | null } | null, adds?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', timestamp: any, channelId: string, itemId: string, addedById: any, item: { __typename?: 'Item', id: string, uri: string, timestamp: any } }> | null } | null } | null };
+export type ChannelWithIdQuery = { __typename?: 'Query', channel?: { __typename?: 'Channel', id: string, timestamp: any, createdById: any, uri: string, name: string, description: string, roles?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> | null } | null, adds?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', timestamp: any, channelId: string, itemId: string, addedById: any, removed?: boolean | null, item: { __typename?: 'Item', id: string, uri: string, timestamp: any } }> | null } | null } | null };
 
 export type ChannelsItemsWithUserQueryVariables = Exact<{
   userId: Scalars['BigInt']['input'];
@@ -883,6 +897,7 @@ export const AllAddsDocument = gql`
   addss(orderBy: "timestamp", orderDirection: "desc") {
     items {
       addedById
+      removed
       item {
         id
         timestamp
@@ -963,6 +978,7 @@ export const ChannelWithIdDocument = gql`
         channelId
         itemId
         addedById
+        removed
         item {
           id
           uri

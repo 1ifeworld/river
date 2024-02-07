@@ -59,24 +59,24 @@ export function ThumbnailNameCreator({
     <>
       {cid ? (
         <Image
-          className="object-cover aspect-square "
+          className="hover:underline object-cover aspect-square  hover:cursor-pointer"
           src={w3sUrlFromCid({ cid })}
           alt={itemMetadata.name}
           width={40}
           height={40}
         />
       ) : (
-        <GenericThumbnailSmall text={itemMetadata?.contentType as string} />
+        <GenericThumbnailSmall className='hover:cursor-pointer' text={itemMetadata?.contentType as string} />
       )}
-      <Stack>
+      <Stack className='hover:underline'>
         {/* <Link href={`/item/${reference.id}`}> */}
         {/* <Button variant="link"> */}
         {/* This component is hidden on large screens */}
-        <Typography className="md:hidden text-primary-foreground leading-none whitespace-nowrap">
+        <Typography className="hover:cursor-pointer md:hidden text-primary-foreground leading-none whitespace-nowrap">
           {truncateText(itemMetadata.name, 35)}
         </Typography>
         {/* This component is hidden on small screens */}
-        <Typography className="hidden md:block text-primary-foreground leading-none whitespace-nowrap">
+        <Typography className="hover:cursor-pointer hidden md:block text-primary-foreground leading-none whitespace-nowrap">
           {truncateText(itemMetadata.name, 50)}
         </Typography>
         {/* </Button> */}
