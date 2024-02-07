@@ -1,13 +1,6 @@
-import React, { useEffect, CSSProperties } from "react"
-import { ModelViewerElement } from '@google/model-viewer'
+'use client'
 
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      'model-viewer': Partial<ModelViewerElement>
-    }
-  }
-}
+import React, { useEffect } from "react"
 
 interface ModelRendererProps {
   src: string
@@ -15,24 +8,25 @@ interface ModelRendererProps {
 
 const ModelRenderer: React.FC<ModelRendererProps> = ({ src }) => {
   useEffect(() => {
-    import('@google/model-viewer').catch(console.error)
+    import("@google/model-viewer").catch(console.error)
   }, [])
-
-  // Define the styles with the correct type
-  const style: CSSProperties = {
-    width: '100%',
-    height: '100%',
-  }
 
   return (
     <>
       <model-viewer
         src={src}
         autoplay
-        camera-controls 
+        progress
+        camera-controls
         touch-action="pan-y"
-        style={{ width: '100%', height: '100%' } as any}
-        ></model-viewer>
+        style={{ width: "100%", height: "100%" }}
+        // ios-src={src}
+        // ios
+        // ar
+        // ar-modes="webxr scene-viewer"
+        // loading ='eager'
+        // preload
+      ></model-viewer>
     </>
   )
 }
