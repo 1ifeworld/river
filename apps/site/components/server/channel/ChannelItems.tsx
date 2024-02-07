@@ -71,10 +71,8 @@ export async function ChannelItems({
               </Link>
               <TableCell className="text-right text-primary-foreground z-40">
                 <ItemDropdown
-                  itemRemovedIndex={index}
-                  itemRemoved={add.removed ? add.removed : false}
-                  channelCid={channel.id}
-                  itemCid={add.itemId}
+                  channel={channel}
+                  add={add}
                 />
               </TableCell>
             </TableRow>

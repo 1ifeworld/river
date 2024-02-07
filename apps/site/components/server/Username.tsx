@@ -8,10 +8,6 @@ export async function Username({
   className,
 }: { id: bigint; className?: string }) {
   const username = await getUsername({ id: id })
-
-  console.log("get id in username comp", id)
-  console.log("get username in username comp", username)
-
   return (
     <Link
       href={`/${username}`}
