@@ -72,11 +72,11 @@ export function ThumbnailNameCreator({
         {/* <Button variant="link"> */}
         {/* This component is hidden on large screens */}
         <Typography className="hover:cursor-pointer md:hidden hover:underline text-primary-foreground leading-none whitespace-nowrap">
-          {truncateText(itemMetadata.name, 35)}
+          {truncateText(itemMetadata.name, 35, false)}
         </Typography>
         {/* This component is hidden on small screens */}
         <Typography className="hover:cursor-pointer hidden md:block hover:underline text-primary-foreground leading-none whitespace-nowrap">
-          {truncateText(itemMetadata.name, 50)}
+          {truncateText(itemMetadata.name, 50, true)}
         </Typography>
         {/* </Button> */}
         {/* </Link> */}
