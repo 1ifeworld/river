@@ -65,9 +65,7 @@ const ModelRenderer: React.FC<ModelRendererProps> = ({ src }) => {
       />
       <model-viewer
         src={src}
-        ar
         autoplay  
-        ar-modes="webxr scene-viewer"
         camera-controls 
         touch-action="pan-y" 
         style={{ width: '100%', height: '100%' }}
