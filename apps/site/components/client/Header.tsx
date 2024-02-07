@@ -1,4 +1,4 @@
-import { ChannelDialog, User, UsernameDialog } from '@/client'
+import { ChannelDialog, UserDropdown, UsernameDialog } from '@/client'
 import { Button, Flex, Typography } from '@/design-system'
 import { RiverLogo } from '@/server'
 import { usePrivy } from '@privy-io/react-auth'
@@ -37,9 +37,9 @@ export function Header() {
   useEffect(() => {
     const fetchData = async () => {
       // fetch userId + username values. 
-      // will return null for userId or username if no adderss included, or no id/username found
+      // will return null for userId or username if no address included, or no id/username found
       const { userId, username } = await userCheck(embeddedWallet?.address as Hex);
-      // if no wallet address detected, dialog shoul dbe false
+      // if no wallet address detected, dialog should be false
       if (!embeddedWallet?.address) {
         setOpen(false)
       } else {
@@ -62,7 +62,7 @@ export function Header() {
       {/* Header */}
       <Flex
         className={`py-3 px-5 items-center justify-between border-b border-border ${
-          params.index ? '' : 'md:border-none'
+          params.index || params.username ? '' : 'md:border-none'
         }`}
       >
         <RiverLogo />
@@ -73,7 +73,7 @@ export function Header() {
           <Flex className="gap-x-5">
             <ChannelDialog authenticated={authenticated} login={login} />
             {authenticated ? (
-              <User setOpen={setOpen} />
+              <UserDropdown setOpen={setOpen} />
             ) : (
               <Button variant="link" onClick={login}>
                 <Typography>Login</Typography>

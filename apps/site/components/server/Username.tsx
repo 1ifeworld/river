@@ -1,6 +1,7 @@
 import { Typography } from '@/design-system'
 import { cn } from '@/design-system'
 import { getUsername } from '@/lib'
+import Link from 'next/link'
 
 export async function Username({
   id,
@@ -9,8 +10,13 @@ export async function Username({
   const username = await getUsername({ id: id })
 
   return (
-    <Typography className={cn('text-secondary-foreground', className)}>
-      {username}
-    </Typography>
+    <Link
+      href={`/${username}`}
+      className="hover:underline underline-offset-2 transition-all decoration-secondary-foreground"
+    >
+      <Typography className={cn('text-secondary-foreground', className)}>
+        {username}
+      </Typography>
+    </Link>
   )
 }

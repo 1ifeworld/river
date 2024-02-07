@@ -8,7 +8,7 @@ import {
   generateMessageHash,
   encodeCreateAssetMsgBody,
   encodeAddItemMsgBody,
-  type Post
+  type Post,
 } from 'scrypt'
 
 export async function processBatchCreateAddItemPost({
@@ -82,7 +82,7 @@ export async function processBatchCreateAddItemPost({
     sig: createItemSig,
   }
   // Create itemCid using canonical types
-  const itemCid = (await messageToCid(createItemPost.message)).cid.toString()  
+  const itemCid = (await messageToCid(createItemPost.message)).cid.toString()
   /*
   ADD ITEM POST
   */
@@ -116,7 +116,7 @@ export async function processBatchCreateAddItemPost({
     sig: addItemSig,
   }
 
-  try {   
+  try {
     const postBatchResponse = await relayPostBatch([
       createItemPost,
       addItemPost,

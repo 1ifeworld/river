@@ -1,9 +1,9 @@
 import { Typography, Stack, Flex } from '@/design-system'
 import { type Adds } from '@/gql'
-import { getUsername, ipfsUrlToCid, type ChannelMetadata } from '@/lib'
+import { getUsername, ipfsUrlToCid } from '@/lib'
 import { unixTimeConverter } from '@/utils'
-import { kv } from '@vercel/kv'
 import Link from 'next/link'
+import { Username } from '@/server'
 
 interface ItemSidebarProps {
   itemContext: Adds
@@ -13,8 +13,8 @@ interface ItemSidebarProps {
     image: string
     animationUri: string
     contentType: string
-    muxAssetId?: string | undefined
-    muxPlaybackId?: string | undefined
+    muxAssetId?: string
+    muxPlaybackId?: string
   } | null
 }
 
@@ -22,10 +22,6 @@ export async function ItemSidebar({
   itemContext,
   itemMetadata,
 }: ItemSidebarProps) {
-  const createdByUsername = await getUsername({ id: itemContext.item.createdById })
-  const addedByUsername = await getUsername({ id: itemContext.addedById })
-  const channelName = itemContext.channel.name
-
   return (
     <Stack className="px-5 py-[10px] h-full justify-between border-t border-border md:border-none">
       {/* Info / Index */}
@@ -40,9 +36,7 @@ export async function ItemSidebar({
         <Stack className="pt-[30px] gap-y-5">
           <div>
             <Typography className="truncate">{itemMetadata?.name}</Typography>
-            <Typography className="text-secondary-foreground">
-              {createdByUsername}
-            </Typography>
+            <Username id={itemContext.item.createdById} />
           </div>
           <Typography>{'--'}</Typography>
         </Stack>
@@ -54,16 +48,13 @@ export async function ItemSidebar({
               className="hover:underline underline-offset-2 transition-all decoration-secondary-foreground"
             >
               <Typography className="text-secondary-foreground">
-                {/* @ts-ignore */}
-                {channelName}
+                {itemContext.channel.name}
               </Typography>
             </Link>
           </Flex>
           <Flex className="justify-between">
             <Typography>Added by</Typography>
-            <Typography className="text-secondary-foreground">
-              {addedByUsername}
-            </Typography>
+            <Username id={itemContext.addedById} />
           </Flex>
           <Flex className="justify-between">
             <Typography>Date added</Typography>
