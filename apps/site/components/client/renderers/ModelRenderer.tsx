@@ -9,9 +9,9 @@ interface ModelRendererProps {
 }
 
 const ModelRenderer: React.FC<ModelRendererProps> = ({ src }) => {
-  // useEffect(() => {
-  //   import('@google/model-viewer').catch(console.error)
-  // }, [])
+  useEffect(() => {
+    import('@google/model-viewer').catch(console.error)
+  }, [])
 
 
   return (
