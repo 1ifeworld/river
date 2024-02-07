@@ -196,6 +196,9 @@ importers:
       tailwind-merge:
         specifier: ^1.14.0
         version: 1.14.0
+      three:
+        specifier: 0.160.1
+        version: 0.160.1
       ts-pattern:
         specifier: ^5.0.6
         version: 5.0.6
