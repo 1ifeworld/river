@@ -17,12 +17,13 @@ const ModelRenderer: React.FC<ModelRendererProps> = ({ src }) => {
         src={src}
         ios-src={src}
         ios
-        ar
+        // ar
         autoplay  
-        ar-modes="webxr scene-viewer" 
+        // ar-modes="webxr scene-viewer" 
         progress
         camera-controls 
-        preload
+        loading ='eager'
+        // preload
         touch-action="pan-y" 
         style={{ width: '100%', height: '100%' }}
       ></model-viewer>
