@@ -15,15 +15,3 @@ export const ID_REGISTRY_EIP_712_DOMAIN = {
     { name: 'nonce', type: 'uint256' },
     { name: 'deadline', type: 'uint256' },
   ] as const
-//   export const TYPED_DATA_STRUCT = {
-//     account: embeddedWallet.address as Hex,
-//     domain: ID_REGISTRY_EIP_712_DOMAIN,
-//     types: { Register: REGISTER_TYPE },
-//     primaryType: 'Register',
-//     message: {
-//       to: embeddedWallet.address as Hex,
-//       recovery: addresses.riverRecovery.optimism,
-//       nonce: BigInt(0), // assumes all wallets calling this have 0 previous transactions
-//       deadline: deadline,
-//     },
-//   }  
