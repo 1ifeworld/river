@@ -21,16 +21,16 @@ const UserContext = createContext<{
     uiOptions?: SignMessageModalUIOptions,
   ) => Promise<string>
   userId?: bigint
-  authToken?: string | null 
+  authToken?: string | null
   username?: string
   fetchUserData?: () => Promise<void>
   clearUserData?: () => void
-}>({ authToken: null }) 
+}>({ authToken: null })
 
 export function UserContextComponent({ children }: { children: ReactNode }) {
   const [userId, setUserId] = useState<bigint>()
   const [username, setUsername] = useState<string>()
-  const [authToken, setAuthToken] = useState<string | null>(null) 
+  const [authToken, setAuthToken] = useState<string | null>(null)
 
   const { signMessage, getAccessToken } = usePrivy()
   const { wallets } = useWallets()
@@ -43,7 +43,7 @@ export function UserContextComponent({ children }: { children: ReactNode }) {
     if (!embeddedWallet) return
 
     const token = await getAccessToken()
-    setAuthToken(token) 
+    setAuthToken(token)
 
     const fetchedUserId = await getUserId({
       custodyAddress: embeddedWallet.address as Address,

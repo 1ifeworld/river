@@ -1,0 +1,27 @@
+query channelsItemsWithUser($userId: BigInt!) {
+  channels(where: {createdById: $userId}, orderBy: "id", orderDirection: "desc") {
+    items {
+      id
+      name
+      description
+      createdById
+      adds(orderBy: "timestamp", orderDirection: "desc", limit: 4) {
+        items {
+          item {
+            uri
+          }
+        }
+      }
+    }
+  }
+  items(
+    where: {createdById: $userId}
+    orderBy: "timestamp"
+    orderDirection: "desc"
+  ) {
+    items {
+      timestamp
+      uri
+    }
+  }
+}

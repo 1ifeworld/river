@@ -1,28 +1,22 @@
 import { Flex, Stack, Typography } from '@/design-system'
 import { type Adds } from '@/gql'
-import {
-  getUsername,
-  type MediaAssetObject,
-  type ChannelMetadata,
-  w3sUrlFromCid,
-} from '@/lib'
+import { getUsername, type MediaAssetObject, w3sUrlFromCid } from '@/lib'
 import { unixTimeConverter } from '@/utils'
 import { kv } from '@vercel/kv'
 import Image from 'next/image'
 import Link from 'next/link'
-import { GenericThumbnailLarge } from '@/server'
+import { GenericThumbnailLarge, Username } from '@/server'
+import { THUMBNAIL_TYPES_TO_RENDER } from '@/constants'
 
 export async function ItemCard({
   add,
 }: {
   add: Adds
 }) {
-  const username = await getUsername({ id: BigInt(add.item.createdById) })
   const itemMetadata = await kv.get<Pick<MediaAssetObject, 'value'>['value']>(
     add?.item?.uri as string,
   )
   const channelName = add.channel.name
-  const renderableThumbnailTypes = ['image/png', 'image/gif', 'image/jpeg']
 
   const totalItems = add.channel.adds?.items?.length ?? 0
 
@@ -39,7 +33,7 @@ export async function ItemCard({
         className="transition-all"
       >
         <Stack className="relative aspect-[5/6] justify-center items-center">
-          {renderableThumbnailTypes.includes(
+          {THUMBNAIL_TYPES_TO_RENDER.includes(
             itemMetadata?.contentType as string,
           ) ? (
             <Image
@@ -66,15 +60,13 @@ export async function ItemCard({
             </Typography>
           </Link>
           <Flex className="items-center">
-            <Typography className="text-secondary-foreground">
-              {username ?? ''}
-            </Typography>
+            <Username id={add.addedById} />
             <span className="text-secondary-foreground">{'·'}</span>
             <Link
               href={`/channel/${add.channelId}`}
-              className="hover:underline underline-offset-2 transition-all decoration-secondary-foreground"
+              className="hover:underline underline-offset-2 transition-all decoration-secondary-foreground truncate"
             >
-              <Typography className="text-secondary-foreground truncate">
+              <Typography className="text-secondary-foreground">
                 {channelName}
               </Typography>
             </Link>

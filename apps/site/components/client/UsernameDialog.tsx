@@ -28,12 +28,7 @@ import debounce from 'debounce'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import {
-  Hex,
-  createWalletClient,
-  custom,
-  EIP1193Provider,
-} from 'viem'
+import { Hex, createWalletClient, custom, EIP1193Provider } from 'viem'
 import { arbitrumNova, optimism } from 'viem/chains'
 import { getExpiration } from 'scrypt'
 
@@ -102,8 +97,7 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                   name: 'River IdRegistry',
                   version: '1',
                   chainId: 10,
-                  verifyingContract:
-                    addresses.idRegistry.optimism, 
+                  verifyingContract: addresses.idRegistry.optimism,
                 } as const
                 const REGISTER_TYPE = [
                   { name: 'to', type: 'address' },

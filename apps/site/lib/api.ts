@@ -27,7 +27,7 @@ type User = {
 // @ts-ignore
 BigInt.prototype.toJSON = function () {
   return this.toString()
-}    
+}
 
 export async function relayPost(post: Post) {
   const res = await fetch('/api/post', {
