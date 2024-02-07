@@ -11,10 +11,11 @@ const ModelRenderer: React.FC<ModelRendererProps> = ({ src }) => {
   //   import('@google/model-viewer').catch(console.error)
   // }, [])
 
-  <Script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></Script>
 
   return (
     <>
+      <Script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js" />
+
       <model-viewer
         src={src}
         ios-src={src}
@@ -30,7 +31,7 @@ const ModelRenderer: React.FC<ModelRendererProps> = ({ src }) => {
         style={{ width: '100%', height: '100%' }}
       ></model-viewer>
     </>
-  );
-};
+  )
+}
 
 export default ModelRenderer
