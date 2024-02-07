@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useUserContext } from '@/context'
 import {
   Button,
@@ -9,6 +10,7 @@ import {
   DropdownMenuTrigger,
   Toast,
   Typography,
+  Loading
 } from '@/design-system'
 import { processRemoveItemPost } from 'lib/posts'
 import { toast } from 'sonner'
@@ -28,6 +30,7 @@ export function ItemDropdown({
   itemRemovedIndex
 }: ItemDropdownProps) {
   const { signMessage, userId: targetUserId, embeddedWallet } = useUserContext()
+  const [isRemoving, setIsRemoving] = useState(false)
 
   console.log("itemcid: ", itemCid)
   console.log("both: ", `${channelCid}/${itemCid}`)
@@ -36,8 +39,8 @@ export function ItemDropdown({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="focus:outline-none md:mr-4 mb-1">
-        <Typography variant="h2">{'...'}</Typography>
+      <DropdownMenuTrigger disabled={isRemoving} className="focus:outline-none mb-1">
+        <Typography className='hover:font-bold' variant="h2">{isRemoving ? <Loading/> : '...'}</Typography>
       </DropdownMenuTrigger>
       <DropdownMenuPortal>
         <DropdownMenuContent side="bottom" className="w-32 mx-4 md:mx-6">
@@ -46,9 +49,11 @@ export function ItemDropdown({
               <Button
                 variant="link"
                 type="submit"
-                disabled={!targetUserId}
+                disabled={!targetUserId || !embeddedWallet?.address}
                 onClick={async () => {
                   if (!embeddedWallet?.address) return false
+                  //
+                  setIsRemoving(true)
                   // initialize bool for txn success check
                   let txSuccess: boolean = false
                   // Generate removeReference post
@@ -64,9 +69,11 @@ export function ItemDropdown({
                       toast.custom((t) => (
                         <Toast>{'Item successfully removed'}</Toast>
                       ))
+                      
                     } else {
-                      ;<Toast>{'Error removing item'}</Toast>
-                    }
+                      <Toast>{'Error removing item'}</Toast>
+                      setIsRemoving(false)
+                    }                  
                   }
                 }}
               >

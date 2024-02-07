@@ -7,17 +7,16 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 interface ThumbnailNameCreatorProps {
-  channel: Channel
   item: Item
   metadata: any
 }
 
 export function ThumbnailNameCreator({
-  channel,
   item,
   metadata,
 }: ThumbnailNameCreatorProps) {
-  if (!item || item?.createdById) {
+
+  if (!item) {
     return (
       <>
         <Image
@@ -59,7 +58,7 @@ export function ThumbnailNameCreator({
     <>
       {cid ? (
         <Image
-          className="hover:underline object-cover aspect-square  hover:cursor-pointer"
+          className="object-cover aspect-square  hover:cursor-pointer"
           src={w3sUrlFromCid({ cid })}
           alt={itemMetadata.name}
           width={40}
@@ -68,15 +67,15 @@ export function ThumbnailNameCreator({
       ) : (
         <GenericThumbnailSmall className='hover:cursor-pointer' text={itemMetadata?.contentType as string} />
       )}
-      <Stack className='hover:underline'>
+      <Stack className=''>
         {/* <Link href={`/item/${reference.id}`}> */}
         {/* <Button variant="link"> */}
         {/* This component is hidden on large screens */}
-        <Typography className="hover:cursor-pointer md:hidden text-primary-foreground leading-none whitespace-nowrap">
+        <Typography className="hover:cursor-pointer md:hidden hover:underline text-primary-foreground leading-none whitespace-nowrap">
           {truncateText(itemMetadata.name, 35)}
         </Typography>
         {/* This component is hidden on small screens */}
-        <Typography className="hover:cursor-pointer hidden md:block text-primary-foreground leading-none whitespace-nowrap">
+        <Typography className="hover:cursor-pointer hidden md:block hover:underline text-primary-foreground leading-none whitespace-nowrap">
           {truncateText(itemMetadata.name, 50)}
         </Typography>
         {/* </Button> */}

@@ -24,6 +24,7 @@ query channelWithId($id: String!) {
           id
           uri
           timestamp
+          createdById
         }
       }
     }

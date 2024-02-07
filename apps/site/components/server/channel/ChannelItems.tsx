@@ -30,43 +30,56 @@ export async function ChannelItems({
   return (
     <Table className="md:ml-2">
       <TableBody>
-        {channel?.adds?.items?.map((add: Adds, index: number) => (
+        {channel?.adds?.items?.map((add: Adds, index: number) =>
           add.removed ? null : (
-          <TableRow>
-            <TableCell className="flex gap-4 items-center">
+            <TableRow className={`${styles.tableRow}`}>
               <Link
-                key={index}
+                key={`/${index}-tnc`}
                 href={`/channel/${add.channelId}/${totalItems - index}`}
-                className="flex gap-4 items-center"
-                // legacyBehavior
+                legacyBehavior
               >
-                <ThumbnailNameCreator
-                  channel={channel}
-                  item={add.item}
-                  metadata={metadata}
-                />
+                <TableCell className="flex gap-4 items-center hover:cursor-pointer">
+                  <ThumbnailNameCreator item={add.item} metadata={metadata} />
+                </TableCell>
               </Link>
-            </TableCell>
 
-            {/* This component is hidden on small screens */}
-            <TableCell className="hidden md:table-cell max-w-[118px] text-primary-foreground text-nowrap truncate pr-12">
-              <Typography>{`${extractContentType({
-                item: add?.item,
-                metadata: metadata,
-              })}`}</Typography>
-            </TableCell>
-            {/* This component is hidden on small screens */}
-            <TableCell className="hidden md:table-cell text-primary-foreground text-nowrap truncate">
-              <Typography>
-                {unixTimeConverter(Number(add.item.timestamp))}
-              </Typography>
-            </TableCell>
-            <TableCell className="text-right w-fit md:w-[100px] text-primary-foreground">
-              <ItemDropdown itemRemovedIndex={index} itemRemoved={add.removed ? add.removed : false } channelCid={channel.id} itemCid={add.itemId} />
-            </TableCell>
-          </TableRow>
+              {/* This component is hidden on small screens */}        
+              <Link
+                key={`/${index}-cont`}
+                href={`/channel/${add.channelId}/${totalItems - index}`}
+                legacyBehavior
+              >
+              <TableCell className="hidden md:table-cell max-w-[118px] text-primary-foreground text-nowrap truncate pr-12 hover:cursor-pointer">
+                <Typography>{`${extractContentType({
+                  item: add?.item,
+                  metadata: metadata,
+                })}`}</Typography>
+              </TableCell>
+              </Link>
+
+              {/* This component is hidden on small screens */}
+              <Link
+                key={`/${index}-time`}
+                href={`/channel/${add.channelId}/${totalItems - index}`}
+                legacyBehavior
+              >         
+              <TableCell className="hidden md:table-cell text-primary-foreground text-nowrap truncate hover:cursor-pointer">
+                <Typography>
+                  {unixTimeConverter(Number(add.item.timestamp))}
+                </Typography>
+              </TableCell>
+              </Link>
+              <TableCell className="text-right text-primary-foreground z-40">
+                <ItemDropdown
+                  itemRemovedIndex={index}
+                  itemRemoved={add.removed ? add.removed : false}
+                  channelCid={channel.id}
+                  itemCid={add.itemId}
+                />
+              </TableCell>
+            </TableRow>
           )
-        ))}
+        )}
       </TableBody>
     </Table>
   );
