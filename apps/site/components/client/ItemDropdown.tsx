@@ -32,11 +32,6 @@ export function ItemDropdown({
   const { signMessage, userId: targetUserId, embeddedWallet } = useUserContext()
   const [isRemoving, setIsRemoving] = useState(false)
 
-  console.log("itemcid: ", itemCid)
-  console.log("both: ", `${channelCid}/${itemCid}`)
-  console.log("number: ", itemRemovedIndex)
-  console.log("itemRemoved: ", itemRemoved)
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger disabled={isRemoving} className="focus:outline-none mb-1">
@@ -52,7 +47,7 @@ export function ItemDropdown({
                 disabled={!targetUserId || !embeddedWallet?.address}
                 onClick={async () => {
                   if (!embeddedWallet?.address) return false
-                  //
+                  // set isRemoving state to true
                   setIsRemoving(true)
                   // initialize bool for txn success check
                   let txSuccess: boolean = false
@@ -69,9 +64,11 @@ export function ItemDropdown({
                       toast.custom((t) => (
                         <Toast>{'Item successfully removed'}</Toast>
                       ))
-                      
+                      setIsRemoving(false)                      
                     } else {
-                      <Toast>{'Error removing item'}</Toast>
+                      toast.custom((t) => (
+                        <Toast>{'Error removing item'}</Toast>
+                      ))
                       setIsRemoving(false)
                     }                  
                   }

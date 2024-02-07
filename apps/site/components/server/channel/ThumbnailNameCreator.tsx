@@ -1,10 +1,9 @@
 import { Button, Stack, Typography } from '@/design-system'
-import { type Channel, type Item } from '@/gql'
+import { type Item } from '@/gql'
 import { ipfsUrlToCid, w3sUrlFromCid } from '@/lib'
 import { GenericThumbnailSmall, Username } from '@/server'
 import { truncateText } from '@/utils'
 import Image from 'next/image'
-import Link from 'next/link'
 
 interface ThumbnailNameCreatorProps {
   item: Item
@@ -67,9 +66,7 @@ export function ThumbnailNameCreator({
       ) : (
         <GenericThumbnailSmall className='hover:cursor-pointer' text={itemMetadata?.contentType as string} />
       )}
-      <Stack className=''>
-        {/* <Link href={`/item/${reference.id}`}> */}
-        {/* <Button variant="link"> */}
+      <Stack>
         {/* This component is hidden on large screens */}
         <Typography className="hover:cursor-pointer md:hidden hover:underline text-primary-foreground leading-none whitespace-nowrap">
           {truncateText(itemMetadata.name, 35, false)}
@@ -78,8 +75,6 @@ export function ThumbnailNameCreator({
         <Typography className="hover:cursor-pointer hidden md:block hover:underline text-primary-foreground leading-none whitespace-nowrap">
           {truncateText(itemMetadata.name, 50, true)}
         </Typography>
-        {/* </Button> */}
-        {/* </Link> */}
         <Username id={item.createdById} />
       </Stack>
     </>
