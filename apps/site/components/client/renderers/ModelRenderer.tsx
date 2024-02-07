@@ -65,7 +65,6 @@ const ModelRenderer: React.FC<ModelRendererProps> = ({ src }) => {
       />
       <model-viewer
         src={src}
-        loading="eager"
         ar
         autoplay  
         ar-modes="webxr scene-viewer"
