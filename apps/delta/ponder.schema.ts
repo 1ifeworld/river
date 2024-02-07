@@ -92,6 +92,8 @@ export default createSchema((p) => ({
     itemId: p.string().references('Item.id'),
     item: p.one('itemId'),
     channelId: p.string().references('Channel.id'),
-    channel: p.one('channelId')
+    channel: p.one('channelId'),
+    removedById: p.bigint().optional(),
+    removed: p.boolean().optional()
   })
 }))

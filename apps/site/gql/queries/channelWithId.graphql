@@ -19,11 +19,22 @@ query channelWithId($id: String!) {
         channelId
         itemId
         addedById
+        removed
         item {
           id
           uri
           timestamp
+          createdById
         }
+        # channel {
+        #   roles(orderBy: "timestamp", orderDirection: "desc") {
+        #     items {
+        #       timestamp
+        #       rid
+        #       role
+        #     }
+        #   }
+        # }
       }
     }
   }
