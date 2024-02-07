@@ -1,7 +1,9 @@
 'use client'
 
 import React, { useEffect } from "react"
-import Script from "next/script"
+// import Script from "next/script"
+import '@google/model-viewer'
+
 interface ModelRendererProps {
   src: string;
 }
@@ -14,7 +16,7 @@ const ModelRenderer: React.FC<ModelRendererProps> = ({ src }) => {
 
   return (
     <>
-      <Script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js" />
+      {/* <Script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js" /> */}
 
       <model-viewer
         src={src}
