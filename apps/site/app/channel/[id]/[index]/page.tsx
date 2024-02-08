@@ -18,13 +18,16 @@ import Image from 'next/image'
 import { match, P } from 'ts-pattern' 
 import * as React from 'react'
 import { kv } from '@vercel/kv'
-import PdfViewer from '../../../../components/client/renderers/PdfViewer'
 
 const MarkdownRenderer = dynamic(
   () => import('../../../../components/client/renderers/MarkdownRenderer'),
   { ssr: false },
 )
 
+const PdfViewer = dynamic(
+  () => import('../../../../components/client/renderers/PdfViewer'),
+  { ssr: false },
+)
 const ModelRenderer = dynamic(
   () => import('../../../../components/client/renderers/ModelRenderer'),
   { ssr: false },
