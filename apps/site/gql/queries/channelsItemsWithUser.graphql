@@ -2,12 +2,13 @@ query channelsItemsWithUser($userId: BigInt!) {
   channels(where: {createdById: $userId}, orderBy: "timestamp", orderDirection: "desc") {
     items {
       id
-      timestamp        
       name
       description
       createdById
-      adds(orderBy: "timestamp", orderDirection: "desc", limit: 4) {
+      adds(orderBy: "timestamp", orderDirection: "desc") {
         items {
+          timestamp
+          removed
           item {
             uri
           }
