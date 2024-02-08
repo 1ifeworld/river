@@ -19,6 +19,8 @@ export default async function Profile({
     userId: userData.id,
   })
 
+  console.log("channels", channels)
+
   return (
     <Stack className="gap-y-8">
       <Stack className="gap-y-[3px]">

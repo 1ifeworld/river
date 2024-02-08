@@ -992,7 +992,11 @@ export const ChannelWithIdDocument = gql`
     `;
 export const ChannelsItemsWithUserDocument = gql`
     query channelsItemsWithUser($userId: BigInt!) {
-  channels(where: {createdById: $userId}, orderBy: "id", orderDirection: "desc") {
+  channels(
+    where: {createdById: $userId}
+    orderBy: "timestamp"
+    orderDirection: "desc"
+  ) {
     items {
       id
       name
