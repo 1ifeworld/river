@@ -14,4 +14,4 @@ const PdfViewer = ({ file }: {file: string}) => {
   )
 }
 
-export default PdfViewer
+export default PdfViewer  
