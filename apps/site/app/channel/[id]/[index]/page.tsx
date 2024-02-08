@@ -98,18 +98,20 @@ export default async function ItemPage({
       P.when((type) => isAudio({ mimeType: type })),
       () => <AudioPlayer playbackId={itemMetadata?.muxPlaybackId as string} />,
     )
-    .with(
-      P.when((type) => isPdf({ mimeType: type })),
-      () => (
-          <iframe
-            src={contentUrl as string}
-            width="100%"
-            height="100%"
-            style={{ border: "none" }}
-            allowFullScreen
-          ></iframe>
-      ),
-    )
+    .with(P.when((type) => isPdf({ mimeType: type })), () => {
+      const encodedPdfUrl = encodeURIComponent(contentUrl as string)
+      const googleDocsViewerUrl = `https://docs.google.com/viewer?url=${encodedPdfUrl}&embedded=true`
+
+      return (
+        <iframe
+          src={googleDocsViewerUrl}
+          width="100%"
+          height="100%"
+          style={{ border: "none" }}
+          allowFullScreen
+        ></iframe>
+      )
+    })
     .with(
       P.when((type) => isGlb({ mimeType: type })),
       () => <ModelRenderer src={contentUrl as string} />,
