@@ -101,7 +101,6 @@ export default async function ItemPage({
     .with(
       P.when((type) => isPdf({ mimeType: type })),
       () => (
-        <div className="flex justify-center items-center w-full h-full">
           <iframe
             src={contentUrl as string}
             width="100%"
@@ -109,7 +108,6 @@ export default async function ItemPage({
             style={{ border: "none" }}
             allowFullScreen
           ></iframe>
-        </div>
       ),
     )
     .with(
