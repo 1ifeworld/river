@@ -1,4 +1,4 @@
-import { AudioPlayer, VideoPlayer } from '@/client'
+import { AudioPlayer, VideoPlayer, PdfViewer } from '@/client'
 import { ItemSidebar } from '@/server'
 import { Typography, Flex, Stack } from '@/design-system'
 import { getItemPage, getChannelWithId } from '@/gql'
@@ -18,7 +18,6 @@ import Image from 'next/image'
 import { match, P } from 'ts-pattern'
 import * as React from 'react'
 import { kv } from '@vercel/kv'
-import PdfViewer from 'components/client/renderers/PdfViewer'
 
 const MarkdownRenderer = dynamic(
   () => import('../../../../components/client/renderers/MarkdownRenderer'),

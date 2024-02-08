@@ -2,10 +2,10 @@
 
 import React from 'react'
 interface PDFViewerProps {
-  file: string // URL to the PDF file
+  file: string 
 }
 
-const PdfViewer: React.FC<PDFViewerProps> = ({ file }) => {
+export const PdfViewer: React.FC<PDFViewerProps> = ({ file }) => {
   return (
     <div className="flex justify-center items-center w-full h-full">
       <iframe
@@ -18,6 +18,4 @@ const PdfViewer: React.FC<PDFViewerProps> = ({ file }) => {
     </div>
   )
 }
-
-export default PdfViewer
 
