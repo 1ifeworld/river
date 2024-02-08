@@ -1,6 +1,6 @@
 'use client'
 
-export const PdfViewer = ({ file }: {file: string}) => {
+const PdfViewer = ({ file }: {file: string}) => {
   return (
     <div className="flex justify-center items-center w-full h-full">
       <iframe
@@ -14,3 +14,4 @@ export const PdfViewer = ({ file }: {file: string}) => {
   )
 }
 
+export default PdfViewer
