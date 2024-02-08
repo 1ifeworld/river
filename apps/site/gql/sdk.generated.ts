@@ -861,7 +861,7 @@ export type ChannelsItemsWithUserQueryVariables = Exact<{
 }>;
 
 
-export type ChannelsItemsWithUserQuery = { __typename?: 'Query', channels?: { __typename?: 'ChannelPage', items?: Array<{ __typename?: 'Channel', id: string, timestamp: any, name: string, description: string, createdById: any, adds?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', item: { __typename?: 'Item', uri: string } }> | null } | null }> | null } | null, items?: { __typename?: 'ItemPage', items?: Array<{ __typename?: 'Item', timestamp: any, uri: string }> | null } | null };
+export type ChannelsItemsWithUserQuery = { __typename?: 'Query', channels?: { __typename?: 'ChannelPage', items?: Array<{ __typename?: 'Channel', id: string, name: string, description: string, createdById: any, adds?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', timestamp: any, removed?: boolean | null, item: { __typename?: 'Item', uri: string } }> | null } | null }> | null } | null, items?: { __typename?: 'ItemPage', items?: Array<{ __typename?: 'Item', timestamp: any, uri: string }> | null } | null };
 
 export type ItemPageQueryVariables = Exact<{
   id: Scalars['String']['input'];
@@ -999,12 +999,13 @@ export const ChannelsItemsWithUserDocument = gql`
   ) {
     items {
       id
-      timestamp
       name
       description
       createdById
-      adds(orderBy: "timestamp", orderDirection: "desc", limit: 4) {
+      adds(orderBy: "timestamp", orderDirection: "desc") {
         items {
+          timestamp
+          removed
           item {
             uri
           }
