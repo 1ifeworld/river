@@ -18,14 +18,15 @@ import Image from 'next/image'
 import { match, P } from 'ts-pattern'
 import * as React from 'react'
 import { kv } from '@vercel/kv'
-
-const Model = dynamic(
-  () => import('../../../../components/client/renderers/ModelRenderer'),
-  { ssr: false },
-)
+// import ModelRenderer from 'components/client/renderers/ModelRenderer'
 
 const MarkdownRenderer = dynamic(
   () => import('../../../../components/client/renderers/MarkdownRenderer'),
+  { ssr: false },
+)
+
+const ModelRenderer = dynamic(
+  () => import('../../../../components/client/renderers/ModelRenderer'),
   { ssr: false },
 )
 
@@ -106,7 +107,7 @@ export default async function ItemPage({
     )
     .with(
       P.when((type) => isGlb({ mimeType: type })),
-      () => <Model src={contentUrl as string} />,
+      () => <ModelRenderer src={contentUrl as string} />,
     )
     .otherwise(() => (
       <Stack className="h-full items-center justify-center">
