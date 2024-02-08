@@ -1,11 +1,6 @@
 'use client'
 
-import React from 'react'
-interface PDFViewerProps {
-  file: string 
-}
-
-export const PdfViewer: React.FC<PDFViewerProps> = ({ file }) => {
+export const PdfViewer = ({ file }: {file: string}) => {
   return (
     <div className="flex justify-center items-center w-full h-full">
       <iframe
