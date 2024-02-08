@@ -1,6 +1,6 @@
 import { Flex, Stack, Typography } from '@/design-system'
 import { type Adds } from '@/gql'
-import { getUsername, type MediaAssetObject, w3sUrlFromCid } from '@/lib'
+import { type MediaAssetObject, w3sUrlFromCid } from '@/lib'
 import { unixTimeConverter } from '@/utils'
 import { kv } from '@vercel/kv'
 import Image from 'next/image'
@@ -16,7 +16,6 @@ export async function ItemCard({
   const itemMetadata = await kv.get<Pick<MediaAssetObject, 'value'>['value']>(
     add?.item?.uri as string,
   )
-  const channelName = add.channel.name
 
   const totalItems = add.channel.adds?.items?.length ?? 0
 
@@ -67,7 +66,7 @@ export async function ItemCard({
               className="hover:underline underline-offset-2 transition-all decoration-secondary-foreground truncate"
             >
               <Typography className="text-secondary-foreground">
-                {channelName}
+                {add.channel.name}
               </Typography>
             </Link>
           </Flex>

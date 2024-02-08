@@ -26,15 +26,14 @@ query channelWithId($id: String!) {
           timestamp
           createdById
         }
-        # channel {
-        #   roles(orderBy: "timestamp", orderDirection: "desc") {
-        #     items {
-        #       timestamp
-        #       rid
-        #       role
-        #     }
-        #   }
-        # }
+        channel {
+          name
+          adds(orderBy: "timestamp", orderDirection: "desc") {
+            items {
+              itemId
+            }
+          }
+        }
       }
     }
   }
