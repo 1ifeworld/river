@@ -1,6 +1,6 @@
-import { Channel } from '@/gql'
+import { Channel, Adds } from '@/gql'
 import { Username, GenericThumbnailLarge } from '@/server'
-import { Typography, Stack, Flex, Grid, Debug } from '@/design-system'
+import { Typography, Stack, Flex, Grid } from '@/design-system'
 import { w3sUrlFromCid, MediaAssetObject } from '@/lib'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -8,8 +8,14 @@ import { kv } from '@vercel/kv'
 import { THUMBNAIL_TYPES_TO_RENDER } from '@/constants'
 
 export async function ChannelCard({ channel }: { channel: Channel }) {
+
+  const lastFourNonRemovedItems: Adds[] = 
+    (channel?.adds?.items ?? [])
+      .filter(item => !item.removed)
+      .slice(0, 4);
+
   const channelCardMetadata = await Promise.all(
-    channel.adds?.items?.map((item) =>
+    lastFourNonRemovedItems.map((item) =>
       kv.get<Pick<MediaAssetObject, 'value'>['value']>(item.item.uri as string),
     ) || [],
   )
@@ -17,13 +23,13 @@ export async function ChannelCard({ channel }: { channel: Channel }) {
   return (
     <Stack className="w-full gap-y-[10px]">
       <Link href={`/channel/${channel.id}`}>
-        {(channel.adds?.items?.length as number) < 4 ? (
+        {(lastFourNonRemovedItems.length as number) < 4 ? (
           THUMBNAIL_TYPES_TO_RENDER.includes(
             channelCardMetadata[0]?.contentType as string,
           ) ? (
             <Image
               src={w3sUrlFromCid({
-                cid: channel.adds?.items?.[0].item.uri as string,
+                cid: channelCardMetadata[0]?.image as string,
               })}
               alt={channelCardMetadata[0]?.name as string}
               width={256}
@@ -32,7 +38,7 @@ export async function ChannelCard({ channel }: { channel: Channel }) {
             />
           ) : (
             <div className="w-full md:w-64">
-              {channel.adds?.items?.length ? (
+              {lastFourNonRemovedItems.length ? (
                 <GenericThumbnailLarge
                   text={channelCardMetadata[0]?.contentType as string}
                 />
@@ -47,13 +53,13 @@ export async function ChannelCard({ channel }: { channel: Channel }) {
           )
         ) : (
           <Grid className="grid-cols-2 grid-rows-2 aspect-square md:w-64 relative">
-            {channel.adds?.items?.map((item, index) =>
+            {lastFourNonRemovedItems.map((item, index) =>
               THUMBNAIL_TYPES_TO_RENDER.includes(
                 channelCardMetadata[index]?.contentType as string,
               ) ? (
                 <Image
                   key={index}
-                  src={w3sUrlFromCid({ cid: item.item.uri })}
+                  src={w3sUrlFromCid({ cid: channelCardMetadata[index]?.image as string })}
                   alt={channelCardMetadata[index]?.name as string}
                   width={128}
                   height={128}
