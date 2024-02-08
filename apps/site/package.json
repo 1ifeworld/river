@@ -45,7 +45,6 @@
     "react-dropzone": "^14.2.3",
     "react-fast-marquee": "^1.6.3",
     "react-hook-form": "^7.47.0",
-    "react-pdf": "^7.6.0",
     "rich-markdown-editor": "^11.21.3",
     "scrypt": "workspace:*",
     "server-only": "^0.0.1",

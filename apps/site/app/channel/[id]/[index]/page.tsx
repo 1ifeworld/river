@@ -18,7 +18,7 @@ import Image from 'next/image'
 import { match, P } from 'ts-pattern'
 import * as React from 'react'
 import { kv } from '@vercel/kv'
-// import ModelRenderer from 'components/client/renderers/ModelRenderer'
+import PdfViewer from 'components/client/renderers/PdfViewer'
 
 const MarkdownRenderer = dynamic(
   () => import('../../../../components/client/renderers/MarkdownRenderer'),
@@ -30,10 +30,7 @@ const ModelRenderer = dynamic(
   { ssr: false },
 )
 
-const PdfViewer = dynamic(
-  () => import('../../../../components/client/renderers/PDFViewer'),
-  { ssr: false },
-)
+
 
 export default async function ItemPage({
   params,
