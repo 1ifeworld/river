@@ -1,3 +1,4 @@
+'use client'
 import { Header, ThemeToggle } from '@/client'
 import { Analytics } from '@vercel/analytics/react'
 import type { Metadata } from 'next'
