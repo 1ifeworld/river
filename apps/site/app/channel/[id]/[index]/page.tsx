@@ -18,7 +18,7 @@ import Image from 'next/image'
 import { match, P } from 'ts-pattern' 
 import * as React from 'react'
 import { kv } from '@vercel/kv'
-import PdfViewer from 'components/client/renderers/PdfViewer'
+// import PdfViewer from 'components/client/renderers/PdfViewer'
 
 const MarkdownRenderer = dynamic(
   () => import('../../../../components/client/renderers/MarkdownRenderer'),
@@ -100,7 +100,17 @@ export default async function ItemPage({
     )
     .with(
       P.when((type) => isPdf({ mimeType: type })),
-      () => <PdfViewer file={contentUrl as string} />,
+      () => (
+        <div className="flex justify-center items-center w-full h-full">
+          <iframe
+            src={contentUrl as string}
+            width="100%"
+            height="100%"
+            style={{ border: "none" }}
+            allowFullScreen
+          ></iframe>
+        </div>
+      ),
     )
     .with(
       P.when((type) => isGlb({ mimeType: type })),
