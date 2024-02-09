@@ -32,26 +32,28 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ contentUrl }) => {
       })
   }, [contentUrl])
 
+  const viewerStyles = {
+    lineHeight: '17px',
+  };
 
-return (
-<div ref={containerRef} className="flex flex-col items-center bg-white overflow-auto h-[95vh] px-12 sm:px-12 py-8">
-    <div className="w-full max-w-2xl mx-auto">
-      {isLoading ? (
-        <div className="flex justify-center items-center h-full">
-          Loading...
-        </div>
-      ) : (
-        <Viewer
-        className="max-w-none"
-        value={content}
-          readOnly
-        />
-      )}
+  return (
+    <div ref={containerRef} className="flex flex-col items-center bg-white overflow-auto h-[95vh] px-2 py-10 sm:px-10">
+      <div className="w-full base max-w-2xl mx-auto" style={{ width: '70vw' }}>
+        {isLoading ? (
+          <div className="flex base justify-center items-center h-full">
+            Loading...
+          </div>
+        ) : (
+          <Viewer
+            className="max-w-none base"
+            value={content}
+            readOnly
+            style={viewerStyles}
+          />
+        )}
+      </div>
     </div>
-  </div>
-)
-}
+  );
+};
 
-export default MarkdownRenderer
-
-
+export default MarkdownRenderer;
