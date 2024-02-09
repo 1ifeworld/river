@@ -108,6 +108,10 @@ export default async function ItemPage({
     .with(
       P.when((type) => isGlb({ mimeType: type })),
       () => <ModelRenderer src={contentUrl as string} />,
+    )  // TODO: Update styling for markdown renderer
+    .with(
+      P.when((type) => isMarkdown({ mimeType: type })),
+      () => <MarkdownRenderer contentUrl={contentUrl as string} />,
     )
     .otherwise(() => (
       <Stack className="h-full items-center justify-center">
@@ -117,11 +121,7 @@ export default async function ItemPage({
       </Stack>
     ))
 
-  // TODO: Update styling for markdown renderer
-  // .with(
-  //   P.when((type) => isMarkdown({ mimeType: type })),
-  //   () => <MarkdownRenderer contentUrl={contentUrl as string} />,
-  // )
+
 
   return (
     <Stack className="h-[calc(100dvh-38px)] md:flex-row">
