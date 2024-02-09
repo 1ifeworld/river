@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState, useRef } from 'react'
 import Viewer from 'rich-markdown-editor'
-import { light as customTheme } from '../../../styles/editorTheme'
 
 interface MarkdownRendererProps {
   contentUrl: string
@@ -12,6 +11,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ contentUrl }) => {
   const [content, setContent] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const containerRef = useRef<HTMLDivElement>(null)
+
 
   useEffect(() => {
     setIsLoading(true)
@@ -32,34 +32,26 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ contentUrl }) => {
       })
   }, [contentUrl])
 
-  const editorStyles = {
-    padding: '3vw 5vh', 
-    backgroundColor: '#FFFFFF', 
-    color: '#333',
-    maxWidth: 'calc(100% - 80px)', 
-    margin: 'auto'
-  }
 
-  return (
-    <div
-      ref={containerRef}
-      className="flex flex-col items-center my-4 bg-gray-100 overflow-auto"
-      style={{ height: '98%' }}
-    >
-      <div style={editorStyles}>
-        {isLoading ? (
-          <div>Loading...</div>
-        ) : (
-          <Viewer
-            className="text-secondary-foreground font-mono text-base w-full"
-            value={content}
-            readOnly
-            theme={customTheme}
-          />
-        )}
-      </div>
+return (
+<div ref={containerRef} className="flex flex-col items-center bg-white overflow-auto h-[95vh] px-12 sm:px-12 py-8">
+    <div className="w-full max-w-2xl mx-auto">
+      {isLoading ? (
+        <div className="flex justify-center items-center h-full">
+          <div className="animate-spin rounded-full h-12 w-10 border-b-2 border-gray-900"></div>
+        </div>
+      ) : (
+        <Viewer
+        className="max-w-none"
+        value={content}
+          readOnly
+        />
+      )}
     </div>
-  )
+  </div>
+)
 }
 
 export default MarkdownRenderer
+
+
