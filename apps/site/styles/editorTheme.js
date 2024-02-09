@@ -66,7 +66,7 @@ export const base = {
 
 export const light = {
   ...base,
-  background: colors.white,
+  background: '#FFFFFF',
   text: colors.almostBlack,
   code: colors.lightBlack,
   cursor: colors.black,
@@ -79,7 +79,7 @@ export const light = {
 
   tableDivider: colors.greyMid,
   tableSelected: colors.primary,
-  tableSelectedBackground: '#E5F7FF',
+  tableSelectedBackground: '#f3f4f6',
 
   quote: colors.greyDark,
   codeBackground: colors.greyLight,

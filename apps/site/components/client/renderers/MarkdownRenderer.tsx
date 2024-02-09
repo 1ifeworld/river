@@ -1,16 +1,17 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
-import Editor from 'rich-markdown-editor'
+import React, { useEffect, useState, useRef } from 'react'
+import Viewer from 'rich-markdown-editor'
 import { light as customTheme } from '../../../styles/editorTheme'
 
-type Props = {
+interface MarkdownRendererProps {
   contentUrl: string
 }
 
-const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
+const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ contentUrl }) => {
   const [content, setContent] = useState('')
   const [isLoading, setIsLoading] = useState(true)
+  const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setIsLoading(true)
@@ -31,18 +32,26 @@ const MarkdownRenderer: React.FC<Props> = ({ contentUrl }) => {
       })
   }, [contentUrl])
 
+  const editorStyles = {
+    padding: '3vw 5vh', 
+    backgroundColor: '#FFFFFF', 
+    color: '#333',
+    maxWidth: 'calc(100% - 80px)', 
+    margin: 'auto'
+  }
+
   return (
-    <div className="flex justify-center items-center py-4">
-      <div
-        className="flex h-full w-full justify-center"
-        // style={{ height: '90vh', maxWidth: '55vw' }}
-      >
+    <div
+      ref={containerRef}
+      className="flex flex-col items-center my-4 bg-gray-100 overflow-auto"
+      style={{ height: '98%' }}
+    >
+      <div style={editorStyles}>
         {isLoading ? (
           <div>Loading...</div>
         ) : (
-          <Editor
-            className=" editor-body-text w-[620px]"
-            // disableExtensions={['container_notice']}
+          <Viewer
+            className="text-secondary-foreground font-mono text-base w-full"
             value={content}
             readOnly
             theme={customTheme}
