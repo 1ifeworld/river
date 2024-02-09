@@ -51,24 +51,27 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
   return (
     <div
       ref={containerRef}
-      className="flex flex-col items-center my-4 bg-gray-100"
+      className="flex flex-col items-center my-4 bg-gray-100 overflow-auto"
+      style={{ height: '98%' }}
     >
       <div className="my-2 p-4">
         <Document
-          className="text-secondary-foreground font-mono text-base"
           file={file}
           onLoadSuccess={onDocumentLoadSuccess}
+          className="text-secondary-foreground font-mono text-base"
         >
           {Array.from({ length: numPages }, (_, index) => (
             <div key={`page_${index + 1}`} className="flex justify-center my-2">
-              <Page
-                pageNumber={index + 1}
-                width={pageWidth}
-                renderAnnotationLayer={false}
-                renderTextLayer={false}
-                renderMode="canvas"
+
+            <Page
+              key={`page_${index + 1}`}
+              pageNumber={index + 1}
+              width={pageWidth}
+              renderAnnotationLayer={false}
+              renderTextLayer={false}
+              renderMode="canvas"
               />
-            </div>
+              </div>
           ))}
         </Document>
       </div>
