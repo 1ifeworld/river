@@ -1,32 +1,44 @@
-import { ItemDropdown } from "@/client";
+import { ItemDropdown } from '@/client'
 import {
   Table,
   TableBody,
   TableCell,
   TableRow,
   Typography,
-} from "@/design-system";
-import { Channel, Adds, Item } from "@/gql";
-import { ThumbnailNameCreator } from "@/server";
-import { unixTimeConverter } from "@/utils";
-import Link from "next/link";
-import styles from "./ChannelItems.module.css";
+  Grid,
+} from '@/design-system'
+import { Channel, Adds, Item } from '@/gql'
+import { ThumbnailNameCreator, ItemCard } from '@/server'
+import { unixTimeConverter } from '@/utils'
+import Link from 'next/link'
+import styles from './ChannelItems.module.css'
 
 function extractContentType({ item, metadata }: { item: Item; metadata: any }) {
-  if (!item || !item.uri) return undefined;
-  const itemMetadata = metadata.data[item.uri];
-  return itemMetadata?.contentType ? itemMetadata.contentType : "undefined";
+  if (!item || !item.uri) return undefined
+  const itemMetadata = metadata.data[item.uri]
+  return itemMetadata?.contentType ? itemMetadata.contentType : 'undefined'
 }
 
 export async function ChannelItems({
   channel,
   metadata,
+  view,
 }: {
-  channel: Channel;
-  metadata: any;
+  channel: Channel
+  metadata: any
+  view?: string | string[]
 }) {
-  const totalItems = channel.adds?.items?.length ?? 0;
+  const totalItems = channel.adds?.items?.length ?? 0
 
+  if (view === 'grid') {
+    return (
+      <Grid className="grid-cols-2 md:grid-cols-[repeat(auto-fill,_minmax(255px,_1fr))] gap-5 py-[30px]">
+        {channel?.adds?.items?.map((add: Adds, index: number) =>
+          add.removed ? null : <ItemCard key={index} add={add} />,
+        )}
+      </Grid>
+    )
+  }
   return (
     <Table className="md:ml-2">
       <TableBody>
@@ -42,43 +54,38 @@ export async function ChannelItems({
                   <ThumbnailNameCreator item={add.item} metadata={metadata} />
                 </TableCell>
               </Link>
-
-              {/* This component is hidden on small screens */}        
+              {/* This component is hidden on small screens */}
               <Link
                 key={`/${index}-cont`}
                 href={`/channel/${add.channelId}/${totalItems - index}`}
                 legacyBehavior
               >
-              <TableCell className="hidden md:table-cell max-w-[118px] text-primary-foreground text-nowrap truncate pr-12 hover:cursor-pointer">
-                <Typography>{`${extractContentType({
-                  item: add?.item,
-                  metadata: metadata,
-                })}`}</Typography>
-              </TableCell>
+                <TableCell className="hidden md:table-cell max-w-[118px] text-primary-foreground text-nowrap truncate pr-12 hover:cursor-pointer">
+                  <Typography>{`${extractContentType({
+                    item: add?.item,
+                    metadata: metadata,
+                  })}`}</Typography>
+                </TableCell>
               </Link>
-
               {/* This component is hidden on small screens */}
               <Link
                 key={`/${index}-time`}
                 href={`/channel/${add.channelId}/${totalItems - index}`}
                 legacyBehavior
-              >         
-              <TableCell className="hidden md:table-cell text-primary-foreground text-nowrap truncate hover:cursor-pointer">
-                <Typography>
-                  {unixTimeConverter(Number(add.item.timestamp))}
-                </Typography>
-              </TableCell>
+              >
+                <TableCell className="hidden md:table-cell text-primary-foreground text-nowrap truncate hover:cursor-pointer">
+                  <Typography>
+                    {unixTimeConverter(Number(add.item.timestamp))}
+                  </Typography>
+                </TableCell>
               </Link>
               <TableCell className="text-right text-primary-foreground z-40">
-                <ItemDropdown
-                  channel={channel}
-                  add={add}
-                />
+                <ItemDropdown channel={channel} add={add} />
               </TableCell>
             </TableRow>
-          )
+          ),
         )}
       </TableBody>
     </Table>
-  );
+  )
 }

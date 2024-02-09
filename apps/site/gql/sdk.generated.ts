@@ -854,7 +854,7 @@ export type ChannelWithIdQueryVariables = Exact<{
 }>;
 
 
-export type ChannelWithIdQuery = { __typename?: 'Query', channel?: { __typename?: 'Channel', id: string, timestamp: any, createdById: any, uri: string, name: string, description: string, roles?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> | null } | null, adds?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', timestamp: any, channelId: string, itemId: string, addedById: any, removed?: boolean | null, item: { __typename?: 'Item', id: string, uri: string, timestamp: any, createdById: any } }> | null } | null } | null };
+export type ChannelWithIdQuery = { __typename?: 'Query', channel?: { __typename?: 'Channel', id: string, timestamp: any, createdById: any, uri: string, name: string, description: string, roles?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> | null } | null, adds?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', timestamp: any, channelId: string, itemId: string, addedById: any, removed?: boolean | null, item: { __typename?: 'Item', id: string, uri: string, timestamp: any, createdById: any }, channel: { __typename?: 'Channel', name: string, adds?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', itemId: string }> | null } | null } }> | null } | null } | null };
 
 export type ChannelsItemsWithUserQueryVariables = Exact<{
   userId: Scalars['BigInt']['input'];
@@ -984,6 +984,14 @@ export const ChannelWithIdDocument = gql`
           uri
           timestamp
           createdById
+        }
+        channel {
+          name
+          adds(orderBy: "timestamp", orderDirection: "desc") {
+            items {
+              itemId
+            }
+          }
         }
       }
     }

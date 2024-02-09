@@ -1,6 +1,7 @@
 import { Stack, Typography, Flex } from '@/design-system'
 import { getChannelWithId } from '@/gql'
 import { getAddsMetadata } from '@/lib'
+import { ViewToggle } from '@/client'
 import {
   ChannelBanner,
   ChannelItems,
@@ -11,8 +12,10 @@ import {
 
 export default async function Channel({
   params,
+  searchParams,
 }: {
   params: { id: string }
+  searchParams: { [key: string]: string | string[] | undefined }
 }) {
   const { channel } = await getChannelWithId({
     id: params.id,
@@ -37,10 +40,17 @@ export default async function Channel({
         <div className="w-full md:w-[78%]">
           <Stack>
             <Stack className="gap-y-[45px]">
-              {/* @ts-ignore */}
-              <ChannelBanner channel={channel} />
-              {/* @ts-ignore */}
-              <ChannelItems channel={channel} metadata={metadata} />
+              <Flex className="justify-between">
+                {/* @ts-ignore */}
+                <ChannelBanner channel={channel} />
+                <ViewToggle />
+              </Flex>
+              <ChannelItems
+                // @ts-ignore
+                channel={channel}
+                metadata={metadata}
+                view={searchParams.view}
+              />
             </Stack>
             {/* @ts-ignore */}
             <ChannelDetails channel={channel} />
