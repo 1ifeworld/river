@@ -103,7 +103,7 @@ export default async function ItemPage({
     )
     .with(
       P.when((type) => isPdf({ mimeType: type })),
-      () => <PdfViewer file={contentUrl as string} />,
+      () =>  <PdfViewer file={contentUrl as string} />,
     )
     .with(
       P.when((type) => isGlb({ mimeType: type })),
@@ -124,8 +124,10 @@ export default async function ItemPage({
   // )
 
   return (
-    <Stack className="h-[calc(100dvh-38px)] md:flex-row">
-      <div className="bg-[#F3F4F6] w-full h-full md:w-[78%]">{content}</div>
+    <Stack className="h-[calc(100vh-38px)] md:flex-row">
+      <div className="bg-[#F3F4F6] w-full h-full md:w-[78%]">
+        {content}
+      </div>
       <div className="md:w-[22%]">
         <ItemSidebar
           // @ts-ignore
@@ -134,5 +136,19 @@ export default async function ItemPage({
         />
       </div>
     </Stack>
-  )
+  );
 }
+
+// return (
+//   <Stack className="h-[calc(100vh-38px)] md:flex-row">
+//     <div className="bg-[#F3F4F6] w-full h-full md:w-[78%]">{content}</div>
+//     <div className="md:w-[22%]">
+//       <ItemSidebar
+//         // @ts-ignore
+//         itemContext={itemPage}
+//         itemMetadata={itemMetadata}
+//       />
+//     </div>
+//   </Stack>
+// )
+// }
