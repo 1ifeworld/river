@@ -38,7 +38,7 @@ return (
     <div className="w-full max-w-2xl mx-auto">
       {isLoading ? (
         <div className="flex justify-center items-center h-full">
-          <div className="animate-spin rounded-full h-12 w-10 border-b-2 border-gray-900"></div>
+          Loading...
         </div>
       ) : (
         <Viewer
