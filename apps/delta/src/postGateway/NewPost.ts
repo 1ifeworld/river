@@ -10,7 +10,8 @@ import {
   ChannelDataTypes,
   ItemAccessTypes,
   ItemDataTypes,
-  decodeRemoveItemMsgBody
+  decodeRemoveItemMsgBody,
+  decodeUpdateAssetMsgBody,
 } from "scrypt";
 import {
   decodeFunctionData,
@@ -52,7 +53,6 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
                       INTAKE
 
   ************************************************ */
-
 
   let posts: Post[] = [];
 
@@ -98,11 +98,10 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
 
     if (!signerIsValid) return;
 
-
     // Create post + message cid
     // NOTE: message cid will double as asset cid for CREATE_ITEM + CREATE_CHANNEL calls
-    const postId = (await postToCid(posts[i])).cid.toString()
-    const messageId = (await messageToCid(posts[i].message)).cid.toString()
+    const postId = (await postToCid(posts[i])).cid.toString();
+    const messageId = (await messageToCid(posts[i].message)).cid.toString();
 
     // store post + message
     const storedPost = await Post.upsert({
@@ -130,8 +129,60 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
       update: {},
     });
 
+    /* ************************************************
+
+                  MESSAGING PROCESSING
+
+  ************************************************ */
+
     switch (posts[i].message.msgType) {
-      case MessageTypes.CREATE_CHANNEL:
+      case MessageTypes.CREATE_ITEM: // 1
+        console.log("running create item");
+        // decode channel data + channel access
+        const { data: itemData, access: itemAccess } =
+          decodeCreateAssetMsgBody({ msgBody: posts[i].message.msgBody }) || {};
+        // check to see if data type + access type are valid
+        if (itemData?.dataType != ItemDataTypes.STRING_URI) break;
+        if (itemAccess?.accessType != ItemAccessTypes.ROLES) break;
+        // decode item ipfs uri from itemData.conetnts
+        const [itemUri] = decodeAbiParameters(
+          [{ name: "itemIpfsCid", type: "string" }],
+          itemData.contents
+        );
+        // decode admins + from access.contents (if ItemAccessTypes.ROLES)
+        const [itemMembers, itemRoles] = decodeAbiParameters(
+          [
+            { name: "members", type: "uint256[]" },
+            { name: "roles", type: "uint256[]" },
+          ],
+          itemAccess.contents
+        );
+        // Create item
+        await Item.upsert({
+          id: messageId,
+          create: {
+            messageId: messageId,
+            timestamp: posts[i].message.timestamp,
+            createdById: posts[i].message.rid,
+            uri: itemUri,
+          },
+          update: {},
+        });
+        // Store item roles (ItemAccessTypes.ROLES)
+        // set roles
+        for (let i = 0; i < itemMembers.length; ++i) {
+          await ItemRoles.upsert({
+            id: `${messageId}/${itemMembers[i]}`,
+            create: {
+              itemId: messageId,
+              rid: itemMembers[i],
+              role: itemRoles[i],
+            },
+            update: {},
+          });
+        }
+        break;
+      case MessageTypes.CREATE_CHANNEL: // 3
         // decode channel data + channel access
         const { data: channelData, access: channelAccess } =
           decodeCreateAssetMsgBody({ msgBody: posts[i].message.msgBody }) || {};
@@ -180,53 +231,57 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
           });
         }
         break;
-      case MessageTypes.CREATE_ITEM:
-        console.log("running create item");
+      case MessageTypes.UPDATE_CHANNEL: // 4 (230210 protocol update, update access msgs are supported)
+        /* currently ignoring things related to updating channel data */
         // decode channel data + channel access
-        const { data: itemData, access: itemAccess } =
-          decodeCreateAssetMsgBody({ msgBody: posts[i].message.msgBody }) || {};
+        const {
+          assetCid: updateChannelCid,
+          data: updateChannelData,
+          access: updateChannelAccess,
+        } = decodeUpdateAssetMsgBody({ msgBody: posts[i].message.msgBody }) || {};
+        // check to seee if channelCid was passed in
+        // NOTE: consider whether to only allow messages to active channel cids (channel lookup first)
+        if (!updateChannelCid) break;
         // check to see if data type + access type are valid
-        if (itemData?.dataType != ItemDataTypes.STRING_URI) break;
-        if (itemAccess?.accessType != ItemAccessTypes.ROLES) break;
-        // decode item ipfs uri from itemData.conetnts
-        const [itemUri] = decodeAbiParameters(
-          [{ name: "itemIpfsCid", type: "string" }],
-          itemData.contents
-        );
-        // decode admins + from access.contents (if ItemAccessTypes.ROLES)
-        const [itemMembers, itemRoles] = decodeAbiParameters(
+        // if (channelData?.dataType != ChannelDataTypes.NAME_AND_DESC) break;
+        if (updateChannelAccess?.accessType != ChannelAccessTypes.ROLES) break;
+        // const [name, description] = decodeAbiParameters(
+        //   [
+        //     { name: "name", type: "string" },
+        //     { name: "desc", type: "string" },
+        //   ],
+        //   channelData.contents
+        // );
+        // decode members + roles from access.contents (if ChannelAccessTypes.Roles)
+        const [updateMembers, updateRoles] = decodeAbiParameters(
           [
             { name: "members", type: "uint256[]" },
-            { name: "roles", type: "uint256[]" }
+            { name: "roles", type: "uint256[]" },
           ],
-          itemAccess.contents
+          updateChannelAccess.contents
         );
-        // Create item
-        await Item.upsert({
-          id: messageId,
-          create: {
-            messageId: messageId,
-            timestamp: posts[i].message.timestamp,
-            createdById: posts[i].message.rid,
-            uri: itemUri,
-          },
-          update: {},
+        // lookup access control for this channel
+        const roleAccess = await ChannelRoles.findUnique({
+          id: `${updateChannelCid}/${posts[i].message.rid}`,
         });
-        // Store item roles (ItemAccessTypes.ROLES)
-        // set roles
-        for (let i = 0; i < itemMembers.length; ++i) {
-          await ItemRoles.upsert({
-            id: `${messageId}/${itemMembers[i]}`,
-            create: {
-              itemId: messageId,
-              rid: itemMembers[i],
-              role: itemRoles[i],
-            },
-            update: {},
-          });
+        // check if rid has admin access for this channel
+        if (roleAccess?.role && roleAccess.role > 1) {
+          // set roles
+          for (let i = 0; i < updateMembers.length; ++i) {
+            await ChannelRoles.upsert({
+              id: `${updateChannelCid}/${updateMembers[i]}`,
+              create: {
+                timestamp: posts[i].message.timestamp,
+                channelId: updateChannelCid,
+                rid: updateMembers[i],
+                role: updateRoles[i],
+              },
+              update: {},
+            });
+          }
         }
         break;
-      case MessageTypes.ADD_ITEM_TO_CHANNEL:
+      case MessageTypes.ADD_ITEM_TO_CHANNEL: // 5
         const { itemCid: addItemCid, channelCid: addChannelCid } =
           decodeAddItemMsgBody({ msgBody: posts[i].message.msgBody }) || {};
         // check for proper decode
@@ -259,39 +314,40 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
           });
         }
         break;
-        case MessageTypes.REMOVE_ITEM_FROM_CHANNEL:
-          console.log("running remove item")
-          const { itemCid: remItemCid, channelCid: remChannelCid } =
-            decodeRemoveItemMsgBody({ msgBody: posts[i].message.msgBody }) || {};
-            //
-            const addLookup = await Adds.findUnique({ id: `${remChannelCid}/${remItemCid}` });
-          // check for proper decode
-          if (!remItemCid || !remChannelCid || !addLookup) return;
-          // lookup itemCid + channelCid
-          const remChannel = await Channel.findUnique({ id: remChannelCid });
-          // check to see if target item + channel exist at timestamp of procesing
-          if (!remChannel || !addLookup) break;
-          // Check to see if rid has access to remove from channel
-          const remAccess = await ChannelRoles.findUnique({
-            id: `${remChannelCid}/${posts[i].message.rid}`,
+      case MessageTypes.REMOVE_ITEM_FROM_CHANNEL: // 6
+        console.log("running remove item");
+        const { itemCid: remItemCid, channelCid: remChannelCid } =
+          decodeRemoveItemMsgBody({ msgBody: posts[i].message.msgBody }) || {};
+        //
+        const addLookup = await Adds.findUnique({
+          id: `${remChannelCid}/${remItemCid}`,
+        });
+        // check for proper decode
+        if (!remItemCid || !remChannelCid || !addLookup) return;
+        // lookup itemCid + channelCid
+        const remChannel = await Channel.findUnique({ id: remChannelCid });
+        // check to see if target item + channel exist at timestamp of procesing
+        if (!remChannel || !addLookup) break;
+        // Check to see if rid has access to remove from channel
+        const remAccess = await ChannelRoles.findUnique({
+          id: `${remChannelCid}/${posts[i].message.rid}`,
+        });
+        console.log("channel access: ", remAccess);
+        // Check to see if rid has admin role or was original adder
+        if (
+          (remAccess?.role && remAccess.role > 1) || // greater than member
+          addLookup.addedById == posts[i].message.rid // was original adder
+        ) {
+          console.log("made it to end of remove");
+          await Adds.update({
+            id: `${remChannelCid}/${remItemCid}`,
+            data: {
+              removed: true,
+              removedById: posts[i].message.rid,
+            },
           });
-          console.log("channel access: ", remAccess)
-          // Check to see if rid has admin role or was original adder
-          if (
-            remAccess?.role && remAccess.role > 1 // greater than member            
-            || addLookup.addedById == posts[i].message.rid // was original adder
-          ) {
-            console.log("made it to end of remove");
-            await Adds.update({
-              id: `${remChannelCid}/${remItemCid}`,
-              data: {
-                removed: true,
-                removedById: posts[i].message.rid
-              }
-            })
-          }
-        break; 
-            
+        }
+        break;
     }
   }
 
