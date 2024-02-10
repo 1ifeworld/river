@@ -267,6 +267,8 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
         // check if rid has admin access for this channel
         if (roleAccess?.role && roleAccess.role > 1) {
           // set roles
+          // NOTE: prob add ome checks about adding rids that dont exist,
+          //       adding role values that dont exist, etc
           for (let i = 0; i < updateMembers.length; ++i) {
             await ChannelRoles.upsert({
               id: `${updateChannelCid}/${updateMembers[i]}`,
