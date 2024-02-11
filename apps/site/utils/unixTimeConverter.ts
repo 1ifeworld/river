@@ -8,10 +8,10 @@ export function unixTimeConverter(seconds: number) {
   let diff = now - timestamp
 
   // If the difference is negative, it means the timestamp is in the future
-  if (diff < 0) {    
+  if (diff < 0) {
     // return 0 minutes ago instead of 23 hours from negative number
-    return '0 minutes ago';
-  }  
+    return '0 minutes ago'
+  }
 
   // Calculate days, hours, and minutes
   const days = Math.floor(diff / (1000 * 60 * 60 * 24))

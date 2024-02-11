@@ -62,16 +62,15 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
         >
           {Array.from({ length: numPages }, (_, index) => (
             <div key={`page_${index + 1}`} className="flex justify-center my-2">
-
-            <Page
-              key={`page_${index + 1}`}
-              pageNumber={index + 1}
-              width={pageWidth}
-              renderAnnotationLayer={false}
-              renderTextLayer={false}
-              renderMode="canvas"
+              <Page
+                key={`page_${index + 1}`}
+                pageNumber={index + 1}
+                width={pageWidth}
+                renderAnnotationLayer={false}
+                renderTextLayer={false}
+                renderMode="canvas"
               />
-              </div>
+            </div>
           ))}
         </Document>
       </div>

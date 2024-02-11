@@ -1,13 +1,13 @@
-import { Grid } from "@/design-system";
-import { getAllAdds } from "@/gql";
-import { ItemCard } from "@/server";
-import { Typography } from "@/design-system";
+import { Grid } from '@/design-system'
+import { getAllAdds } from '@/gql'
+import { ItemCard } from '@/server'
+import { Typography } from '@/design-system'
 
 export default async function Home() {
-  const { adds } = await getAllAdds();
+  const { adds } = await getAllAdds()
 
   if (!adds || !adds.items || adds?.items?.length === 0) {
-    return <Typography>No items added yet</Typography>;
+    return <Typography>No items added yet</Typography>
   }
 
   return (
@@ -15,9 +15,9 @@ export default async function Home() {
       {adds.items.map((add) =>
         add.removed ? null : (
           // @ts-ignore
-          <ItemCard key={add.item.timestamp} add={add} />
-        )
+          <ItemCard key={add.timestamp} add={add} />
+        ),
       )}
     </Grid>
-  );
+  )
 }

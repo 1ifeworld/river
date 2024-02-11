@@ -17,42 +17,44 @@ export function Header() {
 
   async function userCheck(embeddedWalletAddress: Hex | undefined) {
     let fetchedUserId
-    let fetchedUsername;
+    let fetchedUsername
     if (embeddedWalletAddress) {
       fetchedUserId = await getUserId({
         custodyAddress: embeddedWallet?.address as Hex,
-      })      
+      })
     }
     if (fetchedUserId?.userId) {
       fetchedUsername = await getUsername({
         id: BigInt(fetchedUserId.userId),
-      })           
+      })
     }
     return {
       userId: fetchedUserId?.userId ? fetchedUserId?.userId : null,
-      username: fetchedUsername ? fetchedUsername: null
+      username: fetchedUsername ? fetchedUsername : null,
     }
   }
 
   useEffect(() => {
     const fetchData = async () => {
-      // fetch userId + username values. 
+      // fetch userId + username values.
       // will return null for userId or username if no address included, or no id/username found
-      const { userId, username } = await userCheck(embeddedWallet?.address as Hex);
+      const { userId, username } = await userCheck(
+        embeddedWallet?.address as Hex,
+      )
       // if no wallet address detected, dialog should be false
       if (!embeddedWallet?.address) {
         setOpen(false)
       } else {
         // if user is logged in with email, and has valid userId + username, dont show dialog
         if (userId && username) {
-          setOpen(false);
+          setOpen(false)
         } else {
           // show dialog when a user is logged in, and either userId or username is false
-          setOpen(true);
-        }        
+          setOpen(true)
+        }
       }
-    };
-    fetchData();
+    }
+    fetchData()
   }, [embeddedWallet, userId, username])
 
   const params = useParams()
