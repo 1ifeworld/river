@@ -2,7 +2,7 @@ import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { Flex, Typography, Button } from '@/design-system'
 import { useCallback } from 'react'
 
-export function ViewToggle() {
+export function InfoIndexToggle() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -11,53 +11,54 @@ export function ViewToggle() {
     (name: string, value: string) => {
       const params = new URLSearchParams(searchParams.toString())
       params.set(name, value)
+
       return params.toString()
     },
     [searchParams],
   )
 
   return (
-    <Flex className="gap-x-2">
+    <Flex className="gap-x-4 items-center h-[14px] pb-[30px]">
       <Button
-        className={
-          searchParams.get('view') !== 'grid'
-            ? 'hover:no-underline'
-            : 'decoration-secondary-foreground'
-        }
         variant="link"
         onClick={() => {
           router.replace(`${pathname}`)
         }}
+        className={
+          searchParams.get('view') === 'index'
+            ? 'decoration-secondary-foreground'
+            : 'hover:no-underline'
+        }
       >
         <Typography
           className={
-            searchParams.get('view') === 'grid'
+            searchParams.get('view') === 'index'
               ? 'text-secondary-foreground'
-              : ''
+              : 'text-primary-foreground'
           }
         >
-          List
+          Information
         </Typography>
       </Button>
       <Button
+        variant="link"
+        onClick={() => {
+          router.push(`${pathname}?${createQueryString('view', 'index')}`)
+        }}
         className={
-          searchParams.get('view') === 'grid'
+          searchParams.get('view') === 'index'
             ? 'hover:no-underline'
             : 'decoration-secondary-foreground'
         }
-        variant="link"
-        onClick={() => {
-          router.push(`${pathname}?${createQueryString('view', 'grid')}`)
-        }}
       >
         <Typography
           className={
-            searchParams.get('view') !== 'grid'
-              ? 'text-secondary-foreground '
-              : ''
+            searchParams.get('view') === 'index'
+              ? 'text-primary-foreground'
+              : 'text-secondary-foreground'
           }
         >
-          Grid
+          Index
         </Typography>
       </Button>
     </Flex>

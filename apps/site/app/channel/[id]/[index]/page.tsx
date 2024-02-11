@@ -18,7 +18,6 @@ import Image from 'next/image'
 import { match, P } from 'ts-pattern'
 import * as React from 'react'
 import { kv } from '@vercel/kv'
-// import ModelRenderer from 'components/client/renderers/ModelRenderer'
 
 const MarkdownRenderer = dynamic(
   () => import('../../../../components/client/renderers/MarkdownRenderer'),
@@ -37,8 +36,10 @@ const PdfViewer = dynamic(
 
 export default async function ItemPage({
   params,
+  searchParams,
 }: {
   params: { id: string; index: string }
+  searchParams: { [key: string]: string | string[] | undefined }
 }) {
   const { channel } = await getChannelWithId({
     id: params.id,
@@ -129,6 +130,8 @@ export default async function ItemPage({
           // @ts-ignore
           itemContext={itemPage}
           itemMetadata={itemMetadata}
+          channel={channel}
+          view={searchParams.view}
         />
       </div>
     </Stack>
