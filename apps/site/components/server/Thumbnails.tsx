@@ -30,12 +30,17 @@ export function GenericThumbnailLarge({
   )
 }
 
-export function GenericThumbnailSmall({ text, className }: { text: string, className?: string }) {
+export function GenericThumbnailSmall({
+  text,
+  className,
+}: { text: string; className?: string }) {
   return (
-    <Stack className={cn(
-      'bg-[#E9E9E9] justify-center items-center w-[38px] h-[38px]',
-      className
-    )}>
+    <Stack
+      className={cn(
+        'bg-[#E9E9E9] justify-center items-center w-[38px] h-[38px]',
+        className,
+      )}
+    >
       <Typography className="text-secondary-foreground text-[10px]">
         {truncateText(extractFileExtension(text), 5, false)}
       </Typography>

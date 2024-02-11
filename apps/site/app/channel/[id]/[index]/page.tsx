@@ -108,7 +108,7 @@ export default async function ItemPage({
     .with(
       P.when((type) => isGlb({ mimeType: type })),
       () => <ModelRenderer src={contentUrl as string} />,
-    )  // TODO: Update styling for markdown renderer
+    ) // TODO: Update styling for markdown renderer
     .with(
       P.when((type) => isMarkdown({ mimeType: type })),
       () => <MarkdownRenderer contentUrl={contentUrl as string} />,
@@ -120,8 +120,6 @@ export default async function ItemPage({
         </Typography>
       </Stack>
     ))
-
-
 
   return (
     <Stack className="h-[calc(100dvh-38px)] md:flex-row">

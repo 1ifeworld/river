@@ -44,7 +44,6 @@ export async function getAddsMetadata(manyAdds: Adds[]) {
   const uris = manyAdds
     .map((add) => add.item?.uri)
     .filter((uri: string | undefined) => uri != null)
-  console.log('uris: ', uris)
   // setup endpoint
   const getMetadataEndpoint = `${process.env.NEXT_PUBLIC_METADATA_SERVER_URL}/get`
   // prepare request body

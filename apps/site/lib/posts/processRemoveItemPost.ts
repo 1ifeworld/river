@@ -30,7 +30,7 @@ export async function processRemoveItemPost({
   const msgType = 6 as number
   const msgBody = encodeRemoveItemMsgBody({
     itemCid: itemCid,
-    channelCid: channelCid
+    channelCid: channelCid,
   })
   if (!msgBody?.msgBody) return false
   // generate hash to include in post

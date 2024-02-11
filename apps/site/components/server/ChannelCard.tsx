@@ -8,11 +8,9 @@ import { kv } from '@vercel/kv'
 import { THUMBNAIL_TYPES_TO_RENDER } from '@/constants'
 
 export async function ChannelCard({ channel }: { channel: Channel }) {
-
-  const lastFourNonRemovedItems: Adds[] = 
-    (channel?.adds?.items ?? [])
-      .filter(item => !item.removed)
-      .slice(0, 4);
+  const lastFourNonRemovedItems: Adds[] = (channel?.adds?.items ?? [])
+    .filter((item) => !item.removed)
+    .slice(0, 4)
 
   const channelCardMetadata = await Promise.all(
     lastFourNonRemovedItems.map((item) =>
@@ -59,7 +57,9 @@ export async function ChannelCard({ channel }: { channel: Channel }) {
               ) ? (
                 <Image
                   key={index}
-                  src={w3sUrlFromCid({ cid: channelCardMetadata[index]?.image as string })}
+                  src={w3sUrlFromCid({
+                    cid: channelCardMetadata[index]?.image as string,
+                  })}
                   alt={channelCardMetadata[index]?.name as string}
                   width={128}
                   height={128}

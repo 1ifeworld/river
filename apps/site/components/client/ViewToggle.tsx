@@ -23,7 +23,9 @@ export function ViewToggle() {
     <Flex className="gap-x-2">
       <Button
         className={
-          searchParams.get('view') !== 'grid' ? 'hover:no-underline' : 'decoration-secondary-foreground'
+          searchParams.get('view') !== 'grid'
+            ? 'hover:no-underline'
+            : 'decoration-secondary-foreground'
         }
         variant="link"
         onClick={() => {
@@ -42,7 +44,9 @@ export function ViewToggle() {
       </Button>
       <Button
         className={
-          searchParams.get('view') === 'grid' ? 'hover:no-underline' : 'decoration-secondary-foreground'
+          searchParams.get('view') === 'grid'
+            ? 'hover:no-underline'
+            : 'decoration-secondary-foreground'
         }
         variant="link"
         onClick={() => {

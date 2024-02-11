@@ -14,7 +14,6 @@ export function ThumbnailNameCreator({
   item,
   metadata,
 }: ThumbnailNameCreatorProps) {
-
   if (!item) {
     return (
       <>
@@ -64,7 +63,10 @@ export function ThumbnailNameCreator({
           height={40}
         />
       ) : (
-        <GenericThumbnailSmall className='hover:cursor-pointer' text={itemMetadata?.contentType as string} />
+        <GenericThumbnailSmall
+          className="hover:cursor-pointer"
+          text={itemMetadata?.contentType as string}
+        />
       )}
       <Stack>
         {/* This component is hidden on large screens */}

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, CSSProperties } from "react"
+import React, { useEffect, CSSProperties } from 'react'
 import { ModelViewerElement } from '@google/model-viewer'
 
 declare global {
@@ -30,10 +30,10 @@ const ModelRenderer: React.FC<ModelRendererProps> = ({ src }) => {
       <model-viewer
         src={src}
         autoplay
-        camera-controls 
+        camera-controls
         touch-action="pan-y"
         style={{ width: '100%', height: '100%' } as any}
-        ></model-viewer>
+      ></model-viewer>
     </>
   )
 }

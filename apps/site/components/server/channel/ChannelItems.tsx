@@ -33,8 +33,8 @@ export async function ChannelItems({
   if (view === 'grid') {
     return (
       <Grid className="grid-cols-2 md:grid-cols-[repeat(auto-fill,_minmax(255px,_1fr))] gap-5 py-[30px]">
-        {channel?.adds?.items?.map((add: Adds, index: number) =>
-          add.removed ? null : <ItemCard key={index} add={add} />,
+        {channel?.adds?.items?.map((add: Adds) =>
+          add.removed ? null : <ItemCard key={add.timestamp} add={add} />,
         )}
       </Grid>
     )
@@ -44,9 +44,8 @@ export async function ChannelItems({
       <TableBody>
         {channel?.adds?.items?.map((add: Adds, index: number) =>
           add.removed ? null : (
-            <TableRow className={`${styles.tableRow}`}>
+            <TableRow className={`${styles.tableRow}`} key={add.timestamp}>
               <Link
-                key={`/${index}-tnc`}
                 href={`/channel/${add.channelId}/${totalItems - index}`}
                 legacyBehavior
               >
