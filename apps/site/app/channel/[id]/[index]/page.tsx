@@ -130,6 +130,7 @@ export default async function ItemPage({
           // @ts-ignore
           itemContext={itemPage}
           itemMetadata={itemMetadata}
+          // @ts-ignore
           channel={channel}
           view={searchParams.view}
         />
