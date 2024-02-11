@@ -42,6 +42,7 @@ export async function ItemCard({
               fill
               quality={100}
               priority={true}
+              sizes="(min-width: 1200px) 20vw, (min-width: 768px) 25vw, 50vw"
             />
           ) : (
             <GenericThumbnailLarge text={itemMetadata?.contentType as string} />
