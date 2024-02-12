@@ -37,7 +37,7 @@ export function ItemSidebar({
         </Link>
       </Flex>
       {view === 'info' ? (
-        <Stack className='justify-between h-full'>
+        <Stack className='justify-between h-full md:justify-start'>
           <Stack className="gap-y-5">
             <div>
               <Typography className="truncate">{itemMetadata?.name}</Typography>
@@ -45,7 +45,7 @@ export function ItemSidebar({
             </div>
             <Typography>{'--'}</Typography>
           </Stack>
-          <Stack className="gap-y-[3px]">
+          <Stack className="gap-y-[3px] md:pt-[45px]">
             <Flex className="justify-between">
               <Typography>Added to</Typography>
               <Link
