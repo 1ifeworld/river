@@ -2,7 +2,7 @@ import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { Flex, Typography, Button } from '@/design-system'
 import { useCallback } from 'react'
 
-export function InfoIndexToggle() {
+export function IndexInfoToggle() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -18,47 +18,47 @@ export function InfoIndexToggle() {
   )
 
   return (
-    <Flex className="gap-x-4 items-center h-[14px] pb-[30px]">
+    <Flex className="gap-x-4 items-center h-[14px]">
       <Button
         variant="link"
         onClick={() => {
           router.replace(`${pathname}`)
         }}
         className={
-          searchParams.get('view') === 'index'
+          searchParams.get('view') === 'info'
             ? 'decoration-secondary-foreground'
             : 'hover:no-underline'
         }
       >
         <Typography
           className={
-            searchParams.get('view') === 'index'
+            searchParams.get('view') === 'info'
               ? 'text-secondary-foreground'
               : 'text-primary-foreground'
           }
         >
-          Information
+          Index
         </Typography>
       </Button>
       <Button
         variant="link"
         onClick={() => {
-          router.push(`${pathname}?${createQueryString('view', 'index')}`)
+          router.push(`${pathname}?${createQueryString('view', 'info')}`)
         }}
         className={
-          searchParams.get('view') === 'index'
+          searchParams.get('view') === 'info'
             ? 'hover:no-underline'
             : 'decoration-secondary-foreground'
         }
       >
         <Typography
           className={
-            searchParams.get('view') === 'index'
+            searchParams.get('view') === 'info'
               ? 'text-primary-foreground'
               : 'text-secondary-foreground'
           }
         >
-          Index
+          Info
         </Typography>
       </Button>
     </Flex>

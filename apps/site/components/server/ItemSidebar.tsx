@@ -4,8 +4,7 @@ import { ipfsUrlToCid, getAddsMetadata } from '@/lib'
 import { unixTimeConverter } from '@/utils'
 import Link from 'next/link'
 import { Username, ThumbnailNameCreator } from '@/server'
-import { InfoIndexToggle } from '@/client'
-import styles from './channel/ChannelItems.module.css'
+import { IndexInfoToggle } from '@/client'
 
 interface ItemSidebarProps {
   itemContext: Adds
@@ -15,8 +14,6 @@ interface ItemSidebarProps {
     image: string
     animationUri: string
     contentType: string
-    muxAssetId?: string
-    muxPlaybackId?: string
   } | null
   channel: Channel
   view?: string | string[]
@@ -30,10 +27,16 @@ export function ItemSidebar({
 }: ItemSidebarProps) {
   return (
     <Stack className="p-5 h-[300px] md:h-full border-t border-border md:border-none">
-      <InfoIndexToggle />
-      {view === 'index' ? (
-        <ItemIndex channel={channel} />
-      ) : (
+      <Flex className="justify-between items-center pb-[30px]">
+        <IndexInfoToggle />
+        <Link
+          href={`/channel/${itemContext.channelId}`}
+          className="underline-offset-2 transition-all hover:underline"
+        >
+          <Typography>{itemContext.channel.name}</Typography>
+        </Link>
+      </Flex>
+      {view === 'info' ? (
         <div>
           <Stack className="gap-y-5">
             <div>
@@ -86,6 +89,8 @@ export function ItemSidebar({
             </Flex>
           </Stack>
         </div>
+      ) : (
+        <ItemIndex channel={channel} />
       )}
       {/* TODO: Enable these features */}
       {/* Add / Download */}
@@ -106,13 +111,10 @@ async function ItemIndex({ channel }: { channel: Channel }) {
   // @ts-ignore
   const { metadata } = await getAddsMetadata(channel?.adds?.items)
   return (
-    <div className="overflow-y-auto md:overflow-hidden">
+    <div className="overflow-y-auto">
       {channel?.adds?.items?.map((add: Adds, index: number) =>
         add.removed ? null : (
-          <Link
-            href={`/channel/${add.channelId}/${totalItems - index}`}
-            className={`${styles.tableRow}`}
-          >
+          <Link href={`/channel/${add.channelId}/${totalItems - index}`}>
             <Flex className="gap-4 py-2 items-center hover:cursor-pointer">
               <ThumbnailNameCreator item={add.item} metadata={metadata} />
             </Flex>
