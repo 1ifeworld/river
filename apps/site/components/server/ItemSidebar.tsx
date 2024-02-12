@@ -26,7 +26,7 @@ export function ItemSidebar({
   view,
 }: ItemSidebarProps) {
   return (
-    <Stack className="p-5 h-[300px] md:h-full border-t border-border md:border-none">
+    <Stack className="p-5 h-[320px] md:h-full border-t border-border md:border-none">
       <Flex className="justify-between items-center pb-[30px]">
         <IndexInfoToggle />
         <Link
@@ -37,7 +37,7 @@ export function ItemSidebar({
         </Link>
       </Flex>
       {view === 'info' ? (
-        <div>
+        <Stack className='justify-between h-full'>
           <Stack className="gap-y-5">
             <div>
               <Typography className="truncate">{itemMetadata?.name}</Typography>
@@ -45,7 +45,7 @@ export function ItemSidebar({
             </div>
             <Typography>{'--'}</Typography>
           </Stack>
-          <Stack className="pt-[45px] gap-y-[3px]">
+          <Stack className="gap-y-[3px]">
             <Flex className="justify-between">
               <Typography>Added to</Typography>
               <Link
@@ -88,7 +88,7 @@ export function ItemSidebar({
               </Typography>
             </Flex>
           </Stack>
-        </div>
+        </Stack>
       ) : (
         <ItemIndex channel={channel} />
       )}
