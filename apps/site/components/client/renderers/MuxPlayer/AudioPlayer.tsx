@@ -59,7 +59,7 @@ export function AudioPlayer({ playbackId }: { playbackId: string }) {
   }
 
   return (
-    <Flex className="h-full items-center justify-center gap-x-[20px] w-full ml-[15px] mr-[20px] md:w-[839px]">
+    <Flex className="flex flex-col md:flex-row h-full items-center justify-center md:justify-start gap-x-4 w-full p-4">
       <button className="p-[5px] active:bg-[#D9D9D9]"  onClick={togglePlayPause}>
         {isPlaying ? (
           <img src={"/Pause.svg"} alt="Pause" />
