@@ -66,7 +66,7 @@ export function AudioPlayer({ playbackId }: { playbackId: string }) {
             <img src={"/Play.svg"} alt="Play" className="w-4 h-4 md:w-5 md:h-5" />
             )}
       </button>
-      <div className="md:w-[839px] flex items-center justify-center">
+      <div className="sm:w-[339px] md:w-[500px] lg:w-[839px] flex items-center justify-center">
         <span className={`text-xs md:text-sm ${styles.currentTime} px-1`}>{formatTime(currentTime)}</span>
         <input
           type="range"
