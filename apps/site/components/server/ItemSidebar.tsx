@@ -33,7 +33,7 @@ export function ItemSidebar({
           href={`/channel/${itemContext.channelId}`}
           className="underline-offset-2 transition-all hover:underline"
         >
-          <Typography>{itemContext.channel.name}</Typography>
+          <Typography>Go to channel</Typography>
         </Link>
       </Flex>
       {view === 'info' ? (
