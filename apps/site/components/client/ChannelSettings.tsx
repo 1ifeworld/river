@@ -28,7 +28,8 @@ import {
   Separator,
   Flex,
   StatusFilled,
-  StatusEmpty
+  StatusEmpty,
+  cn
 } from "@/design-system";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitButton, ClientUsername } from "@/client";
@@ -37,39 +38,35 @@ import { usePrivy } from "@privy-io/react-auth";
 import { useState, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import debounce from "debounce";
-import { type UsernameSchemaValues, usernameSchema, checkUsernameAvailability, getDataForUsername } from "@/lib";
+import { type UsernameSchemaValues, getUsername, usernameSchema, checkUsernameAvailability, getDataForUsername } from "@/lib";
 
-interface ChannelSettingsDropdownProps {
+interface ChannelSettingsProps {
   channel: Channel;
 }
 
-export function ChannelSettingsDropdown({
+export function ChannelSettings({
   channel,
-}: ChannelSettingsDropdownProps) {
+}: ChannelSettingsProps) {
   const { login } = usePrivy();
-  const {
-    signMessage,
-    userId: targetUserId,
-    embeddedWallet,
-  } = useUserContext();
+  const { signMessage, userId, embeddedWallet} = useUserContext();
   const [isRemoving, setIsRemoving] = useState(false);
 
-  function isAdminOrAdder({
-    userRid,
-    channelRoleData,
-  }: {
-    userRid: bigint;
-    channelRoleData: ChannelRoles[];
-  }) {
-    // to see if they have admin access for channel
-    for (let i = 0; i < channelRoleData.length; ++i) {
-      let rid = channelRoleData[i].rid;
-      if (rid === userRid && channelRoleData[i].role > 1) {
-        return true;
-      }
-    }
-    return false;
-  }
+  // function isAdminOrAdder({
+  //   userRid,
+  //   channelRoleData,
+  // }: {
+  //   userRid: bigint;
+  //   channelRoleData: ChannelRoles[];
+  // }) {
+  //   // to see if they have admin access for channel
+  //   for (let i = 0; i < channelRoleData.length; ++i) {
+  //     let rid = channelRoleData[i].rid;
+  //     if (rid === userRid && channelRoleData[i].role > 1) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
 
   const form = useForm({
     resolver: zodResolver(usernameSchema),
@@ -78,25 +75,28 @@ export function ChannelSettingsDropdown({
     },
   });
 
-  const enableUpdateMembers =
-    !embeddedWallet?.address || !targetUserId || !channel?.roles?.items
-      ? false
-      : isAdminOrAdder({
-          userRid: targetUserId,
-          channelRoleData: channel.roles.items,
-        });
+  // const enableUpdateMembers =
+  //   !embeddedWallet?.address || !targetUserId || !channel?.roles?.items
+  //     ? false
+  //     : isAdminOrAdder({
+  //         userRid: targetUserId,
+  //         channelRoleData: channel.roles.items,
+  //       });
 
-  const members: bigint[] = (channel?.roles?.items ?? [])
-    .filter((member) => member.role > 0)
-    .map((member) => member.rid);
+  // const members: bigint[] = (channel?.roles?.items ?? [])
+  //   .filter((member) => member.role > 0)
+  //   .map((member) => member.rid);
           
 
   type Roles = {
     rid: bigint;
-    role: bigint;
+    username: string;
+    startingRole: bigint;
+    newRole: bigint | null
   };
   const [roles, setRoles] = useState<Roles[]>([]);
 
+  console.log("roles state: ", roles)
 
   /* 
   *
@@ -104,7 +104,7 @@ export function ChannelSettingsDropdown({
   *
   */
 
-  const [isValidUser, setIsValidUser] = useState(0); // 0 no check, 1 = valid, 2 = invalid
+  const [isValidUser, setIsValidUser] = useState(0); // 0 null state, 1 = valid, 2 = invalid
   const [validationComplete, setValidationComplete] = useState(false);
   const [isCheckingUsername, setIsCheckingUsername] = useState(false);
 
@@ -125,7 +125,7 @@ export function ChannelSettingsDropdown({
     if (form.formState.isValid && validationComplete) {
       checkUsernameAvailability(form.getValues().username).then((result) => {
         console.log("username check result: ", result)
-        setIsValidUser(result.exists ? 1 : 2);
+        setIsValidUser(result.exists ? 1 : 2); // 1 == valid, 2 == invalid
         setIsCheckingUsername(false);
       });
       return () => {
@@ -141,8 +141,8 @@ export function ChannelSettingsDropdown({
         console.log("data for username: ", dataForUsername)
         if (dataForUsername) {
             console.log("setting new role in state")
-            const newRole = {rid: dataForUsername.id, role: BigInt(1)}
-            setRoles((prevRoles) => [...prevRoles, newRole]) 
+            const newRole = {rid: dataForUsername.id, username: username, startingRole: BigInt(0), newRole: BigInt(1)}
+            setRoles((prevRoles) => [newRole, ...prevRoles]) 
             setIsValidUser(0)
             form.reset()
         }
@@ -158,38 +158,44 @@ export function ChannelSettingsDropdown({
     console.log("running set role to zero")
     setRoles((prevRoles) =>
       prevRoles.map((role) =>
-        role.rid === rid ? { ...role, role: BigInt(0) } : role
+        role.rid === rid ? { ...role, newRole: BigInt(0) } : role
       )
     );
   }
 
-  function setRoleToOne(rid: bigint) {
-    console.log("running set role to one")
-    setRoles((prevRoles) =>
-      prevRoles.map((role) =>
-        role.rid === rid ? { ...role, role: BigInt(1) } : role
-      )
-    );
-  }  
+function setRoleToOne(rid: bigint) {
+  console.log("running set role to one");
+  setRoles((prevRoles) =>
+    prevRoles.map((role) =>
+      role.rid == rid
+        ? { ...role, newRole: BigInt(1) }
+        : role
+    )
+  );
+}
 
   useEffect(() => {
-    const fetchEdits = () => {
+    const fetchRoles = async () => {
       try {
-        const startingRoles = (channel?.roles?.items ?? [])
-          .filter((member) => member.role > 0)
-          .map((member) => ({
-            rid: member.rid,
-            role: member.role,
-          }));
-
+        const startingRoles = await Promise.all(
+          (channel?.roles?.items ?? [])
+            .filter((member) => member.role > 0)
+            .map(async (member) => ({
+              rid: BigInt(member.rid),
+              username: await getUsername({ id: member.rid }),
+              startingRole: BigInt(member.role),
+              newRole: null,
+            }))
+        );
+  
         setRoles(startingRoles);
       } catch (error) {
         console.error('Error setting roles:', error);
       }
     };
-
+  
     if (channel) {
-      fetchEdits();
+      fetchRoles();
     }
   }, [channel]);
 
@@ -199,10 +205,14 @@ export function ChannelSettingsDropdown({
   // if you toggle off + on an admin, they will be reset as a member (2 -> 1)
   function MemberRow({rid, role}: {rid: bigint, role: bigint}) {
     return (
-        <Flex className=" w-full justify-between">
-            <ClientUsername id={rid} />    
-            {role > 0 ? <button onClick={()=>setRoleToZero(rid)}><StatusFilled/></button> : <button onClick={()=>setRoleToOne(rid)}><StatusEmpty/></button>}
-        </Flex>
+      <Flex className=" w-full justify-between">
+        <Typography className="text-secondary-foreground">
+          {roles.find(role => role.rid === rid)?.username}
+        </Typography> 
+        {role === BigInt(2) && <Typography className="text-secondary-foreground">admin</Typography>}
+        {role === BigInt(1) && <button onClick={() => setRoleToZero(rid)}><StatusFilled/></button>}
+        {role !== BigInt(2) && role !== BigInt(1) && <button onClick={() => setRoleToOne(rid)}><StatusEmpty/></button>}       
+      </Flex>
     )
   }
 
@@ -289,7 +299,7 @@ export function ChannelSettingsDropdown({
                 <Stack className="mx-8 gap-y-[20px]">
                   {roles.map((role, index) => (
                     // <ClientUsername id={role.rid} />
-                    <MemberRow key={index} rid={role.rid} role={role.role}  />
+                    <MemberRow key={index} rid={role.rid} role={role.newRole != null ? role.newRole : role.startingRole}  />
                     // <ClientUsername id={role.rid} />
                   ))}
                 </Stack>
@@ -306,7 +316,7 @@ export function ChannelSettingsDropdown({
                   //     isProcessing
                   //   }
                 >
-                  Save changes
+                  Save
                 </SubmitButton>
               </DialogFooter>
             </form>

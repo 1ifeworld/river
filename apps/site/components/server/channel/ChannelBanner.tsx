@@ -1,4 +1,4 @@
-import { AddMembersForm, ItemDropzone, ChannelSettingsDropdown, UpdateMembersDialog } from '@/client'
+import { AddMembersForm, ItemDropzone, ChannelSettings } from '@/client'
 import {
   Flex,
   HoverCard,
@@ -42,7 +42,7 @@ export async function ChannelBanner({
       <Stack>
         <Flex className='items-center gap-x-[4px]'>
           <Typography className="">{channel.name}</Typography>
-          <ChannelSettingsDropdown channel={channel}  />
+          <ChannelSettings channel={channel}  />
           {/* <UpdateMembersDialog authenticated={true} /> */}
         </Flex>
         {channel?.roles?.items?.[0].rid ? (
