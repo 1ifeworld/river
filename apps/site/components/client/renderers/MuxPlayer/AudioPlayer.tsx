@@ -61,12 +61,12 @@ export function AudioPlayer({ playbackId }: { playbackId: string }) {
     <div className="flex h-full items-center justify-center w-full px-2 md:px-4">
       <button className="active:bg-[#D9D9D9]" onClick={togglePlayPause}>
         {isPlaying ? (
-          <img src={"/Pause.svg"} alt="Pause" className="w-4 h-4 md:w-6 md:h-6" />
+          <img src={"/Pause.svg"} alt="Pause" className="w-4 h-4 md:w-5 md:h-5" />
           ) : (
-            <img src={"/Play.svg"} alt="Play" className="w-4 h-4 md:w-6 md:h-6" />
+            <img src={"/Play.svg"} alt="Play" className="w-4 h-4 md:w-5 md:h-5" />
             )}
       </button>
-      <div className="flex-grow flex items-center justify-center">
+      <div className="md:w-[839px] flex items-center justify-center">
         <span className={`text-xs md:text-sm ${styles.currentTime} px-1`}>{formatTime(currentTime)}</span>
         <input
           type="range"
