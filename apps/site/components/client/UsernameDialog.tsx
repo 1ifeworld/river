@@ -69,7 +69,7 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
 
   useEffect(() => {
     if (form.formState.isValid && validationComplete) {
-      checkUsernameAvailability(form.getValues().username).then((result) => {
+      checkUsernameAvailability(form.getValues().username).then((result) => {        
         setUsernameExists(result.exists);
         setIsCheckingAvailability(false);
       });
@@ -210,8 +210,8 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
                             triggerValidation();
                             setRegistrationFailed(false);
                           }}
-                        />
-                      </FormControl>
+                        />                        
+                      </FormControl>                      
                       <div className="h-3">
                         {usernameExists ? (
                           <FormMessage className="pt-2 text-red-500">
