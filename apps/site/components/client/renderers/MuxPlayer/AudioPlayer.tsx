@@ -57,28 +57,27 @@ export function AudioPlayer({ playbackId }: { playbackId: string }) {
       setCurrentTime(newTime)
     }
   }
-
   return (
-
-    <Flex className="flex items-center justify-between w-full px-2 md:px-4">
-      <button className="flex-shrink-0 p-2 active:bg-[#D9D9D9]"  onClick={togglePlayPause}>
+    <div className="flex items-center justify-center w-full px-2 md:px-4">
+      <button className="flex-shrink-0 p-2 active:bg-[#D9D9D9]" onClick={togglePlayPause}>
         {isPlaying ? (
-          <img src={"/Pause.svg"} alt="Pause" />
+          <img src={"/Pause.svg"} alt="Pause" className="w-6 h-6" />
         ) : (
-          <img src={"/Play.svg"} alt="Play" />
+          <img src={"/Play.svg"} alt="Play" className="w-6 h-6" />
         )}
       </button>
-      <div className="flex-grow flex items-center">
-      <span className={`text-xs md:text-sm ${styles.currentTime}`}>{formatTime(currentTime)}</span>
-      <input
-        type="range"
-        value={progress}
-        onChange={handleProgressBarChange}
-        className={styles.progressBar}
-        style={{
-          background: `linear-gradient(to right, #3A3A3A 0%, #3A3A3A ${progress}%, #D9D9D9 ${progress}%, #D9D9D9 100%)`,
-        }}
-      />
+      <div className="flex-grow flex items-center justify-center mx-auto">
+        <span className={`text-xs md:text-sm ${styles.currentTime} mx-1`}>{formatTime(currentTime)}</span>
+        <input
+          type="range"
+          value={progress}
+          onChange={handleProgressBarChange}
+          className={`mx-1 ${styles.progressBar}`}
+          style={{
+            background: `linear-gradient(to right, #3A3A3A 0%, #3A3A3A ${progress}%, #D9D9D9 ${progress}%, #D9D9D9 100%)`,
+          }}
+        />
+        <span className={`text-xs md:text-sm ${styles.totalTime} mx-1`}>{formatTime(duration)}</span>
       </div>
       <MuxAudio
         ref={audioRef}
@@ -89,7 +88,7 @@ export function AudioPlayer({ playbackId }: { playbackId: string }) {
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
       />
-      <span className={`text-xs md:text-sm ${styles.totalTime}`}>{formatTime(duration)}</span>
-    </Flex>
+    </div>
   )
 }
+  
