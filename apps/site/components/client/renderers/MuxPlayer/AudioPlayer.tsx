@@ -68,7 +68,7 @@ export function AudioPlayer({ playbackId }: { playbackId: string }) {
           <img src={"/Play.svg"} alt="Play" />
         )}
       </button>
-      <span className={styles.currentTime}>{formatTime(currentTime)}</span>
+      <span className={`text-xs md:text-sm ${styles.currentTime}`}>{formatTime(currentTime)}</span>
       <input
         type="range"
         value={progress}
@@ -87,7 +87,7 @@ export function AudioPlayer({ playbackId }: { playbackId: string }) {
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
       />
-      <span className={styles.totalTime}>{formatTime(duration)}</span>
+      <span className={`text-xs md:text-sm ${styles.totalTime}`}>{formatTime(duration)}</span>
     </Flex>
   )
 }
