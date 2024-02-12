@@ -60,14 +60,15 @@ export function AudioPlayer({ playbackId }: { playbackId: string }) {
 
   return (
 
-    <Flex className="flex flex-col md:flex-row h-full items-center justify-center gap-x-2 md:gap-x-4 w-full p-2 md:p-4">
-      <button className="p-[5px] active:bg-[#D9D9D9]"  onClick={togglePlayPause}>
+    <Flex className="flex items-center justify-between w-full px-2 md:px-4">
+      <button className="flex-shrink-0 p-2 active:bg-[#D9D9D9]"  onClick={togglePlayPause}>
         {isPlaying ? (
           <img src={"/Pause.svg"} alt="Pause" />
         ) : (
           <img src={"/Play.svg"} alt="Play" />
         )}
       </button>
+      <div className="flex-grow flex items-center">
       <span className={`text-xs md:text-sm ${styles.currentTime}`}>{formatTime(currentTime)}</span>
       <input
         type="range"
@@ -78,6 +79,7 @@ export function AudioPlayer({ playbackId }: { playbackId: string }) {
           background: `linear-gradient(to right, #3A3A3A 0%, #3A3A3A ${progress}%, #D9D9D9 ${progress}%, #D9D9D9 100%)`,
         }}
       />
+      </div>
       <MuxAudio
         ref={audioRef}
         playbackId={playbackId}
