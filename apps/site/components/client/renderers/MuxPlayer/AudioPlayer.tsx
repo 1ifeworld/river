@@ -57,22 +57,24 @@ export function AudioPlayer({ playbackId }: { playbackId: string }) {
       setCurrentTime(newTime)
     }
   }
-
   return (
-    <Flex className="flex flex-col md:flex-row h-full items-center justify-center md:justify-start gap-x-4 w-full p-4">
-      <button className="p-[5px] active:bg-[#D9D9D9]"  onClick={togglePlayPause}>
+    <Flex className="flex flex-row items-center justify-center gap-x-2 md:gap-x-4 w-full p-2 md:p-4">
+      <button 
+        className="p-2 active:bg-gray-200" 
+        onClick={togglePlayPause}
+      >
         {isPlaying ? (
-          <img src={"/Pause.svg"} alt="Pause" />
+          <img src={"/Pause.svg"} alt="Pause" className="w-8 h-8" />
         ) : (
-          <img src={"/Play.svg"} alt="Play" />
+          <img src={"/Play.svg"} alt="Play" className="w-8 h-8" />
         )}
       </button>
-      <span className={styles.currentTime}>{formatTime(currentTime)}</span>
+      <span className="text-xs md:text-sm">{formatTime(currentTime)}</span>
       <input
         type="range"
         value={progress}
         onChange={handleProgressBarChange}
-        className={styles.progressBar}
+        className="w-full md:w-auto flex-grow md:flex-grow-0"
         style={{
           background: `linear-gradient(to right, #3A3A3A 0%, #3A3A3A ${progress}%, #D9D9D9 ${progress}%, #D9D9D9 100%)`,
         }}
@@ -80,13 +82,12 @@ export function AudioPlayer({ playbackId }: { playbackId: string }) {
       <MuxAudio
         ref={audioRef}
         playbackId={playbackId}
-        placeholder=""
         autoplay
         streamType="on-demand"
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
       />
-      <span className={styles.totalTime}>{formatTime(duration)}</span>
+      <span className="text-xs md:text-sm">{formatTime(duration)}</span>
     </Flex>
   )
 }
