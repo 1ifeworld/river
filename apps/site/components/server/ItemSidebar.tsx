@@ -115,7 +115,7 @@ async function ItemIndex({ channel }: { channel: Channel }) {
       {channel?.adds?.items?.map((add: Adds, index: number) =>
         add.removed ? null : (
           <Link href={`/channel/${add.channelId}/${totalItems - index}`}>
-            <Flex className="gap-4 py-2 items-center hover:cursor-pointer">
+            <Flex className="gap-4 py-[5px] items-center hover:cursor-pointer">
               <ThumbnailNameCreator item={add.item} metadata={metadata} />
             </Flex>
           </Link>
