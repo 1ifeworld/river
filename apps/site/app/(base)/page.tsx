@@ -12,7 +12,7 @@ export default async function Home() {
 
   return (
     <Grid className="grid-cols-2 md:grid-cols-[repeat(auto-fill,_minmax(255px,_1fr))] gap-5 py-[30px]">
-      {adds.items.map((add, index: number) =>
+      {adds.items.map((add, index) =>
         add.removed ? null : (
           // @ts-ignore
           <ItemCard key={index} add={add} />
