@@ -49,10 +49,6 @@ export default async function ItemPage({
   const reversedIndex = totalItems - Number(params.index)
   const itemToRender = channel?.adds?.items?.[reversedIndex]
 
-  const { itemPage } = await getItemPage({
-    id: `${channel?.id}/${itemToRender?.itemId}`,
-  })
-
   const itemMetadata = await kv.get<Pick<MediaAssetObject, 'value'>['value']>(
     itemToRender?.item.uri as string,
   )
@@ -128,7 +124,7 @@ export default async function ItemPage({
       <div className="md:w-[22%]">
         <ItemSidebar
           // @ts-ignore
-          itemContext={itemPage}
+          itemContext={itemToRender} 
           itemMetadata={itemMetadata}
           // @ts-ignore
           channel={channel}
