@@ -147,6 +147,48 @@ export type ChannelRolesArgs = {
   timestamp?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type ChannelCounter = {
+  __typename?: 'ChannelCounter';
+  counter: Scalars['BigInt']['output'];
+  id: Scalars['String']['output'];
+  lastUpdated: Scalars['BigInt']['output'];
+};
+
+export type ChannelCounterFilter = {
+  counter?: InputMaybe<Scalars['BigInt']['input']>;
+  counter_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  counter_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  counter_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  counter_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  counter_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  counter_not?: InputMaybe<Scalars['BigInt']['input']>;
+  counter_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  id_contains?: InputMaybe<Scalars['String']['input']>;
+  id_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains?: InputMaybe<Scalars['String']['input']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id_starts_with?: InputMaybe<Scalars['String']['input']>;
+  lastUpdated?: InputMaybe<Scalars['BigInt']['input']>;
+  lastUpdated_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  lastUpdated_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  lastUpdated_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  lastUpdated_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  lastUpdated_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  lastUpdated_not?: InputMaybe<Scalars['BigInt']['input']>;
+  lastUpdated_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+};
+
+export type ChannelCounterPage = {
+  __typename?: 'ChannelCounterPage';
+  items?: Maybe<Array<ChannelCounter>>;
+  pageInfo?: Maybe<PageInfo>;
+};
+
 export type ChannelFilter = {
   createdById?: InputMaybe<Scalars['BigInt']['input']>;
   createdById_gt?: InputMaybe<Scalars['BigInt']['input']>;
@@ -305,6 +347,48 @@ export type ItemAddsArgs = {
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   timestamp?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type ItemCounter = {
+  __typename?: 'ItemCounter';
+  counter: Scalars['BigInt']['output'];
+  id: Scalars['String']['output'];
+  lastUpdated: Scalars['BigInt']['output'];
+};
+
+export type ItemCounterFilter = {
+  counter?: InputMaybe<Scalars['BigInt']['input']>;
+  counter_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  counter_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  counter_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  counter_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  counter_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  counter_not?: InputMaybe<Scalars['BigInt']['input']>;
+  counter_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  id_contains?: InputMaybe<Scalars['String']['input']>;
+  id_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains?: InputMaybe<Scalars['String']['input']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id_starts_with?: InputMaybe<Scalars['String']['input']>;
+  lastUpdated?: InputMaybe<Scalars['BigInt']['input']>;
+  lastUpdated_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  lastUpdated_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  lastUpdated_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  lastUpdated_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  lastUpdated_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  lastUpdated_not?: InputMaybe<Scalars['BigInt']['input']>;
+  lastUpdated_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+};
+
+export type ItemCounterPage = {
+  __typename?: 'ItemCounterPage';
+  items?: Maybe<Array<ItemCounter>>;
+  pageInfo?: Maybe<PageInfo>;
 };
 
 export type ItemFilter = {
@@ -579,10 +663,14 @@ export type Query = {
   adds?: Maybe<Adds>;
   addss?: Maybe<AddsPage>;
   channel?: Maybe<Channel>;
+  channelCounter?: Maybe<ChannelCounter>;
+  channelCounters?: Maybe<ChannelCounterPage>;
   channelRoles?: Maybe<ChannelRoles>;
   channelRoless?: Maybe<ChannelRolesPage>;
   channels?: Maybe<ChannelPage>;
   item?: Maybe<Item>;
+  itemCounter?: Maybe<ItemCounter>;
+  itemCounters?: Maybe<ItemCounterPage>;
   itemRoles?: Maybe<ItemRoles>;
   itemRoless?: Maybe<ItemRolesPage>;
   items?: Maybe<ItemPage>;
@@ -593,6 +681,8 @@ export type Query = {
   txn?: Maybe<Txn>;
   txns?: Maybe<TxnPage>;
   user?: Maybe<User>;
+  userCounter?: Maybe<UserCounter>;
+  userCounters?: Maybe<UserCounterPage>;
   users?: Maybe<UserPage>;
 };
 
@@ -617,6 +707,23 @@ export type QueryAddssArgs = {
 export type QueryChannelArgs = {
   id: Scalars['String']['input'];
   timestamp?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryChannelCounterArgs = {
+  id: Scalars['String']['input'];
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryChannelCountersArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ChannelCounterFilter>;
 };
 
 
@@ -651,6 +758,23 @@ export type QueryChannelsArgs = {
 export type QueryItemArgs = {
   id: Scalars['String']['input'];
   timestamp?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryItemCounterArgs = {
+  id: Scalars['String']['input'];
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryItemCountersArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ItemCounterFilter>;
 };
 
 
@@ -739,6 +863,23 @@ export type QueryUserArgs = {
 };
 
 
+export type QueryUserCounterArgs = {
+  id: Scalars['String']['input'];
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryUserCountersArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<UserCounterFilter>;
+};
+
+
 export type QueryUsersArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -778,6 +919,48 @@ export type User = {
   recovery: Scalars['String']['output'];
   to: Scalars['String']['output'];
   userId: Scalars['BigInt']['output'];
+};
+
+export type UserCounter = {
+  __typename?: 'UserCounter';
+  counter: Scalars['BigInt']['output'];
+  id: Scalars['String']['output'];
+  lastUpdated: Scalars['BigInt']['output'];
+};
+
+export type UserCounterFilter = {
+  counter?: InputMaybe<Scalars['BigInt']['input']>;
+  counter_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  counter_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  counter_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  counter_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  counter_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  counter_not?: InputMaybe<Scalars['BigInt']['input']>;
+  counter_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  id_contains?: InputMaybe<Scalars['String']['input']>;
+  id_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains?: InputMaybe<Scalars['String']['input']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id_starts_with?: InputMaybe<Scalars['String']['input']>;
+  lastUpdated?: InputMaybe<Scalars['BigInt']['input']>;
+  lastUpdated_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  lastUpdated_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  lastUpdated_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  lastUpdated_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  lastUpdated_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  lastUpdated_not?: InputMaybe<Scalars['BigInt']['input']>;
+  lastUpdated_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+};
+
+export type UserCounterPage = {
+  __typename?: 'UserCounterPage';
+  items?: Maybe<Array<UserCounter>>;
+  pageInfo?: Maybe<PageInfo>;
 };
 
 export type UserFilter = {
@@ -877,6 +1060,11 @@ export type ItemWithIdQueryVariables = Exact<{
 
 export type ItemWithIdQuery = { __typename?: 'Query', item?: { __typename?: 'Item', id: string, timestamp: any, createdById: any, uri: string } | null };
 
+export type MarqueeDataQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MarqueeDataQuery = { __typename?: 'Query', userCounters?: { __typename?: 'UserCounterPage', items?: Array<{ __typename?: 'UserCounter', counter: any }> | null } | null, itemCounters?: { __typename?: 'ItemCounterPage', items?: Array<{ __typename?: 'ItemCounter', counter: any }> | null } | null, channelCounters?: { __typename?: 'ChannelCounterPage', items?: Array<{ __typename?: 'ChannelCounter', counter: any }> | null } | null };
+
 export type TxnHashQueryVariables = Exact<{
   hash: Scalars['String']['input'];
 }>;
@@ -965,7 +1153,7 @@ export const ChannelWithIdDocument = gql`
     uri
     name
     description
-    roles(orderBy: "timestamp", orderDirection: "desc") {
+    roles(orderBy: "role", orderDirection: "desc") {
       items {
         timestamp
         rid
@@ -1060,6 +1248,25 @@ export const ItemWithIdDocument = gql`
   }
 }
     `;
+export const MarqueeDataDocument = gql`
+    query marqueeData {
+  userCounters {
+    items {
+      counter
+    }
+  }
+  itemCounters {
+    items {
+      counter
+    }
+  }
+  channelCounters {
+    items {
+      counter
+    }
+  }
+}
+    `;
 export const TxnHashDocument = gql`
     query txnHash($hash: String!) {
   txn(id: $hash) {
@@ -1111,6 +1318,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     itemWithId(variables: ItemWithIdQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<ItemWithIdQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<ItemWithIdQuery>(ItemWithIdDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'itemWithId', 'query');
+    },
+    marqueeData(variables?: MarqueeDataQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<MarqueeDataQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<MarqueeDataQuery>(MarqueeDataDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'marqueeData', 'query');
     },
     txnHash(variables: TxnHashQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<TxnHashQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<TxnHashQuery>(TxnHashDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'txnHash', 'query');

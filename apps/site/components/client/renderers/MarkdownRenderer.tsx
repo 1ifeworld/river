@@ -1,6 +1,6 @@
 'use client'
 
-import { Typography } from 'design-system/components';
+import { Typography } from 'design-system/components'
 import React, { useEffect, useState, useRef } from 'react'
 import Viewer from 'rich-markdown-editor'
 
@@ -12,7 +12,6 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ contentUrl }) => {
   const [content, setContent] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const containerRef = useRef<HTMLDivElement>(null)
-
 
   useEffect(() => {
     setIsLoading(true)
@@ -47,11 +46,10 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ contentUrl }) => {
     greyMid: '#C5CCD3',
     greyDark: '#DAE1E9',
   }
-  
-   const base = {
+
+  const base = {
     ...colors,
-    fontFamily:
-      "",
+    fontFamily: '',
     fontFamilyMono:
       "'SFMono-Regular',Consolas,'Liberation Mono', Menlo, Courier,monospace",
     fontWeight: 400,
@@ -79,9 +77,8 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ contentUrl }) => {
     codeInserted: '#202746',
     codeImportant: '#c94922',
 
-    lineHeight: 100, 
+    lineHeight: 100,
 
-  
     blockToolbarBackground: colors.white,
     blockToolbarTrigger: colors.greyMid,
     blockToolbarTriggerIcon: colors.white,
@@ -93,7 +90,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ contentUrl }) => {
     blockToolbarSelectedBackground: colors.greyMid,
     blockToolbarHoverBackground: colors.greyLight,
     blockToolbarDivider: colors.greyMid,
-  
+
     noticeInfoBackground: '#F5BE31',
     noticeInfoText: colors.almostBlack,
     noticeTipBackground: '#9E5CF7',
@@ -101,54 +98,50 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ contentUrl }) => {
     noticeWarningBackground: '#FF5C80',
     noticeWarningText: colors.white,
   }
-  
-   const light = {
+
+  const light = {
     ...base,
     background: colors.white,
     text: colors.almostBlack,
     code: colors.lightBlack,
     cursor: colors.black,
     divider: colors.greyMid,
-  
+
     toolbarBackground: colors.lightBlack,
     toolbarHoverBackground: colors.black,
     toolbarInput: colors.white10,
     toolbarItem: colors.white,
-  
+
     tableDivider: colors.greyMid,
     tableSelected: colors.primary,
     tableSelectedBackground: '#E5F7FF',
-  
+
     quote: colors.greyDark,
     codeBackground: colors.greyLight,
     codeBorder: colors.grey,
     horizontalRule: colors.greyMid,
     imageErrorBackground: colors.greyLight,
-  
+
     scrollbarBackground: colors.greyLight,
     scrollbarThumb: colors.greyMid,
   }
 
-
   return (
-    <div ref={containerRef} className="flex flex-col leading items-center bg-white overflow-auto h-[95vh] px-2 py-10 sm:px-10">
+    <div
+      ref={containerRef}
+      className="flex flex-col leading items-center bg-white overflow-auto h-[95vh] px-2 py-10 sm:px-10"
+    >
       <div className="base max-w-2xl mx-auto" style={{ width: '90vw' }}>
         {isLoading ? (
           <Typography className="flex base font-mono justify-center items-center h-full">
             Loading...
           </Typography>
         ) : (
-     
-          <Viewer
-            className="base"
-            value={content}
-            readOnly
-            theme={light}
-          />
+          <Viewer className="base" value={content} readOnly theme={light} />
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default MarkdownRenderer;
+export default MarkdownRenderer

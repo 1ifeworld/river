@@ -3,21 +3,21 @@ import {
   decodeAbiParameters,
   Hex,
   encodeAbiParameters,
+  zeroHash,
 } from "viem";
-// import { postGatewayABI } from "../../abi";
 
 //////////////////////////////////////////////////
 // ENCODING
 //////////////////////////////////////////////////
 
-export function encodeUpdateAssetMsgBody({
+export function encodeUpdateAssetRoleAccessMsgBody({
   assetCid,
-  data,
-  access,
+  members,
+  roles
 }: {
   assetCid: string;
-  data: { dataType: number; contents: Hex };
-  access: { accessType: number; contents: Hex };
+  members: bigint[];
+  roles: bigint[];
 }): {
   msgBody: Hash;
 } | null {
@@ -26,7 +26,9 @@ export function encodeUpdateAssetMsgBody({
       [
         {
           components: [
+            // assetCid
             { internalType: "string", name: "assetCid", type: "string" },
+            // channel struct
             {
               components: [
                 {
@@ -59,7 +61,23 @@ export function encodeUpdateAssetMsgBody({
           type: "tuple",
         },
       ],
-      [{ assetCid, data, access }]
+      [{ 
+        assetCid: assetCid,
+        data: {
+          dataType: 0,
+          contents: zeroHash
+        },
+        access: {
+          accessType: 1, // ROLEBASED
+          contents: encodeAbiParameters(
+            [
+              { name: "members", type: "uint256[]" },
+              { name: "roles", type: "uint256[]" },
+            ],
+            [members, roles]
+          ),
+        },
+      }]
     );
 
     return {
@@ -85,7 +103,9 @@ export function decodeUpdateAssetMsgBody({ msgBody }: { msgBody: Hash }): {
       [
         {
           components: [
+            // assetCid
             { internalType: "string", name: "assetCid", type: "string" },
+            // channel struct
             {
               components: [
                 {

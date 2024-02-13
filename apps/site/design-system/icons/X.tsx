@@ -1,8 +1,8 @@
-import * as React from "react";
-import { cn } from "../utils";
-import { type SvgProps } from "./iconTypes";
+import * as React from 'react'
+import { cn } from '../utils'
+import { type SvgProps } from './iconTypes'
 
-export function X({ width = 10, stroke = "black", className }: SvgProps) {
+export function X({ width = 10, stroke = 'black', className }: SvgProps) {
   return (
     <svg
       className={cn(className)}
@@ -27,5 +27,5 @@ export function X({ width = 10, stroke = "black", className }: SvgProps) {
         stroke={stroke}
       />
     </svg>
-  );
+  )
 }

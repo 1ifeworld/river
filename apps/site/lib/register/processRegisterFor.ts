@@ -12,7 +12,6 @@ export async function processRegisterFor({
   deadline: bigint
   sig: Hash
 }) {
-
   const { success, hash, rid, error } = await relayRegisterFor({
     to: signer,
     recovery: recovery,

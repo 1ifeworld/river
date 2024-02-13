@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useUserContext } from "@/context";
+import { useState } from 'react'
+import { useUserContext } from '@/context'
 import {
   Button,
   DropdownMenu,
@@ -11,15 +11,15 @@ import {
   Toast,
   Typography,
   Loading,
-} from "@/design-system";
-import { processRemoveItemPost } from "lib/posts";
-import { toast } from "sonner";
-import { Hex } from "viem";
-import { Adds, Channel, ChannelRoles } from "@/gql";
+} from '@/design-system'
+import { processRemoveItemPost } from 'lib/posts'
+import { toast } from 'sonner'
+import { Hex } from 'viem'
+import { Adds, Channel, ChannelRoles } from '@/gql'
 
 interface ItemDropdownProps {
-  channel: Channel;
-  add: Adds;
+  channel: Channel
+  add: Adds
 }
 
 function isAdminOrAdder({
@@ -27,32 +27,28 @@ function isAdminOrAdder({
   channelRoleData,
   itemAddedBy,
 }: {
-  userRid: bigint;
-  channelRoleData: ChannelRoles[];
-  itemAddedBy: bigint;
+  userRid: bigint
+  channelRoleData: ChannelRoles[]
+  itemAddedBy: bigint
 }) {
   // if targetRid was itemAdder, they have remove access
   if (userRid === itemAddedBy) {
-    return true;
+    return true
   }
   // if targetRid wasnt itemAdder, loop through channel roles
   // to see if they have admin access for channel
   for (let i = 0; i < channelRoleData.length; ++i) {
-    let rid = channelRoleData[i].rid;
+    let rid = channelRoleData[i].rid
     if (rid === userRid && channelRoleData[i].role > 1) {
-      return true;
+      return true
     }
   }
-  return false;
+  return false
 }
 
 export function ItemDropdown({ channel, add }: ItemDropdownProps) {
-  const {
-    signMessage,
-    userId: targetUserId,
-    embeddedWallet,
-  } = useUserContext();
-  const [isRemoving, setIsRemoving] = useState(false);
+  const { signMessage, userId: targetUserId, embeddedWallet } = useUserContext()
+  const [isRemoving, setIsRemoving] = useState(false)
 
   const enableRemoveItem =
     !embeddedWallet?.address ||
@@ -64,7 +60,7 @@ export function ItemDropdown({ channel, add }: ItemDropdownProps) {
           userRid: targetUserId,
           channelRoleData: channel.roles.items,
           itemAddedBy: add.addedById,
-        });
+        })
 
   return (
     <DropdownMenu>
@@ -73,7 +69,7 @@ export function ItemDropdown({ channel, add }: ItemDropdownProps) {
         className="focus:outline-none mb-1"
       >
         <Typography className="hover:font-bold" variant="h2">
-          {isRemoving ? <Loading /> : "..."}
+          {isRemoving ? <Loading /> : '...'}
         </Typography>
       </DropdownMenuTrigger>
       <DropdownMenuPortal>
@@ -85,11 +81,11 @@ export function ItemDropdown({ channel, add }: ItemDropdownProps) {
                 type="submit"
                 disabled={!enableRemoveItem}
                 onClick={async () => {
-                  if (!embeddedWallet?.address) return false;
+                  if (!embeddedWallet?.address) return false
                   // set isRemoving state to true
-                  setIsRemoving(true);
+                  setIsRemoving(true)
                   // initialize bool for txn success check
-                  let txSuccess: boolean = false;
+                  let txSuccess: boolean = false
                   // Generate removeReference post
                   if (signMessage) {
                     txSuccess = await processRemoveItemPost({
@@ -98,17 +94,17 @@ export function ItemDropdown({ channel, add }: ItemDropdownProps) {
                       itemCid: add.itemId,
                       channelCid: channel.id,
                       privySignMessage: signMessage,
-                    });
+                    })
                     if (txSuccess) {
                       toast.custom((t) => (
-                        <Toast>{"Item successfully removed"}</Toast>
-                      ));
-                      setIsRemoving(false);
+                        <Toast>{'Item successfully removed'}</Toast>
+                      ))
+                      setIsRemoving(false)
                     } else {
                       toast.custom((t) => (
-                        <Toast>{"Error removing item"}</Toast>
-                      ));
-                      setIsRemoving(false);
+                        <Toast>{'Error removing item'}</Toast>
+                      ))
+                      setIsRemoving(false)
                     }
                   }
                 }}
@@ -120,5 +116,5 @@ export function ItemDropdown({ channel, add }: ItemDropdownProps) {
         </DropdownMenuContent>
       </DropdownMenuPortal>
     </DropdownMenu>
-  );
+  )
 }

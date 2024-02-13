@@ -31,12 +31,15 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
   const {
     Txn,
     User,
+    UserCounter,
     Post,
     Message,
-    Channel,
+    Channel,    
     ChannelRoles,
-    Item,
+    ChannelCounter,
+    Item,    
     ItemRoles,
+    ItemCounter,
     Adds,
   } = context.db;
 
@@ -56,6 +59,8 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
 
   let posts: Post[] = [];
 
+  let alecPostIds: string[] = []
+
   const { args } = decodeFunctionData({
     abi: postGatewayABI,
     data: event.transaction.input,
@@ -74,14 +79,16 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
   } else {
     const singlePost = args[0] as Post;
     posts.push(singlePost);
-  }
+  } 
 
   // process every post -> associated message
   for (let i = 0; i < posts.length; ++i) {
+
+    // // check for message existence
     // check for message validity
     // check if timestamp is greater than 10 mins in the future of the block it was emitted in
-    if (posts[i].message.timestamp > event.block.timestamp + BigInt(600))
-      return;
+    // if (posts[i].message.timestamp > event.block.timestamp + BigInt(600))
+    //   return;
 
     // get custody address from user id
     const userLookup = await User.findUnique({ id: posts[i].message.rid });
@@ -103,6 +110,11 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
     const postId = (await postToCid(posts[i])).cid.toString();
     const messageId = (await messageToCid(posts[i].message)).cid.toString();
 
+    if (posts[i].signer == getAddress("0x648BdC06cDffBE20cCBb3dD71f5590a23Cc2FD22")) {
+      console.log("pushing to post ids")
+      alecPostIds.push(postId)
+    }    
+
     // store post + message
     const storedPost = await Post.upsert({
       id: postId,
@@ -121,6 +133,7 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
     const storedMessage = await Message.upsert({
       id: messageId,
       create: {
+        parentPostId: postId,
         rid: posts[i].message.rid,
         timestamp: posts[i].message.timestamp,
         msgType: BigInt(posts[i].message.msgType),
@@ -136,7 +149,7 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
   ************************************************ */
 
     switch (posts[i].message.msgType) {
-      case MessageTypes.CREATE_ITEM: // 1
+      case MessageTypes.CREATE_ITEM: { // 1
         console.log("running create item");
         // decode channel data + channel access
         const { data: itemData, access: itemAccess } =
@@ -170,19 +183,32 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
         });
         // Store item roles (ItemAccessTypes.ROLES)
         // set roles
-        for (let i = 0; i < itemMembers.length; ++i) {
+        for (let j = 0; j < itemMembers.length; ++j) {
           await ItemRoles.upsert({
-            id: `${messageId}/${itemMembers[i]}`,
+            id: `${messageId}/${itemMembers[j]}`,
             create: {
               itemId: messageId,
-              rid: itemMembers[i],
-              role: itemRoles[i],
+              rid: itemMembers[j],
+              role: itemRoles[j],
             },
             update: {},
           });
         }
+        // update channel counter
+        await ItemCounter.upsert({
+          id: `${context.network.chainId}/${event.transaction.to}/item"`,
+          create: {
+            counter: BigInt(1),
+            lastUpdated: event.block.timestamp
+          },
+          update: ({ current }) => ({
+            counter: (current.counter as bigint) + BigInt(1), 
+            lastUpdated: event.block.timestamp      
+          })
+        })        
         break;
-      case MessageTypes.CREATE_CHANNEL: // 3
+      }
+      case MessageTypes.CREATE_CHANNEL: {// 3
         // decode channel data + channel access
         const { data: channelData, access: channelAccess } =
           decodeCreateAssetMsgBody({ msgBody: posts[i].message.msgBody }) || {};
@@ -218,20 +244,33 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
           update: {},
         });
         // set roles
-        for (let i = 0; i < members.length; ++i) {
+        for (let j = 0; j < members.length; ++j) {
           await ChannelRoles.upsert({
-            id: `${messageId}/${members[i]}`,
+            id: `${messageId}/${members[j]}`,
             create: {
               timestamp: posts[i].message.timestamp,
               channelId: messageId,
-              rid: members[i],
-              role: roles[i],
+              rid: members[j],
+              role: roles[j],
             },
             update: {},
           });
         }
+        // update channel counter
+        await ChannelCounter.upsert({
+          id: `${context.network.chainId}/${event.transaction.to}/channel"`,
+          create: {
+            counter: BigInt(1),
+            lastUpdated: event.block.timestamp
+          },
+          update: ({ current }) => ({
+            counter: (current.counter as bigint) + BigInt(1), 
+            lastUpdated: event.block.timestamp      
+          })
+        })
         break;
-      case MessageTypes.UPDATE_CHANNEL: // 4 (230210 protocol update, update access msgs are supported)
+      }
+      case MessageTypes.UPDATE_CHANNEL: { // 4 (230210 protocol update, update access msgs are supported)
         /* currently ignoring things related to updating channel data */
         // decode channel data + channel access
         const {
@@ -239,51 +278,73 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
           data: updateChannelData,
           access: updateChannelAccess,
         } = decodeUpdateAssetMsgBody({ msgBody: posts[i].message.msgBody }) || {};
+        /* 
+          as of the initial upgrade that enables update channel messages that took place blocktimestamp (blah),
+          the only functionality that is possible is updating the Role based access for a channel.
+          any infomration sent in the channel.data field will be ignored
+        */
         // check to seee if channelCid was passed in
         // NOTE: consider whether to only allow messages to active channel cids (channel lookup first)
-        if (!updateChannelCid) break;
-        // check to see if data type + access type are valid
-        // if (channelData?.dataType != ChannelDataTypes.NAME_AND_DESC) break;
+        //     DECISION: dont need to do lookup, because later on we lookup roles, which will null
+        //               any messages sent to channels that have no access set (or dont exist)
+        //     PROTOCOL speak: you can only update roles in ROLE based access for channels that
+        //                     you have a role of > 1 on. 2 is currently in use as the ADMIN role
+        if (!updateChannelCid) break; // this is in here for type safety, not protoocl check
+        // check to see if access type is valid
+        // PROTOCOL: as of blocktimestamp { }, the only valid value is 1 (ROLES)
         if (updateChannelAccess?.accessType != ChannelAccessTypes.ROLES) break;
-        // const [name, description] = decodeAbiParameters(
-        //   [
-        //     { name: "name", type: "string" },
-        //     { name: "desc", type: "string" },
-        //   ],
-        //   channelData.contents
-        // );
         // decode members + roles from access.contents (if ChannelAccessTypes.Roles)
+        // PROTOCOL: as of blocktimestamp { }, ROLE type access contents must be decoded into a members + roles uint256[] arrays
         const [updateMembers, updateRoles] = decodeAbiParameters(
           [
             { name: "members", type: "uint256[]" },
             { name: "roles", type: "uint256[]" },
           ],
           updateChannelAccess.contents
-        );
+        );        
         // lookup access control for this channel
         const roleAccess = await ChannelRoles.findUnique({
           id: `${updateChannelCid}/${posts[i].message.rid}`,
         });
         // check if rid has admin access for this channel
+        // PROTOCOL: as of blocktimestamp {}, admin acccess is anything greatoer than 1. (maybe we should hardcode as 2)
         if (roleAccess?.role && roleAccess.role > 1) {
-          // set roles
-          // NOTE: prob add ome checks about adding rids that dont exist,
-          //       adding role values that dont exist, etc
-          for (let i = 0; i < updateMembers.length; ++i) {
+
+          if (updateMembers.length != updateRoles.length) break // this prevents indexing breaks due to invalid array index access
+
+          for (let j = 0; j < updateMembers.length; ++j) {
+            const user = await User.findUnique({ id: updateMembers[j]})
+            console.log("user to add: ", user)
+
+            if (!user) break // prevents role values being assigned to users that havent been registered
+
+            if (updateRoles[j] > 2) break // prevents role values other than (0: none, 1: member, 2: admin)
+            // console.log("message: ")
+
+            console.log("logging posts right before upset: ", posts)
+            console.log("logging posts[i] right before upset: ", posts[i])
+
+            // SET ROLES
             await ChannelRoles.upsert({
-              id: `${updateChannelCid}/${updateMembers[i]}`,
+              id: `${updateChannelCid}/${updateMembers[j]}`,
               create: {
                 timestamp: posts[i].message.timestamp,
                 channelId: updateChannelCid,
-                rid: updateMembers[i],
-                role: updateRoles[i],
+                rid: updateMembers[j],
+                role: updateRoles[j],
               },
-              update: {},
+              update: {
+                timestamp: posts[i].message.timestamp,
+                channelId: updateChannelCid,
+                rid: updateMembers[j],
+                role: updateRoles[j],                
+              },
             });
           }
         }
         break;
-      case MessageTypes.ADD_ITEM_TO_CHANNEL: // 5
+      }
+      case MessageTypes.ADD_ITEM_TO_CHANNEL: { // 5
         const { itemCid: addItemCid, channelCid: addChannelCid } =
           decodeAddItemMsgBody({ msgBody: posts[i].message.msgBody }) || {};
         // check for proper decode
@@ -316,7 +377,8 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
           });
         }
         break;
-      case MessageTypes.REMOVE_ITEM_FROM_CHANNEL: // 6
+      }
+      case MessageTypes.REMOVE_ITEM_FROM_CHANNEL: { // 6
         console.log("running remove item");
         const { itemCid: remItemCid, channelCid: remChannelCid } =
           decodeRemoveItemMsgBody({ msgBody: posts[i].message.msgBody }) || {};
@@ -350,6 +412,7 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
           });
         }
         break;
+      }
     }
   }
 
@@ -358,6 +421,8 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
                 POST PROCESSING RECEIPT
 
   ************************************************ */
+
+  console.log("alec post ids: ", alecPostIds)
 
   // record every transaction that has entered the crud cycle
   txnReceipt = await Txn.findUnique({ id: event.transaction.hash });

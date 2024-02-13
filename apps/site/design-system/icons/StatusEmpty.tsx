@@ -1,6 +1,6 @@
-import * as React from "react";
-import { cn } from "../utils";
-import { type SvgProps } from "./iconTypes";
+import * as React from 'react'
+import { cn } from '../utils'
+import { type SvgProps } from './iconTypes'
 
 export function StatusEmpty({ width = 14, fill, stroke, className }: SvgProps) {
   return (
@@ -13,5 +13,5 @@ export function StatusEmpty({ width = 14, fill, stroke, className }: SvgProps) {
     >
       <circle cx="7" cy="7" r="6.25" stroke="#404040" stroke-width="1.5" />
     </svg>
-  );
+  )
 }

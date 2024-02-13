@@ -6,31 +6,35 @@ import {
   getExpiration,
   remove0xPrefix,
   generateMessageHash,
-  encodeRemoveItemMsgBody,
+  encodeUpdateAssetRoleAccessMsgBody,
+  MessageTypes,
 } from 'scrypt'
 
-export async function processRemoveItemPost({
-  signer,
-  itemCid,
-  channelCid,
+export async function processEditMembersPost({
   rid,
+  signer,
   privySignMessage,
+  channelCid,
+  members,
+  roles,
 }: {
   signer: Hex
-  itemCid: string
-  channelCid: string
   rid: bigint
   privySignMessage: (
     message: string,
     uiOptions?: SignMessageModalUIOptions | undefined,
   ) => Promise<string>
+  channelCid: string
+  members: bigint[]
+  roles: bigint[]
 }): Promise<boolean> {
   // Declare constants/params
   const msgTimestamp: bigint = getExpiration() // gives 120s buffer
-  const msgType = 6 as number
-  const msgBody = encodeRemoveItemMsgBody({
-    itemCid: itemCid,
-    channelCid: channelCid,
+  const msgType = MessageTypes.UPDATE_CHANNEL as number
+  const msgBody = encodeUpdateAssetRoleAccessMsgBody({
+    assetCid: channelCid,
+    members: members,
+    roles: roles,
   })
   if (!msgBody?.msgBody) return false
   // generate hash to include in post

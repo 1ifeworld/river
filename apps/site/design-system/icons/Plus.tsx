@@ -1,11 +1,11 @@
-import * as React from "react";
-import { cn } from "../utils";
-import { type SvgProps } from "./iconTypes";
+import * as React from 'react'
+import { cn } from '../utils'
+import { type SvgProps } from './iconTypes'
 
 export function Plus({
   width = 15,
-  fill = "#000000",
-  stroke = "black",
+  fill = '#000000',
+  stroke = 'black',
   className,
 }: SvgProps) {
   return (
@@ -41,5 +41,5 @@ export function Plus({
         stroke-width="1.27231"
       />
     </svg>
-  );
+  )
 }

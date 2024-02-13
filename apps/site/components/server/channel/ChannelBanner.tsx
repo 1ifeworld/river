@@ -31,26 +31,24 @@ export async function ChannelBanner({
   // channel.roles?.items[0].role == 2
   // channel.roles?.items[0].role == 1
 
-  const lastFourNonRemovedItems: Adds[] = 
-    (channel?.adds?.items ?? [])
-      .filter(item => !item.removed)
-      .slice(0, 4);
+  const lastFourNonRemovedItems: Adds[] = (channel?.adds?.items ?? [])
+    .filter((item) => !item.removed)
+    .slice(0, 4)
 
   return (
     // Include left margin to accommodate for margin necessary for hover states for items
     <Stack className="gap-5 md:ml-2">
       <Stack>
-        <Flex className='items-center gap-x-[4px]'>
+        <Flex className="items-center gap-x-[4px]">
           <Typography className="">{channel.name}</Typography>
-          <ChannelSettings channel={channel}  />
-          {/* <UpdateMembersDialog authenticated={true} /> */}
+          <ChannelSettings channel={channel} />
         </Flex>
         {channel?.roles?.items?.[0].rid ? (
           // <HoverCard>
           //   <HoverCardTrigger className="cursor-pointer">
-              <Flex>
-                <Username id={channel?.roles?.items?.[0].rid} />
-              </Flex>
+          <Flex>
+            <Username id={channel?.roles?.items?.[0].rid} />
+          </Flex>
           //   </HoverCardTrigger>
           // </HoverCard>
         ) : (
