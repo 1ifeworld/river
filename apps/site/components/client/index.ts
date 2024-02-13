@@ -6,6 +6,7 @@ export * from './renderers'
 // Individual components
 export * from './AddMembersForm'
 export * from './ChannelDialog'
+export * from './ChannelMembersPopover'
 export * from './Header'
 export * from './IndexInfoToggle'
 export * from './ItemDropdown'
