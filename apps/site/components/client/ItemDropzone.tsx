@@ -63,18 +63,6 @@ export function ItemDropzone({ channel }: { channel: Channel }) {
     setIsUploading(true)
 
     for (const [index, file] of acceptedFiles.entries()) {
-    // Check file size (200MB = 200 * 1024 * 1024 bytes)
-    if (file.size > 200 * 1024 * 1024) {
-      setProgressInfo({
-        fileIndex: index + 1,
-        totalFiles: acceptedFiles.length,
-        statusHeader: 'Error',
-        statusMessage: `${file.name} is too large. Max file size is 200MB.`,
-        showLoadingIcon: false,
-      })
-      continue
-    }
-
       setProgressInfo({
         fileIndex: index + 1,
         totalFiles: acceptedFiles.length,
