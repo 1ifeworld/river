@@ -112,13 +112,5 @@ export default createSchema((p) => ({
     channel: p.one('channelId'),
     removedById: p.bigint().optional(),
     removed: p.boolean().optional()
-  }),
-  Debug: p.createTable({
-    id: p.string(),
-    rid: p.bigint(),
-    blockTimestamp: p.bigint(),
-    msgTimestamp: p.bigint(),
-    msgType: p.bigint(),
-    userLookupTo: p.string()
   })
 }))

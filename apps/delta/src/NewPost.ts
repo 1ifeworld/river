@@ -3,7 +3,7 @@ import {
   postGatewayABI,
   decodeCreateAssetMsgBody,
   decodeAddItemMsgBody,
-  remove0xPrefix,
+  remove0xPrefix, 
   Post,
   MessageTypes,
   ChannelAccessTypes,
@@ -20,9 +20,12 @@ import {
   recoverMessageAddress,
   Hex
 } from "viem";
-import { messageToCid, postToCid } from "../utils";
+import { messageToCid, postToCid } from "./utils";
 
 ponder.on("PostGateway:NewPost", async ({ event, context }) => {
+
+  // const yo = context.network.
+
   /* ************************************************
 
                     DATA STRUCTURES
@@ -41,7 +44,6 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
     ItemRoles,
     ItemCounter,
     Adds,
-    // Debug
   } = context.db;
 
   /* ************************************************
@@ -65,7 +67,7 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
     data: event.transaction.input,
   });
 
-  console.log("args coming in correcltly? ", args);
+  console.log("Post args ", args);
 
   // if decode fails return
   if (!args?.[0]) return;
@@ -83,57 +85,29 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
   // process every post -> associated message
   for (let i = 0; i < posts.length; ++i) {
 
-    // if (posts[i].signer != "0x648BdC06cDffBE20cCBb3dD71f5590a23Cc2FD22") return
-
     // check for message validity
-    // check if timestamp is greater than 10 mins in the future of the block it was emitted in
+    // if timestamp is greater than 10 mins in the future of the block it was emitted in
     if (posts[i].message.timestamp > event.block.timestamp + BigInt(600)) return;
-
     // get custody address from user id
     const userLookup = await User.findUnique({ id: posts[i].message.rid });
-    // const userLookup = await User.findUnique({ id: BigInt(57) });
-
-    if (!userLookup) return;
-
-    // await Debug.create({
-    //   id: `${posts[i].message.rid}/${event.block.timestamp}/${posts[i].message.msgType}/${event.log.logIndex}`,
-    //   data: {
-    //     rid: posts[i].message.rid,
-    //     msgType: BigInt(posts[i].message.msgType),
-    //     msgTimestamp: posts[i].message.timestamp,
-    //     blockTimestamp: event.block.timestamp,
-    //     userLookupTo: userLookup ? userLookup.to : "fail"
-    //   }
-    // })    
-
+    // return if user lookup unsuccessful
+    if (!userLookup) return;  
+    // recover signer address from message sig
     const recoverAddressFromMessageSignature = await recoverMessageAddress({
       message: remove0xPrefix({ bytes32Hash: posts[i].hash }),
       signature: posts[i].sig,
     });
-
-    const signerIsValid =
-      getAddress(userLookup.to) === recoverAddressFromMessageSignature;
-
-    // if (!signerIsValid) {
-    //   console.log("signer is not valid")
-    //   failedSigRecovery.push({
-    //     rid: posts[i].message.rid,
-    //     blocktimestamp: event.block.timestamp,
-    //     msgTimestamp: posts[i].message.timestamp,
-    //     msgType: posts[i].message.msgType,
-    //     userLookupTo: userLookup.to
-    //   })
-    // }      
-
+    // check if valid signer for message
+    const signerIsValid = getAddress(userLookup.to) === recoverAddressFromMessageSignature;
+    // return if signer was not  valid
     if (!signerIsValid) return;
-
     // Create post + message cid
     // NOTE: message cid will double as asset cid for CREATE_ITEM + CREATE_CHANNEL calls
     const postId = (await postToCid(posts[i])).cid.toString();
     const messageId = (await messageToCid(posts[i].message)).cid.toString();
 
-    // store post + message
-    const storedPost = await Post.upsert({
+    // Store Post + Message
+    await Post.upsert({
       id: postId,
       create: {
         relayer: event.transaction.from,
@@ -147,7 +121,7 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
       update: {},
     });
 
-    const storedMessage = await Message.upsert({
+    await Message.upsert({
       id: messageId,
       create: {
         parentPostId: postId,
@@ -226,6 +200,7 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
         break;
       }
       case MessageTypes.CREATE_CHANNEL: {// 3
+        console.log("running create channel")
         // decode channel data + channel access
         const { data: channelData, access: channelAccess } =
           decodeCreateAssetMsgBody({ msgBody: posts[i].message.msgBody }) || {};
@@ -287,7 +262,8 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
         })
         break;
       }
-      case MessageTypes.UPDATE_CHANNEL: { // 4 (230210 protocol update, update access msgs are supported)
+      case MessageTypes.UPDATE_CHANNEL: { // 4 (230213 protocol update, update access msgs are supported)
+        console.log("running update channel")
         /* currently ignoring things related to updating channel data */
         // decode channel data + channel access
         const {
@@ -326,21 +302,11 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
         // check if rid has admin access for this channel
         // PROTOCOL: as of blocktimestamp {}, admin acccess is anything greatoer than 1. (maybe we should hardcode as 2)
         if (roleAccess?.role && roleAccess.role > 1) {
-
           if (updateMembers.length != updateRoles.length) break // this prevents indexing breaks due to invalid array index access
-
           for (let j = 0; j < updateMembers.length; ++j) {
             const user = await User.findUnique({ id: updateMembers[j]})
-            console.log("user to add: ", user)
-
             if (!user) break // prevents role values being assigned to users that havent been registered
-
             if (updateRoles[j] > 2) break // prevents role values other than (0: none, 1: member, 2: admin)
-            // console.log("message: ")
-
-            console.log("logging posts right before upset: ", posts)
-            console.log("logging posts[i] right before upset: ", posts[i])
-
             // SET ROLES
             await ChannelRoles.upsert({
               id: `${updateChannelCid}/${updateMembers[j]}`,
@@ -362,6 +328,7 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
         break;
       }
       case MessageTypes.ADD_ITEM_TO_CHANNEL: { // 5
+        console.log("running add item to channel")
         const { itemCid: addItemCid, channelCid: addChannelCid } =
           decodeAddItemMsgBody({ msgBody: posts[i].message.msgBody }) || {};
         // check for proper decode
@@ -380,7 +347,7 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
           // check if item exists. prevent adding item cids that dont exist
           const itemLookup = await Item.findUnique({ id: addItemCid });
           if (!itemLookup) break;
-          console.log("made it to end");
+          // console.log("made it to end");
           await Adds.upsert({
             id: `${addChannelCid}/${addItemCid}`,
             create: {
@@ -413,13 +380,13 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
         const remAccess = await ChannelRoles.findUnique({
           id: `${remChannelCid}/${posts[i].message.rid}`,
         });
-        console.log("channel access: ", remAccess);
+        // console.log("channel access: ", remAccess);
         // Check to see if rid has admin role or was original adder
         if (
           (remAccess?.role && remAccess.role > 1) || // greater than member
           addLookup.addedById == posts[i].message.rid // was original adder
         ) {
-          console.log("made it to end of remove");
+          // console.log("made it to end of remove");
           await Adds.update({
             id: `${remChannelCid}/${remItemCid}`,
             data: {

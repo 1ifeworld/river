@@ -327,6 +327,77 @@ export type ChannelRolesPage = {
   pageInfo?: Maybe<PageInfo>;
 };
 
+export type Debug = {
+  __typename?: 'Debug';
+  blockTimestamp: Scalars['BigInt']['output'];
+  id: Scalars['String']['output'];
+  msgTimestamp: Scalars['BigInt']['output'];
+  msgType: Scalars['BigInt']['output'];
+  rid: Scalars['BigInt']['output'];
+  userLookupTo: Scalars['String']['output'];
+};
+
+export type DebugFilter = {
+  blockTimestamp?: InputMaybe<Scalars['BigInt']['input']>;
+  blockTimestamp_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  blockTimestamp_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  blockTimestamp_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  blockTimestamp_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  blockTimestamp_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  blockTimestamp_not?: InputMaybe<Scalars['BigInt']['input']>;
+  blockTimestamp_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  id_contains?: InputMaybe<Scalars['String']['input']>;
+  id_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains?: InputMaybe<Scalars['String']['input']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id_starts_with?: InputMaybe<Scalars['String']['input']>;
+  msgTimestamp?: InputMaybe<Scalars['BigInt']['input']>;
+  msgTimestamp_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  msgTimestamp_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  msgTimestamp_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  msgTimestamp_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  msgTimestamp_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  msgTimestamp_not?: InputMaybe<Scalars['BigInt']['input']>;
+  msgTimestamp_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  msgType?: InputMaybe<Scalars['BigInt']['input']>;
+  msgType_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  msgType_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  msgType_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  msgType_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  msgType_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  msgType_not?: InputMaybe<Scalars['BigInt']['input']>;
+  msgType_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  rid?: InputMaybe<Scalars['BigInt']['input']>;
+  rid_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  rid_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  rid_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  rid_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  rid_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  rid_not?: InputMaybe<Scalars['BigInt']['input']>;
+  rid_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  userLookupTo?: InputMaybe<Scalars['String']['input']>;
+  userLookupTo_contains?: InputMaybe<Scalars['String']['input']>;
+  userLookupTo_ends_with?: InputMaybe<Scalars['String']['input']>;
+  userLookupTo_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  userLookupTo_not?: InputMaybe<Scalars['String']['input']>;
+  userLookupTo_not_contains?: InputMaybe<Scalars['String']['input']>;
+  userLookupTo_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  userLookupTo_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  userLookupTo_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  userLookupTo_starts_with?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type DebugPage = {
+  __typename?: 'DebugPage';
+  items?: Maybe<Array<Debug>>;
+  pageInfo?: Maybe<PageInfo>;
+};
+
 export type Item = {
   __typename?: 'Item';
   adds?: Maybe<AddsPage>;
@@ -505,6 +576,7 @@ export type Message = {
   id: Scalars['String']['output'];
   msgBody: Scalars['String']['output'];
   msgType: Scalars['BigInt']['output'];
+  parentPostId: Scalars['String']['output'];
   rid: Scalars['BigInt']['output'];
   timestamp: Scalars['BigInt']['output'];
 };
@@ -536,6 +608,16 @@ export type MessageFilter = {
   msgType_lte?: InputMaybe<Scalars['BigInt']['input']>;
   msgType_not?: InputMaybe<Scalars['BigInt']['input']>;
   msgType_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  parentPostId?: InputMaybe<Scalars['String']['input']>;
+  parentPostId_contains?: InputMaybe<Scalars['String']['input']>;
+  parentPostId_ends_with?: InputMaybe<Scalars['String']['input']>;
+  parentPostId_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  parentPostId_not?: InputMaybe<Scalars['String']['input']>;
+  parentPostId_not_contains?: InputMaybe<Scalars['String']['input']>;
+  parentPostId_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  parentPostId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  parentPostId_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  parentPostId_starts_with?: InputMaybe<Scalars['String']['input']>;
   rid?: InputMaybe<Scalars['BigInt']['input']>;
   rid_gt?: InputMaybe<Scalars['BigInt']['input']>;
   rid_gte?: InputMaybe<Scalars['BigInt']['input']>;
@@ -668,6 +750,8 @@ export type Query = {
   channelRoles?: Maybe<ChannelRoles>;
   channelRoless?: Maybe<ChannelRolesPage>;
   channels?: Maybe<ChannelPage>;
+  debug?: Maybe<Debug>;
+  debugs?: Maybe<DebugPage>;
   item?: Maybe<Item>;
   itemCounter?: Maybe<ItemCounter>;
   itemCounters?: Maybe<ItemCounterPage>;
@@ -752,6 +836,23 @@ export type QueryChannelsArgs = {
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   timestamp?: InputMaybe<Scalars['Int']['input']>;
   where?: InputMaybe<ChannelFilter>;
+};
+
+
+export type QueryDebugArgs = {
+  id: Scalars['String']['input'];
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryDebugsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<DebugFilter>;
 };
 
 
@@ -917,6 +1018,7 @@ export type User = {
   from: Scalars['String']['output'];
   id: Scalars['BigInt']['output'];
   recovery: Scalars['String']['output'];
+  timestamp: Scalars['BigInt']['output'];
   to: Scalars['String']['output'];
   userId: Scalars['BigInt']['output'];
 };
@@ -988,6 +1090,14 @@ export type UserFilter = {
   recovery_lte?: InputMaybe<Scalars['String']['input']>;
   recovery_not?: InputMaybe<Scalars['String']['input']>;
   recovery_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  timestamp?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  timestamp_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_not?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
   to?: InputMaybe<Scalars['String']['input']>;
   to_gt?: InputMaybe<Scalars['String']['input']>;
   to_gte?: InputMaybe<Scalars['String']['input']>;

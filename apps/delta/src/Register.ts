@@ -8,7 +8,7 @@ ponder.on('IdRegistry:Register', async ({ event, context }) => {
   } = context.db
   const { to, id, recovery } = event.args  
 
-  await User.create({
+  const newUser = await User.create({
     id: id,
     data: {
       timestamp: event.block.timestamp,
