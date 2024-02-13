@@ -5,14 +5,12 @@ import {
   DialogContent,
   DialogFooter,
   DialogHeader,
-  DialogPortal,
   DialogTitle,
   DialogTrigger,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuPortal,
   DropdownMenuTrigger,
   Toast,
   Typography,
@@ -23,24 +21,20 @@ import {
   FormControl,
   FormField,
   FormMessage,
-  Input,
   Separator,
   Flex,
   StatusFilled,
   StatusEmpty,
-  cn,
   Loading,
 } from "@/design-system";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitButton, EditMembersInput } from "@/client";
+import { EditMembersInput } from "@/client";
 import { type Channel, type ChannelRoles } from "@/gql";
-import { usePrivy } from "@privy-io/react-auth";
 import { useState, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import debounce from "debounce";
 import { toast } from "sonner";
 import {
-  type UsernameSchemaValues,
   getUsername,
   usernameSchema,
   checkUsernameAvailability,
@@ -58,34 +52,30 @@ export function ChannelSettings({ channel }: ChannelSettingsProps) {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [isEditing, setIsEditing] = useState(false);
 
-  // function isAdminOrAdder({
-  //   userRid,
-  //   channelRoleData,
-  // }: {
-  //   userRid: bigint;
-  //   channelRoleData: ChannelRoles[];
-  // }) {
-  //   // to see if they have admin access for channel
-  //   for (let i = 0; i < channelRoleData.length; ++i) {
-  //     let rid = channelRoleData[i].rid;
-  //     if (rid === userRid && channelRoleData[i].role > 1) {
-  //       return true;
-  //     }
-  //   }
-  //   return false;
-  // }
+  function isAdmin({
+    userRid,
+    channelRoleData,
+  }: {
+    userRid: bigint;
+    channelRoleData: ChannelRoles[];
+  }) {
+    // to see if they have admin access for channel
+    for (let i = 0; i < channelRoleData.length; ++i) {
+      let rid = channelRoleData[i].rid;
+      if (rid === userRid && channelRoleData[i].role > 1) {
+        return true;
+      }
+    }
+    return false;
+  }
 
-  // const enableUpdateMembers =
-  //   !embeddedWallet?.address || !targetUserId || !channel?.roles?.items
-  //     ? false
-  //     : isAdminOrAdder({
-  //         userRid: targetUserId,
-  //         channelRoleData: channel.roles.items,
-  //       });
-
-  // const members: bigint[] = (channel?.roles?.items ?? [])
-  //   .filter((member) => member.role > 0)
-  //   .map((member) => member.rid);
+  const enableEditMembers =
+    !embeddedWallet?.address || !userId || !channel?.roles?.items
+      ? false
+      : isAdmin({
+          userRid: userId,
+          channelRoleData: channel.roles.items,
+        });
 
   const form = useForm({
     resolver: zodResolver(usernameSchema),
@@ -110,14 +100,11 @@ export function ChannelSettings({ channel }: ChannelSettingsProps) {
   }
 
   const rolesStateDif: Roles[] = getStateDiff(roles);
-  console.log("roles state dif: ", rolesStateDif);
 
   const stateDifMembers: bigint[] = rolesStateDif.map((role) => BigInt(role.rid));
   const stateDifRoleValues: bigint[] = rolesStateDif.map(
     (role) => role.newRole || BigInt(0)
-  ); // default to BigInt(0) if newRole is null
-  console.log("stae dif members:", stateDifMembers);
-  console.log("stae dif values:", stateDifRoleValues);
+  ); // default to BigInt(0) if newRole is null);
 
   /* 
   *
@@ -164,18 +151,14 @@ export function ChannelSettings({ channel }: ChannelSettingsProps) {
     }
   }, [validationComplete, watchUsername]);
 
+  /* NOTE: probably should add a check to ensure that number of admins/members works nice in UI */
   async function addUsernameHandler() {
-    // dont let more than 5 get added at once. add an error state for this too
-    // NOTE: add a warning message for specifically this
-    if (roles.length > 4) return;
     const username = form.getValues().username;
     if (username) {
       const dataForUsername = await getDataForUsername({
         username: form.getValues().username,
       });
-      console.log("data for username: ", dataForUsername);
       if (dataForUsername) {
-        console.log("setting new role in state");
         const newRole = {
           rid: dataForUsername.id,
           username: username,
@@ -195,7 +178,6 @@ export function ChannelSettings({ channel }: ChannelSettingsProps) {
   }
 
   function setRoleToZero(rid: bigint) {
-    console.log("running set role to zero");
     setRoles((prevRoles) =>
       prevRoles.map((role) =>
         role.rid === rid ? { ...role, newRole: BigInt(0) } : role
@@ -204,7 +186,6 @@ export function ChannelSettings({ channel }: ChannelSettingsProps) {
   }
 
   function setRoleToOne(rid: bigint) {
-    console.log("running set role to one");
     setRoles((prevRoles) =>
       prevRoles.map((role) =>
         role.rid == rid ? { ...role, newRole: BigInt(1) } : role
@@ -238,10 +219,6 @@ export function ChannelSettings({ channel }: ChannelSettingsProps) {
     }
   }, [channel]);
 
-  //   console.log("starting roles", roles)
-
-  // NOTE has flaw in logic that makes it so that
-  // if you toggle off + on an admin, they will be reset as a member (2 -> 1)
   function MemberRow({ rid, role }: { rid: bigint; role: bigint }) {
     return (
       <Flex className=" w-full justify-between">
@@ -269,16 +246,18 @@ export function ChannelSettings({ channel }: ChannelSettingsProps) {
     <Dialog>
       {/* Dropdown logic */}
       <DropdownMenu>
+        {enableEditMembers && (
         <DropdownMenuTrigger className="focus:outline-none mb-1">
-          <Typography className="hover:font-bold" variant="h2">
-            {"..."}
-          </Typography>
-        </DropdownMenuTrigger>
+        <Typography className="hover:font-bold" variant="h2">
+          {"..."}
+        </Typography>
+      </DropdownMenuTrigger>
+        )}
         <DropdownMenuContent side="bottom">
           <DropdownMenuGroup className="flex flex-col gap-2">
             <DropdownMenuItem>
               <DialogTrigger asChild>
-                <Button variant="link">
+                <Button disabled={!enableEditMembers} variant="link">
                   <Typography>Edit members</Typography>
                 </Button>
               </DialogTrigger>
