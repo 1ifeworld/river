@@ -99,7 +99,7 @@ export async function w3sUpload(body: FormData, authToken: string | null) {
 
     return res.json()
   } catch (error) {
-    console.error('Upload to Mux failed:', error)
+    console.error('Upload failed', error)
     throw error
   }
 }
@@ -114,8 +114,8 @@ export async function uploadToMux(body: string, authToken: string | null) {
     },
   )
   if (!res.ok) {
-    console.error('Could not process video', await res.text())
-    throw new Error('Could not process video')
+    console.error('Could not upload to Mux', await res.text())
+    throw new Error('Could not upload to Mux')
   }
   const muxResponseData = await res.json()
 
