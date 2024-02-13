@@ -252,7 +252,7 @@ export function ChannelSettings({ channel }: ChannelSettingsProps) {
         </Typography>
       </DropdownMenuTrigger>
         )}
-        <DropdownMenuContent side="bottom">
+        <DropdownMenuContent side="bottom" align="start">
           <DropdownMenuGroup className="flex flex-col gap-2">
             <DropdownMenuItem>
               <DialogTrigger asChild>
