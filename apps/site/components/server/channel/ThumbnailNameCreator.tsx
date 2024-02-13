@@ -1,4 +1,4 @@
-import { Button, Stack, Typography } from '@/design-system'
+import { Stack, Typography } from '@/design-system'
 import { type Item } from '@/gql'
 import { ipfsUrlToCid, w3sUrlFromCid } from '@/lib'
 import { GenericThumbnailSmall, Username } from '@/server'
@@ -24,7 +24,7 @@ export function ThumbnailNameCreator({
           width={40}
           height={40}
         />
-        <Stack className="">
+        <Stack>
           <Typography className="text-primary-foreground">{''}</Typography>
         </Stack>
       </>
@@ -43,7 +43,7 @@ export function ThumbnailNameCreator({
           width={40}
           height={40}
         />
-        <Stack className="">
+        <Stack>
           <Typography className="text-primary-foreground">{''}</Typography>
         </Stack>
       </>
@@ -56,7 +56,7 @@ export function ThumbnailNameCreator({
     <>
       {cid ? (
         <Image
-          className="object-cover aspect-square  hover:cursor-pointer"
+          className="object-cover aspect-square hover:cursor-pointer"
           src={w3sUrlFromCid({ cid })}
           alt={itemMetadata.name}
           width={40}
@@ -75,7 +75,7 @@ export function ThumbnailNameCreator({
         </Typography>
         {/* This component is hidden on small screens */}
         <Typography className="hover:cursor-pointer hidden md:block hover:underline text-primary-foreground leading-none whitespace-nowrap">
-          {truncateText(itemMetadata.name, 50, true)}
+          {truncateText(itemMetadata.name, 35, true)}
         </Typography>
         <Username id={item.createdById} />
       </Stack>

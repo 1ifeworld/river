@@ -41,6 +41,7 @@ export async function ItemCard({
               alt={itemMetadata?.name as string}
               fill
               quality={100}
+              sizes="(min-width: 1200px) 20vw, (min-width: 768px) 25vw, 50vw"
               priority={true}
             />
           ) : (
