@@ -18,6 +18,7 @@ import {
   getAddress,
   decodeAbiParameters,
   recoverMessageAddress,
+  Hex
 } from "viem";
 import { messageToCid, postToCid } from "../utils";
 
@@ -31,7 +32,6 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
   const {
     Txn,
     User,
-    UserCounter,
     Post,
     Message,
     Channel,    
@@ -41,6 +41,7 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
     ItemRoles,
     ItemCounter,
     Adds,
+    // Debug
   } = context.db;
 
   /* ************************************************
@@ -58,8 +59,6 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
   ************************************************ */
 
   let posts: Post[] = [];
-
-  let alecPostIds: string[] = []
 
   const { args } = decodeFunctionData({
     abi: postGatewayABI,
@@ -84,16 +83,28 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
   // process every post -> associated message
   for (let i = 0; i < posts.length; ++i) {
 
-    // // check for message existence
+    // if (posts[i].signer != "0x648BdC06cDffBE20cCBb3dD71f5590a23Cc2FD22") return
+
     // check for message validity
     // check if timestamp is greater than 10 mins in the future of the block it was emitted in
-    // if (posts[i].message.timestamp > event.block.timestamp + BigInt(600))
-    //   return;
+    if (posts[i].message.timestamp > event.block.timestamp + BigInt(600)) return;
 
     // get custody address from user id
     const userLookup = await User.findUnique({ id: posts[i].message.rid });
+    // const userLookup = await User.findUnique({ id: BigInt(57) });
 
     if (!userLookup) return;
+
+    // await Debug.create({
+    //   id: `${posts[i].message.rid}/${event.block.timestamp}/${posts[i].message.msgType}/${event.log.logIndex}`,
+    //   data: {
+    //     rid: posts[i].message.rid,
+    //     msgType: BigInt(posts[i].message.msgType),
+    //     msgTimestamp: posts[i].message.timestamp,
+    //     blockTimestamp: event.block.timestamp,
+    //     userLookupTo: userLookup ? userLookup.to : "fail"
+    //   }
+    // })    
 
     const recoverAddressFromMessageSignature = await recoverMessageAddress({
       message: remove0xPrefix({ bytes32Hash: posts[i].hash }),
@@ -103,17 +114,23 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
     const signerIsValid =
       getAddress(userLookup.to) === recoverAddressFromMessageSignature;
 
+    // if (!signerIsValid) {
+    //   console.log("signer is not valid")
+    //   failedSigRecovery.push({
+    //     rid: posts[i].message.rid,
+    //     blocktimestamp: event.block.timestamp,
+    //     msgTimestamp: posts[i].message.timestamp,
+    //     msgType: posts[i].message.msgType,
+    //     userLookupTo: userLookup.to
+    //   })
+    // }      
+
     if (!signerIsValid) return;
 
     // Create post + message cid
     // NOTE: message cid will double as asset cid for CREATE_ITEM + CREATE_CHANNEL calls
     const postId = (await postToCid(posts[i])).cid.toString();
     const messageId = (await messageToCid(posts[i].message)).cid.toString();
-
-    if (posts[i].signer == getAddress("0x648BdC06cDffBE20cCBb3dD71f5590a23Cc2FD22")) {
-      console.log("pushing to post ids")
-      alecPostIds.push(postId)
-    }    
 
     // store post + message
     const storedPost = await Post.upsert({
@@ -194,7 +211,7 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
             update: {},
           });
         }
-        // update channel counter
+        // update item counter
         await ItemCounter.upsert({
           id: `${context.network.chainId}/${event.transaction.to}/item"`,
           create: {
@@ -421,8 +438,6 @@ ponder.on("PostGateway:NewPost", async ({ event, context }) => {
                 POST PROCESSING RECEIPT
 
   ************************************************ */
-
-  console.log("alec post ids: ", alecPostIds)
 
   // record every transaction that has entered the crud cycle
   txnReceipt = await Txn.findUnique({ id: event.transaction.hash });
