@@ -91,7 +91,6 @@ export function ChannelSettings({ channel }: ChannelSettingsProps) {
     newRole: bigint | null;
   };
   const [roles, setRoles] = useState<Roles[]>([]);
-  console.log("roles state: ", roles);
 
   function getStateDiff(roles: Roles[]): Roles[] {
     return roles.filter(
@@ -112,7 +111,7 @@ export function ChannelSettings({ channel }: ChannelSettingsProps) {
   *
   */
 
-  const [isValidUser, setIsValidUser] = useState(0); // 0 null state, 1 = valid, 2 = invalid, 3 = already added
+    const [isValidUser, setIsValidUser] = useState<0 | 1 | 2 | 3>(0); // 0 = null state, 1 = valid, 2 = invalid, 3 = already added
   const [validationComplete, setValidationComplete] = useState(false);
   const [isCheckingUsername, setIsCheckingUsername] = useState(false);
 
