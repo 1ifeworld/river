@@ -14,8 +14,14 @@ export default createSchema((p) => ({
       ID REGISTRY
   */
 
+  UserCounter: p.createTable({
+    id: p.string(), // chain + id registry addy
+    counter: p.bigint(),
+    lastUpdated: p.bigint()
+  }),
   User: p.createTable({
     id: p.bigint(),
+    timestamp: p.bigint(),
     userId: p.bigint(),
     to: p.hex(),
     recovery: p.hex(),
@@ -39,11 +45,17 @@ export default createSchema((p) => ({
   }),
   Message: p.createTable({
     id: p.string(),
+    parentPostId: p.string(),
     rid: p.bigint(),
     timestamp: p.bigint(),
     msgType: p.bigint(),
     msgBody: p.hex(),
   }),
+  ChannelCounter: p.createTable({
+    id: p.string(), // chain+idregistry+"channel"
+    counter: p.bigint(),
+    lastUpdated: p.bigint()
+  }),  
   Channel: p.createTable({
     id: p.string(),
     messageId: p.string().references('Message.id'),
@@ -65,6 +77,11 @@ export default createSchema((p) => ({
     channel: p.one('channelId'),
     role: p.bigint()
   }),  
+  ItemCounter: p.createTable({
+    id: p.string(), // chain+idregistry+"item"
+    counter: p.bigint(),
+    lastUpdated: p.bigint()
+  }),    
   Item: p.createTable({
     id: p.string(),
     messageId: p.string().references('Message.id'),

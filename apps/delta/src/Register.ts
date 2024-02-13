@@ -3,18 +3,32 @@ import { ponder } from '@/generated'
 ponder.on('IdRegistry:Register', async ({ event, context }) => {
   const {
     User,
+    UserCounter,
     Txn,
   } = context.db
   const { to, id, recovery } = event.args  
 
-  const user = await User.create({
+  await User.create({
     id: id,
     data: {
+      timestamp: event.block.timestamp,
       userId: id,
       to: to,
       recovery: recovery,
       from: event.transaction.from,
     },
+  })
+
+  await UserCounter.upsert({
+    id: `${context.network.chainId}/${event.transaction.to}`,
+    create: {
+      counter: BigInt(1),
+      lastUpdated: event.block.timestamp
+    },
+    update: ({ current }) => ({
+      counter: (current.counter as bigint) + BigInt(1), 
+      lastUpdated: event.block.timestamp      
+    })
   })
 
   // record every transaction that has entered the crud cycle
