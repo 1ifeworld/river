@@ -20,6 +20,7 @@ export function isAudio({ mimeType }: { mimeType: string }) {
     'audio/ogg',
     'audio/opus',
     'audio/wav',
+    'audio/x-wav',
     'audio/webm',
     'audio/3gpp',
     'audio/3gpp2',
