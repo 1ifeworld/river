@@ -1,7 +1,7 @@
 import { AudioPlayer, VideoPlayer } from '@/client'
 import { ItemSidebar } from '@/server'
 import { Typography, Flex, Stack } from '@/design-system'
-import { getItemPage, getChannelWithId } from '@/gql'
+import { getChannelWithId } from '@/gql'
 import {
   type MediaAssetObject,
   ipfsUrlToCid,
