@@ -1,0 +1,17 @@
+query marqueeData {
+  userCounters {
+    items {
+      counter
+    }
+  }
+  itemCounters {
+    items {
+      counter
+    }
+  }
+  channelCounters {
+    items {
+      counter
+    }
+  }
+}

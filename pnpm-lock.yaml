@@ -21,8 +21,8 @@ importers:
         specifier: ^9.1.0
         version: 9.1.0
       '@ponder/core':
-        specifier: ^0.2.2
-        version: 0.2.2(@types/node@18.11.18)(typescript@5.1.6)(viem@1.20.0)
+        specifier: ^0.2.5
+        version: 0.2.5(@types/node@18.11.18)(typescript@5.1.6)(viem@1.20.0)
       base64url:
         specifier: ^3.0.1
         version: 3.0.1
@@ -3747,8 +3747,8 @@ packages:
     dev: false
     optional: true
 
-  /@ponder/core@0.2.2(@types/node@18.11.18)(typescript@5.1.6)(viem@1.20.0):
-    resolution: {integrity: sha512-0VBy/vwkKJwSVb1ve9qcnppebLGhqWZfA/6tNWPdtU1u0Oc5cPYPi4fZyyMPwRpli1XeLeGNi1V+Mhren8u9uA==}
+  /@ponder/core@0.2.5(@types/node@18.11.18)(typescript@5.1.6)(viem@1.20.0):
+    resolution: {integrity: sha512-My+cVl1rPItgbUhlJOJElEY7UvZjxXGQqTVWQzsveQHO6nLzID2HSzwc9pYQ4jpPcoNy58fTu8MPrXQn24CZtA==}
     engines: {node: '>=18.14'}
     hasBin: true
     peerDependencies:

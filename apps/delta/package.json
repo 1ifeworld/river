@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@ipld/dag-cbor": "^9.1.0",
-    "@ponder/core": "^0.2.2",
+    "@ponder/core": "^0.2.5",
     "base64url": "^3.0.1",
     "multiformats": "^13.0.1",
     "scrypt": "workspace:*"

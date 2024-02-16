@@ -6,7 +6,7 @@ query channelWithId($id: String!) {
     uri
     name
     description
-    roles(orderBy: "timestamp", orderDirection: "desc") {
+    roles(orderBy: "role", orderDirection: "desc") {
       items {
         timestamp
         rid

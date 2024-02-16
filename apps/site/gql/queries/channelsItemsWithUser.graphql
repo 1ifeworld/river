@@ -20,6 +20,7 @@ query channelsItemsWithUser($userId: BigInt!) {
     where: {createdById: $userId}
     orderBy: "timestamp"
     orderDirection: "desc"
+    limit: 100
   ) {
     items {
       timestamp

@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { Typography } from 'design-system/components'
 import './markdownStyles.css'
+
 interface MarkdownRendererProps {
   contentUrl: string
 }
