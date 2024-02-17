@@ -34,7 +34,13 @@ export async function ChannelItems({
     return (
       <Grid className="grid-cols-2 md:grid-cols-[repeat(auto-fill,_minmax(255px,_1fr))] gap-5 py-[30px]">
         {channel?.adds?.items?.map((add: Adds) =>
-          add.removed ? null : <ItemCard key={add.timestamp} add={add} />,
+          add.removed ? null : (
+            <ItemCard
+              key={add.timestamp}
+              add={add}
+              dropdownComponent={<ItemDropdown add={add} channel={channel} />}
+            />
+          ),
         )}
       </Grid>
     )
