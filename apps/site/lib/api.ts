@@ -81,16 +81,27 @@ export async function relayRegisterFor(
 /* MEDIA SERVICE */
 
 export async function w3sUpload(body: FormData, authToken: string | null) {
-  const res = await fetch('https://river-media-service.up.railway.app/w3s', {
-    method: 'POST',
-    headers: authToken ? { Authorization: `Bearer ${authToken}` } : undefined,
-    body,
-  })
-  if (!res.ok) {
-    console.error('Could not upload file', await res.text())
-    throw new Error('Could not upload file')
+  try {
+    const res = await fetch('https://river-media-service.up.railway.app/w3s', {
+      method: 'POST',
+      headers: authToken ? { Authorization: `Bearer ${authToken}` } : undefined,
+      body,
+    })
+
+    if (res.status === 413) {
+      console.error('File too large')
+      throw new Error('File too large. Please try a smaller file.')
+    } else if (!res.ok) {
+      const errorText = await res.text()
+      console.error('Could not upload file', errorText)
+      throw new Error(`Could not upload file: ${res.status} ${res.statusText} - ${errorText}`)
+    }
+
+    return res.json()
+  } catch (error) {
+    console.error('Upload failed', error)
+    throw error
   }
-  return res.json()
 }
 
 export async function uploadToMux(body: string, authToken: string | null) {
@@ -103,8 +114,8 @@ export async function uploadToMux(body: string, authToken: string | null) {
     },
   )
   if (!res.ok) {
-    console.error('Could not process video', await res.text())
-    throw new Error('Could not process video')
+    console.error('Could not upload to Mux', await res.text())
+    throw new Error('Could not upload to Mux')
   }
   const muxResponseData = await res.json()
 
