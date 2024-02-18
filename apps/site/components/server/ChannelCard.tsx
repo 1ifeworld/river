@@ -1,11 +1,11 @@
-import { Channel, Adds } from '@/gql'
-import { Username, GenericThumbnailLarge } from '@/server'
-import { Typography, Stack, Flex, Grid } from '@/design-system'
-import { w3sUrlFromCid, MediaAssetObject } from '@/lib'
+import { THUMBNAIL_TYPES_TO_RENDER } from '@/constants'
+import { Flex, Grid, Stack, Typography } from '@/design-system'
+import { Adds, Channel } from '@/gql'
+import { MediaAssetObject, w3sUrlFromCid } from '@/lib'
+import { GenericThumbnailLarge, Username } from '@/server'
+import { kv } from '@vercel/kv'
 import Image from 'next/image'
 import Link from 'next/link'
-import { kv } from '@vercel/kv'
-import { THUMBNAIL_TYPES_TO_RENDER } from '@/constants'
 
 export async function ChannelCard({ channel }: { channel: Channel }) {
   const lastFourNonRemovedItems: Adds[] = (channel?.adds?.items ?? [])

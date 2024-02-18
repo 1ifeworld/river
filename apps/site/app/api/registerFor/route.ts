@@ -1,9 +1,9 @@
-import { ethers } from 'ethers'
-import { addresses, idRegistryABI } from 'scrypt'
-import { Defender } from '@openzeppelin/defender-sdk'
 import { optimismPubClient } from '@/config/publicClient'
-import { decodeAbiParameters, Hex } from 'viem'
+import { Defender } from '@openzeppelin/defender-sdk'
+import { ethers } from 'ethers'
 import { NextRequest } from 'next/server'
+import { addresses, idRegistryABI } from 'scrypt'
+import { Hex, decodeAbiParameters } from 'viem'
 
 export async function POST(req: NextRequest) {
   const user = await req.json()
@@ -72,6 +72,7 @@ export async function POST(req: NextRequest) {
     if (error instanceof Error) {
       errorMessage = error.message
       statusCode =
+        // biome-ignore lint: `status` is not part of the standard Error interface
         typeof (error as any).status === 'number' ? (error as any).status : 500
     }
 

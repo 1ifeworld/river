@@ -1,7 +1,7 @@
-import { Stack, Typography, Flex, Grid, Separator } from '@/design-system'
-import { ChannelCard } from '@/server'
-import { getDataForUsername } from '@/lib'
+import { Flex, Grid, Separator, Stack, Typography } from '@/design-system'
 import { getChannelsItemsWithUser } from '@/gql'
+import { getDataForUsername } from '@/lib'
+import { ChannelCard } from '@/server'
 import { pluralize } from '@/utils'
 
 export default async function Profile({

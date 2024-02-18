@@ -1,5 +1,4 @@
-export interface SvgProps
-  extends Pick<
-    React.SVGProps<SVGSVGElement>,
-    'fill' | 'stroke' | 'width' | 'className'
-  > {}
+export type SvgProps = Pick<
+  React.SVGProps<SVGSVGElement>,
+  'fill' | 'stroke' | 'width' | 'className'
+>

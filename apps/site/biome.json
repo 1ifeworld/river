@@ -1,40 +1,24 @@
 {
   "extends": ["../../biome.json"],
+  "files": {
+    "ignore": ["./gql/sdk.generated.ts"]
+  },
   "formatter": {
     "enabled": true,
     "formatWithErrors": false,
     "indentStyle": "space",
     "indentWidth": 2,
-    "lineWidth": 80,
-    "include": [
-      "./abi/**",
-      "./app/**",
-      "./components/**",
-      "./constants/**",
-      "./design-system/**",
-      "./gql/**",
-      "./hooks/**",
-      "./styles/**",
-      "./utils/**"
-    ],
-    "ignore": ["./.next/**"]
+    "lineWidth": 80
   },
   "linter": {
     "enabled": true,
     "rules": {
       "recommended": true
-    },
-    "include": [
-      "./abi/**",
-      "./app/**",
-      "./components/**",
-      "./constants/**",
-      "./design-system/**",
-      "./gql/**",
-      "./hooks/**",
-      "./styles/**",
-      "./utils/**"
-    ],
-    "ignore": ["./.next/**"]
+    }
+  },
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
   }
 }

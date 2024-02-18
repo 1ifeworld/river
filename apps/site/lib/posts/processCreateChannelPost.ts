@@ -1,14 +1,14 @@
-import { SignMessageModalUIOptions } from '@privy-io/react-auth'
-import { Hash, Hex } from 'viem'
 import { relayPost } from '@/lib'
 import { getTxnInclusion, revalidationHelper } from '@/lib'
+import { SignMessageModalUIOptions } from '@privy-io/react-auth'
+import { revalidatePath } from 'next/cache'
 import {
+  encodeCreateChannelMsgBody,
+  generateMessageHash,
   getExpiration,
   remove0xPrefix,
-  generateMessageHash,
-  encodeCreateChannelMsgBody,
 } from 'scrypt'
-import { revalidatePath } from 'next/cache'
+import { Hash, Hex } from 'viem'
 
 export async function processCreateChannelPost({
   signer,

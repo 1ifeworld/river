@@ -1,4 +1,4 @@
-import { cn, Stack, Typography } from '@/design-system'
+import { Stack, Typography, cn } from '@/design-system'
 import { truncateText } from '@/utils'
 
 function extractFileExtension(mimeType: string): string {

@@ -1,4 +1,4 @@
-import { Typography, Stack } from '@/design-system'
+import { Stack, Typography } from '@/design-system'
 import { getAllChannels } from '@/gql'
 import { getChannelMetadata } from '@/lib'
 import Link from 'next/link'

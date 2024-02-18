@@ -1,7 +1,6 @@
 import { AudioPlayer, VideoPlayer } from '@/client'
-import { ItemSidebar } from '@/server'
-import { Typography, Flex, Stack } from '@/design-system'
-import { getItemPage, getChannelWithId } from '@/gql'
+import { Flex, Stack, Typography } from '@/design-system'
+import { getChannelWithId, getItemPage } from '@/gql'
 import {
   type MediaAssetObject,
   ipfsUrlToCid,
@@ -13,11 +12,12 @@ import {
   isVideo,
   w3sUrlFromCid,
 } from '@/lib'
+import { ItemSidebar } from '@/server'
+import { kv } from '@vercel/kv'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
-import { match, P } from 'ts-pattern'
 import * as React from 'react'
-import { kv } from '@vercel/kv'
+import { P, match } from 'ts-pattern'
 
 const MarkdownRenderer = dynamic(
   () => import('../../../../components/client/renderers/MarkdownRenderer'),

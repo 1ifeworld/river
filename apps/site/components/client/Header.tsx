@@ -2,13 +2,13 @@ import { ChannelDialog, UserDropdown, UsernameDialog } from '@/client'
 import { Button, Flex, Typography } from '@/design-system'
 import { RiverLogo } from '@/server'
 import { usePrivy } from '@privy-io/react-auth'
-import { useState } from 'react'
-import { useParams } from 'next/navigation'
 import { useUserContext } from 'context/UserContext'
-import { useEffect } from 'react'
 import { getUserId } from 'gql/requests'
-import { Hex } from 'viem'
 import { getUsername } from 'lib/username'
+import { useParams } from 'next/navigation'
+import { useState } from 'react'
+import { useEffect } from 'react'
+import { Hex } from 'viem'
 
 export function Header() {
   const [open, setOpen] = useState<boolean>(false)

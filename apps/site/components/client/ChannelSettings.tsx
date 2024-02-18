@@ -1,5 +1,7 @@
-import { useUserContext } from "@/context";
+import { EditMembersInput } from '@/client'
+import { useUserContext } from '@/context'
 import {
+  Button,
   Dialog,
   DialogClose,
   DialogContent,
@@ -12,61 +14,59 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  Toast,
-  Typography,
-  Stack,
-  Button,
+  Flex,
   Form,
-  FormItem,
   FormControl,
   FormField,
+  FormItem,
   FormMessage,
-  Separator,
-  Flex,
-  StatusFilled,
-  StatusEmpty,
   Loading,
-} from "@/design-system";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { EditMembersInput } from "@/client";
-import { type Channel, type ChannelRoles } from "@/gql";
-import { useState, useEffect, useMemo } from "react";
-import { useForm } from "react-hook-form";
-import debounce from "debounce";
-import { toast } from "sonner";
+  Separator,
+  Stack,
+  StatusEmpty,
+  StatusFilled,
+  Toast,
+  Typography,
+} from '@/design-system'
+import { type Channel, type ChannelRoles } from '@/gql'
 import {
-  getUsername,
-  usernameSchema,
   checkUsernameAvailability,
   getDataForUsername,
+  getUsername,
   processEditMembersPost,
-} from "@/lib";
-import { Hex } from "viem";
+  usernameSchema,
+} from '@/lib'
+import { zodResolver } from '@hookform/resolvers/zod'
+import debounce from 'debounce'
+import { useEffect, useMemo, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import { Hex } from 'viem'
 
 interface ChannelSettingsProps {
-  channel: Channel;
+  channel: Channel
 }
 
 export function ChannelSettings({ channel }: ChannelSettingsProps) {
-  const { signMessage, userId, embeddedWallet } = useUserContext();
+  const { signMessage, userId, embeddedWallet } = useUserContext()
   const [dialogOpen, setDialogOpen] = useState(false)
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(false)
 
   function isAdmin({
     userRid,
     channelRoleData,
   }: {
-    userRid: bigint;
-    channelRoleData: ChannelRoles[];
+    userRid: bigint
+    channelRoleData: ChannelRoles[]
   }) {
     // to see if they have admin access for channel
     for (let i = 0; i < channelRoleData.length; ++i) {
-      let rid = channelRoleData[i].rid;
+      const rid = channelRoleData[i].rid
       if (rid === userRid && channelRoleData[i].role > 1) {
-        return true;
+        return true
       }
     }
-    return false;
+    return false
   }
 
   const enableEditMembers =
@@ -75,35 +75,37 @@ export function ChannelSettings({ channel }: ChannelSettingsProps) {
       : isAdmin({
           userRid: userId,
           channelRoleData: channel.roles.items,
-        });
+        })
 
   const form = useForm({
     resolver: zodResolver(usernameSchema),
     defaultValues: {
-      username: "",
+      username: '',
     },
-  });
+  })
 
   type Roles = {
-    rid: bigint;
-    username: string;
-    startingRole: bigint;
-    newRole: bigint | null;
-  };
-  const [roles, setRoles] = useState<Roles[]>([]);
+    rid: bigint
+    username: string
+    startingRole: bigint
+    newRole: bigint | null
+  }
+  const [roles, setRoles] = useState<Roles[]>([])
 
   function getStateDiff(roles: Roles[]): Roles[] {
     return roles.filter(
-      (role) => role.newRole !== null && role.newRole !== role.startingRole
-    );
+      (role) => role.newRole !== null && role.newRole !== role.startingRole,
+    )
   }
 
-  const rolesStateDif: Roles[] = getStateDiff(roles);
+  const rolesStateDif: Roles[] = getStateDiff(roles)
 
-  const stateDifMembers: bigint[] = rolesStateDif.map((role) => BigInt(role.rid));
+  const stateDifMembers: bigint[] = rolesStateDif.map((role) =>
+    BigInt(role.rid),
+  )
   const stateDifRoleValues: bigint[] = rolesStateDif.map(
-    (role) => role.newRole || BigInt(0)
-  ); // default to BigInt(0) if newRole is null);
+    (role) => role.newRole || BigInt(0),
+  ) // default to BigInt(0) if newRole is null);
 
   /* 
   *
@@ -111,85 +113,85 @@ export function ChannelSettings({ channel }: ChannelSettingsProps) {
   *
   */
 
-    const [isValidUser, setIsValidUser] = useState<0 | 1 | 2 | 3>(0); // 0 = null state, 1 = valid, 2 = invalid, 3 = already added
-  const [validationComplete, setValidationComplete] = useState(false);
-  const [isCheckingUsername, setIsCheckingUsername] = useState(false);
+  const [isValidUser, setIsValidUser] = useState<0 | 1 | 2 | 3>(0) // 0 = null state, 1 = valid, 2 = invalid, 3 = already added
+  const [validationComplete, setValidationComplete] = useState(false)
+  const [isCheckingUsername, setIsCheckingUsername] = useState(false)
 
   // Subscribe to changes to the username input
-  const watchUsername = debounce(() => form.watch("username"), 500);
+  const watchUsername = debounce(() => form.watch('username'), 500)
 
   // username checkibng
   const triggerValidation = useMemo(
     () =>
       debounce(() => {
-        form.trigger("username");
-        setValidationComplete(true);
+        form.trigger('username')
+        setValidationComplete(true)
       }, 500),
-    [form]
-  );
+    [form],
+  )
 
   useEffect(() => {
     if (form.formState.isValid && validationComplete) {
-      const inputUsername = form.getValues().username;
+      const inputUsername = form.getValues().username
       const usernameAddedCheck = roles.some(
-        (role) => role.username === inputUsername
-      );
+        (role) => role.username === inputUsername,
+      )
       if (usernameAddedCheck) {
-        setIsValidUser(3); // 3 == already added
-        setIsCheckingUsername(false);
+        setIsValidUser(3) // 3 == already added
+        setIsCheckingUsername(false)
       } else {
         checkUsernameAvailability(form.getValues().username).then((result) => {
-          console.log("username check result: ", result);
-          setIsValidUser(result.exists ? 1 : 2); // 1 == valid, 2 == invalid
-          setIsCheckingUsername(false);
-        });
+          console.log('username check result: ', result)
+          setIsValidUser(result.exists ? 1 : 2) // 1 == valid, 2 == invalid
+          setIsCheckingUsername(false)
+        })
       }
       return () => {
-        setValidationComplete(false);
-      };
+        setValidationComplete(false)
+      }
     }
-  }, [validationComplete, watchUsername]);
+  }, [validationComplete, watchUsername])
 
   /* NOTE: probably should add a check to ensure that number of admins/members works nice in UI */
   async function addUsernameHandler() {
-    const username = form.getValues().username;
+    const username = form.getValues().username
     if (username) {
       const dataForUsername = await getDataForUsername({
         username: form.getValues().username,
-      });
+      })
       if (dataForUsername) {
         const newRole = {
           rid: dataForUsername.id,
           username: username,
           startingRole: BigInt(0),
           newRole: BigInt(1),
-        };
-        setRoles((prevRoles) => [newRole, ...prevRoles]);
-        setIsValidUser(0);
-        form.reset();
+        }
+        setRoles((prevRoles) => [newRole, ...prevRoles])
+        setIsValidUser(0)
+        form.reset()
       }
     }
   }
 
   function clearUsernameHandler() {
-    setIsValidUser(0);
-    form.reset();
+    setIsValidUser(0)
+    form.reset()
   }
 
   function setRoleToZero(rid: bigint) {
     setRoles((prevRoles) =>
       prevRoles.map((role) =>
-        role.rid === rid ? { ...role, newRole: BigInt(0) } : role
-      )
-    );
+        role.rid === rid ? { ...role, newRole: BigInt(0) } : role,
+      ),
+    )
   }
 
   function setRoleToOne(rid: bigint) {
     setRoles((prevRoles) =>
       prevRoles.map((role) =>
-        role.rid == rid ? { ...role, newRole: BigInt(1) } : role
-      )
-    );
+        role.rid === rid ? { ...role, newRole: BigInt(1) } : role,
+      ),
+    )
   }
 
   useEffect(() => {
@@ -203,20 +205,22 @@ export function ChannelSettings({ channel }: ChannelSettingsProps) {
               username: await getUsername({ id: member.rid }),
               startingRole: BigInt(member.role),
               newRole: null,
-            }))            
-        );        
+            })),
+        )
         // Sort the startingRoles array based on startingRole in descending order
-        startingRoles.sort((a, b) => Number(a.startingRole) - Number(b.startingRole));
-        setRoles(startingRoles);
+        startingRoles.sort(
+          (a, b) => Number(a.startingRole) - Number(b.startingRole),
+        )
+        setRoles(startingRoles)
       } catch (error) {
-        console.error("Error setting roles:", error);
+        console.error('Error setting roles:', error)
       }
-    };
+    }
 
     if (channel) {
-      fetchRoles();
+      fetchRoles()
     }
-  }, [channel]);
+  }, [channel])
 
   function MemberRow({ rid, role }: { rid: bigint; role: bigint }) {
     return (
@@ -228,17 +232,17 @@ export function ChannelSettings({ channel }: ChannelSettingsProps) {
           <Typography className="text-secondary-foreground">admin</Typography>
         )}
         {role === BigInt(1) && (
-          <button onClick={() => setRoleToZero(rid)}>
+          <button type="button" onClick={() => setRoleToZero(rid)}>
             <StatusFilled />
           </button>
         )}
         {role !== BigInt(2) && role !== BigInt(1) && (
-          <button onClick={() => setRoleToOne(rid)}>
+          <button type="button" onClick={() => setRoleToOne(rid)}>
             <StatusEmpty />
           </button>
         )}
       </Flex>
-    );
+    )
   }
 
   return (
@@ -246,11 +250,11 @@ export function ChannelSettings({ channel }: ChannelSettingsProps) {
       {/* Dropdown logic */}
       <DropdownMenu>
         {enableEditMembers && (
-        <DropdownMenuTrigger className="focus:outline-none mb-1">
-        <Typography className="hover:font-bold" variant="h2">
-          {"..."}
-        </Typography>
-      </DropdownMenuTrigger>
+          <DropdownMenuTrigger className="focus:outline-none mb-1">
+            <Typography className="hover:font-bold" variant="h2">
+              {'...'}
+            </Typography>
+          </DropdownMenuTrigger>
         )}
         <DropdownMenuContent side="bottom" align="start">
           <DropdownMenuGroup className="flex flex-col gap-2">
@@ -296,23 +300,22 @@ export function ChannelSettings({ channel }: ChannelSettingsProps) {
                           placeholder="Enter username..."
                           {...field}
                           onChange={(e) => {
-                            const lowercasedValue =
-                              e.target.value.toLowerCase();
+                            const lowercasedValue = e.target.value.toLowerCase()
                             field.onChange({
                               ...e,
                               target: { ...e.target, value: lowercasedValue },
-                            });
-                            setIsCheckingUsername(true);
-                            triggerValidation();
+                            })
+                            setIsCheckingUsername(true)
+                            triggerValidation()
                           }}
                         />
                       </FormControl>
                       <div className="h-3">
-                        {isValidUser == 2 ? (
+                        {isValidUser === 2 ? (
                           <FormMessage className="pt-2 text-red-500">
                             User doesnt exist, please try again
                           </FormMessage>
-                        ) : isValidUser == 3 ? (
+                        ) : isValidUser === 3 ? (
                           <FormMessage className="pt-2 text-red-500">
                             User already added
                           </FormMessage>
@@ -341,19 +344,16 @@ export function ChannelSettings({ channel }: ChannelSettingsProps) {
                 <Button
                   variant="link"
                   type="submit"
-                  disabled={
-                    rolesStateDif.length == 0 ||
-                    isEditing
-                  }
+                  disabled={rolesStateDif.length === 0 || isEditing}
                   onClick={async (e) => {
                     // prevent form from submitting
                     e.preventDefault()
                     // check to make sure userId and wallet are present
-                    if (!embeddedWallet?.address || !userId) return false;
+                    if (!embeddedWallet?.address || !userId) return false
                     // set isRemoving state to true
-                    setIsEditing(true);
+                    setIsEditing(true)
                     // initialize bool for txn success check
-                    let txSuccess: boolean = false;
+                    let txSuccess = false
                     // Generate removeReference post
                     if (signMessage) {
                       txSuccess = await processEditMembersPost({
@@ -363,23 +363,23 @@ export function ChannelSettings({ channel }: ChannelSettingsProps) {
                         channelCid: channel.id,
                         members: stateDifMembers,
                         roles: stateDifRoleValues,
-                      });
+                      })
                       setDialogOpen(false)
-                      if (txSuccess) {                        
+                      if (txSuccess) {
                         toast.custom((t) => (
-                          <Toast>{"Members successfuly edited"}</Toast>
-                        ));
-                        setIsEditing(false);
+                          <Toast>{'Members successfuly edited'}</Toast>
+                        ))
+                        setIsEditing(false)
                       } else {
                         toast.custom((t) => (
-                          <Toast>{"Error editing members"}</Toast>
-                        ));
-                        setIsEditing(false);
+                          <Toast>{'Error editing members'}</Toast>
+                        ))
+                        setIsEditing(false)
                       }
                     }
                   }}
                 >
-                  {isEditing ? <Loading /> : "Save"}
+                  {isEditing ? <Loading /> : 'Save'}
                 </Button>
               </DialogFooter>
             </form>
@@ -387,5 +387,5 @@ export function ChannelSettings({ channel }: ChannelSettingsProps) {
         </Stack>
       </DialogContent>
     </Dialog>
-  );
+  )
 }
