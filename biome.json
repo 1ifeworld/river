@@ -3,6 +3,9 @@
   "organizeImports": {
     "enabled": false
   },
+  "files": {
+    "ignore": ["cache", "coverage"]
+  },
   "formatter": {
     "enabled": true,
     "formatWithErrors": false,
@@ -10,11 +13,6 @@
     "indentWidth": 2,
     "lineWidth": 80,
     "ignore": [
-      "**/.turbo",
-      "**/node_modules",
-      "cache",
-      "coverage",
-      ".gitignore",
       "LICENSE.md",
       "pnpm-lock.yaml",
       "pnpm-workspace.yaml",
@@ -42,11 +40,6 @@
       }
     },
     "ignore": [
-      "**/.turbo",
-      "**/node_modules",
-      "cache",
-      "coverage",
-      ".gitignore",
       "LICENSE.md",
       "pnpm-lock.yaml",
       "pnpm-workspace.yaml",
@@ -60,5 +53,10 @@
       "trailingComma": "all",
       "semicolons": "asNeeded"
     }
+  },
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
   }
 }
