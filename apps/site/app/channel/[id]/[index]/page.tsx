@@ -124,7 +124,7 @@ export default async function ItemPage({
       <div className="md:w-[22%]">
         <ItemSidebar
           // @ts-ignore
-          itemContext={itemToRender} 
+          itemContext={itemToRender}
           itemMetadata={itemMetadata}
           // @ts-ignore
           channel={channel}
