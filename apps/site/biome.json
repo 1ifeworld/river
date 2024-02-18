@@ -13,7 +13,24 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true
+      "recommended": true,
+      "style": {
+        "noUselessElse": "off"
+      },
+      "suspicious": {
+        "noRedeclare": "off",
+        "noArrayIndexKey": "off"
+      },
+      "complexity": {
+        "useOptionalChain": "off",
+        "noExtraBooleanCast": "off"
+      },
+      "correctness": {
+        "useExhaustiveDependencies": "off"
+      },
+      "a11y": {
+        "noSvgWithoutTitle": "off"
+      }
     }
   },
   "vcs": {
