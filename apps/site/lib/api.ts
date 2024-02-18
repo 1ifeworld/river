@@ -94,7 +94,9 @@ export async function w3sUpload(body: FormData, authToken: string | null) {
     } else if (!res.ok) {
       const errorText = await res.text()
       console.error('Could not upload file', errorText)
-      throw new Error(`Could not upload file: ${res.status} ${res.statusText} - ${errorText}`)
+      throw new Error(
+        `Could not upload file: ${res.status} ${res.statusText} - ${errorText}`,
+      )
     }
 
     return res.json()
