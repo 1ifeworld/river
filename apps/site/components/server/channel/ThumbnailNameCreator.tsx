@@ -7,6 +7,7 @@ import Image from 'next/image'
 
 interface ThumbnailNameCreatorProps {
   item: Item
+  // biome-ignore lint:
   metadata: any
 }
 

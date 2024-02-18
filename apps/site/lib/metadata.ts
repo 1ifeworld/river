@@ -1,4 +1,4 @@
-import { type Channel, type Adds } from '@/gql'
+import { type Adds, type Channel } from '@/gql'
 
 export interface ChannelMetadata {
   name: string

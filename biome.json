@@ -3,6 +3,9 @@
   "organizeImports": {
     "enabled": false
   },
+  "files": {
+    "ignore": ["cache", "coverage"]
+  },
   "formatter": {
     "enabled": true,
     "formatWithErrors": false,
@@ -10,11 +13,6 @@
     "indentWidth": 2,
     "lineWidth": 80,
     "ignore": [
-      "**/.turbo",
-      "**/node_modules",
-      "cache",
-      "coverage",
-      ".gitignore",
       "LICENSE.md",
       "pnpm-lock.yaml",
       "pnpm-workspace.yaml",
@@ -25,28 +23,9 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
-      "suspicious": {
-        "noRedeclare": "off",
-        "noArrayIndexKey": "off"
-      },
-      "complexity": {
-        "useOptionalChain": "off",
-        "noExtraBooleanCast": "off"
-      },
-      "correctness": {
-        "useExhaustiveDependencies": "off"
-      },
-      "a11y": {
-        "noSvgWithoutTitle": "off"
-      }
+      "recommended": true
     },
     "ignore": [
-      "**/.turbo",
-      "**/node_modules",
-      "cache",
-      "coverage",
-      ".gitignore",
       "LICENSE.md",
       "pnpm-lock.yaml",
       "pnpm-workspace.yaml",
@@ -60,5 +39,10 @@
       "trailingComma": "all",
       "semicolons": "asNeeded"
     }
+  },
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
   }
 }

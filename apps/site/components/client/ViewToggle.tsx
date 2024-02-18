@@ -1,5 +1,5 @@
-import { useRouter, usePathname, useSearchParams } from 'next/navigation'
-import { Flex, Typography, Button } from '@/design-system'
+import { Button, Flex, Typography } from '@/design-system'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
 
 export function ViewToggle() {
@@ -20,7 +20,7 @@ export function ViewToggle() {
     <Flex className="gap-x-2">
       <Button
         className={
-          searchParams.get('view') !== 'grid'
+          searchParams.get('view') !== 'list'
             ? 'hover:no-underline'
             : 'decoration-secondary-foreground'
         }
@@ -31,33 +31,33 @@ export function ViewToggle() {
       >
         <Typography
           className={
-            searchParams.get('view') === 'grid'
+            searchParams.get('view') === 'list'
               ? 'text-secondary-foreground'
               : ''
           }
         >
-          List
+          Grid
         </Typography>
       </Button>
       <Button
         className={
-          searchParams.get('view') === 'grid'
+          searchParams.get('view') === 'list'
             ? 'hover:no-underline'
             : 'decoration-secondary-foreground'
         }
         variant="link"
         onClick={() => {
-          router.push(`${pathname}?${createQueryString('view', 'grid')}`)
+          router.push(`${pathname}?${createQueryString('view', 'list')}`)
         }}
       >
         <Typography
           className={
-            searchParams.get('view') !== 'grid'
+            searchParams.get('view') !== 'list'
               ? 'text-secondary-foreground '
               : ''
           }
         >
-          Grid
+          List
         </Typography>
       </Button>
     </Flex>

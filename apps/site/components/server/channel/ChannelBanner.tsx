@@ -1,6 +1,6 @@
-import { ChannelMembersPopover, ItemDropzone, ChannelSettings } from '@/client'
+import { ChannelMembersPopover, ChannelSettings, ItemDropzone } from '@/client'
 import { Flex, Stack, Typography } from '@/design-system'
-import { type Channel, type Adds } from '@/gql'
+import { type Adds, type Channel } from '@/gql'
 import { Username } from '@/server'
 import { truncateText } from '@/utils'
 
@@ -9,6 +9,7 @@ export async function ChannelBanner({
   metadata,
 }: {
   channel: Channel
+  // biome-ignore lint:
   metadata?: any
 }) {
   // const channelMetadata = metadata.data[channel.uri as string]

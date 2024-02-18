@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useUserContext } from '@/context'
 import {
   Button,
@@ -8,14 +7,15 @@ import {
   DropdownMenuItem,
   DropdownMenuPortal,
   DropdownMenuTrigger,
+  Loading,
   Toast,
   Typography,
-  Loading,
 } from '@/design-system'
+import { Adds, Channel, ChannelRoles } from '@/gql'
 import { processRemoveItemPost } from 'lib/posts'
+import { useState } from 'react'
 import { toast } from 'sonner'
 import { Hex } from 'viem'
-import { Adds, Channel, ChannelRoles } from '@/gql'
 
 interface ItemDropdownProps {
   channel: Channel
@@ -38,7 +38,7 @@ function isAdminOrAdder({
   // if targetRid wasnt itemAdder, loop through channel roles
   // to see if they have admin access for channel
   for (let i = 0; i < channelRoleData.length; ++i) {
-    let rid = channelRoleData[i].rid
+    const rid = channelRoleData[i].rid
     if (rid === userRid && channelRoleData[i].role > 1) {
       return true
     }
@@ -73,7 +73,7 @@ export function ItemDropdown({ channel, add }: ItemDropdownProps) {
         </Typography>
       </DropdownMenuTrigger>
       <DropdownMenuPortal>
-        <DropdownMenuContent side="bottom" className="w-32 mx-4 md:mx-6">
+        <DropdownMenuContent side="bottom" align="end" className="w-32">
           <DropdownMenuGroup className="flex flex-col gap-2">
             <DropdownMenuItem>
               <Button
@@ -85,7 +85,7 @@ export function ItemDropdown({ channel, add }: ItemDropdownProps) {
                   // set isRemoving state to true
                   setIsRemoving(true)
                   // initialize bool for txn success check
-                  let txSuccess: boolean = false
+                  let txSuccess = false
                   // Generate removeReference post
                   if (signMessage) {
                     txSuccess = await processRemoveItemPost({

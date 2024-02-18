@@ -1,7 +1,6 @@
-import { Grid } from '@/design-system'
+import { Grid, Typography } from '@/design-system'
 import { getAllAdds } from '@/gql'
 import { ItemCard } from '@/server'
-import { Typography } from '@/design-system'
 
 export default async function Home() {
   const { adds } = await getAllAdds()

@@ -1,8 +1,8 @@
-import { ethers } from 'ethers'
-import { postGatewayABI, addresses } from 'scrypt'
-import { Defender } from '@openzeppelin/defender-sdk'
-import { NextRequest } from 'next/server'
 import { novaPubClient } from '@/config/publicClient'
+import { Defender } from '@openzeppelin/defender-sdk'
+import { ethers } from 'ethers'
+import { NextRequest } from 'next/server'
+import { addresses, postGatewayABI } from 'scrypt'
 import { type Hex } from 'viem'
 
 export async function POST(req: NextRequest) {
@@ -42,9 +42,9 @@ export async function POST(req: NextRequest) {
 
     if (error instanceof Error) {
       errorMessage = error.message
-      if (typeof (error as any).status === 'number') {
-        statusCode = (error as any).status
-      }
+      statusCode =
+        // biome-ignore lint: `status` is not part of the standard Error interface
+        typeof (error as any).status === 'number' ? (error as any).status : 500
     }
 
     return new Response(

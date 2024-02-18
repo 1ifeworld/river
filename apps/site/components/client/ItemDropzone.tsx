@@ -1,23 +1,23 @@
-import React, { useState } from 'react'
-import { useDropzone } from 'react-dropzone'
+import { UploadProgress } from '@/client'
+import { useUserContext } from '@/context'
+import { Button, Flex, Stack, Typography } from '@/design-system'
+import { type Channel, ChannelRoles } from '@/gql'
 import {
-  w3sUpload,
+  MetadataObject,
   determineContentType,
   isAudio,
   isGLB,
   isPdf,
   isText,
   isVideo,
+  processBatchCreateAddItemPost,
   sendToDb,
   uploadToMux,
-  MetadataObject,
-  processBatchCreateAddItemPost,
+  w3sUpload,
 } from '@/lib'
-import { Typography, Flex, Stack, Button } from '@/design-system'
-import { useUserContext } from '@/context'
 import { useParams } from 'next/navigation'
-import { UploadProgress } from '@/client'
-import { ChannelRoles, type Channel } from '@/gql'
+import React, { useState } from 'react'
+import { useDropzone } from 'react-dropzone'
 import { Hex } from 'viem'
 
 function isRidPresent({
@@ -28,7 +28,7 @@ function isRidPresent({
   targetRid: bigint
 }) {
   for (let i = 0; i < roleData.length; ++i) {
-    let rid = roleData[i].rid
+    const rid = roleData[i].rid
     if (rid === targetRid) return true
   }
   return false
@@ -99,8 +99,8 @@ export function ItemDropzone({ channel }: { channel: Channel }) {
         isVideo({ mimeType: contentType }) || isAudio({ mimeType: contentType })
           ? 2
           : isPdf({ mimeType: contentType }) || isGLB(file) || isText(file)
-          ? 1
-          : 0
+            ? 1
+            : 0
 
       const animationUri =
         contentTypeKey === 2 || contentTypeKey === 1 ? cid : ''

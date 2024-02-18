@@ -1,11 +1,11 @@
-import { Stack, Typography, Flex } from '@/design-system'
+import { ViewToggle } from '@/client'
+import { Flex, Stack, Typography } from '@/design-system'
 import { getChannelWithId } from '@/gql'
 import { getAddsMetadata } from '@/lib'
-import { ViewToggle } from '@/client'
 import {
   ChannelBanner,
-  ChannelItems,
   ChannelDetails,
+  ChannelItems,
   MarqueeWrapper,
   RecentChannels,
 } from '@/server'

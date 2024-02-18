@@ -1,6 +1,6 @@
 import { Typography } from '@/design-system'
-import ReactMarquee from 'react-fast-marquee'
 import { pluralize } from '@/utils'
+import ReactMarquee from 'react-fast-marquee'
 
 const currentDate = new Date().toLocaleString('en-US', {
   weekday: 'long',

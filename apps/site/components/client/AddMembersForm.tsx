@@ -80,7 +80,7 @@ export function AddMembersForm({ targetChannelId }: AddMembersFormProps) {
 
   async function onSubmit(data: z.infer<typeof usernameSchema>) {
     // initialize bool for txn success check
-    let txSuccess: boolean = false
+    const txSuccess = false
     if (signMessage && embeddedWallet?.address && usernameId) {
       // txSuccess = await processEditChannelAccessPost({
       //   targetUserId: userId as bigint,

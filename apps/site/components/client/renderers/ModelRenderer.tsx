@@ -1,7 +1,7 @@
 'use client'
 
-import React, { useEffect, CSSProperties } from 'react'
 import { ModelViewerElement } from '@google/model-viewer'
+import React, { CSSProperties, useEffect } from 'react'
 
 declare global {
   namespace JSX {
@@ -32,8 +32,9 @@ const ModelRenderer: React.FC<ModelRendererProps> = ({ src }) => {
         autoplay
         camera-controls
         touch-action="pan-y"
+        // biome-ignore lint:
         style={{ width: '100%', height: '100%' } as any}
-      ></model-viewer>
+      />
     </>
   )
 }

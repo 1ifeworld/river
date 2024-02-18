@@ -1,17 +1,19 @@
+import { THUMBNAIL_TYPES_TO_RENDER } from '@/constants'
 import { Flex, Stack, Typography } from '@/design-system'
 import { type Adds } from '@/gql'
 import { type MediaAssetObject, w3sUrlFromCid } from '@/lib'
+import { GenericThumbnailLarge, Username } from '@/server'
 import { unixTimeConverter } from '@/utils'
 import { kv } from '@vercel/kv'
 import Image from 'next/image'
 import Link from 'next/link'
-import { GenericThumbnailLarge, Username } from '@/server'
-import { THUMBNAIL_TYPES_TO_RENDER } from '@/constants'
 
 export async function ItemCard({
   add,
+  dropdownComponent,
 }: {
   add: Adds
+  dropdownComponent?: React.ReactNode
 }) {
   const itemMetadata = await kv.get<Pick<MediaAssetObject, 'value'>['value']>(
     add?.item?.uri as string,
@@ -51,14 +53,17 @@ export async function ItemCard({
       </Link>
       <Stack className="gap-y-[10px]">
         <div>
-          <Link
-            href={`/channel/${add?.channelId}/${itemIndex}`}
-            className="hover:underline underline-offset-2 transition-all"
-          >
-            <Typography className="truncate">
-              {itemMetadata?.name ?? 'untitled'}
-            </Typography>
-          </Link>
+          <Flex className="items-center justify-between">
+            <Link
+              href={`/channel/${add?.channelId}/${itemIndex}`}
+              className="hover:underline underline-offset-2 transition-all w-4/6"
+            >
+              <Typography className="truncate">
+                {itemMetadata?.name ?? 'untitled'}
+              </Typography>
+            </Link>
+            {dropdownComponent}
+          </Flex>
           <Flex className="items-center">
             <Username id={add.addedById} />
             <span className="text-secondary-foreground">{'·'}</span>

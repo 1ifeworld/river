@@ -1,11 +1,11 @@
 import { Header, ThemeToggle } from '@/client'
 import { Analytics } from '@vercel/analytics/react'
 import type { Metadata } from 'next'
+import Script from 'next/script'
 import { Toaster } from 'sonner'
 import '../styles/globals.css'
 import { sfMono } from './fonts/fonts'
 import { Providers } from './providers/providers'
-import Script from 'next/script'
 
 export const metadata: Metadata = {
   title: 'River',

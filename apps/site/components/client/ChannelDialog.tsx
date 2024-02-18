@@ -16,12 +16,12 @@ import {
   FormLabel,
   FormMessage,
   Input,
+  Loading,
   Separator,
   Stack,
   Textarea,
   Toast,
   Typography,
-  Loading,
 } from '@/design-system'
 import {
   type NewChannelSchemaValues,

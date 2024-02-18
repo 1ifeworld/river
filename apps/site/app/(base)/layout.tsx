@@ -1,5 +1,5 @@
 import { Flex } from '@/design-system'
-import { RecentChannels, MarqueeWrapper } from '@/server'
+import { MarqueeWrapper, RecentChannels } from '@/server'
 
 export default function BaseLayout({
   children,

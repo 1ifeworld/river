@@ -1,5 +1,5 @@
-import { Hash, Hex, zeroAddress } from 'viem'
 import { relayRegisterFor } from '@/lib'
+import { Hash, Hex, zeroAddress } from 'viem'
 
 export async function processRegisterFor({
   signer,
