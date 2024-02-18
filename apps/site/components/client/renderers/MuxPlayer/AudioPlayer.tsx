@@ -1,7 +1,7 @@
-import React, { useState, useRef } from "react"
-import { Flex } from "@/design-system"
-import MuxAudio from "@mux/mux-audio-react"
-import styles from "./Player.module.css"
+import { Flex } from '@/design-system'
+import MuxAudio from '@mux/mux-audio-react'
+import React, { useRef, useState } from 'react'
+import styles from './Player.module.css'
 
 export function AudioPlayer({ playbackId }: { playbackId: string }) {
   const audioRef = useRef<HTMLAudioElement>(null)
@@ -27,7 +27,7 @@ export function AudioPlayer({ playbackId }: { playbackId: string }) {
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60)
     const seconds = Math.floor(time % 60)
-    return `${minutes}:${seconds.toString().padStart(2, "0")}`
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`
   }
 
   // Event handler for time updates
@@ -59,15 +59,25 @@ export function AudioPlayer({ playbackId }: { playbackId: string }) {
   }
   return (
     <div className="flex h-full items-center justify-center w-full px-2 md:px-4">
-      <button className="active:bg-[#D9D9D9]" onClick={togglePlayPause}>
+      <button
+        type="button"
+        className="active:bg-[#D9D9D9]"
+        onClick={togglePlayPause}
+      >
         {isPlaying ? (
-          <img src={"/Pause.svg"} alt="Pause" className="w-4 h-4 md:w-5 md:h-5" />
-          ) : (
-            <img src={"/Play.svg"} alt="Play" className="w-4 h-4 md:w-5 md:h-5" />
-            )}
+          <img
+            src={'/Pause.svg'}
+            alt="Pause"
+            className="w-4 h-4 md:w-5 md:h-5"
+          />
+        ) : (
+          <img src={'/Play.svg'} alt="Play" className="w-4 h-4 md:w-5 md:h-5" />
+        )}
       </button>
       <div className="sm:w-[339px] md:w-[500px] lg:w-[839px] flex items-center justify-center">
-        <span className={`text-xs md:text-sm ${styles.currentTime} px-1`}>{formatTime(currentTime)}</span>
+        <span className={`text-xs md:text-sm ${styles.currentTime} px-1`}>
+          {formatTime(currentTime)}
+        </span>
         <input
           type="range"
           value={progress}
@@ -77,7 +87,9 @@ export function AudioPlayer({ playbackId }: { playbackId: string }) {
             background: `linear-gradient(to right, #3A3A3A 0%, #3A3A3A ${progress}%, #D9D9D9 ${progress}%, #D9D9D9 100%)`,
           }}
         />
-        <span className={`text-xs md:text-sm ${styles.totalTime} px-1`}>{formatTime(duration)}</span>
+        <span className={`text-xs md:text-sm ${styles.totalTime} px-1`}>
+          {formatTime(duration)}
+        </span>
       </div>
       <MuxAudio
         ref={audioRef}
@@ -89,4 +101,4 @@ export function AudioPlayer({ playbackId }: { playbackId: string }) {
       />
     </div>
   )
-        }
+}

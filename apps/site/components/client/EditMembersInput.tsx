@@ -1,6 +1,6 @@
+import { Flex, cn } from '@/design-system'
+import { InputProps, Plus, X } from '@/design-system'
 import * as React from 'react'
-import { cn, Flex } from '@/design-system'
-import { InputProps, X, Plus } from '@/design-system'
 
 interface EditMembersInputProps extends InputProps {
   onButtonClickStateTrue: () => void
@@ -34,16 +34,17 @@ const EditMembersInput = React.forwardRef<
           ref={ref}
           {...props}
         />
-        {state == 0 ? (
+        {state === 0 ? (
           <></>
         ) : (
           <button
-            className={`absolute right-3 cursor-pointer`}
+            type="button"
+            className="absolute right-3 cursor-pointer"
             onClick={
-              state == 1 ? onButtonClickStateTrue : onButtonClickStateFalse
+              state === 1 ? onButtonClickStateTrue : onButtonClickStateFalse
             }
           >
-            {state == 1 ? <Plus /> : <X />}
+            {state === 1 ? <Plus /> : <X />}
           </button>
         )}
       </Flex>

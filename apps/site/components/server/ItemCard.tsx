@@ -1,12 +1,12 @@
+import { THUMBNAIL_TYPES_TO_RENDER } from '@/constants'
 import { Flex, Stack, Typography } from '@/design-system'
 import { type Adds } from '@/gql'
 import { type MediaAssetObject, w3sUrlFromCid } from '@/lib'
+import { GenericThumbnailLarge, Username } from '@/server'
 import { unixTimeConverter } from '@/utils'
 import { kv } from '@vercel/kv'
 import Image from 'next/image'
 import Link from 'next/link'
-import { GenericThumbnailLarge, Username } from '@/server'
-import { THUMBNAIL_TYPES_TO_RENDER } from '@/constants'
 
 export async function ItemCard({
   add,

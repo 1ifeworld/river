@@ -20,18 +20,18 @@ import {
   type UsernameSchemaValues,
   checkUsernameAvailability,
   processRegisterFor,
-  usernameSchema,
   setUsername,
+  usernameSchema,
 } from '@/lib'
-import { addresses } from 'scrypt'
 import { zodResolver } from '@hookform/resolvers/zod'
 import debounce from 'debounce'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
-import { Hex, createWalletClient, custom, EIP1193Provider } from 'viem'
-import { optimism } from 'viem/chains'
+import { addresses } from 'scrypt'
 import { getExpiration } from 'scrypt'
+import { toast } from 'sonner'
+import { EIP1193Provider, Hex, createWalletClient, custom } from 'viem'
+import { optimism } from 'viem/chains'
 
 interface UsernameDialogProps {
   open: boolean

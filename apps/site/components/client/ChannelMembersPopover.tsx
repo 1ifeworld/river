@@ -3,8 +3,8 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-  Typography,
   Stack,
+  Typography,
 } from '@/design-system'
 import { pluralize } from '@/utils'
 

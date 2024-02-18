@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useUserContext } from '@/context'
 import {
   Button,
@@ -8,14 +7,15 @@ import {
   DropdownMenuItem,
   DropdownMenuPortal,
   DropdownMenuTrigger,
+  Loading,
   Toast,
   Typography,
-  Loading,
 } from '@/design-system'
+import { Adds, Channel, ChannelRoles } from '@/gql'
 import { processRemoveItemPost } from 'lib/posts'
+import { useState } from 'react'
 import { toast } from 'sonner'
 import { Hex } from 'viem'
-import { Adds, Channel, ChannelRoles } from '@/gql'
 
 interface ItemDropdownProps {
   channel: Channel

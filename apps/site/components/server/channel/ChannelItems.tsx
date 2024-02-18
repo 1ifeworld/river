@@ -1,18 +1,19 @@
 import { ItemDropdown } from '@/client'
 import {
+  Grid,
   Table,
   TableBody,
   TableCell,
   TableRow,
   Typography,
-  Grid,
 } from '@/design-system'
-import { Channel, Adds, Item } from '@/gql'
-import { ThumbnailNameCreator, ItemCard } from '@/server'
+import { Adds, Channel, Item } from '@/gql'
+import { ItemCard, ThumbnailNameCreator } from '@/server'
 import { unixTimeConverter } from '@/utils'
 import Link from 'next/link'
 import styles from './ChannelItems.module.css'
 
+// biome-ignore lint:
 function extractContentType({ item, metadata }: { item: Item; metadata: any }) {
   if (!item || !item.uri) return undefined
   const itemMetadata = metadata.data[item.uri]
@@ -25,6 +26,7 @@ export async function ChannelItems({
   view,
 }: {
   channel: Channel
+  // biome-ignore lint:
   metadata: any
   view?: string | string[]
 }) {

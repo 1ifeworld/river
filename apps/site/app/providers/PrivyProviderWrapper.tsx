@@ -1,5 +1,5 @@
-import { PrivyProvider } from '@privy-io/react-auth'
 import { arbitrumNova } from '@/config/customChainConfig'
+import { PrivyProvider } from '@privy-io/react-auth'
 
 import * as React from 'react'
 

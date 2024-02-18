@@ -1,4 +1,4 @@
-import { Stack, Typography, Flex, Loading } from '@/design-system'
+import { Flex, Loading, Stack, Typography } from '@/design-system'
 
 interface UploadProgressProps {
   fileIndex: number

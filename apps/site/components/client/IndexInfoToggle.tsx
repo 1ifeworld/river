@@ -1,5 +1,5 @@
-import { useRouter, usePathname, useSearchParams } from 'next/navigation'
-import { Flex, Typography, Button } from '@/design-system'
+import { Button, Flex, Typography } from '@/design-system'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
 
 export function IndexInfoToggle() {

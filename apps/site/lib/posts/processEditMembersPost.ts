@@ -1,14 +1,14 @@
-import { SignMessageModalUIOptions } from '@privy-io/react-auth'
-import { Hash, Hex } from 'viem'
 import { relayPost } from '@/lib'
 import { getTxnInclusion, revalidationHelper } from '@/lib'
+import { SignMessageModalUIOptions } from '@privy-io/react-auth'
 import {
+  MessageTypes,
+  encodeUpdateAssetRoleAccessMsgBody,
+  generateMessageHash,
   getExpiration,
   remove0xPrefix,
-  generateMessageHash,
-  encodeUpdateAssetRoleAccessMsgBody,
-  MessageTypes,
 } from 'scrypt'
+import { Hash, Hex } from 'viem'
 
 export async function processEditMembersPost({
   rid,

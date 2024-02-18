@@ -1,10 +1,10 @@
-import { Typography, Stack, Flex } from '@/design-system'
+import { IndexInfoToggle } from '@/client'
+import { Flex, Stack, Typography } from '@/design-system'
 import { type Adds, type Channel } from '@/gql'
-import { ipfsUrlToCid, getAddsMetadata } from '@/lib'
+import { getAddsMetadata, ipfsUrlToCid } from '@/lib'
+import { ThumbnailNameCreator, Username } from '@/server'
 import { unixTimeConverter } from '@/utils'
 import Link from 'next/link'
-import { Username, ThumbnailNameCreator } from '@/server'
-import { IndexInfoToggle } from '@/client'
 
 interface ItemSidebarProps {
   itemContext: Adds
@@ -37,7 +37,7 @@ export function ItemSidebar({
         </Link>
       </Flex>
       {view === 'info' ? (
-        <Stack className='justify-between h-full md:justify-start'>
+        <Stack className="justify-between h-full md:justify-start">
           <Stack className="gap-y-5">
             <div>
               <Typography className="truncate">{itemMetadata?.name}</Typography>

@@ -1,6 +1,6 @@
 import { http, createPublicClient } from 'viem'
-import { arbitrumNova } from './customChainConfig'
 import { optimism } from 'viem/chains'
+import { arbitrumNova } from './customChainConfig'
 
 export const optimismPubClient = createPublicClient({
   chain: optimism,

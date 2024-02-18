@@ -1,9 +1,9 @@
 'use client'
 
+import { Typography } from 'design-system/components'
 import React, { useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import { Typography } from 'design-system/components'
 import './markdownStyles.css'
 
 interface MarkdownRendererProps {
@@ -41,7 +41,11 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ contentUrl }) => {
             Loading...
           </Typography>
         ) : (
-      <ReactMarkdown className="markdown"  remarkPlugins={[remarkGfm]} children={content} />
+          <ReactMarkdown
+            className="markdown"
+            remarkPlugins={[remarkGfm]}
+            children={content}
+          />
         )}
       </div>
     </div>
