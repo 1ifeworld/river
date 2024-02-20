@@ -42,7 +42,7 @@ export function isImage({ mimeType }: { mimeType: string }) {
 // TODO: Maybe can removed in favor of the function below?
 export function isGLB(file: File) {
   const extension = file.name.split('.').pop()?.toLowerCase()
-  return extension === 'glb' || extension === 'gltf'
+  return extension === 'glb' || extension === 'gltf' || extension === 'glb 2'
 }
 
 export function isGlb({ mimeType }: { mimeType: string }) {
