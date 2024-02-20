@@ -89,6 +89,11 @@ export function ItemDropzone({ channel }: { channel: Channel }) {
   const handleFileUpload = async (file: File, fileIndex: number) => {
     const formData = new FormData()
     formData.append('file', file)
+    let fileName = file.name
+    if (fileName.toLowerCase().endsWith('.glb 2')) {
+      fileName = fileName.slice(0, -2)
+    }
+
     if (!authToken) return
     const { cid } = await w3sUpload(formData, authToken)
 
