@@ -47,7 +47,7 @@
     "react-fast-marquee": "^1.6.3",
     "react-hook-form": "^7.47.0",
     "react-markdown": "^9.0.1",
-    "react-pdf": "^7.6.0",
+    "react-pdf": "^7.7.0",
     "remark-gfm": "^4.0.0",
     "scrypt": "workspace:*",
     "server-only": "^0.0.1",
