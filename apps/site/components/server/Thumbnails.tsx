@@ -37,7 +37,7 @@ export function GenericThumbnailSmall({
   return (
     <Stack
       className={cn(
-        'bg-[#E9E9E9] justify-center items-center w-[38px] h-[38px] aspect-square',
+        'bg-[#E9E9E9] justify-center items-center aspect-square w-12 h-12 md:w-10 md:h-10',
         className,
       )}
     >
