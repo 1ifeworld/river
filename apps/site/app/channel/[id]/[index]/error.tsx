@@ -18,7 +18,7 @@ export default function ItemError({
   const router = useRouter()
 
   return (
-    <Stack className="gap-y-3 justify-center items-center h-[calc(100dvh-38px)]">
+    <Stack className="gap-y-3 justify-center items-center h-[calc(100dvh-var(--header-height))]">
       <Typography>Something went wrong</Typography>
       <Button
         onClick={() => router.back()}

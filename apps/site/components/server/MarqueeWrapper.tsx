@@ -2,7 +2,6 @@ import { Marquee } from '@/client'
 import { getMarqueeData } from '@/gql'
 
 export async function MarqueeWrapper() {
-  // Everything
   const { users, channels, items } = await getMarqueeData()
   return (
     <Marquee

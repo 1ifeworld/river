@@ -119,7 +119,7 @@ export default async function ItemPage({
     ))
 
   return (
-    <Stack className="h-[calc(100dvh-38px)] md:flex-row">
+    <Stack className="h-[calc(100dvh-var(--header-height))] md:flex-row">
       <div className="bg-[#F3F4F6] w-full h-full md:w-[78%]">{content}</div>
       <div className="md:w-[22%]">
         <ItemSidebar

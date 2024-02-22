@@ -22,7 +22,7 @@ export function Marquee({
 }: MarqueeProps) {
   return (
     <ReactMarquee
-      className="py-3 border-t border-b border-border bg-popover"
+      className="py-[11px] border-t border-b border-border bg-popover"
       speed={30}
       pauseOnHover
     >
