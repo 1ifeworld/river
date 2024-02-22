@@ -32,7 +32,7 @@ export function UserDropdown({ setOpen }: UserProps) {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-32" align="end">
         <DropdownMenuGroup className="flex flex-col gap-2">
-          <DropdownMenuItem>
+          <DropdownMenuItem asChild>
             <Link
               href={`/${username}`}
               className="hover:underline underline-offset-2 transition-all"
