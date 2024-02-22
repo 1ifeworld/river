@@ -39,7 +39,7 @@ export default async function Channel({
         </div>
         <div className="w-full md:w-[78%]">
           <Stack>
-            <Stack className="gap-y-[45px]">
+            <Stack className="gap-y-5">
               <Flex className="justify-between">
                 {/* @ts-ignore */}
                 <ChannelBanner channel={channel} />
