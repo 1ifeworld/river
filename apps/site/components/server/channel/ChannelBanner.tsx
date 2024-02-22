@@ -69,7 +69,9 @@ export async function ChannelBanner({
       <Typography className="md:hidden">
         {truncateText(channel.description, 90, true) || '--'}
       </Typography>
-      <ItemDropzone channel={channel} />
+      <div className="pt-[10px]">
+        <ItemDropzone channel={channel} />
+      </div>
     </Stack>
   )
 }
