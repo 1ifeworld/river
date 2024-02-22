@@ -45,7 +45,7 @@ export function ItemSidebar({
             </div>
             <Typography>{'--'}</Typography>
           </Stack>
-          <Stack className="gap-y-[3px] md:pt-[45px]">
+          <Stack className="gap-y-[7px] md:pt-[45px]">
             <Flex className="justify-between">
               <Typography>Added to</Typography>
               <Link
