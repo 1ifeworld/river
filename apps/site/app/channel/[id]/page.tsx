@@ -33,7 +33,7 @@ export default async function Channel({
       <div className="hidden md:block fixed top-[var(--header-height)] z-50 w-full">
         <MarqueeWrapper />
       </div>
-      <Flex className="px-5 pt-[70px] md:pt-[110px]">
+      <Flex className="px-5 pt-[70px] md:pt-[104px]">
         <div className="hidden md:w-[19%] md:block">
           <RecentChannels params={params} />
         </div>
