@@ -36,7 +36,7 @@ export async function ChannelBanner({
   return (
     // Include left margin to accommodate for margin necessary for hover states for items
     <Stack className="gap-5 md:ml-2">
-      <Stack className='gap-y-[3px]'>
+      <Stack className="gap-y-[3px]">
         <Flex className="items-center gap-x-[4px]">
           <Typography>{channel.name}</Typography>
           <ChannelSettings channel={channel} />
