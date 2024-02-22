@@ -69,7 +69,7 @@ export function ThumbnailNameCreator({
           text={itemMetadata?.contentType as string}
         />
       )}
-      <Stack>
+      <Stack className='gap-y-[3px]'>
         {/* This component is hidden on large screens */}
         <Typography className="hover:cursor-pointer md:hidden hover:underline text-primary-foreground leading-none whitespace-nowrap">
           {truncateText(itemMetadata.name, 35, false)}
