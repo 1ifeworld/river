@@ -10,10 +10,10 @@ export default function BaseLayout({
 }) {
   return (
     <section>
-      <div className="hidden md:block fixed top-[38px] z-50 w-full">
+      <div className="hidden md:block fixed top-[var(--header-height)] z-50 w-full">
         <MarqueeWrapper />
       </div>
-      <Flex className="px-5 pt-[70px] md:pt-[110px]">
+      <Flex className="px-[15px] md:px-5 pt-[57px] md:pt-[104px]">
         <div className="hidden md:w-[19%] md:block">
           <RecentChannels params={params} />
         </div>

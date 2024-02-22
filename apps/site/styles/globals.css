@@ -36,6 +36,9 @@
     --radius: 0.5rem;
 
     --divider: 0 0% 94%;
+
+    /* Style Constants */
+    --header-height: 36px
   }
 
   .dark {

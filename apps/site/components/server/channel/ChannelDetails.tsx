@@ -6,7 +6,7 @@ export async function ChannelDetails({ channel }: { channel: Channel }) {
   const length = channel.adds?.items ? channel.adds?.items.length : 0
 
   return (
-    <Stack className="py-8 ml-2">
+    <Stack className="py-8 md:ml-2 gap-y-[3px]">
       {/* Number of items */}
       <Typography className="text-secondary-foreground">
         {pluralize(length, 'item', 'items')}

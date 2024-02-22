@@ -2,12 +2,11 @@ import { ChannelDialog, UserDropdown, UsernameDialog } from '@/client'
 import { Button, Flex, Typography } from '@/design-system'
 import { RiverLogo } from '@/server'
 import { usePrivy } from '@privy-io/react-auth'
-import { useUserContext } from 'context/UserContext'
-import { getUserId } from 'gql/requests'
-import { getUsername } from 'lib/username'
+import { useUserContext } from '@/context'
+import { getUserId } from '@/gql'
+import { getUsername } from '@/lib'
 import { useParams } from 'next/navigation'
-import { useState } from 'react'
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Hex } from 'viem'
 
 export function Header() {
@@ -63,7 +62,7 @@ export function Header() {
     <div className="bg-popover fixed z-50 w-screen">
       {/* Header */}
       <Flex
-        className={`py-3 px-5 items-center justify-between border-b border-border ${
+        className={`py-[11px] px-[15px] md:px-5 items-center justify-between border-b border-border ${
           params.index || params.username ? '' : 'md:border-none'
         }`}
       >

@@ -18,13 +18,15 @@ export function ThumbnailNameCreator({
   if (!item) {
     return (
       <>
-        <Image
-          className="object-cover aspect-square "
-          src={''}
-          alt={''}
-          width={40}
-          height={40}
-        />
+        <div className="relative w-12 h-12 md:w-10 md:h-10">
+          <Image
+            className="object-cover aspect-square"
+            src={''}
+            alt={''}
+            fill
+            sizes="48px"
+          />
+        </div>
         <Stack>
           <Typography className="text-primary-foreground">{''}</Typography>
         </Stack>
@@ -37,13 +39,15 @@ export function ThumbnailNameCreator({
   if (!itemMetadata) {
     return (
       <>
-        <Image
-          className="object-cover aspect-square "
-          src={''}
-          alt={''}
-          width={40}
-          height={40}
-        />
+        <div className="relative w-12 h-12 md:w-10 md:h-10">
+          <Image
+            className="object-cover aspect-square"
+            src={''}
+            alt={''}
+            fill
+            sizes="48px"
+          />
+        </div>
         <Stack>
           <Typography className="text-primary-foreground">{''}</Typography>
         </Stack>
@@ -56,20 +60,22 @@ export function ThumbnailNameCreator({
   return (
     <>
       {cid ? (
-        <Image
-          className="object-cover aspect-square hover:cursor-pointer"
-          src={w3sUrlFromCid({ cid })}
-          alt={itemMetadata.name}
-          width={40}
-          height={40}
-        />
+        <div className="relative w-12 h-12 md:w-10 md:h-10">
+          <Image
+            className="object-cover aspect-square hover:cursor-pointer"
+            src={w3sUrlFromCid({ cid })}
+            alt={itemMetadata.name}
+            fill
+            sizes="48px"
+          />
+        </div>
       ) : (
         <GenericThumbnailSmall
           className="hover:cursor-pointer"
           text={itemMetadata?.contentType as string}
         />
       )}
-      <Stack>
+      <Stack className="gap-y-[3px]">
         {/* This component is hidden on large screens */}
         <Typography className="hover:cursor-pointer md:hidden hover:underline text-primary-foreground leading-none whitespace-nowrap">
           {truncateText(itemMetadata.name, 35, false)}
