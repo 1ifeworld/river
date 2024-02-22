@@ -62,7 +62,7 @@ export function Header() {
     <div className="bg-popover fixed z-50 w-screen">
       {/* Header */}
       <Flex
-        className={`py-[11px] px-5 items-center justify-between border-b border-border ${
+        className={`py-[11px] px-[15px] md:px-5 items-center justify-between border-b border-border ${
           params.index || params.username ? '' : 'md:border-none'
         }`}
       >
