@@ -18,14 +18,8 @@ export function ThumbnailNameCreator({
   if (!item) {
     return (
       <>
-        <div className="relative w-12 h-12 md:w-10 md:h-10">
-          <Image
-            className="object-cover aspect-square"
-            src={''}
-            alt={''}
-            fill
-            sizes="48px"
-          />
+        <div className="relative w-12 h-12 md:w-10 md:h-10 aspect-square">
+          <Image className="object-cover" src={''} alt={''} fill sizes="48px" />
         </div>
         <Stack>
           <Typography className="text-primary-foreground">{''}</Typography>
@@ -39,14 +33,8 @@ export function ThumbnailNameCreator({
   if (!itemMetadata) {
     return (
       <>
-        <div className="relative w-12 h-12 md:w-10 md:h-10">
-          <Image
-            className="object-cover aspect-square"
-            src={''}
-            alt={''}
-            fill
-            sizes="48px"
-          />
+        <div className="relative w-12 h-12 md:w-10 md:h-10 aspect-square">
+          <Image className="object-cover" src={''} alt={''} fill sizes="48px" />
         </div>
         <Stack>
           <Typography className="text-primary-foreground">{''}</Typography>
@@ -60,9 +48,9 @@ export function ThumbnailNameCreator({
   return (
     <>
       {cid ? (
-        <div className="relative w-12 h-12 md:w-10 md:h-10">
+        <div className="relative w-12 h-12 md:w-10 md:h-10 aspect-square">
           <Image
-            className="object-cover aspect-square hover:cursor-pointer"
+            className="object-cover hover:cursor-pointer"
             src={w3sUrlFromCid({ cid })}
             alt={itemMetadata.name}
             fill
