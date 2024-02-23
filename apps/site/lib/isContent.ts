@@ -24,6 +24,7 @@ export function isAudio({ mimeType }: { mimeType: string }) {
     'audio/webm',
     'audio/3gpp',
     'audio/3gpp2',
+    'audio/flac',
   ].includes(mimeType)
 }
 
