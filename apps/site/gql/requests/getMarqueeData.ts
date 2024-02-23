@@ -1,6 +1,7 @@
 import sdk from '../client'
+import { unstable_cache } from 'next/cache'
 
-export async function getMarqueeData() {
+export const getMarqueeData = unstable_cache(async () => {
   const response = await sdk.marqueeData()
 
   return {
@@ -8,4 +9,4 @@ export async function getMarqueeData() {
     channels: response.channelCounters,
     items: response.itemCounters,
   }
-}
+}, ["marqueeData"])

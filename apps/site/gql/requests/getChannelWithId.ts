@@ -1,9 +1,10 @@
 import sdk from '../client'
+import { unstable_cache } from 'next/cache'
 
-export async function getChannelWithId({ id }: { id: string }) {
+export const getChannelWithId = unstable_cache(async ({ id }: { id: string }) => {
   const response = await sdk.channelWithId({
     id: id,
   })
 
   return { channel: response.channel }
-}
+}, ["channelWithId"])

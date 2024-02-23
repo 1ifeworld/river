@@ -1,9 +1,10 @@
 import { type Address } from 'viem'
 import sdk from '../client'
+import { unstable_cache } from 'next/cache'
 
-export async function getUserId({
+export const getUserId = unstable_cache(async ({
   custodyAddress,
-}: { custodyAddress: Address }) {
+}: { custodyAddress: Address }) => {
   if (!custodyAddress) {
     throw new Error('Address is required')
   }
@@ -15,4 +16,4 @@ export async function getUserId({
   return {
     userId: response.users?.items?.[0] ? response.users.items[0].userId : null,
   }
-}
+}, ["userId"])
