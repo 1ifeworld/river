@@ -7,4 +7,4 @@ export const getAllAdds = unstable_cache(async () => {
   return {
     adds: response.addss,
   }
-}, ["allAdds"])
+}, ['allAdds'])

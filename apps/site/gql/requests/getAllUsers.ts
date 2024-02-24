@@ -7,4 +7,4 @@ export const getAllUsers = unstable_cache(async () => {
   return {
     users: response.users,
   }
-}, ["allUsers"])
+}, ['allUsers'])

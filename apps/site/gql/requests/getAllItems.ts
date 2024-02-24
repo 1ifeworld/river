@@ -7,4 +7,4 @@ export const getAllItems = unstable_cache(async () => {
   return {
     items: response.items,
   }
-}, ["allItems"])
+}, ['allItems'])

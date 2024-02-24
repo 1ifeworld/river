@@ -7,4 +7,4 @@ export const getAllChannels = unstable_cache(async () => {
   return {
     channels: response.channels,
   }
-}, ["allChannels"])
+}, ['allChannels'])
