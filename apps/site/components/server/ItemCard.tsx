@@ -1,4 +1,7 @@
-import { THUMBNAIL_TYPES_TO_RENDER } from '@/constants'
+import {
+  IMAGE_THUMBNAIL_TYPES_TO_RENDER,
+  VIDEO_THUMBNAIL_TYPES_TO_RENDER,
+} from '@/constants'
 import { Flex, Stack, Typography } from '@/design-system'
 import { type Adds } from '@/gql'
 import { type MediaAssetObject, w3sUrlFromCid } from '@/lib'
@@ -34,12 +37,24 @@ export async function ItemCard({
         className="transition-all"
       >
         <Stack className="relative aspect-[5/6] justify-center items-center">
-          {THUMBNAIL_TYPES_TO_RENDER.includes(
+          {IMAGE_THUMBNAIL_TYPES_TO_RENDER.includes(
             itemMetadata?.contentType as string,
           ) ? (
             <Image
               className="object-contain"
               src={w3sUrlFromCid({ cid: itemMetadata?.image as string })}
+              alt={itemMetadata?.name as string}
+              fill
+              quality={100}
+              sizes="(min-width: 1200px) 20vw, (min-width: 768px) 25vw, 50vw"
+              priority={true}
+            />
+          ) : VIDEO_THUMBNAIL_TYPES_TO_RENDER.includes(
+              itemMetadata?.contentType as string,
+            ) ? (
+            <Image
+              className="object-contain"
+              src={`https://image.mux.com/${itemMetadata?.muxPlaybackId}/thumbnail.png?width=1200&height=1000&fit_mode=smartcrop&time=35`}
               alt={itemMetadata?.name as string}
               fill
               quality={100}

@@ -1,6 +1,7 @@
 import { Stack, Typography } from '@/design-system'
 import { type Item } from '@/gql'
 import { ipfsUrlToCid, w3sUrlFromCid } from '@/lib'
+import { VIDEO_THUMBNAIL_TYPES_TO_RENDER } from 'constants/thumbnails'
 import { GenericThumbnailSmall, Username } from '@/server'
 import { truncateText } from '@/utils'
 import Image from 'next/image'
@@ -55,6 +56,19 @@ export function ThumbnailNameCreator({
             alt={itemMetadata.name}
             fill
             sizes="48px"
+          />
+        </div>
+      ) : VIDEO_THUMBNAIL_TYPES_TO_RENDER.includes(
+          itemMetadata?.contentType as string,
+        ) ? (
+        <div className="relative w-12 h-12 md:w-10 md:h-10 aspect-square">
+          <Image
+            className="object-contain"
+            src={`https://image.mux.com/${itemMetadata?.muxPlaybackId}/thumbnail.png?width=48&height=48&fit_mode=smartcrop&time=35`}
+            alt={itemMetadata?.name as string}
+            quality={100}
+            width={48}
+            height={48}
           />
         </div>
       ) : (

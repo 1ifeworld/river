@@ -9,6 +9,10 @@ module.exports = {
         protocol: 'https',
         hostname: 'ipfs.w3s.link',
       },
+      {
+        protocol: 'https',
+        hostname: 'image.mux.com',
+      },
     ],
   },
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
