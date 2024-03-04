@@ -1,9 +1,13 @@
 import sdk from '../client'
+import { unstable_cache } from 'next/cache'
 
-export async function getItemWithId({ id }: { id: string }) {
-  const response = await sdk.itemWithId({
-    id: id,
-  })
+export const getItemWithId = unstable_cache(
+  async ({ id }: { id: string }) => {
+    const response = await sdk.itemWithId({
+      id: id,
+    })
 
-  return { item: response.item }
-}
+    return { item: response.item }
+  },
+  ['itemWithId'],
+)

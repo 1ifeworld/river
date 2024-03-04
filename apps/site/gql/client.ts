@@ -7,6 +7,7 @@ const client = new GraphQLClient(
     headers: {
       'Content-Type': 'application/json',
     },
+    fetch,
   },
 )
 
