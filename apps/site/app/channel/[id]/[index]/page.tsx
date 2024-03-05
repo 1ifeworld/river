@@ -1,5 +1,5 @@
 import { AudioPlayer, VideoPlayer } from '@/client'
-import { Flex, Stack, Typography } from '@/design-system'
+import { Flex, Stack, Typography, Separator } from '@/design-system'
 import { getChannelWithId } from '@/gql'
 import {
   type MediaAssetObject,
@@ -122,6 +122,7 @@ export default async function ItemPage({
   return (
     <Stack className="h-[calc(100dvh-var(--header-height))] md:flex-row">
       <div className="bg-[#F3F4F6] w-full h-full md:w-[78%]">{content}</div>
+      <Separator className="hidden md:block bg-border" orientation='vertical' />
       <div className="md:w-[22%]">
         <ItemSidebar
           // @ts-ignore
