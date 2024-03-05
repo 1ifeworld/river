@@ -81,6 +81,7 @@ export default async function ItemPage({
             alt={itemMetadata?.name as string}
             fill
             quality={100}
+            sizes="(min-width: 1200px) 75vw, 100vw"
             priority={true}
           />
         </div>
