@@ -1,5 +1,5 @@
-import { Hash, decodeAbiParameters, encodeAbiParameters } from "viem";
-import { postGatewayABI } from "../../abi";
+import { Hash, decodeAbiParameters, encodeAbiParameters } from 'viem'
+import { postGatewayABI } from '../../abi'
 
 //////////////////////////////////////////////////
 // ENCODING
@@ -9,23 +9,22 @@ export function encodeAddItemMsgBody({
   itemCid,
   channelCid,
 }: {
-  itemCid: string;
-  channelCid: string;
+  itemCid: string
+  channelCid: string
 }): {
-  msgBody: Hash;
+  msgBody: Hash
 } | null {
   try {
-    const msgBody = encodeAbiParameters(
-      postGatewayABI[3].outputs,
-      [{ itemCid, channelCid }]
-    );
+    const msgBody = encodeAbiParameters(postGatewayABI[3].outputs, [
+      { itemCid, channelCid },
+    ])
 
     return {
       msgBody: msgBody,
-    };
+    }
   } catch (error) {
-    console.error("Failed to encode add item Message body", error);
-    return null;
+    console.error('Failed to encode add item Message body', error)
+    return null
   }
 }
 
@@ -34,21 +33,21 @@ export function encodeAddItemMsgBody({
 //////////////////////////////////////////////////
 
 export function decodeAddItemMsgBody({ msgBody }: { msgBody: Hash }): {
-  itemCid: string;
-  channelCid: string;
+  itemCid: string
+  channelCid: string
 } | null {
   try {
     const [{ itemCid, channelCid }] = decodeAbiParameters(
       postGatewayABI[3].outputs,
-      msgBody
-    );
+      msgBody,
+    )
 
     return {
       itemCid: itemCid,
       channelCid: channelCid,
-    };
+    }
   } catch (error) {
-    console.error("Failed to decode add item Message body", error);
-    return null;
+    console.error('Failed to decode add item Message body', error)
+    return null
   }
 }

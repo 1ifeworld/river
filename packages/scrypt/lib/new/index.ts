@@ -1,1 +1,1 @@
-export * from "./generateMessageHash"
+export * from './generateMessageHash'

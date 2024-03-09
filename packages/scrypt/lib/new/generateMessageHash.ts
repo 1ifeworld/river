@@ -1,4 +1,4 @@
-import { hashMessage, Hash, encodeAbiParameters } from "viem";
+import { hashMessage, Hash, encodeAbiParameters } from 'viem'
 
 export function generateMessageHash({
   rid,
@@ -6,27 +6,27 @@ export function generateMessageHash({
   msgType,
   msgBody,
 }: {
-  rid: bigint;
-  timestamp: bigint;
-  msgType: number;
-  msgBody: Hash;
+  rid: bigint
+  timestamp: bigint
+  msgType: number
+  msgBody: Hash
 }) {
   return hashMessage(
     encodeAbiParameters(
       [
         {
-          name: "message",
-          internalType: "struct IPostGateway2.Message",
-          type: "tuple",
+          name: 'message',
+          internalType: 'struct IPostGateway2.Message',
+          type: 'tuple',
           components: [
-            { name: "rid", internalType: "uint256", type: "uint256" },
-            { name: "timestamp", internalType: "uint256", type: "uint256" },
+            { name: 'rid', internalType: 'uint256', type: 'uint256' },
+            { name: 'timestamp', internalType: 'uint256', type: 'uint256' },
             {
-              name: "msgType",
-              internalType: "enum IPostGateway2.MessageTypes",
-              type: "uint8",
+              name: 'msgType',
+              internalType: 'enum IPostGateway2.MessageTypes',
+              type: 'uint8',
             },
-            { name: "msgBody", internalType: "bytes", type: "bytes" },
+            { name: 'msgBody', internalType: 'bytes', type: 'bytes' },
           ],
         },
       ],
@@ -37,7 +37,7 @@ export function generateMessageHash({
           msgType: msgType,
           msgBody: msgBody,
         },
-      ]
-    )
-  );
+      ],
+    ),
+  )
 }

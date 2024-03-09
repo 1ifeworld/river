@@ -10,7 +10,7 @@ export default defineConfig({
     foundry({
       project: '../river-contracts/lib/river-contracts',
       include: ['IdRegistry.json'],
-    }) 
+    }),
   ],
   out: './abi/generated.ts',
 })
