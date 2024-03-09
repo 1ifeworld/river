@@ -11,5 +11,5 @@ export const newChannelSchema = z.object({
     .max(30, {
       message: 'Channel name must not be longer than 30 characters',
     }),
-  description: z.string().max(160).min(4).optional(),
+  description: z.string().max(333).min(4).optional(),
 })
