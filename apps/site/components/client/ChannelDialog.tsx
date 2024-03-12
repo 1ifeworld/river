@@ -35,7 +35,7 @@ import { revalidatePath } from 'next/cache'
 import * as React from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import { Hex } from 'viem'
+import type { Hex } from 'viem'
 
 interface ChannelDialogProps {
   authenticated: boolean

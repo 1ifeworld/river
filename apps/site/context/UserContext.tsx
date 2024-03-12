@@ -4,15 +4,15 @@ import { getUserId } from '@/gql'
 import { getUsername } from '@/lib'
 import { type ConnectedWallet, User, useWallets } from '@privy-io/react-auth'
 import { usePrivy } from '@privy-io/react-auth'
-import { SignMessageModalUIOptions } from '@privy-io/react-auth'
+import type { SignMessageModalUIOptions } from '@privy-io/react-auth'
 import React, {
-  ReactNode,
+  type ReactNode,
   createContext,
   useContext,
   useEffect,
   useState,
 } from 'react'
-import { type Address } from 'viem'
+import type { Address } from 'viem'
 
 const UserContext = createContext<{
   embeddedWallet?: ConnectedWallet

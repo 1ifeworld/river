@@ -3,7 +3,7 @@ import {
   VIDEO_THUMBNAIL_TYPES_TO_RENDER,
 } from '@/constants'
 import { Flex, Stack, Typography } from '@/design-system'
-import { type Adds } from '@/gql'
+import type { Adds } from '@/gql'
 import { type MediaAssetObject, w3sUrlFromCid } from '@/lib'
 import { GenericThumbnailLarge, Username } from '@/server'
 import { unixTimeConverter } from '@/utils'

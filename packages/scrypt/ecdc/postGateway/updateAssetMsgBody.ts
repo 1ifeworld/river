@@ -1,10 +1,10 @@
 import {
-  Hash,
+  type Hash,
   decodeAbiParameters,
-  Hex,
+  type Hex,
   encodeAbiParameters,
   zeroHash,
-} from "viem";
+} from 'viem'
 
 //////////////////////////////////////////////////
 // ENCODING
@@ -13,13 +13,13 @@ import {
 export function encodeUpdateAssetRoleAccessMsgBody({
   assetCid,
   members,
-  roles
+  roles,
 }: {
-  assetCid: string;
-  members: bigint[];
-  roles: bigint[];
+  assetCid: string
+  members: bigint[]
+  roles: bigint[]
 }): {
-  msgBody: Hash;
+  msgBody: Hash
 } | null {
   try {
     const msgBody = encodeAbiParameters(
@@ -27,65 +27,67 @@ export function encodeUpdateAssetRoleAccessMsgBody({
         {
           components: [
             // assetCid
-            { internalType: "string", name: "assetCid", type: "string" },
+            { internalType: 'string', name: 'assetCid', type: 'string' },
             // channel struct
             {
               components: [
                 {
-                  internalType: "enum IPostGateway.ChannelDataTypes",
-                  name: "dataType",
-                  type: "uint8",
+                  internalType: 'enum IPostGateway.ChannelDataTypes',
+                  name: 'dataType',
+                  type: 'uint8',
                 },
-                { internalType: "bytes", name: "contents", type: "bytes" },
+                { internalType: 'bytes', name: 'contents', type: 'bytes' },
               ],
-              internalType: "struct IPostGateway.ChannelData",
-              name: "data",
-              type: "tuple",
+              internalType: 'struct IPostGateway.ChannelData',
+              name: 'data',
+              type: 'tuple',
             },
             {
               components: [
                 {
-                  internalType: "enum IPostGateway.ChannelAccessTypes",
-                  name: "accessType",
-                  type: "uint8",
+                  internalType: 'enum IPostGateway.ChannelAccessTypes',
+                  name: 'accessType',
+                  type: 'uint8',
                 },
-                { internalType: "bytes", name: "contents", type: "bytes" },
+                { internalType: 'bytes', name: 'contents', type: 'bytes' },
               ],
-              internalType: "struct IPostGateway.ChannelAccess",
-              name: "access",
-              type: "tuple",
+              internalType: 'struct IPostGateway.ChannelAccess',
+              name: 'access',
+              type: 'tuple',
             },
           ],
-          internalType: "struct IPostGateway.Channel",
-          name: "channel",
-          type: "tuple",
+          internalType: 'struct IPostGateway.Channel',
+          name: 'channel',
+          type: 'tuple',
         },
       ],
-      [{ 
-        assetCid: assetCid,
-        data: {
-          dataType: 0,
-          contents: zeroHash
+      [
+        {
+          assetCid: assetCid,
+          data: {
+            dataType: 0,
+            contents: zeroHash,
+          },
+          access: {
+            accessType: 1, // ROLEBASED
+            contents: encodeAbiParameters(
+              [
+                { name: 'members', type: 'uint256[]' },
+                { name: 'roles', type: 'uint256[]' },
+              ],
+              [members, roles],
+            ),
+          },
         },
-        access: {
-          accessType: 1, // ROLEBASED
-          contents: encodeAbiParameters(
-            [
-              { name: "members", type: "uint256[]" },
-              { name: "roles", type: "uint256[]" },
-            ],
-            [members, roles]
-          ),
-        },
-      }]
-    );
+      ],
+    )
 
     return {
       msgBody: msgBody,
-    };
+    }
   } catch (error) {
-    console.error("Failed to encode update asset Message body", error);
-    return null;
+    console.error('Failed to encode update asset Message body', error)
+    return null
   }
 }
 
@@ -94,9 +96,9 @@ export function encodeUpdateAssetRoleAccessMsgBody({
 //////////////////////////////////////////////////
 
 export function decodeUpdateAssetMsgBody({ msgBody }: { msgBody: Hash }): {
-  assetCid: string;
-  data: { dataType: number; contents: Hex };
-  access: { accessType: number; contents: Hex };
+  assetCid: string
+  data: { dataType: number; contents: Hex }
+  access: { accessType: number; contents: Hex }
 } | null {
   try {
     const [{ assetCid, data, access }] = decodeAbiParameters(
@@ -104,50 +106,50 @@ export function decodeUpdateAssetMsgBody({ msgBody }: { msgBody: Hash }): {
         {
           components: [
             // assetCid
-            { internalType: "string", name: "assetCid", type: "string" },
+            { internalType: 'string', name: 'assetCid', type: 'string' },
             // channel struct
             {
               components: [
                 {
-                  internalType: "enum IPostGateway.ChannelDataTypes",
-                  name: "dataType",
-                  type: "uint8",
+                  internalType: 'enum IPostGateway.ChannelDataTypes',
+                  name: 'dataType',
+                  type: 'uint8',
                 },
-                { internalType: "bytes", name: "contents", type: "bytes" },
+                { internalType: 'bytes', name: 'contents', type: 'bytes' },
               ],
-              internalType: "struct IPostGateway.ChannelData",
-              name: "data",
-              type: "tuple",
+              internalType: 'struct IPostGateway.ChannelData',
+              name: 'data',
+              type: 'tuple',
             },
             {
               components: [
                 {
-                  internalType: "enum IPostGateway.ChannelAccessTypes",
-                  name: "accessType",
-                  type: "uint8",
+                  internalType: 'enum IPostGateway.ChannelAccessTypes',
+                  name: 'accessType',
+                  type: 'uint8',
                 },
-                { internalType: "bytes", name: "contents", type: "bytes" },
+                { internalType: 'bytes', name: 'contents', type: 'bytes' },
               ],
-              internalType: "struct IPostGateway.ChannelAccess",
-              name: "access",
-              type: "tuple",
+              internalType: 'struct IPostGateway.ChannelAccess',
+              name: 'access',
+              type: 'tuple',
             },
           ],
-          internalType: "struct IPostGateway.Channel",
-          name: "channel",
-          type: "tuple",
+          internalType: 'struct IPostGateway.Channel',
+          name: 'channel',
+          type: 'tuple',
         },
       ],
-      msgBody
-    );
+      msgBody,
+    )
 
     return {
-    assetCid: assetCid,
+      assetCid: assetCid,
       data: data,
       access: access,
-    };
+    }
   } catch (error) {
-    console.error("Failed to decode update asset Message body", error);
-    return null;
+    console.error('Failed to decode update asset Message body', error)
+    return null
   }
 }

@@ -1,6 +1,7 @@
 import { Flex } from '@/design-system'
 import MuxAudio from '@mux/mux-audio-react'
-import React, { useRef, useState } from 'react'
+import type React from 'react'
+import { useRef, useState } from 'react'
 import styles from './Player.module.css'
 
 export function AudioPlayer({ playbackId }: { playbackId: string }) {

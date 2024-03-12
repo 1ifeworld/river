@@ -29,10 +29,6 @@ export function ThemeToggle() {
   if (!mounted) {
     return null
   }
-
-  {
-    /* Currently, the ability to toggle between dark and light modes using a button is commented out. This is due to some components and styles that are not yet compatible with this feature. */
-  }
   return (
     <>
       {/* <button

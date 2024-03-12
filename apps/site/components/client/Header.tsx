@@ -7,7 +7,7 @@ import { getUserId } from '@/gql'
 import { getUsername } from '@/lib'
 import { useParams } from 'next/navigation'
 import { useState, useEffect } from 'react'
-import { Hex } from 'viem'
+import type { Hex } from 'viem'
 
 export function Header() {
   const [open, setOpen] = useState<boolean>(false)

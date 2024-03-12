@@ -1,7 +1,8 @@
 'use client'
 
-import { ModelViewerElement } from '@google/model-viewer'
-import React, { CSSProperties, useEffect } from 'react'
+import type { ModelViewerElement } from '@google/model-viewer'
+import type React from 'react'
+import { type CSSProperties, useEffect } from 'react'
 
 declare global {
   namespace JSX {

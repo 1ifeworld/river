@@ -28,7 +28,7 @@ import {
   Toast,
   Typography,
 } from '@/design-system'
-import { type Channel, type ChannelRoles } from '@/gql'
+import type { Channel, ChannelRoles } from '@/gql'
 import {
   checkUsernameAvailability,
   getDataForUsername,
@@ -41,7 +41,7 @@ import debounce from 'debounce'
 import { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import { Hex } from 'viem'
+import type { Hex } from 'viem'
 
 interface ChannelSettingsProps {
   channel: Channel

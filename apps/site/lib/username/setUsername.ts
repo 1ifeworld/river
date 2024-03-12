@@ -1,4 +1,4 @@
-import { Hex } from 'viem'
+import type { Hex } from 'viem'
 
 interface RegistrationParameters {
   id: string

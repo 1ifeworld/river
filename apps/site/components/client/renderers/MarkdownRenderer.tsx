@@ -1,7 +1,8 @@
 'use client'
 
 import { Typography } from 'design-system/components'
-import React, { useEffect, useState } from 'react'
+import type React from 'react'
+import { useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import './markdownStyles.css'

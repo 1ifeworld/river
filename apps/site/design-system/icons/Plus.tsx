@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { cn } from '../utils'
-import { type SvgProps } from './iconTypes'
+import type { SvgProps } from './iconTypes'
 
 export function Plus({
   width = 15,

@@ -23,7 +23,7 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { useDebounce } from 'usehooks-ts'
-import * as z from 'zod'
+import type * as z from 'zod'
 
 interface AddMembersFormProps {
   targetChannelId: bigint

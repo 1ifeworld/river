@@ -1,6 +1,6 @@
 import { Button, Loading, Typography } from '@/design-system'
-import * as React from 'react'
-import { ComponentProps } from 'react'
+import type * as React from 'react'
+import type { ComponentProps } from 'react'
 // @ts-expect-error
 import { useFormStatus } from 'react-dom'
 

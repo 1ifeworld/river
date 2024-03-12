@@ -30,7 +30,12 @@ import { useForm } from 'react-hook-form'
 import { addresses } from 'scrypt'
 import { getExpiration } from 'scrypt'
 import { toast } from 'sonner'
-import { EIP1193Provider, Hex, createWalletClient, custom } from 'viem'
+import {
+  type EIP1193Provider,
+  type Hex,
+  createWalletClient,
+  custom,
+} from 'viem'
 import { optimism } from 'viem/chains'
 
 interface UsernameDialogProps {

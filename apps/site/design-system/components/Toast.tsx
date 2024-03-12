@@ -1,5 +1,5 @@
 import { Flex, Typography } from '@/design-system'
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 interface ToastProps {
   children: ReactNode

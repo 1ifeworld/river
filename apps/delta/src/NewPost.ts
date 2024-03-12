@@ -4,7 +4,7 @@ import {
   decodeCreateAssetMsgBody,
   decodeAddItemMsgBody,
   remove0xPrefix,
-  Post,
+  type Post,
   MessageTypes,
   ChannelAccessTypes,
   ChannelDataTypes,
