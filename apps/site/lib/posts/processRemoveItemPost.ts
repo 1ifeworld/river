@@ -1,13 +1,13 @@
 import { relayPost } from '@/lib'
 import { getTxnInclusion, revalidationHelper } from '@/lib'
-import { SignMessageModalUIOptions } from '@privy-io/react-auth'
+import type { SignMessageModalUIOptions } from '@privy-io/react-auth'
 import {
   encodeRemoveItemMsgBody,
   generateMessageHash,
   getExpiration,
   remove0xPrefix,
 } from 'scrypt'
-import { Hash, Hex } from 'viem'
+import type { Hash, Hex } from 'viem'
 
 export async function processRemoveItemPost({
   signer,

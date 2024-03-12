@@ -3,8 +3,8 @@ import {
   VIDEO_THUMBNAIL_TYPES_TO_RENDER,
 } from '@/constants'
 import { Flex, Grid, Stack, Typography } from '@/design-system'
-import { Adds, Channel } from '@/gql'
-import { MediaAssetObject, w3sUrlFromCid } from '@/lib'
+import type { Adds, Channel } from '@/gql'
+import { type MediaAssetObject, w3sUrlFromCid } from '@/lib'
 import { GenericThumbnailLarge, Username } from '@/server'
 import { kv } from '@vercel/kv'
 import Image from 'next/image'

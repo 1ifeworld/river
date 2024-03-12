@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -34,7 +30,7 @@
       "@/gql": ["gql/index.ts"],
       "@/hooks": ["hooks/index.ts"],
       "@/lib": ["lib/index.ts"],
-      "@/utils": ["utils/index.ts"],
+      "@/utils": ["utils/index.ts"]
     }
   },
   "include": [
@@ -44,7 +40,5 @@
     "**/*.d.ts",
     ".next/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

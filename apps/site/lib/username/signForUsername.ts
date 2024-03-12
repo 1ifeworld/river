@@ -1,5 +1,5 @@
-import { SignMessageModalUIOptions } from '@privy-io/react-auth'
-import { Hex } from 'viem'
+import type { SignMessageModalUIOptions } from '@privy-io/react-auth'
+import type { Hex } from 'viem'
 import { setUsername } from './setUsername'
 
 export async function signForUsername(

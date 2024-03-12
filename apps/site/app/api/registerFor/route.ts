@@ -1,9 +1,9 @@
 import { optimismPubClient } from '@/config/publicClient'
 import { Defender } from '@openzeppelin/defender-sdk'
 import { ethers } from 'ethers'
-import { NextRequest } from 'next/server'
+import type { NextRequest } from 'next/server'
 import { addresses, idRegistryABI } from 'scrypt'
-import { Hex, decodeAbiParameters } from 'viem'
+import { type Hex, decodeAbiParameters } from 'viem'
 
 export async function POST(req: NextRequest) {
   const user = await req.json()
