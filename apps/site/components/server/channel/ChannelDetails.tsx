@@ -1,5 +1,5 @@
 import { Stack, Typography } from '@/design-system'
-import { type Channel } from '@/gql'
+import type { Channel } from '@/gql'
 import { pluralize, unixTimeConverter } from '@/utils'
 
 export async function ChannelDetails({ channel }: { channel: Channel }) {

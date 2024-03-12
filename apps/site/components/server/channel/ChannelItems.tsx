@@ -7,7 +7,7 @@ import {
   TableRow,
   Typography,
 } from '@/design-system'
-import { Adds, Channel, Item } from '@/gql'
+import type { Adds, Channel, Item } from '@/gql'
 import { ItemCard, ThumbnailNameCreator } from '@/server'
 import { unixTimeConverter } from '@/utils'
 import Link from 'next/link'

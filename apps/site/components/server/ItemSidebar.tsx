@@ -1,6 +1,6 @@
 import { IndexInfoToggle } from '@/client'
 import { Flex, Stack, Typography } from '@/design-system'
-import { type Adds, type Channel } from '@/gql'
+import type { Adds, Channel } from '@/gql'
 import { getAddsMetadata, ipfsUrlToCid } from '@/lib'
 import { ThumbnailNameCreator, Username } from '@/server'
 import { unixTimeConverter } from '@/utils'

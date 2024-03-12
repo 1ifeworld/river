@@ -1,6 +1,6 @@
 import { ChannelMembersPopover, ChannelSettings, ItemDropzone } from '@/client'
 import { Flex, Stack, Typography } from '@/design-system'
-import { type Adds, type Channel } from '@/gql'
+import type { Adds, Channel } from '@/gql'
 import { Username } from '@/server'
 import { truncateText } from '@/utils'
 
@@ -30,7 +30,7 @@ export async function ChannelBanner({
     .slice(0, 4)
 
   const activeMemberCount = channel?.roles?.items?.filter(
-    (item) => parseInt(item.role) === 1,
+    (item) => Number.parseInt(item.role) === 1,
   ).length as number
 
   return (

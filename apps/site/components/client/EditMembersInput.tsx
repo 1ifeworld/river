@@ -1,5 +1,5 @@
 import { Flex, cn } from '@/design-system'
-import { InputProps, Plus, X } from '@/design-system'
+import { type InputProps, Plus, X } from '@/design-system'
 import * as React from 'react'
 
 interface EditMembersInputProps extends InputProps {

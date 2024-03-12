@@ -1,5 +1,5 @@
 import { Stack, Typography } from '@/design-system'
-import { type Item } from '@/gql'
+import type { Item } from '@/gql'
 import { ipfsUrlToCid, w3sUrlFromCid } from '@/lib'
 import { VIDEO_THUMBNAIL_TYPES_TO_RENDER } from 'constants/thumbnails'
 import { GenericThumbnailSmall, Username } from '@/server'

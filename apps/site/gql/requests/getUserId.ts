@@ -1,4 +1,4 @@
-import { type Address } from 'viem'
+import type { Address } from 'viem'
 import sdk from '../client'
 
 export async function getUserId({

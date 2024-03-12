@@ -1,7 +1,7 @@
 import { arbitrumNova } from '@/config/customChainConfig'
 import { PrivyProvider } from '@privy-io/react-auth'
 
-import * as React from 'react'
+import type * as React from 'react'
 
 export function PrivyProviderWrapper({
   children,

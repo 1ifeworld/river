@@ -1,9 +1,9 @@
 import { novaPubClient } from '@/config/publicClient'
 import { Defender } from '@openzeppelin/defender-sdk'
 import { ethers } from 'ethers'
-import { NextRequest } from 'next/server'
+import type { NextRequest } from 'next/server'
 import { addresses, postGatewayABI } from 'scrypt'
-import { type Hex } from 'viem'
+import type { Hex } from 'viem'
 
 export async function POST(req: NextRequest) {
   const post = await req.json()

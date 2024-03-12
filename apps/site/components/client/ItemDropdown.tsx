@@ -11,11 +11,11 @@ import {
   Toast,
   Typography,
 } from '@/design-system'
-import { Adds, Channel, ChannelRoles } from '@/gql'
+import type { Adds, Channel, ChannelRoles } from '@/gql'
 import { processRemoveItemPost } from 'lib/posts'
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { Hex } from 'viem'
+import type { Hex } from 'viem'
 
 interface ItemDropdownProps {
   channel: Channel

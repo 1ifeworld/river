@@ -1,4 +1,4 @@
-import { Hex, getAddress } from 'viem'
+import { type Hex, getAddress } from 'viem'
 
 export function shortenAddress(address?: Hex, chars = 4): string {
   if (!address) {

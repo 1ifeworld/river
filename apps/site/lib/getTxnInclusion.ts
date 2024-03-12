@@ -1,5 +1,5 @@
 import { getTxnWithHash } from '@/gql'
-import { Hash } from 'viem'
+import type { Hash } from 'viem'
 
 export async function getTxnInclusion(txnHash: Hash): Promise<boolean> {
   let txn

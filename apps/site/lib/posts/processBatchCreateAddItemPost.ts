@@ -1,6 +1,6 @@
 import { getTxnInclusion, relayPostBatch, revalidationHelper } from '@/lib'
 import { messageToCid } from '@/utils'
-import { SignMessageModalUIOptions } from '@privy-io/react-auth'
+import type { SignMessageModalUIOptions } from '@privy-io/react-auth'
 import {
   type Post,
   encodeAddItemMsgBody,
@@ -9,7 +9,7 @@ import {
   getExpiration,
   remove0xPrefix,
 } from 'scrypt'
-import { Hash, Hex, encodeAbiParameters } from 'viem'
+import { type Hash, type Hex, encodeAbiParameters } from 'viem'
 
 export async function processBatchCreateAddItemPost({
   signer,

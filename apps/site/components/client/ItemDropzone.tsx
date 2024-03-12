@@ -1,9 +1,9 @@
 import { UploadProgress } from '@/client'
 import { useUserContext } from '@/context'
 import { Button, Flex, Stack, Typography } from '@/design-system'
-import { type Channel, ChannelRoles } from '@/gql'
+import type { Channel, ChannelRoles } from '@/gql'
 import {
-  MetadataObject,
+  type MetadataObject,
   determineContentType,
   isAudio,
   isGLB,
@@ -18,7 +18,7 @@ import {
 import { useParams } from 'next/navigation'
 import React, { useState } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { Hex } from 'viem'
+import type { Hex } from 'viem'
 
 function isRidPresent({
   roleData,
