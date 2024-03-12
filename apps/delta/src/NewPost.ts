@@ -10,6 +10,7 @@ import {
   ChannelDataTypes,
   ItemAccessTypes,
   ItemDataTypes,
+  ChannelRoleTypes,
   decodeRemoveItemMsgBody,
   decodeUpdateAssetMsgBody,
 } from 'scrypt'
@@ -20,7 +21,7 @@ import {
   recoverMessageAddress,
   Hex,
 } from 'viem'
-import { messageToCid, postToCid } from './utils'
+import { messageToCid, postToCid, USER_ID_ZERO, roleCheck } from './utils'
 
 ponder.on('PostGateway:NewPost', async ({ event, context }) => {
   /* ************************************************
@@ -42,6 +43,8 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
     ItemCounter,
     Adds,
   } = context.db
+
+
 
   /* ************************************************
 
@@ -185,7 +188,7 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
         }
         // update item counter
         await ItemCounter.upsert({
-          id: `${context.network.chainId}/${event.transaction.to}/item"`,
+          id: `${context.network.chainId}/${event.transaction.to}/item`,
           create: {
             counter: BigInt(1),
             lastUpdated: event.block.timestamp,
@@ -236,6 +239,25 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
         })
         // set roles
         for (let j = 0; j < members.length; ++j) {
+          // Check that
+          //    role is valid role
+          //    userId exists or is equal to USER_ID_ZERO, 
+          //    if USER_ID_ZERO == 0, role CANNOT equal ADMIN
+          // if (!await roleCheck({context: context, rid: members[j], role: roles[j]}))
+
+          // // Check that corresponding role is valid (NONE or MEMBER or ADMIN)
+          // if (!Object.values(ChannelRoleTypes).includes(Number(roles[j]))) continue
+          // // Check to make sure user exists or is USER_ID_ZERO
+          // const user = await User.findUnique({ id: members[j]})
+          // // Check if user exists
+          // if (!user) {
+          //     // Check if rid is USER_ID_ZERO
+          //     if (members[j] !== USER_ID_ZERO) continue 
+          //     // USER_ID_ZERO cannot have ADMIN role
+          //     if (roles[j] === BigInt(ChannelRoleTypes.ADMIN)) continue
+          // }
+
+          //         
           await ChannelRoles.upsert({
             id: `${messageId}/${members[j]}`,
             create: {
@@ -249,7 +271,7 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
         }
         // update channel counter
         await ChannelCounter.upsert({
-          id: `${context.network.chainId}/${event.transaction.to}/channel"`,
+          id: `${context.network.chainId}/${event.transaction.to}/channel`,
           create: {
             counter: BigInt(1),
             lastUpdated: event.block.timestamp,
@@ -301,13 +323,32 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
           id: `${updateChannelCid}/${posts[i].message.rid}`,
         })
         // check if rid has admin access for this channel
-        // PROTOCOL: as of blocktimestamp { }, admin acccess is anything greater than 1. (maybe we should hardcode as 2)
-        if (roleAccess?.role && roleAccess.role > 1) {
+        // if (roleAccess?.role && roleAccess.role === BigInt(ChannelRoleTypes.ADMIN)) {
+        if (roleAccess?.role && roleAccess.role > BigInt(1)) {
+          console.log("rid has admin access to update role")
           if (updateMembers.length !== updateRoles.length) break // this prevents indexing breaks due to invalid array index access
           for (let j = 0; j < updateMembers.length; ++j) {
-            const user = await User.findUnique({ id: updateMembers[j] })
-            if (!user) break // prevents role values being assigned to users that haven't been registered
-            if (updateRoles[j] > 2) break // prevents role values other than (0: none, 1: member, 2: admin)
+            // Check that
+            //    role is valid role
+            //    userId exists or is equal to USER_ID_ZERO, 
+            //    if USER_ID_ZERO == 0, role CANNOT equal ADMIN
+            // if (!await roleCheck({context: context, rid: updateMembers[j], role: updateRoles[j]})) continue   
+            
+          
+            // // Check that corresponding role is valid (NONE or MEMBER or ADMIN)
+            // if (!Object.values(ChannelRoleTypes).includes(Number(updateRoles[j]))) continue
+            // // Check to make sure user exists or is USER_ID_ZERO
+            // const user = await User.findUnique({ id: updateMembers[j]})
+            // // Check if user exists
+            // if (!user) {
+            //     // Check if rid is USER_ID_ZERO
+            //     if (updateMembers[j] !== USER_ID_ZERO) continue 
+            //     // USER_ID_ZERO cannot have ADMIN role
+            //     if (updateRoles[j] === BigInt(ChannelRoleTypes.ADMIN)) continue
+            // }
+
+            //
+            console.log("role check in update role successful")
             // SET ROLES
             await ChannelRoles.upsert({
               id: `${updateChannelCid}/${updateMembers[j]}`,
@@ -341,11 +382,16 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
         // check to see if target item + channel exist at timestamp of processing
         if (!addItem || !addChannel) break
         // Check to see if rid has access to add to channel
+        // Fetch the access data for given rid for given channel
         const access = await ChannelRoles.findUnique({
           id: `${addChannelCid}/${posts[i].message.rid}`,
         })
-        // Check to see if role is greater than 0
-        if (access?.role && access.role > 0) {
+        // Fetch the access data for userId = 0 for given  channel
+        const publicAccess = await ChannelRoles.findUnique({
+          id: `${addChannelCid}/${USER_ID_ZERO}`,
+        })
+        // Check to see if specific userId role OR userId 0, is greater than 0
+        if ((access?.role && access.role > BigInt(ChannelRoleTypes.NONE)) || (publicAccess?.role && publicAccess.role === BigInt(ChannelRoleTypes.MEMBER))) {
           // check if item exists. prevent adding item cids that don't exist
           const itemLookup = await Item.findUnique({ id: addItemCid })
           if (!itemLookup) break
@@ -384,7 +430,7 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
         })
         // Check to see if rid has admin role or was original adder
         if (
-          (remAccess?.role && remAccess.role > 1) || // greater than member
+          (remAccess?.role && remAccess.role === BigInt(ChannelRoleTypes.ADMIN)) || // is admin
           addLookup.addedById === posts[i].message.rid // was original adder
         ) {
           await Adds.update({

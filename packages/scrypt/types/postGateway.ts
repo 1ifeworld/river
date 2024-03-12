@@ -45,3 +45,9 @@ export enum MessageTypes {
   ADD_ITEM_TO_CHANNEL, // 5
   REMOVE_ITEM_FROM_CHANNEL, // 6
 }
+
+export enum ChannelRoleTypes {
+  NONE, // 0
+  MEMBER, // 1
+  ADMIN, // 2
+}
