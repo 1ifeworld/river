@@ -1,10 +1,11 @@
 import { IndexInfoToggle } from '@/client'
-import { Flex, Stack, Typography } from '@/design-system'
-import type { Adds, Channel } from '@/gql'
+import { Flex, Stack, Typography, Public } from '@/design-system'
+import type { Adds, Channel, ChannelRoles } from '@/gql'
 import { getAddsMetadata, ipfsUrlToCid } from '@/lib'
 import { ThumbnailNameCreator, Username } from '@/server'
 import { unixTimeConverter } from '@/utils'
 import Link from 'next/link'
+import { USER_ID_ZERO } from '@/constants'
 
 interface ItemSidebarProps {
   itemContext: Adds
@@ -25,6 +26,17 @@ export function ItemSidebar({
   channel,
   view,
 }: ItemSidebarProps) {
+  function checkIsPublic({ roleData }: { roleData: ChannelRoles[] }) {
+    for (let i = 0; i < roleData.length; ++i) {
+      if (roleData[i].rid === USER_ID_ZERO && roleData[i].role > 0) return true
+    }
+    return false
+  }
+
+  const isPublic = !channel?.roles?.items
+    ? false
+    : checkIsPublic({ roleData: channel?.roles?.items })
+
   return (
     <Stack className="p-5 h-[320px] md:h-full border-t border-border md:border-none">
       <Flex className="justify-between items-center pb-[30px]">
@@ -47,15 +59,18 @@ export function ItemSidebar({
           </Stack>
           <Stack className="gap-y-[7px] md:pt-[45px]">
             <Flex className="justify-between">
-              <Typography>Added to</Typography>
-              <Link
-                href={`/channel/${itemContext.channelId}`}
-                className="hover:underline underline-offset-2 transition-all decoration-secondary-foreground"
-              >
-                <Typography className="text-secondary-foreground">
-                  {itemContext.channel.name}
-                </Typography>
-              </Link>
+              <Typography>Channel</Typography>
+              <Flex className="items-center space-x-[6px]">
+                <Link
+                  href={`/channel/${itemContext.channelId}`}
+                  className="hover:underline underline-offset-2 transition-all decoration-secondary-foreground"
+                >
+                  <Typography className="text-secondary-foreground">
+                    {itemContext.channel.name}
+                  </Typography>
+                </Link>
+                {isPublic && <Public />}
+              </Flex>
             </Flex>
             <Flex className="justify-between">
               <Typography>Added by</Typography>

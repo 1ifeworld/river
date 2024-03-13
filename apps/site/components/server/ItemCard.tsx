@@ -33,8 +33,6 @@ export async function ItemCard({
 
   function checkIsPublic({ roleData }: { roleData: ChannelRoles[] }) {
     for (let i = 0; i < roleData.length; ++i) {
-      console.log('rid = ', roleData[i].rid)
-      console.log('role = ', roleData[i].role)
       if (roleData[i].rid === USER_ID_ZERO && roleData[i].role > 0) return true
     }
     return false
