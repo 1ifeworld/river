@@ -20,7 +20,7 @@ import React, { useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import type { Hex } from 'viem'
 
-function isRidPresent({
+function hasAddAccess({
   roleData,
   targetRid,
 }: {
@@ -29,10 +29,13 @@ function isRidPresent({
 }) {
   for (let i = 0; i < roleData.length; ++i) {
     const rid = roleData[i].rid
-    if (rid === targetRid) return true
+    if ((rid === targetRid || rid === 0 )  && roleData[i].role > 0 ) return true
   }
   return false
 }
+ 
+
+
 
 export function ItemDropzone({ channel }: { channel: Channel }) {
   const [isUploading, setIsUploading] = useState(false)
@@ -54,7 +57,7 @@ export function ItemDropzone({ channel }: { channel: Channel }) {
   const showDropzone =
     !channel?.roles?.items || !targetUserId
       ? false
-      : isRidPresent({
+      : hasAddAccess({
           roleData: channel.roles.items,
           targetRid: targetUserId,
         })
