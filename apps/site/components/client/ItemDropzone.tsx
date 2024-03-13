@@ -53,7 +53,6 @@ export function ItemDropzone({ channel }: { channel: Channel }) {
     embeddedWallet,
   } = useUserContext()
   const params = useParams()
-  console.log('CHAN ROLE', channel.roles)
   const showDropzone =
     !channel?.roles?.items || !targetUserId
       ? false
