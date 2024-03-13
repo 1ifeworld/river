@@ -19,6 +19,7 @@ import { useParams } from 'next/navigation'
 import React, { useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import type { Hex } from 'viem'
+import { USER_ID_ZERO } from 'constants/protocol'
 
 function hasAddAccess({
   roleData,
@@ -29,7 +30,8 @@ function hasAddAccess({
 }) {
   for (let i = 0; i < roleData.length; ++i) {
     const rid = roleData[i].rid
-    if ((rid === targetRid || rid === 0) && roleData[i].role > 0) return true
+    if ((rid === targetRid || rid === USER_ID_ZERO) && roleData[i].role > 0)
+      return true
   }
   return false
 }
@@ -51,6 +53,7 @@ export function ItemDropzone({ channel }: { channel: Channel }) {
     embeddedWallet,
   } = useUserContext()
   const params = useParams()
+  console.log('CHAN ROLE', channel.roles)
   const showDropzone =
     !channel?.roles?.items || !targetUserId
       ? false
