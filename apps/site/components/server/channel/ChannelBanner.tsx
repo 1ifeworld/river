@@ -24,8 +24,8 @@ export async function ChannelBanner({
 
   // channel.roles?.items[0].role == 2
   // channel.roles?.items[0].role == 1
-  
-  console.log("channel info: ", channel)
+
+  console.log('channel info: ', channel)
 
   const lastFourNonRemovedItems: Adds[] = (channel?.adds?.items ?? [])
     .filter((item) => !item.removed)

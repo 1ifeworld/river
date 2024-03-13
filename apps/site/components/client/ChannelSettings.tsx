@@ -49,6 +49,7 @@ interface ChannelSettingsProps {
 
 export function ChannelSettings({ channel }: ChannelSettingsProps) {
   const { signMessage, userId, embeddedWallet } = useUserContext()
+  const [isConfiguring, setIsConfiguring] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
 
@@ -105,13 +106,7 @@ export function ChannelSettings({ channel }: ChannelSettingsProps) {
   )
   const stateDifRoleValues: bigint[] = rolesStateDif.map(
     (role) => role.newRole || BigInt(0),
-  ) // default to BigInt(0) if newRole is null);
-
-  /* 
-  *
-    username input validation
-  *
-  */
+  ) // default to BigInt(0) if newRole is null)
 
   const [isValidUser, setIsValidUser] = useState<0 | 1 | 2 | 3>(0) // 0 = null state, 1 = valid, 2 = invalid, 3 = already added
   const [validationComplete, setValidationComplete] = useState(false)
@@ -250,20 +245,59 @@ export function ChannelSettings({ channel }: ChannelSettingsProps) {
       {/* Dropdown logic */}
       <DropdownMenu>
         {enableEditMembers && (
-          <DropdownMenuTrigger className="focus:outline-none mb-1">
+          <DropdownMenuTrigger
+            disabled={isConfiguring}
+            className="focus:outline-none mb-1"
+          >
             <Typography className="hover:font-bold" variant="h2">
-              {'...'}
+              {isConfiguring ? <Loading /> : '...'}
             </Typography>
           </DropdownMenuTrigger>
         )}
         <DropdownMenuContent side="bottom" align="start">
-          <DropdownMenuGroup className="flex flex-col gap-2">
+          <DropdownMenuGroup className="flex flex-col gap-3">
             <DropdownMenuItem>
               <DialogTrigger asChild>
                 <Button disabled={!enableEditMembers} variant="link">
                   <Typography>Edit members</Typography>
                 </Button>
               </DialogTrigger>
+            </DropdownMenuItem>
+            <Separator className="w-full" />
+            <DropdownMenuItem>
+              <Button
+                variant="link"
+                onClick={async () => {
+                  if (!embeddedWallet?.address || !userId) return false
+                  setIsConfiguring(true)
+                  // Initialize bool for txn success check
+                  let txSuccess = false
+                  // Generate edit members post
+                  if (signMessage) {
+                    txSuccess = await processEditMembersPost({
+                      rid: userId,
+                      signer: embeddedWallet.address as Hex,
+                      privySignMessage: signMessage,
+                      channelCid: channel.id,
+                      members: [BigInt(0)], // USER_ID_ZERO
+                      roles: [BigInt(1)], // MEMBER
+                    })
+                    if (txSuccess) {
+                      toast.custom((t) => (
+                        <Toast>{'Your channel is now public'}</Toast>
+                      ))
+                      setIsConfiguring(false)
+                    } else {
+                      toast.custom((t) => (
+                        <Toast>{'Error making channel public'}</Toast>
+                      ))
+                      setIsConfiguring(false)
+                    }
+                  }
+                }}
+              >
+                <Typography>Make channel public</Typography>
+              </Button>
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>

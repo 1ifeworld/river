@@ -4,7 +4,7 @@ import { getMarqueeData } from '@/gql'
 export async function MarqueeWrapper() {
   const { users, channels, items } = await getMarqueeData()
 
-  console.log("num channels: ", channels)
+  console.log('num channels: ', channels)
 
   return (
     <Marquee
