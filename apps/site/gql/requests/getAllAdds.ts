@@ -5,6 +5,6 @@ export const getAllAdds = unstable_cache(async () => {
   const response = await sdk.allAdds()
 
   return {
-    adds: response.addss
+    adds: response.addss,
   }
 }, ['allAdds'])
