@@ -10,6 +10,6 @@
     "noEmit": false,
     "noImplicitReturns": true,
     "skipLibCheck": true,
-    "outDir": "./dist",
+    "outDir": "./dist"
   }
 }
