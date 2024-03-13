@@ -12,6 +12,13 @@ query allAdds {
       channelId
       channel {
         name
+        roles(orderBy: "role", orderDirection: "desc") {
+          items {
+            timestamp
+            rid
+            role
+          }
+        }        
         adds(orderBy: "timestamp", orderDirection: "desc") {
           items {
             itemId
