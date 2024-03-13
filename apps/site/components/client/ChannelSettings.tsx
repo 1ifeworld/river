@@ -263,7 +263,9 @@ export function ChannelSettings({ channel }: ChannelSettingsProps) {
                 </Button>
               </DialogTrigger>
             </DropdownMenuItem>
-            <Separator className="w-full" />
+            <div className='-mx-4'>
+            <Separator />
+            </div>
             <DropdownMenuItem>
               <Button
                 variant="link"
