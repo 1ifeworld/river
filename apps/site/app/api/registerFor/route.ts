@@ -4,6 +4,7 @@ import { ethers } from 'ethers'
 import type { NextRequest } from 'next/server'
 import { addresses, idRegistryABI } from 'scrypt'
 import { type Hex, decodeAbiParameters } from 'viem'
+import { SyndicateClient } from '@syndicateio/syndicate-node'
 
 export async function POST(req: NextRequest) {
   const user = await req.json()
@@ -13,23 +14,32 @@ export async function POST(req: NextRequest) {
   const { to, recovery, deadline, sig } = userWithoutUsername
 
   console.log({ userWithoutUsername })
-  const credentials = {
-    relayerApiKey: process.env.IDREGISTRY_API_UNO,
-    relayerApiSecret: process.env.IDREGISTRY_SECRET_UNO,
-  }
+
+  // const credentials = {
+  //   relayerApiKey: process.env.IDREGISTRY_API_UNO,
+  //   relayerApiSecret: process.env.IDREGISTRY_SECRET_UNO,
+  // }
+
+  const syndicate = new SyndicateClient({
+    token: () => {
+      const apiKey = process.env.SYNDICATE_API_KEY
+      if (typeof apiKey === "undefined") {
+        throw new Error("SYNDICATE_API_KEY is not defined in environment variables.")
+      }
+      return apiKey;
+    },
+  });
 
   try {
-    const defenderClient = new Defender(credentials)
-    const provider = defenderClient.relaySigner.getProvider()
-    const signer = defenderClient.relaySigner.getSigner(provider, {
-      speed: 'fast',
-    })
+    // const defenderClient = new Defender(credentials)
+    // const provider = defenderClient.relaySigner.getProvider()
+    // const signer = defenderClient.relaySigner.getSigner(provider, {
+    //   speed: 'fast',
+    // })
 
     const idRegistry = new ethers.Contract(
       addresses.idRegistry.optimism,
-      idRegistryABI,
-      signer as unknown as ethers.Signer,
-    )
+      idRegistryABI,    )
 
     const registerTxn = await idRegistry.registerFor(
       to,
@@ -37,6 +47,18 @@ export async function POST(req: NextRequest) {
       deadline,
       sig,
     )
+
+        const projectId = process.env.SYNDICATE_PROJECT_ID
+        if (!projectId) {
+          throw new Error("SYNDICATE_PROJECT_ID is not defined in environment variables.")
+        }
+
+    const txnResponse = await syndicate.transact.sendTransaction({
+      projectId: projectId,
+      contractAddress: addresses.idRegistry.optimism,
+      chainId: 420, 
+      functionSignature: registerTxn.data, 
+    });
 
     const txnReceipt = await optimismPubClient.waitForTransactionReceipt({
       hash: registerTxn.hash as Hex,
@@ -56,7 +78,7 @@ export async function POST(req: NextRequest) {
     return new Response(
       JSON.stringify({
         success: true,
-        hash: registerTxn.hash,
+        hash: txnResponse.transactionId || 'N/A', 
         rid: rid.toString(),
       }),
       {
