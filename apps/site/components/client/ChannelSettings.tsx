@@ -33,7 +33,7 @@ import {
   checkUsernameAvailability,
   getDataForUsername,
   getUsername,
-  processEditMembersPost,
+  processEditRolesPost,
   usernameSchema,
 } from '@/lib'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -272,14 +272,14 @@ export function ChannelSettings({ channel }: ChannelSettingsProps) {
                   setIsConfiguring(true)
                   // Initialize bool for txn success check
                   let txSuccess = false
-                  // Generate edit members post
+                  // Generate process roles post
                   if (signMessage) {
-                    txSuccess = await processEditMembersPost({
+                    txSuccess = await processEditRolesPost({
                       rid: userId,
                       signer: embeddedWallet.address as Hex,
                       privySignMessage: signMessage,
                       channelCid: channel.id,
-                      members: [BigInt(0)], // USER_ID_ZERO
+                      targetRids: [BigInt(0)], // USER_ID_ZERO
                       roles: [BigInt(1)], // MEMBER
                     })
                     if (txSuccess) {
@@ -390,12 +390,12 @@ export function ChannelSettings({ channel }: ChannelSettingsProps) {
                     let txSuccess = false
                     // Generate removeReference post
                     if (signMessage) {
-                      txSuccess = await processEditMembersPost({
+                      txSuccess = await processEditRolesPost({
                         rid: userId,
                         signer: embeddedWallet.address as Hex,
                         privySignMessage: signMessage,
                         channelCid: channel.id,
-                        members: stateDifMembers,
+                        targetRids: stateDifMembers,
                         roles: stateDifRoleValues,
                       })
                       setDialogOpen(false)

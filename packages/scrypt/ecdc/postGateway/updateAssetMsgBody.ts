@@ -12,11 +12,11 @@ import {
 
 export function encodeUpdateAssetRoleAccessMsgBody({
   assetCid,
-  members,
+  targetRids,
   roles
 }: {
   assetCid: string;
-  members: bigint[];
+  targetRids: bigint[];
   roles: bigint[];
 }): {
   msgBody: Hash;
@@ -71,10 +71,10 @@ export function encodeUpdateAssetRoleAccessMsgBody({
           accessType: 1, // ROLEBASED
           contents: encodeAbiParameters(
             [
-              { name: "members", type: "uint256[]" },
+              { name: "targetRids", type: "uint256[]" },
               { name: "roles", type: "uint256[]" },
             ],
-            [members, roles]
+            [targetRids, roles]
           ),
         },
       }]

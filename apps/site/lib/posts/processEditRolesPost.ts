@@ -10,12 +10,12 @@ import {
 } from 'scrypt'
 import type { Hash, Hex } from 'viem'
 
-export async function processEditMembersPost({
+export async function processEditRolesPost({
   rid,
   signer,
   privySignMessage,
   channelCid,
-  members,
+  targetRids,
   roles,
 }: {
   signer: Hex
@@ -25,7 +25,7 @@ export async function processEditMembersPost({
     uiOptions?: SignMessageModalUIOptions | undefined,
   ) => Promise<string>
   channelCid: string
-  members: bigint[]
+  targetRids: bigint[]
   roles: bigint[]
 }): Promise<boolean> {
   // Declare constants/params
@@ -33,7 +33,7 @@ export async function processEditMembersPost({
   const msgType = MessageTypes.UPDATE_CHANNEL as number
   const msgBody = encodeUpdateAssetRoleAccessMsgBody({
     assetCid: channelCid,
-    members: members,
+    targetRids,
     roles: roles,
   })
   if (!msgBody?.msgBody) return false
