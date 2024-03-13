@@ -2,14 +2,15 @@ import {
   IMAGE_THUMBNAIL_TYPES_TO_RENDER,
   VIDEO_THUMBNAIL_TYPES_TO_RENDER,
 } from '@/constants'
-import { Flex, Stack, Typography } from '@/design-system'
-import type { Adds } from '@/gql'
+import { Flex, Stack, Typography, Public } from '@/design-system'
+import type { Adds, ChannelRoles } from '@/gql'
 import { type MediaAssetObject, w3sUrlFromCid } from '@/lib'
 import { GenericThumbnailLarge, Username } from '@/server'
 import { unixTimeConverter } from '@/utils'
 import { kv } from '@vercel/kv'
 import Image from 'next/image'
 import Link from 'next/link'
+import { USER_ID_ZERO } from '@/constants'
 
 export async function ItemCard({
   add,
@@ -29,6 +30,19 @@ export async function ItemCard({
     (add.channel.adds?.items?.findIndex(
       (item) => item.itemId === add.item.id,
     ) as number)
+
+  function checkIsPublic({ roleData }: { roleData: ChannelRoles[] }) {
+    for (let i = 0; i < roleData.length; ++i) {
+      console.log('rid = ', roleData[i].rid)
+      console.log('role = ', roleData[i].role)
+      if (roleData[i].rid === USER_ID_ZERO && roleData[i].role > 0) return true
+    }
+    return false
+  }
+
+  const isPublic = !add.channel?.roles?.items
+    ? false
+    : checkIsPublic({ roleData: add.channel?.roles?.items })
 
   return (
     <Stack className="gap-y-[10px]">
@@ -90,6 +104,11 @@ export async function ItemCard({
                 {add.channel.name}
               </Typography>
             </Link>
+            {isPublic && (
+              <div className="ml-[6px] mt-[1px]">
+                <Public />
+              </div>
+            )}
           </Flex>
         </div>
         <Typography className="text-secondary-foreground">

@@ -1,4 +1,4 @@
-import { Hash } from 'viem'
+import type { Hash } from 'viem'
 
 export function remove0xPrefix({ bytes32Hash }: { bytes32Hash: Hash }) {
   return bytes32Hash.slice(2)
