@@ -7,6 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
   Typography,
+  Separator,
 } from '@/design-system'
 import { useLogout } from '@privy-io/react-auth'
 import Link from 'next/link'
@@ -31,7 +32,7 @@ export function UserDropdown({ setOpen }: UserProps) {
         <Button variant="link">{username ? username : 'Logout'}</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-32" align="end">
-        <DropdownMenuGroup className="flex flex-col gap-2">
+        <DropdownMenuGroup className="flex flex-col gap-3">
           <DropdownMenuItem asChild>
             <Link
               href={`/${username}`}
@@ -40,6 +41,22 @@ export function UserDropdown({ setOpen }: UserProps) {
               <Typography>Profile</Typography>
             </Link>
           </DropdownMenuItem>
+          <div className="-mx-4">
+            <Separator />
+          </div>
+          <DropdownMenuItem asChild>
+            <Link
+              href={
+                '/channel/bafyreihuskbd64blgyd6lkx7es4boxljbdqp3w5s5d2sym5ovbergxjlna'
+              }
+              className="hover:underline underline-offset-2 transition-all"
+            >
+              <Typography>Feedback</Typography>
+            </Link>
+          </DropdownMenuItem>
+          <div className="-mx-4">
+            <Separator />
+          </div>
           <DropdownMenuItem>
             <Button variant="link" onClick={logout}>
               <Typography>Logout</Typography>
