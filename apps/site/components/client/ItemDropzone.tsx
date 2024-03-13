@@ -29,13 +29,10 @@ function hasAddAccess({
 }) {
   for (let i = 0; i < roleData.length; ++i) {
     const rid = roleData[i].rid
-    if ((rid === targetRid || rid === 0 )  && roleData[i].role > 0 ) return true
+    if ((rid === targetRid || rid === 0) && roleData[i].role > 0) return true
   }
   return false
 }
- 
-
-
 
 export function ItemDropzone({ channel }: { channel: Channel }) {
   const [isUploading, setIsUploading] = useState(false)
