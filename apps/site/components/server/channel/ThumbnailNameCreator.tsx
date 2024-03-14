@@ -10,11 +10,13 @@ interface ThumbnailNameCreatorProps {
   item: Item
   // biome-ignore lint:
   metadata: any
+  truncation?: number
 }
 
 export function ThumbnailNameCreator({
   item,
   metadata,
+  truncation = 35,
 }: ThumbnailNameCreatorProps) {
   if (!item) {
     return (
@@ -80,11 +82,11 @@ export function ThumbnailNameCreator({
       <Stack className="gap-y-[3px]">
         {/* This component is hidden on large screens */}
         <Typography className="hover:cursor-pointer md:hidden hover:underline text-primary-foreground leading-none whitespace-nowrap">
-          {truncateText(itemMetadata.name, 35, false)}
+          {truncateText(itemMetadata.name, truncation, false)}
         </Typography>
         {/* This component is hidden on small screens */}
         <Typography className="hover:cursor-pointer hidden md:block hover:underline text-primary-foreground leading-none whitespace-nowrap">
-          {truncateText(itemMetadata.name, 35, true)}
+          {truncateText(itemMetadata.name, truncation, true)}
         </Typography>
         <Username id={item.createdById} />
       </Stack>

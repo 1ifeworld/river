@@ -120,13 +120,14 @@ export default async function ItemPage({
     ))
 
   return (
-    <Stack className="h-[calc(100dvh-var(--header-height))] md:flex-row">
+    <Stack className="h-[calc(100dvh-var(--header-height))] md:flex-row ">
       <div className="bg-[#F3F4F6] w-full h-full md:w-[78%]">{content}</div>
       <Separator className="hidden md:block bg-border" orientation="vertical" />
-      <div className="md:w-[22%]">
+      <div className="md:overflow-y-auto md:w-[22%]">
         <ItemSidebar
           // @ts-ignore
           itemContext={itemToRender}
+          itemIndex={Number(params.index)}
           itemMetadata={itemMetadata}
           // @ts-ignore
           channel={channel}
