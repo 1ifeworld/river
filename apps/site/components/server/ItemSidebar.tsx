@@ -1,4 +1,4 @@
-import { IndexInfoToggle } from '@/client'
+import { AddToChannelDialog, IndexInfoToggle } from '@/client'
 import {
   Flex,
   Stack,
@@ -165,6 +165,11 @@ export function ItemSidebar({
           </Flex>
         </Stack>
       </Stack>
+
+      <Flex className="py-[30px]">
+        <AddToChannelDialog />
+      </Flex>
+
       {/* <Separator /> */}
       <Flex className="py-[30px]">
         <Typography>{`Index [${itemIndex}/${indexLength}]`}</Typography>

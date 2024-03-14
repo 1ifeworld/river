@@ -1042,6 +1042,13 @@ export type AllChannelsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type AllChannelsQuery = { __typename?: 'Query', channels?: { __typename?: 'ChannelPage', items?: Array<{ __typename?: 'Channel', id: string, timestamp: any, createdById: any, uri: string, name: string, description: string, roles?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> | null } | null }> | null } | null };
 
+export type AllChannelsWithRidQueryVariables = Exact<{
+  rid: Scalars['BigInt']['input'];
+}>;
+
+
+export type AllChannelsWithRidQuery = { __typename?: 'Query', channelRoless?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', channel: { __typename?: 'Channel', id: string, timestamp: any, createdById: any, uri: string, name: string, description: string, roles?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', rid: any, role: any }> | null } | null } }> | null } | null };
+
 export type AllItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1147,6 +1154,28 @@ export const AllChannelsDocument = gql`
           timestamp
           rid
           role
+        }
+      }
+    }
+  }
+}
+    `;
+export const AllChannelsWithRidDocument = gql`
+    query allChannelsWithRid($rid: BigInt!) {
+  channelRoless(where: {rid: $rid, role_gte: "1"}) {
+    items {
+      channel {
+        id
+        timestamp
+        createdById
+        uri
+        name
+        description
+        roles {
+          items {
+            rid
+            role
+          }
         }
       }
     }
@@ -1328,6 +1357,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     allChannels(variables?: AllChannelsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<AllChannelsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<AllChannelsQuery>(AllChannelsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'allChannels', 'query');
+    },
+    allChannelsWithRid(variables: AllChannelsWithRidQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<AllChannelsWithRidQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<AllChannelsWithRidQuery>(AllChannelsWithRidDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'allChannelsWithRid', 'query');
     },
     allItems(variables?: AllItemsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<AllItemsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<AllItemsQuery>(AllItemsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'allItems', 'query');

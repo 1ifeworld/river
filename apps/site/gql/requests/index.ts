@@ -1,5 +1,6 @@
 export * from './getAllAdds'
 export * from './getAllChannels'
+export * from './getAllChannelsWithRid'
 export * from './getAllItems'
 export * from './getAllUsers'
 export * from './getChannelsItemsWithUser'

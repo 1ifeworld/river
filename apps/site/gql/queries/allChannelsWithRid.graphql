@@ -1,0 +1,20 @@
+query allChannelsWithRid($rid: BigInt!) {
+  channelRoless(where: {rid: $rid, role_gte: "1"}) {
+    items {
+      channel {
+        id
+        timestamp
+        createdById
+        uri
+        name
+        description
+        roles(orderBy: "timestamp", orderDirection: "desc") {
+        items {
+            timestamp
+            rid
+            role
+        }
+      }
+    }
+  }
+}
