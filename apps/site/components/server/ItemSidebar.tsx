@@ -148,7 +148,7 @@ export function ItemSidebar({
             <Typography className="text-secondary-foreground">
               {itemMetadata?.contentType}
             </Typography>
-            {/* </Flex>
+            {/* </Flex> ayo
           <Flex className="justify-between">
             <Typography>Content</Typography>
             <Typography className="text-secondary-foreground truncate">
