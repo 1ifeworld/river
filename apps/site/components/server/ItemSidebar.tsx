@@ -118,7 +118,7 @@ export function ItemSidebar({
           </div>
           <Typography>{'--'}</Typography>
         </Stack>
-        <Stack className=" gap-y-[7px] md:pt-[45px]">
+        <Stack className=" gap-y-[7px] pt-5 md:pt-[45px]">
           <Flex className="justify-between">
             <Typography>Channel</Typography>
             <Flex className="items-center space-x-[6px]">
@@ -195,7 +195,7 @@ async function ItemIndex({ channel }: { channel: Channel }) {
   const { metadata } = await getAddsMetadata(channel?.adds?.items)
   return (
     // <div className="overflow-y-auto">
-    <div className="overflow-x-hidden">
+    <div className="md:overflow-x-hidden">
       {channel?.adds?.items?.map((add: Adds, index: number) =>
         add.removed ? null : (
           <Link href={`/channel/${add.channelId}/${totalItems - index}`}>
