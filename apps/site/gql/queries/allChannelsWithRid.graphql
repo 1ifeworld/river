@@ -8,11 +8,11 @@ query allChannelsWithRid($rid: BigInt!) {
         uri
         name
         description
-        roles(orderBy: "timestamp", orderDirection: "desc") {
-        items {
-            timestamp
+        roles {
+          items {
             rid
             role
+          }
         }
       }
     }

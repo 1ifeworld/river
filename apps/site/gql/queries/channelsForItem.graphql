@@ -7,7 +7,7 @@ query channelsForItem($id: String!) {
         id
         timestamp
         name
-        roles(orderBy: "") {
+        roles {
           items {
             rid
             role
