@@ -143,24 +143,43 @@ export function AddToChannelDialog({item}: AddToChannelDialogProps) {
 //     (role) => role.newRole || BigInt(0),
 //   ) // default to BigInt(0) if newRole is null)  
 
-function flipContainsItem(channelId: any) {
-    setRidChannels((prevChannels) =>
-        prevChannels.map((c) => {
-            if (c.channel.id === channelId) {
-                // Check if newContainsItem already exists
-                if (c.hasOwnProperty('newContainsItem')) {
-                    // Toggle the existing value of newContainsItem
-                    return { ...c, newContainsItem: !c.newContainsItem };
+    function flipContainsItem(channelId: any) {
+        setRidChannels((prevChannels) =>
+            prevChannels.map((c) => {
+                if (c.channel.id === channelId) {
+                    // Check if newContainsItem already exists
+                    if (c.hasOwnProperty('newContainsItem')) {
+                        // Toggle the existing value of newContainsItem
+                        return { ...c, newContainsItem: !c.newContainsItem };
+                    } else {
+                        // If newContainsItem doesn't exist, create it with the opposite value of containsItem
+                        console.log("flipping new contains item")
+                        return { ...c, newContainsItem: !c.containsItem };
+                    }
                 } else {
-                    // If newContainsItem doesn't exist, create it with the opposite value of containsItem
-                    return { ...c, newContainsItem: !c.containsItem };
+                    return c;
                 }
-            } else {
-                return c;
-            }
-        })
-    );
-}
+            })
+        );
+    }
+
+    // TODO: figure out state dif
+    // function getStateDiff(channels: any[]): any[] {
+    //     return channels.filter(
+    //       (channel) => channel.newContainsItem !== null && role.newRole !== role.startingRole,
+    //     )
+    //   }
+    
+    //   const rolesStateDif: Roles[] = getStateDiff(roles)
+    
+    //   const stateDifMembers: bigint[] = rolesStateDif.map((role) =>
+    //     BigInt(role.rid),
+    //   )
+    //   const stateDifRoleValues: bigint[] = rolesStateDif.map(
+    //     (role) => role.newRole || BigInt(0),
+    //   ) // default to BigInt(0) if newRole is null)    
+
+
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -204,9 +223,9 @@ function flipContainsItem(channelId: any) {
                   <Typography>{channel?.channel.name}</Typography>
                   <Checkbox 
                     checked={
-                        channel.newContainsItem 
+                        channel.newContainsItem
                             ? true 
-                            : channel.containsItem == true && channel.newContainsItem == false 
+                            : channel.containsItem && (!channel.hasOwnProperty('newContainsItem') || channel.newContainsItem)
                                 ? true 
                                 : false
                     } 
