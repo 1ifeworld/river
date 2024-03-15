@@ -11,8 +11,8 @@ import {
 import { type Hash, type Hex, encodeAbiParameters } from 'viem'
 
 type Diff = {
-    channelId: string
-    action: number
+  channelId: string
+  action: number
 }
 
 export async function processBatchMoveItemPost({
@@ -34,71 +34,71 @@ export async function processBatchMoveItemPost({
   // generic values
   const timestamp = getExpiration()
   // initialize empty Post array
-  let posts: Post[] = []
+  const posts: Post[] = []
   //
   for (let i = 0; i < diffs.length; ++i) {
     if (diffs[i].action == 1) {
-        // add item to channel
-        const addItemMsgType: number = 5
-        const addItemMsgBody = encodeAddItemMsgBody({
-          itemCid: itemId,
-          channelCid: diffs[i].channelId,
-        })
-        if (!addItemMsgBody?.msgBody) return false
-        const addItemMessageHash = generateMessageHash({
+      // add item to channel
+      const addItemMsgType: number = 5
+      const addItemMsgBody = encodeAddItemMsgBody({
+        itemCid: itemId,
+        channelCid: diffs[i].channelId,
+      })
+      if (!addItemMsgBody?.msgBody) return false
+      const addItemMessageHash = generateMessageHash({
+        rid: BigInt(rid),
+        timestamp: BigInt(timestamp),
+        msgType: addItemMsgType as number,
+        msgBody: addItemMsgBody.msgBody,
+      })
+      const addItemMsgHashForSig = remove0xPrefix({
+        bytes32Hash: addItemMessageHash,
+      })
+      const addItemSig = (await privySignMessage(addItemMsgHashForSig)) as Hash
+      posts.push({
+        signer: signer,
+        message: {
           rid: BigInt(rid),
           timestamp: BigInt(timestamp),
           msgType: addItemMsgType as number,
           msgBody: addItemMsgBody.msgBody,
-        })
-        const addItemMsgHashForSig = remove0xPrefix({
-          bytes32Hash: addItemMessageHash,
-        })
-        const addItemSig = (await privySignMessage(addItemMsgHashForSig)) as Hash
-        posts.push({
-            signer: signer,
-            message: {
-              rid: BigInt(rid),
-              timestamp: BigInt(timestamp),
-              msgType: addItemMsgType as number,
-              msgBody: addItemMsgBody.msgBody,
-            },
-            hashType: 1 as number,
-            hash: addItemMessageHash,
-            sigType: 1 as number,
-            sig: addItemSig,
-        })
+        },
+        hashType: 1 as number,
+        hash: addItemMessageHash,
+        sigType: 1 as number,
+        sig: addItemSig,
+      })
     } else {
-        // remove item from channel
-        const msgType = 6 as number
-        const msgBody = encodeRemoveItemMsgBody({
-          itemCid: itemId,
-          channelCid: diffs[i].channelId,
-        })
-        if (!msgBody?.msgBody) return false
-        // generate hash to include in post
-        const messageHash = generateMessageHash({
+      // remove item from channel
+      const msgType = 6 as number
+      const msgBody = encodeRemoveItemMsgBody({
+        itemCid: itemId,
+        channelCid: diffs[i].channelId,
+      })
+      if (!msgBody?.msgBody) return false
+      // generate hash to include in post
+      const messageHash = generateMessageHash({
+        rid: BigInt(rid),
+        timestamp: BigInt(timestamp),
+        msgType: msgType as number,
+        msgBody: msgBody.msgBody,
+      })
+      const msgHashForSig = remove0xPrefix({ bytes32Hash: messageHash })
+      const sig = (await privySignMessage(msgHashForSig)) as Hash
+
+      posts.push({
+        signer: signer,
+        message: {
           rid: BigInt(rid),
           timestamp: BigInt(timestamp),
           msgType: msgType as number,
           msgBody: msgBody.msgBody,
-        })
-        const msgHashForSig = remove0xPrefix({ bytes32Hash: messageHash })
-        const sig = (await privySignMessage(msgHashForSig)) as Hash
-      
-        posts.push({
-          signer: signer,
-          message: {
-            rid: BigInt(rid),
-            timestamp: BigInt(timestamp),
-            msgType: msgType as number,
-            msgBody: msgBody.msgBody,
-          },
-          hashType: 1 as number,
-          hash: messageHash,
-          sigType: 1 as number,
-          sig: sig,
-        })       
+        },
+        hashType: 1 as number,
+        hash: messageHash,
+        sigType: 1 as number,
+        sig: sig,
+      })
     }
   }
 

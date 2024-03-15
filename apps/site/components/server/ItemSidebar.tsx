@@ -5,7 +5,7 @@ import {
   Typography,
   Public,
   Button,
-  Separator,  
+  Separator,
 } from '@/design-system'
 import type { Adds, Channel, ChannelRoles } from '@/gql'
 import { getAddsMetadata, ipfsUrlToCid } from '@/lib'

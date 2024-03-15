@@ -29,10 +29,16 @@ import {
   type NewChannelSchemaValues,
   newChannelSchema,
   processCreateChannelPost,
+  processBatchMoveItemPost,
   sendToDb,
   w3sUpload,
 } from '@/lib'
-import { getAllChannelsWithRid, type Channel, type Item, getChannelsForItem } from '@/gql'
+import {
+  getAllChannelsWithRid,
+  type Channel,
+  type Item,
+  getChannelsForItem,
+} from '@/gql'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { revalidatePath } from 'next/cache'
 import * as React from 'react'
@@ -42,10 +48,10 @@ import type { Hex } from 'viem'
 import { usePrivy } from '@privy-io/react-auth'
 
 type AddToChannelDialogProps = {
-    item: Item
+  item: Item
 }
 
-export function AddToChannelDialog({item}: AddToChannelDialogProps) {
+export function AddToChannelDialog({ item }: AddToChannelDialogProps) {
   const [dialogOpen, setDialogOpen] = React.useState(false)
   const [isSubmitting, setIsSubmitting] = React.useState(false)
   const { login, authenticated } = usePrivy()
@@ -57,11 +63,11 @@ export function AddToChannelDialog({item}: AddToChannelDialogProps) {
   const [ridChannels, setRidChannels] = React.useState<any[]>([])
 
   console.log('rid channels: ', ridChannels)
-//   console.log('a name: ', ridChannels?.[0]?.channel?.name)
+  //   console.log('a name: ', ridChannels?.[0]?.channel?.name)
 
-//   interface ChannelWithTag extends Channel {
-//     containsItem: boolean
-//   }
+  //   interface ChannelWithTag extends Channel {
+  //     containsItem: boolean
+  //   }
 
   React.useEffect(() => {
     const fetchRidChannels = async () => {
@@ -71,27 +77,30 @@ export function AddToChannelDialog({item}: AddToChannelDialogProps) {
         })
         // TODO: add once fix codegen
         const { channels: channelsForItem } = await getChannelsForItem({
-            id: item.id
+          id: item.id,
         })
 
         // console.log("channels: ", channels)
 
-
         if (!channels?.items) return
 
         const channelsWithTag = channels?.items.map((channel) => {
-            const contains = channelsForItem?.items?.some(c => channel.channel.id == c.channel.id)
-            console.log(`${channel.channel.name} contains item: `, contains)
+          const contains = channelsForItem?.items?.some(
+            (c) => channel.channel.id == c.channel.id,
+          )
+          console.log(`${channel.channel.name} contains item: `, contains)
 
-            return {
-                channel: channel.channel,
-                // TODO: add once fix codegen
-                containsItem: channelsForItem?.items?.some(c => channel.channel.id == c.channel.id)
-                // containsItem: false
-            };
-        });
+          return {
+            channel: channel.channel,
+            // TODO: add once fix codegen
+            containsItem: channelsForItem?.items?.some(
+              (c) => channel.channel.id === c.channel.id,
+            ),
+            // containsItem: false
+          }
+        })
 
-        console.log("Channels with Tag: ", channelsWithTag)
+        console.log('Channels with Tag: ', channelsWithTag)
 
         if (channels?.items) {
           setRidChannels(channelsWithTag)
@@ -112,41 +121,45 @@ export function AddToChannelDialog({item}: AddToChannelDialogProps) {
     }
   }, [targetUserId])
 
-
-    function flipContainsItem(channelId: any) {
-        setRidChannels((prevChannels) =>
-            prevChannels.map((c) => {
-                if (c.channel.id === channelId) {
-                    // Check if newContainsItem already exists
-                    if (c.hasOwnProperty('newContainsItem')) {
-                        // Toggle the existing value of newContainsItem
-                        return { ...c, newContainsItem: !c.newContainsItem };
-                    } else {
-                        // If newContainsItem doesn't exist, create it with the opposite value of containsItem
-                        console.log("flipping new contains item")
-                        return { ...c, newContainsItem: !c.containsItem };
-                    }
-                } else {
-                    return c;
-                }
-            })
-        );
-    }
-
-    function getStateDiff(channels: any[]): any[] {
-        return channels.filter((channel) => {
-        if (channel.hasOwnProperty('newContainsItem') && channel.newContainsItem !== channel.containsItem) {
-            return true; // include the channel in the result array
+  function flipContainsItem(channelId: any) {
+    setRidChannels((prevChannels) =>
+      prevChannels.map((c) => {
+        if (c.channel.id === channelId) {
+          // Check if newContainsItem already exists
+          if (c.hasOwnProperty('newContainsItem')) {
+            // Toggle the existing value of newContainsItem
+            return { ...c, newContainsItem: !c.newContainsItem }
+          } else {
+            // If newContainsItem doesn't exist, create it with the opposite value of containsItem
+            console.log('flipping new contains item')
+            return { ...c, newContainsItem: !c.containsItem }
+          }
+        } else {
+          return c
         }
-        return false; // exclude the channel from the result array   
-        }).map((channel) => ({
+      }),
+    )
+  }
+
+  function getStateDiff(channels: any[]): any[] {
+    return channels
+      .filter((channel) => {
+        if (
+          channel.hasOwnProperty('newContainsItem') &&
+          channel.newContainsItem !== channel.containsItem
+        ) {
+          return true // include the channel in the result array
+        }
+        return false // exclude the channel from the result array
+      })
+      .map((channel) => ({
         channelId: channel.channel.id,
-        diff: channel.newContainsItem ? 1 : 0 // 1 == add, 0 = remove
-        }));
-    }
+        action: channel.newContainsItem ? 1 : 0, // 1 == add, 0 = remove
+      }))
+  }
 
   const channelsStateDif: any[] = getStateDiff(ridChannels)
-  console.log("channels state dif: ", channelsStateDif)
+  console.log('channels state dif: ', channelsStateDif)
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -188,15 +201,19 @@ export function AddToChannelDialog({item}: AddToChannelDialogProps) {
                     */
                 <Flex className="w-full border-2 justify-between items-center">
                   <Typography>{channel?.channel.name}</Typography>
-                  <Checkbox 
+                  <Checkbox
                     checked={
-                        channel.newContainsItem
-                            ? true 
-                            : channel.containsItem && (!channel.hasOwnProperty('newContainsItem') || channel.newContainsItem)
-                                ? true 
-                                : false
-                    } 
-                    onClick={() => flipContainsItem(channel.channel.id)} className='mr-2' />
+                      channel.newContainsItem
+                        ? true
+                        : channel.containsItem &&
+                            (!channel.hasOwnProperty('newContainsItem') ||
+                              channel.newContainsItem)
+                          ? true
+                          : false
+                    }
+                    onClick={() => flipContainsItem(channel.channel.id)}
+                    className="mr-2"
+                  />
                 </Flex>
               ))}
             </Stack>
@@ -206,35 +223,32 @@ export function AddToChannelDialog({item}: AddToChannelDialogProps) {
                 variant="link"
                 // TODO: replace onclick with a processAddItemToChannels call
                 //       that adds target item to as many channels as desired
-                //
-                // onClick={async () => {
-                //   if (!embeddedWallet?.address || !userId) return false
-                //   setIsConfiguring(true)
-                //   // Initialize bool for txn success check
-                //   let txSuccess = false
-                //   // Generate process roles post
-                //   if (signMessage) {
-                //     txSuccess = await processEditRolesPost({
-                //       rid: userId,
-                //       signer: embeddedWallet.address as Hex,
-                //       privySignMessage: signMessage,
-                //       channelCid: channel.id,
-                //       targetRids: [BigInt(0)], // USER_ID_ZERO
-                //       roles: [BigInt(1)], // MEMBER
-                //     })
-                //     if (txSuccess) {
-                //       toast.custom((t) => (
-                //         <Toast>{'Your channel is now public'}</Toast>
-                //       ))
-                //       setIsConfiguring(false)
-                //     } else {
-                //       toast.custom((t) => (
-                //         <Toast>{'Error making channel public'}</Toast>
-                //       ))
-                //       setIsConfiguring(false)
-                //     }
-                //   }
-                // }}
+                disabled={channelsStateDif.length == 0 ? true : false}
+                onClick={async () => {
+                  if (!embeddedWallet?.address || !targetUserId) return false
+                  setIsSubmitting(true)
+                  // Initialize bool for txn success check
+                  let txSuccess = false
+                  // Generate process roles post
+                  if (signMessage) {
+                    txSuccess = await processBatchMoveItemPost({
+                      rid: targetUserId,
+                      signer: embeddedWallet.address as Hex,
+                      privySignMessage: signMessage,
+                      itemId: item.id,
+                      diffs: channelsStateDif,
+                    })
+                    if (txSuccess) {
+                      toast.custom((t) => (
+                        <Toast>{'Items moved successfully'}</Toast>
+                      ))
+                      setIsSubmitting(false)
+                    } else {
+                      toast.custom((t) => <Toast>{'Error moving items'}</Toast>)
+                      setIsSubmitting(false)
+                    }
+                  }
+                }}
               >
                 <Typography>Save</Typography>
               </Button>
