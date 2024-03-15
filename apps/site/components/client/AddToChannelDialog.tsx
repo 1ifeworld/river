@@ -112,36 +112,6 @@ export function AddToChannelDialog({item}: AddToChannelDialogProps) {
     }
   }, [targetUserId])
 
-  //   const form = useForm<NewChannelSchemaValues>({
-  //     resolver: zodResolver(newChannelSchema),
-  //     defaultValues: {
-  //       name: '',
-  //       description: '',
-  //     },
-  //   })
-
-//   type Roles = {
-//     rid: bigint
-//     username: string
-//     startingRole: bigint
-//     newRole: bigint | null
-//   }
-//   const [roles, setRoles] = useState<Roles[]>([])
-
-//   function getStateDiff(roles: Roles[]): Roles[] {
-//     return roles.filter(
-//       (role) => role.newRole !== null && role.newRole !== role.startingRole,
-//     )
-//   }
-
-//   const rolesStateDif: Roles[] = getStateDiff(roles)
-
-//   const stateDifMembers: bigint[] = rolesStateDif.map((role) =>
-//     BigInt(role.rid),
-//   )
-//   const stateDifRoleValues: bigint[] = rolesStateDif.map(
-//     (role) => role.newRole || BigInt(0),
-//   ) // default to BigInt(0) if newRole is null)  
 
     function flipContainsItem(channelId: any) {
         setRidChannels((prevChannels) =>
@@ -163,23 +133,20 @@ export function AddToChannelDialog({item}: AddToChannelDialogProps) {
         );
     }
 
-    // TODO: figure out state dif
-    // function getStateDiff(channels: any[]): any[] {
-    //     return channels.filter(
-    //       (channel) => channel.newContainsItem !== null && role.newRole !== role.startingRole,
-    //     )
-    //   }
-    
-    //   const rolesStateDif: Roles[] = getStateDiff(roles)
-    
-    //   const stateDifMembers: bigint[] = rolesStateDif.map((role) =>
-    //     BigInt(role.rid),
-    //   )
-    //   const stateDifRoleValues: bigint[] = rolesStateDif.map(
-    //     (role) => role.newRole || BigInt(0),
-    //   ) // default to BigInt(0) if newRole is null)    
+    function getStateDiff(channels: any[]): any[] {
+        return channels.filter((channel) => {
+        if (channel.hasOwnProperty('newContainsItem') && channel.newContainsItem !== channel.containsItem) {
+            return true; // include the channel in the result array
+        }
+        return false; // exclude the channel from the result array   
+        }).map((channel) => ({
+        channelId: channel.channel.id,
+        diff: channel.newContainsItem ? 1 : 0 // 1 == add, 0 = remove
+        }));
+    }
 
-
+  const channelsStateDif: any[] = getStateDiff(ridChannels)
+  console.log("channels state dif: ", channelsStateDif)
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -271,15 +238,6 @@ export function AddToChannelDialog({item}: AddToChannelDialogProps) {
               >
                 <Typography>Save</Typography>
               </Button>
-
-              {/* <Button
-                form="newChannel"
-                type="submit"
-                variant="link"
-                disabled={!targetUserId || isSubmitting}
-                >
-                {isSubmitting ? <Loading /> : 'Create'}
-                </Button> */}
             </DialogFooter>
           </Stack>
         </DialogContent>
