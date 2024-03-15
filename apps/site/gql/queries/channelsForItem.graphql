@@ -1,0 +1,19 @@
+query channelsForItem($id: String!) {
+  addss(
+    where: {itemId: $id}
+  ) {
+    items {
+      channel {
+        id
+        timestamp
+        name
+        roles(orderBy: "") {
+          items {
+            rid
+            role
+          }
+        }
+      }
+    }
+  }
+}

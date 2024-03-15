@@ -1,6 +1,7 @@
 import { useUserContext } from '@/context'
 import {
   Button,
+  Checkbox,
   Dialog,
   DialogClose,
   DialogContent,
@@ -31,7 +32,7 @@ import {
   sendToDb,
   w3sUpload,
 } from '@/lib'
-import { getAllChannelsWithRid, type Channel } from '@/gql'
+import { getAllChannelsWithRid, type Channel, type Item } from '@/gql'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { revalidatePath } from 'next/cache'
 import * as React from 'react'
@@ -40,9 +41,11 @@ import { toast } from 'sonner'
 import type { Hex } from 'viem'
 import { usePrivy } from '@privy-io/react-auth'
 
-type AddToChannelDialogProps = {}
+type AddToChannelDialogProps = {
+    item: Item
+}
 
-export function AddToChannelDialog({}: AddToChannelDialogProps) {
+export function AddToChannelDialog({item}: AddToChannelDialogProps) {
   const [dialogOpen, setDialogOpen] = React.useState(false)
   const [isSubmitting, setIsSubmitting] = React.useState(false)
   const { login, authenticated } = usePrivy()
@@ -129,8 +132,9 @@ export function AddToChannelDialog({}: AddToChannelDialogProps) {
                         wraps an updated channel card, with a button that lets u
                         update state of the channels we want to add item to
                     */
-                <Flex className="w-full">
+                <Flex className="w-full border-2 justify-between items-center">
                   <Typography>{channel?.channel.name}</Typography>
+                  <Checkbox  className='mr-2' />
                 </Flex>
               ))}
             </Stack>
