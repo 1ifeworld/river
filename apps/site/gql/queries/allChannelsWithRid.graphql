@@ -14,6 +14,15 @@ query allChannelsWithRid($rid: BigInt!) {
             role
           }
         }
+        adds(orderBy: "timestamp", orderDirection: "desc") {
+          items {
+            timestamp
+            removed
+            item {
+              uri
+            }
+          }
+        }
       }
     }
   }

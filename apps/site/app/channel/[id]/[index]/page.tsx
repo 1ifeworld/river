@@ -132,6 +132,7 @@ export default async function ItemPage({
           // @ts-ignore
           channel={channel}
           view={searchParams.view}
+          rid={searchParams.rid}
         />
       </div>
     </Stack>

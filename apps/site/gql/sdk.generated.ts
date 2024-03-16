@@ -1047,7 +1047,7 @@ export type AllChannelsWithRidQueryVariables = Exact<{
 }>;
 
 
-export type AllChannelsWithRidQuery = { __typename?: 'Query', channelRoless?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', channel: { __typename?: 'Channel', id: string, timestamp: any, createdById: any, uri: string, name: string, description: string, roles?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', rid: any, role: any }> | null } | null } }> | null } | null };
+export type AllChannelsWithRidQuery = { __typename?: 'Query', channelRoless?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', channel: { __typename?: 'Channel', id: string, timestamp: any, createdById: any, uri: string, name: string, description: string, roles?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', rid: any, role: any }> | null } | null, adds?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', timestamp: any, removed?: boolean | null, item: { __typename?: 'Item', uri: string } }> | null } | null } }> | null } | null };
 
 export type AllItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1182,6 +1182,15 @@ export const AllChannelsWithRidDocument = gql`
           items {
             rid
             role
+          }
+        }
+        adds(orderBy: "timestamp", orderDirection: "desc") {
+          items {
+            timestamp
+            removed
+            item {
+              uri
+            }
           }
         }
       }

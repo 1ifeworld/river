@@ -46,12 +46,32 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { Hex } from 'viem'
 import { usePrivy } from '@privy-io/react-auth'
+import { AddToChannelFetcher } from '@/server'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 
 type AddToChannelDialogProps = {
   item: Item
+  dialogContent: React.ReactNode
 }
 
-export function AddToChannelDialog({ item }: AddToChannelDialogProps) {
+export function AddToChannelDialog({
+  item,
+  dialogContent,
+}: AddToChannelDialogProps) {
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+
+  const createQueryString = React.useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString())
+      params.set(name, value)
+
+      return params.toString()
+    },
+    [searchParams],
+  )
+
   const [dialogOpen, setDialogOpen] = React.useState(false)
   const [isSubmitting, setIsSubmitting] = React.useState(false)
   const { login, authenticated } = usePrivy()
@@ -69,57 +89,57 @@ export function AddToChannelDialog({ item }: AddToChannelDialogProps) {
   //     containsItem: boolean
   //   }
 
-  React.useEffect(() => {
-    const fetchRidChannels = async () => {
-      try {
-        const { channels } = await getAllChannelsWithRid({
-          userId: targetUserId as bigint,
-        })
-        // TODO: add once fix codegen
-        const { channels: channelsForItem } = await getChannelsForItem({
-          id: item.id,
-        })
+  // React.useEffect(() => {
+  //   const fetchRidChannels = async () => {
+  //     try {
+  //       const { channels } = await getAllChannelsWithRid({
+  //         userId: targetUserId as bigint,
+  //       })
+  //       // TODO: add once fix codegen
+  //       const { channels: channelsForItem } = await getChannelsForItem({
+  //         id: item.id,
+  //       })
 
-        // console.log("channels: ", channels)
+  //       // console.log("channels: ", channels)
 
-        if (!channels?.items) return
+  //       if (!channels?.items) return
 
-        const channelsWithTag = channels?.items.map((channel) => {
-          const contains = channelsForItem?.items?.some(
-            (c) => channel.channel.id == c.channel.id,
-          )
-          console.log(`${channel.channel.name} contains item: `, contains)
+  //       const channelsWithTag = channels?.items.map((channel) => {
+  //         const contains = channelsForItem?.items?.some(
+  //           (c) => channel.channel.id == c.channel.id,
+  //         )
+  //         console.log(`${channel.channel.name} contains item: `, contains)
 
-          return {
-            channel: channel.channel,
-            // TODO: add once fix codegen
-            containsItem: channelsForItem?.items?.some(
-              (c) => channel.channel.id === c.channel.id,
-            ),
-            // containsItem: false
-          }
-        })
+  //         return {
+  //           channel: channel.channel,
+  //           // TODO: add once fix codegen
+  //           containsItem: channelsForItem?.items?.some(
+  //             (c) => channel.channel.id === c.channel.id,
+  //           ),
+  //           // containsItem: false
+  //         }
+  //       })
 
-        console.log('Channels with Tag: ', channelsWithTag)
+  //       console.log('Channels with Tag: ', channelsWithTag)
 
-        if (channels?.items) {
-          setRidChannels(channelsWithTag)
-        }
+  //       if (channels?.items) {
+  //         setRidChannels(channelsWithTag)
+  //       }
 
-        // TODO: add in any relevant sorting
-        // // Sort the startingRoles array based on startingRole in descending order
-        // startingRoles.sort(
-        //   (a, b) => Number(a.startingRole) - Number(b.startingRole),
-        // )
-      } catch (error) {
-        console.error('Error setting channels:', error)
-      }
-    }
+  //       // TODO: add in any relevant sorting
+  //       // // Sort the startingRoles array based on startingRole in descending order
+  //       // startingRoles.sort(
+  //       //   (a, b) => Number(a.startingRole) - Number(b.startingRole),
+  //       // )
+  //     } catch (error) {
+  //       console.error('Error setting channels:', error)
+  //     }
+  //   }
 
-    if (targetUserId) {
-      fetchRidChannels()
-    }
-  }, [targetUserId])
+  //   if (targetUserId) {
+  //     fetchRidChannels()
+  //   }
+  // }, [targetUserId])
 
   function flipContainsItem(channelId: any) {
     setRidChannels((prevChannels) =>
@@ -170,6 +190,16 @@ export function AddToChannelDialog({ item }: AddToChannelDialogProps) {
       ) : (
         <DialogTrigger asChild>
           <Button
+            onClick={() => {
+              if (typeof targetUserId !== 'undefined') {
+                router.push(
+                  `${pathname}?${createQueryString(
+                    'rid',
+                    targetUserId.toString(),
+                  )}`,
+                )
+              }
+            }}
             variant="outline"
             className="rounded-[0px] shadow-none w-full hover:bg-transparent hover:border-secondary-foreground focus:border-secondary-foreground"
           >
@@ -192,6 +222,7 @@ export function AddToChannelDialog({ item }: AddToChannelDialogProps) {
             </DialogHeader>
             <Separator />
             <Stack className="px-5 w-full max-h-[500px] overflow-y-auto">
+              {dialogContent}
               {ridChannels?.map((channel, index) => (
                 /* 
                         TODO

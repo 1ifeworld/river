@@ -2,6 +2,7 @@
 export * from './channel'
 
 // Individual components
+export * from './AddToChannelFetcher'
 export * from './ChannelCard'
 export * from './Footer'
 export * from './ItemCard'

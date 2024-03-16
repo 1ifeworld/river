@@ -9,7 +9,7 @@ import {
 } from '@/design-system'
 import type { Adds, Channel, ChannelRoles } from '@/gql'
 import { getAddsMetadata, ipfsUrlToCid } from '@/lib'
-import { ThumbnailNameCreator, Username } from '@/server'
+import { ThumbnailNameCreator, Username, AddToChannelFetcher } from '@/server'
 import { unixTimeConverter } from '@/utils'
 import Link from 'next/link'
 import { USER_ID_ZERO } from '@/constants'
@@ -26,6 +26,7 @@ interface ItemSidebarProps {
   } | null
   channel: Channel
   view?: string | string[]
+  rid?: string | string[]
 }
 
 export function ItemSidebar({
@@ -34,6 +35,7 @@ export function ItemSidebar({
   itemMetadata,
   channel,
   view,
+  rid,
 }: ItemSidebarProps) {
   function checkIsPublic({ roleData }: { roleData: ChannelRoles[] }) {
     for (let i = 0; i < roleData.length; ++i) {
@@ -167,7 +169,14 @@ export function ItemSidebar({
       </Stack>
 
       <Flex className="py-[30px]">
-        <AddToChannelDialog item={itemContext.item} />
+        <AddToChannelDialog
+          item={itemContext.item}
+          dialogContent={
+            <AddToChannelFetcher
+              userId={BigInt(typeof rid === 'string' ? rid : rid?.[0] ?? '0')}
+            />
+          }
+        />
       </Flex>
 
       {/* <Separator /> */}
