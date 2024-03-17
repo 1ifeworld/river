@@ -5,6 +5,7 @@ export * from './renderers'
 
 // Individual components
 export * from './AddMembersForm'
+export * from './ChannelCard2'
 export * from './ChannelDialog'
 export * from './AddToChannelDialog'
 export * from './ChannelMembersPopover'

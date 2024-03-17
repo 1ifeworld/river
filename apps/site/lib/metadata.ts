@@ -1,12 +1,14 @@
 import type { Adds, Channel } from '@/gql'
 
-export interface ChannelMetadata {
-  name: string
-  description: string
-  image?: string
-  animationUri?: string
-  contentType: string
-}
+// export interface ChannelMetadata {
+//   name: string
+//   description: string
+//   image?: string
+//   animationUri?: string
+//   contentType: string
+// }
+
+
 
 export async function getChannelMetadata(channels: Channel[]) {
   // extract URIs from the channels array

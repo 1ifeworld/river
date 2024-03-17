@@ -32,11 +32,14 @@ import {
   processBatchMoveItemPost,
   sendToDb,
   w3sUpload,
+  getChannelMetadata,
+  getAddsMetadata
 } from '@/lib'
 import {
   getAllChannelsWithRid,
   type Channel,
   type Item,
+  type Adds,
   getChannelsForItem,
 } from '@/gql'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -46,6 +49,9 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { Hex } from 'viem'
 import { usePrivy } from '@privy-io/react-auth'
+import { ChannelCard2 } from '@/client'
+import { kv, createClient } from '@vercel/kv'
+import { type MediaAssetObject } from '@/lib'
 
 type AddToChannelDialogProps = {
   item: Item
@@ -58,8 +64,6 @@ export function AddToChannelDialog({ item }: AddToChannelDialogProps) {
 
   const { signMessage, userId: targetUserId, embeddedWallet } = useUserContext()
 
-  //   const [roles, setRoles] = useState<Roles[]>([])
-  //   const [ridChannels, setRidChannels] = React.useState<{ name: string; id: string; }[] | undefined>([])
   const [ridChannels, setRidChannels] = React.useState<any[]>([])
 
   console.log('rid channels: ', ridChannels)
@@ -80,30 +84,44 @@ export function AddToChannelDialog({ item }: AddToChannelDialogProps) {
           id: item.id,
         })
 
-        // console.log("channels: ", channels)
+        if (!channels?.items) return
+
+        const allAdds = channels?.items.map((channel, index) => {
+            const last4 = (channel.channel.adds?.items ?? [])
+            .filter((item) => !item.removed)
+            .slice(0, 4)                 
+            return last4
+        })     
+        const allAddsFlat = allAdds.flat()
+        // @ts-ignore
+        const allAddsMetadata = await getAddsMetadata(allAddsFlat)
+
+        const processedAdds = allAdds.map((addArray, index) => {
+            return addArray.map((add) => {
+                return {
+                    add: add,
+                    itemMetadata: allAddsMetadata.metadata.data[add.item.uri]
+                }
+            }) 
+        })
+
+        console.log("processed adds: ", processedAdds)
 
         if (!channels?.items) return
 
-        const channelsWithTag = channels?.items.map((channel) => {
-          const contains = channelsForItem?.items?.some(
-            (c) => channel.channel.id == c.channel.id,
-          )
-          console.log(`${channel.channel.name} contains item: `, contains)
+        const processedChannels = channels?.items.map((channel, index) => {
 
           return {
             channel: channel.channel,
-            // TODO: add once fix codegen
+            channelItemMetadata: processedAdds[index],
             containsItem: channelsForItem?.items?.some(
               (c) => channel.channel.id === c.channel.id,
             ),
-            // containsItem: false
           }
         })
 
-        console.log('Channels with Tag: ', channelsWithTag)
-
         if (channels?.items) {
-          setRidChannels(channelsWithTag)
+          setRidChannels(processedChannels)
         }
 
         // TODO: add in any relevant sorting
@@ -191,7 +209,7 @@ export function AddToChannelDialog({ item }: AddToChannelDialogProps) {
               </DialogClose>
             </DialogHeader>
             <Separator />
-            <Stack className="px-5 w-full max-h-[500px] overflow-y-auto">
+            <Stack className="px-5 w-full max-h-[500px] overflow-y-auto space-y-[10px]">
               {ridChannels?.map((channel, index) => (
                 /* 
                         TODO
@@ -199,8 +217,13 @@ export function AddToChannelDialog({ item }: AddToChannelDialogProps) {
                         wraps an updated channel card, with a button that lets u
                         update state of the channels we want to add item to
                     */
-                <Flex className="w-full border-2 justify-between items-center">
-                  <Typography>{channel?.channel.name}</Typography>
+                <Flex className="w-full justify-between items-center">
+                  {/* <Typography>{channel?.channel.name}</Typography> */}
+                  {/* <Typography>{"yo"}</Typography> */}
+                    {/* @ts-ignore */}
+                  {/* <ChannelCard channel={channel?.channel} /> */}
+                  <ChannelCard2 key={index} channel={channel?.channel} metadata={channel?.channelItemMetadata} imageBoxWidth={65} />
+
                   <Checkbox
                     checked={
                       channel.newContainsItem
@@ -212,7 +235,7 @@ export function AddToChannelDialog({ item }: AddToChannelDialogProps) {
                           : false
                     }
                     onClick={() => flipContainsItem(channel.channel.id)}
-                    className="mr-2"
+                    className="mr-2 rounded-none border-[#858585] data-[state=checked]:bg-[#858585] shadow-none"
                   />
                 </Flex>
               ))}
@@ -223,7 +246,7 @@ export function AddToChannelDialog({ item }: AddToChannelDialogProps) {
                 variant="link"
                 // TODO: replace onclick with a processAddItemToChannels call
                 //       that adds target item to as many channels as desired
-                disabled={channelsStateDif.length == 0 ? true : false}
+                disabled={channelsStateDif.length === 0 || isSubmitting}
                 onClick={async () => {
                   if (!embeddedWallet?.address || !targetUserId) return false
                   setIsSubmitting(true)
@@ -250,7 +273,8 @@ export function AddToChannelDialog({ item }: AddToChannelDialogProps) {
                   }
                 }}
               >
-                <Typography>Save</Typography>
+                <Typography>{isSubmitting ? <Loading /> : 'Save'}</Typography>
+                
               </Button>
             </DialogFooter>
           </Stack>

@@ -6,6 +6,7 @@ query channelsForItem($id: String!) {
       channel {
         id
         timestamp
+        uri
         name
         roles {
           items {
@@ -13,6 +14,21 @@ query channelsForItem($id: String!) {
             role
           }
         }
+        adds(orderBy: "timestamp", orderDirection: "desc") {
+          items {
+            timestamp
+            channelId
+            itemId
+            addedById
+            removed
+            item {
+              id
+              uri
+              timestamp
+              createdById
+            }
+          }
+        }        
       }
     }
   }
