@@ -33,7 +33,7 @@ import {
   sendToDb,
   w3sUpload,
   getChannelMetadata,
-  getAddsMetadata
+  getAddsMetadata,
 } from '@/lib'
 import {
   getAllChannelsWithRid,
@@ -87,30 +87,29 @@ export function AddToChannelDialog({ item }: AddToChannelDialogProps) {
         if (!channels?.items) return
 
         const allAdds = channels?.items.map((channel, index) => {
-            const last4 = (channel.channel.adds?.items ?? [])
+          const last4 = (channel.channel.adds?.items ?? [])
             .filter((item) => !item.removed)
-            .slice(0, 4)                 
-            return last4
-        })     
+            .slice(0, 4)
+          return last4
+        })
         const allAddsFlat = allAdds.flat()
         // @ts-ignore
         const allAddsMetadata = await getAddsMetadata(allAddsFlat)
 
         const processedAdds = allAdds.map((addArray, index) => {
-            return addArray.map((add) => {
-                return {
-                    add: add,
-                    itemMetadata: allAddsMetadata.metadata.data[add.item.uri]
-                }
-            }) 
+          return addArray.map((add) => {
+            return {
+              add: add,
+              itemMetadata: allAddsMetadata.metadata.data[add.item.uri],
+            }
+          })
         })
 
-        console.log("processed adds: ", processedAdds)
+        console.log('processed adds: ', processedAdds)
 
         if (!channels?.items) return
 
         const processedChannels = channels?.items.map((channel, index) => {
-
           return {
             channel: channel.channel,
             channelItemMetadata: processedAdds[index],
@@ -220,9 +219,14 @@ export function AddToChannelDialog({ item }: AddToChannelDialogProps) {
                 <Flex className="w-full justify-between items-center">
                   {/* <Typography>{channel?.channel.name}</Typography> */}
                   {/* <Typography>{"yo"}</Typography> */}
-                    {/* @ts-ignore */}
+                  {/* @ts-ignore */}
                   {/* <ChannelCard channel={channel?.channel} /> */}
-                  <ChannelCard2 key={index} channel={channel?.channel} metadata={channel?.channelItemMetadata} imageBoxWidth={65} />
+                  <ChannelCard2
+                    key={index}
+                    channel={channel?.channel}
+                    metadata={channel?.channelItemMetadata}
+                    imageBoxWidth={64}
+                  />
 
                   <Checkbox
                     checked={
@@ -274,7 +278,6 @@ export function AddToChannelDialog({ item }: AddToChannelDialogProps) {
                 }}
               >
                 <Typography>{isSubmitting ? <Loading /> : 'Save'}</Typography>
-                
               </Button>
             </DialogFooter>
           </Stack>

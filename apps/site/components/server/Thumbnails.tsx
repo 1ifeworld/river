@@ -40,6 +40,7 @@ export function GenericThumbnailSmall({
         'bg-[#E9E9E9] justify-center items-center aspect-square w-12 h-12 md:w-10 md:h-10',
         className,
       )}
+      // className='bg-[#E9E9E9] aspect-square w-12 h-12'
     >
       <Typography className="text-secondary-foreground text-[10px]">
         {truncateText(extractFileExtension(text), 5, false)}
