@@ -8,8 +8,6 @@ import type { Adds, Channel } from '@/gql'
 //   contentType: string
 // }
 
-
-
 export async function getChannelMetadata(channels: Channel[]) {
   // extract URIs from the channels array
   const uris = channels.map((channel: { uri: string }) => channel.uri)
