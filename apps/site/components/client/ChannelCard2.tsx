@@ -46,7 +46,7 @@ export function ChannelCard2({
             <div className="w-full">
               {metadata?.length ? (
                 <GenericThumbnailSmall
-                  className="border-border border-[0.5px] w-16"
+                  className="border-border border-[0.5px] h-16 w-16 md:w-16 md:h-16"
                   text={metadata[0]?.itemMetadata?.contentType as string}
                 />
               ) : (
@@ -87,7 +87,7 @@ export function ChannelCard2({
                 />
               ) : (
                 <GenericThumbnailSmall
-                  className="border-border border-[0.25px] md:w-8 md:h-8"
+                  className="border-border border-[0.25px] w-8 h-8 md:w-8 md:h-8"
                   text={metadata[index]?.itemMetadata?.contentType as string}
                 />
               ),
