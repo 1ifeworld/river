@@ -181,14 +181,18 @@ export function AddToChannelDialog({ item }: AddToChannelDialogProps) {
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       {!authenticated ? (
-        <Button variant="outline" className='py-5 md:py-4' onClick={login}>
+        <Button
+          variant="outline"
+          className="rounded-none shadow-none py-5 md:py-4 w-full hover:bg-transparent hover:border-secondary-foreground transition-all"
+          onClick={login}
+        >
           <Typography>Add to channel</Typography>
         </Button>
       ) : (
         <DialogTrigger asChild>
           <Button
             variant="outline"
-            className="rounded-[0px] py-5 md:py-4 shadow-none w-full hover:bg-transparent hover:border-secondary-foreground focus:border-secondary-foreground"
+            className="rounded-none shadow-none py-5 md:py-4 w-full hover:bg-transparent hover:border-secondary-foreground transition-all"
           >
             <Typography>Add to channel</Typography>
           </Button>
