@@ -112,7 +112,7 @@ import {
     // )
 
     return (
-      <Flex className="w-full gap-x-[12px] items-center">
+      <Flex className="w-full gap-x-3 items-center">
         <Link href={`/channel/${channel?.id}`}>
           {(metadata?.length as number) < 4 ? (
             IMAGE_THUMBNAIL_TYPES_TO_RENDER.includes(
@@ -155,7 +155,7 @@ import {
               </div>
             )
           ) : (
-            <Grid className="grid-cols-2 grid-rows-2 aspect-square md:w-64 relative">
+            <Grid className="grid-cols-2 grid-rows-2 aspect-square relative">
               {metadata?.map((item: any, index: number) =>
                 IMAGE_THUMBNAIL_TYPES_TO_RENDER.includes(
                   metadata[index]?.itemMetadata?.contentType as string,
