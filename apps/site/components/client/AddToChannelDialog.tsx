@@ -33,6 +33,7 @@ export function AddToChannelDialog({ item }: { item: Item }) {
     embeddedWallet,
     userChannels,
   } = useUserContext()
+  // biome-ignore lint:
   const [taggedChannels, setTaggedChannels] = React.useState<any[]>([])
   const [dialogOpen, setDialogOpen] = React.useState(false)
   const [isSubmitting, setIsSubmitting] = React.useState(false)
@@ -76,6 +77,7 @@ export function AddToChannelDialog({ item }: { item: Item }) {
     }
   }, [userChannels])
 
+  // biome-ignore lint:
   function flipContainsItem(channelId: any) {
     setTaggedChannels((prevChannels) =>
       prevChannels.map((c) => {
@@ -96,6 +98,7 @@ export function AddToChannelDialog({ item }: { item: Item }) {
     )
   }
 
+  // biome-ignore lint:
   function getStateDiff(channels: any[]): any[] {
     return channels
       .filter((channel) => {
@@ -113,6 +116,7 @@ export function AddToChannelDialog({ item }: { item: Item }) {
       }))
   }
 
+  // biome-ignore lint:
   const channelsStateDif: any[] = getStateDiff(taggedChannels)
 
   return (

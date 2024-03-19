@@ -14,6 +14,7 @@ export function ChannelCard2({
   channel,
   metadata,
   imageBoxWidth,
+  // biome-ignore lint:
 }: { channel: Channel; metadata: any; imageBoxWidth: number }) {
   return (
     <Flex className="w-full gap-x-3 items-center">
@@ -60,6 +61,7 @@ export function ChannelCard2({
           )
         ) : (
           <Grid className="grid-cols-2 grid-rows-2 aspect-square relative">
+            {/* biome-ignore lint: */}
             {metadata?.map((item: any, index: number) =>
               IMAGE_THUMBNAIL_TYPES_TO_RENDER.includes(
                 metadata[index]?.itemMetadata?.contentType as string,

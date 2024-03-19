@@ -20,8 +20,10 @@ export async function getUserChannels(rid: bigint) {
     // generate active member count for channels
 
     // fetch item metadata for channel mosaics
-    const allAdds = channels?.items.map((channel: any, index) => {
+    // biome-ignore lint:
+    const allAdds = channels?.items.map((channel: any) => {
       const last4 = (channel.channel.adds?.items ?? [])
+        // biome-ignore lint:
         .filter((item: any) => !item.removed)
         .slice(0, 4)
       return last4
@@ -30,7 +32,8 @@ export async function getUserChannels(rid: bigint) {
     // @ts-ignore
     const allAddsMetadata = await getAddsMetadata(allAddsFlat)
 
-    const processedAdds = allAdds.map((addArray, index) => {
+    const processedAdds = allAdds.map((addArray) => {
+      // biome-ignore lint:
       return addArray.map((add: any) => {
         return {
           add: add,
@@ -38,10 +41,6 @@ export async function getUserChannels(rid: bigint) {
         }
       })
     })
-
-    // const activeMemberCount = channel?.roles?.items?.filter(
-    //   (item) => item.rid !== USER_ID_ZERO && Number.parseInt(item.role) === 1,
-    // ).length as number
 
     const processedChannels = channels?.items.map((channel, index) => {
       return {

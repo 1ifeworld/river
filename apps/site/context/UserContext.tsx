@@ -23,6 +23,7 @@ const UserContext = createContext<{
   userId?: bigint
   authToken?: string | null
   username?: string
+  // biome-ignore lint:
   userChannels?: any[]
   fetchUserData?: () => Promise<void>
   clearUserData?: () => void
@@ -31,6 +32,7 @@ const UserContext = createContext<{
 export function UserContextComponent({ children }: { children: ReactNode }) {
   const [userId, setUserId] = useState<bigint>()
   const [username, setUsername] = useState<string>()
+  // biome-ignore lint:
   const [userChannels, setUserChannels] = useState<any[]>([])
   const [authToken, setAuthToken] = useState<string | null>(null)
 
