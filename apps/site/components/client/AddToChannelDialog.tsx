@@ -124,7 +124,7 @@ export function AddToChannelDialog({ item }: { item: Item }) {
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       {!authenticated ? (
-        <Button variant="outline" className="py-5 md:py-4" onClick={login}>
+        <Button variant="outline" className="rounded-none shadow-none py-5 md:py-4 w-full hover:bg-transparent hover:border-secondary-foreground transition-all" onClick={login}>
           <Typography>Add to channel</Typography>
         </Button>
       ) : (
