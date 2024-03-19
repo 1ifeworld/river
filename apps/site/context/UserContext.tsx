@@ -65,8 +65,6 @@ export function UserContextComponent({ children }: { children: ReactNode }) {
 
     const userChannels = await getUserChannels(fetchedUserId.userId)
     if (userChannels) setUserChannels(userChannels)
-
-    console.log('userchannels: ', userChannels)
   }
 
   function clearUserData() {

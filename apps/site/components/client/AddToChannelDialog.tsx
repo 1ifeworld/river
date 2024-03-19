@@ -103,7 +103,8 @@ export function AddToChannelDialog({ item }: { item: Item }) {
     return channels
       .filter((channel) => {
         if (
-          channel.hasOwn('newContainsItem') &&
+          // biome-ignore lint:
+          channel.hasOwnProperty('newContainsItem') &&
           channel.newContainsItem !== channel.containsItem
         ) {
           return true // include the channel in the result array
@@ -164,7 +165,8 @@ export function AddToChannelDialog({ item }: { item: Item }) {
                       channel.newContainsItem
                         ? true
                         : channel.containsItem &&
-                            (!channel.hasOwn('newContainsItem') ||
+                            // biome-ignore lint:
+                            (!channel.hasOwnProperty('newContainsItem') ||
                               channel.newContainsItem)
                           ? true
                           : false
