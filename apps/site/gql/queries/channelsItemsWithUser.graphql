@@ -5,6 +5,12 @@ query channelsItemsWithUser($userId: BigInt!) {
       name
       description
       createdById
+      roles {
+        items {
+          rid
+          role
+        }
+      }      
       adds(orderBy: "timestamp", orderDirection: "desc") {
         items {
           timestamp

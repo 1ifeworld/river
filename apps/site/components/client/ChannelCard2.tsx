@@ -56,7 +56,7 @@ export function ChannelCard2({
               height={imageBoxWidth}
             />
           ) : (
-            <div className="w-full">
+            <div className="w-full md:w-64">
               {metadata?.length ? (
                 <GenericThumbnailSmall
                   className="border-border border-[0.5px] h-16 w-16 md:w-16 md:h-16"

@@ -37,12 +37,12 @@ export default async function Profile({
           </Typography>
         </Flex>
         {/* Channels */}
-        <Grid className="grid-cols-2 md:grid-cols-[repeat(auto-fill,_minmax(255px,_1fr))] gap-5">
+        <Stack className="gap-5">
           {channels?.items?.map((channel, index: number) => (
             // @ts-ignore
             <ChannelCard channel={channel} />
           ))}
-        </Grid>
+        </Stack>
       </Stack>
     </Stack>
   )
