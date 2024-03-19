@@ -83,7 +83,8 @@ export function AddToChannelDialog({ item }: { item: Item }) {
       prevChannels.map((c) => {
         if (c.channel.id === channelId) {
           // Check if newContainsItem already exists
-          if (c.hashOwn('newContainsItem')) {
+          // biome-ignore lint:
+          if (c.hasOwnProperty('newContainsItem')) {
             // Toggle the existing value of newContainsItem
             return { ...c, newContainsItem: !c.newContainsItem }
           } else {
