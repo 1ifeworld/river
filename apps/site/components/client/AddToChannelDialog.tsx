@@ -184,7 +184,7 @@ export function AddToChannelDialog({ item }: { item: Item }) {
               </DialogClose>
             </DialogHeader>
             <Separator />
-            <Stack className="px-5 w-full max-h-[500px] overflow-y-auto space-y-[10px]">
+            <Stack className="px-5 w-full max-h-[400px] md:max-h-[500px] overflow-y-auto space-y-[10px]">
               {taggedChannels?.map((channel, index) => (
                 <Flex className="w-full justify-between items-center">
                   <ChannelCard2
