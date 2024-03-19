@@ -38,7 +38,7 @@ export function ChannelCard2({
               className="object-contain"
               src={`https://image.mux.com/${metadata[0]?.itemMetadata?.muxPlaybackId}/thumbnail.png?width=${imageBoxWidth}&height=${imageBoxWidth}&fit_mode=smartcrop&time=35`}
               alt={metadata[0]?.itemMetadata?.name as string}
-              quality={100}
+              quality={25}
               width={imageBoxWidth}
               height={imageBoxWidth}
             />
@@ -81,7 +81,7 @@ export function ChannelCard2({
                   className="object-contain"
                   src={`https://image.mux.com/${metadata[index]?.itemMetadata?.muxPlaybackId}/thumbnail.png?width=${imageBoxWidth}&height=${imageBoxWidth}&fit_mode=smartcrop&time=35`}
                   alt={metadata[index]?.itemMetadata?.name as string}
-                  quality={100}
+                  quality={25}
                   width={imageBoxWidth / 2}
                   height={imageBoxWidth / 2}
                 />
