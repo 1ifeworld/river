@@ -37,7 +37,7 @@ export async function processBatchMoveItemPost({
   const posts: Post[] = []
   //
   for (let i = 0; i < diffs.length; ++i) {
-    if (diffs[i].action == 1) {
+    if (diffs[i].action === 1) {
       // add item to channel
       const addItemMsgType: number = 5
       const addItemMsgBody = encodeAddItemMsgBody({

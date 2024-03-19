@@ -51,7 +51,7 @@ import type { Hex } from 'viem'
 import { usePrivy } from '@privy-io/react-auth'
 import { ChannelCard2 } from '@/client'
 import { kv, createClient } from '@vercel/kv'
-import { type MediaAssetObject } from '@/lib'
+import type { MediaAssetObject } from '@/lib'
 
 type AddToChannelDialogProps = {
   item: Item
@@ -181,7 +181,7 @@ export function AddToChannelDialog({ item }: AddToChannelDialogProps) {
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       {!authenticated ? (
-        <Button variant="outline" className='py-5 md:py-4' onClick={login}>
+        <Button variant="outline" className="py-5 md:py-4" onClick={login}>
           <Typography>Add to channel</Typography>
         </Button>
       ) : (
