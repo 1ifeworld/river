@@ -92,7 +92,7 @@ export async function ItemCard({
             {dropdownComponent}
           </Flex>
           <Flex className="items-center">
-            <Username id={add.item.createdById} />
+            <Username id={add.addedById} />
             <span className="text-secondary-foreground">{'·'}</span>
             <Link
               href={`/channel/${add.channelId}`}
@@ -109,9 +109,9 @@ export async function ItemCard({
             )}
           </Flex>
         </div>
-        <Typography className="text-secondary-foreground">
+        {/* <Typography className="text-secondary-foreground">
           {unixTimeConverter(add.item.timestamp)}
-        </Typography>
+        </Typography> */}
       </Stack>
     </Stack>
   )
