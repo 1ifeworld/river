@@ -25,16 +25,21 @@ import type { Hex } from 'viem'
 import { usePrivy } from '@privy-io/react-auth'
 import { ChannelCard2 } from '@/client'
 
-export function AddToChannelDialog({ item }: {item: Item}) {
+export function AddToChannelDialog({ item }: { item: Item }) {
   const { login, authenticated } = usePrivy()
-  const { signMessage, userId: targetUserId, embeddedWallet, userChannels } = useUserContext()
+  const {
+    signMessage,
+    userId: targetUserId,
+    embeddedWallet,
+    userChannels,
+  } = useUserContext()
   const [taggedChannels, setTaggedChannels] = React.useState<any[]>([])
   const [dialogOpen, setDialogOpen] = React.useState(false)
   const [isSubmitting, setIsSubmitting] = React.useState(false)
 
   React.useEffect(() => {
     const tagChannels = async () => {
-      try {        
+      try {
         // fetch channels item has been added to
         const { channels: channelsForItem } = await getChannelsForItem({
           id: item.id,
@@ -52,10 +57,10 @@ export function AddToChannelDialog({ item }: {item: Item}) {
               (c) => channel.channel.id === c.channel.id,
             ),
           }
-        })          
+        })
         // update taggedChannels state if processedChannels returned succcessfully
         if (processedChannels) setTaggedChannels(processedChannels)
-      
+
         // TODO: add in any relevant sorting
         // // Sort the startingRoles array based on startingRole in descending order
         // startingRoles.sort(
@@ -76,7 +81,7 @@ export function AddToChannelDialog({ item }: {item: Item}) {
       prevChannels.map((c) => {
         if (c.channel.id === channelId) {
           // Check if newContainsItem already exists
-          if (c.hasOwnProperty('newContainsItem')) {
+          if (c.hashOwn('newContainsItem')) {
             // Toggle the existing value of newContainsItem
             return { ...c, newContainsItem: !c.newContainsItem }
           } else {
@@ -95,7 +100,7 @@ export function AddToChannelDialog({ item }: {item: Item}) {
     return channels
       .filter((channel) => {
         if (
-          channel.hasOwnProperty('newContainsItem') &&
+          channel.hasOwn('newContainsItem') &&
           channel.newContainsItem !== channel.containsItem
         ) {
           return true // include the channel in the result array
@@ -113,7 +118,7 @@ export function AddToChannelDialog({ item }: {item: Item}) {
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       {!authenticated ? (
-        <Button variant="outline" className='py-5 md:py-4' onClick={login}>
+        <Button variant="outline" className="py-5 md:py-4" onClick={login}>
           <Typography>Add to channel</Typography>
         </Button>
       ) : (
@@ -155,7 +160,7 @@ export function AddToChannelDialog({ item }: {item: Item}) {
                       channel.newContainsItem
                         ? true
                         : channel.containsItem &&
-                            (!channel.hasOwnProperty('newContainsItem') ||
+                            (!channel.hasOwn('newContainsItem') ||
                               channel.newContainsItem)
                           ? true
                           : false

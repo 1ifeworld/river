@@ -5,7 +5,6 @@ import {
 import { Flex, Grid, Stack, Typography } from '@/design-system'
 import type { Channel } from '@/gql'
 import Image from 'next/image'
-import Link from 'next/link'
 import { GenericThumbnailSmall } from '@/server'
 import { w3sUrlFromCid } from '@/lib'
 import { UsernameNoFetch } from '@/client'
@@ -16,7 +15,6 @@ export function ChannelCard2({
   metadata,
   imageBoxWidth,
 }: { channel: Channel; metadata: any; imageBoxWidth: number }) {
-  console.log("channel: ", channel)
   return (
     <Flex className="w-full gap-x-3 items-center">
       <div>
@@ -99,10 +97,15 @@ export function ChannelCard2({
       </div>
       <Stack className="gap-y-[3px]">
         <Flex className="justify-between items-center">
-            <Typography>{truncateText(channel?.name, 28, true)}</Typography>
+          <Typography>{truncateText(channel?.name, 28, true)}</Typography>
         </Flex>
-        {/* @ts-ignore */}
-        <UsernameNoFetch asLink={false} username={channel?.creatorUsername} activeMemberCount={channel?.activeMembers} />
+        <UsernameNoFetch
+          asLink={false}
+          // @ts-ignore
+          username={channel?.creatorUsername}
+          // @ts-ignore
+          activeMemberCount={channel?.activeMembers}
+        />
       </Stack>
     </Flex>
   )
