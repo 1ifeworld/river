@@ -77,20 +77,25 @@ export function AddToChannelDialog({ item }: { item: Item }) {
     }
   }, [userChannels])
 
+  /*
+    for items that previously are in a channel, dont enable deselecting
+    for item that were not in a channel, enable selecting/deselecting
+  */
+
   // biome-ignore lint:
   function flipContainsItem(channelId: any) {
     setTaggedChannels((prevChannels) =>
       prevChannels.map((c) => {
         if (c.channel.id === channelId) {
-          // Check if newContainsItem already exists
-          // biome-ignore lint:
-          if (c.hasOwnProperty('newContainsItem')) {
-            // Toggle the existing value of newContainsItem
-            return { ...c, newContainsItem: !c.newContainsItem }
+          if (c.containsItem === true) {
+            return c
           } else {
-            // If newContainsItem doesn't exist, create it with the opposite value of containsItem
-            console.log('flipping new contains item')
-            return { ...c, newContainsItem: !c.containsItem }
+            // biome-ignore lint:
+            if (!c.hasOwnProperty('newContainsItem')) {
+              return { ...c, newContainsItem: true }
+            } else {
+              return { ...c, newContainsItem: !c.newContainsItem }
+            }
           }
         } else {
           return c
@@ -99,8 +104,29 @@ export function AddToChannelDialog({ item }: { item: Item }) {
     )
   }
 
+  // NOTE: keeping this code in that allows for full toggle flexibility
+  // function flipContainsItem(channelId: any) {
+  //   setTaggedChannels((prevChannels) =>
+  //     prevChannels.map((c) => {
+  //       if (c.channel.id === channelId) {
+  //         // if contains item == true, dont do anything (removes disabled)
+  //         if (c.containsItem) {
+  //           return c
+  //         // if newContainsItem already true, it means its a new add, so can be deselected
+  //         } else if (c.hasOwnProperty('newContainsItem')) {
+  //           return { ...c, newContainsItem: !c.newContainsItem}
+  //           // if not present from beginning, and newContainsItem not present yet, set to true
+  //         } else {
+  //           return { ...c, newContainsItem: true}
+  //         }
+  //       }
+  //     }),
+  //   )
+  // }
+
   // biome-ignore lint:
   function getStateDiff(channels: any[]): any[] {
+    console.log('channels inside of state dif ', channels)
     return channels
       .filter((channel) => {
         if (
@@ -120,6 +146,8 @@ export function AddToChannelDialog({ item }: { item: Item }) {
 
   // biome-ignore lint:
   const channelsStateDif: any[] = getStateDiff(taggedChannels)
+
+  console.log('channels state dif: ', channelsStateDif)
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -201,13 +229,20 @@ export function AddToChannelDialog({ item }: { item: Item }) {
                       itemId: item.id,
                       diffs: channelsStateDif,
                     })
+                    setDialogOpen(false)
                     if (txSuccess) {
                       toast.custom((t) => (
-                        <Toast>{'Items moved successfully'}</Toast>
+                        <Toast>{`Item${
+                          channelsStateDif.length > 1 ? 's' : ''
+                        } added successfully`}</Toast>
                       ))
                       setIsSubmitting(false)
                     } else {
-                      toast.custom((t) => <Toast>{'Error moving items'}</Toast>)
+                      toast.custom((t) => (
+                        <Toast>{`Error moving item${
+                          channelsStateDif.length > 1 ? 's' : ''
+                        }`}</Toast>
+                      ))
                       setIsSubmitting(false)
                     }
                   }
