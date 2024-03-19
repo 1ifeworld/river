@@ -8,13 +8,14 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { GenericThumbnailSmall } from '@/server'
 import { w3sUrlFromCid } from '@/lib'
-// import { Username } from '@/server'
+import { UsernameNoFetch } from '@/client'
 
 export function ChannelCard2({
   channel,
   metadata,
   imageBoxWidth,
 }: { channel: Channel; metadata: any; imageBoxWidth: number }) {
+  console.log("channel: ", channel)
   return (
     <Flex className="w-full gap-x-3 items-center">
       <Link href={`/channel/${channel?.id}`}>
@@ -104,7 +105,8 @@ export function ChannelCard2({
             <Typography>{channel?.name}</Typography>
           </Link>
         </Flex>
-        {/* <Username id={channel?.createdById} /> */}
+        {/* @ts-ignore */}
+        <UsernameNoFetch username={channel?.creatorUsername} activeMemberCount={channel?.activeMembers} />
       </Stack>
     </Flex>
   )

@@ -1,8 +1,8 @@
 'use client'
 
 import { getUserId } from '@/gql'
-import { getUsername } from '@/lib'
-import { type ConnectedWallet, User, useWallets } from '@privy-io/react-auth'
+import { getUsername, getUserChannels } from '@/lib'
+import { type ConnectedWallet, useWallets } from '@privy-io/react-auth'
 import { usePrivy } from '@privy-io/react-auth'
 import type { SignMessageModalUIOptions } from '@privy-io/react-auth'
 import React, {
@@ -23,6 +23,7 @@ const UserContext = createContext<{
   userId?: bigint
   authToken?: string | null
   username?: string
+  userChannels?: any[]
   fetchUserData?: () => Promise<void>
   clearUserData?: () => void
 }>({ authToken: null })
@@ -30,6 +31,7 @@ const UserContext = createContext<{
 export function UserContextComponent({ children }: { children: ReactNode }) {
   const [userId, setUserId] = useState<bigint>()
   const [username, setUsername] = useState<string>()
+  const [userChannels, setUserChannels] = useState<any[]>([])
   const [authToken, setAuthToken] = useState<string | null>(null)
 
   const { signMessage, getAccessToken } = usePrivy()
@@ -58,11 +60,17 @@ export function UserContextComponent({ children }: { children: ReactNode }) {
     })
 
     setUsername(fetchedUsername)
+
+    const userChannels = await getUserChannels(fetchedUserId.userId)
+    if (userChannels) setUserChannels(userChannels)
+
+    console.log("userchannels: ", userChannels)
   }
 
   function clearUserData() {
     setUserId(undefined)
     setUsername(undefined)
+    setUserChannels([])
   }
 
   useEffect(() => {
@@ -77,6 +85,7 @@ export function UserContextComponent({ children }: { children: ReactNode }) {
         signMessage,
         userId,
         username,
+        userChannels,
         fetchUserData,
         clearUserData,
       }}
