@@ -92,7 +92,7 @@ export async function ItemCard({
             {dropdownComponent}
           </Flex>
           <Flex className="items-center">
-            <Username id={add.addedById} />
+            <Username id={add.item.createdById} />
             <span className="text-secondary-foreground">{'·'}</span>
             <Link
               href={`/channel/${add.channelId}`}

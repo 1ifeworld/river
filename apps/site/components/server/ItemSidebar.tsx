@@ -1,4 +1,4 @@
-import { IndexInfoToggle } from '@/client'
+import { AddToChannelDialog, IndexInfoToggle } from '@/client'
 import {
   Flex,
   Stack,
@@ -148,7 +148,7 @@ export function ItemSidebar({
             <Typography className="text-secondary-foreground">
               {itemMetadata?.contentType}
             </Typography>
-            {/* </Flex>
+            {/* </Flex> ayo
           <Flex className="justify-between">
             <Typography>Content</Typography>
             <Typography className="text-secondary-foreground truncate">
@@ -165,6 +165,11 @@ export function ItemSidebar({
           </Flex>
         </Stack>
       </Stack>
+
+      <Flex className="py-[30px]">
+        <AddToChannelDialog item={itemContext.item} />
+      </Flex>
+
       {/* <Separator /> */}
       <Flex className="py-[30px]">
         <Typography>{`Index [${itemIndex}/${indexLength}]`}</Typography>
