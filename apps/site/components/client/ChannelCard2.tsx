@@ -2,13 +2,14 @@ import {
   IMAGE_THUMBNAIL_TYPES_TO_RENDER,
   VIDEO_THUMBNAIL_TYPES_TO_RENDER,
 } from '@/constants'
-import { Flex, Grid, Stack, Typography } from '@/design-system'
-import type { Channel } from '@/gql'
+import { Flex, Grid, Stack, Typography, Public } from '@/design-system'
+import type { Channel, ChannelRoles } from '@/gql'
 import Image from 'next/image'
 import { GenericThumbnailSmall } from '@/server'
 import { w3sUrlFromCid } from '@/lib'
 import { UsernameNoFetch } from '@/client'
 import { truncateText } from '@/utils'
+import { USER_ID_ZERO } from '@/constants'
 
 export function ChannelCard2({
   channel,
@@ -16,6 +17,17 @@ export function ChannelCard2({
   imageBoxWidth,
   // biome-ignore lint:
 }: { channel: Channel; metadata: any; imageBoxWidth: number }) {
+  function checkIsPublic({ roleData }: { roleData: ChannelRoles[] }) {
+    for (let i = 0; i < roleData.length; ++i) {
+      if (roleData[i].rid === USER_ID_ZERO && roleData[i].role > 0) return true
+    }
+    return false
+  }
+
+  const isPublic = !channel?.roles?.items
+    ? false
+    : checkIsPublic({ roleData: channel?.roles?.items })
+
   return (
     <Flex className="w-full gap-x-3 items-center">
       <div>
@@ -98,8 +110,9 @@ export function ChannelCard2({
         )}
       </div>
       <Stack className="gap-y-[3px]">
-        <Flex className="justify-between items-center">
-          <Typography>{truncateText(channel?.name, 28, true)}</Typography>
+        <Flex className="justify-between items-center space-x-[6px]">
+          <Typography>{truncateText(channel?.name, 25, true)}</Typography>
+          {isPublic && <Public />}
         </Flex>
         <UsernameNoFetch
           asLink={false}

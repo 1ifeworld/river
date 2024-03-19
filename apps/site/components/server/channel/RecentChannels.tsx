@@ -1,6 +1,6 @@
-import { Stack, Typography } from '@/design-system'
-import { getAllChannels } from '@/gql'
-import { getChannelMetadata } from '@/lib'
+import { Stack, Typography, Public } from '@/design-system'
+import { getAllChannels, type ChannelRoles } from '@/gql'
+import { USER_ID_ZERO } from '@/constants'
 import Link from 'next/link'
 
 export async function RecentChannels({
@@ -14,13 +14,26 @@ export async function RecentChannels({
     return <Typography>Error fetching channels</Typography>
   }
 
+  function checkIsPublic({ roleData }: { roleData: ChannelRoles[] }) {
+    for (let i = 0; i < roleData.length; ++i) {
+      if (roleData[i].rid === USER_ID_ZERO && roleData[i].role > 0) return true
+    }
+    return false
+  }
+
   return (
     <Stack className="hidden md:flex gap-y-[34px]">
       <Typography className="font-medium">Recent channels</Typography>
       <Stack className="gap-y-[3px]">
         {channels.items.slice(0, 50).map((channel) => {
+          // @ts-ignore
+          const isPublic = checkIsPublic({ roleData: channel?.roles?.items })
           return (
-            <Link href={`/channel/${channel.id}`} key={channel.timestamp}>
+            <Link
+              className="flex items-center space-x-[6px]"
+              href={`/channel/${channel.id}`}
+              key={channel.timestamp}
+            >
               <Typography
                 className={`hover:underline underline-offset-2 transition-all truncate ${
                   channel?.id === params?.id ? 'underline' : ''
@@ -28,6 +41,7 @@ export async function RecentChannels({
               >
                 {channel?.name || '--'}
               </Typography>
+              {isPublic && <Public />}
             </Link>
           )
         })}
