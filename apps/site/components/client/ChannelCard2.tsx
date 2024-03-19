@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { GenericThumbnailSmall } from '@/server'
 import { w3sUrlFromCid } from '@/lib'
 import { UsernameNoFetch } from '@/client'
+import { truncateText } from '@/utils'
 
 export function ChannelCard2({
   channel,
@@ -18,7 +19,7 @@ export function ChannelCard2({
   console.log("channel: ", channel)
   return (
     <Flex className="w-full gap-x-3 items-center">
-      <Link href={`/channel/${channel?.id}`}>
+      <div>
         {(metadata?.length as number) < 4 ? (
           IMAGE_THUMBNAIL_TYPES_TO_RENDER.includes(
             metadata[0]?.itemMetadata?.contentType as string,
@@ -95,18 +96,13 @@ export function ChannelCard2({
             )}
           </Grid>
         )}
-      </Link>
+      </div>
       <Stack className="gap-y-[3px]">
         <Flex className="justify-between items-center">
-          <Link
-            href={`/channel/${channel?.id}`}
-            className="hover:underline underline-offset-2 transition-all truncate"
-          >
-            <Typography>{channel?.name}</Typography>
-          </Link>
+            <Typography>{truncateText(channel?.name, 28, true)}</Typography>
         </Flex>
         {/* @ts-ignore */}
-        <UsernameNoFetch username={channel?.creatorUsername} activeMemberCount={channel?.activeMembers} />
+        <UsernameNoFetch asLink={false} username={channel?.creatorUsername} activeMemberCount={channel?.activeMembers} />
       </Stack>
     </Flex>
   )

@@ -20,14 +20,14 @@ export function UsernameNoFetch({
         className="hover:underline underline-offset-2 transition-all decoration-secondary-foreground w-fit"
       >
         <Typography className={cn("text-secondary-foreground", className)}>
-        {`${username}${' + '}${activeMemberCount && pluralize(activeMemberCount, 'other', 'others')}`}
+        {`${username}${activeMemberCount ?  ' + ' + pluralize(activeMemberCount, 'other', 'others') : ''}`}
         </Typography>
       </Link>
     );
   } else {
     return (
       <Typography className={cn("text-secondary-foreground", className)}>
-        {`${username}${' + '}${activeMemberCount && pluralize(activeMemberCount, 'other', 'others')}`}
+        {`${username}${activeMemberCount ? ' + ' + pluralize(activeMemberCount, 'other', 'others'): ''}`}
       </Typography>
     );
   }
