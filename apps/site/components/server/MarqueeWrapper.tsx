@@ -8,9 +8,9 @@ export async function MarqueeWrapper() {
 
   return (
     <Marquee
-      totalChannels={channels?.items?.[0]?.counter}
-      totalItems={items?.items?.[0]?.counter}
-      totalUsers={users?.items?.[0]?.counter}
+      totalChannels={channels?.items?.[0]?.counter ?? 0}
+      totalItems={items?.items?.[0]?.counter ?? 0}
+      totalUsers={users?.items?.[0]?.counter ?? 0}
     />
   )
 }
