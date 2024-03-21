@@ -37,10 +37,23 @@ export default async function Profile({
           </Typography>
         </Flex>
         {/* Channels */}
-        <Grid className="grid-cols-2 md:grid-cols-[repeat(auto-fill,_minmax(255px,_1fr))] gap-5">
+        {/* mobile view */}
+        <Stack className="md:hidden gap-[10px]">
           {channels?.items?.map((channel, index: number) => (
             // @ts-ignore
-            <ChannelCard channel={channel} />
+            <ChannelCard channel={channel} width={64} />
+          ))}
+        </Stack>
+        {/* desktop view  */}
+        <Grid className="hidden md:grid grid-cols-2 md:grid-cols-[repeat(auto-fill,_minmax(255px,_1fr))] gap-5">
+          {channels?.items?.map((channel, index: number) => (
+            <ChannelCard
+              // @ts-ignore
+              channel={channel}
+              width={256}
+              quality={100}
+              orientation={1}
+            />
           ))}
         </Grid>
       </Stack>
