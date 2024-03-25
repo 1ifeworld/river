@@ -15,6 +15,7 @@ export interface MediaAssetObject {
     contentType: string
     muxAssetId?: string
     muxPlaybackId?: string
+    muxAssetStatus?: string
   }
 }
 

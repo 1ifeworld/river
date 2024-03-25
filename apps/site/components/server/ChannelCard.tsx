@@ -15,6 +15,8 @@ import {
   Username,
 } from '@/server'
 import { kv } from '@vercel/kv'
+import { muxClient } from '@/config/mux'
+import { isVideo } from '@/lib'
 
 interface ChannelCardProps {
   channel: Channel
@@ -33,11 +35,30 @@ export async function ChannelCard({
     .filter((item) => !item.removed)
     .slice(0, 4)
 
+  // const channelCardMetadata = await Promise.all(
+  //   lastFourNonRemovedItems.map((item) => 
+  //     kv.get<Pick<MediaAssetObject, 'value'>['value']>(item.item.uri as string),
+  //   ) || [],
+  // )
+  
   const channelCardMetadata = await Promise.all(
-    lastFourNonRemovedItems.map((item) =>
-      kv.get<Pick<MediaAssetObject, 'value'>['value']>(item.item.uri as string),
-    ) || [],
-  )
+    lastFourNonRemovedItems.map(async (item) => {
+      let metadata = await kv.get<Pick<MediaAssetObject, 'value'>['value']>(item.item.uri as string);
+  
+      // If content type is video, add processing state
+      if (metadata && isVideo({ mimeType: metadata.contentType })) {
+        if (muxClient) {
+          const { status } = await muxClient.video.assets.retrieve(metadata?.muxAssetId as string);
+          metadata.muxAssetStatus = status
+        }
+      }
+  
+      return metadata;
+    }) || [],
+  );
+
+
+
 
   function checkIsPublic({ roleData }: { roleData: ChannelRoles[] }) {
     for (let i = 0; i < roleData.length; ++i) {
@@ -75,7 +96,7 @@ export async function ChannelCard({
             />
           ) : VIDEO_THUMBNAIL_TYPES_TO_RENDER.includes(
               channelCardMetadata[0]?.contentType as string,
-            ) ? (
+            ) && channelCardMetadata[0]?.muxAssetStatus === "ready" ? (
             <Image
               className="object-contain"
               src={`https://image.mux.com/${channelCardMetadata[0]?.muxPlaybackId}/thumbnail.png?width=${width}&height=${width}&fit_mode=smartcrop&time=35`}
@@ -140,7 +161,7 @@ export async function ChannelCard({
                 />
               ) : VIDEO_THUMBNAIL_TYPES_TO_RENDER.includes(
                   channelCardMetadata[index]?.contentType as string,
-                ) ? (
+                ) && channelCardMetadata[index]?.muxAssetStatus === "ready" ? (
                 <Image
                   className="object-contain"
                   src={`https://image.mux.com/${
