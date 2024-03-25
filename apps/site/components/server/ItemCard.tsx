@@ -7,8 +7,7 @@ import type { Adds, ChannelRoles } from '@/gql'
 import {
   type MediaAssetObject,
   w3sUrlFromCid,
-  isVideo,
-  getMuxUploadStatus,
+  isVideo
 } from '@/lib'
 import { GenericThumbnailLarge, Username } from '@/server'
 import { unixTimeConverter } from '@/utils'
