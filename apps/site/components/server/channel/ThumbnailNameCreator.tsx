@@ -5,6 +5,8 @@ import { VIDEO_THUMBNAIL_TYPES_TO_RENDER } from 'constants/thumbnails'
 import { GenericThumbnailSmall, Username } from '@/server'
 import { truncateText } from '@/utils'
 import Image from 'next/image'
+import { muxClient } from '@/config/mux'
+import { isVideo } from '@/lib'
 
 interface ThumbnailNameCreatorProps {
   item: Item
@@ -13,7 +15,7 @@ interface ThumbnailNameCreatorProps {
   truncation?: number
 }
 
-export function ThumbnailNameCreator({
+export async function ThumbnailNameCreator({
   item,
   metadata,
   truncation = 35,
@@ -48,6 +50,19 @@ export function ThumbnailNameCreator({
 
   const cid = ipfsUrlToCid({ ipfsUrl: itemMetadata.image })
 
+  const videoThumbnail = {
+    isVideo: isVideo({ mimeType: itemMetadata?.contentType as string }),
+    thumbnailReady: false,
+  }
+  if (videoThumbnail.isVideo) {
+    if (muxClient) {
+      const { status } = await muxClient.video.assets.retrieve(
+        itemMetadata?.muxAssetId as string,
+      )
+      if (status === 'ready') videoThumbnail.thumbnailReady = true
+    }
+  }
+
   return (
     <>
       {cid ? (
@@ -62,7 +77,7 @@ export function ThumbnailNameCreator({
         </div>
       ) : VIDEO_THUMBNAIL_TYPES_TO_RENDER.includes(
           itemMetadata?.contentType as string,
-        ) ? (
+        ) && videoThumbnail.thumbnailReady ? (
         <div className="relative w-12 h-12 md:w-10 md:h-10 aspect-square">
           <Image
             className="object-contain"

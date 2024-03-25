@@ -1,3 +1,8 @@
+import * as React from 'react'
+import dynamic from 'next/dynamic'
+import Image from 'next/image'
+import { kv } from '@vercel/kv'
+import { P, match } from 'ts-pattern'
 import { AudioPlayer, VideoPlayer } from '@/client'
 import { Flex, Stack, Typography, Separator } from '@/design-system'
 import { getChannelWithId } from '@/gql'
@@ -13,11 +18,7 @@ import {
   w3sUrlFromCid,
 } from '@/lib'
 import { ItemSidebar } from '@/server'
-import { kv } from '@vercel/kv'
-import dynamic from 'next/dynamic'
-import Image from 'next/image'
-import * as React from 'react'
-import { P, match } from 'ts-pattern'
+import { muxClient } from '@/config/mux'
 
 const MarkdownRenderer = dynamic(
   () => import('../../../../components/client/renderers/MarkdownRenderer'),
@@ -89,11 +90,48 @@ export default async function ItemPage({
     )
     .with(
       P.when((type) => isVideo({ mimeType: type })),
-      () => (
-        <Flex className="h-full">
-          <VideoPlayer playbackId={itemMetadata?.muxPlaybackId as string} />
-        </Flex>
-      ),
+      async () => {
+        console.log('trying to render video page')
+        if (muxClient) {
+          const { status } = await muxClient.video.assets.retrieve(
+            itemMetadata?.muxAssetId as string,
+          )
+
+          if (status === 'ready') {
+            return (
+              <Flex className="h-full">
+                <VideoPlayer
+                  playbackId={itemMetadata?.muxPlaybackId as string}
+                />
+              </Flex>
+            )
+          } else if (status === 'preparing') {
+            return (
+              <Stack className="h-full items-center justify-center">
+                <Typography className="text-secondary-foreground">
+                  Processing... Check back later!
+                </Typography>
+              </Stack>
+            )
+          } else {
+            return (
+              <Stack className="h-full items-center justify-center">
+                <Typography className="text-secondary-foreground">
+                  Error: please re-upload
+                </Typography>
+              </Stack>
+            )
+          }
+        } else {
+          return (
+            <Stack className="h-full items-center justify-center">
+              <Typography className="text-secondary-foreground">
+                Error: please refresh
+              </Typography>
+            </Stack>
+          )
+        }
+      },
     )
     .with(
       P.when((type) => isAudio({ mimeType: type })),
