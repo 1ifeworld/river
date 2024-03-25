@@ -18,6 +18,7 @@ import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import * as React from 'react'
 import { P, match } from 'ts-pattern'
+import { muxClient } from '@/config/mux'
 
 const MarkdownRenderer = dynamic(
   () => import('../../../../components/client/renderers/MarkdownRenderer'),
@@ -89,11 +90,37 @@ export default async function ItemPage({
     )
     .with(
       P.when((type) => isVideo({ mimeType: type })),
-      () => (
-        <Flex className="h-full">
-          <VideoPlayer playbackId={itemMetadata?.muxPlaybackId as string} />
-        </Flex>
-      ),
+      async () => {
+        if (muxClient) {
+          const { status } = await muxClient.video.assets.retrieve(
+            itemMetadata?.muxAssetId as string,
+          );
+          
+          if (status === "ready") {
+            return (
+              <Flex className="h-full">
+                <VideoPlayer playbackId={itemMetadata?.muxPlaybackId as string} />
+              </Flex>
+            );
+          } else if (status === "preparing") {
+            return (
+              <Stack className="h-full items-center justify-center">
+                <Typography className="text-secondary-foreground">
+                  Processing... Check back later!
+                </Typography>
+              </Stack>
+            );
+          } else {
+            return (
+              <Stack className="h-full items-center justify-center">
+                <Typography className="text-secondary-foreground">
+                  Error: please re-upload
+                </Typography>
+              </Stack>
+            );
+          }
+        }
+      },
     )
     .with(
       P.when((type) => isAudio({ mimeType: type })),
