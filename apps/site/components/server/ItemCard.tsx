@@ -16,9 +16,7 @@ import { kv } from '@vercel/kv'
 import Image from 'next/image'
 import Link from 'next/link'
 import { USER_ID_ZERO } from '@/constants'
-// import Mux from '@mux/mux-node'
 import { muxClient } from '@/config/mux'
-// const mux = new Mux({tokenId: process.env.MUX_TOKEN_ID})
 
 export async function ItemCard({
   add,
@@ -36,8 +34,6 @@ export async function ItemCard({
     thumbnailReady: false,
   }
   if (videoThumbnail.isVideo) {
-    console.log(itemMetadata?.name)
-    console.log(itemMetadata?.muxAssetId)
     if (muxClient) {
       const { status } = await muxClient.video.assets.retrieve(
         itemMetadata?.muxAssetId as string,
