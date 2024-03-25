@@ -15,6 +15,7 @@
     "@hookform/resolvers": "^3.3.2",
     "@ipld/dag-cbor": "^9.1.0",
     "@mux/mux-audio-react": "^0.7.2",
+    "@mux/mux-node": "^8.2.3",
     "@mux/mux-player-react": "^2.3.0",
     "@openzeppelin/defender-relay-client": "^1.54.1",
     "@openzeppelin/defender-sdk": "^1.9.0",

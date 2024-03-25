@@ -4,13 +4,16 @@ import {
 } from '@/constants'
 import { Flex, Stack, Typography, Public } from '@/design-system'
 import type { Adds, ChannelRoles } from '@/gql'
-import { type MediaAssetObject, w3sUrlFromCid } from '@/lib'
+import { type MediaAssetObject, w3sUrlFromCid, isVideo, getMuxUploadStatus } from '@/lib'
 import { GenericThumbnailLarge, Username } from '@/server'
 import { unixTimeConverter } from '@/utils'
 import { kv } from '@vercel/kv'
 import Image from 'next/image'
 import Link from 'next/link'
 import { USER_ID_ZERO } from '@/constants'
+// import Mux from '@mux/mux-node'
+import { muxClient } from '@/config/mux'
+// const mux = new Mux({tokenId: process.env.MUX_TOKEN_ID})
 
 export async function ItemCard({
   add,
@@ -22,6 +25,20 @@ export async function ItemCard({
   const itemMetadata = await kv.get<Pick<MediaAssetObject, 'value'>['value']>(
     add?.item?.uri as string,
   )
+
+  let videoThumbnail = {
+    isVideo: isVideo({mimeType: itemMetadata?.contentType as string}),
+    thumbnailReady: false
+  }
+  if (videoThumbnail.isVideo) {
+    console.log(itemMetadata?.name)
+    console.log(itemMetadata?.muxAssetId)
+    if (muxClient) {
+      const { status } = await muxClient.video.assets.retrieve(itemMetadata?.muxAssetId as string)
+      console.log("Vid status: ", status)
+      if (status === 'ready') videoThumbnail.thumbnailReady = true
+    }      
+  }
 
   const totalItems = add.channel.adds?.items?.length ?? 0
 
@@ -63,7 +80,7 @@ export async function ItemCard({
             />
           ) : VIDEO_THUMBNAIL_TYPES_TO_RENDER.includes(
               itemMetadata?.contentType as string,
-            ) ? (
+            ) && videoThumbnail.thumbnailReady ? (
             <Image
               className="object-contain"
               src={`https://image.mux.com/${itemMetadata?.muxPlaybackId}/thumbnail.png?width=1200&height=1000&fit_mode=smartcrop&time=35`}
