@@ -94,22 +94,24 @@ export default async function ItemPage({
         if (muxClient) {
           const { status } = await muxClient.video.assets.retrieve(
             itemMetadata?.muxAssetId as string,
-          );
-          
-          if (status === "ready") {
+          )
+
+          if (status === 'ready') {
             return (
               <Flex className="h-full">
-                <VideoPlayer playbackId={itemMetadata?.muxPlaybackId as string} />
+                <VideoPlayer
+                  playbackId={itemMetadata?.muxPlaybackId as string}
+                />
               </Flex>
-            );
-          } else if (status === "preparing") {
+            )
+          } else if (status === 'preparing') {
             return (
               <Stack className="h-full items-center justify-center">
                 <Typography className="text-secondary-foreground">
                   Processing... Check back later!
                 </Typography>
               </Stack>
-            );
+            )
           } else {
             return (
               <Stack className="h-full items-center justify-center">
@@ -117,8 +119,16 @@ export default async function ItemPage({
                   Error: please re-upload
                 </Typography>
               </Stack>
-            );
+            )
           }
+        } else {
+          return (
+            <Stack className="h-full items-center justify-center">
+              <Typography className="text-secondary-foreground">
+                Error: please re-upload
+              </Typography>
+            </Stack>
+          )
         }
       },
     )
