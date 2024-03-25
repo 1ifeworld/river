@@ -91,6 +91,7 @@ export default async function ItemPage({
     .with(
       P.when((type) => isVideo({ mimeType: type })),
       async () => {
+        console.log("trying to render video page")
         if (muxClient) {
           const { status } = await muxClient.video.assets.retrieve(
             itemMetadata?.muxAssetId as string,
