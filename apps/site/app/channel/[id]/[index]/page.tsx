@@ -125,7 +125,7 @@ export default async function ItemPage({
           return (
             <Stack className="h-full items-center justify-center">
               <Typography className="text-secondary-foreground">
-                Error: please re-upload
+                Error: please refresh
               </Typography>
             </Stack>
           )
