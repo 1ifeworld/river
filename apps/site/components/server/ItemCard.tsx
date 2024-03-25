@@ -32,7 +32,6 @@ export async function ItemCard({
       const { status } = await muxClient.video.assets.retrieve(
         itemMetadata?.muxAssetId as string,
       )
-      console.log('Vid status: ', status)
       if (status === 'ready') videoThumbnail.thumbnailReady = true
     }
   }
