@@ -1,3 +1,8 @@
+import * as React from 'react'
+import dynamic from 'next/dynamic'
+import Image from 'next/image'
+import { kv } from '@vercel/kv'
+import { P, match } from 'ts-pattern'
 import { AudioPlayer, VideoPlayer } from '@/client'
 import { Flex, Stack, Typography, Separator } from '@/design-system'
 import { getChannelWithId } from '@/gql'
@@ -13,11 +18,6 @@ import {
   w3sUrlFromCid,
 } from '@/lib'
 import { ItemSidebar } from '@/server'
-import { kv } from '@vercel/kv'
-import dynamic from 'next/dynamic'
-import Image from 'next/image'
-import * as React from 'react'
-import { P, match } from 'ts-pattern'
 import { muxClient } from '@/config/mux'
 
 const MarkdownRenderer = dynamic(
