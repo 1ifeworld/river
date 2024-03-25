@@ -127,20 +127,20 @@ export async function uploadToMux(body: string, authToken: string | null) {
   }
 }
 
-  export async function getMuxUploadStatus(body: string, secret: string | null) {
-    const res = await fetch(
-      'https://river-media-service.up.railway.app/mux/uploadStatus',
-      {
-        method: 'POST',
-        headers: secret ? { secret: `Bearer ${secret}` } : undefined,
-        body,
-      },
-    )
-    if (!res.ok) {
-      console.error('Could not fetch Mux upload status', await res.text())
-      throw new Error('Could not fetch Mux upload status')
-    }
-    const muxResponseData = await res.json()
-  
-    return muxResponseData
+export async function getMuxUploadStatus(body: string, secret: string | null) {
+  const res = await fetch(
+    'https://river-media-service.up.railway.app/mux/uploadStatus',
+    {
+      method: 'POST',
+      headers: secret ? { secret: `Bearer ${secret}` } : undefined,
+      body,
+    },
+  )
+  if (!res.ok) {
+    console.error('Could not fetch Mux upload status', await res.text())
+    throw new Error('Could not fetch Mux upload status')
   }
+  const muxResponseData = await res.json()
+
+  return muxResponseData
+}

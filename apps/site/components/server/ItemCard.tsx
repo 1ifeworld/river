@@ -4,7 +4,12 @@ import {
 } from '@/constants'
 import { Flex, Stack, Typography, Public } from '@/design-system'
 import type { Adds, ChannelRoles } from '@/gql'
-import { type MediaAssetObject, w3sUrlFromCid, isVideo, getMuxUploadStatus } from '@/lib'
+import {
+  type MediaAssetObject,
+  w3sUrlFromCid,
+  isVideo,
+  getMuxUploadStatus,
+} from '@/lib'
 import { GenericThumbnailLarge, Username } from '@/server'
 import { unixTimeConverter } from '@/utils'
 import { kv } from '@vercel/kv'
@@ -26,18 +31,20 @@ export async function ItemCard({
     add?.item?.uri as string,
   )
 
-  let videoThumbnail = {
-    isVideo: isVideo({mimeType: itemMetadata?.contentType as string}),
-    thumbnailReady: false
+  const videoThumbnail = {
+    isVideo: isVideo({ mimeType: itemMetadata?.contentType as string }),
+    thumbnailReady: false,
   }
   if (videoThumbnail.isVideo) {
     console.log(itemMetadata?.name)
     console.log(itemMetadata?.muxAssetId)
     if (muxClient) {
-      const { status } = await muxClient.video.assets.retrieve(itemMetadata?.muxAssetId as string)
-      console.log("Vid status: ", status)
+      const { status } = await muxClient.video.assets.retrieve(
+        itemMetadata?.muxAssetId as string,
+      )
+      console.log('Vid status: ', status)
       if (status === 'ready') videoThumbnail.thumbnailReady = true
-    }      
+    }
   }
 
   const totalItems = add.channel.adds?.items?.length ?? 0
