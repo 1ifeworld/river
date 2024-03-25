@@ -4,13 +4,8 @@ import {
 } from '@/constants'
 import { Flex, Stack, Typography, Public } from '@/design-system'
 import type { Adds, ChannelRoles } from '@/gql'
-import {
-  type MediaAssetObject,
-  w3sUrlFromCid,
-  isVideo
-} from '@/lib'
+import { type MediaAssetObject, w3sUrlFromCid, isVideo } from '@/lib'
 import { GenericThumbnailLarge, Username } from '@/server'
-import { unixTimeConverter } from '@/utils'
 import { kv } from '@vercel/kv'
 import Image from 'next/image'
 import Link from 'next/link'
