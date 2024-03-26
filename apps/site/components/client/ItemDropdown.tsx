@@ -63,8 +63,8 @@ export function ItemDropdown({
   channel,
   add,
   item,
-  showRemove = false
-}: { channel: Channel; add: Adds; item: Item, showRemove?: boolean }) {
+  showRemove = false,
+}: { channel: Channel; add: Adds; item: Item; showRemove?: boolean }) {
   /*
     General state/hooks
   */
@@ -196,58 +196,63 @@ export function ItemDropdown({
             {isRemoving || isSubmitting ? <Loading /> : '...'}
           </Typography>
         </DropdownMenuTrigger>
-        <DropdownMenuContent side="bottom" align="start">
+        <DropdownMenuContent side="bottom" align="end">
           <DropdownMenuItem>
-            <DialogTrigger asChild>
-              <Button
-                disabled={!userChannels || userChannels.length === 0}
-                variant="link"
-              >
+            {!authenticated ? (
+              <Button variant="link" onClick={login}>
                 <Typography>Add to channel</Typography>
               </Button>
-            </DialogTrigger>
-          </DropdownMenuItem>          
+            ) : (
+              <DialogTrigger asChild>
+                <Button variant="link">
+                  <Typography>Add to channel</Typography>
+                </Button>
+              </DialogTrigger>
+            )}
+          </DropdownMenuItem>
           {showRemove && (
             <>
-            <div className="my-4 -mx-4">
-              <Separator />
-            </div>          
-            <DropdownMenuItem>
-              <Button
-                variant="link"
-                type="submit"
-                disabled={!enableRemoveItem}
-                onClick={async () => {
-                  if (!embeddedWallet?.address) return false
-                  // set isRemoving state to true
-                  setIsRemoving(true)
-                  // initialize bool for txn success check
-                  let txSuccess = false
-                  // Generate removeReference post
-                  if (signMessage) {
-                    txSuccess = await processRemoveItemPost({
-                      rid: targetUserId as bigint,
-                      signer: embeddedWallet.address as Hex,
-                      itemCid: add.itemId,
-                      channelCid: channel.id,
-                      privySignMessage: signMessage,
-                    })
-                    if (txSuccess) {
-                      toast.custom((t) => (
-                        <Toast>{'Item successfully removed'}</Toast>
-                      ))
-                      setIsRemoving(false)
-                    } else {
-                      toast.custom((t) => <Toast>{'Error removing item'}</Toast>)
-                      setIsRemoving(false)
+              <div className="my-4 -mx-4">
+                <Separator />
+              </div>
+              <DropdownMenuItem>
+                <Button
+                  variant="link"
+                  type="submit"
+                  disabled={!enableRemoveItem}
+                  onClick={async () => {
+                    if (!embeddedWallet?.address) return false
+                    // set isRemoving state to true
+                    setIsRemoving(true)
+                    // initialize bool for txn success check
+                    let txSuccess = false
+                    // Generate removeReference post
+                    if (signMessage) {
+                      txSuccess = await processRemoveItemPost({
+                        rid: targetUserId as bigint,
+                        signer: embeddedWallet.address as Hex,
+                        itemCid: add.itemId,
+                        channelCid: channel.id,
+                        privySignMessage: signMessage,
+                      })
+                      if (txSuccess) {
+                        toast.custom((t) => (
+                          <Toast>{'Item successfully removed'}</Toast>
+                        ))
+                        setIsRemoving(false)
+                      } else {
+                        toast.custom((t) => (
+                          <Toast>{'Error removing item'}</Toast>
+                        ))
+                        setIsRemoving(false)
+                      }
                     }
-                  }
-                }}
-              >
-                <Typography>Remove item</Typography>
-              </Button>
-            </DropdownMenuItem>
-          </>
+                  }}
+                >
+                  <Typography>Remove item</Typography>
+                </Button>
+              </DropdownMenuItem>
+            </>
           )}
         </DropdownMenuContent>
       </DropdownMenu>
@@ -267,30 +272,38 @@ export function ItemDropdown({
             </DialogHeader>
             <Separator />
             <Stack className="px-5 w-full max-h-[350px] md:max-h-[500px] overflow-y-auto space-y-[10px]">
-              {taggedChannels?.map((channel, index) => (
+              {taggedChannels.length === 0 ? (
                 <Flex className="w-full justify-between items-center">
-                  <ChannelCard2
-                    key={index}
-                    channel={channel?.channel}
-                    metadata={channel?.channelItemMetadata}
-                    imageBoxWidth={64}
-                  />
-                  <Checkbox
-                    checked={
-                      channel.newContainsItem
-                        ? true
-                        : channel.containsItem &&
-                            // biome-ignore lint:
-                            (!channel.hasOwnProperty('newContainsItem') ||
-                              channel.newContainsItem)
-                          ? true
-                          : false
-                    }
-                    onClick={() => flipContainsItem(channel.channel.id)}
-                    className="mr-2 rounded-none border-[#858585] data-[state=checked]:bg-[#858585] shadow-none"
-                  />
+                  <Typography>No channels created yet</Typography>
                 </Flex>
-              ))}
+              ) : (
+                <>
+                  {taggedChannels?.map((channel, index) => (
+                    <Flex className="w-full justify-between items-center">
+                      <ChannelCard2
+                        key={index}
+                        channel={channel?.channel}
+                        metadata={channel?.channelItemMetadata}
+                        imageBoxWidth={64}
+                      />
+                      <Checkbox
+                        checked={
+                          channel.newContainsItem
+                            ? true
+                            : channel.containsItem &&
+                                // biome-ignore lint:
+                                (!channel.hasOwnProperty('newContainsItem') ||
+                                  channel.newContainsItem)
+                              ? true
+                              : false
+                        }
+                        onClick={() => flipContainsItem(channel.channel.id)}
+                        className="mr-2 rounded-none border-[#858585] data-[state=checked]:bg-[#858585] shadow-none"
+                      />
+                    </Flex>
+                  ))}
+                </>
+              )}
             </Stack>
             <Separator />
             <DialogFooter className="flex flex-col py-2">

@@ -159,7 +159,6 @@ export function AddToChannelDialog({ item }: { item: Item }) {
       ) : (
         <DialogTrigger asChild>
           <Button
-            disabled={!userChannels || userChannels.length === 0}
             variant="outline"
             className="rounded-none shadow-none py-5 md:py-4 w-full hover:bg-transparent hover:border-secondary-foreground transition-all"
           >
@@ -182,30 +181,38 @@ export function AddToChannelDialog({ item }: { item: Item }) {
             </DialogHeader>
             <Separator />
             <Stack className="px-5 w-full max-h-[350px] md:max-h-[500px] overflow-y-auto space-y-[10px]">
-              {taggedChannels?.map((channel, index) => (
-                <Flex className="w-full justify-between items-center">
-                  <ChannelCard2
-                    key={index}
-                    channel={channel?.channel}
-                    metadata={channel?.channelItemMetadata}
-                    imageBoxWidth={64}
-                  />
-                  <Checkbox
-                    checked={
-                      channel.newContainsItem
-                        ? true
-                        : channel.containsItem &&
-                            // biome-ignore lint:
-                            (!channel.hasOwnProperty('newContainsItem') ||
-                              channel.newContainsItem)
-                          ? true
-                          : false
-                    }
-                    onClick={() => flipContainsItem(channel.channel.id)}
-                    className="mr-2 rounded-none border-[#858585] data-[state=checked]:bg-[#858585] shadow-none"
-                  />
+              {taggedChannels.length === 0 ? (
+                <Flex className="w-full justify-start items-center text-center">
+                  <Typography>No channels created yet</Typography>
                 </Flex>
-              ))}
+              ) : (
+                <>
+                  {taggedChannels?.map((channel, index) => (
+                    <Flex className="w-full justify-between items-center">
+                      <ChannelCard2
+                        key={index}
+                        channel={channel?.channel}
+                        metadata={channel?.channelItemMetadata}
+                        imageBoxWidth={64}
+                      />
+                      <Checkbox
+                        checked={
+                          channel.newContainsItem
+                            ? true
+                            : channel.containsItem &&
+                                // biome-ignore lint:
+                                (!channel.hasOwnProperty('newContainsItem') ||
+                                  channel.newContainsItem)
+                              ? true
+                              : false
+                        }
+                        onClick={() => flipContainsItem(channel.channel.id)}
+                        className="mr-2 rounded-none border-[#858585] data-[state=checked]:bg-[#858585] shadow-none"
+                      />
+                    </Flex>
+                  ))}
+                </>
+              )}
             </Stack>
             <Separator />
             <DialogFooter className="flex flex-col py-2">
