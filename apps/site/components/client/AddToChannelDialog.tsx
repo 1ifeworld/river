@@ -126,7 +126,6 @@ export function AddToChannelDialog({ item }: { item: Item }) {
 
   // biome-ignore lint:
   function getStateDiff(channels: any[]): any[] {
-    console.log('channels inside of state dif ', channels)
     return channels
       .filter((channel) => {
         if (
@@ -146,8 +145,6 @@ export function AddToChannelDialog({ item }: { item: Item }) {
 
   // biome-ignore lint:
   const channelsStateDif: any[] = getStateDiff(taggedChannels)
-
-  console.log('channels state dif: ', channelsStateDif)
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -184,7 +181,7 @@ export function AddToChannelDialog({ item }: { item: Item }) {
               </DialogClose>
             </DialogHeader>
             <Separator />
-            <Stack className="px-5 w-full max-h-[330px] md:max-h-[500px] overflow-y-auto space-y-[10px]">
+            <Stack className="px-5 w-full max-h-[350px] md:max-h-[500px] overflow-y-auto space-y-[10px]">
               {taggedChannels?.map((channel, index) => (
                 <Flex className="w-full justify-between items-center">
                   <ChannelCard2

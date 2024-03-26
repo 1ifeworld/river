@@ -73,7 +73,7 @@ export async function ChannelItems({
                   </TableCell>
                 </Link>
                 <TableCell className="text-right text-primary-foreground z-40">
-                  <ItemDropdown channel={channel} add={add} />
+                  <ItemDropdown channel={channel} add={add} item={add.item} />
                 </TableCell>
               </TableRow>
             ),
@@ -89,7 +89,9 @@ export async function ChannelItems({
           <ItemCard
             key={add.timestamp}
             add={add}
-            dropdownComponent={<ItemDropdown add={add} channel={channel} />}
+            dropdownComponent={
+              <ItemDropdown channel={channel} add={add} item={add.item} />
+            }
           />
         ),
       )}

@@ -1,26 +1,39 @@
+import { useState, useEffect } from 'react'
+import { toast } from 'sonner'
+import type { Hex } from 'viem'
+import { usePrivy } from '@privy-io/react-auth'
 import { useUserContext } from '@/context'
 import {
   Button,
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuPortal,
   DropdownMenuTrigger,
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogPortal,
+  DialogTitle,
+  DialogTrigger,
   Loading,
   Toast,
   Typography,
+  Separator,
+  Stack,
+  Flex,
+  Checkbox,
 } from '@/design-system'
-import type { Adds, Channel, ChannelRoles } from '@/gql'
-import { processRemoveItemPost } from 'lib/posts'
-import { useState } from 'react'
-import { toast } from 'sonner'
-import type { Hex } from 'viem'
-
-interface ItemDropdownProps {
-  channel: Channel
-  add: Adds
-}
+import {
+  getChannelsForItem,
+  type Adds,
+  type Channel,
+  type ChannelRoles,
+  type Item,
+} from '@/gql'
+import { processRemoveItemPost, processBatchMoveItemPost } from '@/lib'
+import { ChannelCard2 } from '@/client'
 
 function isAdminOrAdder({
   userRid,
@@ -46,10 +59,27 @@ function isAdminOrAdder({
   return false
 }
 
-export function ItemDropdown({ channel, add }: ItemDropdownProps) {
-  const { signMessage, userId: targetUserId, embeddedWallet } = useUserContext()
-  const [isRemoving, setIsRemoving] = useState(false)
+export function ItemDropdown({
+  channel,
+  add,
+  item,
+}: { channel: Channel; add: Adds; item: Item }) {
+  /*
+    General state/hooks
+  */
+  const { login, authenticated } = usePrivy()
+  const {
+    signMessage,
+    userId: targetUserId,
+    embeddedWallet,
+    userChannels,
+  } = useUserContext()
+  const [dialogOpen, setDialogOpen] = useState(false)
 
+  /*
+    remove item state + helpers
+  */
+  const [isRemoving, setIsRemoving] = useState(false)
   const enableRemoveItem =
     !embeddedWallet?.address ||
     !targetUserId ||
@@ -62,59 +92,245 @@ export function ItemDropdown({ channel, add }: ItemDropdownProps) {
           itemAddedBy: add.addedById,
         })
 
+  /*
+    add to channel state + helpers
+  */
+  // biome-ignore lint:
+  const [taggedChannels, setTaggedChannels] = useState<any[]>([])
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  useEffect(() => {
+    const tagChannels = async () => {
+      try {
+        // fetch channels item has been added to
+        const { channels: channelsForItem } = await getChannelsForItem({
+          id: item.id,
+        })
+        // if not added to any channels, return
+        if (!channelsForItem?.items) return
+        // update taggedChannels state by adding "contains item" value to each channel
+        // userChannels is fed in via user contexst
+        // @ts-ignore
+        const processedChannels = userChannels?.map((channel, index) => {
+          return {
+            channel: channel.channel,
+            channelItemMetadata: channel.channelItemMetadata,
+            containsItem: channelsForItem?.items?.some(
+              (c) => channel.channel.id === c.channel.id,
+            ),
+          }
+        })
+        // update taggedChannels state if processedChannels returned
+        if (processedChannels) setTaggedChannels(processedChannels)
+
+        // TODO: add in any relevant sorting
+      } catch (error) {
+        console.error('Error tagging channels:', error)
+      }
+    }
+
+    if (userChannels) {
+      tagChannels()
+    }
+  }, [userChannels])
+
+  /*
+    for items that previously are in a channel, dont enable deselecting
+    for item that were not in a channel, enable selecting/deselecting
+  */
+
+  // biome-ignore lint:
+  function flipContainsItem(channelId: any) {
+    setTaggedChannels((prevChannels) =>
+      prevChannels.map((c) => {
+        if (c.channel.id === channelId) {
+          if (c.containsItem === true) {
+            return c
+          } else {
+            // biome-ignore lint:
+            if (!c.hasOwnProperty('newContainsItem')) {
+              return { ...c, newContainsItem: true }
+            } else {
+              return { ...c, newContainsItem: !c.newContainsItem }
+            }
+          }
+        } else {
+          return c
+        }
+      }),
+    )
+  }
+
+  // biome-ignore lint:
+  function getStateDiff(channels: any[]): any[] {
+    return channels
+      .filter((channel) => {
+        if (
+          // biome-ignore lint:
+          channel.hasOwnProperty('newContainsItem') &&
+          channel.newContainsItem !== channel.containsItem
+        ) {
+          return true // include the channel in the result array
+        }
+        return false // exclude the channel from the result array
+      })
+      .map((channel) => ({
+        channelId: channel.channel.id,
+        action: channel.newContainsItem ? 1 : 0, // 1 == add, 0 = remove
+      }))
+  }
+
+  // biome-ignore lint:
+  const channelsStateDif: any[] = getStateDiff(taggedChannels)
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger
-        disabled={isRemoving}
-        className="focus:outline-none mb-1"
-      >
-        <Typography className="hover:font-bold" variant="h2">
-          {isRemoving ? <Loading /> : '...'}
-        </Typography>
-      </DropdownMenuTrigger>
-      <DropdownMenuPortal>
-        <DropdownMenuContent side="bottom" align="end" className="w-32">
-          <DropdownMenuGroup className="flex flex-col gap-2">
-            <DropdownMenuItem>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+      {/* Dropdown logic */}
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          disabled={isRemoving || isSubmitting}
+          className="focus:outline-none mb-1"
+        >
+          <Typography className="hover:font-bold" variant="h2">
+            {isRemoving || isSubmitting ? <Loading /> : '...'}
+          </Typography>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent side="bottom" align="start">
+          <DropdownMenuItem>
+            <DialogTrigger asChild>
+              <Button
+                disabled={!userChannels || userChannels.length === 0}
+                variant="link"
+              >
+                <Typography>Add to channel</Typography>
+              </Button>
+            </DialogTrigger>
+          </DropdownMenuItem>
+          <div className="my-4 -mx-4">
+            <Separator />
+          </div>
+          <DropdownMenuItem>
+            <Button
+              variant="link"
+              type="submit"
+              disabled={!enableRemoveItem}
+              onClick={async () => {
+                if (!embeddedWallet?.address) return false
+                // set isRemoving state to true
+                setIsRemoving(true)
+                // initialize bool for txn success check
+                let txSuccess = false
+                // Generate removeReference post
+                if (signMessage) {
+                  txSuccess = await processRemoveItemPost({
+                    rid: targetUserId as bigint,
+                    signer: embeddedWallet.address as Hex,
+                    itemCid: add.itemId,
+                    channelCid: channel.id,
+                    privySignMessage: signMessage,
+                  })
+                  if (txSuccess) {
+                    toast.custom((t) => (
+                      <Toast>{'Item successfully removed'}</Toast>
+                    ))
+                    setIsRemoving(false)
+                  } else {
+                    toast.custom((t) => <Toast>{'Error removing item'}</Toast>)
+                    setIsRemoving(false)
+                  }
+                }
+              }}
+            >
+              <Typography>Remove item</Typography>
+            </Button>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      {/* Dialog logic logic */}
+      <DialogPortal>
+        <DialogContent className="sm:max-w-[425px] focus:outline-none">
+          <Stack className="items-center gap-4">
+            <DialogHeader className="px-5 flex w-full justify-between items-center">
+              <DialogTitle className="flex-1 text-start">
+                <Typography>Add to channel</Typography>
+              </DialogTitle>
+              <DialogClose asChild className="flex-1 justify-end">
+                <Button variant="link">
+                  <Typography>close</Typography>
+                </Button>
+              </DialogClose>
+            </DialogHeader>
+            <Separator />
+            <Stack className="px-5 w-full max-h-[350px] md:max-h-[500px] overflow-y-auto space-y-[10px]">
+              {taggedChannels?.map((channel, index) => (
+                <Flex className="w-full justify-between items-center">
+                  <ChannelCard2
+                    key={index}
+                    channel={channel?.channel}
+                    metadata={channel?.channelItemMetadata}
+                    imageBoxWidth={64}
+                  />
+                  <Checkbox
+                    checked={
+                      channel.newContainsItem
+                        ? true
+                        : channel.containsItem &&
+                            // biome-ignore lint:
+                            (!channel.hasOwnProperty('newContainsItem') ||
+                              channel.newContainsItem)
+                          ? true
+                          : false
+                    }
+                    onClick={() => flipContainsItem(channel.channel.id)}
+                    className="mr-2 rounded-none border-[#858585] data-[state=checked]:bg-[#858585] shadow-none"
+                  />
+                </Flex>
+              ))}
+            </Stack>
+            <Separator />
+            <DialogFooter className="flex flex-col py-2">
               <Button
                 variant="link"
-                type="submit"
-                disabled={!enableRemoveItem}
+                disabled={channelsStateDif.length === 0 || isSubmitting}
                 onClick={async () => {
-                  if (!embeddedWallet?.address) return false
-                  // set isRemoving state to true
-                  setIsRemoving(true)
-                  // initialize bool for txn success check
+                  if (!embeddedWallet?.address || !targetUserId) return false
+                  setIsSubmitting(true)
+                  // Initialize bool for txn success check
                   let txSuccess = false
-                  // Generate removeReference post
+                  // Generate process roles post
                   if (signMessage) {
-                    txSuccess = await processRemoveItemPost({
-                      rid: targetUserId as bigint,
+                    txSuccess = await processBatchMoveItemPost({
+                      rid: targetUserId,
                       signer: embeddedWallet.address as Hex,
-                      itemCid: add.itemId,
-                      channelCid: channel.id,
                       privySignMessage: signMessage,
+                      itemId: item.id,
+                      diffs: channelsStateDif,
                     })
+                    setDialogOpen(false)
                     if (txSuccess) {
                       toast.custom((t) => (
-                        <Toast>{'Item successfully removed'}</Toast>
+                        <Toast>{`Item${
+                          channelsStateDif.length > 1 ? 's' : ''
+                        } added successfully`}</Toast>
                       ))
-                      setIsRemoving(false)
+                      setIsSubmitting(false)
                     } else {
                       toast.custom((t) => (
-                        <Toast>{'Error removing item'}</Toast>
+                        <Toast>{`Error moving item${
+                          channelsStateDif.length > 1 ? 's' : ''
+                        }`}</Toast>
                       ))
-                      setIsRemoving(false)
+                      setIsSubmitting(false)
                     }
                   }
                 }}
               >
-                <Typography>Remove item</Typography>
+                <Typography>{isSubmitting ? <Loading /> : 'Save'}</Typography>
               </Button>
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
-        </DropdownMenuContent>
-      </DropdownMenuPortal>
-    </DropdownMenu>
+            </DialogFooter>
+          </Stack>
+        </DialogContent>
+      </DialogPortal>
+    </Dialog>
   )
 }
