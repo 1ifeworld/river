@@ -238,7 +238,13 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
         // set roles
         for (let j = 0; j < members.length; ++j) {
           // Check that corresponding role is valid (NONE or MEMBER or ADMIN)
-          if (!Object.values(ChannelRoleTypes).includes(Number(roles[j])))
+          if (
+            !Object.values(ChannelRoleTypes).includes(
+              Number(
+                roles[j],
+              ) as (typeof ChannelRoleTypes)[keyof typeof ChannelRoleTypes],
+            )
+          )
             continue
           // Check to make sure user exists or is USER_ID_ZERO
           const user = await User.findUnique({ id: members[j] })
@@ -324,7 +330,11 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
           for (let j = 0; j < updateMembers.length; ++j) {
             // Check that corresponding role is valid (NONE or MEMBER or ADMIN)
             if (
-              !Object.values(ChannelRoleTypes).includes(Number(updateRoles[j]))
+              !Object.values(ChannelRoleTypes).includes(
+                Number(
+                  updateRoles[j],
+                ) as (typeof ChannelRoleTypes)[keyof typeof ChannelRoleTypes],
+              )
             )
               continue
             // Check to make sure user exists or is USER_ID_ZERO
