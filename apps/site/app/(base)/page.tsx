@@ -20,7 +20,7 @@ export default async function Home() {
             add={add}
             dropdownComponent={
               // @ts-ignore
-              <ItemDropdown channel={add.channel} add={add} item={add.item} />
+              <ItemDropdown channel={add.channel} add={add} item={add.item} showRemove={false} />
             }
           />
         ),

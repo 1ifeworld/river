@@ -63,7 +63,8 @@ export function ItemDropdown({
   channel,
   add,
   item,
-}: { channel: Channel; add: Adds; item: Item }) {
+  showRemove = false
+}: { channel: Channel; add: Adds; item: Item, showRemove?: boolean }) {
   /*
     General state/hooks
   */
@@ -205,45 +206,49 @@ export function ItemDropdown({
                 <Typography>Add to channel</Typography>
               </Button>
             </DialogTrigger>
-          </DropdownMenuItem>
-          <div className="my-4 -mx-4">
-            <Separator />
-          </div>
-          <DropdownMenuItem>
-            <Button
-              variant="link"
-              type="submit"
-              disabled={!enableRemoveItem}
-              onClick={async () => {
-                if (!embeddedWallet?.address) return false
-                // set isRemoving state to true
-                setIsRemoving(true)
-                // initialize bool for txn success check
-                let txSuccess = false
-                // Generate removeReference post
-                if (signMessage) {
-                  txSuccess = await processRemoveItemPost({
-                    rid: targetUserId as bigint,
-                    signer: embeddedWallet.address as Hex,
-                    itemCid: add.itemId,
-                    channelCid: channel.id,
-                    privySignMessage: signMessage,
-                  })
-                  if (txSuccess) {
-                    toast.custom((t) => (
-                      <Toast>{'Item successfully removed'}</Toast>
-                    ))
-                    setIsRemoving(false)
-                  } else {
-                    toast.custom((t) => <Toast>{'Error removing item'}</Toast>)
-                    setIsRemoving(false)
+          </DropdownMenuItem>          
+          {showRemove && (
+            <>
+            <div className="my-4 -mx-4">
+              <Separator />
+            </div>          
+            <DropdownMenuItem>
+              <Button
+                variant="link"
+                type="submit"
+                disabled={!enableRemoveItem}
+                onClick={async () => {
+                  if (!embeddedWallet?.address) return false
+                  // set isRemoving state to true
+                  setIsRemoving(true)
+                  // initialize bool for txn success check
+                  let txSuccess = false
+                  // Generate removeReference post
+                  if (signMessage) {
+                    txSuccess = await processRemoveItemPost({
+                      rid: targetUserId as bigint,
+                      signer: embeddedWallet.address as Hex,
+                      itemCid: add.itemId,
+                      channelCid: channel.id,
+                      privySignMessage: signMessage,
+                    })
+                    if (txSuccess) {
+                      toast.custom((t) => (
+                        <Toast>{'Item successfully removed'}</Toast>
+                      ))
+                      setIsRemoving(false)
+                    } else {
+                      toast.custom((t) => <Toast>{'Error removing item'}</Toast>)
+                      setIsRemoving(false)
+                    }
                   }
-                }
-              }}
-            >
-              <Typography>Remove item</Typography>
-            </Button>
-          </DropdownMenuItem>
+                }}
+              >
+                <Typography>Remove item</Typography>
+              </Button>
+            </DropdownMenuItem>
+          </>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
       {/* Dialog logic logic */}
