@@ -21,6 +21,7 @@ export default async function Channel({
     id: params.id,
   })
 
+
   if (!channel) {
     return <Typography>This is not a valid channel</Typography>
   }
