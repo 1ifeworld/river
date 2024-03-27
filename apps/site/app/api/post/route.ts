@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
       chainId: 42070,
       functionSignature:
         'post((address signer, (uint256 rid, uint256 timestamp, uint8 msgType, bytes msgBody) message, uint16 hashType, bytes32 hash, uint16 sigType, bytes sig))',
-      args: post,
+      args: {post},
     })
 
     // const tx = await postGateway.post(post)
@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
 
     const options = {
       method: 'GET',
-      headers: { Authorization: `Bearer ${process.env.SYNDICATE_API_KEY}` },
+      headers: { Authorization: `Bearer ${process.env.SYNDICATE_API_KEY}`},
     }
 
     const txResponse: SyndicateApiResponse = await fetch(
@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
     }
     let successfulTxHash = null
     for (const tx of txResponse.transactionAttempts) {
-      if (tx.status === 'SUCCESS' && !tx.reverted) {
+      if (tx.status === 'CONFIRMED' && !tx.reverted) {
         successfulTxHash = tx.hash
         break
       }
