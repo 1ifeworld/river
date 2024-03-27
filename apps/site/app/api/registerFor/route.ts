@@ -4,6 +4,8 @@ import { ethers } from 'ethers'
 import type { NextRequest } from 'next/server'
 import { addresses, idRegistryABI } from 'scrypt'
 import { type Hex, decodeAbiParameters } from 'viem'
+import { syndicate } from '@/config/syndicateClient'
+import type { SyndicateApiResponse } from 'lib/api'
 
 export async function POST(req: NextRequest) {
   const user = await req.json()
@@ -13,52 +15,88 @@ export async function POST(req: NextRequest) {
   const { to, recovery, deadline, sig } = userWithoutUsername
 
   console.log({ userWithoutUsername })
-  const credentials = {
-    relayerApiKey: process.env.IDREGISTRY_API_UNO,
-    relayerApiSecret: process.env.IDREGISTRY_SECRET_UNO,
-  }
+
+  // const credentials = {
+  //   relayerApiKey: process.env.IDREGISTRY_API_UNO,
+  //   relayerApiSecret: process.env.IDREGISTRY_SECRET_UNO,
+  // }
 
   try {
-    const defenderClient = new Defender(credentials)
-    const provider = defenderClient.relaySigner.getProvider()
-    const signer = defenderClient.relaySigner.getSigner(provider, {
-      speed: 'fast',
-    })
+    // const defenderClient = new Defender(credentials)
+    // const provider = defenderClient.relaySigner.getProvider()
+    // const signer = defenderClient.relaySigner.getSigner(provider, {
+    //   speed: 'fast',
+    // })
 
     const idRegistry = new ethers.Contract(
       addresses.idRegistry.optimism,
       idRegistryABI,
-      signer as unknown as ethers.Signer,
     )
 
-    const registerTxn = await idRegistry.registerFor(
-      to,
-      recovery,
-      deadline,
-      sig,
-    )
+    // const registerTxn = await idRegistry.registerFor(
+    //   to,
+    //   recovery,
+    //   deadline,
+    //   sig,
+    // )
 
-    const txnReceipt = await optimismPubClient.waitForTransactionReceipt({
-      hash: registerTxn.hash as Hex,
+    const projectId = process.env.SYNDICATE_PROJECT_ID_IDREGISTRY
+    if (!projectId) {
+      throw new Error(
+        'SYNDICATE_PROJECT_ID is not defined in environment variables.',
+      )
+    }
+
+    const registerTx = await syndicate.transact.sendTransaction({
+      projectId: projectId,
+      contractAddress: addresses.idRegistry.optimism,
+      chainId: 420,
+      functionSignature:
+        'registerFor(address to, address recovery, uint256 deadline, bytes sig)',
+      args: { userWithoutUsername },
     })
 
-    const [rid, recoveryAddress] = decodeAbiParameters(
-      [
-        { name: 'rid', type: 'uint256' },
-        { name: 'recoveryAddress', type: 'address' },
-      ],
-      txnReceipt.logs[0].data,
-    )
+    // const txnReceipt = await optimismPubClient.waitForTransactionReceipt({
+    //   hash: registerTxn.hash as Hex,
+    // })
 
-    console.log('rid: ', rid)
-    console.log('transaction receipt: ', registerTxn)
+    // const [rid, recoveryAddress] = decodeAbiParameters(
+    //   [
+    //     { name: 'rid', type: 'uint256' },
+    //     { name: 'recoveryAddress', type: 'address' },
+    //   ],
+    //   txnReceipt.logs[0].data,
+    // )
+
+    // console.log('rid: ', rid)
+    console.log('transaction receipt: ', registerTx)
+
+    const options = {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${process.env.SYNDICATE_API_KEY}` },
+    }
+    const txResponse: SyndicateApiResponse = await fetch(
+      `https://api.syndicate.io/wallet/project/${projectId}/request/${registerTx.transactionId}`,
+      options,
+    ).then((response) => response.json())
+
+    if (!txResponse || !txResponse.transactionAttempts.length) {
+      throw new Error('Transaction attempt data not found.')
+    }
+    let successfulTxHash = null
+    for (const tx of txResponse.transactionAttempts) {
+      if (tx.status === 'CONFIRMED' && !tx.reverted) {
+        successfulTxHash = tx.hash
+        break
+      }
+    }
+
+    if (!successfulTxHash) {
+      throw new Error('No successful transaction attempt found.')
+    }
 
     return new Response(
-      JSON.stringify({
-        success: true,
-        hash: registerTxn.hash,
-        rid: rid.toString(),
-      }),
+      JSON.stringify({ success: true, hash: successfulTxHash }),
       {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
