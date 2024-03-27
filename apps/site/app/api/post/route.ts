@@ -5,7 +5,7 @@ import type { NextRequest } from 'next/server'
 import { addresses, postGatewayABI } from 'scrypt'
 import type { Hex } from 'viem'
 import { syndicate } from '@/config/syndicateClient'
-import { SyndicateApiResponse } from 'lib/api'
+import type { SyndicateApiResponse } from 'lib/api'
 
 export async function POST(req: NextRequest) {
   const post = await req.json()
@@ -31,7 +31,8 @@ export async function POST(req: NextRequest) {
       projectId: 'a8349c10-aafd-4785-95f3-bbada9784910',
       contractAddress: '0x423a602F5e551A25b28eb33eB56B961590aD5290',
       chainId: 42070,
-      functionSignature: 'post()',
+      functionSignature:
+        'post((address signer, (uint256 rid, uint256 timestamp, uint8 msgType, bytes msgBody) message, uint16 hashType, bytes32 hash, uint16 sigType, bytes sig))',
       args: post,
     })
 
@@ -60,25 +61,28 @@ export async function POST(req: NextRequest) {
       .then((response) => response.json())
       .catch((err) => console.error(err))
 
-      if (!txResponse || !txResponse.transactionAttempts.length) {
-        throw new Error('Transaction attempt data not found.')
+    if (!txResponse || !txResponse.transactionAttempts.length) {
+      throw new Error('Transaction attempt data not found.')
+    }
+    let successfulTxHash = null
+    for (const tx of txResponse.transactionAttempts) {
+      if (tx.status === 'SUCCESS' && !tx.reverted) {
+        successfulTxHash = tx.hash
+        break
       }
-      let successfulTxHash = null
-      for (const tx of txResponse.transactionAttempts) {
-        if (tx.status === "SUCCESS" && !tx.reverted) {
-          successfulTxHash = tx.hash
-          break 
-        }
-      }
-    
-      if (!successfulTxHash) {
-        throw new Error('No successful transaction attempt found.')
-      }
-    
-      return new Response(JSON.stringify({ success: true, hash: successfulTxHash }), {
+    }
+
+    if (!successfulTxHash) {
+      throw new Error('No successful transaction attempt found.')
+    }
+
+    return new Response(
+      JSON.stringify({ success: true, hash: successfulTxHash }),
+      {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
-      })
+      },
+    )
   } catch (error) {
     let errorMessage = 'Unknown error'
     let statusCode = 500

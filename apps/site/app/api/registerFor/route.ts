@@ -5,7 +5,7 @@ import type { NextRequest } from 'next/server'
 import { addresses, idRegistryABI } from 'scrypt'
 import { type Hex, decodeAbiParameters } from 'viem'
 import { syndicate } from '@/config/syndicateClient'
-import { SyndicateApiResponse } from 'lib/api'
+import type { SyndicateApiResponse } from 'lib/api'
 
 export async function POST(req: NextRequest) {
   const user = await req.json()
@@ -85,20 +85,23 @@ export async function POST(req: NextRequest) {
     }
     let successfulTxHash = null
     for (const tx of txResponse.transactionAttempts) {
-      if (tx.status === "SUCCESS" && !tx.reverted) {
+      if (tx.status === 'SUCCESS' && !tx.reverted) {
         successfulTxHash = tx.hash
-        break 
+        break
       }
     }
-  
+
     if (!successfulTxHash) {
       throw new Error('No successful transaction attempt found.')
     }
-  
-    return new Response(JSON.stringify({ success: true, hash: successfulTxHash }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    })
+
+    return new Response(
+      JSON.stringify({ success: true, hash: successfulTxHash }),
+      {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      },
+    )
   } catch (error) {
     console.error(error)
     let errorMessage = 'Unknown error'
@@ -107,6 +110,7 @@ export async function POST(req: NextRequest) {
     if (error instanceof Error) {
       errorMessage = error.message
       statusCode =
+        // biome-ignore lint: `status` is not part of the standard Error interface
         typeof (error as any).status === 'number' ? (error as any).status : 500
     }
 
