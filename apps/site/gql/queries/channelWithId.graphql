@@ -13,7 +13,7 @@ query channelWithId($id: String!) {
         role
       }
     }
-    adds(orderBy: "timestamp", orderDirection: "desc") {
+    adds(limit: 100, orderBy: "timestamp", orderDirection: "desc") {
       items {
         timestamp
         channelId
@@ -28,7 +28,7 @@ query channelWithId($id: String!) {
         }
         channel {
           name
-          adds(orderBy: "timestamp", orderDirection: "desc") {
+          adds(limit: 100, orderBy: "timestamp", orderDirection: "desc") {
             items {
               itemId
             }
