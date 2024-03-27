@@ -21,6 +21,36 @@ type User = {
   sig: string
 }
 
+export interface TransactionAttempt {
+  block: number
+  blockCreatedAt: string
+  chainId: number
+  createdAt: string
+  hash: string
+  nonce: number
+  reverted: boolean
+  signedTxn: string
+  status: string
+  transactionId: string
+  updatedAt: string
+  walletAddress: string
+}
+
+export interface SyndicateApiResponse {
+  chainId: number
+  contractAddress: string
+  createdAt: string
+  data: string
+  decodedData: object
+  functionSignature: string
+  invalid: boolean
+  projectId: string
+  transactionAttempts: TransactionAttempt[]
+  transactionId: string
+  updatedAt: string
+  value: string
+}
+
 /* API ROUTES */
 
 // This is in to help with serialization of bigints during json stringify

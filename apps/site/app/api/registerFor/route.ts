@@ -5,37 +5,7 @@ import type { NextRequest } from 'next/server'
 import { addresses, idRegistryABI } from 'scrypt'
 import { type Hex, decodeAbiParameters } from 'viem'
 import { syndicate } from '@/config/syndicateClient'
-
-
-interface SyndicateApiResponse {
-  chainId: number
-  contractAddress: string
-  createdAt: string
-  data: string
-  decodedData: object
-  functionSignature: string
-  invalid: boolean
-  projectId: string
-  transactionAttempts: TransactionAttempt[]
-  transactionId: string
-  updatedAt: string
-  value: string
-}
-
-interface TransactionAttempt {
-  block: number
-  blockCreatedAt: string
-  chainId: number
-  createdAt: string
-  hash: string
-  nonce: number
-  reverted: boolean
-  signedTxn: string
-  status: string
-  transactionId: string
-  updatedAt: string
-  walletAddress: string
-}
+import { SyndicateApiResponse } from 'lib/api'
 
 export async function POST(req: NextRequest) {
   const user = await req.json()
@@ -51,7 +21,6 @@ export async function POST(req: NextRequest) {
   //   relayerApiSecret: process.env.IDREGISTRY_SECRET_UNO,
   // }
 
-
   try {
     // const defenderClient = new Defender(credentials)
     // const provider = defenderClient.relaySigner.getProvider()
@@ -61,8 +30,8 @@ export async function POST(req: NextRequest) {
 
     const idRegistry = new ethers.Contract(
       addresses.idRegistry.optimism,
-      idRegistryABI,    
-      )
+      idRegistryABI,
+    )
 
     // const registerTxn = await idRegistry.registerFor(
     //   to,
@@ -71,17 +40,20 @@ export async function POST(req: NextRequest) {
     //   sig,
     // )
 
-        const projectId = process.env.SYNDICATE_PROJECT_ID
-        if (!projectId) {
-          throw new Error("SYNDICATE_PROJECT_ID is not defined in environment variables.")
-        }
+    const projectId = process.env.SYNDICATE_PROJECT_ID_IDREGISTRY
+    if (!projectId) {
+      throw new Error(
+        'SYNDICATE_PROJECT_ID is not defined in environment variables.',
+      )
+    }
 
     const registerTx = await syndicate.transact.sendTransaction({
       projectId: projectId,
       contractAddress: addresses.idRegistry.optimism,
-      chainId: 420, 
-      functionSignature: 'registerFor(address to, address recovery, uint256 deadline, bytes sig)',
-      args: userWithoutUsername
+      chainId: 420,
+      functionSignature:
+        'registerFor(address to, address recovery, uint256 deadline, bytes sig)',
+      args: userWithoutUsername,
     })
 
     // const txnReceipt = await optimismPubClient.waitForTransactionReceipt({
@@ -99,17 +71,31 @@ export async function POST(req: NextRequest) {
     // console.log('rid: ', rid)
     console.log('transaction receipt: ', registerTx)
 
-    const options = { method: 'GET', headers: { Authorization: `Bearer ${process.env.SYNDICATE_API_KEY}` } }
-    const txResponse: SyndicateApiResponse = await fetch(`https://api.syndicate.io/wallet/project/${projectId}/request/${registerTx.transactionId}`, options)
-      .then(response => response.json())
+    const options = {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${process.env.SYNDICATE_API_KEY}` },
+    }
+    const txResponse: SyndicateApiResponse = await fetch(
+      `https://api.syndicate.io/wallet/project/${projectId}/request/${registerTx.transactionId}`,
+      options,
+    ).then((response) => response.json())
 
     if (!txResponse || !txResponse.transactionAttempts.length) {
-      throw new Error("Transaction attempt data not found.")
+      throw new Error('Transaction attempt data not found.')
     }
-
-    const txHash = txResponse.transactionAttempts[0].hash
-
-    return new Response(JSON.stringify({ success: true, hash: txHash }), {
+    let successfulTxHash = null
+    for (const tx of txResponse.transactionAttempts) {
+      if (tx.status === "SUCCESS" && !tx.reverted) {
+        successfulTxHash = tx.hash
+        break 
+      }
+    }
+  
+    if (!successfulTxHash) {
+      throw new Error('No successful transaction attempt found.')
+    }
+  
+    return new Response(JSON.stringify({ success: true, hash: successfulTxHash }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     })
@@ -120,12 +106,16 @@ export async function POST(req: NextRequest) {
 
     if (error instanceof Error) {
       errorMessage = error.message
-      statusCode = typeof (error as any).status === 'number' ? (error as any).status : 500
+      statusCode =
+        typeof (error as any).status === 'number' ? (error as any).status : 500
     }
 
-    return new Response(JSON.stringify({ success: false, error: errorMessage }), {
-      status: statusCode,
-      headers: { 'Content-Type': 'application/json' },
-    })
+    return new Response(
+      JSON.stringify({ success: false, error: errorMessage }),
+      {
+        status: statusCode,
+        headers: { 'Content-Type': 'application/json' },
+      },
+    )
   }
 }

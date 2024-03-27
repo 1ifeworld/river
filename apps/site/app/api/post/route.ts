@@ -5,37 +5,7 @@ import type { NextRequest } from 'next/server'
 import { addresses, postGatewayABI } from 'scrypt'
 import type { Hex } from 'viem'
 import { syndicate } from '@/config/syndicateClient'
-
-interface TransactionAttempt {
-  block: number
-  blockCreatedAt: string
-  chainId: number
-  createdAt: string
-  hash: string
-  nonce: number
-  reverted: boolean
-  signedTxn: string
-  status: string
-  transactionId: string
-  updatedAt: string
-  walletAddress: string
-}
-
-interface SyndicateApiResponse {
-  chainId: number
-  contractAddress: string
-  createdAt: string
-  data: string
-  decodedData: object
-  functionSignature: string
-  invalid: boolean
-  projectId: string
-  transactionAttempts: TransactionAttempt[]
-  transactionId: string
-  updatedAt: string
-  value: string
-}
-
+import { SyndicateApiResponse } from 'lib/api'
 
 export async function POST(req: NextRequest) {
   const post = await req.json()
@@ -52,45 +22,63 @@ export async function POST(req: NextRequest) {
     //   speed: 'fast',
     // })
 
-    const postGateway = new ethers.Contract(
-      addresses.postGateway.nova,
-      postGatewayABI) 
+    // const postGateway = new ethers.Contract(
+    //   addresses.postGateway.nova,
+    //   postGatewayABI,
+    // )
 
-      const postTx = await syndicate.transact.sendTransaction({
-        projectId: 'a8349c10-aafd-4785-95f3-bbada9784910',
-        contractAddress: '0x423a602F5e551A25b28eb33eB56B961590aD5290', 
-        chainId: 42070,
-        functionSignature: 'post()',
-        args: post
-      })
-  
+    const postTx = await syndicate.transact.sendTransaction({
+      projectId: 'a8349c10-aafd-4785-95f3-bbada9784910',
+      contractAddress: '0x423a602F5e551A25b28eb33eB56B961590aD5290',
+      chainId: 42070,
+      functionSignature: 'post()',
+      args: post,
+    })
+
     // const tx = await postGateway.post(post)
 
     // await novaPubClient.waitForTransactionReceipt({
     //   hash: tx.hash as Hex,
     // })
 
-    const projectId = process.env.SYNDICATE_PROJECT_ID
+    const projectId = process.env.SYNDICATE_PROJECT_ID_POSTGATEWAY
     if (!projectId) {
-      throw new Error("SYNDICATE_PROJECT_ID is not defined in environment variables.")
+      throw new Error(
+        'SYNDICATE_PROJECT_ID_POSTGATEWAY is not defined in environment variables.',
+      )
     }
 
-    const options = { method: 'GET', headers: { Authorization: 'Bearer <token>' } };
+    const options = {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${process.env.SYNDICATE_API_KEY}` },
+    }
 
-    const txResponse: SyndicateApiResponse = await fetch(`https://api.syndicate.io/wallet/project/${projectId}/request/${postTx.transactionId}`, options)
-      .then(response => response.json())
-      .catch(err => console.error(err))
+    const txResponse: SyndicateApiResponse = await fetch(
+      `https://api.syndicate.io/wallet/project/${projectId}/request/${postTx.transactionId}`,
+      options,
+    )
+      .then((response) => response.json())
+      .catch((err) => console.error(err))
 
       if (!txResponse || !txResponse.transactionAttempts.length) {
-        throw new Error("Transaction attempt data not found.")
+        throw new Error('Transaction attempt data not found.')
       }
-  
-      const txHash = txResponse.transactionAttempts[0].hash 
-
-    return new Response(JSON.stringify({ success: true, hash: txHash }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    })
+      let successfulTxHash = null
+      for (const tx of txResponse.transactionAttempts) {
+        if (tx.status === "SUCCESS" && !tx.reverted) {
+          successfulTxHash = tx.hash
+          break 
+        }
+      }
+    
+      if (!successfulTxHash) {
+        throw new Error('No successful transaction attempt found.')
+      }
+    
+      return new Response(JSON.stringify({ success: true, hash: successfulTxHash }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      })
   } catch (error) {
     let errorMessage = 'Unknown error'
     let statusCode = 500
