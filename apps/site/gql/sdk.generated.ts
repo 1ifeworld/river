@@ -1238,7 +1238,7 @@ export const ChannelWithIdDocument = gql`
         role
       }
     }
-    adds(orderBy: "timestamp", orderDirection: "desc") {
+    adds(limit: 100, orderBy: "timestamp", orderDirection: "desc") {
       items {
         timestamp
         channelId
@@ -1253,7 +1253,7 @@ export const ChannelWithIdDocument = gql`
         }
         channel {
           name
-          adds(orderBy: "timestamp", orderDirection: "desc") {
+          adds(limit: 100, orderBy: "timestamp", orderDirection: "desc") {
             items {
               itemId
             }
