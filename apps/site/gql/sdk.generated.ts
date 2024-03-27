@@ -1116,7 +1116,7 @@ export type UserIdQuery = { __typename?: 'Query', users?: { __typename?: 'UserPa
 
 export const AllAddsDocument = gql`
     query allAdds {
-  addss(orderBy: "timestamp", orderDirection: "desc") {
+  addss(limit: 100, orderBy: "timestamp", orderDirection: "desc") {
     items {
       addedById
       removed
@@ -1136,7 +1136,7 @@ export const AllAddsDocument = gql`
             role
           }
         }
-        adds(orderBy: "timestamp", orderDirection: "desc") {
+        adds(limit: 100, orderBy: "timestamp", orderDirection: "desc") {
           items {
             itemId
           }
