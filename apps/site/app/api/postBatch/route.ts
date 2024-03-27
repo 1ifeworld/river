@@ -41,10 +41,10 @@ export async function POST(req: NextRequest) {
       chainId: 42170,
       functionSignature:
         'postBatch((address signer, (uint256 rid, uint256 timestamp, uint8 msgType, bytes msgBody) message, uint16 hashType, bytes32 hash, uint16 sigType, bytes sig)[] posts)',
-        args: {
-          posts: postsArray, 
-        },      
-       })
+      args: {
+        posts: postsArray,
+      },
+    })
 
     const options = {
       method: 'GET',
@@ -58,8 +58,8 @@ export async function POST(req: NextRequest) {
       .then((response) => response.json())
       .catch((err) => console.error(err))
 
-      console.log({txResponse})
-      console.log("transaction attempt", txResponse.transactionAttempts)
+    console.log({ txResponse })
+    console.log('transaction attempt', txResponse.transactionAttempts)
 
     // const tx = await postGateway.postBatch(postsArray)
     // await novaPubClient.waitForTransactionReceipt({
@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
     for (const tx of txResponse.transactionAttempts) {
       if (tx.status === 'CONFIRMED' && !tx.reverted) {
         successfulTxHash = tx.hash
-        console.log("successfulTxHash", successfulTxHash)
+        console.log('successfulTxHash', successfulTxHash)
         break
       }
     }

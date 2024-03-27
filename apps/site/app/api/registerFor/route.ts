@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
       chainId: 420,
       functionSignature:
         'registerFor(address to, address recovery, uint256 deadline, bytes sig)',
-      args: {userWithoutUsername},
+      args: { userWithoutUsername },
     })
 
     // const txnReceipt = await optimismPubClient.waitForTransactionReceipt({
