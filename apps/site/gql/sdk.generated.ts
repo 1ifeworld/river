@@ -1136,7 +1136,7 @@ export const AllAddsDocument = gql`
             role
           }
         }
-        adds(orderBy: "timestamp", orderDirection: "desc") {
+        adds(limit: 100, orderBy: "timestamp", orderDirection: "desc") {
           items {
             itemId
           }
