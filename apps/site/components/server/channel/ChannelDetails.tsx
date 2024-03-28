@@ -3,10 +3,9 @@ import type { Channel, Adds } from '@/gql'
 import { pluralize, unixTimeConverter } from '@/utils'
 
 export async function ChannelDetails({ channel }: { channel: Channel }) {
-  
   const length = channel?.adds?.items
     ? channel.adds.items.filter((add: Adds) => !add.removed).length
-    : 0;  
+    : 0
 
   return (
     <Stack className="py-8 md:ml-2 gap-y-[3px]">
