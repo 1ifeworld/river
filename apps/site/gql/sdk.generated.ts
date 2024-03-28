@@ -1037,10 +1037,12 @@ export type AllAddsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type AllAddsQuery = { __typename?: 'Query', addss?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', addedById: any, removed?: boolean | null, channelId: string, item: { __typename?: 'Item', id: string, timestamp: any, createdById: any, uri: string }, channel: { __typename?: 'Channel', name: string, roles?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> | null } | null, adds?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', itemId: string }> | null } | null } }> | null } | null };
 
-export type AllChannelsQueryVariables = Exact<{ [key: string]: never; }>;
+export type AllChannelsQueryVariables = Exact<{
+  endCursor?: InputMaybe<Scalars['String']['input']>;
+}>;
 
 
-export type AllChannelsQuery = { __typename?: 'Query', channels?: { __typename?: 'ChannelPage', items?: Array<{ __typename?: 'Channel', id: string, timestamp: any, createdById: any, uri: string, name: string, description: string, roles?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> | null } | null }> | null } | null };
+export type AllChannelsQuery = { __typename?: 'Query', channels?: { __typename?: 'ChannelPage', items?: Array<{ __typename?: 'Channel', id: string, timestamp: any, createdById: any, uri: string, name: string, description: string, roles?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> | null } | null, adds?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', timestamp: any }> | null } | null }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null } | null } | null };
 
 export type AllChannelsWithRidQueryVariables = Exact<{
   rid: Scalars['BigInt']['input'];
@@ -1147,8 +1149,8 @@ export const AllAddsDocument = gql`
 }
     `;
 export const AllChannelsDocument = gql`
-    query allChannels {
-  channels(orderBy: "timestamp", orderDirection: "desc") {
+    query allChannels($endCursor: String) {
+  channels(after: $endCursor, orderBy: "timestamp", orderDirection: "desc") {
     items {
       id
       timestamp
@@ -1163,6 +1165,17 @@ export const AllChannelsDocument = gql`
           role
         }
       }
+      adds(limit: 1, orderBy: "timestamp", orderDirection: "desc") {
+        items {
+          timestamp
+        }
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+      hasPreviousPage
+      startCursor
     }
   }
 }

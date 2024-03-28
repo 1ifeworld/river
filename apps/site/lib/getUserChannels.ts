@@ -1,6 +1,7 @@
 import { getAllChannelsWithRid } from '@/gql'
 import { getAddsMetadata, getUsername } from '@/lib'
 import { USER_ID_ZERO } from '@/constants'
+import { sortChannels } from '@/utils'
 
 export async function getUserChannels(rid: bigint) {
   try {
@@ -9,20 +10,26 @@ export async function getUserChannels(rid: bigint) {
       userId: rid,
     })
     if (!channels?.items) return
+    // drill into channels
+    const extractedChannels = channels.items.map((channel) => {
+      return channel.channel
+    })
+    // sort channels
+    // @ts-ignore
+    const sortedChannels = sortChannels(extractedChannels)
+    // @ts-ignore
     // fetch usernames for channels
     const usernames = await Promise.all(
-      channels.items.map((channel) =>
+      sortedChannels.map((channel) =>
         getUsername({
-          id: channel.channel.createdById,
+          id: channel.createdById,
         }),
       ),
     )
-    // generate active member count for channels
-
     // fetch item metadata for channel mosaics
     // biome-ignore lint:
-    const allAdds = channels?.items.map((channel: any) => {
-      const last4 = (channel.channel.adds?.items ?? [])
+    const allAdds = sortedChannels.map((channel: any) => {
+      const last4 = (channel.adds?.items ?? [])
         // biome-ignore lint:
         .filter((item: any) => !item.removed)
         .slice(0, 4)
@@ -42,14 +49,14 @@ export async function getUserChannels(rid: bigint) {
       })
     })
 
-    const processedChannels = channels?.items.map((channel, index) => {
+    const processedChannels = sortedChannels.map((channel, index) => {
       return {
         channel: {
-          ...channel.channel,
+          ...channel,
           creatorUsername: usernames[index],
-          activeMembers: !channel?.channel?.roles?.items
+          activeMembers: !channel?.roles?.items
             ? 0
-            : channel?.channel?.roles?.items.filter(
+            : channel?.roles?.items.filter(
                 (item) =>
                   item.rid !== USER_ID_ZERO && Number.parseInt(item.role) === 1,
               ).length,
