@@ -16,38 +16,38 @@ export type Post = {
   sig: Hash
 }
 
-export enum ChannelDataTypes {
-  NONE = 0,
-  NAME_AND_DESC = 1,
-}
+export const ChannelDataTypes = {
+  NONE: 0,
+  NAME_AND_DESC: 1,
+} as const
 
-export enum ChannelAccessTypes {
-  NONE = 0,
-  ROLES = 1,
-}
+export const ChannelAccessTypes = {
+  NONE: 0,
+  ROLES: 1,
+} as const
 
-export enum ItemDataTypes {
-  NONE = 0,
-  STRING_URI = 1,
-}
+export const ItemDataTypes = {
+  NONE: 0,
+  STRING_URI: 1,
+} as const
 
-export enum ItemAccessTypes {
-  NONE = 0,
-  ROLES = 1,
-}
+export const ItemAccessTypes = {
+  NONE: 0,
+  ROLES: 1,
+} as const
 
-export enum MessageTypes {
-  NONE = 0, // 0
-  CREATE_ITEM = 1, // 1
-  UPDATE_ITEM = 2, // 2
-  CREATE_CHANNEL = 3, // 3
-  UPDATE_CHANNEL = 4, // 4
-  ADD_ITEM_TO_CHANNEL = 5, // 5
-  REMOVE_ITEM_FROM_CHANNEL = 6, // 6
-}
+export const MessageTypes = {
+  NONE: 0,
+  CREATE_ITEM: 1,
+  UPDATE_ITEM: 2,
+  CREATE_CHANNEL: 3,
+  UPDATE_CHANNEL: 4,
+  ADD_ITEM_TO_CHANNEL: 5,
+  REMOVE_ITEM_FROM_CHANNEL: 6,
+} as const
 
-export enum ChannelRoleTypes {
-  NONE = 0, // 0
-  MEMBER = 1, // 1
-  ADMIN = 2, // 2
-}
+export const ChannelRoleTypes = {
+  NONE: 0,
+  MEMBER: 1,
+  ADMIN: 2,
+} as const
