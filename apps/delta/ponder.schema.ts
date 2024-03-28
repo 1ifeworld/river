@@ -106,7 +106,7 @@ export default createSchema((p) => ({
     timestamp: p.bigint(),
     addedById: p.bigint().references('User.id'),
     addedBy: p.one('addedById'),
-    itemId: p.string().references('Item.id'),
+    itemId: p.string().references('Item.id').optional(),
     item: p.one('itemId'),
     channelId: p.string().references('Channel.id'),
     channel: p.one('channelId'),
