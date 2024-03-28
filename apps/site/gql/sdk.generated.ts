@@ -1040,7 +1040,7 @@ export type AllAddsQuery = { __typename?: 'Query', addss?: { __typename?: 'AddsP
 export type AllChannelsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllChannelsQuery = { __typename?: 'Query', channels?: { __typename?: 'ChannelPage', items?: Array<{ __typename?: 'Channel', id: string, timestamp: any, createdById: any, uri: string, name: string, description: string, roles?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> | null } | null }> | null } | null };
+export type AllChannelsQuery = { __typename?: 'Query', channels?: { __typename?: 'ChannelPage', items?: Array<{ __typename?: 'Channel', id: string, timestamp: any, createdById: any, uri: string, name: string, description: string, roles?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> | null } | null, adds?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', timestamp: any }> | null } | null }> | null } | null };
 
 export type AllChannelsWithRidQueryVariables = Exact<{
   rid: Scalars['BigInt']['input'];
@@ -1161,6 +1161,11 @@ export const AllChannelsDocument = gql`
           timestamp
           rid
           role
+        }
+      }
+      adds(limit: 10, orderBy: "timestamp", orderDirection: "desc") {
+        items {
+          timestamp
         }
       }
     }
