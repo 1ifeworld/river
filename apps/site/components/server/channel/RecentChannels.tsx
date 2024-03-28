@@ -1,5 +1,5 @@
 import { Stack, Typography, Public } from '@/design-system'
-import { getAllChannels, type ChannelRoles, type Channel } from '@/gql'
+import { type ChannelRoles, getMostRecentChannels } from '@/gql'
 import { USER_ID_ZERO } from '@/constants'
 import Link from 'next/link'
 
@@ -29,13 +29,13 @@ export async function RecentChannels({
 }: {
   params: { id: string }
 }) {
-  const { channels } = await getAllChannels()
+  const { channels } = await getMostRecentChannels()
 
-  if (!channels?.items) {
+  if (!channels) {
     return <Typography>Error fetching channels</Typography>
   }
 
-  const sortedChannels = sort(channels.items)
+  const sortedChannels = sort(channels)
 
   function checkIsPublic({ roleData }: { roleData: ChannelRoles[] }) {
     for (let i = 0; i < roleData.length; ++i) {

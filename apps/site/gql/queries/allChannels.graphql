@@ -1,5 +1,5 @@
-query allChannels {
-  channels(orderBy: "timestamp", orderDirection: "desc") {
+query allChannels($endCursor: String) {
+  channels(after: $endCursor, orderBy: "timestamp", orderDirection: "desc") {
     items {
       id
       timestamp
@@ -14,11 +14,17 @@ query allChannels {
           role
         }
       }
-      adds(limit: 10, orderBy: "timestamp", orderDirection: "desc") {
+      adds(limit: 1, orderBy: "timestamp", orderDirection: "desc") {
         items {
           timestamp    
         }
       }  
     }
+    pageInfo {
+      endCursor
+      hasNextPage
+      hasPreviousPage
+      startCursor
+    }    
   }
 }
