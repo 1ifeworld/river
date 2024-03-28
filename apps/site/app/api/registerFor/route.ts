@@ -1,11 +1,7 @@
-import { optimismPubClient } from '@/config/publicClient'
-import { Defender } from '@openzeppelin/defender-sdk'
-import { ethers } from 'ethers'
 import type { NextRequest } from 'next/server'
-import { addresses, idRegistryABI } from 'scrypt'
-import { type Hex, decodeAbiParameters } from 'viem'
+import { addresses } from 'scrypt'
 import { syndicate } from '@/config/syndicateClient'
-import type { SyndicateApiResponse } from 'lib/api'
+import { waitUntilTx, } from '@/lib'
 
 export async function POST(req: NextRequest) {
   const user = await req.json()
@@ -16,22 +12,29 @@ export async function POST(req: NextRequest) {
 
   console.log({ userWithoutUsername })
 
+    /* DEFENDER CODE */
+
   // const credentials = {
   //   relayerApiKey: process.env.IDREGISTRY_API_UNO,
   //   relayerApiSecret: process.env.IDREGISTRY_SECRET_UNO,
   // }
 
   try {
+      /* DEFENDER CODE */
+
     // const defenderClient = new Defender(credentials)
     // const provider = defenderClient.relaySigner.getProvider()
     // const signer = defenderClient.relaySigner.getSigner(provider, {
     //   speed: 'fast',
     // })
 
-    const idRegistry = new ethers.Contract(
-      addresses.idRegistry.optimism,
-      idRegistryABI,
-    )
+    // const idRegistry = new ethers.Contract(
+    //   addresses.idRegistry.optimism,
+    //   idRegistryABI,
+    // )
+
+      /* DEFENDER CODE */
+
 
     // const registerTxn = await idRegistry.registerFor(
     //   to,
@@ -56,6 +59,15 @@ export async function POST(req: NextRequest) {
       args: { userWithoutUsername },
     })
 
+         // Use the waitUntilTx function to wait for the transaction to be processed
+         const successfulTxHash = await waitUntilTx({
+          projectID: projectId,
+          txID: registerTx.transactionId,
+        })
+    
+
+      /* DEFENDER CODE */
+
     // const txnReceipt = await optimismPubClient.waitForTransactionReceipt({
     //   hash: registerTxn.hash as Hex,
     // })
@@ -69,32 +81,8 @@ export async function POST(req: NextRequest) {
     // )
 
     // console.log('rid: ', rid)
-    console.log('transaction receipt: ', registerTx)
 
-    const options = {
-      method: 'GET',
-      headers: { Authorization: `Bearer ${process.env.SYNDICATE_API_KEY}` },
-    }
-    const txResponse: SyndicateApiResponse = await fetch(
-      `https://api.syndicate.io/wallet/project/${projectId}/request/${registerTx.transactionId}`,
-      options,
-    ).then((response) => response.json())
-
-    if (!txResponse || !txResponse.transactionAttempts.length) {
-      throw new Error('Transaction attempt data not found.')
-    }
-    let successfulTxHash = null
-    for (const tx of txResponse.transactionAttempts) {
-      if (tx.status === 'CONFIRMED' && !tx.reverted) {
-        successfulTxHash = tx.hash
-        break
-      }
-    }
-
-    if (!successfulTxHash) {
-      throw new Error('No successful transaction attempt found.')
-    }
-
+  
     return new Response(
       JSON.stringify({ success: true, hash: successfulTxHash }),
       {

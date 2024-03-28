@@ -1,14 +1,12 @@
-import { novaPubClient } from '@/config/publicClient'
-import { Defender } from '@openzeppelin/defender-sdk'
-import { ethers } from 'ethers'
 import type { NextRequest } from 'next/server'
-import { addresses, postGatewayABI } from 'scrypt'
-import type { Hex } from 'viem'
+import { addresses } from 'scrypt'
 import { syndicate } from '@/config/syndicateClient'
-import type { SyndicateApiResponse, TransactionAttempt } from 'lib/api'
+import { waitUntilTx, } from '@/lib'
 
 export async function POST(req: NextRequest) {
   const postsArray = await req.json()
+
+  /* DEFENDER CODE */
 
   // const credentials = {
   //   relayerApiKey: process.env.NONCE_API_UNO,
@@ -16,6 +14,9 @@ export async function POST(req: NextRequest) {
   // }
 
   try {
+
+  /* DEFENDER CODE */
+
     // const defenderClient = new Defender(credentials)
     // const provider = defenderClient.relaySigner.getProvider()
     // const signer = defenderClient.relaySigner.getSigner(provider, {
@@ -46,41 +47,18 @@ export async function POST(req: NextRequest) {
       },
     })
 
-    const options = {
-      method: 'GET',
-      headers: { Authorization: `Bearer ${process.env.SYNDICATE_API_KEY}` },
-    }
+     // Use the waitUntilTx function to wait for the transaction to be processed
+     const successfulTxHash = await waitUntilTx({
+      projectID: projectId,
+      txID: postBatchTx.transactionId,
+    })
 
-    const txResponse: SyndicateApiResponse = await fetch(
-      `https://api.syndicate.io/wallet/project/${projectId}/request/${postBatchTx.transactionId}`,
-      options,
-    )
-      .then((response) => response.json())
-      .catch((err) => console.error(err))
-
-    console.log({ txResponse })
-    console.log('transaction attempt', txResponse.transactionAttempts)
+    /* DEFENDER CODE */
 
     // const tx = await postGateway.postBatch(postsArray)
     // await novaPubClient.waitForTransactionReceipt({
     //   hash: tx.hash as Hex,
     // })
-
-    // if (!txResponse || !txResponse.transactionAttempts.length) {
-    //   throw new Error('Transaction attempt data not found.')
-    // }
-
-    let successfulTxHash = null
-    for (const tx of txResponse.transactionAttempts) {
-      if (tx.status === 'CONFIRMED' && !tx.reverted) {
-        successfulTxHash = tx.hash
-        console.log('successfulTxHash', successfulTxHash)
-        break
-      }
-    }
-    if (!successfulTxHash) {
-      throw new Error('No successful transaction attempt found.')
-    }
 
     return new Response(
       JSON.stringify({ success: true, hash: successfulTxHash }),

@@ -1,14 +1,14 @@
-import { novaPubClient } from '@/config/publicClient'
-import { Defender } from '@openzeppelin/defender-sdk'
-import { ethers } from 'ethers'
 import type { NextRequest } from 'next/server'
-import { addresses, postGatewayABI } from 'scrypt'
-import type { Hex } from 'viem'
 import { syndicate } from '@/config/syndicateClient'
-import type { SyndicateApiResponse } from 'lib/api'
+import { addresses } from 'scrypt'
+import { waitUntilTx } from '@/lib'
+
 
 export async function POST(req: NextRequest) {
   const post = await req.json()
+  console.log("POSTY", post)
+
+  /* DEFENDER CODE */
 
   // const credentials = {
   //   relayerApiKey: process.env.NONCE_API_UNO,
@@ -16,6 +16,9 @@ export async function POST(req: NextRequest) {
   // }
 
   try {
+
+  /* DEFENDER CODE */
+
     // const defenderClient = new Defender(credentials)
     // const provider = defenderClient.relaySigner.getProvider()
     // const signer = defenderClient.relaySigner.getSigner(provider, {
@@ -27,14 +30,53 @@ export async function POST(req: NextRequest) {
     //   postGatewayABI,
     // )
 
+
+    const projectId = process.env.SYNDICATE_PROJECT_ID_POSTGATEWAY
+
+    if (!projectId) {
+      throw new Error(
+        'SYNDICATE_PROJECT_ID_POSTGATEWAY is not defined in environment variables.',
+      )
+    }
+
+    // const args = {
+    //   signer: post.signer, // Assuming this is correctly formatted as an address string
+    //   message: {
+    //     // Convert string numeric values to actual numbers. 
+    //     // Ensure these conversions maintain the integrity of the values.
+    //     rid: parseInt(post.message.rid, 10),
+    //     timestamp: parseInt(post.message.timestamp, 10),
+    //     msgType: post.message.msgType, // Assuming this is already the correct type
+    //     msgBody: post.message.msgBody, // Assuming this is correctly formatted as bytes
+    //   },
+    //   hashType: post.hashType, // Assuming this is already the correct type
+    //   hash: post.hash, // Assuming this is correctly formatted as bytes32
+    //   sigType: post.sigType, // Assuming this is already the correct type
+    //   sig: post.sig // Assuming this is correctly formatted as bytes
+    // };
+
     const postTx = await syndicate.transact.sendTransaction({
-      projectId: 'a8349c10-aafd-4785-95f3-bbada9784910',
-      contractAddress: '0x423a602F5e551A25b28eb33eB56B961590aD5290',
-      chainId: 42070,
-      functionSignature:
-        'post((address signer, (uint256 rid, uint256 timestamp, uint8 msgType, bytes msgBody) message, uint16 hashType, bytes32 hash, uint16 sigType, bytes sig))',
-      args: { post },
-    })
+      projectId: projectId,
+      contractAddress: addresses.postGateway.nova,
+      chainId: 42170,
+      functionSignature:'post((address signer, (uint256 rid, uint256 timestamp, uint8 msgType, bytes msgBody) message, uint16 hashType, bytes32 hash, uint16 sigType, bytes sig))',
+      args: {
+        signer: post.signer,
+        message: {
+            rid: post.message.rid, 
+            timestamp: post.message.timestamp,
+            msgType: post.message.msgType, 
+            msgBody: post.message.msgBody, 
+          },
+          hashType: post.hashType, 
+          hash: post.hash, 
+          sigType: post.sigType, 
+          sig: post.sig, 
+        }, 
+      },
+    )
+
+    console.log({postTx})
 
     // const tx = await postGateway.post(post)
 
@@ -42,39 +84,14 @@ export async function POST(req: NextRequest) {
     //   hash: tx.hash as Hex,
     // })
 
-    const projectId = process.env.SYNDICATE_PROJECT_ID_POSTGATEWAY
-    if (!projectId) {
-      throw new Error(
-        'SYNDICATE_PROJECT_ID_POSTGATEWAY is not defined in environment variables.',
-      )
-    }
 
-    const options = {
-      method: 'GET',
-      headers: { Authorization: `Bearer ${process.env.SYNDICATE_API_KEY}` },
-    }
+    // Use the waitUntilTx function to wait for the transaction to be processed
+     const successfulTxHash = await waitUntilTx({
+      projectID: projectId,
+      txID: postTx.transactionId,
+    })
 
-    const txResponse: SyndicateApiResponse = await fetch(
-      `https://api.syndicate.io/wallet/project/${projectId}/request/${postTx.transactionId}`,
-      options,
-    )
-      .then((response) => response.json())
-      .catch((err) => console.error(err))
-
-    if (!txResponse || !txResponse.transactionAttempts.length) {
-      throw new Error('Transaction attempt data not found.')
-    }
-    let successfulTxHash = null
-    for (const tx of txResponse.transactionAttempts) {
-      if (tx.status === 'CONFIRMED' && !tx.reverted) {
-        successfulTxHash = tx.hash
-        break
-      }
-    }
-
-    if (!successfulTxHash) {
-      throw new Error('No successful transaction attempt found.')
-    }
+    console.log({successfulTxHash})
 
     return new Response(
       JSON.stringify({ success: true, hash: successfulTxHash }),

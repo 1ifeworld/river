@@ -51,6 +51,61 @@ export interface SyndicateApiResponse {
   value: string
 }
 
+
+export interface WaitUntilTxOptions {
+  projectID: string
+  txID: string
+  maxAttempts?: number
+  every?: number
+}
+
+export const getTransactionRequest = async ({ projectID, txID }: Pick<WaitUntilTxOptions, 'projectID' | 'txID'>) => {
+  const response = await fetch(
+    `https://api.syndicate.io/wallet/project/${projectID}/request/${txID}`,
+    {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${process.env.SYNDICATE_API_KEY}` },
+    },
+  )
+  if (!response.ok) {
+    throw new Error(`Failed to get transaction request: ${response.statusText}`)
+  }
+  return response.json()
+}
+
+export async function waitUntilTx({
+  projectID,
+  txID,
+  maxAttempts = 20,
+  every = 1000,
+}: WaitUntilTxOptions) {
+  let currAttempts = 0
+  let transactionHash = null
+
+  while (!transactionHash) {
+    await new Promise((resolve) => setTimeout(resolve, every))
+
+    if (currAttempts >= maxAttempts) {
+      throw new Error("Max attempts reached")
+    }
+
+    const txAttempts = (await getTransactionRequest({ projectID, txID }))?.transactionAttempts
+
+    console.log({txAttempts})
+
+    if (txAttempts && txAttempts.length > 0 && txAttempts[txAttempts.length - 1].status === 'PENDING' && !txAttempts[txAttempts.length - 1].reverted) {
+      transactionHash = txAttempts[txAttempts.length - 1].hash
+      console.log(transactionHash)
+      break
+    }
+
+    currAttempts += 1
+  }
+
+  return transactionHash
+}
+
+
 /* API ROUTES */
 
 // This is in to help with serialization of bigints during json stringify
