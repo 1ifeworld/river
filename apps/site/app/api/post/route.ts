@@ -12,14 +12,14 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const postBatchTxRequest = postObject(post)
+    const postTxRequest = postObject(post)
 
-    const postBatchTx =
-      await syndicate.transact.sendTransaction(postBatchTxRequest)
+    const postTx =
+      await syndicate.transact.sendTransaction(postTxRequest)
 
     const successfulTxHash = await waitUntilTx({
       projectID: projectId,
-      txID: postBatchTx.transactionId,
+      txID: post.transactionId,
     })
 
     return new Response(
