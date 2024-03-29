@@ -11,17 +11,21 @@ export type Action = {
 export async function MarqueeWrapper() {
   let marqueeActions: Action[] = []
   const { data } = await getMarqueeData()
+
   if (data) {
     // @ts-ignore
     const { metadata } = await getAddsMetadata(data)
-    marqueeActions = data.map((add, index) => {
-      const itemMetadata = metadata.data[add.item.uri]
-      return {
-        itemName: itemMetadata.name,
-        actionName: 'added to',
-        channelName: data[index].channel.name,
-      }
-    })
+    marqueeActions = data
+      .map((add, index) => {
+        if (add.removed) return null
+        const itemMetadata = metadata.data[add.item.uri]
+        return {
+          itemName: itemMetadata.name,
+          actionName: 'added to',
+          channelName: data[index].channel.name,
+        }
+      })
+      .filter((action): action is Action => action !== null) // Type assertion using 'action is Action'
   }
   return <Marquee actions={marqueeActions} />
 }
