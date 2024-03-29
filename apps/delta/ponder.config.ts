@@ -1,6 +1,6 @@
 import { createConfig } from '@ponder/core'
 import { addresses, idRegistryABI, postGatewayABI } from 'scrypt'
-import { Hex, http } from 'viem'
+import { http } from 'viem'
 
 export default createConfig({
   networks: {

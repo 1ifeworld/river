@@ -84,30 +84,28 @@ export async function waitUntilTx({
   let currAttempts = 0
   let transactionHash = null
 
-  while (!transactionHash) {
-    await new Promise((resolve) => setTimeout(resolve, every))
-
-    if (currAttempts >= maxAttempts) {
-      throw new Error('Max attempts reached')
-    }
-
+  while (!transactionHash && currAttempts < maxAttempts) {
     const txAttempts = (await getTransactionRequest({ projectID, txID }))
       ?.transactionAttempts
 
     console.log({ txAttempts })
 
-    if (
-      txAttempts &&
-      txAttempts.length > 0 &&
-      txAttempts[txAttempts.length - 1].status === 'PENDING' &&
-      !txAttempts[txAttempts.length - 1].reverted
-    ) {
-      transactionHash = txAttempts[txAttempts.length - 1].hash
-      console.log(transactionHash)
-      break
+    if (txAttempts && txAttempts.length > 0) {
+      const lastAttempt = txAttempts[txAttempts.length - 1]
+      if (lastAttempt.status === 'PENDING' && !lastAttempt.reverted) {
+        transactionHash = lastAttempt.hash
+        break
+      }
     }
 
-    currAttempts += 1
+    currAttempts++
+    if (!transactionHash && currAttempts < maxAttempts) {
+      await new Promise((resolve) => setTimeout(resolve, every))
+    }
+  }
+
+  if (!transactionHash) {
+    throw new Error('Transaction not found within maximum attempts')
   }
 
   return transactionHash

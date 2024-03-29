@@ -1,32 +1,22 @@
 import type { NextRequest } from 'next/server'
 import { addresses } from 'scrypt'
-import { syndicate } from '@/config/syndicateClient'
+import { syndicate, postBatchObject, projectId } from '@/config/syndicateClient'
 import { waitUntilTx } from '@/lib'
 
 export async function POST(req: NextRequest) {
   const postsArray = await req.json()
 
   try {
-    const projectId = process.env.SYNDICATE_PROJECT_ID_POSTGATEWAY
-
     if (!projectId) {
       throw new Error(
         'SYNDICATE_PROJECT_ID_POSTGATEWAY is not defined in environment variables.',
       )
     }
+    const postBatchTxRequest = postBatchObject(postsArray)
 
-    const postBatchTx = await syndicate.transact.sendTransaction({
-      projectId: projectId,
-      contractAddress: addresses.postGateway.nova,
-      chainId: 42170,
-      functionSignature:
-        'postBatch((address signer, (uint256 rid, uint256 timestamp, uint8 msgType, bytes msgBody) message, uint16 hashType, bytes32 hash, uint16 sigType, bytes sig)[] posts)',
-      args: {
-        posts: postsArray,
-      },
-    })
+    const postBatchTx =
+      await syndicate.transact.sendTransaction(postBatchTxRequest)
 
-    // Use the waitUntilTx function to wait for the transaction to be processed
     const successfulTxHash = await waitUntilTx({
       projectID: projectId,
       txID: postBatchTx.transactionId,
