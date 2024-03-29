@@ -67,9 +67,11 @@ export async function ChannelCard({
   return (
     <div
       className={
-        orientation === 0
-          ? 'w-full flex gap-x-3 items-center justify-start'
-          : 'w-full flex-col space-y-[10px]'
+        ` w-full
+        ${orientation === 0
+          ? 'flex gap-x-3 items-center justify-start'
+          : 'flex-col gap-y-[10px]'
+        }`
       }
     >
       <Link href={`/channel/${channel.id}`}>
@@ -101,7 +103,7 @@ export async function ChannelCard({
           ) : (
             <div
               className={
-                orientation === 0 ? 'w-full' : `w-full md:w-[${width}px]`
+                orientation === 0 ? 'w-full' : `w-full md:w-64`
               }
             >
               {lastFourNonRemovedItems.length ? (
