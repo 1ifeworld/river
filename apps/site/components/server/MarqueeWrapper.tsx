@@ -1,10 +1,10 @@
 import { Marquee } from '@/client'
 import { getMarqueeData } from '@/gql'
-import { getAddsMetadata } from '@/lib'
+import { getAddsMetadata, getUsername } from '@/lib'
 
 export type Action = {
+  userName: string
   itemName: string
-  actionName: string
   channelName: string
 }
 
@@ -13,6 +13,15 @@ export async function MarqueeWrapper() {
   const { data } = await getMarqueeData()
 
   if (data) {
+    //  fetch usernames for adds
+    const usernames = await Promise.all(
+      data.map((add) =>
+        getUsername({
+          id: add.addedById,
+        }),
+      ),
+    )
+    // fetch metadata for items
     // @ts-ignore
     const { metadata } = await getAddsMetadata(data)
     marqueeActions = data
@@ -20,8 +29,8 @@ export async function MarqueeWrapper() {
         if (add.removed) return null
         const itemMetadata = metadata.data[add.item.uri]
         return {
+          userName: usernames[index],
           itemName: itemMetadata.name,
-          actionName: 'added to',
           channelName: data[index].channel.name,
         }
       })
