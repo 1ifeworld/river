@@ -14,8 +14,7 @@ export async function POST(req: NextRequest) {
 
     const postTxRequest = postObject(post)
 
-    const postTx =
-      await syndicate.transact.sendTransaction(postTxRequest)
+    const postTx = await syndicate.transact.sendTransaction(postTxRequest)
 
     const successfulTxHash = await waitUntilTx({
       projectID: projectId,

@@ -53,13 +53,12 @@ export const postBatchObject = (postsArray: PostBatchFunction) => ({
 })
 
 export const postObject = (post: Post) => ({
-    projectId: projectId,
-    contractAddress: addresses.postGateway.nova,
-    chainId: 42170,
-    functionSignature:
-      'post((address signer, (uint256 rid, uint256 timestamp, uint8 msgType, bytes msgBody) message, uint16 hashType, bytes32 hash, uint16 sigType, bytes sig) post)',
-    args: {
-      post: post,
-    },
-  })
-  
+  projectId: projectId,
+  contractAddress: addresses.postGateway.nova,
+  chainId: 42170,
+  functionSignature:
+    'post((address signer, (uint256 rid, uint256 timestamp, uint8 msgType, bytes msgBody) message, uint16 hashType, bytes32 hash, uint16 sigType, bytes sig) post)',
+  args: {
+    post: post,
+  },
+})
