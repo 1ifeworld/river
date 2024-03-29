@@ -25,7 +25,7 @@ export async function MarqueeWrapper() {
           channelName: data[index].channel.name,
         }
       })
-      .filter((action): action is Action => action !== null) // Type assertion using 'action is Action'
+      .filter((action): action is Action => action !== null)
   }
   return <Marquee actions={marqueeActions} />
 }
