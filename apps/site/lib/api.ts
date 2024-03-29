@@ -51,7 +51,6 @@ export interface SyndicateApiResponse {
   value: string
 }
 
-
 export interface WaitUntilTxOptions {
   projectID: string
   txID: string
@@ -59,7 +58,10 @@ export interface WaitUntilTxOptions {
   every?: number
 }
 
-export const getTransactionRequest = async ({ projectID, txID }: Pick<WaitUntilTxOptions, 'projectID' | 'txID'>) => {
+export const getTransactionRequest = async ({
+  projectID,
+  txID,
+}: Pick<WaitUntilTxOptions, 'projectID' | 'txID'>) => {
   const response = await fetch(
     `https://api.syndicate.io/wallet/project/${projectID}/request/${txID}`,
     {
@@ -86,14 +88,20 @@ export async function waitUntilTx({
     await new Promise((resolve) => setTimeout(resolve, every))
 
     if (currAttempts >= maxAttempts) {
-      throw new Error("Max attempts reached")
+      throw new Error('Max attempts reached')
     }
 
-    const txAttempts = (await getTransactionRequest({ projectID, txID }))?.transactionAttempts
+    const txAttempts = (await getTransactionRequest({ projectID, txID }))
+      ?.transactionAttempts
 
-    console.log({txAttempts})
+    console.log({ txAttempts })
 
-    if (txAttempts && txAttempts.length > 0 && txAttempts[txAttempts.length - 1].status === 'PENDING' && !txAttempts[txAttempts.length - 1].reverted) {
+    if (
+      txAttempts &&
+      txAttempts.length > 0 &&
+      txAttempts[txAttempts.length - 1].status === 'PENDING' &&
+      !txAttempts[txAttempts.length - 1].reverted
+    ) {
       transactionHash = txAttempts[txAttempts.length - 1].hash
       console.log(transactionHash)
       break
@@ -104,7 +112,6 @@ export async function waitUntilTx({
 
   return transactionHash
 }
-
 
 /* API ROUTES */
 

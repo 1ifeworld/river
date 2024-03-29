@@ -1,7 +1,9 @@
+import { optimismPubClient } from '@/config/publicClient'
+import { Defender } from '@openzeppelin/defender-sdk'
+import { ethers } from 'ethers'
 import type { NextRequest } from 'next/server'
-import { addresses } from 'scrypt'
-import { syndicate } from '@/config/syndicateClient'
-import { waitUntilTx, } from '@/lib'
+import { addresses, idRegistryABI } from 'scrypt'
+import { type Hex, decodeAbiParameters } from 'viem'
 
 export async function POST(req: NextRequest) {
   const user = await req.json()
@@ -11,80 +13,52 @@ export async function POST(req: NextRequest) {
   const { to, recovery, deadline, sig } = userWithoutUsername
 
   console.log({ userWithoutUsername })
-
-    /* DEFENDER CODE */
-
-  // const credentials = {
-  //   relayerApiKey: process.env.IDREGISTRY_API_UNO,
-  //   relayerApiSecret: process.env.IDREGISTRY_SECRET_UNO,
-  // }
+  const credentials = {
+    relayerApiKey: process.env.IDREGISTRY_API_UNO,
+    relayerApiSecret: process.env.IDREGISTRY_SECRET_UNO,
+  }
 
   try {
-      /* DEFENDER CODE */
-
-    // const defenderClient = new Defender(credentials)
-    // const provider = defenderClient.relaySigner.getProvider()
-    // const signer = defenderClient.relaySigner.getSigner(provider, {
-    //   speed: 'fast',
-    // })
-
-    // const idRegistry = new ethers.Contract(
-    //   addresses.idRegistry.optimism,
-    //   idRegistryABI,
-    // )
-
-      /* DEFENDER CODE */
-
-
-    // const registerTxn = await idRegistry.registerFor(
-    //   to,
-    //   recovery,
-    //   deadline,
-    //   sig,
-    // )
-
-    const projectId = process.env.SYNDICATE_PROJECT_ID_IDREGISTRY
-    if (!projectId) {
-      throw new Error(
-        'SYNDICATE_PROJECT_ID is not defined in environment variables.',
-      )
-    }
-
-    const registerTx = await syndicate.transact.sendTransaction({
-      projectId: projectId,
-      contractAddress: addresses.idRegistry.optimism,
-      chainId: 420,
-      functionSignature:
-        'registerFor(address to, address recovery, uint256 deadline, bytes sig)',
-      args: { userWithoutUsername },
+    const defenderClient = new Defender(credentials)
+    const provider = defenderClient.relaySigner.getProvider()
+    const signer = defenderClient.relaySigner.getSigner(provider, {
+      speed: 'fast',
     })
 
-         // Use the waitUntilTx function to wait for the transaction to be processed
-         const successfulTxHash = await waitUntilTx({
-          projectID: projectId,
-          txID: registerTx.transactionId,
-        })
-    
+    const idRegistry = new ethers.Contract(
+      addresses.idRegistry.optimism,
+      idRegistryABI,
+      signer as unknown as ethers.Signer,
+    )
 
-      /* DEFENDER CODE */
+    const registerTxn = await idRegistry.registerFor(
+      to,
+      recovery,
+      deadline,
+      sig,
+    )
 
-    // const txnReceipt = await optimismPubClient.waitForTransactionReceipt({
-    //   hash: registerTxn.hash as Hex,
-    // })
+    const txnReceipt = await optimismPubClient.waitForTransactionReceipt({
+      hash: registerTxn.hash as Hex,
+    })
 
-    // const [rid, recoveryAddress] = decodeAbiParameters(
-    //   [
-    //     { name: 'rid', type: 'uint256' },
-    //     { name: 'recoveryAddress', type: 'address' },
-    //   ],
-    //   txnReceipt.logs[0].data,
-    // )
+    const [rid, recoveryAddress] = decodeAbiParameters(
+      [
+        { name: 'rid', type: 'uint256' },
+        { name: 'recoveryAddress', type: 'address' },
+      ],
+      txnReceipt.logs[0].data,
+    )
 
-    // console.log('rid: ', rid)
+    console.log('rid: ', rid)
+    console.log('transaction receipt: ', registerTxn)
 
-  
     return new Response(
-      JSON.stringify({ success: true, hash: successfulTxHash }),
+      JSON.stringify({
+        success: true,
+        hash: registerTxn.hash,
+        rid: rid.toString(),
+      }),
       {
         status: 200,
         headers: { 'Content-Type': 'application/json' },

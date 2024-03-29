@@ -1,34 +1,12 @@
 import type { NextRequest } from 'next/server'
 import { addresses } from 'scrypt'
 import { syndicate } from '@/config/syndicateClient'
-import { waitUntilTx, } from '@/lib'
+import { waitUntilTx } from '@/lib'
 
 export async function POST(req: NextRequest) {
   const postsArray = await req.json()
-  console.log("postArray", postsArray)
-
-  /* DEFENDER CODE */
-
-  // const credentials = {
-  //   relayerApiKey: process.env.NONCE_API_UNO,
-  //   relayerApiSecret: process.env.NONCE_SECRET_UNO,
-  // }
 
   try {
-
-  /* DEFENDER CODE */
-
-    // const defenderClient = new Defender(credentials)
-    // const provider = defenderClient.relaySigner.getProvider()
-    // const signer = defenderClient.relaySigner.getSigner(provider, {
-    //   speed: 'fast',
-    // })
-
-    // const postGateway = new ethers.Contract(
-    //   addresses.postGateway.nova,
-    //   postGatewayABI,
-    // )
-
     const projectId = process.env.SYNDICATE_PROJECT_ID_POSTGATEWAY
 
     if (!projectId) {
@@ -48,18 +26,11 @@ export async function POST(req: NextRequest) {
       },
     })
 
-     // Use the waitUntilTx function to wait for the transaction to be processed
-     const successfulTxHash = await waitUntilTx({
+    // Use the waitUntilTx function to wait for the transaction to be processed
+    const successfulTxHash = await waitUntilTx({
       projectID: projectId,
       txID: postBatchTx.transactionId,
     })
-
-    /* DEFENDER CODE */
-
-    // const tx = await postGateway.postBatch(postsArray)
-    // await novaPubClient.waitForTransactionReceipt({
-    //   hash: tx.hash as Hex,
-    // })
 
     return new Response(
       JSON.stringify({ success: true, hash: successfulTxHash }),
