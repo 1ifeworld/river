@@ -5,6 +5,7 @@ import { waitUntilTx, } from '@/lib'
 
 export async function POST(req: NextRequest) {
   const postsArray = await req.json()
+  console.log("postArray", postsArray)
 
   /* DEFENDER CODE */
 

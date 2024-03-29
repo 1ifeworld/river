@@ -6,7 +6,9 @@ import { waitUntilTx } from '@/lib'
 
 export async function POST(req: NextRequest) {
   const post = await req.json()
-  console.log("POSTY", post)
+  console.log("post", post)
+
+
 
   /* DEFENDER CODE */
 
@@ -39,42 +41,17 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // const args = {
-    //   signer: post.signer, // Assuming this is correctly formatted as an address string
-    //   message: {
-    //     // Convert string numeric values to actual numbers. 
-    //     // Ensure these conversions maintain the integrity of the values.
-    //     rid: parseInt(post.message.rid, 10),
-    //     timestamp: parseInt(post.message.timestamp, 10),
-    //     msgType: post.message.msgType, // Assuming this is already the correct type
-    //     msgBody: post.message.msgBody, // Assuming this is correctly formatted as bytes
-    //   },
-    //   hashType: post.hashType, // Assuming this is already the correct type
-    //   hash: post.hash, // Assuming this is correctly formatted as bytes32
-    //   sigType: post.sigType, // Assuming this is already the correct type
-    //   sig: post.sig // Assuming this is correctly formatted as bytes
-    // };
+
 
     const postTx = await syndicate.transact.sendTransaction({
       projectId: projectId,
       contractAddress: addresses.postGateway.nova,
       chainId: 42170,
-      functionSignature:'post((address signer, (uint256 rid, uint256 timestamp, uint8 msgType, bytes msgBody) message, uint16 hashType, bytes32 hash, uint16 sigType, bytes sig))',
+      functionSignature: 'post((address signer, (uint256 rid, uint256 timestamp, uint8 msgType, bytes msgBody) message, uint16 hashType, bytes32 hash, uint16 sigType, bytes sig) post)',
       args: {
-        signer: post.signer,
-        message: {
-            rid: post.message.rid, 
-            timestamp: post.message.timestamp,
-            msgType: post.message.msgType, 
-            msgBody: post.message.msgBody, 
-          },
-          hashType: post.hashType, 
-          hash: post.hash, 
-          sigType: post.sigType, 
-          sig: post.sig, 
-        }, 
-      },
-    )
+        post: post
+      }
+    })
 
     console.log({postTx})
 
