@@ -46,6 +46,8 @@ export default async function ItemPage({
     id: params.id,
   })
 
+  console.log("channel query on item page: ", channel?.adds)
+
   const totalItems = channel?.adds?.items?.length ?? 0
   const reversedIndex = totalItems - Number(params.index)
   const itemToRender = channel?.adds?.items?.[reversedIndex]

@@ -60,25 +60,22 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
 
   const posts: Post[] = []
 
-  const { args } = decodeFunctionData({
+  const { args, functionName } = decodeFunctionData({
     abi: postGatewayABI,
     data: event.transaction.input,
   })
 
-  console.log('Post args:', args)
-
   // if decode fails return
   if (!args?.[0]) return
 
-  // Check if args is an array of posts or a batch of posts
-  if (Array.isArray(args[0])) {
+  if (functionName === 'post') posts[0] = args[0]
+  if (functionName === 'postBatch') {
     for (let i = 0; i < args[0].length; ++i) {
       posts[i] = args[0][i]
     }
-  } else {
-    const singlePost = args[0] as Post
-    posts.push(singlePost)
   }
+
+  console.log("posts to process: ", posts)
 
   // process every post -> associated message
   for (let i = 0; i < posts.length; ++i) {
@@ -104,10 +101,18 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
     const postId = (await postToCid(posts[i])).cid.toString()
     const messageId = (await messageToCid(posts[i].message)).cid.toString()
 
+    // ignore duplicate posts 
+    // NOTE: unclear why this posts are duplicated. issue on incoming funnnel
+    const postLookup = await Post.findUnique({id: postId})
+    if (postLookup) {
+      console.log("END: this post has already been processed")
+      return
+    }
+
     // Store Post + Message
-    await Post.upsert({
+    await Post.create({
       id: postId,
-      create: {
+      data: {
         relayer: event.transaction.from,
         signer: posts[i].signer,
         messageId: messageId,
@@ -116,7 +121,6 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
         sigType: BigInt(posts[i].sigType),
         sig: posts[i].sig,
       },
-      update: {},
     })
 
     await Message.upsert({
@@ -232,6 +236,7 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
             uri: channelData.contents,
             name: name,
             description: description,
+            addsCounter: BigInt(0)
           },
           update: {},
         })
@@ -357,10 +362,10 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
         break
       }
       case MessageTypes.ADD_ITEM_TO_CHANNEL: {
-        // 5
-        console.log('running add item to channel')
+        // 5        
         const { itemCid: addItemCid, channelCid: addChannelCid } =
           decodeAddItemMsgBody({ msgBody: posts[i].message.msgBody }) || {}
+          console.log(`running add item to channel for add id: ${addChannelCid}/${addItemCid} `)
         // check for proper decode
         if (!addItemCid || !addChannelCid) return
         // lookup itemCid + channelCid
@@ -386,16 +391,32 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
           // check if item exists. prevent adding item cids that don't exist
           const itemLookup = await Item.findUnique({ id: addItemCid })
           if (!itemLookup) break
-          await Adds.upsert({
+          // Create add           
+          const addLookup = await Adds.findUnique({
             id: `${addChannelCid}/${addItemCid}`,
-            create: {
+          })
+            if (addLookup) {
+            console.log("END: item already exists in channel")
+            break
+          }
+          //
+          // increment channel add counrer
+          const channelAddsCounter = await Channel.update({
+            id: addChannelCid,
+            data: ({ current }) => ({
+              addsCounter: (current.addsCounter as bigint) + BigInt(1)
+            }),
+          })          
+          await Adds.create({
+            id: `${addChannelCid}/${addItemCid}`,
+            data: {
               timestamp: posts[i].message.timestamp,
               addedById: posts[i].message.rid,
               messageId: messageId,
               itemId: addItemCid,
               channelId: addChannelCid,
+              channelIndex: channelAddsCounter.addsCounter
             },
-            update: {},
           })
         }
         break
@@ -409,6 +430,10 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
         const addLookup = await Adds.findUnique({
           id: `${remChannelCid}/${remItemCid}`,
         })
+        // const addLookup2 = await Adds.findMany({ where: { 
+        //   channelId: remChannelCid,
+        //   itemId: remItemCid
+        // }})
         // check for proper decode
         if (!remItemCid || !remChannelCid || !addLookup) return
         // lookup itemCid + channelCid

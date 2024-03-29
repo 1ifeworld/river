@@ -7,7 +7,7 @@ export const getChannelWithId = unstable_cache(
       id: id,
     })
 
-    return { channel: response.channel }
+    return { channel: response.channel, bro: "haha" }
   },
   ['channelWithId'],
 )

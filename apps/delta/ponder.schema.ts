@@ -67,6 +67,7 @@ export default createSchema((p) => ({
     name: p.string(),
     description: p.string(),
     roles: p.many("ChannelRoles.channelId"),
+    addsCounter: p.bigint(),
     adds: p.many('Adds.channelId'),
   }),
   ChannelRoles: p.createTable({
@@ -110,6 +111,7 @@ export default createSchema((p) => ({
     item: p.one('itemId'),
     channelId: p.string().references('Channel.id'),
     channel: p.one('channelId'),
+    channelIndex: p.bigint(),
     removedById: p.bigint().optional(),
     removed: p.boolean().optional()
   })
