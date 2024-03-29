@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
 
     const successfulTxHash = await waitUntilTx({
       projectID: projectId,
-      txID: post.transactionId,
+      txID: postTx.transactionId,
     })
 
     return new Response(
