@@ -1,17 +1,16 @@
 query marqueeData {
-  userCounters {
+  addss(limit: 75, orderBy: "timestamp", orderDirection: "desc") {
     items {
-      counter
-    }
-  }
-  itemCounters {
-    items {
-      counter
-    }
-  }
-  channelCounters {
-    items {
-      counter
+      removed
+      addedById      
+      item {
+        id
+        uri
+      }
+      channel {
+        id
+        name  
+      }
     }
   }
 }

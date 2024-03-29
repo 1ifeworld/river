@@ -1099,7 +1099,7 @@ export type ItemWithIdQuery = { __typename?: 'Query', item?: { __typename?: 'Ite
 export type MarqueeDataQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MarqueeDataQuery = { __typename?: 'Query', userCounters?: { __typename?: 'UserCounterPage', items?: Array<{ __typename?: 'UserCounter', counter: any }> | null } | null, itemCounters?: { __typename?: 'ItemCounterPage', items?: Array<{ __typename?: 'ItemCounter', counter: any }> | null } | null, channelCounters?: { __typename?: 'ChannelCounterPage', items?: Array<{ __typename?: 'ChannelCounter', counter: any }> | null } | null };
+export type MarqueeDataQuery = { __typename?: 'Query', addss?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', removed?: boolean | null, addedById: any, item: { __typename?: 'Item', id: string, uri: string }, channel: { __typename?: 'Channel', id: string, name: string } }> | null } | null };
 
 export type TxnHashQueryVariables = Exact<{
   hash: Scalars['String']['input'];
@@ -1383,19 +1383,18 @@ export const ItemWithIdDocument = gql`
     `;
 export const MarqueeDataDocument = gql`
     query marqueeData {
-  userCounters {
+  addss(limit: 75, orderBy: "timestamp", orderDirection: "desc") {
     items {
-      counter
-    }
-  }
-  itemCounters {
-    items {
-      counter
-    }
-  }
-  channelCounters {
-    items {
-      counter
+      removed
+      addedById
+      item {
+        id
+        uri
+      }
+      channel {
+        id
+        name
+      }
     }
   }
 }
