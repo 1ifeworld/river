@@ -111,7 +111,7 @@ export function ItemSidebar({
         <AddToChannelDialog item={itemContext.item} />
       </Flex>
       <Stack className="justify-between md:justify-start">
-        <Stack className="hidden md:block gap-y-5">
+        <Stack className="hidden md:flex gap-y-5">
           {/* <Stack className=""> */}
           <div>
             <Typography className="truncate">{itemMetadata?.name}</Typography>

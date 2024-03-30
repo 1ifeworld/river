@@ -164,7 +164,7 @@ export default async function ItemPage({
       </div>
       <Separator className="hidden md:block bg-border" orientation="vertical" />
       {/* <div>hi</div> */}
-      <div className="md:w-[22%]">
+      <div className="md:overflow-y-auto md:w-[22%]">
         <ItemSidebar
           // @ts-ignore
           itemContext={itemToRender}
