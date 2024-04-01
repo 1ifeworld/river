@@ -1,17 +1,19 @@
 import type { NextRequest } from 'next/server'
 import { syndicate, postObject, projectId } from '@/config/syndicateClient'
-import { waitUntilTx } from '@/lib'
+import { waitUntilTx, authToken} from '@/lib'
 
 export async function POST(req: NextRequest) {
   const post = await req.json()
 
   try {
-    if (!projectId) {
-      throw new Error(
-        'SYNDICATE_PROJECT_ID_POSTGATEWAY is not defined in environment variables.',
-      )
+    if (!projectId || typeof projectId !== 'string') {
+      throw new Error('projectId must be defined and of type string')
     }
-
+    
+    if (!authToken || typeof authToken !== 'string') {
+      throw new Error('authToken must be defined and of type string')
+    }
+    
     const postTxRequest = postObject(post)
 
     const postTx = await syndicate.transact.sendTransaction(postTxRequest)
@@ -19,6 +21,7 @@ export async function POST(req: NextRequest) {
     const successfulTxHash = await waitUntilTx({
       projectID: projectId,
       txID: postTx.transactionId,
+      authToken
     })
 
     return new Response(

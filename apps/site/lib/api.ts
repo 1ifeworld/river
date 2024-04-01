@@ -54,19 +54,24 @@ export interface SyndicateApiResponse {
 export interface WaitUntilTxOptions {
   projectID: string
   txID: string
+  authToken: string
   maxAttempts?: number
   every?: number
 }
 
+export const authToken = process.env.SYNDICATE_API_KEY
+
+
 export const getTransactionRequest = async ({
   projectID,
   txID,
-}: Pick<WaitUntilTxOptions, 'projectID' | 'txID'>) => {
+  authToken,
+}: Pick<WaitUntilTxOptions, 'projectID' | 'txID'> & { authToken: string }) => { 
   const response = await fetch(
     `https://api.syndicate.io/wallet/project/${projectID}/request/${txID}`,
     {
       method: 'GET',
-      headers: { Authorization: `Bearer ${process.env.SYNDICATE_API_KEY}` },
+      headers: { Authorization: `Bearer ${authToken}` },
     },
   )
   if (!response.ok) {
@@ -78,6 +83,7 @@ export const getTransactionRequest = async ({
 export async function waitUntilTx({
   projectID,
   txID,
+  authToken,
   maxAttempts = 20,
   every = 1000,
 }: WaitUntilTxOptions) {
@@ -85,7 +91,7 @@ export async function waitUntilTx({
   let transactionHash = null
 
   while (!transactionHash && currAttempts < maxAttempts) {
-    const txAttempts = (await getTransactionRequest({ projectID, txID }))
+    const txAttempts = (await getTransactionRequest({ projectID, txID, authToken }))
       ?.transactionAttempts
 
     console.log({ txAttempts })
