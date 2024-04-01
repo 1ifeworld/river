@@ -61,12 +61,11 @@ export interface WaitUntilTxOptions {
 
 export const authToken = process.env.SYNDICATE_API_KEY
 
-
 export const getTransactionRequest = async ({
   projectID,
   txID,
   authToken,
-}: Pick<WaitUntilTxOptions, 'projectID' | 'txID'> & { authToken: string }) => { 
+}: Pick<WaitUntilTxOptions, 'projectID' | 'txID'> & { authToken: string }) => {
   const response = await fetch(
     `https://api.syndicate.io/wallet/project/${projectID}/request/${txID}`,
     {
@@ -91,8 +90,9 @@ export async function waitUntilTx({
   let transactionHash = null
 
   while (!transactionHash && currAttempts < maxAttempts) {
-    const txAttempts = (await getTransactionRequest({ projectID, txID, authToken }))
-      ?.transactionAttempts
+    const txAttempts = (
+      await getTransactionRequest({ projectID, txID, authToken })
+    )?.transactionAttempts
 
     console.log({ txAttempts })
 

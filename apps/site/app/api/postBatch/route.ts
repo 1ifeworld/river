@@ -8,13 +8,13 @@ export async function POST(req: NextRequest) {
 
   try {
     if (!projectId || typeof projectId !== 'string') {
-      throw new Error('projectId must be defined and of type string');
+      throw new Error('projectId must be defined and of type string')
     }
-    
+
     if (!authToken || typeof authToken !== 'string') {
-      throw new Error('authToken must be defined and of type string');
+      throw new Error('authToken must be defined and of type string')
     }
-    
+
     const postBatchTxRequest = postBatchObject(postsArray)
 
     const postBatchTx =
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
     const successfulTxHash = await waitUntilTx({
       projectID: projectId,
       txID: postBatchTx.transactionId,
-      authToken
+      authToken,
     })
 
     return new Response(

@@ -33,15 +33,13 @@ export const syndicate = new SyndicateClient({
   },
 })
 
-
-
 export const projectId = process.env.SYNDICATE_PROJECT_ID_POSTGATEWAY
 
 if (!projectId) {
-    throw new Error(
-      'SYNDICATE_PROJECT_ID_POSTGATEWAY is not defined in environment variables.',
-    )
-  }
+  throw new Error(
+    'SYNDICATE_PROJECT_ID_POSTGATEWAY is not defined in environment variables.',
+  )
+}
 
 export const postBatchObject = (postsArray: PostBatchFunction) => ({
   projectId: projectId,
