@@ -2,9 +2,12 @@
 
 import { getUserId } from '@/gql'
 import { getUsername, getUserChannels } from '@/lib'
-import { type ConnectedWallet, useWallets } from '@privy-io/react-auth'
-import { usePrivy } from '@privy-io/react-auth'
-import type { SignMessageModalUIOptions } from '@privy-io/react-auth'
+import {
+  type ConnectedWallet,
+  type SignMessageModalUIOptions,
+  useWallets,
+  usePrivy,
+} from '@privy-io/react-auth'
 import React, {
   type ReactNode,
   createContext,
@@ -21,22 +24,20 @@ const UserContext = createContext<{
     uiOptions?: SignMessageModalUIOptions,
   ) => Promise<string>
   userId?: bigint
-  authToken?: string | null
   username?: string
   // biome-ignore lint:
   userChannels?: any[]
   fetchUserData?: () => Promise<void>
   clearUserData?: () => void
-}>({ authToken: null })
+}>({})
 
 export function UserContextComponent({ children }: { children: ReactNode }) {
   const [userId, setUserId] = useState<bigint>()
   const [username, setUsername] = useState<string>()
   // biome-ignore lint:
   const [userChannels, setUserChannels] = useState<any[]>([])
-  const [authToken, setAuthToken] = useState<string | null>(null)
 
-  const { signMessage, getAccessToken } = usePrivy()
+  const { signMessage } = usePrivy()
   const { wallets } = useWallets()
 
   const embeddedWallet = wallets.find(
@@ -45,9 +46,6 @@ export function UserContextComponent({ children }: { children: ReactNode }) {
 
   async function fetchUserData() {
     if (!embeddedWallet) return
-
-    const token = await getAccessToken()
-    setAuthToken(token)
 
     const fetchedUserId = await getUserId({
       custodyAddress: embeddedWallet.address as Address,
@@ -80,7 +78,6 @@ export function UserContextComponent({ children }: { children: ReactNode }) {
   return (
     <UserContext.Provider
       value={{
-        authToken,
         embeddedWallet,
         signMessage,
         userId,
