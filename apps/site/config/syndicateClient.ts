@@ -21,18 +21,6 @@ type PostBatchFunction = {
   posts: Post[]
 }
 
-export const syndicate = new SyndicateClient({
-  token: () => {
-    const apiKey = process.env.SYNDICATE_API_KEY
-    if (typeof apiKey === 'undefined') {
-      throw new Error(
-        'SYNDICATE_API_KEY is not defined in environment variables.',
-      )
-    }
-    return apiKey
-  },
-})
-
 export const projectId = process.env.SYNDICATE_PROJECT_ID_POSTGATEWAY
 
 if (!projectId) {
@@ -41,7 +29,7 @@ if (!projectId) {
   )
 }
 
-export const postBatchObject = (postsArray: PostBatchFunction) => ({
+export const generatePostBatchTxnInput = (postsArray: PostBatchFunction) => ({
   projectId: projectId,
   contractAddress: addresses.postGateway.nova,
   chainId: 42170,
@@ -52,7 +40,7 @@ export const postBatchObject = (postsArray: PostBatchFunction) => ({
   },
 })
 
-export const postObject = (post: Post) => ({
+export const generatePostTxnInput = (post: Post) => ({
   projectId: projectId,
   contractAddress: addresses.postGateway.nova,
   chainId: 42170,
@@ -62,3 +50,23 @@ export const postObject = (post: Post) => ({
     post: post,
   },
 })
+
+const apiKey = process.env.SYNDICATE_API_KEY
+
+export const syndicateClient =
+  !projectId || !apiKey
+    ? null
+    : {
+        officialActions: new SyndicateClient({
+          token: () => apiKey,
+        }),
+        projectId: projectId,
+        generatePostTxnInput,
+        generatePostBatchTxnInput,
+      }
+
+if (!projectId || !apiKey) {
+  throw new Error(
+    'Missing SYNDICATE_PROJECT_ID_POSTGATEWAY or SYNDICATE_API_KEY in environment variables.',
+  )
+}
