@@ -1,7 +1,6 @@
 import { Header, ThemeToggle } from '@/client'
 import { Analytics } from '@vercel/analytics/react'
 import type { Metadata } from 'next'
-import Script from 'next/script'
 import { Toaster } from 'sonner'
 import '../styles/globals.css'
 import { sfMono } from './fonts/fonts'
@@ -28,10 +27,6 @@ export default function RootLayout({
           <Analytics />
         </Providers>
       </body>
-      <Script
-        async
-        src="https://saturn.tech/widget.js#integration=14b09943-4822-45b7-892d-a0150f577c33&installPath=/saturn"
-      />
     </html>
   )
 }
