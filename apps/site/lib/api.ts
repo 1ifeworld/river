@@ -1,3 +1,5 @@
+import { getAccessToken } from '@privy-io/react-auth'
+
 type Message = {
   rid: bigint
   timestamp: bigint
@@ -80,7 +82,8 @@ export async function relayRegisterFor(
 
 /* MEDIA SERVICE */
 
-export async function w3sUpload(body: FormData, authToken: string | null) {
+export async function w3sUpload(body: FormData) {
+  const authToken = await getAccessToken()
   try {
     const res = await fetch('https://river-media-service.up.railway.app/w3s', {
       method: 'POST',
@@ -91,7 +94,9 @@ export async function w3sUpload(body: FormData, authToken: string | null) {
     if (res.status === 413) {
       console.error('File too large')
       throw new Error('File too large. Please try a smaller file.')
-    } else if (!res.ok) {
+    }
+
+    if (!res.ok) {
       const errorText = await res.text()
       console.error('Could not upload file', errorText)
       throw new Error(
@@ -106,23 +111,31 @@ export async function w3sUpload(body: FormData, authToken: string | null) {
   }
 }
 
-export async function uploadToMux(body: string, authToken: string | null) {
-  const res = await fetch(
-    'https://river-media-service.up.railway.app/mux/upload',
-    {
-      method: 'POST',
-      headers: authToken ? { Authorization: `Bearer ${authToken}` } : undefined,
-      body,
-    },
-  )
-  if (!res.ok) {
-    console.error('Could not upload to Mux', await res.text())
-    throw new Error('Could not upload to Mux')
-  }
-  const muxResponseData = await res.json()
+export async function uploadToMux(body: string) {
+  const authToken = await getAccessToken()
+  try {
+    const res = await fetch(
+      'https://river-media-service.up.railway.app/mux/upload',
+      {
+        method: 'POST',
+        headers: authToken
+          ? { Authorization: `Bearer ${authToken}` }
+          : undefined,
+        body,
+      },
+    )
+    if (!res.ok) {
+      console.error('Could not upload to Mux', await res.text())
+      throw new Error('Could not upload to Mux')
+    }
+    const muxResponseData = await res.json()
 
-  return {
-    id: muxResponseData.id,
-    playbackId: muxResponseData.playbackId,
+    return {
+      id: muxResponseData.id,
+      playbackId: muxResponseData.playbackId,
+    }
+  } catch (error) {
+    console.error('Upload to Mux failed', error)
+    throw error
   }
 }
