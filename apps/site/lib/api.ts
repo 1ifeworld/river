@@ -1,3 +1,5 @@
+'use client'
+
 import { getAccessToken } from '@privy-io/react-auth'
 
 type Message = {
