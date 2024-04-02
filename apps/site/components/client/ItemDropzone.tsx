@@ -20,6 +20,7 @@ import React, { useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import type { Hex } from 'viem'
 import { USER_ID_ZERO } from 'constants/protocol'
+import { getAccessToken } from '@privy-io/react-auth'
 
 function hasAddAccess({
   roleData,
@@ -49,7 +50,6 @@ export function ItemDropzone({ channel }: { channel: Channel }) {
   const {
     signMessage,
     userId: targetUserId,
-    authToken,
     embeddedWallet,
   } = useUserContext()
   const params = useParams()
@@ -95,6 +95,8 @@ export function ItemDropzone({ channel }: { channel: Channel }) {
     if (fileName.toLowerCase().endsWith('.glb 2')) {
       fileName = fileName.slice(0, -2)
     }
+
+    const authToken = await getAccessToken()
 
     if (!authToken) return
     const { cid } = await w3sUpload(formData, authToken)
