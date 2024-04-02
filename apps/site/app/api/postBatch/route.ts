@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
   try {
     const postTx =
       await syndicateClient.officialActions.transact.sendTransaction(
-        generatePostBatchTxnInput({ posts: postsArray }),
+        generatePostBatchTxnInput(postsArray),
       )
 
     const successfulTxHash = await waitUntilTx({

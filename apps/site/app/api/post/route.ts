@@ -29,6 +29,9 @@ export async function POST(req: NextRequest) {
         generatePostTxnInput(post),
       )
 
+    console.log({ syndicateClient })
+    console.log({ postTx })
+
     const successfulTxHash = await waitUntilTx({
       projectID: projectId as string,
       txID: postTx.transactionId,
