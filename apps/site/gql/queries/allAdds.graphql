@@ -21,6 +21,8 @@ query allAdds {
         }        
         adds(limit: 100, orderBy: "timestamp", orderDirection: "desc") {
           items {
+            addedById
+            removed            
             itemId
             item {
               id
@@ -28,6 +30,17 @@ query allAdds {
               createdById
               uri
             }
+            channelId
+            channel {
+              name
+              roles(orderBy: "role", orderDirection: "desc") {
+                items {
+                  timestamp
+                  rid
+                  role
+                }
+              }   
+            }            
           }
         }
       }
