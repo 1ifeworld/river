@@ -1,8 +1,0 @@
-{
-  "routes": [
-    {
-      "src": "/saturn/saturn-sw.js",
-      "dest": "https://saturn.tech/saturn-sw.js"
-    }
-  ]
-}

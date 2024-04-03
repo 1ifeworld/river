@@ -46,12 +46,7 @@ export function ItemDropzone({ channel }: { channel: Channel }) {
     showLoadingIcon: true,
   })
 
-  const {
-    signMessage,
-    userId: targetUserId,
-    authToken,
-    embeddedWallet,
-  } = useUserContext()
+  const { signMessage, userId: targetUserId, embeddedWallet } = useUserContext()
   const params = useParams()
   const showDropzone =
     !channel?.roles?.items || !targetUserId
@@ -96,8 +91,7 @@ export function ItemDropzone({ channel }: { channel: Channel }) {
       fileName = fileName.slice(0, -2)
     }
 
-    if (!authToken) return
-    const { cid } = await w3sUpload(formData, authToken)
+    const { cid } = await w3sUpload(formData)
 
     if (cid) {
       const uploadedFileName = file.name || 'unnamed'
@@ -124,8 +118,7 @@ export function ItemDropzone({ channel }: { channel: Channel }) {
       let muxPlaybackId
 
       if (contentTypeKey === 2) {
-        if (!authToken) return
-        const { id, playbackId } = await uploadToMux(animationUri, authToken)
+        const { id, playbackId } = await uploadToMux(animationUri)
         muxAssetId = id
         muxPlaybackId = playbackId
       }

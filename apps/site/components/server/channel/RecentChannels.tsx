@@ -1,31 +1,36 @@
-import { Stack, Typography, Public } from '@/design-system'
-import { getAllChannels, type ChannelRoles } from '@/gql'
-import { USER_ID_ZERO } from '@/constants'
 import Link from 'next/link'
+import { Stack, Typography, Public } from '@/design-system'
+import { getMostRecentChannels, type ChannelRoles } from '@/gql'
+import { USER_ID_ZERO } from '@/constants'
+import { sortChannels } from '@/utils'
+
+function checkIsPublic({ roleData }: { roleData: ChannelRoles[] }) {
+  for (let i = 0; i < roleData.length; ++i) {
+    if (roleData[i].rid === USER_ID_ZERO && roleData[i].role > 0) return true
+  }
+  return false
+}
 
 export async function RecentChannels({
   params,
 }: {
   params: { id: string }
 }) {
-  const { channels } = await getAllChannels()
+  const { channels } = await getMostRecentChannels()
 
-  if (!channels?.items) {
+  if (!channels) {
     return <Typography>Error fetching channels</Typography>
   }
 
-  function checkIsPublic({ roleData }: { roleData: ChannelRoles[] }) {
-    for (let i = 0; i < roleData.length; ++i) {
-      if (roleData[i].rid === USER_ID_ZERO && roleData[i].role > 0) return true
-    }
-    return false
-  }
+  // @ts-ignore
+  const sortedChannels = sortChannels(channels)
 
   return (
     <Stack className="hidden md:flex gap-y-[34px]">
       <Typography className="font-medium">Recent channels</Typography>
       <Stack className="gap-y-[3px]">
-        {channels.items.slice(0, 50).map((channel) => {
+        {/* @ts-ignore */}
+        {sortedChannels.slice(0, 50).map((channel) => {
           // @ts-ignore
           const isPublic = checkIsPublic({ roleData: channel?.roles?.items })
           return (
