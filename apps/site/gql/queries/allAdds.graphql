@@ -21,6 +21,7 @@ query allAdds {
         }        
         adds(limit: 100, orderBy: "timestamp", orderDirection: "desc") {
           items {
+            timestamp
             addedById
             removed            
             itemId

@@ -16,12 +16,26 @@ query allChannels($endCursor: String) {
       }
       adds(limit: 1, orderBy: "timestamp", orderDirection: "desc") {
         items {
-          timestamp    
+          timestamp
+          addedById
+          removed            
+          itemId
           item {
             id
             timestamp
             createdById
             uri
+          }
+          channelId
+          channel {
+            name
+            roles(orderBy: "role", orderDirection: "desc") {
+              items {
+                timestamp
+                rid
+                role
+              }
+            }   
           }          
         }
       }  
