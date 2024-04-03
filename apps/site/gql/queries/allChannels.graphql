@@ -17,6 +17,12 @@ query allChannels($endCursor: String) {
       adds(limit: 1, orderBy: "timestamp", orderDirection: "desc") {
         items {
           timestamp    
+          item {
+            id
+            timestamp
+            createdById
+            uri
+          }          
         }
       }  
     }
