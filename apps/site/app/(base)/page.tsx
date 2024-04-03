@@ -4,7 +4,6 @@ import { ItemCard } from '@/server'
 import { ItemDropdown } from '@/client'
 
 export default async function Home() {
-  
   const { adds } = await getAllAdds()
 
   if (!adds || !adds.items || adds?.items?.length === 0) {
