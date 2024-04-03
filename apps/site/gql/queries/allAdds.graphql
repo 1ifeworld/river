@@ -22,6 +22,12 @@ query allAdds {
         adds(limit: 100, orderBy: "timestamp", orderDirection: "desc") {
           items {
             itemId
+            item {
+              id
+              timestamp
+              createdById
+              uri
+            }
           }
         }
       }
