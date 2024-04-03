@@ -7,6 +7,6 @@ export const getMarqueeData = unstable_cache(async () => {
   return {
     users: response.userCounters,
     channels: response.channelCounters,
-    items: response.itemCounters,
+    items: response.itemCounters
   }
 }, ['marqueeData'])
