@@ -1066,7 +1066,7 @@ export type AllChannelsQueryVariables = Exact<{
 }>;
 
 
-export type AllChannelsQuery = { __typename?: 'Query', channels: { __typename?: 'ChannelPage', items: Array<{ __typename?: 'Channel', id: string, timestamp: any, createdById: any, uri: string, name: string, description: string, roles?: { __typename?: 'ChannelRolesPage', items: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> } | null, adds?: { __typename?: 'AddsPage', items: Array<{ __typename?: 'Adds', timestamp: any, addedById: any, removed?: boolean | null, itemId: string, channelId: string, item: { __typename?: 'Item', id: string, timestamp: any, createdById: any, uri: string }, channel: { __typename?: 'Channel', name: string, roles?: { __typename?: 'ChannelRolesPage', items: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> } | null } }> } | null }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null } } };
+export type AllChannelsQuery = { __typename?: 'Query', channels: { __typename?: 'ChannelPage', items: Array<{ __typename?: 'Channel', id: string, timestamp: any, createdById: any, uri: string, name: string, description: string, roles?: { __typename?: 'ChannelRolesPage', items: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> } | null, adds?: { __typename?: 'AddsPage', items: Array<{ __typename?: 'Adds', timestamp: any }> } | null }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null } } };
 
 export type AllChannelsWithRidQueryVariables = Exact<{
   rid: Scalars['BigInt']['input'];
@@ -1192,26 +1192,6 @@ export const AllChannelsDocument = gql`
       adds(limit: 1, orderBy: "timestamp", orderDirection: "desc") {
         items {
           timestamp
-          addedById
-          removed
-          itemId
-          item {
-            id
-            timestamp
-            createdById
-            uri
-          }
-          channelId
-          channel {
-            name
-            roles(orderBy: "role", orderDirection: "desc") {
-              items {
-                timestamp
-                rid
-                role
-              }
-            }
-          }
         }
       }
     }
