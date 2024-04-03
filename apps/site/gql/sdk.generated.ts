@@ -108,7 +108,7 @@ export type AddsFilter = {
 
 export type AddsPage = {
   __typename?: 'AddsPage';
-  items?: Maybe<Array<Adds>>;
+  items: Maybe<Array<Adds>>;
   pageInfo?: Maybe<PageInfo>;
 };
 
