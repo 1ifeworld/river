@@ -1,5 +1,5 @@
 query allAdds {
-  addss(limit: 100, orderBy: "timestamp", orderDirection: "desc") {
+  addss(orderBy: "timestamp", orderDirection: "desc") {
     items {
       addedById
       removed
@@ -19,29 +19,9 @@ query allAdds {
             role
           }
         }        
-        adds(limit: 100, orderBy: "timestamp", orderDirection: "desc") {
+        adds(orderBy: "timestamp", orderDirection: "desc") {
           items {
-            timestamp
-            addedById
-            removed            
             itemId
-            item {
-              id
-              timestamp
-              createdById
-              uri
-            }
-            channelId
-            channel {
-              name
-              roles(orderBy: "role", orderDirection: "desc") {
-                items {
-                  timestamp
-                  rid
-                  role
-                }
-              }   
-            }            
           }
         }
       }

@@ -4,7 +4,6 @@ import { ItemCard } from '@/server'
 import { ItemDropdown } from '@/client'
 
 export default async function Home() {
-  console.log("what is my graphql endpoint: ", process.env.NEXT_PUBLIC_GRAPHQL_API)
   
   const { adds } = await getAllAdds()
 
