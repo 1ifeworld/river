@@ -15,8 +15,13 @@ export default async function Profile({
     userId: userData.id,
   })
 
+  console.log("initial fetch on profile page is good")
+  console.log("whats going into sort channels that could be causing this", channels?.items)
+
   // @ts-ignore
   const sortedChannels = sortChannels(channels?.items)
+
+  console.log("made it pasted sorted channels ok without things breaking")
 
   return (
     <Stack className="gap-y-8">
