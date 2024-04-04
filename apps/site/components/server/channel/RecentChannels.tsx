@@ -25,7 +25,7 @@ export async function RecentChannels({
   // @ts-ignore
   const sortedChannels = sortChannels(channels)
 
-  console.log("sorted channels: ", sortedChannels)
+  // console.log("sorted channels: ", sortedChannels)
 
   return (
     <Stack className="hidden md:flex gap-y-[34px]">

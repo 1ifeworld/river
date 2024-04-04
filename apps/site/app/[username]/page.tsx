@@ -16,7 +16,7 @@ export default async function Profile({
   })
 
   console.log("initial fetch on profile page is good")
-  console.log("whats going into sort channels that could be causing this", channels?.items)
+  // console.log("whats going into sort channels that could be causing this", channels?.items)
 
   // @ts-ignore
   const sortedChannels = sortChannels(channels?.items)
