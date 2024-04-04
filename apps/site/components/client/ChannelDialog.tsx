@@ -64,7 +64,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
     // Prevent non-authenticated users from proceeding
     if (!targetUserId) return
     // Initialize bool for txn success check
-    let txSuccess = false
+    const txSuccess = false
     // Generate create channel post for user and post transaction
     if (signMessage && embeddedWallet) {
       const { success, channelId } = await processCreateChannelPost({
@@ -82,9 +82,9 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
             {'Successfully created '}
             <span className="font-bold">{data.name}</span>
           </Toast>
-        ))        
+        ))
         // Reset form fields to their initial values
-        form.reset()        
+        form.reset()
         // redirect user to channel
         router.push(`/channel/${channelId}`)
       } else {

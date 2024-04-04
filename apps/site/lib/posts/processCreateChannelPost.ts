@@ -61,7 +61,7 @@ export async function processCreateChannelPost({
   }
 
   // generate channelCid to return to client for redirect
-  const channelCid = (await messageToCid(post.message)).cid.toString()  
+  const channelCid = (await messageToCid(post.message)).cid.toString()
 
   try {
     const relayResponse = await relayPost(post)
