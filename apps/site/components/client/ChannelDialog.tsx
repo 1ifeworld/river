@@ -76,17 +76,17 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
       })
       setDialogOpen(false)
       if (success) {
+        // Render a toast with the name of the channel
+        toast.custom((t) => (
+          <Toast>
+            {'Successfully created '}
+            <span className="font-bold">{data.name}</span>
+          </Toast>
+        ))        
         // Reset form fields to their initial values
-        form.reset()
+        form.reset()        
         // redirect user to channel
         router.push(`/channel/${channelId}`)
-        // Render a toast with the name of the channel
-        // toast.custom((t) => (
-        //   <Toast>
-        //     {'Successfully created '}
-        //     <span className="font-bold">{data.name}</span>
-        //   </Toast>
-        // ))
       } else {
         // Render a toast with error message
         toast.custom((t) => <Toast>{'Error creating channel'}</Toast>)
