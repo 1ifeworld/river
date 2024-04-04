@@ -1,7 +1,6 @@
 import { relayPost } from '@/lib'
 import { getTxnInclusion, revalidationHelper } from '@/lib'
 import type { SignMessageModalUIOptions } from '@privy-io/react-auth'
-import { revalidatePath } from 'next/cache'
 import {
   encodeCreateChannelMsgBody,
   generateMessageHash,
@@ -9,6 +8,7 @@ import {
   remove0xPrefix,
 } from 'scrypt'
 import type { Hash, Hex } from 'viem'
+import { messageToCid } from '@/utils'
 
 export async function processCreateChannelPost({
   signer,
@@ -25,7 +25,7 @@ export async function processCreateChannelPost({
     message: string,
     uiOptions?: SignMessageModalUIOptions | undefined,
   ) => Promise<string>
-}): Promise<boolean> {
+}): Promise<{ success: boolean; channelId: string | null }> {
   // Declare constants/params
   const msgTimestamp: bigint = getExpiration() // gives 120s buffer
   const msgType = 3 as number
@@ -35,7 +35,7 @@ export async function processCreateChannelPost({
     members: [BigInt(rid)],
     roles: [BigInt(2)],
   })
-  if (!msgBody?.msgBody) return false
+  if (!msgBody?.msgBody) return { success: false, channelId: null }
   // generate hash to include in post
   const messageHash = generateMessageHash({
     rid: BigInt(rid),
@@ -60,6 +60,9 @@ export async function processCreateChannelPost({
     sig: sig,
   }
 
+  // generate channelCid to return to client for redirect
+  const channelCid = (await messageToCid(post.message)).cid.toString()
+
   try {
     const relayResponse = await relayPost(post)
 
@@ -70,17 +73,17 @@ export async function processCreateChannelPost({
 
       if (txnInclusion) {
         revalidationHelper('/', 'layout')
-        return true
+        return { success: true, channelId: channelCid }
       } else {
         console.error('Transaction was not successfully included.')
-        return false
+        return { success: false, channelId: null }
       }
     } else {
       console.error('Relay post was unsuccessful.')
-      return false
+      return { success: false, channelId: null }
     }
   } catch (error) {
     console.error('Error relaying post:', error)
-    return false
+    return { success: false, channelId: null }
   }
 }

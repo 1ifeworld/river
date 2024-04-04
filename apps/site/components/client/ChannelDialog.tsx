@@ -1,3 +1,4 @@
+import { useRouter } from 'next/navigation'
 import { useUserContext } from '@/context'
 import {
   Button,
@@ -27,11 +28,8 @@ import {
   type NewChannelSchemaValues,
   newChannelSchema,
   processCreateChannelPost,
-  sendToDb,
-  w3sUpload,
 } from '@/lib'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { revalidatePath } from 'next/cache'
 import * as React from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -43,6 +41,7 @@ interface ChannelDialogProps {
 }
 
 export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
+  const router = useRouter()
   const [dialogOpen, setDialogOpen] = React.useState(false)
   const [isSubmitting, setIsSubmitting] = React.useState(false)
 
@@ -65,10 +64,10 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
     // Prevent non-authenticated users from proceeding
     if (!targetUserId) return
     // Initialize bool for txn success check
-    let txSuccess = false
+    const txSuccess = false
     // Generate create channel post for user and post transaction
     if (signMessage && embeddedWallet) {
-      txSuccess = await processCreateChannelPost({
+      const { success, channelId } = await processCreateChannelPost({
         signer: embeddedWallet.address as Hex,
         name: data.name,
         description: data.description || '',
@@ -76,7 +75,7 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
         privySignMessage: signMessage,
       })
       setDialogOpen(false)
-      if (txSuccess) {
+      if (success) {
         // Render a toast with the name of the channel
         toast.custom((t) => (
           <Toast>
@@ -86,6 +85,8 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
         ))
         // Reset form fields to their initial values
         form.reset()
+        // redirect user to channel
+        router.push(`/channel/${channelId}`)
       } else {
         // Render a toast with error message
         toast.custom((t) => <Toast>{'Error creating channel'}</Toast>)

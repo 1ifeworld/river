@@ -1,4 +1,4 @@
-import { Flex, Grid, Separator, Stack, Typography } from '@/design-system'
+import { Flex, Grid, Stack, Typography } from '@/design-system'
 import { getChannelsItemsWithUser } from '@/gql'
 import { getDataForUsername } from '@/lib'
 import { ChannelCard } from '@/server'

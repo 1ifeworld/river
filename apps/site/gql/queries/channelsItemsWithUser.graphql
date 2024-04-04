@@ -2,6 +2,7 @@ query channelsItemsWithUser($userId: BigInt!) {
   channels(where: {createdById: $userId}, orderBy: "timestamp", orderDirection: "desc") {
     items {
       id
+      timestamp
       name
       description
       createdById
