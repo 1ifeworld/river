@@ -1,6 +1,7 @@
 import { Typography, Flex, Button } from '@/design-system'
-import { useRouter } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { useCallback } from 'react'
+import Link from 'next/link'
 
 interface PaginationControlsProps {
   startCursor?: string
@@ -13,33 +14,34 @@ export function PaginationControls({
   pageInfo,
 }: { pageInfo?: PaginationControlsProps }) {
   const router = useRouter()
+  const searchParams = useSearchParams()
 
-  const createQueryString = useCallback((name: string, value: string) => {
-    const params = new URLSearchParams()
-    params.set(name, value)
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString())
+      params.set(name, value)
 
-    return params.toString()
-  }, [])
+      return params.toString()
+    },
+    [searchParams],
+  )
 
   return (
     <Flex className="gap-x-3">
       <Button
         variant="link"
         onClick={() => {
-          router.replace(
-            `/?${createQueryString('before', pageInfo?.startCursor as string)}`,
-          )
+          router.back()
         }}
         className="hover:underline underline-offset-2 transition-all"
         disabled={!pageInfo?.hasPreviousPage}
       >
         <Typography>Prev</Typography>
       </Button>
-
-      <Button
+      {/* <Button
         variant="link"
         onClick={() => {
-          router.replace(
+          router.push(
             `/?${createQueryString('after', pageInfo?.endCursor as string)}`,
           )
         }}
@@ -47,7 +49,13 @@ export function PaginationControls({
         disabled={!pageInfo?.hasNextPage}
       >
         <Typography>Next</Typography>
-      </Button>
+      </Button> */}
+      <Link
+        className="hover:underline underline-offset-2 transition-all"
+        href={`/?${createQueryString('after', pageInfo?.endCursor as string)}`}
+      >
+        <Typography>Next</Typography>
+      </Link>
     </Flex>
   )
 }

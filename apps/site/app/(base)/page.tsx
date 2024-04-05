@@ -7,12 +7,9 @@ export default async function Home({
   searchParams,
 }: { searchParams: { [key: string]: string | string[] | undefined } }) {
   // biome-ignore lint:
-  const before = searchParams['before'] as string | undefined
-
-  // biome-ignore lint:
   const after = searchParams['after'] as string | undefined
 
-  const { adds, pageInfo } = await getAllAdds({ limit: 100, before, after })
+  const { adds, pageInfo } = await getAllAdds({ limit: 100, after })
 
   if (!adds || !adds.items || adds?.items?.length === 0) {
     return <Typography>No items added yet</Typography>
