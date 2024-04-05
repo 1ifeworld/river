@@ -38,24 +38,17 @@ export function PaginationControls({
       >
         <Typography>Prev</Typography>
       </Button>
-      {/* <Button
-        variant="link"
-        onClick={() => {
-          router.push(
-            `/?${createQueryString('after', pageInfo?.endCursor as string)}`,
-          )
-        }}
-        className="hover:underline underline-offset-2 transition-all"
-        disabled={!pageInfo?.hasNextPage}
-      >
-        <Typography>Next</Typography>
-      </Button> */}
-      <Link
-        className="hover:underline underline-offset-2 transition-all"
-        href={`/?${createQueryString('after', pageInfo?.endCursor as string)}`}
-      >
-        <Typography>Next</Typography>
-      </Link>
+      <Button variant="link" disabled={!pageInfo?.hasNextPage}>
+        <Link
+          className="hover:underline underline-offset-2 transition-all"
+          href={`/?${createQueryString(
+            'after',
+            pageInfo?.endCursor as string,
+          )}`}
+        >
+          <Typography>Next</Typography>
+        </Link>
+      </Button>
     </Flex>
   )
 }
