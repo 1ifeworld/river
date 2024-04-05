@@ -1,8 +1,10 @@
 import { SubmitButton } from '@/client'
 import { useUserContext } from '@/context'
 import {
+  Button,
   Dialog,
   DialogContent,
+  DialogClose,
   DialogFooter,
   DialogTitle,
   Form,
@@ -157,6 +159,12 @@ export function EditUsernameDialog({ open, setOpen }: UsernameDialogProps) {
         <Stack className="items-center gap-5">
           <DialogTitle>
             <Typography>Edit Profile</Typography>
+            <DialogClose asChild className="flex-1 justify-end">
+              <Button variant="link">
+                <Typography>close</Typography>
+              </Button>
+            </DialogClose>
+
           </DialogTitle>
           <Form {...form}>
             <form

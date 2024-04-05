@@ -49,7 +49,7 @@ interface UserSettingsProps {
 }
 
 interface RiverUser {
-    rid: bigint
+  rid: bigint
 }
 
 export function UserSettings({ user }: UserSettingsProps) {
@@ -60,12 +60,12 @@ export function UserSettings({ user }: UserSettingsProps) {
   const [open, setOpen] = useState<boolean>(false)
 
   function isUser({ userRid }: { userRid: bigint }) {
-    const rid = userId 
-    return rid === userRid;
+    const rid = userId
+    return rid === userRid
   }
 
   const enableEditMembers =
-    !embeddedWallet?.address || !userId 
+    !embeddedWallet?.address || !userId
       ? false
       : isUser({
           userRid: userId,
@@ -77,7 +77,6 @@ export function UserSettings({ user }: UserSettingsProps) {
       username: '',
     },
   })
-
 
   const [isValidUser, setIsValidUser] = useState<0 | 1 | 2 | 3>(0) // 0 = null state, 1 = valid, 2 = invalid, 3 = already added
   const [validationComplete, setValidationComplete] = useState(false)
@@ -95,7 +94,6 @@ export function UserSettings({ user }: UserSettingsProps) {
       }, 500),
     [form],
   )
-
 
   /* NOTE: probably should add a check to ensure that number of admins/members works nice in UI */
   async function addUsernameHandler() {
@@ -132,19 +130,15 @@ export function UserSettings({ user }: UserSettingsProps) {
         )}
         <DropdownMenuContent side="bottom" align="start">
           <DropdownMenuGroup className="flex flex-col gap-3">
-          <DropdownMenuItem onClick={() => setOpen(true)}>
-            <Typography>Edit Username</Typography>
-          </DropdownMenuItem>
-          <div className="-mx-4">
-            <Separator />
-          </div>
-        </DropdownMenuGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
-
+            <DropdownMenuItem onClick={() => setOpen(true)}>
+              {/* Edit Profile logic pending */}
+              <Typography>Edit Profile</Typography>
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
       {/* Dialog logic */}
-      <EditUsernameDialog open={open} setOpen={setOpen} />
-
+        <EditUsernameDialog open={open} setOpen={setOpen} />
     </Dialog>
   )
 }

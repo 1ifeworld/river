@@ -23,9 +23,10 @@ export default async function Profile({
   return (
     <Stack className="gap-y-8">
       <Stack className="gap-y-[3px]">
-        <Typography>{params.username}</Typography>
-        <UserSettings user={userData.id} />
-
+        <Typography>
+          {params.username}
+          <UserSettings user={userData.id} />
+        </Typography>
         <Typography className="text-secondary-foreground">
           {pluralize(sortedChannels.length as number, 'channel', 'channels')},{' '}
           {pluralize(items?.items?.length as number, 'item', 'items')}
