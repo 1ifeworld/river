@@ -3,6 +3,8 @@ import { getChannelsItemsWithUser } from '@/gql'
 import { getDataForUsername } from '@/lib'
 import { ChannelCard } from '@/server'
 import { pluralize, sortChannels } from '@/utils'
+import { Form } from 'react-hook-form'
+import { UserSettings } from '@/client'
 
 export default async function Profile({
   params,
@@ -22,6 +24,8 @@ export default async function Profile({
     <Stack className="gap-y-8">
       <Stack className="gap-y-[3px]">
         <Typography>{params.username}</Typography>
+        <UserSettings user={userData.id} />
+
         <Typography className="text-secondary-foreground">
           {pluralize(sortedChannels.length as number, 'channel', 'channels')},{' '}
           {pluralize(items?.items?.length as number, 'item', 'items')}
