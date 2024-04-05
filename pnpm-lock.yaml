@@ -21,8 +21,8 @@ importers:
         specifier: ^9.1.0
         version: 9.1.0
       '@ponder/core':
-        specifier: ^0.3.4
-        version: 0.3.4(@types/node@18.11.18)(typescript@5.1.6)(viem@1.20.0)
+        specifier: ^0.3.11
+        version: 0.3.11(@types/node@18.11.18)(typescript@5.1.6)(viem@1.20.0)
       base64url:
         specifier: ^3.0.1
         version: 3.0.1
@@ -3788,8 +3788,8 @@ packages:
     dev: false
     optional: true
 
-  /@ponder/core@0.3.4(@types/node@18.11.18)(typescript@5.1.6)(viem@1.20.0):
-    resolution: {integrity: sha512-030AB9vQ7eSdtk1LMO2LouBuyTsl70q+m0ltWEG7kkpuBGVchDyxlIVOT2dy4ObdcT+L7dSJ0v5P+WEwVy7nrg==}
+  /@ponder/core@0.3.11(@types/node@18.11.18)(typescript@5.1.6)(viem@1.20.0):
+    resolution: {integrity: sha512-xH/2GfIB/KQHV8tvxcXQSkqeSoMxjaJkBeTdh744WZy+Q8pygXlJCzXhqpQ0Lojz5q5wG772rVg8+GRvT7IG9A==}
     engines: {node: '>=18.14'}
     hasBin: true
     peerDependencies:
@@ -3801,7 +3801,7 @@ packages:
     dependencies:
       '@ast-grep/napi': 0.19.4
       '@babel/code-frame': 7.23.5
-      '@ponder/utils': 0.1.1(typescript@5.1.6)(viem@1.20.0)
+      '@ponder/utils': 0.1.2(typescript@5.1.6)(viem@1.20.0)
       abitype: 0.10.3(typescript@5.1.6)
       async-mutex: 0.4.1
       better-sqlite3: 9.3.0
@@ -3828,7 +3828,6 @@ packages:
       pino: 8.17.2
       prom-client: 15.1.0
       react: 18.2.0
-      retry: 0.13.1
       stacktrace-parser: 0.1.10
       typescript: 5.1.6
       viem: 1.20.0(typescript@5.1.6)
@@ -3852,8 +3851,8 @@ packages:
       - zod
     dev: false
 
-  /@ponder/utils@0.1.1(typescript@5.1.6)(viem@1.20.0):
-    resolution: {integrity: sha512-BheJRB5vCl++TLgN9W6+rySbyBHxUzN+p1CR/KySrhErdaIrU5AiXtdMCUE0X7bvMVpY8meFQRBW3n8mUdg5KQ==}
+  /@ponder/utils@0.1.2(typescript@5.1.6)(viem@1.20.0):
+    resolution: {integrity: sha512-AQJv59AYSGEBFyCYj7EQEaLGLPrO070pFpYPJfUBI1bx1pDnHDooCkGS6D2KmQLJWjswha9qioICEKQ/Kl1V6A==}
     peerDependencies:
       typescript: '>=5.0.4'
       viem: '>=1.16'
