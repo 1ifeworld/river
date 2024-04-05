@@ -1,7 +1,6 @@
-import { Typography, Flex } from '@/design-system'
-import { useSearchParams, useRouter } from 'next/navigation'
+import { Typography, Flex, Button } from '@/design-system'
+import { useRouter } from 'next/navigation'
 import { useCallback } from 'react'
-import Link from 'next/link'
 
 interface PaginationControlsProps {
   startCursor?: string
@@ -13,32 +12,42 @@ interface PaginationControlsProps {
 export function PaginationControls({
   pageInfo,
 }: { pageInfo?: PaginationControlsProps }) {
-  const searchParams = useSearchParams()
+  const router = useRouter()
 
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString())
-      params.set(name, value)
+  const createQueryString = useCallback((name: string, value: string) => {
+    const params = new URLSearchParams()
+    params.set(name, value)
 
-      return params.toString()
-    },
-    [searchParams],
-  )
+    return params.toString()
+  }, [])
 
   return (
     <Flex className="gap-x-3">
-      <Link
+      <Button
+        variant="link"
+        onClick={() => {
+          router.replace(
+            `/?${createQueryString('before', pageInfo?.startCursor as string)}`,
+          )
+        }}
         className="hover:underline underline-offset-2 transition-all"
-        href={`/?${createQueryString('before', pageInfo?.startCursor as string)}`}
+        disabled={!pageInfo?.hasPreviousPage}
       >
         <Typography>Prev</Typography>
-      </Link>
-      <Link
+      </Button>
+
+      <Button
+        variant="link"
+        onClick={() => {
+          router.replace(
+            `/?${createQueryString('after', pageInfo?.endCursor as string)}`,
+          )
+        }}
         className="hover:underline underline-offset-2 transition-all"
-        href={`/?${createQueryString('after', pageInfo?.endCursor as string)}`}
+        disabled={!pageInfo?.hasNextPage}
       >
         <Typography>Next</Typography>
-      </Link>
+      </Button>
     </Flex>
   )
 }

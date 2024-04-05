@@ -3,18 +3,14 @@ import { getAllAdds } from '@/gql'
 import { ItemCard } from '@/server'
 import { ItemDropdown, PaginationControls } from '@/client'
 
-const pako = require('pako')
-
 export default async function Home({
   searchParams,
 }: { searchParams: { [key: string]: string | string[] | undefined } }) {
-
+  // biome-ignore lint:
+  const before = searchParams['before'] as string | undefined
 
   // biome-ignore lint:
-  const before = searchParams['before'] as string | undefined;
-
-  // biome-ignore lint:
-  const after = searchParams['after'] as string | undefined;
+  const after = searchParams['after'] as string | undefined
 
   const { adds, pageInfo } = await getAllAdds({ limit: 100, before, after })
 
@@ -46,8 +42,10 @@ export default async function Home({
           ),
         )}
       </Grid>
-      {/* @ts-ignore */}
-      <PaginationControls pageInfo={pageInfo} />
+      <div className="pb-[30px]">
+        {/* @ts-ignore */}
+        <PaginationControls pageInfo={pageInfo} />
+      </div>
     </>
   )
 }
