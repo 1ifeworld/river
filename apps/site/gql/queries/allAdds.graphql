@@ -1,5 +1,10 @@
-query allAdds {
-  addss(limit: 100, orderBy: "timestamp", orderDirection: "desc") {
+query allAdds($limit: Int!, $after: String) {
+  addss(
+    limit: $limit
+    orderBy: "timestamp"
+    orderDirection: "desc"
+    after: $after
+  ) {
     items {
       addedById
       removed
@@ -18,13 +23,16 @@ query allAdds {
             rid
             role
           }
-        }        
+        }
         adds(limit: 100, orderBy: "timestamp", orderDirection: "desc") {
           items {
             itemId
           }
         }
       }
+    }
+    pageInfo {
+      ...PageInfo
     }
   }
 }
