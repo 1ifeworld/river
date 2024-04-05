@@ -17,7 +17,9 @@ export function PaginationControls() {
   )
 
   // Get the current 'refs' value, parse it to an integer, increment it, and convert it back to a string
-  const nextRefs = (Number.parseInt(searchParams.get('refs') || '0') + 1).toString()
+  const nextRefs = (
+    Number.parseInt(searchParams.get('refs') || '0') + 1
+  ).toString()
 
   // Get the current 'refs' value, parse it to an integer, decrement it (but not below 0), and convert it back to a string
   const prevRefs = Math.max(

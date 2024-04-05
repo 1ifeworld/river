@@ -1034,7 +1034,10 @@ export type UserPage = {
 
 export type PageInfoFragment = { __typename?: 'PageInfo', startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean, hasNextPage: boolean };
 
-export type AllAddsQueryVariables = Exact<{ [key: string]: never; }>;
+export type AllAddsQueryVariables = Exact<{
+  limit: Scalars['Int']['input'];
+  after?: InputMaybe<Scalars['String']['input']>;
+}>;
 
 
 export type AllAddsQuery = { __typename?: 'Query', addss?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', addedById: any, removed?: boolean | null, channelId: string, item: { __typename?: 'Item', id: string, timestamp: any, createdById: any, uri: string }, channel: { __typename?: 'Channel', name: string, roles?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> | null } | null, adds?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', itemId: string }> | null } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean, hasNextPage: boolean } | null } | null };
@@ -1126,8 +1129,13 @@ export const PageInfoFragmentDoc = gql`
 }
     `;
 export const AllAddsDocument = gql`
-    query allAdds {
-  addss(limit: 100, orderBy: "timestamp", orderDirection: "desc") {
+    query allAdds($limit: Int!, $after: String) {
+  addss(
+    limit: $limit
+    orderBy: "timestamp"
+    orderDirection: "desc"
+    after: $after
+  ) {
     items {
       addedById
       removed
@@ -1441,7 +1449,7 @@ const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationTy
 
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
-    allAdds(variables?: AllAddsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<AllAddsQuery> {
+    allAdds(variables: AllAddsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<AllAddsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<AllAddsQuery>(AllAddsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'allAdds', 'query');
     },
     allChannels(variables?: AllChannelsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<AllChannelsQuery> {
