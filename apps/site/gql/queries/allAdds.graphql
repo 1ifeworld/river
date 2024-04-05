@@ -26,5 +26,8 @@ query allAdds {
         }
       }
     }
+        pageInfo {
+      ...PageInfo
+    }
   }
 }
