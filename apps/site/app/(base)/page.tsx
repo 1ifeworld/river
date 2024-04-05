@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@/design-system'
+import { Grid, Typography, Flex } from '@/design-system'
 import { getAllAdds } from '@/gql'
 import { ItemCard } from '@/server'
 import { ItemDropdown, PaginationControls } from '@/client'
@@ -17,7 +17,7 @@ export default async function Home({
 
   return (
     <>
-      <Grid className="grid-cols-2 md:grid-cols-[repeat(auto-fill,_minmax(255px,_1fr))] gap-5 pb-[30px]">
+      <Grid className="grid-cols-2 md:grid-cols-[repeat(auto-fill,_minmax(255px,_1fr))] gap-5">
         {adds.items.slice(0, 60).map((add, index) =>
           add.removed ? null : (
             <ItemCard
@@ -39,10 +39,10 @@ export default async function Home({
           ),
         )}
       </Grid>
-      <div className="pb-[30px]">
+      <Flex className="pt-32 pb-8 justify-center">
         {/* @ts-ignore */}
         <PaginationControls pageInfo={pageInfo} />
-      </div>
+      </Flex>
     </>
   )
 }

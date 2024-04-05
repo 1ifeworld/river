@@ -27,7 +27,7 @@ export function PaginationControls({
   )
 
   return (
-    <Flex className="gap-x-3">
+    <Flex className="gap-x-4">
       <Button
         variant="link"
         onClick={() => {
