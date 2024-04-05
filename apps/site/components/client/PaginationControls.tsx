@@ -3,7 +3,16 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import { useCallback } from 'react'
 import Link from 'next/link'
 
-export function PaginationControls() {
+interface PaginationControlsProps {
+  startCursor?: string
+  endCursor?: string
+  hasPreviousPage: boolean
+  hasNextPage: boolean
+}
+
+export function PaginationControls({
+  pageInfo,
+}: { pageInfo?: PaginationControlsProps }) {
   const searchParams = useSearchParams()
 
   const createQueryString = useCallback(
@@ -16,28 +25,17 @@ export function PaginationControls() {
     [searchParams],
   )
 
-  // Get the current 'refs' value, parse it to an integer, increment it, and convert it back to a string
-  const nextRefs = (
-    Number.parseInt(searchParams.get('refs') || '0') + 1
-  ).toString()
-
-  // Get the current 'refs' value, parse it to an integer, decrement it (but not below 0), and convert it back to a string
-  const prevRefs = Math.max(
-    Number.parseInt(searchParams.get('refs') || '0') - 1,
-    0,
-  ).toString()
-
   return (
     <Flex className="gap-x-3">
       <Link
         className="hover:underline underline-offset-2 transition-all"
-        href={`/?${createQueryString('refs', prevRefs)}`}
+        href={`/?${createQueryString('before', pageInfo?.startCursor as string)}`}
       >
         <Typography>Prev</Typography>
       </Link>
       <Link
         className="hover:underline underline-offset-2 transition-all"
-        href={`/?${createQueryString('refs', nextRefs)}`}
+        href={`/?${createQueryString('after', pageInfo?.endCursor as string)}`}
       >
         <Typography>Next</Typography>
       </Link>

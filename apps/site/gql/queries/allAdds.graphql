@@ -1,8 +1,9 @@
-query allAdds($limit: Int!, $after: String) {
+query allAdds($limit: Int!, $before: String, $after: String) {
   addss(
     limit: $limit
     orderBy: "timestamp"
     orderDirection: "desc"
+    before: $before
     after: $after
   ) {
     items {

@@ -1036,6 +1036,7 @@ export type PageInfoFragment = { __typename?: 'PageInfo', startCursor?: string |
 
 export type AllAddsQueryVariables = Exact<{
   limit: Scalars['Int']['input'];
+  before?: InputMaybe<Scalars['String']['input']>;
   after?: InputMaybe<Scalars['String']['input']>;
 }>;
 
@@ -1129,11 +1130,12 @@ export const PageInfoFragmentDoc = gql`
 }
     `;
 export const AllAddsDocument = gql`
-    query allAdds($limit: Int!, $after: String) {
+    query allAdds($limit: Int!, $before: String, $after: String) {
   addss(
     limit: $limit
     orderBy: "timestamp"
     orderDirection: "desc"
+    before: $before
     after: $after
   ) {
     items {
