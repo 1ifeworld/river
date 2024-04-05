@@ -27,7 +27,8 @@
         "noExtraBooleanCast": "off"
       },
       "correctness": {
-        "useExhaustiveDependencies": "off"
+        "useExhaustiveDependencies": "off",
+        "noChildrenProp": "off"
       },
       "a11y": {
         "noSvgWithoutTitle": "off"
