@@ -9,6 +9,11 @@ export default createSchema((p) => ({
   Txn: p.createTable({
     id: p.hex(),
   }),
+  LogToProcess: p.createTable({
+    id: p.string(), // keccackTxnInput
+    posts: p.int(),
+    lastIndexProcessed: p.int()
+  }),
 
   /*
       ID REGISTRY
