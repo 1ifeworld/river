@@ -1,6 +1,6 @@
 import { Grid, Typography, Flex } from '@/design-system'
 import { getAllAdds } from '@/gql'
-import { ItemCard } from '@/server'
+import { ItemCard, Footer } from '@/server'
 import { ItemDropdown, PaginationControls } from '@/client'
 
 export default async function Home({
@@ -39,9 +39,10 @@ export default async function Home({
           ),
         )}
       </Grid>
-      <Flex className="pt-32 pb-8 justify-center">
+      <Flex className="gap-3 pt-32 pb-4 justify-center items-center flex-col md:flex-row">
         {/* @ts-ignore */}
         <PaginationControls pageInfo={pageInfo} />
+        <Footer />
       </Flex>
     </>
   )
