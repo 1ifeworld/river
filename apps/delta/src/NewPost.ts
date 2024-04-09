@@ -74,7 +74,7 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
     post = args[0]
   } else {
     const batchLogToProcess = await LogToProcess.upsert({
-      id:  `${event.transaction.hash}/${event.transaction.transactionIndex}`,
+      id:  event.transaction.hash,
       create: {
         posts: args[0].length,
         lastIndexProcessed: 0
@@ -236,6 +236,7 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
           uri: channelData.contents,
           name: name,
           description: description,
+          addsCounter: BigInt(0)
         },
         update: {},
       })
@@ -400,14 +401,37 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
         // check if item exists. prevent adding item cids that don't exist
         const itemLookup = await Item.findUnique({ id: addItemCid })
         if (!itemLookup) break
+        // check if item already added to target channel
+        // PROTOCOL: prevent items from being added more than once to a channel
+        const addLookup = await Adds.findMany({ 
+          where: {
+            channelId: addChannelCid,
+            itemId: addItemCid,            
+          }  
+        })
+        if (addLookup && addLookup.items.length != 0) {
+          console.log(`END: Item-${addItemCid} already exists in Channel-${addChannelCid}`)
+          break
+        }        
+        // Create Add 
+        //    first increment channel counter
+        //    then create Add and set index position in channel
+        const channelAddsCounter = await Channel.update({
+          id: addChannelCid,
+          data: ({ current }) => ({
+            addsCounter: current.addsCounter + BigInt(1)
+          }),
+        })           
+        // create add
         await Adds.upsert({
-          id: `${addChannelCid}/${addItemCid}`,
+          id: messageId,
           create: {
             timestamp: post.message.timestamp,
             addedById: post.message.rid,
             messageId: messageId,
             itemId: addItemCid,
             channelId: addChannelCid,
+            channelIndex: channelAddsCounter.addsCounter
           },
           update: {},
         })
@@ -420,8 +444,12 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
       const { itemCid: remItemCid, channelCid: remChannelCid } =
         decodeRemoveItemMsgBody({ msgBody: post.message.msgBody }) || {}
       //
-      const addLookup = await Adds.findUnique({
-        id: `${remChannelCid}/${remItemCid}`,
+      // PROTOCOL: this works because items can only be added to channcels once
+      const addLookup = await Adds.findMany({ 
+        where: {
+          channelId: remChannelCid,
+          itemId: remItemCid,            
+        }  
       })
       // check for proper decode
       if (!remItemCid || !remChannelCid || !addLookup) return
@@ -437,10 +465,10 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
       if (
         (remAccess?.role &&
           remAccess.role === BigInt(ChannelRoleTypes.ADMIN)) || // is admin
-        addLookup.addedById === post.message.rid // was original adder
+        addLookup.items[0].addedById === post.message.rid // was original adder
       ) {
         await Adds.update({
-          id: `${remChannelCid}/${remItemCid}`,
+          id: `${addLookup.items[0].id}`,
           data: {
             removed: true,
             removedById: post.message.rid,

@@ -30,7 +30,6 @@ export async function ChannelItems({
   metadata: any
   view?: string | string[]
 }) {
-  const totalItems = channel.adds?.items?.length ?? 0
 
   if (view === 'list') {
     return (
@@ -40,7 +39,7 @@ export async function ChannelItems({
             add.removed ? null : (
               <TableRow className={`${styles.tableRow}`} key={add.timestamp}>
                 <Link
-                  href={`/channel/${add.channelId}/${totalItems - index}`}
+                  href={`/channel/${add.channelId}/${add.channelIndex}`}
                   legacyBehavior
                 >
                   <TableCell className="flex gap-4 items-center hover:cursor-pointer">
@@ -50,7 +49,7 @@ export async function ChannelItems({
                 {/* This component is hidden on small screens */}
                 <Link
                   key={`/${index}-cont`}
-                  href={`/channel/${add.channelId}/${totalItems - index}`}
+                  href={`/channel/${add.channelId}/${add.channelIndex}`}
                   legacyBehavior
                 >
                   <TableCell className="hidden md:table-cell max-w-[118px] text-primary-foreground text-nowrap truncate pr-12 hover:cursor-pointer">
@@ -63,7 +62,7 @@ export async function ChannelItems({
                 {/* This component is hidden on small screens */}
                 <Link
                   key={`/${index}-time`}
-                  href={`/channel/${add.channelId}/${totalItems - index}`}
+                  href={`/channel/${add.channelId}/${add.channelIndex}`}
                   legacyBehavior
                 >
                   <TableCell className="hidden md:table-cell text-primary-foreground text-nowrap truncate hover:cursor-pointer">

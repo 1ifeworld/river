@@ -1,11 +1,12 @@
-query allAdds($limit: Int!, $after: String) {
+query addWithChannelIndex($channelId: String!, $channelIndex: BigInt!) {
   addss(
-    limit: $limit
     orderBy: "timestamp"
     orderDirection: "desc"
-    after: $after
+    where: { channelId: $channelId, channelIndex: $channelIndex }
   ) {
     items {
+      id
+      timestamp
       addedById
       removed
       channelIndex
@@ -15,9 +16,10 @@ query allAdds($limit: Int!, $after: String) {
         createdById
         uri
       }
-      channelId
       channel {
+        id
         name
+        addsCounter
         roles(orderBy: "role", orderDirection: "desc") {
           items {
             timestamp
@@ -25,15 +27,14 @@ query allAdds($limit: Int!, $after: String) {
             role
           }
         }
-        adds(limit: 100, orderBy: "timestamp", orderDirection: "desc") {
-          items {
+        adds(limit: 100, orderBy: "channelIndex", orderDirection: "desc") {
+          items {            
             itemId
+            channelIndex
+            removed
           }
         }
       }
-    }
-    pageInfo {
-      ...PageInfo
     }
   }
 }

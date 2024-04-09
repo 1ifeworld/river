@@ -36,14 +36,6 @@ export async function ItemCard({
     }
   }
 
-  const totalItems = add.channel.adds?.items?.length ?? 0
-
-  const itemIndex =
-    totalItems -
-    (add.channel.adds?.items?.findIndex(
-      (item) => item.itemId === add.item.id,
-    ) as number)
-
   function checkIsPublic({ roleData }: { roleData: ChannelRoles[] }) {
     for (let i = 0; i < roleData.length; ++i) {
       if (roleData[i].rid === USER_ID_ZERO && roleData[i].role > 0) return true
@@ -58,7 +50,7 @@ export async function ItemCard({
   return (
     <Stack className="gap-y-[10px]">
       <Link
-        href={`/channel/${add?.channelId}/${itemIndex}`}
+        href={`/channel/${add?.channelId}/${add.channelIndex}`}
         className="transition-all"
       >
         <Stack className="relative aspect-[5/6] justify-center items-center">
@@ -95,7 +87,7 @@ export async function ItemCard({
         <div>
           <Flex className="items-center justify-between">
             <Link
-              href={`/channel/${add?.channelId}/${itemIndex}`}
+              href={`/channel/${add?.channelId}/${add.channelIndex}`}
               className="hover:underline underline-offset-2 transition-all w-4/6"
             >
               <Typography className="truncate">
