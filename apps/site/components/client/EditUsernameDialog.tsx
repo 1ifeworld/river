@@ -22,7 +22,7 @@ import {
   type UsernameSchemaValues,
   checkUsernameAvailability,
   processRegisterFor,
-  setUsername,
+  updateUsername,
   usernameSchema,
 } from '@/lib'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -136,7 +136,7 @@ export function EditUsernameDialog({ open, setOpen }: UsernameDialogProps) {
     // If userId is still null here, skip username set process
     let success = false
     if (inFlightUserId) {
-      const resp = await setUsername({
+      const resp = await updateUsername({
         userIdRegistered: inFlightUserId,
         signature: sig,
         timestamp: deadline.toString(),
