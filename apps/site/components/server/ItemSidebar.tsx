@@ -87,9 +87,13 @@ export function ItemSidebar({
   // </div>
 
   return (
-    <Stack className="p-5 h-[320px] md:h-full border-t border-border md:border-none">
-      <Flex className="justify-between items-center pb-[30px]">
-        <Typography>Info</Typography>
+    <Stack className="p-5 gap-y-5 md:gap-y-[30px] h-[calc(100dvh-(var(--header-height)+70dvh))] md:h-full border-t border-border md:border-none">
+      <Flex className="justify-between items-center">
+        <Typography className="hidden md:block">Info</Typography>
+        <div className="md:hidden">
+          <Typography className="truncate">{itemMetadata?.name}</Typography>
+          <Username id={itemContext.item.createdById} />
+        </div>
         <Flex className="gap-x-2">
           <Button variant="link" disabled={invalidPrev}>
             <Link href={`/channel/${itemContext.channelId}/${prevIndex}`}>
@@ -102,23 +106,20 @@ export function ItemSidebar({
             </Link>
           </Button>
         </Flex>
-        {/* <IndexInfoToggle /> */}
-        {/* <Link
-          href={`/channel/${itemContext.channelId}`}
-          className="underline-offset-2 transition-all hover:underline"
-        >
-          <Typography>Go to channel</Typography>
-        </Link> */}
+      </Flex>
+      <Flex className="md:hidden">
+        <AddToChannelDialog item={itemContext.item} />
       </Flex>
       <Stack className="justify-between md:justify-start">
-        <Stack className="gap-y-5">
+        <Stack className="hidden md:flex gap-y-5">
+          {/* <Stack className=""> */}
           <div>
             <Typography className="truncate">{itemMetadata?.name}</Typography>
             <Username id={itemContext.item.createdById} />
           </div>
           <Typography>{'--'}</Typography>
         </Stack>
-        <Stack className=" gap-y-[7px] pt-5 md:pt-[45px]">
+        <Stack className=" gap-y-[7px] md:pt-[45px]">
           <Flex className="justify-between">
             <Typography>Channel</Typography>
             <Flex className="items-center space-x-[6px]">
@@ -166,12 +167,12 @@ export function ItemSidebar({
         </Stack>
       </Stack>
 
-      <Flex className="py-[30px]">
+      <Flex className="hidden md:block">
         <AddToChannelDialog item={itemContext.item} />
       </Flex>
 
       {/* <Separator /> */}
-      <Flex className="py-[30px]">
+      <Flex className="pt-5 md:pt-[30px]">
         <Typography>{`Index [${itemIndex}/${indexLength}]`}</Typography>
       </Flex>
 
