@@ -30,7 +30,6 @@ export async function ChannelItems({
   metadata: any
   view?: string | string[]
 }) {
-
   if (view === 'list') {
     return (
       <Table className="md:ml-2">

@@ -1,6 +1,7 @@
 import * as React from 'react'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
+import { redirect } from 'next/navigation'
 import { kv } from '@vercel/kv'
 import { P, match } from 'ts-pattern'
 import { AudioPlayer, VideoPlayer } from '@/client'
@@ -42,11 +43,24 @@ export default async function ItemPage({
   params: { id: string; index: bigint }
   searchParams: { [key: string]: string | string[] | undefined }
 }) {
-
   const { add } = await getAddWithChannelIndex({
     channelId: params.id,
-    channelIndex: params.index
+    channelIndex: params.index,
   })
+
+  if (add) console.log('add was ok on home page')
+
+  // if (add.removed) {
+  //   let indexToRoute = Number(params.index) - 1
+  //   while (
+  //     indexToRoute > 1
+  //     && add.channel.adds?.items[add.channel.addsCounter-indexToRoute].removed === true
+  //     // && itemContext.channel.adds?.items[indexLength-nextIndex].removed === true
+  //   ) {
+  //     indexToRoute = indexToRoute - 1
+  //   }
+  //   redirect(`/channel/${params.id}/${indexToRoute}`)
+  // }
 
   const itemMetadata = await kv.get<Pick<MediaAssetObject, 'value'>['value']>(
     add.item.uri as string,
@@ -164,8 +178,6 @@ export default async function ItemPage({
           // @ts-ignore
           itemContext={add}
           itemMetadata={itemMetadata}
-          // @ts-ignore
-          channel={add.channel}
           view={searchParams.view}
         />
       </div>

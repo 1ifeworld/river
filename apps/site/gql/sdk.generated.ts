@@ -1145,7 +1145,7 @@ export type AddWithChannelIndexQueryVariables = Exact<{
 }>;
 
 
-export type AddWithChannelIndexQuery = { __typename?: 'Query', addss: { __typename?: 'AddsPage', items: Array<{ __typename?: 'Adds', id: string, timestamp: any, addedById: any, removed?: boolean | null, channelIndex: any, item: { __typename?: 'Item', id: string, timestamp: any, createdById: any, uri: string }, channel: { __typename?: 'Channel', id: string, name: string, addsCounter: any, roles?: { __typename?: 'ChannelRolesPage', items: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> } | null, adds?: { __typename?: 'AddsPage', items: Array<{ __typename?: 'Adds', itemId: string, channelIndex: any, removed?: boolean | null }> } | null } }> } };
+export type AddWithChannelIndexQuery = { __typename?: 'Query', addss: { __typename?: 'AddsPage', items: Array<{ __typename?: 'Adds', id: string, timestamp: any, addedById: any, removed?: boolean | null, channelIndex: any, item: { __typename?: 'Item', id: string, timestamp: any, createdById: any, uri: string }, channel: { __typename?: 'Channel', id: string, name: string, addsCounter: any, roles?: { __typename?: 'ChannelRolesPage', items: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> } | null, adds?: { __typename?: 'AddsPage', items: Array<{ __typename?: 'Adds', channelIndex: any, removed?: boolean | null, item: { __typename?: 'Item', id: string, uri: string, createdById: any } }> } | null } }> } };
 
 export type AllAddsQueryVariables = Exact<{
   limit: Scalars['Int']['input'];
@@ -1244,7 +1244,7 @@ export const PageInfoFragmentDoc = gql`
 export const AddWithChannelIndexDocument = gql`
     query addWithChannelIndex($channelId: String!, $channelIndex: BigInt!) {
   addss(
-    orderBy: "timestamp"
+    orderBy: "channelIndex"
     orderDirection: "desc"
     where: {channelId: $channelId, channelIndex: $channelIndex}
   ) {
@@ -1273,9 +1273,13 @@ export const AddWithChannelIndexDocument = gql`
         }
         adds(limit: 100, orderBy: "channelIndex", orderDirection: "desc") {
           items {
-            itemId
             channelIndex
             removed
+            item {
+              id
+              uri
+              createdById
+            }
           }
         }
       }

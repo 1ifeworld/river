@@ -1,6 +1,6 @@
 query addWithChannelIndex($channelId: String!, $channelIndex: BigInt!) {
   addss(
-    orderBy: "timestamp"
+    orderBy: "channelIndex"
     orderDirection: "desc"
     where: { channelId: $channelId, channelIndex: $channelIndex }
   ) {
@@ -28,10 +28,14 @@ query addWithChannelIndex($channelId: String!, $channelIndex: BigInt!) {
           }
         }
         adds(limit: 100, orderBy: "channelIndex", orderDirection: "desc") {
-          items {            
-            itemId
+          items {        
             channelIndex
-            removed
+            removed    
+            item {
+              id
+              uri
+              createdById
+            }
           }
         }
       }

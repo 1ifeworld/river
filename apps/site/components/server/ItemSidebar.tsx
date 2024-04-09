@@ -23,17 +23,14 @@ interface ItemSidebarProps {
     animationUri: string
     contentType: string
   } | null
-  channel: Channel
   view?: string | string[]
 }
 
 export function ItemSidebar({
   itemContext,
   itemMetadata,
-  channel,
   view,
 }: ItemSidebarProps) {
-
   function checkIsPublic({ roleData }: { roleData: ChannelRoles[] }) {
     for (let i = 0; i < roleData.length; ++i) {
       if (roleData[i].rid === USER_ID_ZERO && roleData[i].role > 0) return true
@@ -41,31 +38,45 @@ export function ItemSidebar({
     return false
   }
 
-  const isPublic = !channel?.roles?.items
+  const isPublic = !itemContext?.channel?.roles?.items
     ? false
-    : checkIsPublic({ roleData: channel?.roles?.items })
+    : checkIsPublic({ roleData: itemContext?.channel?.roles?.items })
 
-  const indexLength = channel.addsCounter ?? 0
+  const indexLength = itemContext?.channel.addsCounter ?? 0
 
   // next index means going backwards in time in term of when items were added to channel (smaller = older)
   // ex: channel index 47, clicking next would take u to item 46 which was added before 47
   let nextIndex = itemContext.channelIndex - 1
-  while (
-    nextIndex > 1 
-    && itemContext.channel.adds?.items[indexLength-nextIndex].removed === true
-  ) {
-    nextIndex = nextIndex - 1
+  // NOTE: this if statement is temporary fix for not having acccess to more than 100 adds of this query
+  //    basically things work except your susciple to routing to adds that have been removed
+  //    since you are skipping that check
+  if (indexLength < 101) {
+    while (
+      nextIndex > 1 &&
+      itemContext.channel.adds?.items[indexLength - nextIndex].removed === true
+    ) {
+      nextIndex = nextIndex - 1
+    }
   }
   const invalidNext = nextIndex === 0
 
   let prevIndex = Number(itemContext.channelIndex) + 1
-  while (
-    prevIndex < indexLength 
-    && itemContext.channel.adds?.items[indexLength-prevIndex].removed === true
-  ) {
-    prevIndex++
-  }  
+  // NOTE: this if statement is temporary fix for not having acccess to more than 100 adds of this query
+  //    basically things work except your susciple to routing to adds that have been removed
+  //    since you are skipping that check
+  if (indexLength < 101) {
+    while (
+      prevIndex < indexLength &&
+      itemContext.channel.adds?.items[indexLength - prevIndex].removed === true
+    ) {
+      prevIndex++
+    }
+  }
   const invalidPrev = prevIndex > indexLength
+
+  // console.log("itemContext.channel.id", itemContext.channel.id)
+  // console.log("itemContext.channel", itemContext.channel)
+  // console.log("itemContext", itemContext)
 
   return (
     <Stack className="p-5 h-[320px] md:h-full border-t border-border md:border-none">
@@ -139,23 +150,24 @@ export function ItemSidebar({
 
       {/* <Separator /> */}
       <Flex className="py-[30px]">
-        <Typography>{`Index [${itemContext.channelIndex}/${indexLength}]`}</Typography>
+        <Typography>{`Index [${
+          indexLength - itemContext.channelIndex + 1
+        }/${indexLength}]`}</Typography>
       </Flex>
 
-      <ItemIndex channel={channel} />
+      <ItemIndex channel={itemContext?.channel} />
     </Stack>
   )
 }
 
 async function ItemIndex({ channel }: { channel: Channel }) {
-  const totalItems = channel.adds?.items?.length ?? 0
   // @ts-ignore
   const { metadata } = await getAddsMetadata(channel?.adds?.items)
   return (
     <div className="md:overflow-x-hidden">
       {channel?.adds?.items?.map((add: Adds, index: number) =>
         add.removed ? null : (
-          <Link key={index} href={`/channel/${add.channelId}/${add.channelIndex}`}>
+          <Link key={index} href={`/channel/${channel.id}/${add.channelIndex}`}>
             <Flex className="gap-4 py-[5px] items-center hover:cursor-pointer">
               <ThumbnailNameCreator
                 item={add.item}
