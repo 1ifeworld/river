@@ -67,21 +67,21 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
   })
 
   // if decode fails return
-  if (!args?.[0]) return  
+  if (!args?.[0]) return
 
   // Prepare post to process
-  if (functionName === "post") {
+  if (functionName === 'post') {
     post = args[0]
   } else {
     const batchLogToProcess = await LogToProcess.upsert({
-      id:  event.transaction.hash,
+      id: event.transaction.hash,
       create: {
         posts: args[0].length,
-        lastIndexProcessed: 0
+        lastIndexProcessed: 0,
       },
-      update: ({current}) => ({
-        lastIndexProcessed: current.lastIndexProcessed + 1
-      })      
+      update: ({ current }) => ({
+        lastIndexProcessed: current.lastIndexProcessed + 1,
+      }),
     })
     post = args[0][batchLogToProcess.lastIndexProcessed]
   }
@@ -236,7 +236,7 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
           uri: channelData.contents,
           name: name,
           description: description,
-          addsCounter: BigInt(0)
+          addsCounter: BigInt(0),
         },
         update: {},
       })
@@ -294,8 +294,7 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
         assetCid: updateChannelCid,
         data: updateChannelData,
         access: updateChannelAccess,
-      } = decodeUpdateAssetMsgBody({ msgBody: post.message.msgBody }) ||
-      {}
+      } = decodeUpdateAssetMsgBody({ msgBody: post.message.msgBody }) || {}
       /* 
         as of the initial upgrade that enables update channel messages that took place blocktimestamp { },
         the only functionality that is possible is updating the Role based access for a channel.
@@ -403,25 +402,27 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
         if (!itemLookup) break
         // check if item already added to target channel
         // PROTOCOL: prevent items from being added more than once to a channel
-        const addLookup = await Adds.findMany({ 
+        const addLookup = await Adds.findMany({
           where: {
             channelId: addChannelCid,
-            itemId: addItemCid,            
-          }  
+            itemId: addItemCid,
+          },
         })
-        if (addLookup && addLookup.items.length != 0) {
-          console.log(`END: Item-${addItemCid} already exists in Channel-${addChannelCid}`)
+        if (addLookup && addLookup.items.length !== 0) {
+          console.log(
+            `END: Item-${addItemCid} already exists in Channel-${addChannelCid}`,
+          )
           break
-        }        
-        // Create Add 
+        }
+        // Create Add
         //    first increment channel counter
         //    then create Add and set index position in channel
         const channelAddsCounter = await Channel.update({
           id: addChannelCid,
           data: ({ current }) => ({
-            addsCounter: current.addsCounter + BigInt(1)
+            addsCounter: current.addsCounter + BigInt(1),
           }),
-        })           
+        })
         // create add
         await Adds.upsert({
           id: messageId,
@@ -431,7 +432,7 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
             messageId: messageId,
             itemId: addItemCid,
             channelId: addChannelCid,
-            channelIndex: channelAddsCounter.addsCounter
+            channelIndex: channelAddsCounter.addsCounter,
           },
           update: {},
         })
@@ -445,11 +446,11 @@ ponder.on('PostGateway:NewPost', async ({ event, context }) => {
         decodeRemoveItemMsgBody({ msgBody: post.message.msgBody }) || {}
       //
       // PROTOCOL: this works because items can only be added to channcels once
-      const addLookup = await Adds.findMany({ 
+      const addLookup = await Adds.findMany({
         where: {
           channelId: remChannelCid,
-          itemId: remItemCid,            
-        }  
+          itemId: remItemCid,
+        },
       })
       // check for proper decode
       if (!remItemCid || !remChannelCid || !addLookup) return
