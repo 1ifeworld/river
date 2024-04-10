@@ -1,14 +1,44 @@
 import { Marquee } from '@/client'
 import { getMarqueeData } from '@/gql'
+import { getAddsMetadata, getUsername } from '@/lib'
+
+export type Action = {
+  userName: string
+  itemName: string
+  channelName: string
+  channelId: string
+  channelIndex: number
+}
 
 export async function MarqueeWrapper() {
-  const { users, channels, items } = await getMarqueeData()
+  let marqueeActions: Action[] = []
+  const { data } = await getMarqueeData()
 
-  return (
-    <Marquee
-      totalChannels={channels?.items?.[0].counter}
-      totalItems={items?.items?.[0].counter}
-      totalUsers={users?.items?.[0].counter}
-    />
-  )
+  if (data) {
+    //  fetch usernames for adds
+    const usernames = await Promise.all(
+      data.map((add) =>
+        getUsername({
+          id: add.addedById,
+        }),
+      ),
+    )
+    // fetch metadata for items
+    // @ts-ignore
+    const { metadata } = await getAddsMetadata(data)
+    marqueeActions = data
+      .map((add, index) => {
+        if (add.removed) return null
+        const itemMetadata = metadata.data[add.item.uri]
+        return {
+          userName: usernames[index],
+          itemName: itemMetadata.name,
+          channelName: data[index].channel.name,
+          channelId: data[index].channel.id,
+          channelIndex: data[index].channelIndex,
+        }
+      })
+      .filter((action): action is Action => action !== null)
+  }
+  return <Marquee actions={marqueeActions} />
 }

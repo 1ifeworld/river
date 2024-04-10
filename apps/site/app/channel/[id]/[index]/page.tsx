@@ -1,11 +1,12 @@
 import * as React from 'react'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
+import { redirect } from 'next/navigation'
 import { kv } from '@vercel/kv'
 import { P, match } from 'ts-pattern'
 import { AudioPlayer, VideoPlayer } from '@/client'
 import { Flex, Stack, Typography, Separator } from '@/design-system'
-import { getChannelWithId } from '@/gql'
+import { getChannelWithId, getAddWithChannelIndex } from '@/gql'
 import {
   type MediaAssetObject,
   ipfsUrlToCid,
@@ -39,19 +40,30 @@ export default async function ItemPage({
   params,
   searchParams,
 }: {
-  params: { id: string; index: string }
+  params: { id: string; index: bigint }
   searchParams: { [key: string]: string | string[] | undefined }
 }) {
-  const { channel } = await getChannelWithId({
-    id: params.id,
+  const { add } = await getAddWithChannelIndex({
+    channelId: params.id,
+    channelIndex: params.index,
   })
 
-  const totalItems = channel?.adds?.items?.length ?? 0
-  const reversedIndex = totalItems - Number(params.index)
-  const itemToRender = channel?.adds?.items?.[reversedIndex]
+  if (add.removed) {
+    const halfway = add.adds.length / 2
+    const direction = Number(params.index) < halfway ? 1 : -1
+    let indexToRoute = Number(params.index) + direction
+
+    while (
+      (direction === -1 ? indexToRoute > 1 : indexToRoute < add.adds.length) &&
+      add.adds[add.channel.addsCounter - indexToRoute].removed === true
+    ) {
+      indexToRoute = indexToRoute + direction
+    }
+    redirect(`/channel/${params.id}/${indexToRoute}`)
+  }
 
   const itemMetadata = await kv.get<Pick<MediaAssetObject, 'value'>['value']>(
-    itemToRender?.item.uri as string,
+    add.item.uri as string,
   )
 
   const contentType = itemMetadata?.contentType as string
@@ -164,11 +176,8 @@ export default async function ItemPage({
       <div className="md:overflow-y-auto md:w-[22%]">
         <ItemSidebar
           // @ts-ignore
-          itemContext={itemToRender}
-          itemIndex={Number(params.index)}
+          itemContext={add}
           itemMetadata={itemMetadata}
-          // @ts-ignore
-          channel={channel}
           view={searchParams.view}
         />
       </div>

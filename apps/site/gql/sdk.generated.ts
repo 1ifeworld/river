@@ -25,6 +25,7 @@ export type Adds = {
   addedById: Scalars['BigInt']['output'];
   channel: Channel;
   channelId: Scalars['String']['output'];
+  channelIndex: Scalars['BigInt']['output'];
   id: Scalars['String']['output'];
   item: Item;
   itemId: Scalars['String']['output'];
@@ -36,6 +37,8 @@ export type Adds = {
 };
 
 export type AddsFilter = {
+  AND?: InputMaybe<Array<InputMaybe<AddsFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<AddsFilter>>>;
   addedById?: InputMaybe<Scalars['BigInt']['input']>;
   addedById_gt?: InputMaybe<Scalars['BigInt']['input']>;
   addedById_gte?: InputMaybe<Scalars['BigInt']['input']>;
@@ -54,6 +57,14 @@ export type AddsFilter = {
   channelId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   channelId_not_starts_with?: InputMaybe<Scalars['String']['input']>;
   channelId_starts_with?: InputMaybe<Scalars['String']['input']>;
+  channelIndex?: InputMaybe<Scalars['BigInt']['input']>;
+  channelIndex_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  channelIndex_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  channelIndex_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  channelIndex_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  channelIndex_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  channelIndex_not?: InputMaybe<Scalars['BigInt']['input']>;
+  channelIndex_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
   id?: InputMaybe<Scalars['String']['input']>;
   id_contains?: InputMaybe<Scalars['String']['input']>;
   id_ends_with?: InputMaybe<Scalars['String']['input']>;
@@ -108,13 +119,14 @@ export type AddsFilter = {
 
 export type AddsPage = {
   __typename?: 'AddsPage';
-  items?: Maybe<Array<Adds>>;
-  pageInfo?: Maybe<PageInfo>;
+  items: Array<Adds>;
+  pageInfo: PageInfo;
 };
 
 export type Channel = {
   __typename?: 'Channel';
   adds?: Maybe<AddsPage>;
+  addsCounter: Scalars['BigInt']['output'];
   createdBy: User;
   createdById: Scalars['BigInt']['output'];
   description: Scalars['String']['output'];
@@ -134,7 +146,7 @@ export type ChannelAddsArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
-  timestamp?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ChannelFilter>;
 };
 
 
@@ -144,7 +156,7 @@ export type ChannelRolesArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
-  timestamp?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ChannelFilter>;
 };
 
 export type ChannelCounter = {
@@ -155,6 +167,8 @@ export type ChannelCounter = {
 };
 
 export type ChannelCounterFilter = {
+  AND?: InputMaybe<Array<InputMaybe<ChannelCounterFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<ChannelCounterFilter>>>;
   counter?: InputMaybe<Scalars['BigInt']['input']>;
   counter_gt?: InputMaybe<Scalars['BigInt']['input']>;
   counter_gte?: InputMaybe<Scalars['BigInt']['input']>;
@@ -185,11 +199,21 @@ export type ChannelCounterFilter = {
 
 export type ChannelCounterPage = {
   __typename?: 'ChannelCounterPage';
-  items?: Maybe<Array<ChannelCounter>>;
-  pageInfo?: Maybe<PageInfo>;
+  items: Array<ChannelCounter>;
+  pageInfo: PageInfo;
 };
 
 export type ChannelFilter = {
+  AND?: InputMaybe<Array<InputMaybe<ChannelFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<ChannelFilter>>>;
+  addsCounter?: InputMaybe<Scalars['BigInt']['input']>;
+  addsCounter_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  addsCounter_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  addsCounter_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  addsCounter_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  addsCounter_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  addsCounter_not?: InputMaybe<Scalars['BigInt']['input']>;
+  addsCounter_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
   createdById?: InputMaybe<Scalars['BigInt']['input']>;
   createdById_gt?: InputMaybe<Scalars['BigInt']['input']>;
   createdById_gte?: InputMaybe<Scalars['BigInt']['input']>;
@@ -260,8 +284,8 @@ export type ChannelFilter = {
 
 export type ChannelPage = {
   __typename?: 'ChannelPage';
-  items?: Maybe<Array<Channel>>;
-  pageInfo?: Maybe<PageInfo>;
+  items: Array<Channel>;
+  pageInfo: PageInfo;
 };
 
 export type ChannelRoles = {
@@ -275,6 +299,8 @@ export type ChannelRoles = {
 };
 
 export type ChannelRolesFilter = {
+  AND?: InputMaybe<Array<InputMaybe<ChannelRolesFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<ChannelRolesFilter>>>;
   channelId?: InputMaybe<Scalars['String']['input']>;
   channelId_contains?: InputMaybe<Scalars['String']['input']>;
   channelId_ends_with?: InputMaybe<Scalars['String']['input']>;
@@ -323,8 +349,8 @@ export type ChannelRolesFilter = {
 
 export type ChannelRolesPage = {
   __typename?: 'ChannelRolesPage';
-  items?: Maybe<Array<ChannelRoles>>;
-  pageInfo?: Maybe<PageInfo>;
+  items: Array<ChannelRoles>;
+  pageInfo: PageInfo;
 };
 
 export type Item = {
@@ -346,7 +372,7 @@ export type ItemAddsArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
-  timestamp?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ItemFilter>;
 };
 
 export type ItemCounter = {
@@ -357,6 +383,8 @@ export type ItemCounter = {
 };
 
 export type ItemCounterFilter = {
+  AND?: InputMaybe<Array<InputMaybe<ItemCounterFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<ItemCounterFilter>>>;
   counter?: InputMaybe<Scalars['BigInt']['input']>;
   counter_gt?: InputMaybe<Scalars['BigInt']['input']>;
   counter_gte?: InputMaybe<Scalars['BigInt']['input']>;
@@ -387,11 +415,13 @@ export type ItemCounterFilter = {
 
 export type ItemCounterPage = {
   __typename?: 'ItemCounterPage';
-  items?: Maybe<Array<ItemCounter>>;
-  pageInfo?: Maybe<PageInfo>;
+  items: Array<ItemCounter>;
+  pageInfo: PageInfo;
 };
 
 export type ItemFilter = {
+  AND?: InputMaybe<Array<InputMaybe<ItemFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<ItemFilter>>>;
   createdById?: InputMaybe<Scalars['BigInt']['input']>;
   createdById_gt?: InputMaybe<Scalars['BigInt']['input']>;
   createdById_gte?: InputMaybe<Scalars['BigInt']['input']>;
@@ -442,8 +472,8 @@ export type ItemFilter = {
 
 export type ItemPage = {
   __typename?: 'ItemPage';
-  items?: Maybe<Array<Item>>;
-  pageInfo?: Maybe<PageInfo>;
+  items: Array<Item>;
+  pageInfo: PageInfo;
 };
 
 export type ItemRoles = {
@@ -456,6 +486,8 @@ export type ItemRoles = {
 };
 
 export type ItemRolesFilter = {
+  AND?: InputMaybe<Array<InputMaybe<ItemRolesFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<ItemRolesFilter>>>;
   id?: InputMaybe<Scalars['String']['input']>;
   id_contains?: InputMaybe<Scalars['String']['input']>;
   id_ends_with?: InputMaybe<Scalars['String']['input']>;
@@ -496,8 +528,52 @@ export type ItemRolesFilter = {
 
 export type ItemRolesPage = {
   __typename?: 'ItemRolesPage';
-  items?: Maybe<Array<ItemRoles>>;
-  pageInfo?: Maybe<PageInfo>;
+  items: Array<ItemRoles>;
+  pageInfo: PageInfo;
+};
+
+export type LogToProcess = {
+  __typename?: 'LogToProcess';
+  id: Scalars['String']['output'];
+  lastIndexProcessed: Scalars['Int']['output'];
+  posts: Scalars['Int']['output'];
+};
+
+export type LogToProcessFilter = {
+  AND?: InputMaybe<Array<InputMaybe<LogToProcessFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<LogToProcessFilter>>>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  id_contains?: InputMaybe<Scalars['String']['input']>;
+  id_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains?: InputMaybe<Scalars['String']['input']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id_starts_with?: InputMaybe<Scalars['String']['input']>;
+  lastIndexProcessed?: InputMaybe<Scalars['Int']['input']>;
+  lastIndexProcessed_gt?: InputMaybe<Scalars['Int']['input']>;
+  lastIndexProcessed_gte?: InputMaybe<Scalars['Int']['input']>;
+  lastIndexProcessed_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  lastIndexProcessed_lt?: InputMaybe<Scalars['Int']['input']>;
+  lastIndexProcessed_lte?: InputMaybe<Scalars['Int']['input']>;
+  lastIndexProcessed_not?: InputMaybe<Scalars['Int']['input']>;
+  lastIndexProcessed_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  posts?: InputMaybe<Scalars['Int']['input']>;
+  posts_gt?: InputMaybe<Scalars['Int']['input']>;
+  posts_gte?: InputMaybe<Scalars['Int']['input']>;
+  posts_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  posts_lt?: InputMaybe<Scalars['Int']['input']>;
+  posts_lte?: InputMaybe<Scalars['Int']['input']>;
+  posts_not?: InputMaybe<Scalars['Int']['input']>;
+  posts_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+};
+
+export type LogToProcessPage = {
+  __typename?: 'LogToProcessPage';
+  items: Array<LogToProcess>;
+  pageInfo: PageInfo;
 };
 
 export type Message = {
@@ -511,6 +587,8 @@ export type Message = {
 };
 
 export type MessageFilter = {
+  AND?: InputMaybe<Array<InputMaybe<MessageFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<MessageFilter>>>;
   id?: InputMaybe<Scalars['String']['input']>;
   id_contains?: InputMaybe<Scalars['String']['input']>;
   id_ends_with?: InputMaybe<Scalars['String']['input']>;
@@ -567,8 +645,8 @@ export type MessageFilter = {
 
 export type MessagePage = {
   __typename?: 'MessagePage';
-  items?: Maybe<Array<Message>>;
-  pageInfo?: Maybe<PageInfo>;
+  items: Array<Message>;
+  pageInfo: PageInfo;
 };
 
 export type PageInfo = {
@@ -593,6 +671,8 @@ export type Post = {
 };
 
 export type PostFilter = {
+  AND?: InputMaybe<Array<InputMaybe<PostFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<PostFilter>>>;
   hash?: InputMaybe<Scalars['String']['input']>;
   hashType?: InputMaybe<Scalars['BigInt']['input']>;
   hashType_gt?: InputMaybe<Scalars['BigInt']['input']>;
@@ -665,36 +745,38 @@ export type PostFilter = {
 
 export type PostPage = {
   __typename?: 'PostPage';
-  items?: Maybe<Array<Post>>;
-  pageInfo?: Maybe<PageInfo>;
+  items: Array<Post>;
+  pageInfo: PageInfo;
 };
 
 export type Query = {
   __typename?: 'Query';
   adds?: Maybe<Adds>;
-  addss?: Maybe<AddsPage>;
+  addss: AddsPage;
   channel?: Maybe<Channel>;
   channelCounter?: Maybe<ChannelCounter>;
-  channelCounters?: Maybe<ChannelCounterPage>;
+  channelCounters: ChannelCounterPage;
   channelRoles?: Maybe<ChannelRoles>;
-  channelRoless?: Maybe<ChannelRolesPage>;
-  channels?: Maybe<ChannelPage>;
+  channelRoless: ChannelRolesPage;
+  channels: ChannelPage;
   item?: Maybe<Item>;
   itemCounter?: Maybe<ItemCounter>;
-  itemCounters?: Maybe<ItemCounterPage>;
+  itemCounters: ItemCounterPage;
   itemRoles?: Maybe<ItemRoles>;
-  itemRoless?: Maybe<ItemRolesPage>;
-  items?: Maybe<ItemPage>;
+  itemRoless: ItemRolesPage;
+  items: ItemPage;
+  logToProcess?: Maybe<LogToProcess>;
+  logToProcesss: LogToProcessPage;
   message?: Maybe<Message>;
-  messages?: Maybe<MessagePage>;
+  messages: MessagePage;
   post?: Maybe<Post>;
-  posts?: Maybe<PostPage>;
+  posts: PostPage;
   txn?: Maybe<Txn>;
-  txns?: Maybe<TxnPage>;
+  txns: TxnPage;
   user?: Maybe<User>;
   userCounter?: Maybe<UserCounter>;
-  userCounters?: Maybe<UserCounterPage>;
-  users?: Maybe<UserPage>;
+  userCounters: UserCounterPage;
+  users: UserPage;
 };
 
 
@@ -817,6 +899,23 @@ export type QueryItemsArgs = {
 };
 
 
+export type QueryLogToProcessArgs = {
+  id: Scalars['String']['input'];
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryLogToProcesssArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<LogToProcessFilter>;
+};
+
+
 export type QueryMessageArgs = {
   id: Scalars['String']['input'];
   timestamp?: InputMaybe<Scalars['Int']['input']>;
@@ -907,6 +1006,8 @@ export type Txn = {
 };
 
 export type TxnFilter = {
+  AND?: InputMaybe<Array<InputMaybe<TxnFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<TxnFilter>>>;
   id?: InputMaybe<Scalars['String']['input']>;
   id_gt?: InputMaybe<Scalars['String']['input']>;
   id_gte?: InputMaybe<Scalars['String']['input']>;
@@ -919,8 +1020,8 @@ export type TxnFilter = {
 
 export type TxnPage = {
   __typename?: 'TxnPage';
-  items?: Maybe<Array<Txn>>;
-  pageInfo?: Maybe<PageInfo>;
+  items: Array<Txn>;
+  pageInfo: PageInfo;
 };
 
 export type User = {
@@ -941,6 +1042,8 @@ export type UserCounter = {
 };
 
 export type UserCounterFilter = {
+  AND?: InputMaybe<Array<InputMaybe<UserCounterFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<UserCounterFilter>>>;
   counter?: InputMaybe<Scalars['BigInt']['input']>;
   counter_gt?: InputMaybe<Scalars['BigInt']['input']>;
   counter_gte?: InputMaybe<Scalars['BigInt']['input']>;
@@ -971,11 +1074,13 @@ export type UserCounterFilter = {
 
 export type UserCounterPage = {
   __typename?: 'UserCounterPage';
-  items?: Maybe<Array<UserCounter>>;
-  pageInfo?: Maybe<PageInfo>;
+  items: Array<UserCounter>;
+  pageInfo: PageInfo;
 };
 
 export type UserFilter = {
+  AND?: InputMaybe<Array<InputMaybe<UserFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<UserFilter>>>;
   from?: InputMaybe<Scalars['String']['input']>;
   from_gt?: InputMaybe<Scalars['String']['input']>;
   from_gte?: InputMaybe<Scalars['String']['input']>;
@@ -1028,11 +1133,19 @@ export type UserFilter = {
 
 export type UserPage = {
   __typename?: 'UserPage';
-  items?: Maybe<Array<User>>;
-  pageInfo?: Maybe<PageInfo>;
+  items: Array<User>;
+  pageInfo: PageInfo;
 };
 
 export type PageInfoFragment = { __typename?: 'PageInfo', startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean, hasNextPage: boolean };
+
+export type AddWithChannelIndexQueryVariables = Exact<{
+  channelId: Scalars['String']['input'];
+  channelIndex: Scalars['BigInt']['input'];
+}>;
+
+
+export type AddWithChannelIndexQuery = { __typename?: 'Query', addss: { __typename?: 'AddsPage', items: Array<{ __typename?: 'Adds', id: string, timestamp: any, addedById: any, removed?: boolean | null, channelIndex: any, item: { __typename?: 'Item', id: string, timestamp: any, createdById: any, uri: string }, channel: { __typename?: 'Channel', id: string, name: string, addsCounter: any, roles?: { __typename?: 'ChannelRolesPage', items: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> } | null } }> } };
 
 export type AllAddsQueryVariables = Exact<{
   limit: Scalars['Int']['input'];
@@ -1040,52 +1153,60 @@ export type AllAddsQueryVariables = Exact<{
 }>;
 
 
-export type AllAddsQuery = { __typename?: 'Query', addss?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', addedById: any, removed?: boolean | null, channelId: string, item: { __typename?: 'Item', id: string, timestamp: any, createdById: any, uri: string }, channel: { __typename?: 'Channel', name: string, roles?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> | null } | null, adds?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', itemId: string }> | null } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean, hasNextPage: boolean } | null } | null };
+export type AllAddsQuery = { __typename?: 'Query', addss: { __typename?: 'AddsPage', items: Array<{ __typename?: 'Adds', addedById: any, removed?: boolean | null, channelIndex: any, channelId: string, item: { __typename?: 'Item', id: string, timestamp: any, createdById: any, uri: string }, channel: { __typename?: 'Channel', name: string, roles?: { __typename?: 'ChannelRolesPage', items: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> } | null, adds?: { __typename?: 'AddsPage', items: Array<{ __typename?: 'Adds', itemId: string }> } | null } }>, pageInfo: { __typename?: 'PageInfo', startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean, hasNextPage: boolean } } };
+
+export type AllAddsWithChannelQueryVariables = Exact<{
+  channelId: Scalars['String']['input'];
+  endCursor?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type AllAddsWithChannelQuery = { __typename?: 'Query', addss: { __typename?: 'AddsPage', items: Array<{ __typename?: 'Adds', id: string, timestamp: any, channelIndex: any, channelId: string, addedById: any, removed?: boolean | null, item: { __typename?: 'Item', id: string, timestamp: any, createdById: any, uri: string } }>, pageInfo: { __typename?: 'PageInfo', startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean, hasNextPage: boolean } } };
 
 export type AllChannelsQueryVariables = Exact<{
   endCursor?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type AllChannelsQuery = { __typename?: 'Query', channels?: { __typename?: 'ChannelPage', items?: Array<{ __typename?: 'Channel', id: string, timestamp: any, createdById: any, uri: string, name: string, description: string, roles?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> | null } | null, adds?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', timestamp: any }> | null } | null }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null } | null } | null };
+export type AllChannelsQuery = { __typename?: 'Query', channels: { __typename?: 'ChannelPage', items: Array<{ __typename?: 'Channel', id: string, timestamp: any, createdById: any, uri: string, name: string, description: string, roles?: { __typename?: 'ChannelRolesPage', items: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> } | null, adds?: { __typename?: 'AddsPage', items: Array<{ __typename?: 'Adds', timestamp: any }> } | null }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null } } };
 
 export type AllChannelsWithRidQueryVariables = Exact<{
   rid: Scalars['BigInt']['input'];
 }>;
 
 
-export type AllChannelsWithRidQuery = { __typename?: 'Query', channelRoless?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', channel: { __typename?: 'Channel', id: string, timestamp: any, createdById: any, uri: string, name: string, description: string, roles?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', rid: any, role: any }> | null } | null, adds?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', timestamp: any, channelId: string, itemId: string, addedById: any, removed?: boolean | null, item: { __typename?: 'Item', id: string, uri: string, timestamp: any, createdById: any } }> | null } | null } }> | null } | null };
+export type AllChannelsWithRidQuery = { __typename?: 'Query', channelRoless: { __typename?: 'ChannelRolesPage', items: Array<{ __typename?: 'ChannelRoles', channel: { __typename?: 'Channel', id: string, timestamp: any, createdById: any, uri: string, name: string, description: string, roles?: { __typename?: 'ChannelRolesPage', items: Array<{ __typename?: 'ChannelRoles', rid: any, role: any }> } | null, adds?: { __typename?: 'AddsPage', items: Array<{ __typename?: 'Adds', timestamp: any, channelId: string, itemId: string, addedById: any, removed?: boolean | null, item: { __typename?: 'Item', id: string, uri: string, timestamp: any, createdById: any } }> } | null } }> } };
 
 export type AllItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllItemsQuery = { __typename?: 'Query', items?: { __typename?: 'ItemPage', items?: Array<{ __typename?: 'Item', id: string }> | null } | null };
+export type AllItemsQuery = { __typename?: 'Query', items: { __typename?: 'ItemPage', items: Array<{ __typename?: 'Item', id: string }> } };
 
 export type AllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllUsersQuery = { __typename?: 'Query', users?: { __typename?: 'UserPage', items?: Array<{ __typename?: 'User', id: any }> | null } | null };
+export type AllUsersQuery = { __typename?: 'Query', users: { __typename?: 'UserPage', items: Array<{ __typename?: 'User', id: any }> } };
 
 export type ChannelWithIdQueryVariables = Exact<{
   id: Scalars['String']['input'];
 }>;
 
 
-export type ChannelWithIdQuery = { __typename?: 'Query', channel?: { __typename?: 'Channel', id: string, timestamp: any, createdById: any, uri: string, name: string, description: string, roles?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> | null } | null, adds?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', timestamp: any, channelId: string, itemId: string, addedById: any, removed?: boolean | null, item: { __typename?: 'Item', id: string, uri: string, timestamp: any, createdById: any }, channel: { __typename?: 'Channel', name: string, adds?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', itemId: string }> | null } | null } }> | null } | null } | null };
+export type ChannelWithIdQuery = { __typename?: 'Query', channel?: { __typename?: 'Channel', id: string, timestamp: any, addsCounter: any, createdById: any, uri: string, name: string, description: string, roles?: { __typename?: 'ChannelRolesPage', items: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> } | null, adds?: { __typename?: 'AddsPage', items: Array<{ __typename?: 'Adds', timestamp: any, channelId: string, itemId: string, channelIndex: any, addedById: any, removed?: boolean | null, item: { __typename?: 'Item', id: string, uri: string, timestamp: any, createdById: any }, channel: { __typename?: 'Channel', name: string, addsCounter: any, adds?: { __typename?: 'AddsPage', items: Array<{ __typename?: 'Adds', itemId: string, channelIndex: any }> } | null } }> } | null } | null };
 
 export type ChannelsForItemQueryVariables = Exact<{
   id: Scalars['String']['input'];
 }>;
 
 
-export type ChannelsForItemQuery = { __typename?: 'Query', addss?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', channel: { __typename?: 'Channel', id: string, timestamp: any, uri: string, name: string, roles?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', rid: any, role: any }> | null } | null, adds?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', timestamp: any, channelId: string, itemId: string, addedById: any, removed?: boolean | null, item: { __typename?: 'Item', id: string, uri: string, timestamp: any, createdById: any } }> | null } | null } }> | null } | null };
+export type ChannelsForItemQuery = { __typename?: 'Query', addss: { __typename?: 'AddsPage', items: Array<{ __typename?: 'Adds', channel: { __typename?: 'Channel', id: string, timestamp: any, uri: string, name: string, roles?: { __typename?: 'ChannelRolesPage', items: Array<{ __typename?: 'ChannelRoles', rid: any, role: any }> } | null, adds?: { __typename?: 'AddsPage', items: Array<{ __typename?: 'Adds', timestamp: any, channelId: string, itemId: string, addedById: any, removed?: boolean | null, item: { __typename?: 'Item', id: string, uri: string, timestamp: any, createdById: any } }> } | null } }> } };
 
 export type ChannelsItemsWithUserQueryVariables = Exact<{
   userId: Scalars['BigInt']['input'];
 }>;
 
 
-export type ChannelsItemsWithUserQuery = { __typename?: 'Query', channels?: { __typename?: 'ChannelPage', items?: Array<{ __typename?: 'Channel', id: string, timestamp: any, name: string, description: string, createdById: any, roles?: { __typename?: 'ChannelRolesPage', items?: Array<{ __typename?: 'ChannelRoles', rid: any, role: any }> | null } | null, adds?: { __typename?: 'AddsPage', items?: Array<{ __typename?: 'Adds', timestamp: any, removed?: boolean | null, item: { __typename?: 'Item', uri: string } }> | null } | null }> | null } | null, items?: { __typename?: 'ItemPage', items?: Array<{ __typename?: 'Item', timestamp: any, uri: string }> | null } | null };
+export type ChannelsItemsWithUserQuery = { __typename?: 'Query', channels: { __typename?: 'ChannelPage', items: Array<{ __typename?: 'Channel', id: string, timestamp: any, name: string, description: string, createdById: any, roles?: { __typename?: 'ChannelRolesPage', items: Array<{ __typename?: 'ChannelRoles', rid: any, role: any }> } | null, adds?: { __typename?: 'AddsPage', items: Array<{ __typename?: 'Adds', timestamp: any, removed?: boolean | null, item: { __typename?: 'Item', uri: string } }> } | null }> }, items: { __typename?: 'ItemPage', items: Array<{ __typename?: 'Item', timestamp: any, uri: string }> } };
 
 export type ItemPageQueryVariables = Exact<{
   id: Scalars['String']['input'];
@@ -1104,7 +1225,7 @@ export type ItemWithIdQuery = { __typename?: 'Query', item?: { __typename?: 'Ite
 export type MarqueeDataQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MarqueeDataQuery = { __typename?: 'Query', userCounters?: { __typename?: 'UserCounterPage', items?: Array<{ __typename?: 'UserCounter', counter: any }> | null } | null, itemCounters?: { __typename?: 'ItemCounterPage', items?: Array<{ __typename?: 'ItemCounter', counter: any }> | null } | null, channelCounters?: { __typename?: 'ChannelCounterPage', items?: Array<{ __typename?: 'ChannelCounter', counter: any }> | null } | null };
+export type MarqueeDataQuery = { __typename?: 'Query', addss: { __typename?: 'AddsPage', items: Array<{ __typename?: 'Adds', removed?: boolean | null, addedById: any, channelIndex: any, item: { __typename?: 'Item', id: string, uri: string }, channel: { __typename?: 'Channel', id: string, name: string } }> } };
 
 export type TxnHashQueryVariables = Exact<{
   hash: Scalars['String']['input'];
@@ -1118,7 +1239,7 @@ export type UserIdQueryVariables = Exact<{
 }>;
 
 
-export type UserIdQuery = { __typename?: 'Query', users?: { __typename?: 'UserPage', items?: Array<{ __typename?: 'User', id: any, userId: any, to: string, recovery: string, from: string }> | null } | null };
+export type UserIdQuery = { __typename?: 'Query', users: { __typename?: 'UserPage', items: Array<{ __typename?: 'User', id: any, userId: any, to: string, recovery: string, from: string }> } };
 
 export const PageInfoFragmentDoc = gql`
     fragment PageInfo on PageInfo {
@@ -1126,6 +1247,41 @@ export const PageInfoFragmentDoc = gql`
   endCursor
   hasPreviousPage
   hasNextPage
+}
+    `;
+export const AddWithChannelIndexDocument = gql`
+    query addWithChannelIndex($channelId: String!, $channelIndex: BigInt!) {
+  addss(
+    orderBy: "channelIndex"
+    orderDirection: "desc"
+    where: {channelId: $channelId, channelIndex: $channelIndex}
+  ) {
+    items {
+      id
+      timestamp
+      addedById
+      removed
+      channelIndex
+      item {
+        id
+        timestamp
+        createdById
+        uri
+      }
+      channel {
+        id
+        name
+        addsCounter
+        roles(orderBy: "role", orderDirection: "desc") {
+          items {
+            timestamp
+            rid
+            role
+          }
+        }
+      }
+    }
+  }
 }
     `;
 export const AllAddsDocument = gql`
@@ -1139,6 +1295,7 @@ export const AllAddsDocument = gql`
     items {
       addedById
       removed
+      channelIndex
       item {
         id
         timestamp
@@ -1160,6 +1317,35 @@ export const AllAddsDocument = gql`
             itemId
           }
         }
+      }
+    }
+    pageInfo {
+      ...PageInfo
+    }
+  }
+}
+    ${PageInfoFragmentDoc}`;
+export const AllAddsWithChannelDocument = gql`
+    query allAddsWithChannel($channelId: String!, $endCursor: String) {
+  addss(
+    where: {channelId: $channelId}
+    after: $endCursor
+    orderBy: "channelIndex"
+    orderDirection: "desc"
+    limit: 100
+  ) {
+    items {
+      id
+      timestamp
+      channelIndex
+      channelId
+      addedById
+      removed
+      item {
+        id
+        timestamp
+        createdById
+        uri
       }
     }
     pageInfo {
@@ -1260,6 +1446,7 @@ export const ChannelWithIdDocument = gql`
   channel(id: $id) {
     id
     timestamp
+    addsCounter
     createdById
     uri
     name
@@ -1271,11 +1458,12 @@ export const ChannelWithIdDocument = gql`
         role
       }
     }
-    adds(limit: 100, orderBy: "timestamp", orderDirection: "desc") {
+    adds(limit: 100, orderBy: "channelIndex", orderDirection: "desc") {
       items {
         timestamp
         channelId
         itemId
+        channelIndex
         addedById
         removed
         item {
@@ -1286,9 +1474,11 @@ export const ChannelWithIdDocument = gql`
         }
         channel {
           name
-          adds(limit: 100, orderBy: "timestamp", orderDirection: "desc") {
+          addsCounter
+          adds(limit: 100, orderBy: "channelIndex", orderDirection: "desc") {
             items {
               itemId
+              channelIndex
             }
           }
         }
@@ -1404,19 +1594,19 @@ export const ItemWithIdDocument = gql`
     `;
 export const MarqueeDataDocument = gql`
     query marqueeData {
-  userCounters {
+  addss(limit: 75, orderBy: "timestamp", orderDirection: "desc") {
     items {
-      counter
-    }
-  }
-  itemCounters {
-    items {
-      counter
-    }
-  }
-  channelCounters {
-    items {
-      counter
+      removed
+      addedById
+      channelIndex
+      item {
+        id
+        uri
+      }
+      channel {
+        id
+        name
+      }
     }
   }
 }
@@ -1449,8 +1639,14 @@ const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationTy
 
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
+    addWithChannelIndex(variables: AddWithChannelIndexQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<AddWithChannelIndexQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<AddWithChannelIndexQuery>(AddWithChannelIndexDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'addWithChannelIndex', 'query');
+    },
     allAdds(variables: AllAddsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<AllAddsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<AllAddsQuery>(AllAddsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'allAdds', 'query');
+    },
+    allAddsWithChannel(variables: AllAddsWithChannelQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<AllAddsWithChannelQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<AllAddsWithChannelQuery>(AllAddsWithChannelDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'allAddsWithChannel', 'query');
     },
     allChannels(variables?: AllChannelsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<AllChannelsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<AllChannelsQuery>(AllChannelsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'allChannels', 'query');
