@@ -14,9 +14,12 @@ import { unixTimeConverter } from '@/utils'
 import Link from 'next/link'
 import { USER_ID_ZERO } from '@/constants'
 
+interface ItemContext extends Adds {
+  adds: Adds[]
+}
+
 interface ItemSidebarProps {
-  itemContext: Adds
-  itemIndex: number
+  itemContext: ItemContext
   itemMetadata: {
     name: string
     description: string
@@ -24,15 +27,12 @@ interface ItemSidebarProps {
     animationUri: string
     contentType: string
   } | null
-  channel: Channel
   view?: string | string[]
 }
 
 export function ItemSidebar({
   itemContext,
-  itemIndex,
   itemMetadata,
-  channel,
   view,
 }: ItemSidebarProps) {
   function checkIsPublic({ roleData }: { roleData: ChannelRoles[] }) {
@@ -42,49 +42,31 @@ export function ItemSidebar({
     return false
   }
 
-  const isPublic = !channel?.roles?.items
+  const isPublic = !itemContext?.channel?.roles?.items
     ? false
-    : checkIsPublic({ roleData: channel?.roles?.items })
+    : checkIsPublic({ roleData: itemContext?.channel?.roles?.items })
 
-  const indexLength = channel.adds?.items?.length ?? 0
-  const channelIndex = channel?.adds?.items?.map((add, index) => ({
-    itemId: add.itemId,
-    removed: add.removed,
-  }))
+  const indexLength = itemContext?.channel.addsCounter ?? 0
 
-  let prevIndex = itemIndex - 1
-  while (prevIndex >= 0 && channelIndex?.[prevIndex]?.removed === true) {
-    prevIndex--
-  }
-  const invalidPrev = prevIndex === 0
-
-  let nextIndex = itemIndex + 1
+  // next index means going backwards in time in term of when items were added to channel (smaller = older)
+  // ex: channel index 47, clicking next would take u to item 46 which was added before 47
+  let nextIndex = itemContext.channelIndex - 1
   while (
-    nextIndex < indexLength &&
-    channelIndex?.[nextIndex]?.removed === true
+    nextIndex > 0 &&
+    itemContext.adds[indexLength - nextIndex].removed === true
   ) {
-    nextIndex++
+    nextIndex = nextIndex - 1
   }
-  const invalidNext = nextIndex > indexLength
+  const invalidNext = nextIndex === 0
 
-  // let nextIndex = itemIndex;
-  // while (nextIndex < indexLength && channelIndex?.[nextIndex]?.removed === true) {
-  //   if (nextIndex++ != indexLength) {
-  //     nextIndex++;
-  //   }
-  // }
-
-  // <div className="overflow-y-auto">
-  //   {channel?.adds?.items?.map((add: Adds, index: number) =>
-  //     add.removed ? null : (
-  //       <Link href={`/channel/${add.channelId}/${totalItems - index}`}>
-  //         <Flex className="gap-4 py-[5px] items-center hover:cursor-pointer">
-  //           <ThumbnailNameCreator item={add.item} metadata={metadata} />
-  //         </Flex>
-  //       </Link>
-  //     ),
-  //   )}
-  // </div>
+  let prevIndex = Number(itemContext.channelIndex) + 1
+  while (
+    prevIndex < indexLength &&
+    itemContext.adds[indexLength - prevIndex].removed === true
+  ) {
+    prevIndex++
+  }
+  const invalidPrev = prevIndex > indexLength
 
   return (
     <Stack className="p-5 h-[320px] md:h-full border-t border-border md:border-none">
@@ -92,12 +74,12 @@ export function ItemSidebar({
         <Typography>Info</Typography>
         <Flex className="gap-x-2">
           <Button variant="link" disabled={invalidPrev}>
-            <Link href={`/channel/${itemContext.channelId}/${prevIndex}`}>
+            <Link href={`/channel/${itemContext.channel.id}/${prevIndex}`}>
               <Typography>Prev</Typography>
             </Link>
           </Button>
           <Button variant="link" disabled={invalidNext}>
-            <Link href={`/channel/${itemContext.channelId}/${nextIndex}`}>
+            <Link href={`/channel/${itemContext.channel.id}/${nextIndex}`}>
               <Typography>Next</Typography>
             </Link>
           </Button>
@@ -123,7 +105,7 @@ export function ItemSidebar({
             <Typography>Channel</Typography>
             <Flex className="items-center space-x-[6px]">
               <Link
-                href={`/channel/${itemContext.channelId}`}
+                href={`/channel/${itemContext.channel.id}`}
                 className="hover:underline underline-offset-2 transition-all decoration-secondary-foreground"
               >
                 <Typography className="text-secondary-foreground">
@@ -148,20 +130,6 @@ export function ItemSidebar({
             <Typography className="text-secondary-foreground">
               {itemMetadata?.contentType}
             </Typography>
-            {/* </Flex> ayo
-          <Flex className="justify-between">
-            <Typography>Content</Typography>
-            <Typography className="text-secondary-foreground truncate">
-              {itemMetadata?.image === ''
-                ? truncateMiddle(
-                    ipfsUrlToCid({ ipfsUrl: itemMetadata?.animationUri }),
-                  )
-                : truncateMiddle(
-                    ipfsUrlToCid({
-                      ipfsUrl: itemMetadata?.image as string,
-                    }),
-                  )}
-            </Typography> */}
           </Flex>
         </Stack>
       </Stack>
@@ -172,38 +140,28 @@ export function ItemSidebar({
 
       {/* <Separator /> */}
       <Flex className="py-[30px]">
-        <Typography>{`Index [${itemIndex}/${indexLength}]`}</Typography>
+        <Typography>{`Index [${
+          indexLength - itemContext.channelIndex + 1
+        }/${indexLength}]`}</Typography>
       </Flex>
 
-      <ItemIndex channel={channel} />
-
-      {/* ) : (
-        <ItemIndex channel={channel} />
-      )} */}
-      {/* TODO: Enable these features */}
-      {/* Add / Download */}
-      {/* <Flex className="justify-between opacity-0">
-        <Typography className="text-secondary-foreground/50">
-          Add to channel
-        </Typography>
-        <Typography className="text-secondary-foreground/50">
-          Download
-        </Typography>
-      </Flex> */}
+      <ItemIndex itemContext={itemContext} />
     </Stack>
   )
 }
 
-async function ItemIndex({ channel }: { channel: Channel }) {
-  const totalItems = channel.adds?.items?.length ?? 0
+async function ItemIndex({ itemContext }: { itemContext: ItemContext }) {
   // @ts-ignore
-  const { metadata } = await getAddsMetadata(channel?.adds?.items)
+  // const { metadata } = await getAddsMetadata(channel?.adds?.items)
+  const { metadata } = await getAddsMetadata(itemContext.adds)
   return (
-    // <div className="overflow-y-auto">
     <div className="md:overflow-x-hidden">
-      {channel?.adds?.items?.map((add: Adds, index: number) =>
+      {itemContext.adds.map((add: Adds, index: number) =>
         add.removed ? null : (
-          <Link href={`/channel/${add.channelId}/${totalItems - index}`}>
+          <Link
+            key={index}
+            href={`/channel/${add.channelId}/${add.channelIndex}`}
+          >
             <Flex className="gap-4 py-[5px] items-center hover:cursor-pointer">
               <ThumbnailNameCreator
                 item={add.item}

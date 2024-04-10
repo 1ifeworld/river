@@ -9,6 +9,11 @@ export default createSchema((p) => ({
   Txn: p.createTable({
     id: p.hex(),
   }),
+  LogToProcess: p.createTable({
+    id: p.string(), // txnhash
+    posts: p.int(),
+    lastIndexProcessed: p.int()
+  }),
 
   /*
       ID REGISTRY
@@ -67,6 +72,7 @@ export default createSchema((p) => ({
     name: p.string(),
     description: p.string(),
     roles: p.many("ChannelRoles.channelId"),
+    addsCounter: p.bigint(),
     adds: p.many('Adds.channelId'),
   }),
   ChannelRoles: p.createTable({
@@ -109,6 +115,7 @@ export default createSchema((p) => ({
     itemId: p.string().references('Item.id'),
     item: p.one('itemId'),
     channelId: p.string().references('Channel.id'),
+    channelIndex: p.bigint(),
     channel: p.one('channelId'),
     removedById: p.bigint().optional(),
     removed: p.boolean().optional()

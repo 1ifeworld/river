@@ -1,5 +1,7 @@
 export * from './getAllAdds'
 export * from './getAllChannels'
+export * from './getAllAddsWithChannel'
+export * from './getAddWithChannelIndex'
 export * from './getMostRecentChannels'
 export * from './getAllChannelsWithRid'
 export * from './getAllItems'

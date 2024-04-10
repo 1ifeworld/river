@@ -5,8 +5,6 @@ export const getMarqueeData = unstable_cache(async () => {
   const response = await sdk.marqueeData()
 
   return {
-    users: response.userCounters,
-    channels: response.channelCounters,
-    items: response.itemCounters,
+    data: response.addss?.items,
   }
 }, ['marqueeData'])
