@@ -1145,7 +1145,7 @@ export type AddWithChannelIndexQueryVariables = Exact<{
 }>;
 
 
-export type AddWithChannelIndexQuery = { __typename?: 'Query', addss: { __typename?: 'AddsPage', items: Array<{ __typename?: 'Adds', id: string, timestamp: any, addedById: any, removed?: boolean | null, channelIndex: any, item: { __typename?: 'Item', id: string, timestamp: any, createdById: any, uri: string }, channel: { __typename?: 'Channel', id: string, name: string, addsCounter: any, roles?: { __typename?: 'ChannelRolesPage', items: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> } | null, adds?: { __typename?: 'AddsPage', items: Array<{ __typename?: 'Adds', channelIndex: any, removed?: boolean | null, item: { __typename?: 'Item', id: string, uri: string, createdById: any } }> } | null } }> } };
+export type AddWithChannelIndexQuery = { __typename?: 'Query', addss: { __typename?: 'AddsPage', items: Array<{ __typename?: 'Adds', id: string, timestamp: any, addedById: any, removed?: boolean | null, channelIndex: any, item: { __typename?: 'Item', id: string, timestamp: any, createdById: any, uri: string }, channel: { __typename?: 'Channel', id: string, name: string, addsCounter: any, roles?: { __typename?: 'ChannelRolesPage', items: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> } | null } }> } };
 
 export type AllAddsQueryVariables = Exact<{
   limit: Scalars['Int']['input'];
@@ -1154,6 +1154,14 @@ export type AllAddsQueryVariables = Exact<{
 
 
 export type AllAddsQuery = { __typename?: 'Query', addss: { __typename?: 'AddsPage', items: Array<{ __typename?: 'Adds', addedById: any, removed?: boolean | null, channelIndex: any, channelId: string, item: { __typename?: 'Item', id: string, timestamp: any, createdById: any, uri: string }, channel: { __typename?: 'Channel', name: string, roles?: { __typename?: 'ChannelRolesPage', items: Array<{ __typename?: 'ChannelRoles', timestamp: any, rid: any, role: any }> } | null, adds?: { __typename?: 'AddsPage', items: Array<{ __typename?: 'Adds', itemId: string }> } | null } }>, pageInfo: { __typename?: 'PageInfo', startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean, hasNextPage: boolean } } };
+
+export type AllAddsWithChannelQueryVariables = Exact<{
+  channelId: Scalars['String']['input'];
+  endCursor?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type AllAddsWithChannelQuery = { __typename?: 'Query', addss: { __typename?: 'AddsPage', items: Array<{ __typename?: 'Adds', id: string, timestamp: any, channelIndex: any, channelId: string, addedById: any, removed?: boolean | null, item: { __typename?: 'Item', id: string, timestamp: any, createdById: any, uri: string } }>, pageInfo: { __typename?: 'PageInfo', startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean, hasNextPage: boolean } } };
 
 export type AllChannelsQueryVariables = Exact<{
   endCursor?: InputMaybe<Scalars['String']['input']>;
@@ -1271,17 +1279,6 @@ export const AddWithChannelIndexDocument = gql`
             role
           }
         }
-        adds(limit: 100, orderBy: "channelIndex", orderDirection: "desc") {
-          items {
-            channelIndex
-            removed
-            item {
-              id
-              uri
-              createdById
-            }
-          }
-        }
       }
     }
   }
@@ -1320,6 +1317,35 @@ export const AllAddsDocument = gql`
             itemId
           }
         }
+      }
+    }
+    pageInfo {
+      ...PageInfo
+    }
+  }
+}
+    ${PageInfoFragmentDoc}`;
+export const AllAddsWithChannelDocument = gql`
+    query allAddsWithChannel($channelId: String!, $endCursor: String) {
+  addss(
+    where: {channelId: $channelId}
+    after: $endCursor
+    orderBy: "channelIndex"
+    orderDirection: "desc"
+    limit: 100
+  ) {
+    items {
+      id
+      timestamp
+      channelIndex
+      channelId
+      addedById
+      removed
+      item {
+        id
+        timestamp
+        createdById
+        uri
       }
     }
     pageInfo {
@@ -1618,6 +1644,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     allAdds(variables: AllAddsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<AllAddsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<AllAddsQuery>(AllAddsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'allAdds', 'query');
+    },
+    allAddsWithChannel(variables: AllAddsWithChannelQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<AllAddsWithChannelQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<AllAddsWithChannelQuery>(AllAddsWithChannelDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'allAddsWithChannel', 'query');
     },
     allChannels(variables?: AllChannelsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<AllChannelsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<AllChannelsQuery>(AllChannelsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'allChannels', 'query');

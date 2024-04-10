@@ -1,0 +1,27 @@
+query allAddsWithChannel($channelId: String!, $endCursor: String) {
+  addss(
+    where: { channelId: $channelId }
+    after: $endCursor    
+    orderBy: "channelIndex"
+    orderDirection: "desc"
+    limit: 100
+  ) {
+    items {
+      id
+      timestamp
+      channelIndex      
+      channelId
+      addedById
+      removed
+      item {
+        id
+        timestamp
+        createdById
+        uri
+      }
+    }
+    pageInfo {
+      ...PageInfo
+    }    
+  }
+}

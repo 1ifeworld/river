@@ -48,19 +48,19 @@ export default async function ItemPage({
     channelIndex: params.index,
   })
 
-  if (add) console.log('add was ok on home page')
+  if (add.removed) {
+    const halfway = add.adds.length / 2
+    const direction = Number(params.index) < halfway ? 1 : -1
+    let indexToRoute = Number(params.index) + direction
 
-  // if (add.removed) {
-  //   let indexToRoute = Number(params.index) - 1
-  //   while (
-  //     indexToRoute > 1
-  //     && add.channel.adds?.items[add.channel.addsCounter-indexToRoute].removed === true
-  //     // && itemContext.channel.adds?.items[indexLength-nextIndex].removed === true
-  //   ) {
-  //     indexToRoute = indexToRoute - 1
-  //   }
-  //   redirect(`/channel/${params.id}/${indexToRoute}`)
-  // }
+    while (
+      (direction === -1 ? indexToRoute > 1 : indexToRoute < add.adds.length) &&
+      add.adds[add.channel.addsCounter - indexToRoute].removed === true
+    ) {
+      indexToRoute = indexToRoute + direction
+    }
+    redirect(`/channel/${params.id}/${indexToRoute}`)
+  }
 
   const itemMetadata = await kv.get<Pick<MediaAssetObject, 'value'>['value']>(
     add.item.uri as string,

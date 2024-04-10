@@ -14,8 +14,12 @@ import { unixTimeConverter } from '@/utils'
 import Link from 'next/link'
 import { USER_ID_ZERO } from '@/constants'
 
+interface ItemContext extends Adds {
+  adds: Adds[]
+}
+
 interface ItemSidebarProps {
-  itemContext: Adds
+  itemContext: ItemContext
   itemMetadata: {
     name: string
     description: string
@@ -47,36 +51,22 @@ export function ItemSidebar({
   // next index means going backwards in time in term of when items were added to channel (smaller = older)
   // ex: channel index 47, clicking next would take u to item 46 which was added before 47
   let nextIndex = itemContext.channelIndex - 1
-  // NOTE: this if statement is temporary fix for not having acccess to more than 100 adds of this query
-  //    basically things work except your susciple to routing to adds that have been removed
-  //    since you are skipping that check
-  if (indexLength < 101) {
-    while (
-      nextIndex > 1 &&
-      itemContext.channel.adds?.items[indexLength - nextIndex].removed === true
-    ) {
-      nextIndex = nextIndex - 1
-    }
+  while (
+    nextIndex > 1 &&
+    itemContext.adds[indexLength - nextIndex].removed === true
+  ) {
+    nextIndex = nextIndex - 1
   }
   const invalidNext = nextIndex === 0
 
   let prevIndex = Number(itemContext.channelIndex) + 1
-  // NOTE: this if statement is temporary fix for not having acccess to more than 100 adds of this query
-  //    basically things work except your susciple to routing to adds that have been removed
-  //    since you are skipping that check
-  if (indexLength < 101) {
-    while (
-      prevIndex < indexLength &&
-      itemContext.channel.adds?.items[indexLength - prevIndex].removed === true
-    ) {
-      prevIndex++
-    }
+  while (
+    prevIndex < indexLength &&
+    itemContext.adds[indexLength - prevIndex].removed === true
+  ) {
+    prevIndex++
   }
   const invalidPrev = prevIndex > indexLength
-
-  // console.log("itemContext.channel.id", itemContext.channel.id)
-  // console.log("itemContext.channel", itemContext.channel)
-  // console.log("itemContext", itemContext)
 
   return (
     <Stack className="p-5 h-[320px] md:h-full border-t border-border md:border-none">
@@ -155,19 +145,23 @@ export function ItemSidebar({
         }/${indexLength}]`}</Typography>
       </Flex>
 
-      <ItemIndex channel={itemContext?.channel} />
+      <ItemIndex itemContext={itemContext} />
     </Stack>
   )
 }
 
-async function ItemIndex({ channel }: { channel: Channel }) {
+async function ItemIndex({ itemContext }: { itemContext: ItemContext }) {
   // @ts-ignore
-  const { metadata } = await getAddsMetadata(channel?.adds?.items)
+  // const { metadata } = await getAddsMetadata(channel?.adds?.items)
+  const { metadata } = await getAddsMetadata(itemContext.adds)
   return (
     <div className="md:overflow-x-hidden">
-      {channel?.adds?.items?.map((add: Adds, index: number) =>
+      {itemContext.adds.map((add: Adds, index: number) =>
         add.removed ? null : (
-          <Link key={index} href={`/channel/${channel.id}/${add.channelIndex}`}>
+          <Link
+            key={index}
+            href={`/channel/${add.channelId}/${add.channelIndex}`}
+          >
             <Flex className="gap-4 py-[5px] items-center hover:cursor-pointer">
               <ThumbnailNameCreator
                 item={add.item}

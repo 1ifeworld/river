@@ -114,9 +114,6 @@ export async function ItemCard({
             )}
           </Flex>
         </div>
-        {/* <Typography className="text-secondary-foreground">
-          {unixTimeConverter(add.item.timestamp)}
-        </Typography> */}
       </Stack>
     </Stack>
   )

@@ -27,17 +27,6 @@ query addWithChannelIndex($channelId: String!, $channelIndex: BigInt!) {
             role
           }
         }
-        adds(limit: 100, orderBy: "channelIndex", orderDirection: "desc") {
-          items {        
-            channelIndex
-            removed    
-            item {
-              id
-              uri
-              createdById
-            }
-          }
-        }
       }
     }
   }
