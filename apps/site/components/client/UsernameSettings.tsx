@@ -138,7 +138,7 @@ export function UserSettings({ user }: UserSettingsProps) {
         </DropdownMenuContent>
       </DropdownMenu>
       {/* Dialog logic */}
-        <EditUsernameDialog open={open} setOpen={setOpen} />
+      <EditUsernameDialog open={open} setOpen={setOpen} />
     </Dialog>
   )
 }

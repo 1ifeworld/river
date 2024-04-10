@@ -6,6 +6,7 @@ import {
   DialogContent,
   DialogClose,
   DialogFooter,
+  DialogHeader,
   DialogTitle,
   Form,
   FormControl,
@@ -155,109 +156,115 @@ export function EditUsernameDialog({ open, setOpen }: UsernameDialogProps) {
 
   return (
     <Dialog open={open}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] focus:outline-none">
         <Stack className="items-center gap-5">
-          <DialogTitle>
-            <Typography>Edit Profile</Typography>
-            <DialogClose asChild className="flex-1 justify-end">
+          <DialogHeader className="flex w-full px-5 justify-between items-center">
+            <div className="flex-1">{/* Placholder */}</div>
+            <DialogTitle>
+              <Typography>Edit Profile</Typography>
+            </DialogTitle>
+            <DialogClose
+              asChild
+              className="flex-1 justify-end"
+              onClick={() => setOpen(false)}
+            >
               <Button variant="link">
                 <Typography>close</Typography>
               </Button>
             </DialogClose>
-
-          </DialogTitle>
-          <Form {...form}>
-            <form
-              action={async () => {
-                // reset registrationFailed to false incase you had already submitted it
-                setUsernameEditFailed(false)
-                // validating starting state
-                if (!embeddedWallet || !signMessage || !fetchUserData) return
-                // process userId registration + username
-                const registrationSuccess = await processEditUsername()
-                // recheck userId + username. only close dialog if both are true
-                if (registrationSuccess) {
-                  // Close dialog
-                  setOpen(false)
-                  // Emit successful registration toast
-                  toast.custom((t) => (
-                    <Toast>
-                      Welcome to River{' '}
-                      <span className="font-bold">
-                        {form.getValues().username}
-                      </span>
-                    </Toast>
-                  ))
-                } else {
-                  // if you submitted the form and post registration attempt
-                  // userId + username are still invalid, display a
-                  // registration failed attempt
-                  setUsernameEditFailed(true)
-                }
-              }}
-              className="w-full"
-            >
-              <Stack className="gap-8">
-                <Separator />
-                <FormField
-                  control={form.control}
-                  name="username"
-                  render={({ field }) => (
-                    <FormItem className="mx-5 text-center">
-                      <FormControl>
-                        <Input
-                          placeholder="Enter username..."
-                          {...field}
-                          onChange={(e) => {
-                            const lowercasedValue = e.target.value.toLowerCase()
-                            field.onChange({
-                              ...e,
-                              target: { ...e.target, value: lowercasedValue },
-                            })
-                            setIsCheckingAvailability(true)
-                            triggerValidation()
-                            setUsernameEditFailed(false)
-                          }}
-                        />
-                      </FormControl>
-                      <div className="h-3">
-                        {usernameExists ? (
-                          <FormMessage className="pt-2 text-red-500">
-                            Username not available, please try another
-                          </FormMessage>
-                        ) : usernameEditFailed ? (
-                          <></>
-                        ) : (
-                          <FormMessage className="pt-2 text-red-500" />
-                        )}
-                        {usernameEditFailed && (
-                          <FormMessage className="pt-2 text-red-500">
-                            Registration failed, please try again
-                          </FormMessage>
-                        )}
-                      </div>
-                    </FormItem>
-                  )}
-                />
-                <Separator className="-mt-3" />
-              </Stack>
-              <DialogFooter className="text-center pt-[18px]">
-                <SubmitButton
-                  type="submit"
-                  variant="link"
-                  disabled={
-                    !form.formState.isValid ||
-                    usernameExists ||
-                    isCheckingAvailability ||
-                    isProcessing
-                  }
-                >
-                  Complete
-                </SubmitButton>
-              </DialogFooter>
-            </form>
-          </Form>
+          </DialogHeader>
         </Stack>
+        <Form {...form}>
+          <form
+            action={async () => {
+              // reset registrationFailed to false incase you had already submitted it
+              setUsernameEditFailed(false)
+              // validating starting state
+              if (!embeddedWallet || !signMessage || !fetchUserData) return
+              // process userId registration + username
+              const registrationSuccess = await processEditUsername()
+              // recheck userId + username. only close dialog if both are true
+              if (registrationSuccess) {
+                // Close dialog
+                setOpen(false)
+                // Emit successful registration toast
+                toast.custom((t) => (
+                  <Toast>
+                    Welcome to River{' '}
+                    <span className="font-bold">
+                      {form.getValues().username}
+                    </span>
+                  </Toast>
+                ))
+              } else {
+                // if you submitted the form and post registration attempt
+                // userId + username are still invalid, display a
+                // registration failed attempt
+                setUsernameEditFailed(true)
+              }
+            }}
+            className="w-full"
+          >
+            <Stack className="gap-8">
+              <Separator />
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem className="mx-5 text-center">
+                    <FormControl>
+                      <Input
+                        placeholder="Enter username..."
+                        {...field}
+                        onChange={(e) => {
+                          const lowercasedValue = e.target.value.toLowerCase()
+                          field.onChange({
+                            ...e,
+                            target: { ...e.target, value: lowercasedValue },
+                          })
+                          setIsCheckingAvailability(true)
+                          triggerValidation()
+                          setUsernameEditFailed(false)
+                        }}
+                      />
+                    </FormControl>
+                    <div className="h-3">
+                      {usernameExists ? (
+                        <FormMessage className="pt-2 text-red-500">
+                          Username not available, please try another
+                        </FormMessage>
+                      ) : usernameEditFailed ? (
+                        <></>
+                      ) : (
+                        <FormMessage className="pt-2 text-red-500" />
+                      )}
+                      {usernameEditFailed && (
+                        <FormMessage className="pt-2 text-red-500">
+                          Registration failed, please try again
+                        </FormMessage>
+                      )}
+                    </div>
+                  </FormItem>
+                )}
+              />
+              <Separator className="-mt-3" />
+            </Stack>
+            <DialogFooter className="text-center pt-[18px]">
+              <SubmitButton
+                type="submit"
+                variant="link"
+                disabled={
+                  !form.formState.isValid ||
+                  usernameExists ||
+                  isCheckingAvailability ||
+                  isProcessing
+                }
+              >
+                Complete
+              </SubmitButton>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   )
