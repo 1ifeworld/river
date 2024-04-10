@@ -44,6 +44,7 @@ export default async function ItemPage({
 }) {
   const { channel } = await getChannelWithId({
     id: params.id,
+    limit: 100,
   })
 
   const totalItems = channel?.adds?.items?.length ?? 0
