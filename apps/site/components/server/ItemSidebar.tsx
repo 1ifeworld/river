@@ -52,7 +52,7 @@ export function ItemSidebar({
   // ex: channel index 47, clicking next would take u to item 46 which was added before 47
   let nextIndex = itemContext.channelIndex - 1
   while (
-    nextIndex > 1 &&
+    nextIndex > 0 &&
     itemContext.adds[indexLength - nextIndex].removed === true
   ) {
     nextIndex = nextIndex - 1
