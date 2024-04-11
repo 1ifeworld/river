@@ -11,7 +11,6 @@ export function Footer() {
   }
 
   return (
-    // md:justify-end
     <Flex className="gap-2 w-full py-4 justify-center">
       <Typography className="text-muted-foreground items-center">
         <a
