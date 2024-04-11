@@ -1,5 +1,3 @@
-import { Flex } from '@/design-system'
-
 export default function ProfileLayout({
   children,
   params,

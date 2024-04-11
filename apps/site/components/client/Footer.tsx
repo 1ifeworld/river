@@ -1,17 +1,20 @@
 import { Flex, Typography } from '@/design-system'
 import Link from 'next/link'
-import { useSelectedLayoutSegments } from 'next/navigation'
+import { useSelectedLayoutSegments, usePathname } from 'next/navigation'
 
 export function Footer() {
   const segments = useSelectedLayoutSegments()
+  const pathname = usePathname()
 
-  // Hide the footer on the item page
-  if (segments.length === 3) {
+  // Hide the footer on the item page and profile page
+  if (segments.length === 3 || (segments.length === 1 && pathname !== '/')) {
     return null
   }
 
+  console.log(segments.length)
+
   return (
-    <Flex className="gap-2 w-full py-4 justify-center">
+    <Flex className="gap-2 py-8 w-full justify-center">
       <Typography className="text-muted-foreground items-center">
         <a
           className="hover:text-primary-foreground transition-all"

@@ -39,7 +39,7 @@ export default async function Home({
           ),
         )}
       </Grid>
-      <Flex className="pt-32 pb-8 justify-center md:mr-[19%]">
+      <Flex className="pt-36 justify-center md:mr-[19%]">
         {/* @ts-ignore */}
         <PaginationControls pageInfo={pageInfo} />
       </Flex>
