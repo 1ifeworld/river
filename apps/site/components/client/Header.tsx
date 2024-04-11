@@ -24,7 +24,7 @@ export function Header() {
     }
     if (fetchedUserId?.userId) {
       fetchedUsername = await getUsername({
-        id: BigInt(fetchedUserId.userId),
+        id: fetchedUserId.userId,
       })
     }
     return {

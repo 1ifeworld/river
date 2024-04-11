@@ -5,7 +5,7 @@ export const getChannelsItemsWithUser =
 // unstable_cache(
   async ({ userId }: { userId: string }) => {
     const response = await sdk.channelsItemsWithUser({
-      userId: BigInt(userId),
+      userId: userId,
     })
 
     return { channels: response.channels, items: response.items }
