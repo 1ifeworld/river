@@ -1,4 +1,4 @@
-import { Header, ThemeToggle } from '@/client'
+import { Header, ThemeToggle, Footer } from '@/client'
 import { Analytics } from '@vercel/analytics/react'
 import type { Metadata } from 'next'
 import { Toaster } from 'sonner'
@@ -22,6 +22,7 @@ export default function RootLayout({
         <Providers>
           <Header />
           {children}
+          <Footer />
           <Toaster position="bottom-center" />
           <ThemeToggle />
           <Analytics />
