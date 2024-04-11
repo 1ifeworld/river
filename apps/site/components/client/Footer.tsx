@@ -11,8 +11,6 @@ export function Footer() {
     return null
   }
 
-  console.log(segments.length)
-
   return (
     <Flex className="gap-2 py-8 w-full justify-center">
       <Typography className="text-muted-foreground items-center">
