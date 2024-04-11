@@ -10,8 +10,6 @@ export default async function Profile({
 }: {
   params: { username: string }
 }) {
-
-
   const userData = await getDataForUsername({ username: params.username })
 
   const { channels, items } = await getChannelsItemsWithUser({
