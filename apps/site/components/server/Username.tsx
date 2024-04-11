@@ -7,7 +7,7 @@ export async function Username({
   id,
   className,
   asLink = true,
-}: { id: bigint; className?: string; asLink?: boolean }) {
+}: { id: string; className?: string; asLink?: boolean }) {
   const username = await getUsername({ id: id })
   if (asLink) {
     return (

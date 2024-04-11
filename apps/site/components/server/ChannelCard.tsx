@@ -193,7 +193,7 @@ export async function ChannelCard({
           <Typography>{truncateText(channel?.name, 25, true)}</Typography>
           {isPublic && <Public />}
         </Link>
-        <Username id={channel.createdById} />
+        <Username id={channel.createdById.toString()} />
       </Stack>
     </div>
   )

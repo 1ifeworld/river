@@ -1,7 +1,7 @@
-export async function getUsername({ id }: { id: bigint }) {
+export async function getUsername({ id }: { id: string }) {
   if (!id) return
   try {
-    const idString = id.toString()
+    // const idString = id.toString()
 
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_USERNAME_SERVICE}/getUsernameById`,
@@ -10,7 +10,7 @@ export async function getUsername({ id }: { id: bigint }) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id: idString }),
+        body: JSON.stringify({ id: id }),
       },
     )
 
