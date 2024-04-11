@@ -14,14 +14,8 @@ export function Footer() {
   return (
     <Flex className="gap-2 py-8 w-full justify-center">
       <Typography className="text-muted-foreground items-center">
-        <a
-          className="hover:text-primary-foreground transition-all"
-          href="https://www.lifeworld.co"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Lifeworld
-        </a>
+        {/* Copyright symbol */}
+        <span className="text-[14px] align-middle">&#169;</span> river.ph 2024
         <span className="px-1">·</span>
         <Link
           className="hover:text-primary-foreground"
@@ -30,8 +24,14 @@ export function Footer() {
           Feedback
         </Link>
         <span className="px-1">·</span>
-        {/* Copyright symbol */}
-        <span className="text-[14px] align-middle">&#169;</span> river.ph, 2024
+        <a
+          className="hover:text-primary-foreground transition-all"
+          href="https://www.lifeworld.co"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Lifeworld
+        </a>
       </Typography>
     </Flex>
   )
