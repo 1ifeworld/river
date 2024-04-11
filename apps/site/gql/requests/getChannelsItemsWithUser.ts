@@ -9,5 +9,5 @@ export const getChannelsItemsWithUser = unstable_cache(
 
     return { channels: response.channels, items: response.items }
   },
-  ['channelsItemsWithUser']
+  ['channelsItemsWithUser'],
 )
