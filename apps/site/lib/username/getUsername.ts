@@ -1,7 +1,7 @@
-export async function getUsername({ id }: { id: string }) {
+export async function getUsername({ id }: { id: bigint }) {
   if (!id) return
   try {
-    // const idString = id.toString()
+    const idString = id.toString()
 
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_USERNAME_SERVICE}/getUsernameById`,
