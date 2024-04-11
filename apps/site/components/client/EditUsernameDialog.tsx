@@ -22,7 +22,6 @@ import {
 import {
   type UsernameSchemaValues,
   checkUsernameAvailability,
-  processRegisterFor,
   updateUsername,
   usernameSchema,
 } from '@/lib'
@@ -145,6 +144,7 @@ export function EditUsernameDialog({ open, setOpen }: UsernameDialogProps) {
         registerForRecipient: embeddedWallet?.address as Hex,
       })
       if (resp.success) success = true
+
     }
     // reset context embeddedWallet + userId + username
     await fetchUserData()
@@ -194,6 +194,7 @@ export function EditUsernameDialog({ open, setOpen }: UsernameDialogProps) {
                     <span className="font-bold">
                       {form.getValues().username}
                     </span>
+                    
                   </Toast>
                 ))
               } else {

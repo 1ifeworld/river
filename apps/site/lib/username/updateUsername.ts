@@ -35,7 +35,7 @@ export async function updateUsername({
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_USERNAME_SERVICE}/update`,
+      `${process.env.NEXT_PUBLIC_USERNAME_SERVICE}/set`,
       {
         method: 'POST',
         headers: {

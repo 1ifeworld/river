@@ -3,7 +3,6 @@ import { getChannelsItemsWithUser } from '@/gql'
 import { getDataForUsername } from '@/lib'
 import { ChannelCard } from '@/server'
 import { pluralize, sortChannels } from '@/utils'
-import { Form } from 'react-hook-form'
 import { UserSettings } from '@/client'
 
 export default async function Profile({
@@ -11,6 +10,8 @@ export default async function Profile({
 }: {
   params: { username: string }
 }) {
+
+
   const userData = await getDataForUsername({ username: params.username })
 
   const { channels, items } = await getChannelsItemsWithUser({
