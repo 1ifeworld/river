@@ -16,16 +16,15 @@ import debounce from 'debounce'
 import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
+
+
 interface UserSettingsProps {
-  user: RiverUser
+  user: bigint;
+  profileUsername: string
 }
 
-interface RiverUser {
-  rid: bigint
-}
-
-export function UserSettings({ user }: UserSettingsProps) {
-  const { signMessage, userId, embeddedWallet } = useUserContext()
+export function UserSettings({ user, profileUsername }: UserSettingsProps) {
+  const { signMessage, userId, embeddedWallet, username} = useUserContext()
   const [isConfiguring, setIsConfiguring] = useState(false)
   const [open, setOpen] = useState<boolean>(false)
 
@@ -49,6 +48,9 @@ export function UserSettings({ user }: UserSettingsProps) {
   })
   const [validationComplete, setValidationComplete] = useState(false)
 
+  const isUserOwnProfile = username === profileUsername
+
+
   // Subscribe to changes to the username input
   const watchUsername = debounce(() => form.watch('username'), 500)
 
@@ -61,6 +63,10 @@ export function UserSettings({ user }: UserSettingsProps) {
       }, 500),
     [form],
   )
+
+  if (!isUserOwnProfile) {
+    return null
+  }
 
   return (
     <Dialog>

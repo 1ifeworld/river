@@ -10,11 +10,13 @@ export default async function Profile({
 }: {
   params: { username: string }
 }) {
+
   const userData = await getDataForUsername({ username: params.username })
 
   const { channels, items } = await getChannelsItemsWithUser({
     userId: userData.id,
   })
+
 
   // @ts-ignore
   const sortedChannels = sortChannels(channels?.items)
@@ -23,8 +25,8 @@ export default async function Profile({
     <Stack className="gap-y-8">
       <Stack className="gap-y-[3px]">
         <Typography>
-          {params.username}
-          <UserSettings user={userData.id} />
+        {params.username}
+     <UserSettings user={userData.id} profileUsername={params.username} />
         </Typography>
         <Typography className="text-secondary-foreground">
           {pluralize(sortedChannels.length as number, 'channel', 'channels')},{' '}
