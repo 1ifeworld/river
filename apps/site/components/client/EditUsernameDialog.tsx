@@ -39,6 +39,8 @@ import {
   custom,
 } from 'viem'
 import { optimism } from 'viem/chains'
+import { revalidationHelper } from '@/lib'
+import { useRouter } from 'next/navigation'
 
 interface UsernameDialogProps {
   open: boolean
@@ -61,6 +63,8 @@ export function EditUsernameDialog({ open, setOpen }: UsernameDialogProps) {
   const [isCheckingAvailability, setIsCheckingAvailability] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
   const [usernameEditFailed, setUsernameEditFailed] = useState(false)
+
+  const router = useRouter()
 
   // Subscribe to changes to the username input
   const watchUsername = debounce(() => form.watch('username'), 500)
@@ -149,6 +153,10 @@ export function EditUsernameDialog({ open, setOpen }: UsernameDialogProps) {
     await fetchUserData()
     // set is processing to false. re enables ability to submit form
     setIsProcessing(false)
+    revalidationHelper('/', 'layout')
+    revalidationHelper(`/${form.getValues().username}`, 'layout')
+    router.push(`/${form.getValues().username}`)
+
     // return success state
     return success
   }

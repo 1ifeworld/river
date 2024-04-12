@@ -10,11 +10,7 @@ import {
   Loading,
   Typography,
 } from '@/design-system'
-import { getDataForUsername, usernameSchema } from '@/lib'
-import { zodResolver } from '@hookform/resolvers/zod'
-import debounce from 'debounce'
-import { useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useState } from 'react'
 
 interface UserSettingsProps {
   user: bigint
@@ -22,7 +18,7 @@ interface UserSettingsProps {
 }
 
 export function UserSettings({ user, profileUsername }: UserSettingsProps) {
-  const { signMessage, userId, embeddedWallet, username } = useUserContext()
+  const { userId, username } = useUserContext()
   const [isConfiguring, setIsConfiguring] = useState(false)
   const [open, setOpen] = useState<boolean>(false)
 
@@ -31,35 +27,7 @@ export function UserSettings({ user, profileUsername }: UserSettingsProps) {
     return rid === userRid
   }
 
-  const enableEditMembers =
-    !embeddedWallet?.address || !userId
-      ? false
-      : isUser({
-          userRid: userId,
-        })
-
-  const form = useForm({
-    resolver: zodResolver(usernameSchema),
-    defaultValues: {
-      username: '',
-    },
-  })
-  const [validationComplete, setValidationComplete] = useState(false)
-
   const isUserOwnProfile = username === profileUsername
-
-  // Subscribe to changes to the username input
-  const watchUsername = debounce(() => form.watch('username'), 500)
-
-  // username checkibng
-  const triggerValidation = useMemo(
-    () =>
-      debounce(() => {
-        form.trigger('username')
-        setValidationComplete(true)
-      }, 500),
-    [form],
-  )
 
   if (!isUserOwnProfile) {
     return null
@@ -69,16 +37,14 @@ export function UserSettings({ user, profileUsername }: UserSettingsProps) {
     <Dialog>
       {/* Dropdown logic */}
       <DropdownMenu>
-        {enableEditMembers && (
-          <DropdownMenuTrigger
-            disabled={isConfiguring}
-            className="focus:outline-none mb-1"
-          >
-            <Typography className="hover:font-bold" variant="h2">
-              {isConfiguring ? <Loading /> : '...'}
-            </Typography>
-          </DropdownMenuTrigger>
-        )}
+        <DropdownMenuTrigger
+          disabled={isConfiguring}
+          className="focus:outline-none mb-1"
+        >
+          <Typography className="hover:font-bold" variant="h2">
+            {isConfiguring ? <Loading /> : '...'}
+          </Typography>
+        </DropdownMenuTrigger>
         <DropdownMenuContent side="bottom" align="start">
           <DropdownMenuGroup className="flex flex-col gap-3">
             <DropdownMenuItem onClick={() => setOpen(true)}>
