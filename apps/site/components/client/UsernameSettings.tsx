@@ -22,11 +22,6 @@ export function UserSettings({ user, profileUsername }: UserSettingsProps) {
   const [isConfiguring, setIsConfiguring] = useState(false)
   const [open, setOpen] = useState<boolean>(false)
 
-  function isUser({ userRid }: { userRid: bigint }) {
-    const rid = userId
-    return rid === userRid
-  }
-
   const isUserOwnProfile = username === profileUsername
 
   if (!isUserOwnProfile) {

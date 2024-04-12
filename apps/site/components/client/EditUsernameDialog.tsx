@@ -148,14 +148,14 @@ export function EditUsernameDialog({ open, setOpen }: UsernameDialogProps) {
         registerForRecipient: embeddedWallet?.address as Hex,
       })
       if (resp.success) success = true
+      revalidationHelper('/', 'layout')
+      revalidationHelper(`/${form.getValues().username}`, 'layout')
+      router.push(`/${form.getValues().username}`)
     }
     // reset context embeddedWallet + userId + username
     await fetchUserData()
     // set is processing to false. re enables ability to submit form
     setIsProcessing(false)
-    revalidationHelper('/', 'layout')
-    revalidationHelper(`/${form.getValues().username}`, 'layout')
-    router.push(`/${form.getValues().username}`)
 
     // return success state
     return success
