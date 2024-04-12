@@ -249,7 +249,7 @@ export function EditUsernameDialog({ open, setOpen }: UsernameDialogProps) {
                       )}
                       {usernameEditFailed && (
                         <FormMessage className="pt-2 text-red-500">
-                          Can only edit once every two weeks
+                          Username can only be changed once every two weeks
                         </FormMessage>
                       )}
                     </div>
