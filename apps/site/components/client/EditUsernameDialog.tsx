@@ -148,11 +148,11 @@ export function EditUsernameDialog({ open, setOpen }: UsernameDialogProps) {
         registerForRecipient: embeddedWallet?.address as Hex,
       })
       if (resp.success) {
-      success = true
-      revalidationHelper('/', 'layout')
-      revalidationHelper(`/${form.getValues().username}`, 'layout')
-      router.push(`/${form.getValues().username}`) 
-    }
+        success = true
+        revalidationHelper('/', 'layout')
+        revalidationHelper(`/${form.getValues().username}`, 'layout')
+        router.push(`/${form.getValues().username}`)
+      }
     }
     // reset context embeddedWallet + userId + username
     await fetchUserData()
