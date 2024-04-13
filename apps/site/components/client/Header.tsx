@@ -1,6 +1,6 @@
 import { ChannelDialog, UserDropdown, UsernameDialog } from '@/client'
 import { Button, Flex, Typography } from '@/design-system'
-import { RiverLogo } from '@/server'
+import { RiverLogo, IndexDirectory } from '@/server'
 import { usePrivy } from '@privy-io/react-auth'
 import { useUserContext } from '@/context'
 import { getUserId } from '@/gql'
@@ -67,6 +67,8 @@ export function Header() {
         }`}
       >
         <RiverLogo />
+        <IndexDirectory />
+
         {/* If the `PrivyProvider` is loading, display only the River logo */}
         {!ready ? (
           <></>
