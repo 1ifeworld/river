@@ -2,7 +2,7 @@ import { Stack, Typography, Grid } from '@/design-system'
 import { getMostRecentChannels } from '@/gql'
 import Link from 'next/link'
 import { MarqueeWrapper } from '@/server'
-import { Channel } from '@/gql'
+
 export default async function IndexDirectory() {
   const { channels } = await getMostRecentChannels()
 
