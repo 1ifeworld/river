@@ -68,7 +68,6 @@ export function Header() {
       >
         <RiverLogo />
         <IndexDirectory />
-
         {/* If the `PrivyProvider` is loading, display only the River logo */}
         {!ready ? (
           <></>

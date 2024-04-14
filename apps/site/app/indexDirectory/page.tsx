@@ -1,10 +1,10 @@
 import { Stack, Typography, Grid } from '@/design-system'
-import { getAllChannels } from '@/gql'
+import { getMostRecentChannels } from '@/gql'
 import Link from 'next/link'
 import { MarqueeWrapper } from '@/server'
-
+import { Channel } from '@/gql'
 export default async function IndexDirectory() {
-  const { channels } = await getAllChannels()
+  const { channels } = await getMostRecentChannels()
 
   if (!channels) {
     return <Typography>No channels added yet</Typography>
@@ -17,7 +17,7 @@ export default async function IndexDirectory() {
       </div>
 
       <Grid className="grid-cols-4 gap-4 justify-center items-center">
-        {channels.items.map((channel) => (
+        {channels.map((channel) => (
           <Link
             href={`/channel/${channel.id}`}
             key={channel.id}

@@ -5,7 +5,7 @@ import React from 'react'
 export function IndexDirectory() {
   return (
     <Link href={'/indexDirectory'}>
-      <Typography>Index</Typography>
+      <Typography className="text-zinc-700">Index</Typography>
     </Link>
   )
 }
