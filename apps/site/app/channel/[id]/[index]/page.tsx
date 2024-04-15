@@ -6,7 +6,7 @@ import { kv } from '@vercel/kv'
 import { P, match } from 'ts-pattern'
 import { AudioPlayer, VideoPlayer } from '@/client'
 import { Flex, Stack, Typography, Separator } from '@/design-system'
-import { getChannelWithId, getAddWithChannelIndex } from '@/gql'
+import { getAddWithChannelIndex } from '@/gql'
 import {
   type MediaAssetObject,
   ipfsUrlToCid,
