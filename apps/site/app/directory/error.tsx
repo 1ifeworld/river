@@ -2,7 +2,7 @@
 
 import { Button, Stack, Typography } from '@/design-system'
 
-export default function IndexDirectoryError({
+export default function DirectoryError({
   error,
   reset,
 }: {

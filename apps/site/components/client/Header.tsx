@@ -1,6 +1,6 @@
 import { ChannelDialog, UserDropdown, UsernameDialog } from '@/client'
 import { Button, Flex, Typography } from '@/design-system'
-import { RiverLogo, IndexDirectory } from '@/server'
+import { RiverLogo, Directory } from '@/server'
 import { usePrivy } from '@privy-io/react-auth'
 import { useUserContext } from '@/context'
 import { getUserId } from '@/gql'
@@ -66,8 +66,10 @@ export function Header() {
           params.index || params.username ? '' : 'md:border-none'
         }`}
       >
-        <RiverLogo />
-        <IndexDirectory />
+        <Flex className="gap-x-6">
+          <RiverLogo />
+          <Directory />
+        </Flex>
         {/* If the `PrivyProvider` is loading, display only the River logo */}
         {!ready ? (
           <></>
