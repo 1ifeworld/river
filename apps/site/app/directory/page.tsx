@@ -10,13 +10,14 @@ export default async function Directory() {
     return <Typography>No channels added yet</Typography>
   }
 
+  channels.sort((a, b) => a.name.localeCompare(b.name))
+
   return (
     <section className="flex flex-col justify-center items-center min-h-screen pt-[var(--header-height)]">
-      {/* <div className="fixed top-[var(--header-height)] z-50 w-full">
+      <div className="fixed top-[var(--header-height)] z-50 w-full">
         <MarqueeWrapper />
-      </div> */}
-
-      <Grid className="grid-cols-4 gap-4 justify-center items-center">
+      </div>
+      <Grid className="grid-cols-4 gap-4 p-20 justify-center items-center">
         {channels.map((channel) => (
           <Link
             href={`/channel/${channel.id}`}
