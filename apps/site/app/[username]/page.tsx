@@ -10,6 +10,10 @@ export default async function Profile({
 }: {
   params: { username: string }
 }) {
+  // Saturn's service worker is served at the root of the domain
+  // avoid fetching username data when the following is a supplied param
+  if (params.username === 'saturn-sw.js') return
+
   const userData = await getDataForUsername({ username: params.username })
   let channels
   let items
