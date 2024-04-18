@@ -1,4 +1,4 @@
-import { Button, Flex, Typography } from '@/design-system'
+import { Button, Flex, Typography, Stack } from '@/design-system'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
 
@@ -18,11 +18,12 @@ export function UserChannelToggle() {
   )
 
   return (
-    <Flex className="gap-x-4 p-20 items-center h-[14px]">
+    <Stack className="hidden md:flex gap-y-[34px]">
+      <Stack className="gap-y-[3px]">
       <Button
               className={
                 searchParams.get('view') !== 'user'
-                ? 'hover:no-underline'
+                ? 'p-5 hover:no-underline'
                 : 'decoration-secondary-foreground'
             }
         variant="link"
@@ -33,7 +34,7 @@ export function UserChannelToggle() {
         <Typography
           className={
             searchParams.get('view') === 'user'
-            ? 'text-secondary-foreground'
+            ? 'p-5 text-secondary-foreground'
             : ''
           }
         >
@@ -43,7 +44,7 @@ export function UserChannelToggle() {
       <Button
         className={
           searchParams.get('view') === 'user'
-            ? 'hover:no-underline'
+            ? 'p-5 hover:no-underline'
             : 'decoration-secondary-foreground'
         }
         variant="link"
@@ -54,13 +55,14 @@ export function UserChannelToggle() {
         <Typography
           className={
             searchParams.get('view') !== 'user'
-              ? 'text-secondary-foreground'
+              ? 'p-5 text-secondary-foreground'
               : ''
           }
         >
           User
         </Typography>
       </Button>
-    </Flex>
+    </Stack>
+    </Stack>
   )
 }
