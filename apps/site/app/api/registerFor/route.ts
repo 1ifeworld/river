@@ -5,6 +5,8 @@ import type { NextRequest } from 'next/server'
 import { addresses, idRegistryABI } from 'scrypt'
 import { type Hex, decodeAbiParameters } from 'viem'
 
+export const maxDuration = 30; // This function can run for a maximum of 30 seconds
+
 export async function POST(req: NextRequest) {
   const user = await req.json()
   console.log({ user })
