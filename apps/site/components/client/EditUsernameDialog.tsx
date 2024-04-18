@@ -92,7 +92,6 @@ export function EditUsernameDialog({ open, setOpen }: UsernameDialogProps) {
 
   async function processEditUsername() {
     if (!fetchUserData || !userId) {
-      console.log('fetch user data missing')
       return
     }
     // set is processing to false. disables ability to submit form
@@ -161,7 +160,7 @@ export function EditUsernameDialog({ open, setOpen }: UsernameDialogProps) {
           <DialogHeader className="flex w-full px-5 justify-between items-center">
             <div className="flex-1">{/* Placholder */}</div>
             <DialogTitle>
-              <Typography>Edit Profile</Typography>
+              <Typography>Edit username</Typography>
             </DialogTitle>
             <DialogClose
               asChild
