@@ -1,13 +1,17 @@
-import { Typography, Grid, Flex, Stack } from '@/design-system'
+import { Typography, Grid, Flex, Stack, Public } from '@/design-system'
 import { getMostRecentChannels } from '@/gql'
+import type { Channel, ChannelRoles } from '@/gql'
+import { USER_ID_ZERO } from '@/constants'
 import Link from 'next/link'
 import { MarqueeWrapper } from '@/server'
 import { getAllFields } from 'lib/username'
 import { UserChannelToggle } from '@/client'
 
 export default async function Directory({
+  channel,
   searchParams,
 }: {
+  channel: Channel
   searchParams: { [key: string]: string | string[] | undefined }
 }) {
   let channels, users
@@ -30,6 +34,13 @@ export default async function Directory({
     users.sort((x: string, y: string) => x.localeCompare(y))
   }
 
+  function checkIsPublic({ roleData }: { roleData: ChannelRoles[] }) {
+    for (let i = 0; i < roleData.length; ++i) {
+      if (roleData[i].rid === USER_ID_ZERO && roleData[i].role > 0) return true
+    }
+    return false
+  }
+
   return (
     <div className="pt-[104px]">
       <div className="fixed top-[var(--header-height)] z-50 w-full">
@@ -45,15 +56,27 @@ export default async function Directory({
         <div className="w-full md:w-[78%]">
           {channels && (
             <Grid className="grid-cols-1 md:grid-cols-4 gap-y-[3px]">
-              {channels.map((channel) => (
-                <Link
-                  href={`/channel/${channel.id}`}
-                  key={channel.id}
-                  className="hover:underline underline-offset-2 transition-all decoration-primary-foreground"
-                >
-                  <Typography>{channel.name}</Typography>
-                </Link>
-              ))}
+              {channels.map((channel) => {
+                // Check public status for each channel
+                const isChannelPublic = !channel?.roles?.items
+                  ? false
+                  : checkIsPublic({
+                      roleData: channel.roles.items as ChannelRoles[],
+                    })
+
+                return (
+                  <Link
+                    href={`/channel/${channel.id}`}
+                    key={channel.id}
+                    className="hover:underline underline-offset-2 transition-all decoration-primary-foreground"
+                  >
+                    <Flex className=" items-center space-x-[6px]">
+                      <Typography>{channel.name}</Typography>
+                      {isChannelPublic && <Public />}
+                    </Flex>
+                  </Link>
+                )
+              })}
             </Grid>
           )}
           {users && (
