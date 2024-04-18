@@ -3,6 +3,7 @@ import { getChannelsItemsWithUser } from '@/gql'
 import { getDataForUsername } from '@/lib'
 import { ChannelCard } from '@/server'
 import { pluralize, sortChannels } from '@/utils'
+import { UserSettings } from '@/client'
 
 export default async function Profile({
   params,
@@ -10,18 +11,28 @@ export default async function Profile({
   params: { username: string }
 }) {
   const userData = await getDataForUsername({ username: params.username })
+  let channels
+  let items
 
-  const { channels, items } = await getChannelsItemsWithUser({
-    userId: userData.id.toString(),
-  })
+  if (userData) {
+    const { channels: channelsResp, items: itemsResp } =
+      await getChannelsItemsWithUser({
+        userId: userData.id.toString(),
+      })
+    channels = channelsResp
+    items = itemsResp
+  }
 
   // @ts-ignore
-  const sortedChannels = sortChannels(channels?.items)
+  const sortedChannels = channels?.items ? sortChannels(channels.items) : []
 
   return (
     <Stack className="gap-y-8">
       <Stack className="gap-y-[3px]">
-        <Typography>{params.username}</Typography>
+        <Flex className="gap-x-2 items-center">
+          <Typography>{params.username}</Typography>
+          <UserSettings profileUsername={params.username} />
+        </Flex>
         <Typography className="text-secondary-foreground">
           {pluralize(sortedChannels.length as number, 'channel', 'channels')},{' '}
           {pluralize(items?.items?.length as number, 'item', 'items')}
