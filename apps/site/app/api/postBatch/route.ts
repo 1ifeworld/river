@@ -30,9 +30,11 @@ export async function POST(req: NextRequest) {
     const tx = await postGateway.postBatch(postsArray)
     console.log("tx in api/postBatch/route.ts", tx)
     console.log("novaPubclient in api/postBatch/route.ts", novaPubClient)
+    console.log("time before wait for txn: ", Date.now())
     await novaPubClient.waitForTransactionReceipt({
       hash: tx.hash as Hex,
     })
+    console.log("time after wait for txn: ", Date.now())
 
     return new Response(JSON.stringify({ success: true, hash: tx.hash }), {
       status: 200,
