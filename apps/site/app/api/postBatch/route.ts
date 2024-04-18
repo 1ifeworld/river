@@ -28,6 +28,7 @@ export async function POST(req: NextRequest) {
     )
 
     const tx = await postGateway.postBatch(postsArray)
+    console.log("tx in api/postBatch/route.ts")
     await novaPubClient.waitForTransactionReceipt({
       hash: tx.hash as Hex,
     })
