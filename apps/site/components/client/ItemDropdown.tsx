@@ -258,7 +258,10 @@ export function ItemDropdown({
       </DropdownMenu>
       {/* Dialog logic logic */}
       <DialogPortal>
-        <DialogContent className="sm:max-w-[425px] focus:outline-none">
+        <DialogContent
+          overlayClassName="bg-border/50"
+          className="sm:max-w-[425px] focus:outline-none"
+        >
           <Stack className="items-center gap-4">
             <DialogHeader className="px-5 flex w-full justify-between items-center">
               <DialogTitle className="flex-1 text-start">

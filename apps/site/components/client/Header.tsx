@@ -1,10 +1,11 @@
-import { ChannelDialog, UserDropdown, UsernameDialog } from '@/client'
+import { MenuDialog, UsernameDialog } from '@/client'
 import { Button, Flex, Typography } from '@/design-system'
-import { RiverLogo, Directory } from '@/server'
+import { RiverLogo } from '@/server'
 import { usePrivy } from '@privy-io/react-auth'
 import { useUserContext } from '@/context'
 import { getUserId } from '@/gql'
 import { getUsername } from '@/lib'
+import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import type { Hex } from 'viem'
@@ -68,19 +69,27 @@ export function Header() {
       >
         <Flex className="gap-x-6">
           <RiverLogo />
-          <Directory />
+          <Link className="hidden md:block" href={'/directory'}>
+            <Typography className="text-secondary-foreground underline-offset-2 hover:underline">
+              Index
+            </Typography>
+          </Link>
         </Flex>
         {/* If the `PrivyProvider` is loading, display only the River logo */}
         {!ready ? (
           <></>
         ) : (
-          <Flex className="gap-x-5">
-            <ChannelDialog authenticated={authenticated} login={login} />
+          <Flex className="gap-x-5 items-center">
+            <MenuDialog />
             {authenticated ? (
-              <UserDropdown setOpen={setOpen} />
+              <Link href={`/${username}`}>
+                <Typography className="text-primary-foreground">
+                  {username}
+                </Typography>
+              </Link>
             ) : (
               <Button variant="link" onClick={login}>
-                <Typography>Login</Typography>
+                <Typography>login</Typography>
               </Button>
             )}
           </Flex>

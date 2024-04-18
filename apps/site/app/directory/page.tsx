@@ -10,7 +10,8 @@ export default async function Directory({
 }: {
   searchParams: { [key: string]: string | string[] | undefined }
 }) {
-  let channels, users
+  let channels
+  let users
 
   if (searchParams.view === 'user') {
     // Fetch user data if the view is set to 'user'
@@ -39,7 +40,7 @@ export default async function Directory({
       </div>
       <UserChannelToggle />
       {channels && (
-        <Grid className="grid-cols-4 gap-1 gap-x-10 py-6 p-0 justify-center items-center">
+        <Grid className="grid-cols-2 md:grid-cols-4 gap-1 gap-x-10 py-6 p-0 justify-center items-center">
           {channels.map((channel) => (
             <Link
               href={`/channel/${channel.id}`}
