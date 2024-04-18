@@ -92,7 +92,6 @@ export function EditUsernameDialog({ open, setOpen }: UsernameDialogProps) {
 
   async function processEditUsername() {
     if (!fetchUserData || !userId) {
-      console.log('fetch user data missing')
       return
     }
     // set is processing to false. disables ability to submit form
