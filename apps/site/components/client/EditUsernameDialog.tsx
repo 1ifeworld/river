@@ -91,7 +91,7 @@ export function EditUsernameDialog({ open, setOpen }: UsernameDialogProps) {
   }, [validationComplete, watchUsername])
 
   async function processEditUsername() {
-    if (!fetchUserData) {
+    if (!fetchUserData || !userId) {
       console.log('fetch user data missing')
       return
     }
@@ -132,33 +132,24 @@ export function EditUsernameDialog({ open, setOpen }: UsernameDialogProps) {
         deadline: deadline,
       },
     })
-    // if no userId/usernmae, then go thru the reg + username flow
-    // if no username, only go through username flow
-    // we can lean on userContext since thats whats dictating header
-    const inFlightUserId = userId ? userId.toString() : ''
-    // check if inflightUserId was overwritten from valid userId in user context
     // If userId is still null here, skip username set process
     let success = false
-    if (inFlightUserId) {
-      const resp = await setUsername({
-        userIdRegistered: inFlightUserId,
-        signature: sig,
-        timestamp: deadline.toString(),
-        username: form.getValues().username,
-        registerForRecipient: embeddedWallet?.address as Hex,
-      })
-      if (resp.success) {
-        success = true
-        revalidationHelper('/', 'layout')
-        revalidationHelper(`/${form.getValues().username}`, 'layout')
-        router.push(`/${form.getValues().username}`)
-      }
+    const resp = await setUsername({
+      userIdRegistered: userId.toString(),
+      signature: sig,
+      timestamp: deadline.toString(),
+      username: form.getValues().username,
+      registerForRecipient: embeddedWallet?.address as Hex,
+    })
+    if (resp.success) {
+      success = true
+      revalidationHelper('/', 'layout')
+      router.push(`/${form.getValues().username}`)
     }
     // reset context embeddedWallet + userId + username
     await fetchUserData()
     // set is processing to false. re enables ability to submit form
     setIsProcessing(false)
-
     // return success state
     return success
   }
@@ -186,27 +177,27 @@ export function EditUsernameDialog({ open, setOpen }: UsernameDialogProps) {
         <Form {...form}>
           <form
             action={async () => {
-              // reset registrationFailed to false incase you had already submitted it
+              // reset usernameFailed to false incase you had already submitted it
               setUsernameEditFailed(false)
               // validating starting state
               if (!embeddedWallet || !signMessage || !fetchUserData) return
-              // process userId registration + username
-              const registrationSuccess = await processEditUsername()
+              // process editUsername
+              const editUsername = await processEditUsername()
               // recheck userId + username. only close dialog if both are true
-              if (registrationSuccess) {
+              if (editUsername) {
                 // Close dialog
                 setOpen(false)
-                // Emit successful registration toast
+                // Emit successful edit toast
                 toast.custom((t) => (
                   <Toast>
-                    Welcome to River{' '}
+                    Username updated to{' '}
                     <span className="font-bold">
                       {form.getValues().username}
                     </span>
                   </Toast>
                 ))
               } else {
-                // if you submitted the form and post registration attempt
+                // if you submitted the form and post edit attempt
                 // userId + username are still invalid, display a
                 // registration failed attempt
                 setUsernameEditFailed(true)
@@ -249,7 +240,7 @@ export function EditUsernameDialog({ open, setOpen }: UsernameDialogProps) {
                       )}
                       {usernameEditFailed && (
                         <FormMessage className="pt-2 text-red-500">
-                          Username can be changed once per two weeks
+                          Username can only be changed once every two weeks
                         </FormMessage>
                       )}
                     </div>

@@ -11,21 +11,28 @@ export default async function Profile({
   params: { username: string }
 }) {
   const userData = await getDataForUsername({ username: params.username })
+  let channels
+  let items
 
-  const { channels, items } = await getChannelsItemsWithUser({
-    userId: userData.id,
-  })
+  if (userData) {
+    const { channels: channelsResp, items: itemsResp } =
+      await getChannelsItemsWithUser({
+        userId: userData.id,
+      })
+    channels = channelsResp
+    items = itemsResp
+  }
 
   // @ts-ignore
-  const sortedChannels = sortChannels(channels?.items)
+  const sortedChannels = channels?.items ? sortChannels(channels.items) : []
 
   return (
     <Stack className="gap-y-8">
       <Stack className="gap-y-[3px]">
-        <Typography>
-          {params.username}
-          <UserSettings user={userData.id} profileUsername={params.username} />
-        </Typography>
+        <Flex className="gap-x-2 items-center">
+          <Typography>{params.username}</Typography>
+          <UserSettings profileUsername={params.username} />
+        </Flex>
         <Typography className="text-secondary-foreground">
           {pluralize(sortedChannels.length as number, 'channel', 'channels')},{' '}
           {pluralize(items?.items?.length as number, 'item', 'items')}

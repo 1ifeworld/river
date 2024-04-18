@@ -13,12 +13,11 @@ import {
 import { useState } from 'react'
 
 interface UserSettingsProps {
-  user: bigint
   profileUsername: string
 }
 
-export function UserSettings({ user, profileUsername }: UserSettingsProps) {
-  const { userId, username } = useUserContext()
+export function UserSettings({ profileUsername }: UserSettingsProps) {
+  const { username } = useUserContext()
   const [isConfiguring, setIsConfiguring] = useState(false)
   const [open, setOpen] = useState<boolean>(false)
 
