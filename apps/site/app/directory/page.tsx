@@ -1,4 +1,4 @@
-import { Typography, Grid, Flex, Stack} from '@/design-system'
+import { Typography, Grid, Flex, Stack } from '@/design-system'
 import { getMostRecentChannels } from '@/gql'
 import Link from 'next/link'
 import { MarqueeWrapper } from '@/server'
@@ -13,10 +13,8 @@ export default async function Directory({
   let channels, users
 
   if (searchParams.view === 'user') {
-    // Fetch user data if the view is set to 'user'
     users = await getAllFields({ field: 'name' })
   } else {
-    // Fetch channel data by default or if the view is set to anything else
     const data = await getMostRecentChannels()
     channels = data.channels
   }
@@ -33,30 +31,25 @@ export default async function Directory({
   }
 
   return (
-    <section className="flex flex-col justify-center items-center min-h-screen pt-[var(--header-height)]">
+    <div className="pt-[104px]">
       <div className="fixed top-[var(--header-height)] z-50 w-full">
         <MarqueeWrapper />
       </div>
-      <Flex className="px-5 p-5 py-5 pt-[104px]">
-        {/* Container for toggle options */}
-        <div className="hidden md:w-[19%] md:block">
-        <Stack>
-          <UserChannelToggle />
-        </Stack>
-      </div>
-
-        {/* Container for results */}
+      <Flex className="px-5 pb-5 gap-y-[60px] flex-col md:flex-row md:gap-none">
+        <div className="md:w-[19%] md:block">
+          <Stack className="gap-y-[30px]">
+            <Typography>Filter</Typography>
+            <UserChannelToggle />
+          </Stack>
+        </div>
         <div className="w-full md:w-[78%]">
-        <Stack>
-            <Stack className="gap-y-5">
-              <Flex className="justify-between">
           {channels && (
-            <Grid className="grid-cols-4 gap-1 gap-x-10 py-6 p-0 justify-center items-center">
+            <Grid className="grid-cols-1 md:grid-cols-4 gap-y-[3px]">
               {channels.map((channel) => (
                 <Link
                   href={`/channel/${channel.id}`}
                   key={channel.id}
-                  className="flex items-center space-x-[6px]"
+                  className="hover:underline underline-offset-2 transition-all decoration-primary-foreground"
                 >
                   <Typography>{channel.name}</Typography>
                 </Link>
@@ -64,24 +57,22 @@ export default async function Directory({
             </Grid>
           )}
           {users && (
-            <Grid className="grid-cols-4 gap-1 gap-x-10 py-6 justify-center items-center">
+            <Grid className="grid-cols-1 md:grid-cols-4 gap-y-[3px]">
               {users.map((user: string) => (
-                <a
+                <Link
                   href={`/${user}`}
                   key={user}
-                  className="flex items-center space-x-[6px]"
+                  className="hover:underline underline-offset-2 transition-all decoration-primary-foreground"
                 >
                   <Typography>{user}</Typography>
-                </a>
+                </Link>
               ))}
             </Grid>
           )}
-          
-          </Flex>
-        </Stack>
-        </Stack>
         </div>
+
+        <div className="hidden md:w-[3%] md:block">{}</div>
       </Flex>
-    </section>
+    </div>
   )
 }

@@ -18,14 +18,18 @@ export function UserChannelToggle() {
   )
 
   return (
-    <Stack className="hidden md:flex gap-y-[34px]">
-      <Stack className="gap-y-[3px]">
+    <Stack className="items-start gap-y-2">
       <Button
-              className={
-                searchParams.get('view') !== 'user'
-                ? 'p-5 hover:no-underline'
-                : 'decoration-secondary-foreground'
-            }
+        // className={
+        //   searchParams.get('view') !== 'user'
+        //     ? 'hover:no-underline'
+        //     : 'decoration-secondary-foreground'
+        // }
+        className={`h-4 ${
+          searchParams.get('view') !== 'user'
+            ? 'hover:no-underline'
+            : 'decoration-secondary-foreground'
+        }`}
         variant="link"
         onClick={() => {
           router.replace(`${pathname}`)
@@ -34,19 +38,19 @@ export function UserChannelToggle() {
         <Typography
           className={
             searchParams.get('view') === 'user'
-            ? 'p-5 text-secondary-foreground'
-            : ''
+              ? 'text-secondary-foreground'
+              : ''
           }
         >
-          Channel
+          Channels
         </Typography>
       </Button>
       <Button
-        className={
+        className={`h-4  ${
           searchParams.get('view') === 'user'
-            ? 'p-5 hover:no-underline'
+            ? 'hover:no-underline'
             : 'decoration-secondary-foreground'
-        }
+        }`}
         variant="link"
         onClick={() => {
           router.push(`${pathname}?${createQueryString('view', 'user')}`)
@@ -55,14 +59,13 @@ export function UserChannelToggle() {
         <Typography
           className={
             searchParams.get('view') !== 'user'
-              ? 'p-5 text-secondary-foreground'
+              ? 'text-secondary-foreground'
               : ''
           }
         >
-          User
+          Users
         </Typography>
       </Button>
-    </Stack>
     </Stack>
   )
 }

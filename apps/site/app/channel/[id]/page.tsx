@@ -36,7 +36,7 @@ export default async function Channel({
       <Flex className="px-5 pt-[104px]">
         <div className="hidden md:w-[19%] md:block">
           <RecentChannels params={params} />
-        </div>  
+        </div>
         <div className="w-full md:w-[78%]">
           <Stack>
             <Stack className="gap-y-5">
