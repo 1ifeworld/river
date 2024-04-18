@@ -160,7 +160,7 @@ export function EditUsernameDialog({ open, setOpen }: UsernameDialogProps) {
           <DialogHeader className="flex w-full px-5 justify-between items-center">
             <div className="flex-1">{/* Placholder */}</div>
             <DialogTitle>
-              <Typography>Edit Profile</Typography>
+              <Typography>Edit username</Typography>
             </DialogTitle>
             <DialogClose
               asChild

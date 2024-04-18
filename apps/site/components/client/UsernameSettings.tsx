@@ -1,6 +1,7 @@
 import { EditUsernameDialog } from '@/client'
 import { useUserContext } from '@/context'
 import {
+  Button,
   Dialog,
   DropdownMenu,
   DropdownMenuContent,
@@ -29,7 +30,6 @@ export function UserSettings({ profileUsername }: UserSettingsProps) {
 
   return (
     <Dialog>
-      {/* Dropdown logic */}
       <DropdownMenu>
         <DropdownMenuTrigger
           disabled={isConfiguring}
@@ -42,13 +42,14 @@ export function UserSettings({ profileUsername }: UserSettingsProps) {
         <DropdownMenuContent side="bottom" align="start">
           <DropdownMenuGroup className="flex flex-col gap-3">
             <DropdownMenuItem onClick={() => setOpen(true)}>
-              {/* Edit Profile logic pending */}
-              <Typography>Edit Profile</Typography>
+              {/* TODO: Add ability to edit both username and bio */}
+              <Button variant="link">
+                <Typography>Edit username</Typography>
+              </Button>
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
-      {/* Dialog logic */}
       <EditUsernameDialog open={open} setOpen={setOpen} />
     </Dialog>
   )
