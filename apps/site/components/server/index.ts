@@ -3,7 +3,6 @@ export * from './channel'
 
 // Individual components
 export * from './ChannelCard'
-export * from './Footer'
 export * from './ItemCard'
 export * from './ItemSidebar'
 export * from './MarqueeWrapper'

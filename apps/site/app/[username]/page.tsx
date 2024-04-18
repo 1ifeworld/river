@@ -17,7 +17,7 @@ export default async function Profile({
   if (userData) {
     const { channels: channelsResp, items: itemsResp } =
       await getChannelsItemsWithUser({
-        userId: userData.id,
+        userId: userData.id.toString(),
       })
     channels = channelsResp
     items = itemsResp
