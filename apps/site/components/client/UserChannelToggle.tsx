@@ -20,42 +20,42 @@ export function UserChannelToggle() {
   return (
     <Flex className="gap-x-4 p-20 items-center h-[14px]">
       <Button
+              className={
+                searchParams.get('view') !== 'user'
+                ? 'hover:no-underline'
+                : 'decoration-secondary-foreground'
+            }
         variant="link"
         onClick={() => {
           router.replace(`${pathname}`)
         }}
-        className={
-          searchParams.get('view') === 'channel'
-            ? 'decoration-secondary-foreground'
-            : 'hover:no-underline'
-        }
       >
         <Typography
           className={
-            searchParams.get('view') === 'channel'
-              ? 'text-secondary-foreground'
-              : 'text-primary-foreground'
+            searchParams.get('view') === 'user'
+            ? 'text-secondary-foreground'
+            : ''
           }
         >
           Channel
         </Typography>
       </Button>
       <Button
-        variant="link"
-        onClick={() => {
-          router.push(`${pathname}?${createQueryString('view', 'user')}`)
-        }}
         className={
           searchParams.get('view') === 'user'
             ? 'hover:no-underline'
             : 'decoration-secondary-foreground'
         }
+        variant="link"
+        onClick={() => {
+          router.push(`${pathname}?${createQueryString('view', 'user')}`)
+        }}
       >
         <Typography
           className={
-            searchParams.get('view') === 'user'
-              ? 'text-primary-foreground'
-              : 'text-secondary-foreground'
+            searchParams.get('view') !== 'user'
+              ? 'text-secondary-foreground'
+              : ''
           }
         >
           User
