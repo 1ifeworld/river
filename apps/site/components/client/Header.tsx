@@ -98,7 +98,7 @@ export function Header() {
                   </Link>
                 ) : (
                   <Button variant="link" onClick={login}>
-                    <Typography>login</Typography>
+                    <Typography>Login</Typography>
                   </Button>
                 )}
               </>
@@ -118,7 +118,7 @@ export function Header() {
                   <UserDropdown setOpen={setOpen} />
                 ) : (
                   <Button variant="link" onClick={login}>
-                    <Typography>login</Typography>
+                    <Typography>Login</Typography>
                   </Button>
                 )}
               </>

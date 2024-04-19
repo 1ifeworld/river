@@ -54,7 +54,7 @@ export function MenuDialog() {
                 <DialogClose asChild>
                   <Link
                     href={'/directory'}
-                    className="flex w-full justify-between items-center"
+                    className="flex w-full justify-between items-center border-[1px] border-red-500"
                   >
                     <Typography className="text-primary-foreground">
                       Index
@@ -67,7 +67,7 @@ export function MenuDialog() {
                 <DialogClose asChild>
                   <Link
                     href="/channel/bafyreihuskbd64blgyd6lkx7es4boxljbdqp3w5s5d2sym5ovbergxjlna"
-                    className="flex w-full justify-between items-center"
+                    className="flex w-full justify-between items-center border-[1px] border-red-500"
                   >
                     <Typography className="text-primary-foreground">
                       Feedback
@@ -81,7 +81,7 @@ export function MenuDialog() {
                   <Button
                     variant="link"
                     onClick={login}
-                    className="w-full pt-9 justify-start h-7 rounded-none"
+                    className="w-full pt-9 justify-start h-7 rounded-none border-[1px] border-red-500"
                   >
                     <Typography className="text-[#999999]">
                       Profile - login
@@ -94,7 +94,7 @@ export function MenuDialog() {
                 <DialogClose asChild>
                   <Link
                     href={'/directory'}
-                    className="flex w-full justify-between items-center"
+                    className="flex w-full justify-between items-center border-[1px] border-red-500"
                   >
                     <Typography className="text-primary-foreground">
                       Directory
@@ -107,7 +107,7 @@ export function MenuDialog() {
                 <DialogClose asChild>
                   <Link
                     href="/channel/bafyreihuskbd64blgyd6lkx7es4boxljbdqp3w5s5d2sym5ovbergxjlna"
-                    className="flex w-full justify-between items-center"
+                    className="flex w-full justify-between items-center border-[1px] border-red-500"
                   >
                     <Typography className="text-primary-foreground">
                       Feedback
@@ -120,7 +120,7 @@ export function MenuDialog() {
                 <DialogClose asChild>
                   <Link
                     href={`/${username}`}
-                    className="flex w-full justify-between items-center"
+                    className="flex w-full justify-between items-center border-[1px] border-red-500"
                   >
                     <Typography className="text-primary-foreground">
                       Profile
@@ -134,7 +134,7 @@ export function MenuDialog() {
                   <Button
                     variant="link"
                     onClick={logout}
-                    className="w-full pt-9 justify-start h-7 rounded-none"
+                    className="w-full pt-9 justify-start h-7 rounded-none border-[1px] border-red-500"
                   >
                     <Typography className="text-[#999999]">Logout</Typography>
                   </Button>
