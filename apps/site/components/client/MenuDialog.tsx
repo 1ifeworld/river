@@ -49,42 +49,47 @@ export function MenuDialog() {
             </DialogClose>
           </DialogHeader>
           <Stack className="h-full w-full pt-[52px] items-start gap-y-6">
+            <DialogClose asChild>
+              <Button
+                variant="link"
+                className="w-full h-5 justify-start rounded-none"
+                onClick={() => setDialogOpen(false)}
+              >
+                <Link href={'/directory'} className="rounded-none flex w-full">
+                  <Flex className="w-full justify-between items-center">
+                    <Typography className="text-primary-foreground">
+                      Directory
+                    </Typography>
+                    <Typography className="text-secondary-foreground text-[14px]">
+                      ›
+                    </Typography>
+                  </Flex>
+                </Link>
+              </Button>
+            </DialogClose>
+            <DialogClose asChild>
+              <Button
+                variant="link"
+                className="w-full h-5 justify-start rounded-none"
+                onClick={() => setDialogOpen(false)}
+              >
+                <Link
+                  href="/channel/bafyreihuskbd64blgyd6lkx7es4boxljbdqp3w5s5d2sym5ovbergxjlna"
+                  className="rounded-none flex w-full"
+                >
+                  <Flex className="w-full justify-between items-center">
+                    <Typography className="text-primary-foreground">
+                      Feedback
+                    </Typography>
+                    <Typography className="text-secondary-foreground text-[14px]">
+                      ›
+                    </Typography>
+                  </Flex>
+                </Link>
+              </Button>
+            </DialogClose>
             {!authenticated ? (
               <>
-                <DialogClose asChild>
-                  <Button variant="link" className="w-full h-5 justify-start">
-                    <Link
-                      href={'/directory'}
-                      className="rounded-none flex w-full"
-                    >
-                      <Flex className="w-full justify-between items-center">
-                        <Typography className="text-primary-foreground">
-                          Directory
-                        </Typography>
-                        <Typography className="text-secondary-foreground text-[14px]">
-                          ›
-                        </Typography>
-                      </Flex>
-                    </Link>
-                  </Button>
-                </DialogClose>
-                <DialogClose asChild>
-                  <Button variant="link" className="w-full h-5 justify-start">
-                    <Link
-                      href="/channel/bafyreihuskbd64blgyd6lkx7es4boxljbdqp3w5s5d2sym5ovbergxjlna"
-                      className="rounded-none flex w-full"
-                    >
-                      <Flex className="w-full justify-between items-center">
-                        <Typography className="text-primary-foreground">
-                          Feedback
-                        </Typography>
-                        <Typography className="text-secondary-foreground text-[14px]">
-                          ›
-                        </Typography>
-                      </Flex>
-                    </Link>
-                  </Button>
-                </DialogClose>
                 <Separator orientation="vertical" className="h-4 border-none" />
                 <DialogClose asChild>
                   <Button
@@ -101,43 +106,25 @@ export function MenuDialog() {
             ) : (
               <>
                 <DialogClose asChild>
-                  <Link
-                    href={'/directory'}
-                    className="flex w-full justify-between rounded-none items-center"
+                  <Button
+                    variant="link"
+                    className="w-full h-5 justify-start rounded-none"
+                    onClick={() => setDialogOpen(false)}
                   >
-                    <Typography className="text-primary-foreground">
-                      Directory
-                    </Typography>
-                    <Typography className="text-secondary-foreground text-[13px] p-0 m-0">
-                      ›
-                    </Typography>
-                  </Link>
-                </DialogClose>
-                <DialogClose asChild>
-                  <Link
-                    href="/channel/bafyreihuskbd64blgyd6lkx7es4boxljbdqp3w5s5d2sym5ovbergxjlna"
-                    className="flex w-full justify-between rounded-none items-center"
-                  >
-                    <Typography className="text-primary-foreground">
-                      Feedback
-                    </Typography>
-                    <Typography className="text-secondary-foreground text-[13px] p-0 m-0">
-                      ›
-                    </Typography>
-                  </Link>
-                </DialogClose>
-                <DialogClose asChild>
-                  <Link
-                    href={`/${username}`}
-                    className="flex w-full justify-between rounded-none items-center"
-                  >
-                    <Typography className="text-primary-foreground">
-                      Profile
-                    </Typography>
-                    <Typography className="text-secondary-foreground text-[13px] p-0 m-0">
-                      ›
-                    </Typography>
-                  </Link>
+                    <Link
+                      href={`/${username}`}
+                      className="rounded-none flex w-full"
+                    >
+                      <Flex className="w-full justify-between items-center">
+                        <Typography className="text-primary-foreground">
+                          Profile
+                        </Typography>
+                        <Typography className="text-secondary-foreground text-[14px]">
+                          ›
+                        </Typography>
+                      </Flex>
+                    </Link>
+                  </Button>
                 </DialogClose>
                 <Separator
                   orientation="vertical"
