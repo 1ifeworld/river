@@ -53,7 +53,7 @@ export function MenuDialog() {
                 <DialogClose asChild>
                   <Link
                     href={'/directory'}
-                    className="flex w-full justify-between items-center"
+                    className="flex w-full justify-between rounded-none items-center"
                   >
                     <Typography className="text-primary-foreground">
                       Directory
@@ -66,7 +66,7 @@ export function MenuDialog() {
                 <DialogClose asChild>
                   <Link
                     href="/channel/bafyreihuskbd64blgyd6lkx7es4boxljbdqp3w5s5d2sym5ovbergxjlna"
-                    className="flex w-full justify-between items-center"
+                    className="flex w-full justify-between rounded-none items-center"
                   >
                     <Typography className="text-primary-foreground">
                       Feedback
@@ -97,7 +97,7 @@ export function MenuDialog() {
                 <DialogClose asChild>
                   <Link
                     href={'/directory'}
-                    className="flex w-full justify-between items-center"
+                    className="flex w-full justify-between rounded-none items-center"
                   >
                     <Typography className="text-primary-foreground">
                       Directory
@@ -110,7 +110,7 @@ export function MenuDialog() {
                 <DialogClose asChild>
                   <Link
                     href="/channel/bafyreihuskbd64blgyd6lkx7es4boxljbdqp3w5s5d2sym5ovbergxjlna"
-                    className="flex w-full justify-between items-center"
+                    className="flex w-full justify-between rounded-none items-center"
                   >
                     <Typography className="text-primary-foreground">
                       Feedback
@@ -123,7 +123,7 @@ export function MenuDialog() {
                 <DialogClose asChild>
                   <Link
                     href={`/${username}`}
-                    className="flex w-full justify-between items-center"
+                    className="flex w-full justify-between rounded-none items-center"
                   >
                     <Typography className="text-primary-foreground">
                       Profile
