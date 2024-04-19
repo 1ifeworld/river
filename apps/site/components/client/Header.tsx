@@ -5,7 +5,7 @@ import {
   UserDropdown,
 } from '@/client'
 import { useMediaQuery } from 'hooks/useMediaQuery'
-import { Button, Flex, Typography } from '@/design-system'
+import { Button, Flex, Typography, DialogTrigger } from '@/design-system'
 import { RiverLogo } from '@/server'
 import { usePrivy } from '@privy-io/react-auth'
 import { useUserContext } from '@/context'
@@ -104,7 +104,16 @@ export function Header() {
               </>
             ) : (
               <>
-                <ChannelDialog authenticated={authenticated} login={login} />
+                <ChannelDialog
+                  hideTrigger={false}
+                  trigger={
+                    <DialogTrigger>
+                      <Typography className="hover:underline hover:underline-offset-2 transition-all">
+                        +&nbsp;Channel
+                      </Typography>
+                    </DialogTrigger>
+                  }
+                />
                 {authenticated ? (
                   <UserDropdown setOpen={setOpen} />
                 ) : (
