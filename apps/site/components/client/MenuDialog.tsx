@@ -81,7 +81,7 @@ export function MenuDialog() {
                   <Button
                     variant="link"
                     onClick={login}
-                    className="w-full pt-9 justify-start h-7 rounded-none border-[1px] border-red-500"
+                    className="w-full pt-9 justify-start h-5 rounded-none border-[1px] border-red-500 items-center"
                   >
                     <Typography className="text-[#999999]">
                       Profile - login
@@ -134,7 +134,7 @@ export function MenuDialog() {
                   <Button
                     variant="link"
                     onClick={logout}
-                    className="w-full pt-9 justify-start h-7 rounded-none border-[1px] border-red-500"
+                    className="w-full pt-9 justify-start h-5 rounded-none border-[1px] border-red-500 items-center"
                   >
                     <Typography className="text-[#999999]">Logout</Typography>
                   </Button>
