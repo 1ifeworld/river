@@ -1,4 +1,10 @@
-import { MenuDialog, UsernameDialog } from '@/client'
+import {
+  ChannelDialog,
+  MenuDialog,
+  UsernameDialog,
+  UserDropdown,
+} from '@/client'
+import { useMediaQuery } from 'hooks/useMediaQuery'
 import { Button, Flex, Typography } from '@/design-system'
 import { RiverLogo } from '@/server'
 import { usePrivy } from '@privy-io/react-auth'
@@ -14,6 +20,7 @@ export function Header() {
   const [open, setOpen] = useState<boolean>(false)
   const { ready, login, authenticated } = usePrivy()
   const { embeddedWallet, userId, username } = useUserContext()
+  const { isMobile } = useMediaQuery()
 
   async function userCheck(embeddedWalletAddress: Hex | undefined) {
     let fetchedUserId
@@ -71,7 +78,7 @@ export function Header() {
           <RiverLogo />
           <Link className="hidden md:block" href={'/directory'}>
             <Typography className="text-secondary-foreground underline-offset-2 hover:underline">
-              Index
+              Directory
             </Typography>
           </Link>
         </Flex>
@@ -80,17 +87,32 @@ export function Header() {
           <></>
         ) : (
           <Flex className="gap-x-5 items-center">
-            <MenuDialog />
-            {authenticated ? (
-              <Link href={`/${username}`}>
-                <Typography className="text-primary-foreground">
-                  {username}
-                </Typography>
-              </Link>
+            {isMobile ? (
+              <>
+                <MenuDialog />
+                {authenticated ? (
+                  <Link href={`/${username}`}>
+                    <Typography className="text-primary-foreground">
+                      {username ? username : 'Logout'}
+                    </Typography>
+                  </Link>
+                ) : (
+                  <Button variant="link" onClick={login}>
+                    <Typography>login</Typography>
+                  </Button>
+                )}
+              </>
             ) : (
-              <Button variant="link" onClick={login}>
-                <Typography>login</Typography>
-              </Button>
+              <>
+                <ChannelDialog authenticated={authenticated} login={login} />
+                {authenticated ? (
+                  <UserDropdown setOpen={setOpen} />
+                ) : (
+                  <Button variant="link" onClick={login}>
+                    <Typography>login</Typography>
+                  </Button>
+                )}
+              </>
             )}
           </Flex>
         )}

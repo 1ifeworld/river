@@ -31,51 +31,59 @@ export function MenuDialog() {
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      {!dialogOpen ? (
-        <DialogTrigger asChild>
-          <Button variant="link" onClick={() => setDialogOpen(false)}>
-            <Typography>menu</Typography>
-          </Button>
-        </DialogTrigger>
-      ) : (
-        <DialogClose asChild className="flex justify-end">
-          <Button variant="link">
-            <Typography>close</Typography>
-          </Button>
-        </DialogClose>
-      )}
+      <DialogTrigger asChild>
+        <Button variant="link" onClick={() => setDialogOpen(false)}>
+          <Typography>Menu</Typography>
+        </Button>
+      </DialogTrigger>
       <DialogPortal>
         <DialogContent
           overlayClassName="bg-none"
           className="flex flex-col items-start h-full w-full px-4 border-none focus:outline-none"
         >
           <DialogHeader className="flex w-full h-fit justify-end">
-            <DialogClose asChild >
+            <DialogClose asChild>
               <Button variant="link">
-                <Typography>close</Typography>
+                <Typography>Close</Typography>
               </Button>
             </DialogClose>
-          </DialogHeader>           
-          <Stack className="h-full w-full pt-12 items-start gap-2">           
+          </DialogHeader>
+          <Stack className="h-full w-full pt-[52px] items-start gap-6">
             {!authenticated ? (
               <>
                 <DialogClose asChild>
-                  <Link href={'/directory'}>
+                  <Link
+                    href={'/directory'}
+                    className="flex w-full justify-between items-center"
+                  >
                     <Typography className="text-primary-foreground">
-                      Directory
+                      Index
+                    </Typography>
+                    <Typography className="text-secondary-foreground text-[13px] p-0 m-0">
+                      ›
                     </Typography>
                   </Link>
                 </DialogClose>
                 <DialogClose asChild>
-                  <Link href="/channel/bafyreihuskbd64blgyd6lkx7es4boxljbdqp3w5s5d2sym5ovbergxjlna">
+                  <Link
+                    href="/channel/bafyreihuskbd64blgyd6lkx7es4boxljbdqp3w5s5d2sym5ovbergxjlna"
+                    className="flex w-full justify-between items-center"
+                  >
                     <Typography className="text-primary-foreground">
                       Feedback
                     </Typography>
+                    <Typography className="text-secondary-foreground text-[13px] p-0 m-0">
+                      ›
+                    </Typography>
                   </Link>
                 </DialogClose>
                 <DialogClose asChild>
-                  <Button variant="link" onClick={login}>
-                    <Typography className="text-primary-foreground">
+                  <Button
+                    variant="link"
+                    onClick={login}
+                    className="w-full pt-9 justify-start h-7 rounded-none"
+                  >
+                    <Typography className="text-[#999999]">
                       Profile - login
                     </Typography>
                   </Button>
@@ -84,43 +92,51 @@ export function MenuDialog() {
             ) : (
               <>
                 <DialogClose asChild>
-                  <Link href={'/directory'} className='flex w-full justify-between items-center'>
+                  <Link
+                    href={'/directory'}
+                    className="flex w-full justify-between items-center"
+                  >
                     <Typography className="text-primary-foreground">
                       Directory
                     </Typography>
-                    <Typography className="text-secondary-foreground text-[20px] p-0 m-0">
+                    <Typography className="text-secondary-foreground text-[13px] p-0 m-0">
                       ›
-                    </Typography>                                        
+                    </Typography>
                   </Link>
                 </DialogClose>
                 <DialogClose asChild>
-                  <Link 
+                  <Link
                     href="/channel/bafyreihuskbd64blgyd6lkx7es4boxljbdqp3w5s5d2sym5ovbergxjlna"
-                    className='flex w-full justify-between items-center'
+                    className="flex w-full justify-between items-center"
                   >
                     <Typography className="text-primary-foreground">
                       Feedback
                     </Typography>
-                    <Typography className="text-secondary-foreground text-[20px] p-0 m-0">
+                    <Typography className="text-secondary-foreground text-[13px] p-0 m-0">
                       ›
-                    </Typography>                       
+                    </Typography>
                   </Link>
                 </DialogClose>
                 <DialogClose asChild>
-                  <Link href={`/${username}`} className='flex w-full justify-between items-center'>
+                  <Link
+                    href={`/${username}`}
+                    className="flex w-full justify-between items-center"
+                  >
                     <Typography className="text-primary-foreground">
                       Profile
                     </Typography>
-                    <Typography className="text-secondary-foreground text-[20px] p-0 m-0">
+                    <Typography className="text-secondary-foreground text-[13px] p-0 m-0">
                       ›
-                    </Typography>                         
+                    </Typography>
                   </Link>
                 </DialogClose>
                 <DialogClose asChild>
-                  <Button variant="link" onClick={logout} className='w-full pt-8 justify-start h-8 rounded-none '>
-                    <Typography className="text-secondary-foreground">
-                      Logout
-                    </Typography>
+                  <Button
+                    variant="link"
+                    onClick={logout}
+                    className="w-full pt-9 justify-start h-7 rounded-none"
+                  >
+                    <Typography className="text-[#999999]">Logout</Typography>
                   </Button>
                 </DialogClose>
               </>
