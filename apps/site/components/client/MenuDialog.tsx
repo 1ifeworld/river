@@ -51,7 +51,7 @@ export function MenuDialog() {
           <Stack className="h-full w-full pt-[52px] items-start gap-y-6">
             {!authenticated ? (
               <>
-                <DialogClose asChild>
+                <DialogClose>
                   <Button variant="link" className="w-full h-5 justify-start">
                     <Link
                       href={'/directory'}
@@ -68,7 +68,7 @@ export function MenuDialog() {
                     </Link>
                   </Button>
                 </DialogClose>
-                <DialogClose asChild>
+                <DialogClose>
                   <Button variant="link" className="w-full h-5 justify-start">
                     <Link
                       href="/channel/bafyreihuskbd64blgyd6lkx7es4boxljbdqp3w5s5d2sym5ovbergxjlna"
