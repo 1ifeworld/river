@@ -8,10 +8,9 @@ import { getAllFields } from 'lib/username'
 import { UserChannelToggle } from '@/client'
 
 export default async function Directory({
-  params,
   searchParams,
 }: {
-  params: {channel: Channel }
+  params: { channel: Channel }
   searchParams: { [key: string]: string | string[] | undefined }
 }) {
   let channels
@@ -22,10 +21,6 @@ export default async function Directory({
   } else {
     const data = await getMostRecentChannels()
     channels = data.channels
-  }
-
-  if (!channels && !users) {
-    return <Typography>No channels or users available</Typography>
   }
 
   if (channels) {
@@ -71,7 +66,7 @@ export default async function Directory({
                     key={channel.id}
                     className="hover:underline underline-offset-2 transition-all decoration-primary-foreground"
                   >
-                    <Flex className=" items-center space-x-[6px]">
+                    <Flex className="items-center space-x-[6px]">
                       <Typography>{channel.name}</Typography>
                       {isChannelPublic && <Public />}
                     </Flex>
