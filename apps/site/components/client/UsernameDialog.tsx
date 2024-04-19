@@ -162,7 +162,10 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
 
   return (
     <Dialog open={open}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent
+        overlayClassName="bg-border/50"
+        className="sm:max-w-[425px]"
+      >
         <Stack className="items-center gap-5">
           <DialogTitle>
             <Typography>Choose a username</Typography>

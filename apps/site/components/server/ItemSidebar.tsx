@@ -1,4 +1,4 @@
-import { AddToChannelDialog, IndexInfoToggle } from '@/client'
+import { AddToChannelDialog, DirectoryInfoToggle } from '@/client'
 import {
   Flex,
   Stack,
@@ -84,7 +84,7 @@ export function ItemSidebar({
             </Link>
           </Button>
         </Flex>
-        {/* <IndexInfoToggle /> */}
+        {/* <DirectoryInfoToggle /> */}
         {/* <Link
           href={`/channel/${itemContext.channelId}`}
           className="underline-offset-2 transition-all hover:underline"

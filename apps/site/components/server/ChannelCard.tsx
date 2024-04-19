@@ -65,7 +65,8 @@ export async function ChannelCard({
     : checkIsPublic({ roleData: channel?.roles?.items })
 
   return (
-    <div
+    <Link
+      href={`/channel/${channel.id}`}
       className={` w-full
         ${
           orientation === 0
@@ -73,118 +74,116 @@ export async function ChannelCard({
             : 'flex-col space-y-[10px]'
         }`}
     >
-      <Link href={`/channel/${channel.id}`}>
-        {/* <div> */}
-        {(lastFourNonRemovedItems.length as number) < 4 ? (
-          IMAGE_THUMBNAIL_TYPES_TO_RENDER.includes(
+      {/* <Link href={`/channel/${channel.id}`}> */}
+      {(lastFourNonRemovedItems.length as number) < 4 ? (
+        IMAGE_THUMBNAIL_TYPES_TO_RENDER.includes(
+          channelCardMetadata[0]?.contentType as string,
+        ) ? (
+          <Image
+            src={w3sUrlFromCid({
+              cid: channelCardMetadata[0]?.image as string,
+            })}
+            alt={channelCardMetadata[0]?.name as string}
+            width={width}
+            height={width}
+            className="object-cover aspect-square"
+          />
+        ) : VIDEO_THUMBNAIL_TYPES_TO_RENDER.includes(
             channelCardMetadata[0]?.contentType as string,
-          ) ? (
-            <Image
-              src={w3sUrlFromCid({
-                cid: channelCardMetadata[0]?.image as string,
-              })}
-              alt={channelCardMetadata[0]?.name as string}
-              width={width}
-              height={width}
-              className="object-cover aspect-square"
-            />
-          ) : VIDEO_THUMBNAIL_TYPES_TO_RENDER.includes(
-              channelCardMetadata[0]?.contentType as string,
-            ) && channelCardMetadata[0]?.muxAssetStatus === 'ready' ? (
-            <Image
-              className="object-contain"
-              src={`https://image.mux.com/${channelCardMetadata[0]?.muxPlaybackId}/thumbnail.png?width=${width}&height=${width}&fit_mode=smartcrop&time=35`}
-              alt={channelCardMetadata[0]?.name as string}
-              quality={imgQuality}
-              width={width}
-              height={width}
-            />
-          ) : (
-            <div
-              className={`
-                w-full
+          ) && channelCardMetadata[0]?.muxAssetStatus === 'ready' ? (
+          <Image
+            className="object-contain"
+            src={`https://image.mux.com/${channelCardMetadata[0]?.muxPlaybackId}/thumbnail.png?width=${width}&height=${width}&fit_mode=smartcrop&time=35`}
+            alt={channelCardMetadata[0]?.name as string}
+            quality={imgQuality}
+            width={width}
+            height={width}
+          />
+        ) : (
+          <div
+            className={`
                 ${orientation === 1 && 'w-full md:w-64'}
               `}
-            >
-              {lastFourNonRemovedItems.length ? (
-                <GenericThumbnailLarge
-                  className={
-                    orientation === 0
-                      ? `border-border border-[0.5px] h-${width / 4} w-${
-                          width / 4
-                        } md:w-${width / 4}md:h-${width / 4}`
-                      : ''
-                  }
-                  text={channelCardMetadata[0]?.contentType as string}
-                />
-              ) : (
-                <Flex
-                  className={
-                    orientation === 0
-                      ? `bg-[#E9E9E9] justify-center items-center aspect-square w-${
-                          width / 4
-                        }`
-                      : 'bg-[#E9E9E9] justify-center items-center aspect-square'
-                  }
-                >
-                  <Typography className="text-secondary-foreground">
-                    No items
-                  </Typography>
-                </Flex>
-              )}
-            </div>
-          )
-        ) : (
-          <Grid
-            className={`grid-cols-2 grid-rows-2 md:w-${
-              width / 4
-            } aspect-square relative`}
           >
-            {lastFourNonRemovedItems.map((item, index) =>
-              IMAGE_THUMBNAIL_TYPES_TO_RENDER.includes(
-                channelCardMetadata[index]?.contentType as string,
-              ) ? (
-                <Image
-                  key={index}
-                  src={w3sUrlFromCid({
-                    cid: channelCardMetadata[index]?.image as string,
-                  })}
-                  alt={channelCardMetadata[index]?.name as string}
-                  width={width / 2}
-                  height={width / 2}
-                  className="object-cover aspect-square"
-                />
-              ) : VIDEO_THUMBNAIL_TYPES_TO_RENDER.includes(
-                  channelCardMetadata[index]?.contentType as string,
-                ) && channelCardMetadata[index]?.muxAssetStatus === 'ready' ? (
-                <Image
-                  className="object-contain"
-                  src={`https://image.mux.com/${
-                    channelCardMetadata[index]?.muxPlaybackId
-                  }/thumbnail.png?width=${width / 2}&height=${
-                    width / 2
-                  }&fit_mode=smartcrop&time=35`}
-                  alt={channelCardMetadata[index]?.name as string}
-                  quality={imgQuality}
-                  width={width / 2}
-                  height={width / 2}
-                />
-              ) : (
-                <GenericThumbnailLarge
-                  className={
-                    orientation === 0
-                      ? `border-border border-[0.5px] h-${width / 8} w-${
-                          width / 8
-                        } md:w-${width / 8}md:h-${width / 8}`
-                      : 'border-border border-[0.5px]'
-                  }
-                  text={channelCardMetadata[index]?.contentType as string}
-                />
-              ),
+            {lastFourNonRemovedItems.length ? (
+              <GenericThumbnailLarge
+                className={
+                  orientation === 0
+                    ? `border-border border-[0.5px] h-${width / 4} w-${
+                        width / 4
+                      } md:w-${width / 4}md:h-${width / 4}`
+                    : ''
+                }
+                text={channelCardMetadata[0]?.contentType as string}
+              />
+            ) : (
+              <Flex
+                className={
+                  orientation === 0
+                    ? `bg-[#E9E9E9] justify-center items-center aspect-square w-${
+                        width / 4
+                      }`
+                    : 'bg-[#E9E9E9] justify-center items-center aspect-square'
+                }
+              >
+                <Typography className="text-secondary-foreground">
+                  No items
+                </Typography>
+              </Flex>
             )}
-          </Grid>
-        )}
-      </Link>
+          </div>
+        )
+      ) : (
+        <Grid
+          className={`grid-cols-2 grid-rows-2 md:w-${
+            width / 4
+          } aspect-square relative`}
+        >
+          {lastFourNonRemovedItems.map((item, index) =>
+            IMAGE_THUMBNAIL_TYPES_TO_RENDER.includes(
+              channelCardMetadata[index]?.contentType as string,
+            ) ? (
+              <Image
+                key={index}
+                src={w3sUrlFromCid({
+                  cid: channelCardMetadata[index]?.image as string,
+                })}
+                alt={channelCardMetadata[index]?.name as string}
+                width={width / 2}
+                height={width / 2}
+                className="object-cover aspect-square"
+              />
+            ) : VIDEO_THUMBNAIL_TYPES_TO_RENDER.includes(
+                channelCardMetadata[index]?.contentType as string,
+              ) && channelCardMetadata[index]?.muxAssetStatus === 'ready' ? (
+              <Image
+                className="object-contain"
+                src={`https://image.mux.com/${
+                  channelCardMetadata[index]?.muxPlaybackId
+                }/thumbnail.png?width=${width / 2}&height=${
+                  width / 2
+                }&fit_mode=smartcrop&time=35`}
+                alt={channelCardMetadata[index]?.name as string}
+                quality={imgQuality}
+                width={width / 2}
+                height={width / 2}
+              />
+            ) : (
+              <GenericThumbnailLarge
+                className={
+                  orientation === 0
+                    ? `border-border border-[0.5px] h-${width / 8} w-${
+                        width / 8
+                      } md:w-${width / 8}md:h-${width / 8}`
+                    : 'border-border border-[0.5px]'
+                }
+                text={channelCardMetadata[index]?.contentType as string}
+              />
+            ),
+          )}
+        </Grid>
+      )}
+      {/* </Link> */}
       <Stack className="gap-y-[3px]">
         <Link
           href={`/channel/${channel.id}`}
@@ -195,6 +194,6 @@ export async function ChannelCard({
         </Link>
         <Username id={channel.createdById} />
       </Stack>
-    </div>
+    </Link>
   )
 }

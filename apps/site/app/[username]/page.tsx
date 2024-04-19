@@ -1,9 +1,9 @@
-import { Flex, Grid, Stack, Typography } from '@/design-system'
+import { Button, Flex, Grid, Stack, Typography } from '@/design-system'
 import { getChannelsItemsWithUser } from '@/gql'
 import { getDataForUsername } from '@/lib'
 import { ChannelCard } from '@/server'
 import { pluralize, sortChannels } from '@/utils'
-import { UserSettings } from '@/client'
+import { ChannelDialog, NewChannelTrigger, UserSettings } from '@/client'
 
 export default async function Profile({
   params,
@@ -49,6 +49,7 @@ export default async function Profile({
         {/* Channels */}
         {/* mobile view */}
         <Stack className="md:hidden gap-[10px]">
+          <ChannelDialog trigger={<NewChannelTrigger />} hideTrigger={true} />
           {sortedChannels.map((channel, index: number) => (
             // @ts-ignore
             <ChannelCard channel={channel} width={64} />
@@ -56,6 +57,7 @@ export default async function Profile({
         </Stack>
         {/* desktop view  */}
         <Grid className="hidden md:grid grid-cols-2 md:grid-cols-[repeat(auto-fill,_minmax(255px,_1fr))] gap-5">
+          <ChannelDialog trigger={<NewChannelTrigger />} hideTrigger={true} />
           {sortedChannels.map((channel, index: number) => (
             <ChannelCard
               // @ts-ignore

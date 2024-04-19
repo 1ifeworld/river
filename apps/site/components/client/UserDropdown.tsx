@@ -17,6 +17,7 @@ interface UserProps {
 }
 
 export function UserDropdown({ setOpen }: UserProps) {
+  const { username, clearUserData } = useUserContext()
   const { logout } = useLogout({
     onSuccess: () => {
       if (clearUserData) {
@@ -24,7 +25,6 @@ export function UserDropdown({ setOpen }: UserProps) {
       }
     },
   })
-  const { username, clearUserData } = useUserContext()
 
   return (
     <DropdownMenu>
