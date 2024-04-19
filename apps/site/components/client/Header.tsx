@@ -15,12 +15,14 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import type { Hex } from 'viem'
+import { usePathname } from 'next/navigation'
 
 export function Header() {
   const [open, setOpen] = useState<boolean>(false)
   const { ready, login, authenticated } = usePrivy()
   const { embeddedWallet, userId, username } = useUserContext()
   const { isMobile } = useMediaQuery()
+  const pathname = usePathname()
 
   async function userCheck(embeddedWalletAddress: Hex | undefined) {
     let fetchedUserId
@@ -77,7 +79,13 @@ export function Header() {
         <Flex className="gap-x-6">
           <RiverLogo />
           <Link className="hidden md:block" href={'/directory'}>
-            <Typography className="text-secondary-foreground underline-offset-2 hover:underline">
+            <Typography
+              className={`${
+                pathname === '/directory'
+                  ? 'text-primary-foreground'
+                  : 'text-secondary-foreground'
+              } underline-offset-2 hover:underline`}
+            >
               Directory
             </Typography>
           </Link>

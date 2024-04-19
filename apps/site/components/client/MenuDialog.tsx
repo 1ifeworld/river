@@ -13,6 +13,7 @@ import {
   DialogTitle,
   Stack,
   Typography,
+  Separator,
 } from '@/design-system'
 import { UserDropdown } from '@/client'
 
@@ -54,7 +55,7 @@ export function MenuDialog() {
                 <DialogClose asChild>
                   <Link
                     href={'/directory'}
-                    className="flex w-full justify-between items-center border-[1px] border-red-500"
+                    className="flex w-full justify-between items-center"
                   >
                     <Typography className="text-primary-foreground">
                       Index
@@ -67,7 +68,7 @@ export function MenuDialog() {
                 <DialogClose asChild>
                   <Link
                     href="/channel/bafyreihuskbd64blgyd6lkx7es4boxljbdqp3w5s5d2sym5ovbergxjlna"
-                    className="flex w-full justify-between items-center border-[1px] border-red-500"
+                    className="flex w-full justify-between items-center"
                   >
                     <Typography className="text-primary-foreground">
                       Feedback
@@ -77,13 +78,17 @@ export function MenuDialog() {
                     </Typography>
                   </Link>
                 </DialogClose>
+                <Separator
+                  orientation="vertical"
+                  className="h-4 border-none bg-0"
+                />
                 <DialogClose asChild>
                   <Button
                     variant="link"
                     onClick={login}
-                    className="w-full pt-9 justify-start h-5 rounded-none border-[1px] border-red-500 items-center"
+                    className="w-full justify-start h-6 rounded-none items-center"
                   >
-                    <Typography className="text-[#999999]">
+                    <Typography className="text-[#999999] w-full text-left">
                       Profile - login
                     </Typography>
                   </Button>
@@ -94,7 +99,7 @@ export function MenuDialog() {
                 <DialogClose asChild>
                   <Link
                     href={'/directory'}
-                    className="flex w-full justify-between items-center border-[1px] border-red-500"
+                    className="flex w-full justify-between items-center"
                   >
                     <Typography className="text-primary-foreground">
                       Directory
@@ -107,7 +112,7 @@ export function MenuDialog() {
                 <DialogClose asChild>
                   <Link
                     href="/channel/bafyreihuskbd64blgyd6lkx7es4boxljbdqp3w5s5d2sym5ovbergxjlna"
-                    className="flex w-full justify-between items-center border-[1px] border-red-500"
+                    className="flex w-full justify-between items-center"
                   >
                     <Typography className="text-primary-foreground">
                       Feedback
@@ -120,7 +125,7 @@ export function MenuDialog() {
                 <DialogClose asChild>
                   <Link
                     href={`/${username}`}
-                    className="flex w-full justify-between items-center border-[1px] border-red-500"
+                    className="flex w-full justify-between items-center"
                   >
                     <Typography className="text-primary-foreground">
                       Profile
@@ -130,13 +135,19 @@ export function MenuDialog() {
                     </Typography>
                   </Link>
                 </DialogClose>
+                <Separator
+                  orientation="vertical"
+                  className="h-4 border-none bg-0"
+                />
                 <DialogClose asChild>
                   <Button
                     variant="link"
                     onClick={logout}
-                    className="w-full pt-9 justify-start h-5 rounded-none border-[1px] border-red-500 items-center"
+                    className="w-full justify-start h-6 rounded-none items-center"
                   >
-                    <Typography className="text-[#999999]">Logout</Typography>
+                    <Typography className="text-[#999999] w-full text-left">
+                      Logout
+                    </Typography>
                   </Button>
                 </DialogClose>
               </>
