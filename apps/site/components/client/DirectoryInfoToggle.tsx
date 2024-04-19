@@ -2,7 +2,7 @@ import { Button, Flex, Typography } from '@/design-system'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
 
-export function IndexInfoToggle() {
+export function DirectoryInfoToggle() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -37,7 +37,7 @@ export function IndexInfoToggle() {
               : 'text-primary-foreground'
           }
         >
-          Index
+          Directory
         </Typography>
       </Button>
       <Button
