@@ -305,7 +305,10 @@ export function ChannelSettings({ channel }: ChannelSettingsProps) {
         </DropdownMenuContent>
       </DropdownMenu>
       {/* Dialog logic */}
-      <DialogContent className="sm:max-w-[425px] focus:outline-none">
+      <DialogContent
+        overlayClassName="bg-border/50"
+        className="sm:max-w-[425px] focus:outline-none"
+      >
         <Stack className="items-center gap-4">
           <DialogHeader className="flex w-full px-5 justify-between items-center">
             <div className="flex-1">{/* Placholder */}</div>

@@ -1,18 +1,28 @@
-import { ChannelDialog, UserDropdown, UsernameDialog } from '@/client'
-import { Button, Flex, Typography } from '@/design-system'
-import { RiverLogo, Directory } from '@/server'
+import {
+  ChannelDialog,
+  MenuDialog,
+  UsernameDialog,
+  UserDropdown,
+} from '@/client'
+import { useMediaQuery } from 'hooks/useMediaQuery'
+import { Button, Flex, Typography, DialogTrigger } from '@/design-system'
+import { RiverLogo } from '@/server'
 import { usePrivy } from '@privy-io/react-auth'
 import { useUserContext } from '@/context'
 import { getUserId } from '@/gql'
 import { getUsername } from '@/lib'
+import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import type { Hex } from 'viem'
+import { usePathname } from 'next/navigation'
 
 export function Header() {
   const [open, setOpen] = useState<boolean>(false)
   const { ready, login, authenticated } = usePrivy()
   const { embeddedWallet, userId, username } = useUserContext()
+  const { isMobile } = useMediaQuery()
+  const pathname = usePathname()
 
   async function userCheck(embeddedWalletAddress: Hex | undefined) {
     let fetchedUserId
@@ -68,20 +78,58 @@ export function Header() {
       >
         <Flex className="gap-x-6">
           <RiverLogo />
-          <Directory />
+          <Link className="hidden md:block" href={'/directory'}>
+            <Typography
+              className={`${
+                pathname === '/directory'
+                  ? 'text-primary-foreground'
+                  : 'text-secondary-foreground'
+              } underline-offset-2 hover:underline`}
+            >
+              Directory
+            </Typography>
+          </Link>
         </Flex>
         {/* If the `PrivyProvider` is loading, display only the River logo */}
         {!ready ? (
           <></>
         ) : (
-          <Flex className="gap-x-5">
-            <ChannelDialog authenticated={authenticated} login={login} />
-            {authenticated ? (
-              <UserDropdown setOpen={setOpen} />
+          <Flex className="gap-x-5 items-center">
+            {isMobile ? (
+              <>
+                <MenuDialog />
+                {authenticated ? (
+                  <Link href={`/${username}`}>
+                    <Typography className="text-primary-foreground">
+                      {username ? username : 'Logout'}
+                    </Typography>
+                  </Link>
+                ) : (
+                  <Button variant="link" onClick={login}>
+                    <Typography>Login</Typography>
+                  </Button>
+                )}
+              </>
             ) : (
-              <Button variant="link" onClick={login}>
-                <Typography>Login</Typography>
-              </Button>
+              <>
+                <ChannelDialog
+                  hideTrigger={false}
+                  trigger={
+                    <DialogTrigger>
+                      <Typography className="hover:underline hover:underline-offset-2 transition-all">
+                        +&nbsp;Channel
+                      </Typography>
+                    </DialogTrigger>
+                  }
+                />
+                {authenticated ? (
+                  <UserDropdown setOpen={setOpen} />
+                ) : (
+                  <Button variant="link" onClick={login}>
+                    <Typography>Login</Typography>
+                  </Button>
+                )}
+              </>
             )}
           </Flex>
         )}

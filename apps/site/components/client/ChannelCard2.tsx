@@ -110,7 +110,7 @@ export function ChannelCard2({
         )}
       </div>
       <Stack className="gap-y-[3px]">
-        <Flex className="justify-between items-center space-x-[6px]">
+        <Flex className="items-center space-x-[6px]">
           <Typography>{truncateText(channel?.name, 25, true)}</Typography>
           {isPublic && <Public />}
         </Flex>

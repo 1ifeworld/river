@@ -34,18 +34,21 @@ import * as React from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { Hex } from 'viem'
+import { usePrivy } from '@privy-io/react-auth'
+import { useSelectedLayoutSegments } from 'next/navigation'
 
 interface ChannelDialogProps {
-  authenticated: boolean
-  login: () => void
+  trigger: React.ReactNode
+  hideTrigger?: boolean
 }
 
-export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
+export function ChannelDialog({ trigger, hideTrigger }: ChannelDialogProps) {
   const router = useRouter()
   const [dialogOpen, setDialogOpen] = React.useState(false)
   const [isSubmitting, setIsSubmitting] = React.useState(false)
 
   const { signMessage, userId: targetUserId, embeddedWallet } = useUserContext()
+  const { authenticated, login } = usePrivy()
 
   const form = useForm<NewChannelSchemaValues>({
     resolver: zodResolver(newChannelSchema),
@@ -97,18 +100,21 @@ export function ChannelDialog({ authenticated, login }: ChannelDialogProps) {
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       {!authenticated ? (
-        <Button variant="link" onClick={login}>
+        <Button
+          className={hideTrigger ? 'hidden' : ''}
+          variant="link"
+          onClick={login}
+        >
           <Typography>+&nbsp;Channel</Typography>
         </Button>
       ) : (
-        <DialogTrigger asChild>
-          <Button variant="link">
-            <Typography>+&nbsp;Channel</Typography>
-          </Button>
-        </DialogTrigger>
+        trigger
       )}
       <DialogPortal>
-        <DialogContent className="sm:max-w-[425px] focus:outline-none">
+        <DialogContent
+          overlayClassName="bg-border/50"
+          className="sm:max-w-[425px] focus:outline-none"
+        >
           <Stack className="items-center gap-4">
             <DialogHeader className="flex w-full px-5 justify-between items-center">
               <div className="flex-1">{/* Placholder */}</div>
