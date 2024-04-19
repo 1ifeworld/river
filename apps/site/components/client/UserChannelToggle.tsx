@@ -1,4 +1,4 @@
-import { Button, Flex, Typography } from '@/design-system'
+import { Button, Flex, Typography, Stack } from '@/design-system'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
 
@@ -18,49 +18,54 @@ export function UserChannelToggle() {
   )
 
   return (
-    <Flex className="gap-x-4 p-20 items-center h-[14px]">
+    <Stack className="items-start gap-y-2">
       <Button
+        // className={
+        //   searchParams.get('view') !== 'user'
+        //     ? 'hover:no-underline'
+        //     : 'decoration-secondary-foreground'
+        // }
+        className={`h-4 ${
+          searchParams.get('view') !== 'user'
+            ? 'hover:no-underline'
+            : 'decoration-secondary-foreground'
+        }`}
         variant="link"
         onClick={() => {
           router.replace(`${pathname}`)
         }}
-        className={
-          searchParams.get('view') === 'channel'
-            ? 'decoration-secondary-foreground'
-            : 'hover:no-underline'
-        }
-      >
-        <Typography
-          className={
-            searchParams.get('view') === 'channel'
-              ? 'text-secondary-foreground'
-              : 'text-primary-foreground'
-          }
-        >
-          Channel
-        </Typography>
-      </Button>
-      <Button
-        variant="link"
-        onClick={() => {
-          router.push(`${pathname}?${createQueryString('view', 'user')}`)
-        }}
-        className={
-          searchParams.get('view') === 'user'
-            ? 'hover:no-underline'
-            : 'decoration-secondary-foreground'
-        }
       >
         <Typography
           className={
             searchParams.get('view') === 'user'
-              ? 'text-primary-foreground'
-              : 'text-secondary-foreground'
+              ? 'text-secondary-foreground'
+              : ''
           }
         >
-          User
+          Channels
         </Typography>
       </Button>
-    </Flex>
+      <Button
+        className={`h-4  ${
+          searchParams.get('view') === 'user'
+            ? 'hover:no-underline'
+            : 'decoration-secondary-foreground'
+        }`}
+        variant="link"
+        onClick={() => {
+          router.push(`${pathname}?${createQueryString('view', 'user')}`)
+        }}
+      >
+        <Typography
+          className={
+            searchParams.get('view') !== 'user'
+              ? 'text-secondary-foreground'
+              : ''
+          }
+        >
+          Users
+        </Typography>
+      </Button>
+    </Stack>
   )
 }
