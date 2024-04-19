@@ -5,6 +5,7 @@ import { Toaster } from 'sonner'
 import '../styles/globals.css'
 import { sfMono } from './fonts/fonts'
 import { Providers } from './providers/providers'
+import NextTopLoader from 'nextjs-toploader';
 
 export const metadata: Metadata = {
   title: 'River',
@@ -21,6 +22,21 @@ export default function RootLayout({
       <body>
         <Providers>
           <Header />
+          <NextTopLoader 
+            color="#B4B4B4"
+            initialPosition={0.08}
+            crawlSpeed={200}
+            height={3}
+            crawl={true}
+            showSpinner={true}
+            easing="linear"
+            speed={200}
+            // shadow="0 0 10px #2299DD,0 0 5px #2299DD"
+            template='<div class="bar" role="bar"><div class="peg"></div></div> 
+            <div class="spinner" role="spinner"><div class="spinner-icon"></div></div>'
+            zIndex={1600}
+            showAtBottom={false}          
+          />
           {children}
           <Footer />
           <Toaster position="bottom-center" />
