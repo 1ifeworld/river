@@ -31,7 +31,7 @@ export default function RootLayout({
             showSpinner={true}
             easing="linear"
             speed={200}
-            // shadow="0 0 10px #2299DD,0 0 5px #2299DD"
+            shadow={false}
             template='<div class="bar" role="bar"><div class="peg"></div></div>'
             zIndex={1600}
             showAtBottom={false}
