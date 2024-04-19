@@ -10,12 +10,10 @@ import {
   DialogPortal,
   DialogTrigger,
   DialogHeader,
-  DialogTitle,
   Stack,
   Typography,
   Separator,
 } from '@/design-system'
-import { UserDropdown } from '@/client'
 
 export function MenuDialog() {
   const { login, authenticated } = usePrivy()
@@ -58,7 +56,7 @@ export function MenuDialog() {
                     className="flex w-full justify-between items-center"
                   >
                     <Typography className="text-primary-foreground">
-                      Index
+                      Directory
                     </Typography>
                     <Typography className="text-secondary-foreground text-[13px] p-0 m-0">
                       ›
@@ -89,7 +87,7 @@ export function MenuDialog() {
                     className="w-full justify-start h-6 rounded-none items-center"
                   >
                     <Typography className="text-[#999999] w-full text-left">
-                      Profile - login
+                      Login
                     </Typography>
                   </Button>
                 </DialogClose>
