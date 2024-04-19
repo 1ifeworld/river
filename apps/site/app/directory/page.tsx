@@ -8,9 +8,10 @@ import { getAllFields } from 'lib/username'
 import { UserChannelToggle } from '@/client'
 
 export default async function Directory({
+  params,
   searchParams,
 }: {
-  channel: Channel
+  params: {channel: Channel }
   searchParams: { [key: string]: string | string[] | undefined }
 }) {
   let channels
