@@ -20,12 +20,7 @@ export function UserChannelToggle() {
   return (
     <Stack className="items-start gap-y-2">
       <Button
-        // className={
-        //   searchParams.get('view') !== 'user'
-        //     ? 'hover:no-underline'
-        //     : 'decoration-secondary-foreground'
-        // }
-        className={`h-4 ${
+        className={`h-4 rounded-none ${
           searchParams.get('view') !== 'user'
             ? 'hover:no-underline'
             : 'decoration-secondary-foreground'
@@ -46,7 +41,7 @@ export function UserChannelToggle() {
         </Typography>
       </Button>
       <Button
-        className={`h-4  ${
+        className={`h-4 rounded-none  ${
           searchParams.get('view') === 'user'
             ? 'hover:no-underline'
             : 'decoration-secondary-foreground'
