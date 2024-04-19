@@ -8,13 +8,13 @@ import { getAllFields } from 'lib/username'
 import { UserChannelToggle } from '@/client'
 
 export default async function Directory({
-  channel,
   searchParams,
 }: {
   channel: Channel
   searchParams: { [key: string]: string | string[] | undefined }
 }) {
-  let channels, users
+  let channels
+  let users
 
   if (searchParams.view === 'user') {
     users = await getAllFields({ field: 'name' })
