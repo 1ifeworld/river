@@ -35,7 +35,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { Hex } from 'viem'
 import { usePrivy } from '@privy-io/react-auth'
-import { useSelectedLayoutSegments } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 
 interface ChannelDialogProps {
   trigger: React.ReactNode
@@ -44,10 +44,16 @@ interface ChannelDialogProps {
 
 export function ChannelDialog({ trigger, hideTrigger }: ChannelDialogProps) {
   const router = useRouter()
+  const pathname = usePathname()
   const [dialogOpen, setDialogOpen] = React.useState(false)
   const [isSubmitting, setIsSubmitting] = React.useState(false)
 
-  const { signMessage, userId: targetUserId, embeddedWallet } = useUserContext()
+  const {
+    signMessage,
+    userId: targetUserId,
+    username,
+    embeddedWallet,
+  } = useUserContext()
   const { authenticated, login } = usePrivy()
 
   const form = useForm<NewChannelSchemaValues>({
@@ -99,7 +105,7 @@ export function ChannelDialog({ trigger, hideTrigger }: ChannelDialogProps) {
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      {!authenticated ? (
+      {!authenticated || !username || `/${username}` !== pathname ? (
         <Button
           className={hideTrigger ? 'hidden' : ''}
           variant="link"
