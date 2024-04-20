@@ -1,7 +1,6 @@
 'use client'
 
-import { getUserId } from '@/gql'
-import { getUsername, getUserChannels } from '@/lib'
+import { getUserChannels } from '@/lib'
 import {
   type ConnectedWallet,
   type SignMessageModalUIOptions,
@@ -15,7 +14,7 @@ import React, {
   useEffect,
   useState,
 } from 'react'
-import type { Address } from 'viem'
+import { getUserDataByOwner } from '@/lib'
 
 const UserContext = createContext<{
   embeddedWallet?: ConnectedWallet
@@ -47,21 +46,14 @@ export function UserContextComponent({ children }: { children: ReactNode }) {
   async function fetchUserData() {
     if (!embeddedWallet) return
 
-    const fetchedUserId = await getUserId({
-      custodyAddress: embeddedWallet.address as Address,
-    })
+    const data = await getUserDataByOwner({ owner: embeddedWallet.address })
 
-    if (!fetchedUserId.userId) return
+    if (!data) return
 
-    setUserId(fetchedUserId.userId)
+    setUserId(data.records.id)
+    setUsername(data.records.name)
 
-    const fetchedUsername = await getUsername({
-      id: BigInt(fetchedUserId.userId),
-    })
-
-    setUsername(fetchedUsername)
-
-    const userChannels = await getUserChannels(fetchedUserId.userId)
+    const userChannels = await getUserChannels(data.records.id)
     if (userChannels) setUserChannels(userChannels)
   }
 
