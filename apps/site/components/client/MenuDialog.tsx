@@ -55,7 +55,7 @@ export function MenuDialog() {
                 className="w-full h-5 justify-start rounded-none"
                 onClick={() => setDialogOpen(false)}
               >
-                <Link href={'/directory'} className="rounded-none flex w-full">
+                <Link href={'/'} className="rounded-none flex w-full">
                   <Flex className="w-full justify-between items-center">
                     <Typography className="text-primary-foreground">
                       Home
