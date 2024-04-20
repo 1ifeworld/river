@@ -105,16 +105,24 @@ export function ChannelDialog({ trigger, hideTrigger }: ChannelDialogProps) {
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      {!authenticated || !username || `/${username}` !== pathname ? (
-        <Button
-          className={hideTrigger ? 'hidden' : ''}
-          variant="link"
-          onClick={login}
-        >
-          <Typography>+&nbsp;Channel</Typography>
-        </Button>
+      {/* 
+          Logic for showing trigger:
+          - hide trigger variable is used for optionally hiding trigger in header on mobile
+          - always show trigger on desktop (hide trigger == false)
+          - if user not authed, prompt log in, if not, prompt new channel
+      */}
+      {!hideTrigger ? (
+        <>
+          {!authenticated || !username ? (
+            <Button variant="link" onClick={login}>
+              <Typography>+&nbsp;Channel</Typography>
+            </Button>
+          ) : (
+            trigger
+          )}
+        </>
       ) : (
-        trigger
+        <>{`/${username}` !== pathname ? <></> : trigger}</>
       )}
       <DialogPortal>
         <DialogContent

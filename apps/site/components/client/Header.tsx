@@ -116,9 +116,12 @@ export function Header() {
                   hideTrigger={false}
                   trigger={
                     <DialogTrigger>
+                      {/* <Button variant="link"> */}
                       <Typography className="hover:underline hover:underline-offset-2 transition-all">
+                        {/* <Typography className=""> */}
                         +&nbsp;Channel
                       </Typography>
+                      {/* </Button> */}
                     </DialogTrigger>
                   }
                 />

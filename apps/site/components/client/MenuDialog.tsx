@@ -49,6 +49,24 @@ export function MenuDialog() {
             </DialogClose>
           </DialogHeader>
           <Stack className="h-full w-full pt-[52px] items-start gap-y-6">
+          <DialogClose asChild>
+              <Button
+                variant="link"
+                className="w-full h-5 justify-start rounded-none"
+                onClick={() => setDialogOpen(false)}
+              >
+                <Link href={'/'} className="rounded-none flex w-full">
+                  <Flex className="w-full justify-between items-center">
+                    <Typography className="text-primary-foreground">
+                      Home
+                    </Typography>
+                    <Typography className="text-secondary-foreground text-[14px]">
+                      ›
+                    </Typography>
+                  </Flex>
+                </Link>
+              </Button>
+            </DialogClose>            
             <DialogClose asChild>
               <Button
                 variant="link"
@@ -90,7 +108,7 @@ export function MenuDialog() {
             </DialogClose>
             {!authenticated ? (
               <>
-                <Separator orientation="vertical" className="h-4 border-none" />
+                <Separator orientation="vertical" className="h-4 border-none bg-0" />
                 <DialogClose asChild>
                   <Button
                     variant="link"
