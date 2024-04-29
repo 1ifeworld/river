@@ -16,8 +16,6 @@ import {
   Flex,
 } from '@/design-system'
 
-// eh
-
 export function MenuDialog() {
   const { login, authenticated } = usePrivy()
   const { username, clearUserData } = useUserContext()
