@@ -21,8 +21,8 @@ importers:
         specifier: ^9.1.0
         version: 9.1.0
       '@ponder/core':
-        specifier: ^0.3.11
-        version: 0.3.11(@types/node@18.11.18)(typescript@5.1.6)(viem@1.20.0)
+        specifier: ^0.4.13
+        version: 0.4.13(@types/node@18.11.18)(typescript@5.1.6)(viem@1.20.0)
       base64url:
         specifier: ^3.0.1
         version: 3.0.1
@@ -354,92 +354,6 @@ packages:
 
   /@assemblyscript/loader@0.9.4:
     resolution: {integrity: sha512-HazVq9zwTVwGmqdwYzu7WyQ6FQVZ7SwET0KKQuKm55jD0IfUpZgN0OPIiZG3zV1iSrVYcN0bdwLRXI/VNCYsUA==}
-    dev: false
-
-  /@ast-grep/napi-darwin-arm64@0.19.4:
-    resolution: {integrity: sha512-tZUCBZuP0jFkdNHuEbjJD6KgPe15CEMrA5bAl3W2zyo/QiwNStHqDekgWgwLY46ct/Y2BQaTjuvSDy0Ze651gg==}
-    engines: {node: '>= 10'}
-    cpu: [arm64]
-    os: [darwin]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@ast-grep/napi-darwin-x64@0.19.4:
-    resolution: {integrity: sha512-GBT+LFRaSrUz897C2XlLrnEp6mI6kYpkzaQRncERbWMiuH9gWiBc1r5GLJVEqFLssnC+e9e6FLnI3PrcnEGf1w==}
-    engines: {node: '>= 10'}
-    cpu: [x64]
-    os: [darwin]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@ast-grep/napi-linux-arm64-gnu@0.19.4:
-    resolution: {integrity: sha512-xwtuUurvz1np3YIdljuCKOPH0bLtHK7Fs70nT+HDl7sUEo/7a8mp3EOmuLgviB6GIpOx/Lzbptp+d1EYW4eUIw==}
-    engines: {node: '>= 10'}
-    cpu: [arm64]
-    os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@ast-grep/napi-linux-x64-gnu@0.19.4:
-    resolution: {integrity: sha512-NDtmg7Zp7zxUhJ1mpOpeAshI5SJhIRlOnBncAWqb+LgzwHafXBLGXnCQ5GNU6xcOyhZRDS2OpPSIhd1E+ztTTw==}
-    engines: {node: '>= 10'}
-    cpu: [x64]
-    os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@ast-grep/napi-linux-x64-musl@0.19.4:
-    resolution: {integrity: sha512-Xgd4CFIugfbdoyN0pYWEwhbdq9EK9y2yGjxXNRs4raW91b6Vdc+140FsBJgWeO1/ek1f5zOzOguJh+L5fuBynQ==}
-    engines: {node: '>= 10'}
-    cpu: [x64]
-    os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@ast-grep/napi-win32-arm64-msvc@0.19.4:
-    resolution: {integrity: sha512-gZpq5dSEObJJLY9Vd3oDc3FtsvLAKjc7XS2X2c9trjHZ64KTt9t59SKG8bvBcAe5mqejPWjnWJYdIh7wQLgRZA==}
-    engines: {node: '>= 10'}
-    cpu: [arm64]
-    os: [win32]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@ast-grep/napi-win32-ia32-msvc@0.19.4:
-    resolution: {integrity: sha512-kSqYHfsd8yfMkLJU6R8iJyJ/APsmm/8TEUcAOcaFR2TY26eFPNKhF4cDxVs7ZFsRLFItHlT4mj6b8VJn4lXPWA==}
-    engines: {node: '>= 10'}
-    cpu: [ia32]
-    os: [win32]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@ast-grep/napi-win32-x64-msvc@0.19.4:
-    resolution: {integrity: sha512-Dh9AKWk5AoxLgeQxiJCSTHFlagS/SMznaLv7Q0RyalXoOzZSdMBtJ345tYRbISKubMg3uO7PWu4vrQN1EvPqMg==}
-    engines: {node: '>= 10'}
-    cpu: [x64]
-    os: [win32]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@ast-grep/napi@0.19.4:
-    resolution: {integrity: sha512-Lv68h2sePJApz7LkOJ4S6lUQgI5L28BDfbzeyK6BeU3t9Df6AbqiwWfAxc1C6vbUcRDv+AH3t0+eI+iLFBhoTw==}
-    engines: {node: '>= 10'}
-    optionalDependencies:
-      '@ast-grep/napi-darwin-arm64': 0.19.4
-      '@ast-grep/napi-darwin-x64': 0.19.4
-      '@ast-grep/napi-linux-arm64-gnu': 0.19.4
-      '@ast-grep/napi-linux-x64-gnu': 0.19.4
-      '@ast-grep/napi-linux-x64-musl': 0.19.4
-      '@ast-grep/napi-win32-arm64-msvc': 0.19.4
-      '@ast-grep/napi-win32-ia32-msvc': 0.19.4
-      '@ast-grep/napi-win32-x64-msvc': 0.19.4
     dev: false
 
   /@aws-crypto/sha256-js@1.2.2:
@@ -1264,6 +1178,14 @@ packages:
       sha.js: 2.4.11
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /@commander-js/extra-typings@12.0.1(commander@12.0.0):
+    resolution: {integrity: sha512-OvkMobb1eMqOCuJdbuSin/KJkkZr7n24/UNV+Lcz/0Dhepf3r2p9PaGwpRpAWej7A+gQnny4h8mGhpFl4giKkg==}
+    peerDependencies:
+      commander: ~12.0.0
+    dependencies:
+      commander: 12.0.0
     dev: false
 
   /@cspotcode/source-map-support@0.8.1:
@@ -2900,6 +2822,21 @@ packages:
       react: 18.2.0
     dev: false
 
+  /@hono/graphql-server@0.4.3(hono@4.2.9):
+    resolution: {integrity: sha512-HSoOeW5F0PdlKaxC5Skc2m6mSML2yXDrVAFJfu0Hifp6igqmhqh8bhY18JgkzLyn5xuAM1/suHORETpUJnA6gQ==}
+    engines: {node: '>=16.0.0'}
+    peerDependencies:
+      hono: '>=3.0.0'
+    dependencies:
+      graphql: 16.8.1
+      hono: 4.2.9
+    dev: false
+
+  /@hono/node-server@1.11.1:
+    resolution: {integrity: sha512-GW1Iomhmm1o4Z+X57xGby8A35Cu9UZLL7pSMdqDBkD99U5cywff8F+8hLk5aBTzNubnsFAvWQ/fZjNwPsEn9lA==}
+    engines: {node: '>=18.14.1'}
+    dev: false
+
   /@hookform/resolvers@3.3.2(react-hook-form@7.47.0):
     resolution: {integrity: sha512-Tw+GGPnBp+5DOsSg4ek3LCPgkBOuOgS5DsDV7qsWNH9LZc433kgsWICjlsh2J9p04H2K66hsXPPb9qn9ILdUtA==}
     peerDependencies:
@@ -3819,8 +3756,8 @@ packages:
     dev: false
     optional: true
 
-  /@ponder/core@0.3.11(@types/node@18.11.18)(typescript@5.1.6)(viem@1.20.0):
-    resolution: {integrity: sha512-xH/2GfIB/KQHV8tvxcXQSkqeSoMxjaJkBeTdh744WZy+Q8pygXlJCzXhqpQ0Lojz5q5wG772rVg8+GRvT7IG9A==}
+  /@ponder/core@0.4.13(@types/node@18.11.18)(typescript@5.1.6)(viem@1.20.0):
+    resolution: {integrity: sha512-bikdE6+WRNi9p26RtRP5awQGGAZoIYmOcyYNZwmRpRF5iv35JE4EqiRxWHu3LY2vAB1XlhKz+suxRClQ19Xq/w==}
     engines: {node: '>=18.14'}
     hasBin: true
     peerDependencies:
@@ -3830,24 +3767,23 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@ast-grep/napi': 0.19.4
       '@babel/code-frame': 7.23.5
-      '@ponder/utils': 0.1.2(typescript@5.1.6)(viem@1.20.0)
+      '@commander-js/extra-typings': 12.0.1(commander@12.0.0)
+      '@hono/graphql-server': 0.4.3(hono@4.2.9)
+      '@hono/node-server': 1.11.1
+      '@ponder/utils': 0.1.4(typescript@5.1.6)(viem@1.20.0)
       abitype: 0.10.3(typescript@5.1.6)
-      async-mutex: 0.4.1
       better-sqlite3: 9.3.0
-      cac: 6.7.14
+      commander: 12.0.0
       conf: 12.0.0
-      cors: 2.8.5
       dataloader: 2.2.2
       detect-package-manager: 3.0.1
       dotenv: 16.3.1
       emittery: 1.0.2
       ethereum-bloom-filters: 1.0.10
-      express: 4.18.2
       glob: 10.3.10
       graphql: 16.8.1
-      graphql-http: 1.22.0(graphql@16.8.1)
+      hono: 4.2.9
       http-terminator: 3.2.0
       ink: 4.4.1(react@18.2.0)
       kysely: 0.26.3
@@ -3882,8 +3818,8 @@ packages:
       - zod
     dev: false
 
-  /@ponder/utils@0.1.2(typescript@5.1.6)(viem@1.20.0):
-    resolution: {integrity: sha512-AQJv59AYSGEBFyCYj7EQEaLGLPrO070pFpYPJfUBI1bx1pDnHDooCkGS6D2KmQLJWjswha9qioICEKQ/Kl1V6A==}
+  /@ponder/utils@0.1.4(typescript@5.1.6)(viem@1.20.0):
+    resolution: {integrity: sha512-NszanAm2DWZqCcv3XMkpgx9mfbMD8qc9ifux6xwWaryJbo9Ofu/zpvU0CIf7192WrrROaXQyWjfXHLf8Lf/YXg==}
     peerDependencies:
       typescript: '>=5.0.4'
       viem: '>=1.16'
@@ -6115,12 +6051,6 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /async-mutex@0.4.1:
-    resolution: {integrity: sha512-WfoBo4E/TbCX1G95XTjbWTE3X2XLG0m1Xbv2cwOtuPdyH9CZvnaA5nCt1ucjaKEgW2A5IF71hxrRhr83Je5xjA==}
-    dependencies:
-      tslib: 2.6.2
-    dev: false
-
   /async-retry@1.3.3:
     resolution: {integrity: sha512-wfr/jstw9xNi/0teMHrRW7dsz3Lt5ARhYNZ2ewpadnhaIp5mbALhOAP+EAdsC7t4Z6wqsDVv9+W6gm1Dk9mEyw==}
     dependencies:
@@ -7000,6 +6930,11 @@ packages:
 
   /comma-separated-tokens@2.0.3:
     resolution: {integrity: sha512-Fu4hJdvzeylCfQPp9SGWidpzrMs7tTrlu6Vb8XGaRGck8QSNZJJp538Wrb60Lax4fPwR64ViY468OIUTbRlGZg==}
+    dev: false
+
+  /commander@12.0.0:
+    resolution: {integrity: sha512-MwVNWlYjDTtOjX5PiD7o5pK0UrFU/OYgcJfjjK4RaHZETNtjJqrZa9Y9ds88+A+f+d5lv+561eZ+yCKoS3gbAA==}
+    engines: {node: '>=18'}
     dev: false
 
   /commander@4.1.1:
@@ -8867,15 +8802,6 @@ packages:
       - utf-8-validate
     dev: true
 
-  /graphql-http@1.22.0(graphql@16.8.1):
-    resolution: {integrity: sha512-9RBUlGJWBFqz9LwfpmAbjJL/8j/HCNkZwPBU5+Bfmwez+1Ay43DocMNQYpIWsWqH0Ftv6PTNAh2aRnnMCBJgLw==}
-    engines: {node: '>=12'}
-    peerDependencies:
-      graphql: '>=0.11 <=16'
-    dependencies:
-      graphql: 16.8.1
-    dev: false
-
   /graphql-request@6.1.0(graphql@16.8.0):
     resolution: {integrity: sha512-p+XPfS4q7aIpKVcgmnZKhMNqhltk20hfXtkaIkTfjjmiKMJ5xrt5c743cL03y/K7y1rg3WrIC49xGiEQ4mxdNw==}
     peerDependencies:
@@ -9085,6 +9011,11 @@ packages:
     resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}
     dependencies:
       react-is: 16.13.1
+    dev: false
+
+  /hono@4.2.9:
+    resolution: {integrity: sha512-59FAv52UxDWUt/NlC0NzrRCjeVCThUnVlqlrKYm+k80XujBu6uJwBIa5gACKKZWobjA0MJ6Vds0I3URKf383Cw==}
+    engines: {node: '>=16.0.0'}
     dev: false
 
   /hosted-git-info@2.8.9:
