@@ -50,7 +50,7 @@ export function UserContextComponent({ children }: { children: ReactNode }) {
 
     if (!data) return
 
-    setUserId(data.records.id)
+    setUserId(BigInt(data.records.id))
     setUsername(data.records.name)
 
     const userChannels = await getUserChannels(data.records.id)

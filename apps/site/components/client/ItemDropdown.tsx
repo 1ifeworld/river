@@ -40,12 +40,12 @@ function isAdminOrAdder({
   channelRoleData,
   itemAddedBy,
 }: {
-  userRid: bigint
+  userRid: string
   channelRoleData: ChannelRoles[]
   itemAddedBy: bigint
 }) {
   // if targetRid was itemAdder, they have remove access
-  if (userRid === itemAddedBy) {
+  if (BigInt(userRid) === itemAddedBy) {
     return true
   }
   // if targetRid wasnt itemAdder, loop through channel roles
@@ -88,7 +88,7 @@ export function ItemDropdown({
     !add?.addedById
       ? false
       : isAdminOrAdder({
-          userRid: targetUserId,
+          userRid: targetUserId.toString(),
           channelRoleData: channel.roles.items,
           itemAddedBy: add.addedById,
         })

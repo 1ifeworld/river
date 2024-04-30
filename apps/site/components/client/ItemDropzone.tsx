@@ -26,7 +26,7 @@ function hasAddAccess({
   targetRid,
 }: {
   roleData: ChannelRoles[]
-  targetRid: bigint
+  targetRid: string
 }) {
   for (let i = 0; i < roleData.length; ++i) {
     const rid = roleData[i].rid
@@ -53,7 +53,7 @@ export function ItemDropzone({ channel }: { channel: Channel }) {
       ? false
       : hasAddAccess({
           roleData: channel.roles.items,
-          targetRid: targetUserId,
+          targetRid: targetUserId.toString(),
         })
 
   const onDrop = async (acceptedFiles: File[]) => {
