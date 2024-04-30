@@ -45,7 +45,7 @@ function isAdminOrAdder({
   itemAddedBy: bigint
 }) {
   // if targetRid was itemAdder, they have remove access
-  if (BigInt(userRid) === itemAddedBy) {
+  if (BigInt(userRid) === BigInt(itemAddedBy)) {
     return true
   }
   // if targetRid wasnt itemAdder, loop through channel roles
