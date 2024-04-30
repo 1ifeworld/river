@@ -136,7 +136,7 @@ export function ItemDropzone({ channel }: { channel: Channel }) {
       if (signMessage && targetUserId && embeddedWallet) {
         const txSuccess = await processBatchCreateAddItemPost({
           signer: embeddedWallet.address as Hex,
-          rid: BigInt(targetUserId),
+          rid: targetUserId,
           itemUri: cid,
           channelId: channel.id,
           privySignMessage: signMessage,
