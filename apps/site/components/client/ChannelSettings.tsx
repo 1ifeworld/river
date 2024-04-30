@@ -57,7 +57,7 @@ export function ChannelSettings({ channel }: ChannelSettingsProps) {
     userRid,
     channelRoleData,
   }: {
-    userRid: bigint
+    userRid: string
     channelRoleData: ChannelRoles[]
   }) {
     // to see if they have admin access for channel
@@ -74,7 +74,7 @@ export function ChannelSettings({ channel }: ChannelSettingsProps) {
     !embeddedWallet?.address || !userId || !channel?.roles?.items
       ? false
       : isAdmin({
-          userRid: userId,
+          userRid: userId.toString(),
           channelRoleData: channel.roles.items,
         })
 
