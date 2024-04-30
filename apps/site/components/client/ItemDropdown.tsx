@@ -88,7 +88,7 @@ export function ItemDropdown({
     !add?.addedById
       ? false
       : isAdminOrAdder({
-          userRid: targetUserId,
+          userRid: BigInt(targetUserId),
           channelRoleData: channel.roles.items,
           itemAddedBy: add.addedById,
         })
