@@ -11,7 +11,7 @@ export default function BaseLayout({
   return (
     <section>
       <div className="fixed top-[var(--header-height)] z-50 w-full">
-        {/* <MarqueeWrapper /> */}
+        <MarqueeWrapper />
       </div>
       <Flex className="px-5 pt-[104px]">
         <div className="hidden md:w-[19%] md:block">

@@ -40,7 +40,7 @@ export default async function Directory({
   return (
     <div className="pt-[104px]">
       <div className="fixed top-[var(--header-height)] z-50 w-full">
-        {/* <MarqueeWrapper /> */}
+        <MarqueeWrapper />
       </div>
       <Flex className="px-5 pb-5 gap-y-[60px] flex-col md:flex-row md:gap-none">
         <div className="md:w-[19%] md:block">

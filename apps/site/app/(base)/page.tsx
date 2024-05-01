@@ -18,7 +18,7 @@ export default async function Home({
   return (
     <>
       <Grid className="grid-cols-2 md:grid-cols-[repeat(auto-fill,_minmax(255px,_1fr))] gap-5">
-        {/* {adds.items.slice(0, 60).map((add, index) =>
+        {adds.items.slice(0, 60).map((add, index) =>
           add.removed ? null : (
             <ItemCard
               key={index}
@@ -37,7 +37,7 @@ export default async function Home({
               }
             />
           ),
-        )} */}
+        )}
       </Grid>
       <Flex className="pt-36 justify-center md:mr-[19%]">
         {/* @ts-ignore */}
