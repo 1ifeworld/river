@@ -23,6 +23,7 @@ export async function MarqueeWrapper() {
         }),
       ),
     )
+
     // fetch metadata for items
     // @ts-ignore
     const { metadata } = await getAddsMetadata(data)
@@ -32,7 +33,7 @@ export async function MarqueeWrapper() {
         const itemMetadata = metadata.data[add.item.uri]
         return {
           userName: usernames[index],
-          itemName: itemMetadata.name,
+          itemName: itemMetadata?.name ?? 'untitled',
           channelName: data[index].channel.name,
           channelId: data[index].channel.id,
           channelIndex: data[index].channelIndex,
