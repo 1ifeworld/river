@@ -12,7 +12,7 @@ export function Marquee({ actions }: { actions: Action[] }) {
       pauseOnHover
     >
       <Typography>Welcome to River -&nbsp;</Typography>
-      <Flex className="gap-x-4">
+      {/* <Flex className="gap-x-4">
         {actions.map((action, index) => (
           <Link
             key={index}
@@ -36,7 +36,7 @@ export function Marquee({ actions }: { actions: Action[] }) {
             </Typography>
           </Link>
         ))}
-      </Flex>
+      </Flex> */}
     </ReactMarquee>
   )
 }

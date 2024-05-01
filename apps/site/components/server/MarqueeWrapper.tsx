@@ -33,10 +33,11 @@ export async function MarqueeWrapper() {
     marqueeActions = data
       .map((add, index) => {
         if (add.removed) return null
-        const itemMetadata = metadata.data[add.item.uri]
+        // const itemMetadata = metadata.data[add.item.uri]
         return {
           userName: usernames[index],
-          itemName: itemMetadata.name ? itemMetadata.name : '-',
+          // itemName: itemMetadata.name ? itemMetadata.name : '-',
+          itemName: 'null item name',
           channelName: data[index].channel.name,
           channelId: data[index].channel.id,
           channelIndex: data[index].channelIndex,
