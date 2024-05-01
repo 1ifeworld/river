@@ -21,7 +21,7 @@ export default function RootLayout({
     <html lang="en" className={`${sfMono.variable}`} suppressHydrationWarning>
       <body>
         <Providers>
-          {/* <Header /> */}
+          <Header />
           <NextTopLoader
             color="#B4B4B4"
             initialPosition={0.08}
