@@ -14,10 +14,10 @@ export default async function Directory({
   searchParams: { [key: string]: string | string[] | undefined }
 }) {
   let channels
-  let users
+  // let users
 
   if (searchParams.view === 'user') {
-    users = await getAllFields({ field: 'name' })
+    // users = await getAllFields({ field: 'name' })
   } else {
     const data = await getMostRecentChannels()
     channels = data.channels
@@ -26,9 +26,9 @@ export default async function Directory({
   if (channels) {
     channels.sort((a, b) => a.name.localeCompare(b.name))
   }
-  if (users) {
-    users.sort((x: string, y: string) => x.localeCompare(y))
-  }
+  // if (users) {
+  //   users.sort((x: string, y: string) => x.localeCompare(y))
+  // }
 
   function checkIsPublic({ roleData }: { roleData: ChannelRoles[] }) {
     for (let i = 0; i < roleData.length; ++i) {
@@ -40,13 +40,13 @@ export default async function Directory({
   return (
     <div className="pt-[104px]">
       <div className="fixed top-[var(--header-height)] z-50 w-full">
-        <MarqueeWrapper />
+        {/* <MarqueeWrapper /> */}
       </div>
       <Flex className="px-5 pb-5 gap-y-[60px] flex-col md:flex-row md:gap-none">
         <div className="md:w-[19%] md:block">
           <Stack className="gap-y-[30px]">
             <Typography>Filter</Typography>
-            <UserChannelToggle />
+            {/* <UserChannelToggle /> */}
           </Stack>
         </div>
         <div className="w-full md:w-[78%]">
@@ -75,7 +75,7 @@ export default async function Directory({
               })}
             </Grid>
           )}
-          {users && (
+          {/* {users && (
             <Grid className="grid-cols-1 md:grid-cols-4 gap-y-[3px]">
               {users.map((user: string) => (
                 <Link
@@ -87,7 +87,7 @@ export default async function Directory({
                 </Link>
               ))}
             </Grid>
-          )}
+          )} */}
         </div>
 
         <div className="hidden md:w-[3%] md:block">{}</div>
