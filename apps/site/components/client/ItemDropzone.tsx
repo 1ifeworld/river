@@ -94,7 +94,7 @@ export function ItemDropzone({ channel }: { channel: Channel }) {
     const { cid } = await w3sUpload(formData)
 
     if (cid) {
-      const uploadedFileName = file.name || 'unnamed'
+      const uploadedFileName = file?.name && 'untitled'
       const contentType = determineContentType(file)
       const contentTypeKey =
         isVideo({ mimeType: contentType }) || isAudio({ mimeType: contentType })
