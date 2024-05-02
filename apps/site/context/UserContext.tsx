@@ -16,7 +16,7 @@ import React, {
 } from 'react'
 import { getUserDataByOwner } from '@/lib'
 import { getUserId } from '@/gql'
-import { Address } from 'viem'
+import type { Address } from 'viem'
 
 const UserContext = createContext<{
   embeddedWallet?: ConnectedWallet
@@ -54,17 +54,17 @@ export function UserContextComponent({ children }: { children: ReactNode }) {
     if (data) {
       // if succcessful from username db, set user id, name, and channels for user
       setUserId(BigInt(data.records.id))
-      setUsername(data.records.name)      
+      setUsername(data.records.name)
       const userChannels = await getUserChannels(data.records.id)
-      if (userChannels) setUserChannels(userChannels)      
+      if (userChannels) setUserChannels(userChannels)
     } else {
       // if not successful from username db, fetch from ponder. means that user may have id
       // but not username yet
       userIdFromDelta = await getUserId({
         custodyAddress: embeddedWallet.address as Address,
-      })  
+      })
       if (!userIdFromDelta.userId) return
-      setUserId(userIdFromDelta.userId)          
+      setUserId(userIdFromDelta.userId)
     }
   }
 

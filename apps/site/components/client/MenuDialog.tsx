@@ -49,7 +49,7 @@ export function MenuDialog() {
             </DialogClose>
           </DialogHeader>
           <Stack className="h-full w-full pt-[52px] items-start gap-y-6">
-          <DialogClose asChild>
+            <DialogClose asChild>
               <Button
                 variant="link"
                 className="w-full h-5 justify-start rounded-none"
@@ -66,7 +66,7 @@ export function MenuDialog() {
                   </Flex>
                 </Link>
               </Button>
-            </DialogClose>            
+            </DialogClose>
             <DialogClose asChild>
               <Button
                 variant="link"
@@ -108,7 +108,10 @@ export function MenuDialog() {
             </DialogClose>
             {!authenticated ? (
               <>
-                <Separator orientation="vertical" className="h-4 border-none bg-0" />
+                <Separator
+                  orientation="vertical"
+                  className="h-4 border-none bg-0"
+                />
                 <DialogClose asChild>
                   <Button
                     variant="link"
