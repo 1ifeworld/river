@@ -18,6 +18,9 @@ jobs:
 
     - name: Setup Biome
       uses: biomejs/setup-biome@v2
+      with:
+        # The version of the Biome CLI to install.
+        version: "^1.6.4"
 
     - name: Run Biome
       # This runs the biome command in the project's directory.
