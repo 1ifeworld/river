@@ -16,15 +16,12 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Print package.json
+      working-directory: .
+      run: cat package.json
+
     - name: Setup Biome
       uses: biomejs/setup-biome@v2
-      with:
-        # The version of the Biome CLI to install.
-        version: "^1.6.4"
-        # This allows the setup action to resolve the biome version to install
-        # from the package.json file in the project's directory. Falls back to
-        # the latest stable version if no version is specified.
-        working-dir: ${{ matrix.project }}
 
     - name: Run Biome
       # This runs the biome command in the project's directory.
