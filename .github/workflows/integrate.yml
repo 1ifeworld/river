@@ -16,10 +16,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Print package.json
-      working-directory: .
-      run: cat package.json
-
     - name: Setup Biome
       uses: biomejs/setup-biome@v2
 
