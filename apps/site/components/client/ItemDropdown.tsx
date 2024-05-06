@@ -192,7 +192,7 @@ export function ItemDropdown({
           disabled={isRemoving || isSubmitting}
           className="focus:outline-none mb-1"
         >
-          <Typography className="hover:font-bold" variant="h2">
+          <Typography className="hover:font-bold leading-none" variant="h2">
             {isRemoving || isSubmitting ? <Loading /> : '...'}
           </Typography>
         </DropdownMenuTrigger>
