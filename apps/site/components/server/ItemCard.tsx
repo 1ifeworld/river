@@ -98,7 +98,9 @@ export async function ItemCard({
           </Flex>
           <Flex className="items-center">
             <Username id={add.addedById} />
-            <span className="text-secondary-foreground">{'·'}</span>
+            <span className="text-secondary-foreground leading-none">
+              {'·'}
+            </span>
             <Link
               href={`/channel/${add.channelId}`}
               className="hover:underline underline-offset-2 transition-all decoration-secondary-foreground truncate"
