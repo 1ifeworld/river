@@ -17,7 +17,7 @@ export default async function Home({
 
   return (
     <>
-      <Grid className="grid-cols-2 md:grid-cols-[repeat(auto-fill,_minmax(255px,_1fr))] gap-x-5 gap-y-[30px]">
+      <Grid className="grid-cols-2 md:grid-cols-[repeat(auto-fill,_minmax(255px,_1fr))] gap-x-5 gap-y-[40px]">
         {adds.items.slice(0, 60).map((add, index) =>
           add.removed ? null : (
             <ItemCard
