@@ -6,6 +6,7 @@ import '../styles/globals.css'
 import { sfMono } from './fonts/fonts'
 import { Providers } from './providers/providers'
 import NextTopLoader from 'nextjs-toploader'
+import Script from 'next/script'
 
 export const metadata: Metadata = {
   title: 'River',
@@ -21,6 +22,14 @@ export default function RootLayout({
     <html lang="en" className={`${sfMono.variable}`} suppressHydrationWarning>
       <body>
         <Providers>
+          <Script id="unregister-service-worker">
+            {`
+            navigator.serviceWorker.getRegistrations().then(registrations => {
+              for (const registration of registrations) {
+                  registration.unregister();
+              }
+            })`}
+          </Script>
           <Header />
           <NextTopLoader
             color="#B4B4B4"
