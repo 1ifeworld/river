@@ -32,11 +32,13 @@ export default async function Channel({
   return (
     <section>
       <div className="fixed top-[var(--header-height)] z-50 w-full">
-        <MarqueeWrapper />
+        {/* <MarqueeWrapper /> */}
       </div>
       <Flex className="px-5 pt-[104px]">
         <div className="hidden md:w-[19%] md:block">
-          <RecentChannels params={params} />
+          <Suspense fallback={<p>Loading recent channels...</p>}>
+            <RecentChannels params={params} />
+          </Suspense>
         </div>
         <div className="w-full md:w-[78%]">
           <Stack>

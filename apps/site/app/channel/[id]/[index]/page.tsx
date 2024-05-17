@@ -20,6 +20,7 @@ import {
 } from '@/lib'
 import { ItemSidebar } from '@/server'
 import { muxClient } from '@/config/mux'
+import { Suspense } from 'react'
 
 const MarkdownRenderer = dynamic(
   () => import('../../../../components/client/renderers/MarkdownRenderer'),
@@ -171,15 +172,19 @@ export default async function ItemPage({
 
   return (
     <Stack className="h-[calc(100dvh-var(--header-height))] md:flex-row ">
+      <Suspense fallback={<p>Loading item...</p>}>
       <div className="bg-[#F3F4F6] w-full h-full md:w-[78%]">{content}</div>
+      </Suspense>
       <Separator className="hidden md:block bg-border" orientation="vertical" />
       <div className="md:overflow-y-auto md:w-[22%]">
-        <ItemSidebar
-          // @ts-ignore
-          itemContext={add}
-          itemMetadata={itemMetadata}
-          view={searchParams.view}
-        />
+        <Suspense fallback={<p>Loading item sidebar...</p>}>
+          <ItemSidebar
+            // @ts-ignore
+            itemContext={add}
+            itemMetadata={itemMetadata}
+            view={searchParams.view}
+          />
+        </Suspense>
       </div>
     </Stack>
   )

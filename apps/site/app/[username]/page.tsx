@@ -4,6 +4,7 @@ import { getDataForUsername } from '@/lib'
 import { ChannelCard } from '@/server'
 import { pluralize, sortChannels } from '@/utils'
 import { ChannelDialog, NewChannelTrigger, UserSettings } from '@/client'
+import { Suspense } from 'react'
 
 export default async function Profile({
   params,
@@ -33,10 +34,12 @@ export default async function Profile({
           <Typography>{params.username}</Typography>
           <UserSettings profileUsername={params.username} />
         </Flex>
-        <Typography className="text-secondary-foreground">
-          {pluralize(sortedChannels.length as number, 'channel', 'channels')},{' '}
-          {pluralize(items?.items?.length as number, 'item', 'items')}
-        </Typography>
+        <Suspense fallback={<p>Loading profile data...</p>}>
+          <Typography className="text-secondary-foreground">
+            {pluralize(sortedChannels.length as number, 'channel', 'channels')},{' '}
+            {pluralize(items?.items?.length as number, 'item', 'items')}
+          </Typography>
+        </Suspense>
       </Stack>
       <Stack className="gap-y-[15px]">
         <Flex className="gap-x-4 items-center">
@@ -48,27 +51,31 @@ export default async function Profile({
         </Flex>
         {/* Channels */}
         {/* mobile view */}
-        <Stack className="md:hidden gap-[10px]">
-          <ChannelDialog trigger={<NewChannelTrigger />} hideTrigger={true} />
-          {sortedChannels.map((channel, index: number) => (
-            // @ts-ignore
-            <ChannelCard channel={channel} width={64} />
-          ))}
-        </Stack>
+        <Suspense fallback={<p>Loading channel cards...</p>}>
+          <Stack className="md:hidden gap-[10px]">
+            <ChannelDialog trigger={<NewChannelTrigger />} hideTrigger={true} />
+            {sortedChannels.map((channel, index: number) => (
+              // @ts-ignore
+              <ChannelCard channel={channel} width={64} />
+            ))}
+          </Stack>
+        </Suspense>
         {/* desktop view  */}
-        <Grid className="hidden md:grid grid-cols-2 md:grid-cols-[repeat(auto-fill,_minmax(255px,_1fr))] gap-5">
-          <ChannelDialog trigger={<NewChannelTrigger />} hideTrigger={true} />
-          {sortedChannels.map((channel, index: number) => (
-            <ChannelCard
-              // @ts-ignore
-              channel={channel}
-              width={256}
-              // @ts-ignore
-              quality={100}
-              orientation={1}
-            />
-          ))}
+        <Suspense fallback={<p>Loading channel cards...</p>}>
+          <Grid className="hidden md:grid grid-cols-2 md:grid-cols-[repeat(auto-fill,_minmax(255px,_1fr))] gap-5">
+            <ChannelDialog trigger={<NewChannelTrigger />} hideTrigger={true} />
+            {sortedChannels.map((channel, index: number) => (
+              <ChannelCard
+                // @ts-ignore
+                channel={channel}
+                width={256}
+                // @ts-ignore
+                quality={100}
+                orientation={1}
+              />
+            ))}
         </Grid>
+        </Suspense>
       </Stack>
     </Stack>
   )
