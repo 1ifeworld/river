@@ -9,6 +9,7 @@ import {
   MarqueeWrapper,
   RecentChannels,
 } from '@/server'
+import { Suspense } from 'react'
 
 export default async function Channel({
   params,
@@ -45,12 +46,14 @@ export default async function Channel({
                 <ChannelBanner channel={channel} />
                 <ViewToggle />
               </Flex>
-              <ChannelItems
-                // @ts-ignore
-                channel={channel}
-                metadata={metadata}
-                view={searchParams.view}
-              />
+              <Suspense fallback={<p>Loading channel items...</p>}>
+                <ChannelItems
+                  // @ts-ignore
+                  channel={channel}
+                  metadata={metadata}
+                  view={searchParams.view}
+                />
+              </Suspense>
             </Stack>
             {/* @ts-ignore */}
             <ChannelDetails channel={channel} />
