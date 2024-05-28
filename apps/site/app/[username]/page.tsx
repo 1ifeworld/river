@@ -47,7 +47,7 @@ export default async function Profile({
           </Typography>
         </Flex>
         {/* Channels */}
-        {/* mobile view */}
+        {/* Mobile */}
         <Stack className="md:hidden gap-[10px]">
           <ChannelDialog trigger={<NewChannelTrigger />} hideTrigger={true} />
           {sortedChannels.map((channel, index: number) => (
@@ -55,7 +55,7 @@ export default async function Profile({
             <ChannelCard channel={channel} width={64} />
           ))}
         </Stack>
-        {/* desktop view  */}
+        {/* Desktop */}
         <Grid className="hidden md:grid grid-cols-2 md:grid-cols-[repeat(auto-fill,_minmax(255px,_1fr))] gap-5">
           <ChannelDialog trigger={<NewChannelTrigger />} hideTrigger={true} />
           {sortedChannels.map((channel, index: number) => (

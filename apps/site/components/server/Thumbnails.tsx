@@ -19,11 +19,11 @@ export function GenericThumbnailLarge({
   return (
     <Stack
       className={cn(
-        'bg-[#E9E9E9] justify-center items-center aspect-square w-full',
+        'bg-[#E9E9E9] justify-center items-center aspect-square w-64',
         className,
       )}
     >
-      <Typography className="text-secondary-foreground md:text-2xl">
+      <Typography className="text-secondary-foreground text-center md:text-2xl">
         {extractFileExtension(text)}
       </Typography>
     </Stack>
@@ -41,7 +41,7 @@ export function GenericThumbnailSmall({
         className,
       )}
     >
-      <Typography className="text-secondary-foreground text-[10px]">
+      <Typography className="text-secondary-foreground text-center text-[10px]">
         {truncateText(extractFileExtension(text), 5, false)}
       </Typography>
     </Stack>
