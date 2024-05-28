@@ -51,7 +51,7 @@ export default async function Directory({
         </div>
         <div className="w-full md:w-[78%]">
           {channels && (
-            <Grid className="grid-cols-1 md:grid-cols-4 gap-y-[3px]">
+            <div className="grid grid-cols-1 md:block md:columns-4 gap-y-[3px]">
               {channels.map((channel) => {
                 // Check public status for each channel
                 const isChannelPublic = !channel?.roles?.items
@@ -59,7 +59,6 @@ export default async function Directory({
                   : checkIsPublic({
                       roleData: channel.roles.items as ChannelRoles[],
                     })
-
                 return (
                   <Link
                     href={`/channel/${channel.id}`}
@@ -73,10 +72,10 @@ export default async function Directory({
                   </Link>
                 )
               })}
-            </Grid>
+            </div>
           )}
           {users && (
-            <Grid className="grid-cols-1 md:grid-cols-4 gap-y-[3px]">
+            <div className="grid grid-cols-1 md:block md:columns-4 gap-y-[3px]">
               {users.map((user: string) => (
                 <Link
                   href={`/${user}`}
@@ -86,10 +85,9 @@ export default async function Directory({
                   <Typography>{user}</Typography>
                 </Link>
               ))}
-            </Grid>
+            </div>
           )}
         </div>
-
         <div className="hidden md:w-[3%] md:block">{}</div>
       </Flex>
     </div>
