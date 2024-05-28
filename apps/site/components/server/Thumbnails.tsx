@@ -19,7 +19,7 @@ export function GenericThumbnailLarge({
   return (
     <Stack
       className={cn(
-        'bg-[#E9E9E9] justify-center items-center aspect-square w-64',
+        'bg-[#E9E9E9] justify-center items-center aspect-square w-full md:w-64',
         className,
       )}
     >

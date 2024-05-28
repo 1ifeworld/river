@@ -82,7 +82,6 @@ export async function ChannelCard({
           width={width}
           height={width}
           className="object-cover aspect-square"
-          unoptimized={true}
         />
       ) : VIDEO_THUMBNAIL_TYPES_TO_RENDER.includes(
           channelCardMetadata?.contentType as string,
