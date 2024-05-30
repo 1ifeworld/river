@@ -1,6 +1,6 @@
-import { Button, Flex, Grid, Stack, Typography } from '@/design-system'
+import { Flex, Grid, Stack, Typography } from '@/design-system'
 import { getChannelsItemsWithUser } from '@/gql'
-import { getDataForUsername } from '@/lib'
+import { getDataForUsername, getItemsWithUserId } from '@/lib'
 import { ChannelCard } from '@/server'
 import { pluralize, sortChannels } from '@/utils'
 import { ChannelDialog, NewChannelTrigger, UserSettings } from '@/client'
@@ -11,6 +11,7 @@ export default async function Profile({
   params: { username: string }
 }) {
   const userData = await getDataForUsername({ username: params.username })
+
   let channels
   let items
 
@@ -22,6 +23,8 @@ export default async function Profile({
     channels = channelsResp
     items = itemsResp
   }
+
+  const { itemsWithUserId } = await getItemsWithUserId(userData.id)
 
   // @ts-ignore
   const sortedChannels = channels?.items ? sortChannels(channels.items) : []
@@ -35,7 +38,7 @@ export default async function Profile({
         </Flex>
         <Typography className="text-secondary-foreground">
           {pluralize(sortedChannels.length as number, 'channel', 'channels')},{' '}
-          {pluralize(items?.items?.length as number, 'item', 'items')}
+          {pluralize(itemsWithUserId as number, 'item', 'items')}
         </Typography>
       </Stack>
       <Stack className="gap-y-[15px]">
