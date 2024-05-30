@@ -11,5 +11,6 @@ export async function getItemsWithUserId(createdById: number) {
     return { itemsWithUserId: res.rows[0].count }
   } catch (err) {
     console.error(err)
+    return { itemsWithUserId: 0 } // Ensure a return on error
   }
 }
