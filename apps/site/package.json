@@ -45,6 +45,7 @@
     "nextjs-toploader": "^1.6.11",
     "p-queue": "^8.0.1",
     "p-retry": "^6.2.0",
+    "pg": "^8.11.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-dropzone": "^14.2.3",
