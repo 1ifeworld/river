@@ -1,5 +1,6 @@
 import { EditMembersInput } from '@/client'
 import { useUserContext } from '@/context'
+import { USER_ID_ZERO } from '@/constants'
 import {
   Button,
   Dialog,
@@ -240,6 +241,17 @@ export function ChannelSettings({ channel }: ChannelSettingsProps) {
     )
   }
 
+  function checkIsPublic({ roleData }: { roleData: ChannelRoles[] }) {
+    for (let i = 0; i < roleData.length; ++i) {
+      if (roleData[i].rid === USER_ID_ZERO && roleData[i].role > 0) return true
+    }
+    return false
+  }
+
+  const isPublic = !channel?.roles?.items
+    ? false
+    : checkIsPublic({ roleData: channel?.roles?.items })
+
   return (
     <Dialog>
       {/* Dropdown logic */}
@@ -267,39 +279,75 @@ export function ChannelSettings({ channel }: ChannelSettingsProps) {
               <Separator />
             </div>
             <DropdownMenuItem>
-              <Button
-                variant="link"
-                onClick={async () => {
-                  if (!embeddedWallet?.address || !userId) return false
-                  setIsConfiguring(true)
-                  // Initialize bool for txn success check
-                  let txSuccess = false
-                  // Generate process roles post
-                  if (signMessage) {
-                    txSuccess = await processEditRolesPost({
-                      rid: userId,
-                      signer: embeddedWallet.address as Hex,
-                      privySignMessage: signMessage,
-                      channelCid: channel.id,
-                      targetRids: [BigInt(0)], // USER_ID_ZERO
-                      roles: [BigInt(1)], // MEMBER
-                    })
-                    if (txSuccess) {
-                      toast.custom((t) => (
-                        <Toast>{'Your channel is now public'}</Toast>
-                      ))
-                      setIsConfiguring(false)
-                    } else {
-                      toast.custom((t) => (
-                        <Toast>{'Error making channel public'}</Toast>
-                      ))
-                      setIsConfiguring(false)
+              {isPublic ? (
+                <Button
+                  variant="link"
+                  onClick={async () => {
+                    if (!embeddedWallet?.address || !userId) return false
+                    setIsConfiguring(true)
+                    // Initialize bool for txn success check
+                    let txSuccess = false
+                    // Generate process roles post
+                    if (signMessage) {
+                      txSuccess = await processEditRolesPost({
+                        rid: userId,
+                        signer: embeddedWallet.address as Hex,
+                        privySignMessage: signMessage,
+                        channelCid: channel.id,
+                        targetRids: [BigInt(USER_ID_ZERO)],
+                        roles: [BigInt(0)], // NONE
+                      })
+                      if (txSuccess) {
+                        toast.custom((t) => (
+                          <Toast>{'Public posts are now disabled'}</Toast>
+                        ))
+                        setIsConfiguring(false)
+                      } else {
+                        toast.custom((t) => (
+                          <Toast>{'Error disabling public posting'}</Toast>
+                        ))
+                        setIsConfiguring(false)
+                      }
                     }
-                  }
-                }}
-              >
-                <Typography>Make channel public</Typography>
-              </Button>
+                  }}
+                >
+                  <Typography>Disable public posting</Typography>
+                </Button>
+              ) : (
+                <Button
+                  variant="link"
+                  onClick={async () => {
+                    if (!embeddedWallet?.address || !userId) return false
+                    setIsConfiguring(true)
+                    // Initialize bool for txn success check
+                    let txSuccess = false
+                    // Generate process roles post
+                    if (signMessage) {
+                      txSuccess = await processEditRolesPost({
+                        rid: userId,
+                        signer: embeddedWallet.address as Hex,
+                        privySignMessage: signMessage,
+                        channelCid: channel.id,
+                        targetRids: [BigInt(USER_ID_ZERO)],
+                        roles: [BigInt(1)], // MEMBER
+                      })
+                      if (txSuccess) {
+                        toast.custom((t) => (
+                          <Toast>{'Your channel is now public'}</Toast>
+                        ))
+                        setIsConfiguring(false)
+                      } else {
+                        toast.custom((t) => (
+                          <Toast>{'Error making channel public'}</Toast>
+                        ))
+                        setIsConfiguring(false)
+                      }
+                    }
+                  }}
+                >
+                  <Typography>Make channel public</Typography>
+                </Button>
+              )}
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
