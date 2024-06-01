@@ -1,5 +1,5 @@
 import { relayPost } from '@/lib'
-import { getTxnInclusion, revalidationHelper } from '@/lib'
+import { getTxnInclusion } from '@/lib'
 import type { SignMessageModalUIOptions } from '@privy-io/react-auth'
 import {
   MessageTypes,
@@ -9,6 +9,7 @@ import {
   remove0xPrefix,
 } from 'scrypt'
 import type { Hash, Hex } from 'viem'
+import { revalidatePath } from 'next/cache'
 
 export async function processEditRolesPost({
   rid,
@@ -70,7 +71,7 @@ export async function processEditRolesPost({
       const txnInclusion = await getTxnInclusion(transactionHash)
 
       if (txnInclusion) {
-        revalidationHelper('/', 'layout')
+        revalidatePath('/', 'layout')
         return true
       } else {
         console.error('Transaction was not successfully included.')

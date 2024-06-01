@@ -39,8 +39,8 @@ import {
   custom,
 } from 'viem'
 import { optimism } from 'viem/chains'
-import { revalidationHelper } from '@/lib'
 import { useRouter } from 'next/navigation'
+import { revalidatePath } from 'next/cache'
 
 interface UsernameDialogProps {
   open: boolean
@@ -142,7 +142,7 @@ export function EditUsernameDialog({ open, setOpen }: UsernameDialogProps) {
     })
     if (resp.success) {
       success = true
-      revalidationHelper('/', 'layout')
+      revalidatePath('/', 'layout')
       router.push(`/${form.getValues().username}`)
     }
     // reset context embeddedWallet + userId + username

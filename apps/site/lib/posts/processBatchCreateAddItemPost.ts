@@ -1,5 +1,4 @@
-import { getTxnInclusion, relayPostBatch, revalidationHelper } from '@/lib'
-import { revalidatePath } from 'next/cache'
+import { getTxnInclusion, relayPostBatch } from '@/lib'
 import { messageToCid } from '@/utils'
 import type { SignMessageModalUIOptions } from '@privy-io/react-auth'
 import {
@@ -11,6 +10,7 @@ import {
   remove0xPrefix,
 } from 'scrypt'
 import { type Hash, type Hex, encodeAbiParameters } from 'viem'
+import { revalidatePath } from 'next/cache'
 
 export async function processBatchCreateAddItemPost({
   signer,
@@ -130,7 +130,6 @@ export async function processBatchCreateAddItemPost({
 
       if (txnInclusion) {
         revalidatePath('/', 'layout')
-        // revalidationHelper('/', 'layout')
         return true
       } else {
         console.error('Transaction was not successfully included.')

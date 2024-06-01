@@ -1,4 +1,4 @@
-import { getTxnInclusion, relayPostBatch, revalidationHelper } from '@/lib'
+import { getTxnInclusion, relayPostBatch } from '@/lib'
 import type { SignMessageModalUIOptions } from '@privy-io/react-auth'
 import {
   type Post,
@@ -8,7 +8,8 @@ import {
   getExpiration,
   remove0xPrefix,
 } from 'scrypt'
-import { type Hash, type Hex, encodeAbiParameters } from 'viem'
+import { type Hash, type Hex } from 'viem'
+import { revalidatePath } from 'next/cache'
 
 type Diff = {
   channelId: string
@@ -111,7 +112,7 @@ export async function processBatchMoveItemPost({
       const txnInclusion = await getTxnInclusion(transactionHash)
 
       if (txnInclusion) {
-        revalidationHelper('/', 'layout')
+        revalidatePath('/', 'layout')
         return true
       } else {
         console.error('Transaction was not successfully included.')
