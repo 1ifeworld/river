@@ -5,6 +5,8 @@ import { ChannelCard } from '@/server'
 import { pluralize, sortChannels } from '@/utils'
 import { ChannelDialog, NewChannelTrigger, UserSettings } from '@/client'
 
+export const maxDuration = 30 // This function can run for a maximum of 30 seconds
+
 export default async function Profile({
   params,
 }: {
