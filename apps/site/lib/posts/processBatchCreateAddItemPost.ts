@@ -1,4 +1,5 @@
 import { getTxnInclusion, relayPostBatch, revalidationHelper } from '@/lib'
+import { revalidatePath } from 'next/cache'
 import { messageToCid } from '@/utils'
 import type { SignMessageModalUIOptions } from '@privy-io/react-auth'
 import {
@@ -128,7 +129,8 @@ export async function processBatchCreateAddItemPost({
       const txnInclusion = await getTxnInclusion(transactionHash)
 
       if (txnInclusion) {
-        revalidationHelper('/', 'layout')
+        revalidatePath('/', 'layout')
+        // revalidationHelper('/', 'layout')
         return true
       } else {
         console.error('Transaction was not successfully included.')
