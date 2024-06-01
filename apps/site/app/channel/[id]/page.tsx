@@ -10,6 +10,8 @@ import {
   RecentChannels,
 } from '@/server'
 
+export const maxDuration = 30 // This function can run for a maximum of 30 seconds
+
 export default async function Channel({
   params,
   searchParams,

@@ -3,6 +3,8 @@ import { getAllAdds } from '@/gql'
 import { ItemCard } from '@/server'
 import { ItemDropdown, PaginationControls } from '@/client'
 
+export const maxDuration = 30 // This function can run for a maximum of 30 seconds
+
 export default async function Home({
   searchParams,
 }: { searchParams: { [key: string]: string | string[] | undefined } }) {
