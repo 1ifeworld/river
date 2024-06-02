@@ -63,7 +63,7 @@ export function ChannelCard2({
               />
             ) : (
               <Flex className="bg-[#E9E9E9] justify-center items-center aspect-square w-16">
-                <Typography className="text-secondary-foreground text-sm md:text-base">
+                <Typography className="text-secondary-foreground text-sm">
                   No items
                 </Typography>
               </Flex>
