@@ -97,7 +97,10 @@ export function TextFallback({ size }: { size?: 'xs' | 'sm' | 'md' | 'lg' }) {
   return (
     <div
       className={cn(
-        'w-1/3 md:1/4 aspect-square mt-1',
+        'w-1/3 md:1/4 aspect-square mt-6',
+        size === 'xs' && 'mt-1',
+        size === 'sm' && 'mt-1',
+        size === 'md' && 'mt-1',
         size === 'lg' && 'mr-1 mt-4',
       )}
     >
@@ -119,7 +122,10 @@ export function ThreeDFallback({ size }: { size?: 'xs' | 'sm' | 'md' | 'lg' }) {
   return (
     <div
       className={cn(
-        'w-1/3 md:1/4 aspect-square mt-1',
+        'w-1/3 md:1/4 aspect-square mt-6',
+        size === 'xs' && 'mt-1',
+        size === 'sm' && 'mt-1',
+        size === 'md' && 'mt-1',
         size === 'lg' && 'mr-1 mt-4',
       )}
     >
