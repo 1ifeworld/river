@@ -5,7 +5,7 @@ import {
 import { Flex, Stack, Typography, Public } from '@/design-system'
 import type { Channel, ChannelRoles } from '@/gql'
 import Image from 'next/image'
-import { GenericThumbnailSmall } from '@/server'
+import { ItemFallback } from '@/server'
 import { w3sUrlFromCid } from '@/lib'
 import { UsernameNoFetch } from '@/client'
 import { truncateText } from '@/utils'
@@ -57,9 +57,9 @@ export function ChannelCard2({
         ) : (
           <div className="w-full">
             {metadata?.length ? (
-              <GenericThumbnailSmall
-                className="h-16 w-16 md:w-16 md:h-16"
-                text={metadata[0]?.itemMetadata?.contentType as string}
+              <ItemFallback
+                contentType={metadata[0]?.itemMetadata?.contentType as string}
+                size="md"
               />
             ) : (
               <Flex className="bg-[#E9E9E9] justify-center items-center aspect-square w-16">

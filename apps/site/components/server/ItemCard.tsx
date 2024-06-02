@@ -5,7 +5,7 @@ import {
 import { Flex, Stack, Typography, Public } from '@/design-system'
 import type { Adds, ChannelRoles } from '@/gql'
 import { type MediaAssetObject, w3sUrlFromCid, isVideo } from '@/lib'
-import { GenericThumbnailLarge, Username } from '@/server'
+import { Username, ItemFallback } from '@/server'
 import { kv } from '@vercel/kv'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -79,7 +79,7 @@ export async function ItemCard({
               priority={true}
             />
           ) : (
-            <GenericThumbnailLarge text={itemMetadata?.contentType as string} />
+            <ItemFallback contentType={itemMetadata?.contentType as string} />
           )}
         </Stack>
       </Link>
