@@ -23,8 +23,6 @@ export async function ItemCard({
     add?.item?.uri as string,
   )
 
-  console.log('Item metadata', itemMetadata?.contentType)
-
   const videoThumbnail = {
     isVideo: isVideo({ mimeType: itemMetadata?.contentType as string }),
     thumbnailReady: false,

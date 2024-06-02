@@ -113,16 +113,9 @@ export async function ChannelCard({
           </Typography>
         </Flex>
       ) : (
-        // <GenericThumbnailLarge
-        //   className={`${
-        //     orientation === 0 ? `h-${width / 4} w-${width / 4}` : ''
-        //   }`}
-        //   text={channelCardMetadata?.contentType as string}
-        // />
         <ItemFallback
           contentType={channelCardMetadata?.contentType as string}
-          size="lg"
-          // size={orientation === 0 ? `h-${width / 4} w-${width / 4}` }
+          size={orientation === 0 ? 'md' : 'lg'}
         />
       )}
       {/* Channel name & creator */}
