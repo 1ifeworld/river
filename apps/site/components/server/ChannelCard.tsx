@@ -9,7 +9,7 @@ import { truncateText } from '@/utils'
 import { Flex, Stack, Typography, Public } from '@/design-system'
 import type { Adds, Channel, ChannelRoles } from '@/gql'
 import { type MediaAssetObject, w3sUrlFromCid } from '@/lib'
-import { GenericThumbnailLarge, Username } from '@/server'
+import { ItemFallback, Username } from '@/server'
 import { kv } from '@vercel/kv'
 import { muxClient } from '@/config/mux'
 import { isVideo } from '@/lib'
@@ -113,11 +113,16 @@ export async function ChannelCard({
           </Typography>
         </Flex>
       ) : (
-        <GenericThumbnailLarge
-          className={`${
-            orientation === 0 ? `h-${width / 4} w-${width / 4}` : ''
-          }`}
-          text={channelCardMetadata?.contentType as string}
+        // <GenericThumbnailLarge
+        //   className={`${
+        //     orientation === 0 ? `h-${width / 4} w-${width / 4}` : ''
+        //   }`}
+        //   text={channelCardMetadata?.contentType as string}
+        // />
+        <ItemFallback
+          contentType={channelCardMetadata?.contentType as string}
+          size="lg"
+          // size={orientation === 0 ? `h-${width / 4} w-${width / 4}` }
         />
       )}
       {/* Channel name & creator */}

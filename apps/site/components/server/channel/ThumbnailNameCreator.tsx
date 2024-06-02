@@ -2,7 +2,7 @@ import { Stack, Typography } from '@/design-system'
 import type { Item } from '@/gql'
 import { ipfsUrlToCid, w3sUrlFromCid } from '@/lib'
 import { VIDEO_THUMBNAIL_TYPES_TO_RENDER } from 'constants/thumbnails'
-import { GenericThumbnailSmall, Username } from '@/server'
+import { ItemFallback, Username } from '@/server'
 import { truncateText } from '@/utils'
 import Image from 'next/image'
 import { muxClient } from '@/config/mux'
@@ -89,9 +89,10 @@ export async function ThumbnailNameCreator({
           />
         </div>
       ) : (
-        <GenericThumbnailSmall
+        <ItemFallback
+          contentType={itemMetadata?.contentType as string}
           className="hover:cursor-pointer"
-          text={itemMetadata?.contentType as string}
+          size="xs"
         />
       )}
       <Stack className="gap-y-[3px]">
