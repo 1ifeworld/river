@@ -100,13 +100,9 @@ export async function ChannelCard({
         />
       ) : !lastNonRemovedItem ? (
         <Flex
-          className={
-            orientation === 0
-              ? `bg-[#E9E9E9] justify-center items-center aspect-square w-${
-                  width / 4
-                }`
-              : 'bg-[#E9E9E9] justify-center items-center aspect-square'
-          }
+          className={`bg-[#E9E9E9] justify-center items-center aspect-square ${
+            orientation === 0 ? `w-${width / 4}` : 'w-64'
+          }`}
         >
           <Typography
             className={`text-secondary-foreground ${
