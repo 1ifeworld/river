@@ -32,8 +32,6 @@ export async function ChannelCard({
     channel?.adds?.items ?? []
   ).find((item) => !item.removed)
 
-  if (!lastNonRemovedItem) return null
-
   // Access the metadata of the most recent non-removed item and update with Mux processing status if it's a video
   const channelCardMetadata = await kv.get<
     Pick<MediaAssetObject, 'value'>['value']
