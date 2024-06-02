@@ -32,19 +32,25 @@ export async function ChannelCard({
     channel?.adds?.items ?? []
   ).find((item) => !item.removed)
 
-  // Access the metadata of the most recent non-removed item and update with Mux processing status if it's a video
-  const channelCardMetadata = await kv.get<
-    Pick<MediaAssetObject, 'value'>['value']
-  >(lastNonRemovedItem?.item.uri as string)
-  if (
-    channelCardMetadata &&
-    isVideo({ mimeType: channelCardMetadata.contentType })
-  ) {
-    if (muxClient) {
-      const { status } = await muxClient.video.assets.retrieve(
-        channelCardMetadata?.muxAssetId as string,
-      )
-      channelCardMetadata.muxAssetStatus = status
+  let channelCardMetadata
+
+  if (lastNonRemovedItem) {
+    // Retrieve metadata only if there is a non-removed item
+    channelCardMetadata = await kv.get<
+      Pick<MediaAssetObject, 'value'>['value']
+    >(lastNonRemovedItem.item.uri as string)
+
+    // Update with Mux processing status if it's a video
+    if (
+      channelCardMetadata &&
+      isVideo({ mimeType: channelCardMetadata.contentType })
+    ) {
+      if (muxClient) {
+        const { status } = await muxClient.video.assets.retrieve(
+          channelCardMetadata.muxAssetId as string,
+        )
+        channelCardMetadata.muxAssetStatus = status
+      }
     }
   }
 
@@ -92,6 +98,24 @@ export async function ChannelCard({
           width={width}
           height={width}
         />
+      ) : !lastNonRemovedItem ? (
+        <Flex
+          className={
+            orientation === 0
+              ? `bg-[#E9E9E9] justify-center items-center aspect-square w-${
+                  width / 4
+                }`
+              : 'bg-[#E9E9E9] justify-center items-center aspect-square'
+          }
+        >
+          <Typography
+            className={`text-secondary-foreground ${
+              orientation === 0 ? 'text-sm' : ''
+            }`}
+          >
+            No items
+          </Typography>
+        </Flex>
       ) : (
         <GenericThumbnailLarge
           className={`${
@@ -100,6 +124,7 @@ export async function ChannelCard({
           text={channelCardMetadata?.contentType as string}
         />
       )}
+      {/* Channel name & creator */}
       <Stack className="gap-y-[3px]">
         <Link
           href={`/channel/${channel.id}`}
