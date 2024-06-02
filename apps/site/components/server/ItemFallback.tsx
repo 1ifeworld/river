@@ -97,8 +97,8 @@ export function TextFallback({ size }: { size?: 'xs' | 'sm' | 'md' | 'lg' }) {
   return (
     <div
       className={cn(
-        'w-1/3 md:1/4 aspect-square md:mr-1 mt-1',
-        size === 'lg' && 'mt-4',
+        'w-1/3 md:1/4 aspect-square mt-1',
+        size === 'lg' && 'mr-1 mt-4',
       )}
     >
       <svg viewBox="0 0 83 54" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -119,8 +119,8 @@ export function ThreeDFallback({ size }: { size?: 'xs' | 'sm' | 'md' | 'lg' }) {
   return (
     <div
       className={cn(
-        'w-1/3 md:1/4 aspect-square md:mr-1 mt-1',
-        size === 'lg' && 'mt-4',
+        'w-1/3 md:1/4 aspect-square mt-1',
+        size === 'lg' && 'mr-1 mt-4',
       )}
     >
       <svg viewBox="0 0 77 54" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -140,10 +140,7 @@ export function ThreeDFallback({ size }: { size?: 'xs' | 'sm' | 'md' | 'lg' }) {
 export function Unsupported({ size }: { size?: 'xs' | 'sm' | 'md' | 'lg' }) {
   return (
     <div
-      className={cn(
-        'w-1/6 aspect-square md:mr-1 mt-1',
-        size === 'lg' && 'mt-4',
-      )}
+      className={cn('w-1/6 aspect-square mt-1', size === 'lg' && 'mr-1 mt-4')}
     >
       <svg viewBox="0 0 33 54" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
