@@ -21,7 +21,7 @@ type Register = {
   to: string
   recovery: string
   deadline: number
-  sig: string 
+  sig: string
 }
 
 type PostBatchFunction = {
@@ -59,17 +59,18 @@ export const generatePostTxnInput = (post: Post) => ({
 })
 
 export const generateIdRegistryInput = (register: Register) => ({
-    projectId: projectId,
-    contractAddress: addresses.idRegistry.optimism,
-    chainId: 10,
-    functionSignature: 'registerFor(address to, address recovery, uint256 deadline, bytes sig)',
-    args: {
-      to: register.to,
-      recovery: register.recovery,
-      deadline: register.deadline,
-      sig: register.sig,
-    },
-  })
+  projectId: projectId,
+  contractAddress: addresses.idRegistry.optimism,
+  chainId: 11155420,
+  functionSignature:
+    'registerFor(address to, address recovery, uint256 deadline, bytes sig)',
+  args: {
+    to: register.to,
+    recovery: register.recovery,
+    deadline: register.deadline,
+    sig: register.sig,
+  },
+})
 
 const apiKey = process.env.SYNDICATE_API_KEY
 

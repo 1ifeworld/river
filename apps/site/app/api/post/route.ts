@@ -2,7 +2,7 @@ import type { NextRequest } from 'next/server'
 import {
   syndicateClient,
   generatePostTxnInput,
-  projectId
+  projectId,
 } from '@/config/syndicateClient'
 import { waitUntilTx, authToken } from '@/lib'
 

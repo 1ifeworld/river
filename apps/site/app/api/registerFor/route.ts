@@ -1,7 +1,10 @@
 import { optimismPubClient } from '@/config/publicClient'
 import type { NextRequest } from 'next/server'
 import { type Hex, decodeAbiParameters } from 'viem'
-import { syndicateClient, generateIdRegistryInput } from '@/config/syndicateClient'
+import {
+  syndicateClient,
+  generateIdRegistryInput,
+} from '@/config/syndicateClient'
 
 export const maxDuration = 30 // This function can run for a maximum of 30 seconds
 
@@ -29,9 +32,10 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const registerTx = await syndicateClient.officialActions.transact.sendTransaction(
-      generateIdRegistryInput({ to, recovery, deadline, sig })
-    )
+    const registerTx =
+      await syndicateClient.officialActions.transact.sendTransaction(
+        generateIdRegistryInput({ to, recovery, deadline, sig }),
+      )
 
     const txnReceipt = await optimismPubClient.waitForTransactionReceipt({
       hash: registerTx.transactionId as Hex,
