@@ -25,6 +25,102 @@ type User = {
   sig: string
 }
 
+export interface TransactionAttempt {
+  block: number
+  blockCreatedAt: string
+  chainId: number
+  createdAt: string
+  hash: string
+  nonce: number
+  reverted: boolean
+  signedTxn: string
+  status: string
+  transactionId: string
+  updatedAt: string
+  walletAddress: string
+}
+
+export interface SyndicateApiResponse {
+  chainId: number
+  contractAddress: string
+  createdAt: string
+  data: string
+  decodedData: object
+  functionSignature: string
+  invalid: boolean
+  projectId: string
+  transactionAttempts: TransactionAttempt[]
+  transactionId: string
+  updatedAt: string
+  value: string
+}
+
+export interface WaitUntilTxOptions {
+  projectID: string
+  txID: string
+  authToken: string
+  maxAttempts?: number
+  every?: number
+}
+
+export const authToken = process.env.SYNDICATE_API_KEY
+
+export const getTransactionRequest = async ({
+  projectID,
+  txID,
+  authToken,
+}: Pick<WaitUntilTxOptions, 'projectID' | 'txID'> & { authToken: string }) => {
+  const response = await fetch(
+    `https://api.syndicate.io/wallet/project/${projectID}/request/${txID}`,
+    {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${authToken}` },
+    },
+  )
+  if (!response.ok) {
+    throw new Error(`Failed to get transaction request: ${response.statusText}`)
+  }
+  return response.json()
+}
+
+export async function waitUntilTx({
+  projectID,
+  txID,
+  authToken,
+  maxAttempts = 20,
+  every = 1000,
+}: WaitUntilTxOptions) {
+  let currAttempts = 0
+  let transactionHash = null
+
+  while (!transactionHash && currAttempts < maxAttempts) {
+    const txAttempts = (
+      await getTransactionRequest({ projectID, txID, authToken })
+    )?.transactionAttempts
+
+    console.log({ txAttempts })
+
+    if (txAttempts && txAttempts.length > 0) {
+      const lastAttempt = txAttempts[txAttempts.length - 1]
+      if (lastAttempt.status === 'PENDING' && !lastAttempt.reverted) {
+        transactionHash = lastAttempt.hash
+        break
+      }
+    }
+
+    currAttempts++
+    if (!transactionHash && currAttempts < maxAttempts) {
+      await new Promise((resolve) => setTimeout(resolve, every))
+    }
+  }
+
+  if (!transactionHash) {
+    throw new Error('Transaction not found within maximum attempts')
+  }
+
+  return transactionHash
+}
+
 /* API ROUTES */
 
 // This is in to help with serialization of bigints during json stringify

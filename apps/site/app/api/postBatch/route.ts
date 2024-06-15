@@ -1,43 +1,49 @@
-import { novaPubClient } from '@/config/publicClient'
-import { Defender } from '@openzeppelin/defender-sdk'
-import { ethers } from 'ethers'
 import type { NextRequest } from 'next/server'
-import { addresses, postGatewayABI } from 'scrypt'
-import type { Hex } from 'viem'
+import {
+  syndicateClient,
+  generatePostBatchTxnInput,
+  projectId,
+} from '@/config/syndicateClient'
+import { waitUntilTx, authToken } from '@/lib'
 
 export const maxDuration = 30 // This function can run for a maximum of 30 seconds
 
 export async function POST(req: NextRequest) {
   const postsArray = await req.json()
-  console.log({ postsArray })
 
-  const credentials = {
-    relayerApiKey: process.env.NONCE_API_UNO,
-    relayerApiSecret: process.env.NONCE_SECRET_UNO,
+  if (!syndicateClient) {
+    return new Response(
+      JSON.stringify({
+        success: false,
+        hash: null,
+        error: 'Syndicate client not initialized',
+      }),
+      {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      },
+    )
   }
 
   try {
-    const defenderClient = new Defender(credentials)
-    const provider = defenderClient.relaySigner.getProvider()
-    const signer = defenderClient.relaySigner.getSigner(provider, {
-      speed: 'fast',
+    const postTx =
+      await syndicateClient.officialActions.transact.sendTransaction(
+        generatePostBatchTxnInput(postsArray),
+      )
+
+    const successfulTxHash = await waitUntilTx({
+      projectID: projectId as string,
+      txID: postTx.transactionId,
+      authToken: authToken as string,
     })
 
-    const postGateway = new ethers.Contract(
-      addresses.postGateway.nova,
-      postGatewayABI,
-      signer as unknown as ethers.Signer,
+    return new Response(
+      JSON.stringify({ success: true, hash: successfulTxHash }),
+      {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      },
     )
-
-    const tx = await postGateway.postBatch(postsArray)
-    await novaPubClient.waitForTransactionReceipt({
-      hash: tx.hash as Hex,
-    })
-
-    return new Response(JSON.stringify({ success: true, hash: tx.hash }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    })
   } catch (error) {
     let errorMessage = 'Unknown error'
     let statusCode = 500
