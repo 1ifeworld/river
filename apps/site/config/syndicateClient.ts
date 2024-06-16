@@ -29,9 +29,7 @@ type PostBatchFunction = {
 }
 
 export const projectIdPost = process.env.SYNDICATE_PROJECT_ID_POSTGATEWAY!
-export const projectIdRegistry = process.env.SYNDICATE_PROJECT_ID_REGISTRY!
-
-
+export const projectIdRegistry = process.env.SYNDICATE_PROJECT_ID_IDREGISTRY!
 
 export const generatePostBatchTxnInput = (postsArray: PostBatchFunction) => ({
   projectId: projectIdPost,
@@ -72,7 +70,7 @@ export const generateIdRegistryInput = (register: Register) => ({
 const apiKey = process.env.SYNDICATE_API_KEY
 
 export const syndicateClient =
-  !projectIdRegistry|| projectIdPost|| !apiKey
+  !projectIdRegistry || projectIdPost || !apiKey
     ? null
     : {
         officialActions: new SyndicateClient({
@@ -82,4 +80,3 @@ export const syndicateClient =
         generatePostBatchTxnInput,
         generateIdRegistryInput,
       }
-
