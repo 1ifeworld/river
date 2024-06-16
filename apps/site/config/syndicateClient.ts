@@ -28,8 +28,10 @@ type PostBatchFunction = {
   posts: Post[]
 }
 
-export const projectIdPost = process.env.SYNDICATE_PROJECT_ID_POSTGATEWAY!
-export const projectIdRegistry = process.env.SYNDICATE_PROJECT_ID_IDREGISTRY!
+export const projectIdPost =
+  process.env.SYNDICATE_PROJECT_ID_POSTGATEWAY ?? 'Error'
+export const projectIdRegistry =
+  process.env.SYNDICATE_PROJECT_ID_IDREGISTRY ?? 'Error'
 
 export const generatePostBatchTxnInput = (postsArray: PostBatchFunction) => ({
   projectId: projectIdPost,
