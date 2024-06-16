@@ -83,14 +83,3 @@ export const syndicateClient =
         generateIdRegistryInput,
       }
 
-if (!projectIdRegistry|| projectIdPost || !apiKey) {
-  throw new Error(
-    'Missing SYNDICATE_PROJECT_ID_POSTGATEWAY or SYNDICATE_API_KEY in environment variables.',
-  )
-}
-
-if (!projectIdRegistry|| projectIdPost || !apiKey) {
-  throw new Error(
-    'Missing SYNDICATE_PROJECT_ID_POSTGATEWAY or SYNDICATE_API_KEY in environment variables.',
-  )
-}
