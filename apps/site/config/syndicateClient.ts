@@ -28,16 +28,13 @@ type PostBatchFunction = {
   posts: Post[]
 }
 
-export const projectId = process.env.SYNDICATE_PROJECT_ID_POSTGATEWAY
+export const projectIdPost = process.env.SYNDICATE_PROJECT_ID_POSTGATEWAY!
+export const projectIdRegistry = process.env.SYNDICATE_PROJECT_ID_REGISTRY!
 
-if (!projectId) {
-  throw new Error(
-    'SYNDICATE_PROJECT_ID_POSTGATEWAY is not defined in environment variables.',
-  )
-}
+
 
 export const generatePostBatchTxnInput = (postsArray: PostBatchFunction) => ({
-  projectId: projectId,
+  projectId: projectIdPost,
   contractAddress: addresses.postGateway.nova,
   chainId: 42170,
   functionSignature:
@@ -48,7 +45,7 @@ export const generatePostBatchTxnInput = (postsArray: PostBatchFunction) => ({
 })
 
 export const generatePostTxnInput = (post: Post) => ({
-  projectId: projectId,
+  projectId: projectIdPost,
   contractAddress: addresses.postGateway.nova,
   chainId: 42170,
   functionSignature:
@@ -59,7 +56,7 @@ export const generatePostTxnInput = (post: Post) => ({
 })
 
 export const generateIdRegistryInput = (register: Register) => ({
-  projectId: projectId,
+  projectId: projectIdRegistry,
   contractAddress: addresses.idRegistry.optimism,
   chainId: 11155420,
   functionSignature:
@@ -75,25 +72,24 @@ export const generateIdRegistryInput = (register: Register) => ({
 const apiKey = process.env.SYNDICATE_API_KEY
 
 export const syndicateClient =
-  !projectId || !apiKey
+  !projectIdRegistry|| projectIdPost|| !apiKey
     ? null
     : {
         officialActions: new SyndicateClient({
           token: () => apiKey,
         }),
-        projectId: projectId,
         generatePostTxnInput,
         generatePostBatchTxnInput,
         generateIdRegistryInput,
       }
 
-if (!projectId || !apiKey) {
+if (!projectIdRegistry|| projectIdPost || !apiKey) {
   throw new Error(
     'Missing SYNDICATE_PROJECT_ID_POSTGATEWAY or SYNDICATE_API_KEY in environment variables.',
   )
 }
 
-if (!projectId || !apiKey) {
+if (!projectIdRegistry|| projectIdPost || !apiKey) {
   throw new Error(
     'Missing SYNDICATE_PROJECT_ID_POSTGATEWAY or SYNDICATE_API_KEY in environment variables.',
   )

@@ -4,7 +4,7 @@ import { type Hex, decodeAbiParameters } from 'viem'
 import {
   syndicateClient,
   generateIdRegistryInput,
-  projectId,
+  projectIdRegistry,
 } from '@/config/syndicateClient'
 import { waitUntilTx, authToken } from '@/lib'
 
@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
       )
 
     const successfulTxHash = await waitUntilTx({
-      projectID: projectId as string,
+      projectID: projectIdRegistry as string,
       txID: registerTx.transactionId,
       authToken: authToken as string,
     })

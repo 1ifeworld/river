@@ -2,7 +2,7 @@ import type { NextRequest } from 'next/server'
 import {
   syndicateClient,
   generatePostBatchTxnInput,
-  projectId,
+  projectIdPost,
 } from '@/config/syndicateClient'
 import { waitUntilTx, authToken } from '@/lib'
 
@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
       )
 
     const successfulTxHash = await waitUntilTx({
-      projectID: projectId as string,
+      projectID: projectIdPost as string,
       txID: postTx.transactionId,
       authToken: authToken as string,
     })

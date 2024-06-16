@@ -1,7 +1,7 @@
 import {
   syndicateClient,
   generatePostTxnInput,
-  projectId,
+  projectIdPost,
 } from '@/config/syndicateClient'
 import { ethers } from 'ethers'
 import type { NextRequest } from 'next/server'
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
       )
 
     const successfulTxHash = await waitUntilTx({
-      projectID: projectId as string,
+      projectID: projectIdPost as string,
       txID: postTx.transactionId,
       authToken: authToken as string,
     })
