@@ -9,7 +9,6 @@ import { addresses, postGatewayABI } from 'scrypt'
 import type { Hex } from 'viem'
 import { waitUntilTx, authToken } from '@/lib'
 
-
 export const maxDuration = 30 // This function can run for a maximum of 30 seconds
 
 export async function POST(req: NextRequest) {

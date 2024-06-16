@@ -4,10 +4,9 @@ import { type Hex, decodeAbiParameters } from 'viem'
 import {
   syndicateClient,
   generateIdRegistryInput,
-  projectId
+  projectId,
 } from '@/config/syndicateClient'
 import { waitUntilTx, authToken } from '@/lib'
-
 
 export const maxDuration = 30 // This function can run for a maximum of 30 seconds
 
@@ -40,12 +39,11 @@ export async function POST(req: NextRequest) {
         generateIdRegistryInput({ to, recovery, deadline, sig }),
       )
 
-      const successfulTxHash = await waitUntilTx({
-        projectID: projectId as string,
-        txID: registerTx.transactionId,
-        authToken: authToken as string,
-      })
-
+    const successfulTxHash = await waitUntilTx({
+      projectID: projectId as string,
+      txID: registerTx.transactionId,
+      authToken: authToken as string,
+    })
 
     const [rid] = decodeAbiParameters(
       [
