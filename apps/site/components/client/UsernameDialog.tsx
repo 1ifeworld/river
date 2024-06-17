@@ -102,7 +102,7 @@ export function UsernameDialog({ open, setOpen }: UsernameDialogProps) {
     const ID_REGISTRY_EIP_712_DOMAIN = {
       name: 'River IdRegistry',
       version: '1',
-      chainId: 10,
+      chainId: 11155420,
       verifyingContract: addresses.idRegistry.optimism,
     } as const
     const REGISTER_TYPE = [
