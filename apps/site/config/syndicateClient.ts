@@ -76,9 +76,9 @@ export const syndicateClient =
     ? null
     : {
         officialActions: new SyndicateClient({
-          token: () => apiKey
+          token: () => apiKey,
         }),
-        projectId: projectIdPost! || projectIdRegistry!,
+        projectId: projectIdPost || projectIdRegistry,
         generatePostTxnInput,
         generatePostBatchTxnInput,
         generateIdRegistryInput,
