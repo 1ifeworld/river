@@ -1,6 +1,6 @@
 import { createConfig } from '@ponder/core'
 import { addresses, idRegistryABI, postGatewayABI } from 'scrypt'
-import { http } from 'viem'
+import { Hex, http } from 'viem'
 
 export default createConfig({
   networks: {
@@ -23,7 +23,7 @@ export default createConfig({
     PostGateway: {
       network: 'arbitrumNova',
       abi: postGatewayABI,
-      address: addresses.postGateway.nova,
+      address: process.env.NEXT_PUBLIC_POSTGATEWAY as Hex,
       startBlock: 45799650, // River genesis
     },    
   },

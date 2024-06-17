@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     })
 
     const postGateway = new ethers.Contract(
-      addresses.postGateway.nova,
+      process.env.NEXT_PUBLIC_POSTGATEWAY as Hex,
       postGatewayABI,
       signer as unknown as ethers.Signer,
     )
