@@ -14,7 +14,7 @@ export const addresses: AddressBook = {
   // },
   // optimism sepolia
   idRegistry: {
-    optimism: '0xCd1f2a68D79592Ce047091d35DD804Fa6B07d125',
+    optimism: '0xc5799be72019c0b79a176bb386644b8be3b58590',
   },
   postGateway: {
     nova: '0x423a602F5e551A25b28eb33eB56B961590aD5290',
