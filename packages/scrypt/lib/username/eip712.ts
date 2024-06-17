@@ -1,10 +1,10 @@
 import { addresses } from '../../constants'
-import { optimism } from 'viem/chains'
+import { optimism, optimismSepolia } from 'viem/chains'
 
 export const ID_REGISTRY_EIP_712_DOMAIN = {
   name: 'River IdRegistry',
   version: '1',
-  chainId: optimism.id,
+  chainId: optimismSepolia.id,
   verifyingContract: addresses.idRegistry.optimism,
 } as const
 
