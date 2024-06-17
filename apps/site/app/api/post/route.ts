@@ -1,5 +1,5 @@
 import {
-  syndicateClient,
+  syndicateClientPost,
   generatePostTxnInput,
   projectIdPost,
 } from '@/config/syndicateClient'
@@ -14,7 +14,7 @@ export const maxDuration = 30 // This function can run for a maximum of 30 secon
 export async function POST(req: NextRequest) {
   const post = await req.json()
 
-  if (!syndicateClient) {
+  if (!syndicateClientPost) {
     return new Response(
       JSON.stringify({
         success: false,
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
   }
   try {
     const postTx =
-      await syndicateClient.officialActions.transact.sendTransaction(
+      await syndicateClientPost.officialActions.transact.sendTransaction(
         generatePostTxnInput(post),
       )
 

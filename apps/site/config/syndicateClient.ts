@@ -69,17 +69,29 @@ export const generateIdRegistryInput = (register: Register) => ({
   },
 })
 
-const apiKey = process.env.SYNDICATE_API_KEY
+const apiPostKey = process.env.SYNDICATE_POST_API_KEY
+const apiIdKey = process.env.SYNDICATE_ID_API_KEY
 
-export const syndicateClient =
-  !projectIdRegistry || !projectIdPost || !apiKey
-    ? null
-    : {
+
+export const syndicateClientPost =
+  projectIdPost !== 'Error' && apiPostKey
+    ? {
         officialActions: new SyndicateClient({
-          token: () => apiKey,
+          token: () => apiPostKey!,
         }),
-        projectId: projectIdPost || projectIdRegistry,
+        projectId: projectIdPost,
         generatePostTxnInput,
         generatePostBatchTxnInput,
+      }
+    : null;
+
+export const syndicateClientIdRegistry =
+  projectIdRegistry !== 'Error' && apiIdKey
+    ? {
+        officialActions: new SyndicateClient({
+          token: () => apiIdKey!,
+        }),
+        projectId: projectIdRegistry,
         generateIdRegistryInput,
       }
+    : null;

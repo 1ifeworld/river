@@ -2,7 +2,7 @@ import { optimismPubClient } from '@/config/publicClient'
 import type { NextRequest } from 'next/server'
 import { type Hex, decodeAbiParameters } from 'viem'
 import {
-  syndicateClient,
+  syndicateClientIdRegistry,
   generateIdRegistryInput,
   projectIdRegistry,
 } from '@/config/syndicateClient'
@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
 
   console.log({ userWithoutUsername })
 
-  if (!syndicateClient) {
+  if (!syndicateClientIdRegistry) {
     return new Response(
       JSON.stringify({
         success: false,
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const registerTx =
-      await syndicateClient.officialActions.transact.sendTransaction(
+      await syndicateClientIdRegistry.officialActions.transact.sendTransaction(
         generateIdRegistryInput({ to, recovery, deadline, sig }),
       )
 

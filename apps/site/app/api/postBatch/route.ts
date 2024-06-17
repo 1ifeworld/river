@@ -1,6 +1,6 @@
 import type { NextRequest } from 'next/server'
 import {
-  syndicateClient,
+  syndicateClientPost,
   generatePostBatchTxnInput,
   projectIdPost,
 } from '@/config/syndicateClient'
@@ -9,7 +9,7 @@ import { waitUntilTx, authToken } from '@/lib'
 export async function POST(req: NextRequest) {
   const postsArray = await req.json()
 
-  if (!syndicateClient) {
+  if (!syndicateClientPost) {
     return new Response(
       JSON.stringify({
         success: false,
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const postTx =
-      await syndicateClient.officialActions.transact.sendTransaction(
+      await syndicateClientPost.officialActions.transact.sendTransaction(
         generatePostBatchTxnInput(postsArray),
       )
 
