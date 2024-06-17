@@ -72,12 +72,13 @@ export const generateIdRegistryInput = (register: Register) => ({
 const apiKey = process.env.SYNDICATE_API_KEY
 
 export const syndicateClient =
-  !projectIdRegistry || projectIdPost || !apiKey
+  !projectIdRegistry || !projectIdPost || !apiKey
     ? null
     : {
         officialActions: new SyndicateClient({
-          token: () => apiKey,
+          token: () => apiKey
         }),
+        projectId: projectIdPost! || projectIdRegistry!,
         generatePostTxnInput,
         generatePostBatchTxnInput,
         generateIdRegistryInput,
