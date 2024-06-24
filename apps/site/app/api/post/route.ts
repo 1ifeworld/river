@@ -11,22 +11,10 @@ export const maxDuration = 30 // This function can run for a maximum of 30 secon
 export async function POST(req: NextRequest) {
   const post = await req.json()
 
-  if (!syndicateClientPost) {
-    return new Response(
-      JSON.stringify({
-        success: false,
-        hash: null,
-        error: 'Syndicate client not initialized',
-      }),
-      {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    )
-  }
   try {
     const postTx =
-      await syndicateClientPost.officialActions.transact.sendTransaction(
+        // biome-ignore lint:
+      await syndicateClientPost!.officialActions.transact.sendTransaction(
         generatePostTxnInput(post),
       )
 

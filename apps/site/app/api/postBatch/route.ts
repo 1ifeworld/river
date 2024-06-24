@@ -9,23 +9,10 @@ import { waitForHash } from '@syndicateio/syndicate-node/utils'
 export async function POST(req: NextRequest) {
   const postsArray = await req.json()
 
-  if (!syndicateClientPost) {
-    return new Response(
-      JSON.stringify({
-        success: false,
-        hash: null,
-        error: 'Syndicate client not initialized',
-      }),
-      {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    )
-  }
-
   try {
     const postTx =
-      await syndicateClientPost.officialActions.transact.sendTransaction(
+        // biome-ignore lint:
+      await syndicateClientPost!.officialActions.transact.sendTransaction(
         generatePostBatchTxnInput(postsArray),
       )
 

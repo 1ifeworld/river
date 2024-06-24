@@ -13,30 +13,13 @@ export const maxDuration = 30 // This function can run for a maximum of 30 secon
 
 export async function POST(req: NextRequest) {
   const user = await req.json()
-  console.log({ user })
-
   const { username, ...userWithoutUsername } = user
   const { to, recovery, deadline, sig } = userWithoutUsername
 
-  console.log({ userWithoutUsername })
-
-  if (!syndicateClientIdRegistry) {
-    return new Response(
-      JSON.stringify({
-        success: false,
-        hash: null,
-        error: 'Syndicate client not initialized',
-      }),
-      {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    )
-  }
-
   try {
     const registerTx =
-      await syndicateClientIdRegistry.officialActions.transact.sendTransaction(
+    // biome-ignore lint:
+      await syndicateClientIdRegistry!.officialActions.transact.sendTransaction(
         generateIdRegistryInput({ to, recovery, deadline, sig }),
       )
 
@@ -44,8 +27,6 @@ export async function POST(req: NextRequest) {
       projectId: projectIdRegistry,
       transactionId: registerTx.transactionId,
     })
-
-    console.log({ successfulTxHash })
 
     const txnReceipt = await optimismPubClient.waitForTransactionReceipt({
       hash: successfulTxHash as Hex,
@@ -59,9 +40,6 @@ export async function POST(req: NextRequest) {
 
       txnReceipt.logs[0].data,
     )
-
-    console.log('rid: ', rid)
-    console.log('transaction receipt: ', successfulTxHash)
 
     return new Response(
       JSON.stringify({
