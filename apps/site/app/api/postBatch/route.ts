@@ -4,7 +4,7 @@ import {
   generatePostBatchTxnInput,
   projectIdPost,
 } from '@/config/syndicateClient'
-import { waitUntilTx, authToken } from '@/lib'
+import { waitForHash } from '@syndicateio/syndicate-node/utils'
 
 export async function POST(req: NextRequest) {
   const postsArray = await req.json()
@@ -29,11 +29,12 @@ export async function POST(req: NextRequest) {
         generatePostBatchTxnInput(postsArray),
       )
 
-    const successfulTxHash = await waitUntilTx({
-      projectID: projectIdPost as string,
-      txID: postTx.transactionId,
-      authToken: authToken as string,
+    const successfulTxHash = await waitForHash(syndicateClientPost, {
+      projectId: projectIdPost,
+      transactionId: postTx.transactionId,
     })
+
+    console.log({ successfulTxHash })
 
     return new Response(
       JSON.stringify({ success: true, hash: successfulTxHash }),

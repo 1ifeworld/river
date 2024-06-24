@@ -1,12 +1,13 @@
-import { optimismPubClient } from '@/config/publicClient'
 import type { NextRequest } from 'next/server'
-import { type Hex, decodeAbiParameters } from 'viem'
+import { decodeAbiParameters } from 'viem'
 import {
   syndicateClientIdRegistry,
   generateIdRegistryInput,
   projectIdRegistry,
 } from '@/config/syndicateClient'
-import { waitUntilTx, authToken } from '@/lib'
+import { waitForHash } from '@syndicateio/syndicate-node/utils'
+import { optimismPubClient } from '@/config/publicClient'
+import type { Hex } from 'viem'
 
 export const maxDuration = 30 // This function can run for a maximum of 30 seconds
 
@@ -39,10 +40,15 @@ export async function POST(req: NextRequest) {
         generateIdRegistryInput({ to, recovery, deadline, sig }),
       )
 
-    const successfulTxHash = await waitUntilTx({
-      projectID: projectIdRegistry as string,
-      txID: registerTx.transactionId,
-      authToken: authToken as string,
+    const successfulTxHash = await waitForHash(syndicateClientIdRegistry, {
+      projectId: projectIdRegistry,
+      transactionId: registerTx.transactionId,
+    })
+
+    console.log({ successfulTxHash })
+
+    const txnReceipt = await optimismPubClient.waitForTransactionReceipt({
+      hash: successfulTxHash as Hex,
     })
 
     const [rid] = decodeAbiParameters(
@@ -50,7 +56,8 @@ export async function POST(req: NextRequest) {
         { name: 'rid', type: 'uint256' },
         { name: 'recoveryAddress', type: 'address' },
       ],
-      successfulTxHash.logs[0].data,
+
+      txnReceipt.logs[0].data,
     )
 
     console.log('rid: ', rid)

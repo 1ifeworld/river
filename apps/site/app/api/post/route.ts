@@ -3,11 +3,8 @@ import {
   generatePostTxnInput,
   projectIdPost,
 } from '@/config/syndicateClient'
-import { ethers } from 'ethers'
 import type { NextRequest } from 'next/server'
-import { addresses, postGatewayABI } from 'scrypt'
-import type { Hex } from 'viem'
-import { waitUntilTx, authToken } from '@/lib'
+import { waitForHash } from '@syndicateio/syndicate-node/utils'
 
 export const maxDuration = 30 // This function can run for a maximum of 30 seconds
 
@@ -33,10 +30,9 @@ export async function POST(req: NextRequest) {
         generatePostTxnInput(post),
       )
 
-    const successfulTxHash = await waitUntilTx({
-      projectID: projectIdPost as string,
-      txID: postTx.transactionId,
-      authToken: authToken as string,
+    const successfulTxHash = await waitForHash(syndicateClientPost, {
+      projectId: projectIdPost,
+      transactionId: postTx.transactionId,
     })
 
     return new Response(
