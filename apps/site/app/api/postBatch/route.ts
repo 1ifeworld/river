@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
 
   const postTx =
     // biome-ignore lint:
-    await syndicateClientPost!.officialActions.transact.sendTransaction(
+    await syndicateClientPost!.transact.sendTransaction(
       generatePostBatchTxnInput(postsArray),
     )
 
