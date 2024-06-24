@@ -58,7 +58,7 @@ export const generatePostTxnInput = (post: Post) => ({
 export const generateIdRegistryInput = (register: Register) => ({
   projectId: projectIdRegistry,
   contractAddress: addresses.idRegistry.optimism,
-  chainId: 11155420,
+  chainId: 10,
   functionSignature:
     'registerFor(address to, address recovery, uint256 deadline, bytes sig)',
   args: {
