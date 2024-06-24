@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
 
   const registerTx =
     // biome-ignore lint:
-    await syndicateClientIdRegistry!.officialActions.transact.sendTransaction(
+    await syndicateClientIdRegistry!.transact.sendTransaction(
       generateIdRegistryInput({ to, recovery, deadline, sig }),
     )
 
