@@ -9,67 +9,44 @@ import { waitForHash } from '@syndicateio/syndicate-node/utils'
 import { optimismPubClient } from '@/config/publicClient'
 import type { Hex } from 'viem'
 
-export const maxDuration = 30 // This function can run for a maximum of 30 seconds
-
 export async function POST(req: NextRequest) {
   const user = await req.json()
   const { username, ...userWithoutUsername } = user
   const { to, recovery, deadline, sig } = userWithoutUsername
 
-  try {
-    const registerTx =
+  const registerTx =
     // biome-ignore lint:
-      await syndicateClientIdRegistry!.officialActions.transact.sendTransaction(
-        generateIdRegistryInput({ to, recovery, deadline, sig }),
-      )
-
-    const successfulTxHash = await waitForHash(syndicateClientIdRegistry, {
-      projectId: projectIdRegistry,
-      transactionId: registerTx.transactionId,
-    })
-
-    const txnReceipt = await optimismPubClient.waitForTransactionReceipt({
-      hash: successfulTxHash as Hex,
-    })
-
-    const [rid] = decodeAbiParameters(
-      [
-        { name: 'rid', type: 'uint256' },
-        { name: 'recoveryAddress', type: 'address' },
-      ],
-
-      txnReceipt.logs[0].data,
+    await syndicateClientIdRegistry!.officialActions.transact.sendTransaction(
+      generateIdRegistryInput({ to, recovery, deadline, sig }),
     )
 
-    return new Response(
-      JSON.stringify({
-        success: true,
-        hash: successfulTxHash,
-        rid: rid.toString(),
-      }),
-      {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    )
-  } catch (error) {
-    console.error(error)
-    let errorMessage = 'Unknown error'
-    let statusCode = 500
+  const successfulTxHash = await waitForHash(syndicateClientIdRegistry, {
+    projectId: projectIdRegistry,
+    transactionId: registerTx.transactionId,
+  })
 
-    if (error instanceof Error) {
-      errorMessage = error.message
-      statusCode =
-        // biome-ignore lint: `status` is not part of the standard Error interface
-        typeof (error as any).status === 'number' ? (error as any).status : 500
-    }
+  const txnReceipt = await optimismPubClient.waitForTransactionReceipt({
+    hash: successfulTxHash as Hex,
+  })
 
-    return new Response(
-      JSON.stringify({ success: false, error: errorMessage }),
-      {
-        status: statusCode,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    )
-  }
+  const [rid] = decodeAbiParameters(
+    [
+      { name: 'rid', type: 'uint256' },
+      { name: 'recoveryAddress', type: 'address' },
+    ],
+
+    txnReceipt.logs[0].data,
+  )
+
+  return new Response(
+    JSON.stringify({
+      success: true,
+      hash: successfulTxHash,
+      rid: rid.toString(),
+    }),
+    {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    },
+  )
 }

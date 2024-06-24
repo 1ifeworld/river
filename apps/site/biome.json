@@ -16,8 +16,7 @@
       "recommended": true,
       "style": {
         "noUselessElse": "off",
-        "noNonNullAssertion":"off"
-        
+        "noNonNullAssertion": "off"
       },
       "suspicious": {
         "noRedeclare": "off",
