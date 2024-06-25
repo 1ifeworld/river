@@ -1,89 +1,52 @@
-import { optimismPubClient } from '@/config/publicClient'
-import { Defender } from '@openzeppelin/defender-sdk'
-import { ethers } from 'ethers'
 import type { NextRequest } from 'next/server'
-import { addresses, idRegistryABI } from 'scrypt'
-import { type Hex, decodeAbiParameters } from 'viem'
-
-export const maxDuration = 30 // This function can run for a maximum of 30 seconds
+import { decodeAbiParameters } from 'viem'
+import {
+  syndicateClientIdRegistry,
+  generateIdRegistryInput,
+  projectIdRegistry,
+} from '@/config/syndicateClient'
+import { waitForHash } from '@syndicateio/syndicate-node/utils'
+import { optimismPubClient } from '@/config/publicClient'
+import type { Hex } from 'viem'
 
 export async function POST(req: NextRequest) {
   const user = await req.json()
-  console.log({ user })
-
   const { username, ...userWithoutUsername } = user
   const { to, recovery, deadline, sig } = userWithoutUsername
 
-  console.log({ userWithoutUsername })
-  const credentials = {
-    relayerApiKey: process.env.IDREGISTRY_API_UNO,
-    relayerApiSecret: process.env.IDREGISTRY_SECRET_UNO,
-  }
-
-  try {
-    const defenderClient = new Defender(credentials)
-    const provider = defenderClient.relaySigner.getProvider()
-    const signer = defenderClient.relaySigner.getSigner(provider, {
-      speed: 'fast',
-    })
-
-    const idRegistry = new ethers.Contract(
-      addresses.idRegistry.optimism,
-      idRegistryABI,
-      signer as unknown as ethers.Signer,
+  const registerTx =
+    // biome-ignore lint:
+    await syndicateClientIdRegistry!.transact.sendTransaction(
+      generateIdRegistryInput({ to, recovery, deadline, sig }),
     )
 
-    const registerTxn = await idRegistry.registerFor(
-      to,
-      recovery,
-      deadline,
-      sig,
-    )
+  const successfulTxHash = await waitForHash(syndicateClientIdRegistry, {
+    projectId: projectIdRegistry,
+    transactionId: registerTx.transactionId,
+  })
 
-    const txnReceipt = await optimismPubClient.waitForTransactionReceipt({
-      hash: registerTxn.hash as Hex,
-    })
+  const txnReceipt = await optimismPubClient.waitForTransactionReceipt({
+    hash: successfulTxHash as Hex,
+  })
 
-    const [rid, recoveryAddress] = decodeAbiParameters(
-      [
-        { name: 'rid', type: 'uint256' },
-        { name: 'recoveryAddress', type: 'address' },
-      ],
-      txnReceipt.logs[0].data,
-    )
+  const [rid] = decodeAbiParameters(
+    [
+      { name: 'rid', type: 'uint256' },
+      { name: 'recoveryAddress', type: 'address' },
+    ],
 
-    console.log('rid: ', rid)
-    console.log('transaction receipt: ', registerTxn)
+    txnReceipt.logs[0].data,
+  )
 
-    return new Response(
-      JSON.stringify({
-        success: true,
-        hash: registerTxn.hash,
-        rid: rid.toString(),
-      }),
-      {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    )
-  } catch (error) {
-    console.error(error)
-    let errorMessage = 'Unknown error'
-    let statusCode = 500
-
-    if (error instanceof Error) {
-      errorMessage = error.message
-      statusCode =
-        // biome-ignore lint: `status` is not part of the standard Error interface
-        typeof (error as any).status === 'number' ? (error as any).status : 500
-    }
-
-    return new Response(
-      JSON.stringify({ success: false, error: errorMessage }),
-      {
-        status: statusCode,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    )
-  }
+  return new Response(
+    JSON.stringify({
+      success: true,
+      hash: successfulTxHash,
+      rid: rid.toString(),
+    }),
+    {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    },
+  )
 }
