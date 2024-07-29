@@ -1,4 +1,4 @@
-import { ViewToggle } from '@/client'
+import { ViewToggle, PaginationControls } from '@/client'
 import { Flex, Stack, Typography } from '@/design-system'
 import { getChannelWithId } from '@/gql'
 import { getAddsMetadata } from '@/lib'
@@ -19,8 +19,13 @@ export default async function Channel({
   params: { id: string }
   searchParams: { [key: string]: string | string[] | undefined }
 }) {
-  const { channel } = await getChannelWithId({
+  // biome-ignore lint:
+  const after = searchParams['after'] as string | undefined
+
+  const { channel, pageInfo } = await getChannelWithId({
     id: params.id,
+    limit: 100,
+    after,
   })
 
   if (!channel) {
@@ -56,6 +61,10 @@ export default async function Channel({
             </Stack>
             {/* @ts-ignore */}
             <ChannelDetails channel={channel} />
+            <Flex className="pt-36 justify-center md:mr-[19%]">
+              {/* @ts-ignore */}
+              <PaginationControls pageInfo={pageInfo} />
+            </Flex>
           </Stack>
         </div>
         <div className="hidden md:w-[3%] md:block">{}</div>

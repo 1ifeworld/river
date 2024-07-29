@@ -1,8 +1,7 @@
-query channelWithId($id: String!) {
+query channelWithId($id: String!, $limit: Int!, $after: String) {
   channel(id: $id) {
     id
     timestamp
-    addsCounter
     createdById
     uri
     name
@@ -14,12 +13,11 @@ query channelWithId($id: String!) {
         role
       }
     }
-    adds(limit: 100, orderBy: "channelIndex", orderDirection: "desc") {
+    adds(limit: $limit, orderBy: "timestamp", orderDirection: "desc", after: $after) {
       items {
         timestamp
         channelId
         itemId
-        channelIndex
         addedById
         removed
         item {
@@ -30,14 +28,15 @@ query channelWithId($id: String!) {
         }
         channel {
           name
-          addsCounter
-          adds(limit: 100, orderBy: "channelIndex", orderDirection: "desc") {
+          adds(limit: 100, orderBy: "timestamp", orderDirection: "desc") {
             items {
               itemId
-              channelIndex
             }
           }
         }
+      }
+      pageInfo {
+        ...PageInfo
       }
     }
   }
