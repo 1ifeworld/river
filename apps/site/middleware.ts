@@ -4,12 +4,14 @@ import type { NextRequest } from 'next/server';
 export function middleware(request: NextRequest) {
   const url = new URL(request.url);
 
-  console.log("incoming url: ", url)
-
   // Redirect users visiting river.ph to river.site
-  if (url.hostname === 'river.ph') {
+  if (
+    url.hostname === 'river.ph' 
+    || url.hostname === 'www.river.ph'
+    || request.nextUrl.hostname === 'river.ph'
+    || request.nextUrl.hostname === 'www.river.ph'
+  ) {
     url.hostname = 'river.site';
-    console.log("outgoing url: ", url)
     return NextResponse.redirect(url);
     
   }
