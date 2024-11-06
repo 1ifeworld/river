@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export default function middleware(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const url = new URL(request.url);
 
   // Redirect users visiting river.ph to river.site
@@ -12,6 +12,7 @@ export default function middleware(request: NextRequest) {
     || request.nextUrl.hostname === 'www.river.ph'
   ) {
     url.hostname = 'river.site';
+    url.pathname = '/'
     return NextResponse.redirect(url);
     
   }
