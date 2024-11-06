@@ -12,6 +12,7 @@ export function middleware(request: NextRequest) {
     || request.nextUrl.hostname === 'www.river.ph'
   ) {
     url.hostname = 'river.site';
+    url.pathname = '/'
     return NextResponse.redirect(url);
     
   }
